@@ -14,7 +14,7 @@ if getattr(unittest.TestCase, 'assertTrue', None) is None:
     unittest.TestCase.assertTrue = unittest.TestCase.failUnless
 
 class HelloTestCase(unittest.TestCase):
-    sample = hwp50.Document('sample2005.hwp')
+    sample = hwp50.Document('samples/sample-5017.hwp')
     def testFindControlChar(self):
         data = '\x02\x00dces01234567\x02\x00\x02\x00dloc01234567\x02\x00ABC\r'
         pos, pos_end = self.sample.ControlChar.find(data, 0)
@@ -30,7 +30,7 @@ class HelloTestCase(unittest.TestCase):
         print hwp50html.CssDecls.parse('color: black; border:1px solid black;; margin:1em;')
 
 class Sample5017TestCase(unittest.TestCase):
-    sample = hwp50.Document('sample2005.hwp')
+    sample = hwp50.Document('samples/sample-5017.hwp')
     def testVersion(self):
         self.assertEquals((5, 0, 1, 7), self.sample.header.version)
 

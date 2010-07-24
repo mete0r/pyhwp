@@ -1,5 +1,5 @@
 test:
-	python tests.py
+	PYTHONPATH=src python tests/tests.py
 archive:
 	git archive --format=tar HEAD | gzip -9 > hwp-HEAD.tar.gz
 publish: publishhost publishdir
