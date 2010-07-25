@@ -906,7 +906,7 @@ def defineModels(doc):
 
     class ShapeContainer:
         fields = (
-                N_ARRAY(WORD, UINT32), 'controls',
+                N_ARRAY(WORD, CHID), 'controls',
                 )
         def __init__(self):
             self.subshapes = []
@@ -917,8 +917,6 @@ def defineModels(doc):
 
     class ShapeComponent:
         fields = (
-                #CHID, 'chid1',      # DIFFSPEC
-                #CHID, 'chid2',      # DIFFSPEC
                 UINT32, 'xoffsetInGroup',
                 UINT32, 'yoffsetInGroup',
                 WORD, 'groupingLevel',
@@ -939,16 +937,14 @@ def defineModels(doc):
         def __init__(self):
             self.paragraphs = []
         def decode(cls, f):
-            chid1 = CHID.decode(f)
-            chid2 = CHID.decode(f)
-            if chid1 == '$con':
+            chid = CHID.decode(f)
+            if chid == '$con':
                 model = ShapeContainer()
             else:
                 model = ShapeComponent()
-            model.chid1 = chid1
-            model.chid2 = chid2
+            model.chid = chid
             dataio.decode_fields_in(model, ShapeComponent.fields, f)
-            if chid1 == '$con':
+            if chid == '$con':
                 dataio.decode_fields_in(model, ShapeContainer.fields, f)
                 pass
             return model
@@ -968,6 +964,13 @@ def defineModels(doc):
             elif tagid == HWPTAG_PARA_HEADER:
                 return Paragraph, self.paragraphs.append
         __repr__ = dataio.repr
+
+    class PrimaryShapeComponent(ShapeComponent):
+        def decode(cls, f):
+            # GShapeObject의 직할 ShapeComponent는 더미 CHID가 하나 더 있음.
+            dummy = CHID.decode(f)
+            return ShapeComponent.decode(f)
+        decode = classmethod(decode)
 
     class SectionDef:
         fields = (
@@ -1196,7 +1199,8 @@ def defineModels(doc):
     class GShapeObject(CommonControl):
         def getSubModeler(self, tagid):
             if tagid == HWPTAG_SHAPE_COMPONENT:
-                return ShapeComponent, 'shapecomponent'
+                # GShapeObject의 직할 ShapeComponent는 일반 ShapeComponent과 디코딩 방법이 다름
+                return PrimaryShapeComponent, 'shapecomponent'
         __repr__ = dataio.repr
 
     class FootNote(BlobRecord):

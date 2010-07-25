@@ -454,7 +454,7 @@ class HtmlConverter:
             if isinstance(shapecomponent.shape, doc.ShapePicture):
                 return self.makeImg(doc, shapecomponent.shape)
             else:
-                div = ET.Element('div', {'class':'ShapeComponent-%s'%shapecomponent.chid1})
+                div = ET.Element('div', {'class':'ShapeComponent-%s'%shapecomponent.chid})
                 if isinstance(shapecomponent.shape, doc.ShapeRectangle):
                     cssdecls = CssDecls()
                     cssdecls['border'] = '1px solid gray'

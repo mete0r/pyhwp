@@ -145,7 +145,7 @@ class Sample5017TestCase(unittest.TestCase):
                 pass
             else:
                 #print '\t'*rec.level, record_type, rec.size
-                data = dataio.decodeModel(record_type, rec.datastream)
+                #data = dataio.decodeModel(record_type, rec.datastream)
                 #print '\t'*(rec.level+1) + str(data).replace('\n', '\n'+'\t'*(rec.level+1))
                 pass
 
