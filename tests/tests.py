@@ -278,10 +278,13 @@ class Sample5017TestCase(unittest.TestCase):
             if fn[0] == '#':
                 continue
             cvt = hwp50html.HtmlConverter()
-            doc = hwp50.Document(fn)
-            #print doc.header.version, fn
-            rootname = os.path.splitext(os.path.basename(fn))[0]
-            cvt.convert(doc, hwp50html.LocalDestination(rootname))
+            try:
+                doc = hwp50.Document(fn)
+                print doc.header.version, fn
+                rootname = os.path.splitext(os.path.basename(fn))[0]
+                cvt.convert(doc, hwp50html.LocalDestination(os.path.join('gen', rootname)))
+            except IOError, e:
+                print fn, e
 
 if __name__=='__main__':
     unittest.main()
