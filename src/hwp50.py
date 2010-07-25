@@ -1331,7 +1331,16 @@ def defineModels(doc):
                         while idx < len(data):
                             ctrlpos, ctrlpos_end = ControlChar.find(data, idx)
                             if idx < ctrlpos:
-                                yield data[idx:ctrlpos].decode('utf-16le')
+                                textdata = data[idx:ctrlpos]
+                                while True:
+                                    try:
+                                        text = textdata.decode('utf-16le')
+                                        break
+                                    except UnicodeDecodeError, e:
+                                        logging.error('can\'t decode ParagraphText: (%d-%d) %s'%(e.start, e.end, dataio.hexdump(textdata)))
+                                        textdata = textdata[:e.start] + '#'*(e.end-e.start) + textdata[e.end:]
+                                        continue
+                                yield text
                             if ctrlpos < ctrlpos_end:
                                 ctrlch = ControlChar.parse(data[ctrlpos:ctrlpos_end])
                                 if ctrlch.type == ControlChar.extended:
