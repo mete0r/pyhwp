@@ -1,5 +1,7 @@
-test:
+test:	gen
 	PYTHONPATH=src python tests/tests.py
+gen:
+	mkdir gen
 archive:
 	git archive --format=tar HEAD | gzip -9 > hwp-HEAD.tar.gz
 publish: publishhost publishdir
