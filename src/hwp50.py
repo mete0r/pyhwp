@@ -182,9 +182,10 @@ tagnames = {
     HWPTAG_BEGIN + 68 : 'HWPTAG_SHAPE_COMPONENT_OLE',
     HWPTAG_BEGIN + 69 : 'HWPTAG_SHAPE_COMPONENT_PICTURE',
     HWPTAG_BEGIN + 70 : 'HWPTAG_SHAPE_COMPONENT_CONTAINER',
-    HWPTAG_BEGIN + 71 : 'HWPTAB_CTRL_DATA',
-    HWPTAG_BEGIN + 72 : 'HWPTAB_CTRL_EQEDIT',
+    HWPTAG_BEGIN + 71 : 'HWPTAG_CTRL_DATA',
+    HWPTAG_BEGIN + 72 : 'HWPTAG_CTRL_EQEDIT',
     # HWPTAG_BEGIN + 73 : RESERVED
+    HWPTAG_BEGIN + 74 : 'HWPTAG_SHAPE_COMPONENT_TEXTART',
     # ...
     HWPTAG_BEGIN + 78 : 'HWPTAG_FORBIDDEN_CHAR',
 }
@@ -861,6 +862,9 @@ def defineModels(doc):
     class ForbiddenChar(BlobRecord): pass
 
     class ShapeLine(BlobRecord): pass
+    class ShapePolygon(BlobRecord): pass
+    class ShapeEllipse(BlobRecord): pass
+    class ShapeTextArt(BlobRecord): pass
     class ShapeOLE(BlobRecord): pass
     class ShapeRectangle:
         fields = (
@@ -956,8 +960,14 @@ def defineModels(doc):
                 return ShapeLine, 'shape'
             elif tagid == HWPTAG_SHAPE_COMPONENT_RECTANGLE:
                 return ShapeRectangle, 'shape'
+            elif tagid == HWPTAG_SHAPE_COMPONENT_POLYGON:
+                return ShapePolygon, 'shape'
+            elif tagid == HWPTAG_SHAPE_COMPONENT_ELLIPSE:
+                return ShapeEllipse, 'shape'
             elif tagid == HWPTAG_SHAPE_COMPONENT_OLE:
                 return ShapeOLE, 'shape'
+            elif tagid == HWPTAG_SHAPE_COMPONENT_TEXTART:
+                return ShapeTextArt, 'shape'
             elif tagid == HWPTAG_LIST_HEADER:
                 self.paragraphs = []
                 return ListHeader, 'listheader'
