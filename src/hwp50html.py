@@ -276,12 +276,12 @@ class HtmlConverter:
         return tbl
 
     def makeImg(self, doc, pic, cssdecls = CssDecls()):
+        src = None
 
         bindata = pic.pictureInfo.binData
-        if self.destination is not None:
-            src = self.destination.addAttachment(str(bindata.name), bindata.datastream.read())
-        else:
-            src = None
+        if bindata.type == doc.BinEmbedded:
+            if self.destination is not None:
+                src = self.destination.addAttachment(str(bindata.name), bindata.datastream.read())
 
         attrs = {}
         if src is not None:
