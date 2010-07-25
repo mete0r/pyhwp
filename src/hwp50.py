@@ -1580,6 +1580,7 @@ class Document(olefileio.OleFileIO):
         class Sections:
             def __getitem__(sections, idx):
                 sect = self.Section()
+                sect.idx = idx
                 buildModelTree(sect, getRecords(self.streams.section[idx]))
                 return sect
             def __iter__(sections):

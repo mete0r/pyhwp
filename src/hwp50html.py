@@ -507,11 +507,15 @@ class HtmlConverter:
         style.text += '.Page { page-break-after: always; }'
 
         body = ET.SubElement(html, 'body', {'style':'background-color:#ccc'})
+        pagedef = None
         for section in doc.sections:
             clss = ['Section']
             attrs = {'class':' '.join(clss)}
 
-            pagedef = section.sectionDef.pages[0]
+            try:
+                pagedef = section.sectionDef.pages[0]
+            except:
+                logging.warning('section %d has no pagedef'%section.idx)
             divsect = ET.SubElement(body, 'div', attrs)
             divpage = None
             for page in section.pages:
