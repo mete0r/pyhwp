@@ -61,9 +61,9 @@ def decode_fields_in(model, fields, f):
         try:
             value = decodeModel(fieldModel, f)
             setattr(model, name, value)
-        except:
+        except Exception, e:
             logging.warning( 'failed to decode a field named `%s\' as `%s\' of `%s\''%(name, fieldModel, model) )
-            raise
+            raise e
 
 
 def decodeModel(Model, f):

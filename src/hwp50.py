@@ -211,8 +211,7 @@ def buildModelTree(root, records):
                 try:
                     model = dataio.decodeModel(decoder, rec.datastream)
                 except:
-                    logging.error( 'failed to decode a Record: '+str(decoder) )
-                    logging.error( dataio.hexdump(rec.data) )
+                    logging.error( 'failed to decode a Record(#%d): %s'%(rec.seqno, str(decoder)) + ':\n' + '\t'+dataio.hexdump(rec.data).replace('\n', '\n\t') + '\n')
                     #raise
                 if not isinstance(model, unicode) and not isinstance(model, str) and not isinstance(model, dict) and not isinstance(model, list):
                     model.recidx = rec.seqno
@@ -381,6 +380,11 @@ def defineModels(doc):
                 UINT32, 'characterUnitLocInParagraph',
                 #UINT32, 'flags',   # DIFFSPEC
                 )
+
+    class DocData(BlobRecord):
+        def getSubModeler(self, tagid):
+            if tagid == HWPTAG_FORBIDDEN_CHAR:
+                return ForbiddenChar, 'forbiddenChar'
 
     class Border:
         fields = (
@@ -1441,6 +1445,8 @@ def defineModels(doc):
                 return IdMappings, 'mappings'
             elif tagid == HWPTAG_DOCUMENT_PROPERTIES:
                 return DocumentProperties, 'documentProperties'
+            elif tagid == HWPTAG_DOC_DATA:
+                return DocData, 'docData'
 
     record_types = {
             HWPTAG_DOCUMENT_PROPERTIES:DocumentProperties,
