@@ -639,9 +639,9 @@ def defineModels(doc):
                 HWPUNIT16,  'borderTop',
                 HWPUNIT16,  'borderBottom',
                 )
-        if doc.header.version > (5, 0, 0, 6):
+        if doc.header.version > (5, 0, 1, 6):
             fields += (
-                UINT32, 'attr2',       # above 5006
+                UINT32, 'attr2',       # above 5016
                 #UINT32, 'attr3',       # DIFFSPEC
                 #UINT32, 'lineSpacing', # DIFFSPEC
                     )
@@ -950,6 +950,7 @@ def defineModels(doc):
             dataio.decode_fields_in(model, ShapeComponent.fields, f)
             if chid1 == '$con':
                 dataio.decode_fields_in(model, ShapeContainer.fields, f)
+                pass
             return model
         decode = classmethod(decode)
         def getSubModeler(self, tagid):
@@ -981,9 +982,9 @@ def defineModels(doc):
                 UINT16, 'startingTableNumber',
                 UINT16, 'startingEquationNumber',
                 )
-        if doc.header.version > (5, 0, 0, 6):
+        if doc.header.version > (5, 0, 1, 6):
             fields += (
-                    UINT32, 'unknown1', # above 5006
+                    UINT32, 'unknown1', # above 5016
                     #UINT32, 'unknown2',
                     )
         __repr__ = dataio.repr
