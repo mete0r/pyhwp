@@ -1439,6 +1439,8 @@ def defineModels(doc):
         def getSubModeler(self, tagid):
             if tagid == HWPTAG_ID_MAPPINGS:
                 return IdMappings, 'mappings'
+            elif tagid == HWPTAG_DOCUMENT_PROPERTIES:
+                return DocumentProperties, 'documentProperties'
 
     record_types = {
             HWPTAG_DOCUMENT_PROPERTIES:DocumentProperties,
