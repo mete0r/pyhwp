@@ -1143,6 +1143,9 @@ def defineModels(doc):
                     INT16, 'unknown1',
                     ARRAY(HWPUNIT16, 4), 'margin',
                     UINT32, 'instanceId',
+                    )
+        if doc.header.version > (5, 0, 0, 0):
+            fields += (
                     INT16, 'unknown2',
                     BSTR, 'description'
                     )
