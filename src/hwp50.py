@@ -213,7 +213,7 @@ def buildModelTree(root, records):
                     model = dataio.decodeModel(decoder, rec.datastream)
                 except:
                     logging.error( 'failed to decode a Record(#%d): %s'%(rec.seqno, str(decoder)) + ':\n' + '\t'+dataio.hexdump(rec.data).replace('\n', '\n\t') + '\n')
-                    #raise
+                    raise
                 if not isinstance(model, unicode) and not isinstance(model, str) and not isinstance(model, dict) and not isinstance(model, list):
                     model.recidx = rec.seqno
             else:
@@ -573,7 +573,7 @@ def defineModels(doc):
             while i < data_len:
                 if (0 <= ord(data[i]) <= 31) and (data[i+1] == '\x00'):
                     ctlch = cls()
-                    ctlch.ch = data[i:i+2].decode('utf-16le')
+                    ctlch.ch = dataio.decode_utf16le_besteffort(data[i:i+2])
                     size = cls.types[ctlch.ch].size
                     return (i, i+size*2)
                 i = i + 2
@@ -583,7 +583,7 @@ def defineModels(doc):
         def parse(cls, data):
             o = cls()
 
-            o.ch = data[0:2].decode('utf-16le')
+            o.ch = dataio.decode_utf16le_besteffort(data[0:2])
             o.code = ord(o.ch)
             o.type = cls.types[o.ch]
             if o.type.size == 8:
@@ -1331,16 +1331,7 @@ def defineModels(doc):
                         while idx < len(data):
                             ctrlpos, ctrlpos_end = ControlChar.find(data, idx)
                             if idx < ctrlpos:
-                                textdata = data[idx:ctrlpos]
-                                while True:
-                                    try:
-                                        text = textdata.decode('utf-16le')
-                                        break
-                                    except UnicodeDecodeError, e:
-                                        logging.error('can\'t decode ParagraphText: (%d-%d) %s'%(e.start, e.end, dataio.hexdump(textdata)))
-                                        textdata = textdata[:e.start] + '#'*(e.end-e.start) + textdata[e.end:]
-                                        continue
-                                yield text
+                                yield dataio.decode_utf16le_besteffort(data[idx:ctrlpos])
                             if ctrlpos < ctrlpos_end:
                                 ctrlch = ControlChar.parse(data[ctrlpos:ctrlpos_end])
                                 if ctrlch.type == ControlChar.extended:

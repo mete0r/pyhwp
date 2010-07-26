@@ -167,17 +167,26 @@ class COLORREF(UINT32):
     def __str__(self): return '#%02x%02x%02x'%(self.r, self.g, self.b)
     def __repr__(self): return self.__class__.__name__+('(0x%02x, 0x%02x, 0x%02x)'%self.rgb)
 
+def decode_utf16le_besteffort(s):
+    while True:
+        try:
+            return s.decode('utf-16le')
+        except UnicodeDecodeError, e:
+            logging.error('can\'t decode (%d-%d) %s'%(e.start, e.end, hexdump(s)))
+            s = s[:e.start] + '.'*(e.end-e.start) + s[e.end:]
+            continue
+
 class WCHAR:
     def decode(cls, f):
         data = readn(f, 2)
-        return data.decode('utf-16le')
+        return decode_utf16le_besteffort(data)
     decode = classmethod(decode)
 
 class BSTR:
     def decode(cls, f):
         size = UINT16.decode(f)
         data = readn(f, 2*size)
-        return data.decode('utf-16le')
+        return decode_utf16le_besteffort(data)
     decode = classmethod(decode)
 
 class BYTESTREAM:
