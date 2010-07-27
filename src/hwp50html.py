@@ -410,8 +410,18 @@ class HtmlConverter:
                             span = newSpan()
                             continue
                         elif isinstance(e.control, doc.GShapeObject):
+                            style = CssDecls()
+                            style['position'] = 'relative'
+                            #style['top'] = mm(e.control.offsetY);
+                            style['left'] = mm(e.control.offsetX);
+                            divgso = ET.Element('div', {'class':'GShapeObject', 'style':unicode(style)})
+                            divgso.append(ET.Comment(str(e.control)))
                             x = self.handle_shapecomponent(e.control, e.control.shapecomponent)
-                            p.append(x)
+                            divgso.append(x)
+
+                            if len(p[-1]) == 0 and (p[-1].text is None or len(p[-1].text) == 0):
+                                del p[-1]
+                            p.append(divgso)
                             span = newSpan()
                             continue
                         else:
@@ -441,7 +451,14 @@ class HtmlConverter:
         doc = self.doc
         if isinstance(shapecomponent, doc.ShapeContainer):
             #print 'controls', shapecomponent.controls
-            div = ET.Element('div', {'class':'ShapeContainer', 'style':'position:relative'})
+            style = CssDecls()
+            # TODO
+            style['position'] = 'absolute'
+            #style['left'] = mm(shapecomponent.xoffsetInGroup)
+            #style['top'] = mm(shapecomponent.yoffsetInGroup)
+            style['width'] = mm(shapecomponent.width)
+            style['height'] = mm(shapecomponent.height)
+            div = ET.Element('div', {'class':'ShapeContainer', 'style':unicode(style)})
             cmt = ET.Comment(repr(shapecomponent))
             div.append(cmt)
             div.text = ' '
@@ -458,11 +475,21 @@ class HtmlConverter:
                 if isinstance(shapecomponent.shape, doc.ShapeRectangle):
                     cssdecls = CssDecls()
                     cssdecls['border'] = '1px solid gray'
-#                    cssdecls['position'] = 'absolute'
-#                    cssdecls['top'] = mm(doc.SHWPUNIT(shapecomponent.shape.coords[0][1]))
-#                    cssdecls['left'] = mm(doc.SHWPUNIT(shapecomponent.shape.coords[0][0]))
-#                    cssdecls['width'] = mm(doc.SHWPUNIT(shapecomponent.shape.coords[1][0] - shapecomponent.shape.coords[0][0]))
-#                    cssdecls['height'] = mm(doc.SHWPUNIT(shapecomponent.shape.coords[2][1] - shapecomponent.shape.coords[1][1]))
+                    cssdecls['position'] = 'absolute'
+
+                    offset = (shapecomponent.xoffsetInGroup, shapecomponent.yoffsetInGroup)
+                    for mat in list(reversed(shapecomponent.matScaleRotation))[1:]:
+                        offset = mat.scaler.scale(offset)
+
+                    dimens = (shapecomponent.initialWidth, shapecomponent.initialHeight)
+                    for mat in reversed(shapecomponent.matScaleRotation):
+                        dimens = mat.scaler.scale(dimens)
+
+                    cssdecls['left'] = mm(doc.SHWPUNIT(offset[0]))
+                    cssdecls['top'] = mm(doc.SHWPUNIT(offset[1]))
+                    cssdecls['width'] = mm(doc.SHWPUNIT(dimens[0]))
+                    cssdecls['height'] = mm(doc.SHWPUNIT(dimens[1]))
+
                     div.set('style', unicode(cssdecls))
                     cmt = ET.Comment(repr(shapecomponent))
                     div.append(cmt)

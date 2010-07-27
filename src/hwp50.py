@@ -364,7 +364,8 @@ def defineModels(doc):
                     setattr(flags, name, int(flags >> l) & int((2 ** (h-l)) - 1))
                 return flags
             decode = classmethod(decode)
-            __repr__ = dataio.repr
+            def __repr__(self):
+                return hex(self)+'='+dataio.repr(self)
         return _Flags
     class DocumentProperties:
         __repr__ = dataio.repr
@@ -866,10 +867,16 @@ def defineModels(doc):
     class ShapeEllipse(BlobRecord): pass
     class ShapeTextArt(BlobRecord): pass
     class ShapeOLE(BlobRecord): pass
+    class Coord:
+        fields = (
+                SHWPUNIT, 'x',
+                SHWPUNIT, 'y',
+                )
+        __repr__ = dataio.repr
     class ShapeRectangle:
         fields = (
                 BYTE, 'round',
-                ARRAY(ARRAY(SHWPUNIT, 2), 4), 'coords',
+                ARRAY(Coord, 4), 'coords',
                 )
         def getSubModeler(self, tagid):
             pass
@@ -903,39 +910,55 @@ def defineModels(doc):
                 )
         __repr__ = dataio.repr
 
-    class Matrix:
+    class Matrix(list):
         def decode(cls, f):
-            return ARRAY(ARRAY(DOUBLE, 3), 2).decode(f) + [[0.0, 0.0, 1.0]]
+            return cls(ARRAY(ARRAY(DOUBLE, 3), 2).decode(f) + [[0.0, 0.0, 1.0]])
         decode = classmethod(decode)
+        def applyTo(self, (x, y)):
+            ret = []
+            for row in self:
+                ret.append(row[0] * x + row[1] * y + row[2] * 1)
+            return (ret[0], ret[1])
+        def scale(self, (w, h)):
+            ret = []
+            for row in self:
+                ret.append(row[0] * w + row[1] * h + row[2] * 0)
+            return (ret[0], ret[1])
+        def product(self, mat):
+            ret = Matrix()
+            rs = [0, 1, 2]
+            cs = [0, 1, 2]
+            for r in rs:
+                row = []
+                for c in cs:
+                    row.append( self[r][c] * mat[c][r])
+                ret.append(row)
+            return ret
 
-    class ShapeContainer:
+    class ScaleRotationMatrix:
         fields = (
-                N_ARRAY(WORD, CHID), 'controls',
+                Matrix, 'scaler',
+                Matrix, 'rotator',
                 )
-        def __init__(self):
-            self.subshapes = []
-        def getSubModeler(self, tagid):
-            if tagid == HWPTAG_SHAPE_COMPONENT:
-                return ShapeComponent, self.subshapes.append
         __repr__ = dataio.repr
 
     class ShapeComponent:
         fields = (
-                UINT32, 'xoffsetInGroup',
-                UINT32, 'yoffsetInGroup',
+                SHWPUNIT, 'xoffsetInGroup',
+                SHWPUNIT, 'yoffsetInGroup',
                 WORD, 'groupingLevel',
                 WORD, 'localVersion',
-                UINT32, 'initialWidth',
-                UINT32, 'initialHeight',
-                UINT32, 'width',
-                UINT32, 'height',
-                UINT32, 'attr',
+                SHWPUNIT, 'initialWidth',
+                SHWPUNIT, 'initialHeight',
+                SHWPUNIT, 'width',
+                SHWPUNIT, 'height',
+                defineFlags(UINT32, ((0, 1), 'flip')), 'attr',
                 WORD, 'angle',
-                UINT32, 'rotationCenterX',
-                UINT32, 'rotationCenterY',
+                SHWPUNIT, 'rotationCenterX',
+                SHWPUNIT, 'rotationCenterY',
                 WORD, 'nMatrices',
                 Matrix, 'matTranslation',
-                selfref(lambda self: ARRAY(Matrix, self.nMatrices*2)), 'matScaleRotation',
+                selfref(lambda self: ARRAY(ScaleRotationMatrix, self.nMatrices)), 'matScaleRotation',
                 )
         shape = None
         def __init__(self):
@@ -944,13 +967,11 @@ def defineModels(doc):
             chid = CHID.decode(f)
             if chid == '$con':
                 model = ShapeContainer()
+                dataio.decode_fields_in(model, ShapeContainer.fields, f)
             else:
                 model = ShapeComponent()
+                dataio.decode_fields_in(model, ShapeComponent.fields, f)
             model.chid = chid
-            dataio.decode_fields_in(model, ShapeComponent.fields, f)
-            if chid == '$con':
-                dataio.decode_fields_in(model, ShapeContainer.fields, f)
-                pass
             return model
         decode = classmethod(decode)
         def getSubModeler(self, tagid):
@@ -973,6 +994,17 @@ def defineModels(doc):
                 return ListHeader, 'listheader'
             elif tagid == HWPTAG_PARA_HEADER:
                 return Paragraph, self.paragraphs.append
+        __repr__ = dataio.repr
+
+    class ShapeContainer:
+        fields = ShapeComponent.fields + (
+                N_ARRAY(WORD, CHID), 'controls',
+                )
+        def __init__(self):
+            self.subshapes = []
+        def getSubModeler(self, tagid):
+            if tagid == HWPTAG_SHAPE_COMPONENT:
+                return ShapeComponent, self.subshapes.append
         __repr__ = dataio.repr
 
     class PrimaryShapeComponent(ShapeComponent):
