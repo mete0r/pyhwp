@@ -1,0 +1,12 @@
+pyhwp: hwp file format python parser
+====================================
+
+Project Hosting:
+  http://github.com/mete0r/pyhwp
+
+Requirements:
+ - python 2.3 or above
+ - [OleFileIO](http://www.decalage.info/python/olefileio)
+
+Author:
+   mete0r@sarangbang.or.kr
