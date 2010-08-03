@@ -4,7 +4,7 @@ if version < '2.2.3':
     DistMeta.classifiers = None
     DistMeta.download_url = None
 
-from distutils.core import setup
+from setuptools import setup
 setup(
         name='pyhwp',
         version='0.0',
@@ -15,7 +15,7 @@ setup(
         url='http://github.com/mete0r/pyhwp',
         packages = ['hwp'],
 
-        requires=['OleFileIO_PL (>=0.20)'],
+        install_requires=['OleFileIO_PL >=0.20'],
         provides=['hwp'],
 
         classifiers=[
