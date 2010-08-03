@@ -6,7 +6,7 @@ Project Hosting:
 
 Requirements:
  - python 2.3 or above
- - [OleFileIO](http://www.decalage.info/python/olefileio)
+ - OleFileIO_PL (>=2.0)
 
 Author:
-   mete0r@sarangbang.or.kr
+   yoosung <mete0r@sarangbang.or.kr>

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
-import hwp50
-import hwp50html
-import dataio
+from hwp import hwp50
+from hwp import hwp50html
+from hwp import dataio
 
 import StringIO
 try:
