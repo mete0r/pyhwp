@@ -630,7 +630,7 @@ state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
     pyhwp : a hwp file format parser
-    Copyright (C) 2010  yoosung <mete0r2sarangbang.or.kr>
+    Copyright (C) 2010  yoosung <mete0r@sarangbang.or.kr>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
