@@ -21,6 +21,10 @@
 #
 import struct
 import logging
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 class Eof(Exception):
     pass
@@ -38,9 +42,6 @@ def readn(f, size):
         raise OutOfData('%d bytes expected, %d bytes read'%(size, datasize))
     return data
 
-def repr(self):
-    return '%s.%s(%s)'%(self.__class__.__module__,self.__class__.__name__, str(self.__dict__))
-
 def extract_pairs(sequence):
     first = None
     for k in sequence:
@@ -49,113 +50,159 @@ def extract_pairs(sequence):
         else:
             yield first, k
             first = None
+def extract_swapped_pairs(sequence):
+    for x, y in extract_pairs(sequence):
+        yield y, x
 
-class ctx_based:
-    def __init__(self, bind):
-        self.bind = bind
-
-def decode_fields_in(model, fields, f):
-    for fieldModel, name in extract_pairs(fields):
-        if isinstance(fieldModel, ctx_based):
-            fieldModel = fieldModel.bind(model)
+def parseFields(model, f):
+    try:
+        fields = model.getFields()
+    except:
+        logging.debug('no fields definitions for %s : skipped'%(str(model.__class__)))
+        raise
+    for fieldModel, name in fields:
         try:
-            value = decodeModel(fieldModel, f)
-            setattr(model, name, value)
-        except Exception, e:
-            logging.warning( 'failed to decode a field named `%s\' as `%s\' of `%s\''%(name, fieldModel, model) )
-            raise e
+            if fieldModel is None:
+                value = None
+            else:
+                value = fieldModel.parse(f)
 
+            if isinstance(name, basestring):
+                setattr(model, name, value)
+            else:
+                name(model, value)
+        except:
+            logging.error( 'failed to parse a field named `%s\' as `%s\' of `%s\''%(name, fieldModel, model) )
+            raise
 
-def decodeModel(Model, f):
-    decode = getattr(Model, 'decode', None)
-    if decode is not None:
-        return decode(f)
-
-    fields = getattr(Model, 'fields', None)
-    if fields is None:
-        raise Exception('invalid Model: %s'%str(Model))
+def parseFieldsWithType(Model, f):
     model = Model()
-    decode_fields_in(model, Model.fields, f)
+    parseFields(model, f)
     return model
 
+def fixup_parse(cls):
+    parse = getattr(cls, 'parse', None)
+    if parse is None:
+        getFields = getattr(cls, 'getFields', None)
+        if getFields is not None:
+            cls.parse = classmethod(parseFieldsWithType)
+        else:
+            cls.parse = classmethod(lambda cls, f: cls())
+
 class UINT32(long):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<I', readn(f, 4))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 class INT32(int):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<i', readn(f, 4))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 class UINT16(int):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<H', readn(f, 2))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 class INT16(int):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<h', readn(f, 2))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 class UINT8(int):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<B', readn(f, 1))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 class INT8(int):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<b', readn(f, 1))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 WORD = UINT16
 BYTE = UINT8
 
 class DOUBLE(float):
-    def decode(cls, f):
+    def parse(cls, f):
         return cls(struct.unpack('<d', readn(f, 8))[0])
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
-class ARRAY:
+class CHID:
+    TABLE = 'tbl '
+    LINE = '$lin'
+    RECT = '$rec'
+    ELLI = '$ell'
+    ARC = '$arc'
+    POLY = '$pol'
+    CURV = '$cur'
+    EQED = 'eqed'
+    PICT = '$pic'
+    OLE = '$ole'
+    CONTAINER = '$con'
+    def parse(cls, f):
+        return cls.decode_bytes( readn(f,4) )
+    parse = classmethod(parse)
+    def decode_bytes(cls, data):
+        return data[3] + data[2] + data[1] + data[0]
+    decode_bytes = classmethod(decode_bytes)
+
+class ARRAY(list):
     def __init__(self, type, count):
         self.type = type
         self.count = count
-    def decode(self, f):
-        result = []
+    def parse(self, f):
         for i in range(0, self.count):
-            result.append( decodeModel(self.type, f) )
-        return result
+            self.append( self.type.parse(f) )
+        return self
+class DICT(dict):
+    def __init__(self, keytype, valuetype):
+        self.keytype = keytype
+        self.valuetype = valuetype
+    def parse(self, f):
+        try:
+            while True:
+                key = self.keytype.parse(f)
+                value = self.valuetype.parse(f)
+                self[key] = value
+        except Eof:
+            pass
+        return self
 
 class N_ARRAY:
     def __init__(self, countType, type):
         self.countType = countType
         self.type = type
-    def decode(self, f):
+    def parse(self, f):
         result = []
-        count = self.countType.decode(f)
+        count = self.countType.parse(f)
         for i in range(0, count):
-            result.append( self.type.decode(f) )
+            result.append( self.type.parse(f) )
         return result
 
-class OBJECTSTREAM:
-    def __init__(self, Model):
-        self.Model = Model
-    def decode(self, f):
-        result = []
-        try:
-            while True:
-                result.append( decodeModel(self.Model, f) )
-        except Eof:
-            pass
-        return result
-
-class ENUM:
-    def __init__(self, type, mapper):
-        self.type = type
-        self.mapper = mapper
-    def decode(self, f):
-        value = decodeModel(self.type, f)
-        return self.mapper[value]
+class Matrix(list):
+    def parse(cls, f):
+        return cls(ARRAY(ARRAY(DOUBLE, 3), 2).parse(f) + [[0.0, 0.0, 1.0]])
+    parse = classmethod(parse)
+    def applyTo(self, (x, y)):
+        ret = []
+        for row in self:
+            ret.append(row[0] * x + row[1] * y + row[2] * 1)
+        return (ret[0], ret[1])
+    def scale(self, (w, h)):
+        ret = []
+        for row in self:
+            ret.append(row[0] * w + row[1] * h + row[2] * 0)
+        return (ret[0], ret[1])
+    def product(self, mat):
+        ret = Matrix()
+        rs = [0, 1, 2]
+        cs = [0, 1, 2]
+        for r in rs:
+            row = []
+            for c in cs:
+                row.append( self[r][c] * mat[c][r])
+            ret.append(row)
+        return ret
 
 class COLORREF(UINT32):
     def __getattr__(self, name):
@@ -172,43 +219,81 @@ def decode_utf16le_besteffort(s):
         try:
             return s.decode('utf-16le')
         except UnicodeDecodeError, e:
-            logging.error('can\'t decode (%d-%d) %s'%(e.start, e.end, hexdump(s)))
+            logging.error('can\'t parse (%d-%d) %s'%(e.start, e.end, hexdump(s)))
             s = s[:e.start] + '.'*(e.end-e.start) + s[e.end:]
             continue
 
 class WCHAR:
-    def decode(cls, f):
+    def parse(cls, f):
         data = readn(f, 2)
         return decode_utf16le_besteffort(data)
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
 class BSTR:
-    def decode(cls, f):
-        size = UINT16.decode(f)
+    def parse(cls, f):
+        size = UINT16.parse(f)
         data = readn(f, 2*size)
         return decode_utf16le_besteffort(data)
-    decode = classmethod(decode)
+    parse = classmethod(parse)
+
+class BYTES:
+    def __init__(self, size=-1):
+        self.size = size
+    def parse(self, f):
+        if self.size < 0:
+            return f.read()
+        else:
+            return f.read(self.size)
 
 class BYTESTREAM:
-    def decode(cls, f):
+    def parse(cls, f):
         return f.read()
-    decode = classmethod(decode)
+    parse = classmethod(parse)
 
-def hexdump(data):
-    s = []
+class VERSION:
+    def parse(cls, f):
+        version = readn(f, 4)
+        return (ord(version[3]), ord(version[2]), ord(version[1]), ord(version[0]))
+    parse = classmethod(parse)
+
+def dumpbytes(data, crust=False):
+    offsbase = 0
+    if crust:
+        yield '\t 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F'
     while len(data) > 16:
-        s.append( ' '.join(['%02x'%ord(ch) for ch in data[0:16]]) )
+        if crust:
+            line = '%05x0: '%offsbase
+        else:
+            line = ''
+        line += ' '.join(['%02x'%ord(ch) for ch in data[0:16]]) 
+        yield line
         data = data[16:]
-    s.append( ' '.join(['%02x'%ord(ch) for ch in data]) )
-    return '\n'.join(s)
+        offsbase += 1
 
-def BLOB(size):
-    class _BLOB:
-        def decode(cls, f):
-            o = cls()
-            o.data = readn(f, size)
-            return o
-        decode = classmethod(decode)
-        def __repr__(self):
-            return hexdump(self.data)
-    return _BLOB
+    if crust:
+        line = '%05x0: '%offsbase
+    else:
+        line = ''
+    line += ' '.join(['%02x'%ord(ch) for ch in data]) 
+    yield line
+
+def hexdump(data, crust=False):
+    return '\n'.join([line for line in dumpbytes(data, crust)])
+
+class IndentedOutput:
+    def __init__(self, base, level):
+        self.base = base
+        self.level = level
+    def write(self, x):
+        for line in x.split('\n'):
+            if len(line) > 0:
+                self.base.write('\t'*self.level)
+                self.base.write(line)
+                self.base.write('\n')
+class Printer:
+    def __init__(self, baseout):
+        self.baseout = baseout
+    def prints(self, *args):
+        for x in args:
+            self.baseout.write( str(x) + ' ')
+        self.baseout.write('\n')

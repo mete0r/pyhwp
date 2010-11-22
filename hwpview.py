@@ -185,5 +185,9 @@ class MainApp:
             shutil.rmtree(self.working_dir)
 
 if __name__ == '__main__': # <-- this line is optional
+    import logging
+    logging.basicConfig(level=logging.DEBUG,
+            filename='hwpview.log',
+            filemode='a')
     app = MainApp()
     app.main()
