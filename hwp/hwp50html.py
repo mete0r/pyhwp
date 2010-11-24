@@ -325,23 +325,26 @@ class OffsetView(View):
     def __init__(self, *args, **kwargs):
         View.__init__(self, *args, **kwargs)
         self.offsetY = 0
+        self.prev_line = None
     def addParagraph(self, paragraph):
         for html in paragraph.etree():
             self.html.append(html)
 
+    def appendParagraph(self, paragraph, paragraph_lines):
+        paragraph = Paragraph(self.doc, paragraph, offset=self, page=self.getPage())
+        for line_number, (line, line_elements) in enumerate(paragraph_lines):
+            if self.prev_line is not None:
+                self.prev_line.enableLineSpacing()
+            line = Line(self.doc, line, number_in_view=line_number, paragraph=paragraph, position=self.line_position)
+            for element in line_elements:
+                line.addElement(element)
+            paragraph.addLine(line)
+            self.prev_line = line
+        self.addParagraph(paragraph)
+
     def addParagraphs(self, paragraphs):
-        prev_line = None
         for paragraph, paragraph_lines in paragraphs:
-            paragraph = Paragraph(self.doc, paragraph, offset=self, page=self.getPage())
-            for line_number, (line, line_elements) in enumerate(paragraph_lines):
-                if prev_line is not None:
-                    prev_line.enableLineSpacing()
-                line = Line(self.doc, line, number_in_view=line_number, paragraph=paragraph, position=self.line_position)
-                for element in line_elements:
-                    line.addElement(element)
-                paragraph.addLine(line)
-                prev_line = line
-            self.addParagraph(paragraph)
+            self.appendParagraph(paragraph, paragraph_lines)
 
     def getPage(self):
         return self.page
@@ -432,20 +435,22 @@ class Page(OffsetView):
         self.html.styles['width'] = mm ( self.width )
         self.html.styles['min-height'] = mm( self.height )
         self.footnotes = []
+        self.footnotes_view = None
 
     def getPage(self):
         return self
 
     def etree(self):
         if len(self.footnotes) > 0:
-            footnotes = ET.SubElement(self.html, 'div', {'class':'FootNotes'})
-            footnotes.styles['position'] = 'absolute'
-            footnotes.styles['bottom'] = '0'
-            footnotes.styles['border-top'] = '1px solid black'
-            footnotes.styles['padding-top'] = '.5em'
+            if self.footnotes_view is None:
+                self.footnotes_view = FootNotes(self.doc, None, page=self)
+                for html in self.footnotes_view.etree():
+                    self.html.append(html)
             for fn in self.footnotes:
-                for html in fn.etree():
-                    footnotes.append(html)
+                for fn_paragraphs in hwp50.getPagedParagraphs(fn.listhead.paragraphs):
+                    self.footnotes_view.addParagraphs(fn_paragraphs)
+            self.footnotes = []
+
         if len(self.html) == 0 and (self.html.text == None or len(self.html.text) == 0):
             self.html.text = u'\xa0'
         return self.paper.etree()
@@ -681,6 +686,7 @@ class Line(ElementContainerView):
                     self.x -= self.paragraph.text_indent
             self.x = self.doc.SHWPUNIT(self.x)
             styles['margin-left'] = mm(self.x)
+        styles['line-height'] = pt(self.height)
         html.attrib['style'] = unicode(styles)
     def enableLineSpacing(self):
         self.html.styles['margin-bottom'] = pt(self.marginBottom)
@@ -736,10 +742,8 @@ class Line(ElementContainerView):
             self.stack[-1].addHtml(bookmark)
         elif e.ch == e.FOOT_END_NOTE:
             if isinstance(e.control, self.doc.FootNote):
-                fn = FootNote(self.doc, e.control, page=self.paragraph.page)
+                fn = e.control
                 self.stack[-1].addFootNoteRef(fn)
-                for page_paragraphs in hwp50.getPagedParagraphs(fn.listhead.paragraphs):
-                    fn.addParagraphs(page_paragraphs)
                 self.paragraph.page.addFootNote(fn)
             else:
                 self.stack[-1].addComment(e)
@@ -886,15 +890,17 @@ class Table(View):
         if self.doc.debug: yield ET.Comment(repr(self.model))
         yield self.html
 
-class FootNote(OffsetView):
+class FootNotes(OffsetView):
     line_position = 'static'
     def init(self):
-        self.html = html = ET.Element('div', {'class':'FootNote'})
-
+        self.html = html = ET.Element('div', {'class':'FootNotes'})
+        html.styles['position'] = 'absolute'
+        html.styles['bottom'] = '0'
+        html.styles['border-top'] = '1px solid black'
+        html.styles['padding-top'] = '.5em'
     def etree(self):
         if len(self.html) == 0 and (self.html.text is None or len(self.html.text)):
             self.html.text = u'\xa0'
-        if self.doc.debug: yield ET.Comment(repr(self.model))
         yield self.html
 
 class HtmlConverter:
@@ -1161,7 +1167,7 @@ def main():
     import os.path
     rootname = os.path.splitext(os.path.basename(hwpfilename))[0]
 
-    Document.debug = False
+    Document.debug = True
     cvt = HtmlConverter()
     cvt.convert(doc, LocalDestination(rootname))
 if __name__ == '__main__':
