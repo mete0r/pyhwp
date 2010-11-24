@@ -359,25 +359,22 @@ class Document:
         self.head = head = ET.SubElement(html, 'head')
         meta = ET.SubElement(head, 'meta', {'http-equiv':'Content-Type', 'content':'application/xhtml+xml; charset=utf-8'})
         meta = ET.SubElement(head, 'meta', {'name' : 'HWP File Format Version' , 'content':'.'.join([str(x) for x in self.header.version]) })
-        self.style = style = ET.SubElement(head, 'style', {'type':'text/css'})
-        style.text = ''
         self.stylenames, cssrules = self.makeStyles(self.model)
-        style.text += ''.join([unicode(cssrule) for cssrule in cssrules])
+        style_text = '@charset "utf-8"\n'
+        style_text += ''.join([unicode(cssrule) for cssrule in cssrules])
         for charShape in self.docinfo.mappings[self.CharShape]:
-            cssrule = CssRule()
-            cssrule.selectors.append( '.CharShape-%d'%charShape.id )
-            cssrule.props.update( makeCssPropsFromCharShape( self.model, charShape ) )
-            style.text += unicode(cssrule)
+            style_text += unicode(CssRule('.CharShape-%d'%charShape.id, makeCssPropsFromCharShape( self.model, charShape )))
         for paraShape in self.docinfo.mappings[self.ParaShape]:
-            cssrule = CssRule()
-            cssrule.selectors.append( '.ParaShape-%d'%paraShape.id )
-            cssrule.props.update( makeCssPropsFromParaShape( self.model, paraShape ) )
-            style.text += unicode(cssrule)
-        style.text += unicode(CssRule('.Paper', {'page-break-after':'always', 'background-color':'white'}))
-        style.text += unicode(CssRule('.Page', {'position':'relative', 'background':'url(page-background.png) repeat'}))
-        style.text += unicode(CssRule('.Line', {'position':'absolute'}))
-        style.text += unicode(CssRule('body', { 'background-color':'#ccc'}))
-        style.text += unicode(CssRule('.FootNoteRef', { 'vertical-align':'super' }))
+            style_text += unicode(CssRule('.ParaShape-%d'%paraShape.id, makeCssPropsFromParaShape( self.model, paraShape )))
+        style_text += unicode(CssRule('.Paper', {'page-break-after':'always', 'background-color':'white'}))
+        style_text += unicode(CssRule('.Page', {'position':'relative', 'background':'url(page-background.png) repeat'}))
+        style_text += unicode(CssRule('.Line', {'position':'absolute', 'white-space':'nowrap'}))
+        style_text += unicode(CssRule('.FootNoteRef', { 'vertical-align':'super' }))
+        style_text += unicode(CssRule('body', { 'background-color':'#ccc'}))
+        style = ET.SubElement(head, 'link', {'rel':'stylesheet', 'type':'text/css'})
+        src = self.destination.addAttachment('styles.css', style_text.encode('utf-8'))
+        style.attrib['href'] = src
+        style.append(ET.Comment(' '))
 
         self.body = body = ET.SubElement(html, 'body')
 
@@ -672,8 +669,7 @@ class Line(ElementContainerView):
 
             styles['top'] = mm(self.offsetY)
             styles['left'] = pt(self.x)
-            # 폭이 넓은 폰트의 경우 줄이 바뀌는 경우가 있어서: 좀 느슨하게 +10 정도 여유를 더 줌
-            styles['width'] = mm(self.doc.HWPUNIT(self.a5[0]+10))
+            styles['width'] = mm(self.doc.HWPUNIT(self.a5[0]))
             styles['height'] = pt(self.height)
         elif self.position == 'static':
             self.x = 0
