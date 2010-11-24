@@ -140,7 +140,7 @@ def pullparseRecords(recordlist, records):
         while level < len(stack):
             yield ENDREC, stack.pop()
         while len(stack) < level:
-            raise Exception('invalid level: Record %d, level %d, expected level='%(rec.seqno, level, len(stack)))
+            raise Exception('invalid level: Record %d, level %d, expected level=%d'%(rec.seqno, level, len(stack)))
         assert(len(stack) == level)
 
         if len(stack) > 0:
@@ -171,7 +171,7 @@ def buildModelTree(root, bytestream):
                         logging.error( 'failed to parse a Record(#%d): %s'%(rec.seqno, str(Model)) + ':\n' + '\t'+dataio.hexdump(rec.bytes).replace('\n', '\n\t') + '\n')
                         raise
                 else:
-                    logging.debug('record #%d: ignoring unrecognized tagid: %s 0x%x (+%d) at record context %s'%(rec.seqno, tagnames.get(rec.tagid, ''), rec.tagid, rec.tagid - HWPTAG_BEGIN, str(context)))
+                    #logging.debug('record #%d: ignoring unrecognized tagid: %s 0x%x (+%d) at record context %s'%(rec.seqno, tagnames.get(rec.tagid, ''), rec.tagid, rec.tagid - HWPTAG_BEGIN, str(context)))
                     model = None
                     setter = None
             except Exception, e:
@@ -201,33 +201,39 @@ def buildModelTree(root, bytestream):
                 else:
                     setter(model)
 
-def defineFlags(_basetype, _bits):
-    d = dict(dataio.extract_swapped_pairs(_bits))
-    class _Flags(_basetype):
-        def __getattr__(self, name):
-            try:
-                (l, h) = d[name]
-                return int(self >> l) & int( (2**(h-l)) - 1)
-            except KeyError:
-                raise AttributeError('Invalid flag name: %s'%(name))
-        def __repr__(self):
-            return hex(self)+'='+str(dict([(name,getattr(self, name)) for name in d.keys()]))
-    return _Flags
+class CHID:
+    TABLE = 'tbl '
+    LINE = '$lin'
+    RECT = '$rec'
+    ELLI = '$ell'
+    ARC = '$arc'
+    POLY = '$pol'
+    CURV = '$cur'
+    EQED = 'eqed'
+    PICT = '$pic'
+    OLE = '$ole'
+    CONTAINER = '$con'
+    def parse(cls, f):
+        return cls.decode_bytes( readn(f,4) )
+    parse = classmethod(parse)
+    def decode_bytes(cls, data):
+        return data[3] + data[2] + data[1] + data[0]
+    decode_bytes = classmethod(decode_bytes)
 
 class FileHeader:
-    Flags = defineFlags(UINT32, (
-        (0, 1), 'compressed',
-        (1, 2), 'password',
-        (2, 3), 'distributable',
-        (3, 4), 'script',
-        (4, 5), 'drm',
-        (5, 6), 'xmltemplate_storage',
-        (6, 7), 'history',
-        (7, 8), 'cert_signed',
-        (8, 9), 'cert_encrypted',
-        (9, 10), 'cert_signature_extra',
-        (10, 11), 'cert_drm',
-        (11, 12), 'ccl',
+    Flags = dataio.Flags(UINT32, (
+        0, 'compressed',
+        1, 'password',
+        2, 'distributable',
+        3, 'script',
+        4, 'drm',
+        5, 'xmltemplate_storage',
+        6, 'history',
+        7, 'cert_signed',
+        8, 'cert_encrypted',
+        9, 'cert_signature_extra',
+        10, 'cert_drm',
+        11, 'ccl',
         ))
     def getFields(self):
         yield BYTES(32), 'signature'
@@ -354,10 +360,10 @@ def defineModels(doc):
             yield BSTR, 'name'
 
     class FaceName:
-        Flags = defineFlags(BYTE, (
-            (7, 8), 'alternate',
-            (6, 7), 'metric',
-            (5, 6), 'default',
+        Flags = dataio.Flags(BYTE, (
+            5, 'default',
+            6, 'metric',
+            7, 'alternate',
             ))
         def getFields(self):
             yield self.Flags, 'attr'
@@ -380,7 +386,8 @@ def defineModels(doc):
         def getSubModeler(self, rec):
             pass
         def __repr__(self):
-            return '<Control chid="%s">'%(self.chid)
+            return '%s\n'%(self.__class__.__name__)\
+                    + '\n'.join([' - %s : %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
 
     class ControlChar:
         class char:
@@ -420,16 +427,21 @@ def defineModels(doc):
         }
         names = {}
         kinds = {}
+        import re
+        regex = re.compile('[\x00-\x1f]\x00')
         def find(cls, data, start_idx):
-            data_len = len(data)
-            i = start_idx
-            while i < data_len:
-                if (0 <= ord(data[i]) <= 31) and (data[i+1] == '\x00'):
-                    char = dataio.decode_utf16le_besteffort(data[i:i+2])
+            while True:
+                m = cls.regex.search(data, start_idx)
+                if m is not None:
+                    i = m.start()
+                    if i & 1 == 1:
+                        start_idx = i + 1
+                        continue
+                    char = unichr(ord(data[i]))
                     size = cls.kinds[char].size
-                    return (i, i+size*2)
-                i = i + 2
-            return (data_len, data_len)
+                    return i, i+size*2
+            data_len = len(data)
+            return data_len, data_len
         find = classmethod(find)
 
         byteoffset = None
@@ -467,7 +479,7 @@ def defineModels(doc):
             else:
                 param = ''
             return '<ControlChar.%s %s %s charShapeId=%s charoffset=%s byteoffset=%s>'%(
-                    name, chid, param, self.charShapeId, self.charoffset,
+                    name, repr(chid), param, self.charShapeId, self.charoffset,
                     ('0x%x'%self.byteoffset) if self.byteoffset is not None else None)
     for (code, (name, kind)) in ControlChar.chars.iteritems():
         setattr(ControlChar, name, unichr(code))
@@ -518,39 +530,25 @@ def defineModels(doc):
         def getElements(self):
             return self.parseBytes(self.record.bytes)
         def controlchars_by_chid(self, chid):
-            for elem in self:
-                if isinstance(elem, ControlChar) and elem.chid == chid:
-                    yield elem
-        def subdata(self, startpos, endpos):
-            if self.record.bytes is None:
-                return ''
-            if endpos is not None:
-                return self.record.bytes[startpos*2:endpos*2]
-            else:
-                return self.record.bytes[startpos*2:]
-        def datalen(self):
-            if self.record.bytes is None:
-                return 0
-            else:
-                return len(self.record.bytes)/2
-
+            return itertools.ifilter(
+                    lambda elem: isinstance(elem, ControlChar) and elem.chid == chid,
+                    self)
         def __repr__(self):
             return '\n'.join(['- '+repr(x) for x in self])
-            #return repr([x for x in self])
 
-    class ParaShape:
-        Flags = defineFlags(UINT32, (
-                (0, 2), 'lineSpacingType',
-                (2, 5), 'textAlign',
+    class ParaShape(object):
+        Flags = dataio.Flags(UINT32, (
+                (0, 1), 'lineSpacingType',
+                (2, 4), 'textAlign',
                 # TODO
                 ))
         def getFields(self):
             yield self.Flags, 'attr1',
-            yield INT32,  'marginLeft',   # 1/7200 * 2 # DIFFSPEC
-            yield INT32,  'marginRight',  # 1/7200 * 2
+            yield INT32,  'doubleMarginLeft',   # 1/7200 * 2 # DIFFSPEC
+            yield INT32,  'doubleMarginRight',  # 1/7200 * 2
             yield SHWPUNIT,  'indent',
-            yield INT32,  'marginTop',    # 1/7200 * 2
-            yield INT32,  'marginBottom', # 1/7200 * 2
+            yield INT32,  'doubleMarginTop',    # 1/7200 * 2
+            yield INT32,  'doubleMarginBottom', # 1/7200 * 2
             yield SHWPUNIT,  'lineSpacingBefore2007',
             yield UINT16, 'tabDefId',
             yield UINT16, 'numberingBulletId',
@@ -563,6 +561,19 @@ def defineModels(doc):
                 yield UINT32, 'attr2',       # above 5016
                 #yield UINT32, 'attr3',       # DIFFSPEC
                 #yield UINT32, 'lineSpacing', # DIFFSPEC
+        def getMarginLeft(self):
+            return SHWPUNIT(self.doubleMarginLeft/2)
+        marginLeft = property(getMarginLeft)
+        def getMarginRight(self):
+            return SHWPUNIT(self.doubleMarginRight/2)
+        marginRight = property(getMarginRight)
+        def getMarginTop(self):
+            return SHWPUNIT(self.doubleMarginTop/2)
+        marginTop = property(getMarginTop)
+        def getMarginBottom(self):
+            return SHWPUNIT(self.doubleMarginBottom/2)
+        marginBottom = property(getMarginBottom)
+
         LINEHEIGHT_BITS = (0,1)
         LINEHEIGHT_BYFONT       = 0x0
         LINEHEIGHT_FIXED        = 0x1
@@ -720,8 +731,10 @@ def defineModels(doc):
         def getFields(self):
             yield INT32, 'chpos',
             yield SHWPUNIT, 'offsetY',
-            yield ARRAY(SHWPUNIT, 2), 'a2',
-            yield ARRAY(SHWPUNIT, 2), 'a3',
+            yield SHWPUNIT, 'a2',
+            yield SHWPUNIT, 'height',
+            yield SHWPUNIT, 'a3',
+            yield SHWPUNIT, 'marginBottom',
             yield INT32, 'a4',
             yield ARRAY(SHWPUNIT, 2), 'a5',
         def __repr__(self):
@@ -731,10 +744,10 @@ def defineModels(doc):
         pass
 
     class ListHeader(object):
-        Flags = defineFlags(UINT32, (
-            (0, 3), 'textdirection',
-            (3, 5), 'linebreak',
-            (5, 7), 'vertAlign',
+        Flags = dataio.Flags(UINT32, (
+            (0, 2), 'textdirection',
+            (3, 4), 'linebreak',
+            (5, 6), 'vertAlign',
             ))
         VALIGN_MASK     = 0x60
         VALIGN_TOP      = 0x00
@@ -749,17 +762,20 @@ def defineModels(doc):
         def __repr__(self):
             return '%s\n'%self.__class__.__name__+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
 
-    class PageDef:
-        Flags = defineFlags(UINT32, (
-                        (0, 1), 'landscape',
-                        (1, 3), 'bookcompilingStyle',
+    class PageDef(object):
+        Flags = dataio.Flags(UINT32, (
+                        0, 'landscape',
+                        (1, 2), 'bookcompilingStyle',
                         ))
         def getFields(self):
-            yield HWPUNIT, 'width',
-            yield HWPUNIT, 'height',
-            yield ARRAY(HWPUNIT, 4), 'offset',
-            yield HWPUNIT, 'headerOffset',
-            yield HWPUNIT, 'footerOffset',
+            yield HWPUNIT, 'paper_width',
+            yield HWPUNIT, 'paper_height',
+            yield HWPUNIT, 'offsetLeft',
+            yield HWPUNIT, 'offsetRight',
+            yield HWPUNIT, 'offsetTop',
+            yield HWPUNIT, 'offsetBottom',
+            yield HWPUNIT, 'offsetHeader',
+            yield HWPUNIT, 'offsetFooter',
             yield HWPUNIT, 'jebonOffset',
             yield self.Flags, 'attr',
             #yield UINT32, 'attr',
@@ -768,7 +784,52 @@ def defineModels(doc):
         PORTRAIT = 0
         LANDSCAPE = 1
 
-    class FootnoteShape: pass
+        OFFSET_LEFT = 0
+        OFFSET_RIGHT = 1
+        OFFSET_TOP = 2
+        OFFSET_BOTTOM = 3
+        def getDimension(self):
+            width = HWPUNIT( self.paper_width - self.offsetLeft - self.offsetRight )
+            height = HWPUNIT( self.paper_height - (self.offsetTop + self.offsetHeader) - (self.offsetBottom + self.offsetFooter))
+            if self.attr.landscape:
+                return (height, width)
+            else:
+                return (width, height)
+        dimension = property(getDimension)
+        def getHeight(self):
+            if self.attr.landscape:
+                width = HWPUNIT( self.paper_width - self.offsetLeft - self.offsetRight )
+                return width
+            else:
+                height = HWPUNIT( self.paper_height - (self.offsetTop + self.offsetHeader) - (self.offsetBottom + self.offsetFooter))
+                return height
+        height = property(getHeight)
+        def getWidth(self):
+            if self.attr.landscape:
+                height = HWPUNIT( self.paper_height - (self.offsetTop + self.offsetHeader) - (self.offsetBottom + self.offsetFooter))
+                return height
+            else:
+                width = HWPUNIT( self.paper_width - self.offsetLeft - self.offsetRight )
+                return width
+        width = property(getWidth)
+
+    class FootnoteShape:
+        Flags = dataio.Flags(UINT32, (
+            ))
+        def getFields(self):
+            yield self.Flags, 'flags'
+            yield WCHAR, 'usersymbol'
+            yield WCHAR, 'prefix'
+            yield WCHAR, 'suffix'
+            yield UINT16, 'starting_number'
+            yield HWPUNIT16, 'splitterLength'
+            yield HWPUNIT16, 'splitterMarginTop'
+            yield HWPUNIT16, 'splitterMarginBottom'
+            yield HWPUNIT16, 'notesSpacing'
+            yield Border, 'splitterStyle'
+        def __repr__(self):
+            return '%s\n'%self.__class__.__name__+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
+
     class PageBorderFill: pass
     class ForbiddenChar: pass
 
@@ -816,8 +877,8 @@ def defineModels(doc):
             yield Matrix, 'rotator',
 
     class ShapeComponent:
-        Flags = defineFlags(UINT32, (
-                (0, 1), 'flip')
+        Flags = dataio.Flags(UINT32, (
+                0, 'flip')
             )
         def getFields(self):
             yield CHID, 'chid'
@@ -865,77 +926,14 @@ def defineModels(doc):
                 return Paragraph, self.paragraphs.append
             elif tagid == HWPTAG_SHAPE_COMPONENT:
                 return ShapeComponent, self.subshapes.append
+        def __repr__(self):
+            return '%s\n'%self.__class__.__name__+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
 
     class PrimaryShapeComponent(ShapeComponent):
         def getFields(self):
             yield CHID, 'unknownchid'
             for x in ShapeComponent.getFields(self):
                 yield x
-
-    class SectionDef(Control):
-        chid = 'secd'
-        def getFields(self):
-            for x in Control.getFields(self):
-                yield x
-            yield UINT32, 'attr',
-            yield HWPUNIT16, 'intercolumnSpacing',
-            yield HWPUNIT16, 'verticalAlignment',
-            yield HWPUNIT16, 'horizontalAlignment',
-            yield HWPUNIT, 'defaultTabStops',
-            yield UINT16, 'numberingShapeId',
-            yield UINT16, 'startingPageNumber',
-            yield UINT16, 'startingPictureNumber',
-            yield UINT16, 'startingTableNumber',
-            yield UINT16, 'startingEquationNumber',
-            if doc.header.version > (5, 0, 1, 6):
-                yield UINT32, 'unknown1', # above 5016
-                #yield UINT32, 'unknown2',
-
-        def __init__(self):
-            self.pages = []
-            self.footnoteShapes = []
-            self.pageBorderFills = []
-
-        def getSubModeler(self, rec):
-            tagid = rec.tagid
-            submodelers = {
-                    HWPTAG_PAGE_DEF:(PageDef, self.pages.append),
-                    HWPTAG_FOOTNOTE_SHAPE:(FootnoteShape, self.footnoteShapes.append),
-                    HWPTAG_PAGE_BORDER_FILL:(PageBorderFill, self.pageBorderFills.append),
-                    }
-            return submodelers.get(tagid, None)
-    Control.addsubtype(SectionDef)
-
-    class ColumnsDef(Control):
-        chid = 'cold'
-        def getFields(o):
-            for x in Control.getFields(o):
-                yield x
-            yield UINT16, 'attr'
-            yield HWPUNIT16, 'spacing'
-            if not o.sameWidths:
-                yield ARRAY(WORD, o.count), 'widths'
-            yield UINT16, 'attr2'
-            yield UINT8, 'splitterType'
-            yield UINT8, 'splitterWidth'
-            yield COLORREF, 'splitterColor'
-
-        def kind(self):
-            return self.attr & 3
-        kind = property(kind)
-
-        def count(self):
-            return (self.attr >> 2) & 0xff
-        count = property(count)
-
-        def direction(self):
-            return (self.attr >> 10) & 3
-        direction = property(direction)
-
-        def sameWidths(self):
-            return (self.attr & 4096) != 0
-        sameWidths = property(sameWidths)
-    Control.addsubtype(ColumnsDef)
 
     class TableCell(ListHeader):
         def getFields(self):
@@ -960,10 +958,10 @@ def defineModels(doc):
                 yield paragraphs
 
     class TableCaption(ListHeader):
-        CaptionFlags = defineFlags(
+        CaptionFlags = dataio.Flags(
                 UINT32, (
-                    (0, 2), 'position',
-                    (2, 3), 'include_margin',
+                    (0, 1), 'position',
+                    2, 'include_margin',
                     )
                 )
         POS_LEFT = 0
@@ -981,10 +979,10 @@ def defineModels(doc):
             return 'TableCaption\n'+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
 
     class TableBody:
-        TableFlags = defineFlags(
+        TableFlags = dataio.Flags(
                 UINT32, (
-                    (0, 2), 'splitPage',
-                    (2, 3), 'repeatHeaderRow',
+                    (0, 1), 'splitPage',
+                    2, 'repeatHeaderRow',
                     ))
         ZoneInfo = ARRAY(UINT16, 5)
         def getFields(self):
@@ -1003,21 +1001,21 @@ def defineModels(doc):
         def __init__(self):
             self.cells = []
 
-    class CommonControlFlags(defineFlags(UINT32, (
-                (0, 1), 'inline',
-                (2, 3), 'affectsLineSpacing',
-                (3, 5), 'vertRelTo',
-                (5, 8), 'vertAlign',
-                (8, 10), 'horzRelTo',
-                (10, 13), 'horzAlign',
-                (13, 14), 'restrictedInBody',
-                (14, 15), 'overwrap',
-                (15, 18), 'widthRelTo',
-                (18, 20), 'heightRelTo',
-                (20, 21), 'protectedSize',
-                (21, 24), 'flow',
-                (24, 26), 'textSide',
-                (26, 28), 'numberCategory'
+    class CommonControlFlags(dataio.Flags(UINT32, (
+                0, 'inline',
+                2, 'affectsLineSpacing',
+                (3, 4), 'vertRelTo',
+                (5, 7), 'vertAlign',
+                (8, 9), 'horzRelTo',
+                (10, 12), 'horzAlign',
+                13, 'restrictedInPage',
+                14, 'overwrap',
+                (15, 17), 'widthRelTo',
+                (18, 19), 'heightRelTo',
+                20, 'protectedSize',
+                (21, 23), 'flow',
+                (24, 25), 'textSide',
+                (26, 27), 'numberCategory'
                 ))):
         FLOW_FLOAT  = 0
         FLOW_BLOCK  = 1
@@ -1046,7 +1044,7 @@ def defineModels(doc):
 
         VERT_ALIGN_TOP = 0
         VERT_ALIGN_CENTER = 1
-        VERT_ALIGN_RIGHT = 2
+        VERT_ALIGN_BOTTOM = 2
         VERT_ALIGN_INSIDE = 3
         VERT_ALIGN_OUTSIDE = 4
 
@@ -1072,6 +1070,7 @@ def defineModels(doc):
                 yield BSTR, 'description'
         def __repr__(self):
             return ('%s\n'%self.__class__.__name__)+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
+
     class Table(CommonControl):
         chid = 'tbl '
         caption = None
@@ -1120,24 +1119,181 @@ def defineModels(doc):
 
     Control.addsubtype(Table)
 
-    class AutoNumber(Control):
+    class GShapeObject(CommonControl):
+        chid = 'gso '
+        def getSubModeler(self, rec):
+            tagid = rec.tagid
+            if tagid == HWPTAG_SHAPE_COMPONENT:
+                # GShapeObject의 직할 ShapeComponent는 일반 ShapeComponent과 디코딩 방법이 다름
+                return PrimaryShapeComponent, 'shapecomponent'
+    Control.addsubtype(GShapeObject)
+
+    class SectionDef(Control):
+        chid = 'secd'
+        def getFields(self):
+            for x in Control.getFields(self):
+                yield x
+            yield UINT32, 'attr',
+            yield HWPUNIT16, 'intercolumnSpacing',
+            yield HWPUNIT16, 'verticalAlignment',
+            yield HWPUNIT16, 'horizontalAlignment',
+            yield HWPUNIT, 'defaultTabStops',
+            yield UINT16, 'numberingShapeId',
+            yield UINT16, 'startingPageNumber',
+            yield UINT16, 'startingPictureNumber',
+            yield UINT16, 'startingTableNumber',
+            yield UINT16, 'startingEquationNumber',
+            if doc.header.version > (5, 0, 1, 6):
+                yield UINT32, 'unknown1', # above 5016
+                #yield UINT32, 'unknown2',
+
+        def __init__(self):
+            self.pages = []
+            self.footnoteShapes = []
+            self.pageBorderFills = []
+
+        def getSubModeler(self, rec):
+            if rec.tagid == HWPTAG_PAGE_DEF:
+                return PageDef, self.pages.append
+            elif rec.tagid == HWPTAG_FOOTNOTE_SHAPE:
+                return FootnoteShape, self.footnoteShapes.append
+            elif rec.tagid == HWPTAG_PAGE_BORDER_FILL:
+                return PageBorderFill, self.pageBorderFills.append
+            elif rec.tagid == HWPTAG_CTRL_DATA:
+                return SectionDefData, 'data'
+    Control.addsubtype(SectionDef)
+
+    # samples-local / 5024
+    class SectionDefData:
+        def getFields(self):
+            yield BYTESTREAM, 'unknownbytes'
+
+    class ColumnsDef(Control):
+        chid = 'cold'
+        def getFields(o):
+            for x in Control.getFields(o):
+                yield x
+            yield UINT16, 'attr'
+            yield HWPUNIT16, 'spacing'
+            if not o.sameWidths:
+                yield ARRAY(WORD, o.count), 'widths'
+            yield UINT16, 'attr2'
+            yield Border, 'splitterStyle'
+
+        def kind(self):
+            return self.attr & 3
+        kind = property(kind)
+
+        def count(self):
+            return (self.attr >> 2) & 0xff
+        count = property(count)
+
+        def direction(self):
+            return (self.attr >> 10) & 3
+        direction = property(direction)
+
+        def sameWidths(self):
+            return (self.attr & 4096) != 0
+        sameWidths = property(sameWidths)
+    Control.addsubtype(ColumnsDef)
+
+    class NumberingControl(Control):
+        class Flags( dataio.Flags(UINT32, (
+                (0, 3), 'kind',
+                (4, 11), 'footnoteShape',
+                12, 'superscript',
+                ))):
+            KIND_PAGE = 0
+            KIND_FOOTNOTE = 1
+            KIND_ENDNOTE = 2
+            KIND_PICTURE = 3
+            KIND_TABLE = 4
+            KIND_EQUATION = 5
+        def getFields(self):
+            for x in Control.getFields(self):
+                yield x
+            yield self.Flags, 'flags',
+            yield UINT16, 'number',
+    class AutoNumbering(NumberingControl):
         chid = 'atno'
         def getFields(self):
-            yield UINT32, 'flags',
-            yield UINT16, 'number',
+            for x in NumberingControl.getFields(self):
+                yield x
             yield WCHAR, 'usersymbol',
             yield WCHAR, 'prefix',
             yield WCHAR, 'suffix',
-        def __str__(self):
-            return str(self.number)
-    Control.addsubtype(AutoNumber)
+        def __unicode__(self):
+            prefix = u''
+            suffix = u''
+            if self.flags.kind == self.flags.KIND_FOOTNOTE:
+                if self.suffix != u'\x00':
+                    suffix = self.suffix
+            return prefix + unicode(self.number) + suffix
+    Control.addsubtype(AutoNumbering)
 
-    class FieldStart(Control):
+    class NewNumbering(NumberingControl):
+        chid = 'nwno'
+        def getFields(self):
+            for x in Control.getFields(self):
+                yield x
+    Control.addsubtype(NewNumbering)
+
+    class Header(Control):
+        ''' 머리말 '''
+        chid = 'head'
+        def getSubModeler(self, rec):
+            if rec.tagid == HWPTAG_LIST_HEADER:
+                return ListHeader, 'listhead'
+            if rec.tagid == HWPTAG_PARA_HEADER:
+                return Paragraph, self.listhead.paragraphs.append
+    Control.addsubtype(Header)
+
+    class Footer(Control):
+        ''' 꼬리말 '''
+        chid = 'foot'
+        def getSubModeler(self, rec):
+            if rec.tagid == HWPTAG_LIST_HEADER:
+                return ListFooter, 'listhead'
+            if rec.tagid == HWPTAG_PARA_HEADER:
+                return Paragraph, self.listhead.paragraphs.append
+    Control.addsubtype(Footer)
+
+    class FootNote(Control):
+        ''' 각주 '''
+        chid = 'fn  '
+        def getSubModeler(self, rec):
+            tagid = rec.tagid
+            if tagid == HWPTAG_LIST_HEADER:
+                return ListHeader, 'listhead'
+            if tagid == HWPTAG_PARA_HEADER:
+                return Paragraph, self.listhead.paragraphs.append
+        def getAutoNumber(self):
+            for paragraph in self.listhead.paragraphs:
+                for elem in paragraph.getElementsWithControl():
+                    if isinstance(elem.control, AutoNumbering):
+                        return elem.control
+    Control.addsubtype(FootNote)
+
+    class EndNote(Control):
+        ''' 미주 '''
+        chid = 'en  '
+        def getSubModeler(self, rec):
+            tagid = rec.tagid
+            if tagid == HWPTAG_LIST_HEADER:
+                return ListHeader, 'listhead'
+            if tagid == HWPTAG_PARA_HEADER:
+                return Paragraph, self.listhead.paragraphs.append
+    Control.addsubtype(EndNote)
+
+    class Field(Control):
+        pass
+
+    class FieldHyperLink(Field):
         chid = '%hlk'
-        Flags = defineFlags(UINT32, (
-                (0, 1), 'editableInReadOnly',
-                (11, 15), 'visitedType',
-                (15, 16), 'modified',
+        Flags = dataio.Flags(UINT32, (
+                0, 'editableInReadOnly',
+                (11, 14), 'visitedType',
+                15, 'modified',
                 ))
         def getFields(self):
             for x in Control.getFields(self):
@@ -1148,29 +1304,25 @@ def defineModels(doc):
             yield UINT32, 'id',
         def geturl(self):
             s = self.command.split(';')
-            return s[0]
+            return s[0].replace('\\:', ':')
         def __repr__(self):
             return '\n'.join(['- %s: %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
-    Control.addsubtype(FieldStart)
+    Control.addsubtype(FieldHyperLink)
 
-    class GShapeObject(CommonControl):
-        chid = 'gso '
+    class BookmarkData:
+        def getFields(self):
+            yield UINT32, 'unknown1'
+            yield UINT32, 'unknown2'
+            yield UINT16, 'unknown3'
+            yield BSTR, 'name'
+        def __repr__(self):
+            return '%s\n'%self.__class__.__name__+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
+    class Bookmark(Control):
+        chid = 'bokm'
         def getSubModeler(self, rec):
-            tagid = rec.tagid
-            if tagid == HWPTAG_SHAPE_COMPONENT:
-                # GShapeObject의 직할 ShapeComponent는 일반 ShapeComponent과 디코딩 방법이 다름
-                return PrimaryShapeComponent, 'shapecomponent'
-    Control.addsubtype(GShapeObject)
-
-    class FootNote(Control):
-        chid = 'fn  '
-        def getSubModeler(self, rec):
-            tagid = rec.tagid
-            if tagid == HWPTAG_LIST_HEADER:
-                return ListHeader, 'listhead'
-            if tagid == HWPTAG_PARA_HEADER:
-                return Paragraph, self.listhead.paragraphs.append
-    Control.addsubtype(FootNote)
+            if rec.tagid == HWPTAG_CTRL_DATA:
+                return BookmarkData, 'data'
+    Control.addsubtype(Bookmark)
 
     class ParaCharShape(list):
         def parse(self, f):
@@ -1190,15 +1342,20 @@ def defineModels(doc):
             self.controls = {}
             self.sectionDef = None
 
-        SplitFlags = defineFlags(BYTE, (
-                (0, 1), 'section',
-                (1, 2), 'multicolumn',
-                (2, 3), 'page',
-                (3, 4), 'column',
+        SplitFlags = dataio.Flags(BYTE, (
+                0, 'section',
+                1, 'multicolumn',
+                2, 'page',
+                3, 'column',
+                ))
+        ControlMask = dataio.Flags(UINT32, (
+                2, 'unknown1',
+                11, 'control',
+                21, 'new_number',
                 ))
         def getFields(self):
             yield UINT32, 'text',
-            yield UINT32, 'controlMask',
+            yield self.ControlMask, 'controlMask',
             yield UINT16, 'paragraphShapeId',
             yield BYTE, 'styleId',
             yield self.SplitFlags, 'split',
@@ -1261,14 +1418,14 @@ def defineModels(doc):
                 elem = elemiter.next()
                 for (segmentstart, segmentend, segmentid) in segments:
                     if segmentstart == segmentend: continue
-                    logging.debug('RANGE = (%s~%s) with %s'%(segmentstart, segmentend, segmentid))
+                    #logging.debug('RANGE = (%s~%s) with %s'%(segmentstart, segmentend, segmentid))
                     while True:
                         elemstart = elem.charoffset
                         elemend = elem.charoffset + len(elem)
                         if elemstart == elemend:
                             elem = elemiter.next()
                             continue
-                        logging.debug('ELEM = (%s,%s) %s'%(elemstart, elemend, elem))
+                        #logging.debug('ELEM = (%s,%s) %s'%(elemstart, elemend, elem))
                         if elemend <= segmentstart:
                             elem = elemiter.next()
                             continue
@@ -1279,12 +1436,12 @@ def defineModels(doc):
                                 prev, next = elem.split(split_pos)
                                 yield prev, segmentid
                                 elem = next
-                                logging.debug('SPLIT: %s / %s'%(prev, next))
+                                #logging.debug('SPLIT: %s / %s'%(prev, next))
                                 continue
                             else:
                                 logging.warning('element %s is over ParaCharShape (%d~%d, %d)'%(repr(elem), segmentstart, segmentend, segmentid))
                         if segmentstart <= elemstart and elemend <= segmentend:
-                            logging.debug('APPLIED: %s'%elem)
+                            #logging.debug('APPLIED: %s'%elem)
                             yield elem, segmentid
                             elem = elemiter.next()
                             continue
@@ -1294,7 +1451,7 @@ def defineModels(doc):
                                 split_pos = segmentend - elemstart
                                 prev, next = elem.split(split_pos)
                                 yield prev, segmentid
-                                logging.debug('SPLIT2: %s / %s'%(prev, next))
+                                #logging.debug('SPLIT2: %s / %s'%(prev, next))
                                 elem = next
                                 continue
                             else:
@@ -1347,7 +1504,7 @@ def defineModels(doc):
             if start is not None:
                 end = len(self.textdata.record.bytes)/2
                 if end > 0:
-                    lineseg.number_in_paragraph = lineno-1
+                    lineseg.number_in_paragraph = lineno
                     yield start, end, lineseg
 
         def getLinedElements(self):
@@ -1455,8 +1612,8 @@ def defineModels(doc):
             elif tagid == HWPTAG_DOC_DATA:
                 return DocData, 'docData'
 
-    for name, v in locals().iteritems():
-        if name not in ['doc', 'inch2mm', 'inch2px', 'hwp2inch', 'hwp2mm', 'hwp2px', 'hwp2pt']:
+    for name, v in dict(locals()).iteritems():
+        if (name not in ['doc', 'inch2mm', 'inch2px', 'hwp2inch', 'hwp2mm', 'hwp2px', 'hwp2pt']) and not isinstance(v, str):
             fixup_parse(v)
     del name, v
 

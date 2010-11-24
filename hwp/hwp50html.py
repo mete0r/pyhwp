@@ -191,127 +191,6 @@ def element_getattr(self, name):
     raise AttributeError(name)
 x.__class__.__getattr__ = element_getattr
 
-class HtmlP:
-    debug = False
-    def __init__(self, paragraph_stylename=None, paraShapeId=None, charShapeId=None):
-        p = P()
-        if paragraph_stylename is not None:
-            p.classes.append(paragraph_stylename)
-        if paraShapeId is not None:
-            p.classes.append('ParaShape-%d'%paraShapeId)
-        if charShapeId is not None:
-            p.classes.append('CharShape-%d'%charShapeId)
-        self.charShapeId = charShapeId
-        p.styles['position'] = 'relative'
-        self.p = p
-    def fromParagraph(cls, paragraph, stylenames):
-        paragraph_stylename = stylenames.get(paragraph.style, None)
-        if paragraph_stylename is None:
-            logging.warning('paragraph style is missing')
-        if paragraph.style.paragraphShapeId != paragraph.paragraphShapeId:
-            paraShapeId = paragraph.paragraphShapeId
-        else:
-            paraShapeId = None
-        charShapeId = paragraph.style.characterShapeId
-        return cls(paragraph_stylename, paraShapeId, charShapeId)
-    fromParagraph = classmethod(fromParagraph)
-    def get(self):
-        return self.p
-    def addComment(self, s):
-        self.p.append(ET.Comment(unicode(s)))
-    def addText(self, text, charShapeId):
-        if self.charShapeId == charShapeId:
-            if len(self.p) == 0:
-                if self.p.text is None:
-                    self.p.text = text
-                else:
-                    self.p.text += text
-            else:
-                if self.p[-1].tail is None:
-                    self.p[-1].tail = text
-                else:
-                    self.p[-1].tail += text
-        else:
-            span = Span()
-            span.classes.append('CharShape-'+str(charShapeId))
-            span.text = text
-            self.p.append(span)
-        if self.debug:
-            self.addComment(repr(text))
-    def addControlChar(self, e):
-        if e.ch == e.LINE_BREAK:
-            br = ET.Element('br')
-            self.p.append(br)
-        elif e.ch == e.PARAGRAPH_BREAK:
-            # TODO: split htmlP
-            cmt = ET.Comment('PARAGRAPH BREAK')
-            self.p.append(cmt)
-        elif e.ch in [e.NONBREAK_SPACE, e.FIXWIDTH_SPACE]:
-            self.addText(u'\xa0', e.charShapeId) # unicode "&nbsp;"
-        else:
-            self.addText(e.ch, e.charShapeId)
-    def addInlineControl(self, e):
-        if e.ch == e.TAB:
-            self.addText(e.ch, e.charShapeId)
-        else:
-            cmt = ET.Comment(str(e))
-            self.p.append(cmt)
-    def addImage(self, gso, img):
-        styles = CssDecls()
-        styles['width'] = mm(gso.width)
-        wrapdiv = None
-        if not gso.flags.inline:
-            styles['display'] = 'block'
-            if gso.flags.flow == gso.flags.FLOW_FLOAT: # 본문과의 배치: 어울림
-                # float
-                if gso.flags.textSide == gso.flags.TEXTSIDE_LEFT:
-                    styles['float'] = 'right'
-                    if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
-                        styles['margin-right'] = mm(gso.offsetX)
-                    elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
-                        #TODO styles['margin-right'] = mm(doc.SHWPUNIT( page_width - gso.width - gso.offsetX ))
-                        pass
-                elif gso.flags.textSide == gso.flags.TEXTSIDE_RIGHT:
-                    styles['float'] = 'left'
-                    if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
-                        styles['margin-left'] = mm(gso.offsetX)
-                    elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
-                        #TODO styles['margin-left'] = mm(doc.SHWPUNIT( page_width - gso.width - gso.offsetX ))
-                        pass
-                elif gso.flags.textSide == gso.flags.TEXTSIDE_BOTH:
-                    logging.warning('unsupported <본문 위치>: 양쪽')
-                    styles['position'] = 'absolute'
-                    if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
-                        styles['left'] = mm(gso.offsetX)
-                    elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_CENTER:
-                        styles['left'] = mm(gso.offsetX) # TODO: + (50% of container)
-                    elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
-                        styles['right'] = mm(gso.offsetX)
-                elif gso.flags.textSide == gso.flags.TEXTSIDE_LARGER:
-                    logging.warning('unsupported <본문 위치>: 큰 쪽')
-                    pass
-            elif gso.flags.flow == gso.flags.FLOW_BLOCK: # 본문과의 배치: 자리차지
-                styles['position'] = 'relative'
-                if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
-                    styles['left'] = mm(gso.offsetX)
-                elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_CENTER:
-                    styles['margin'] = 'auto'
-                    styles['left'] = mm(gso.offsetX)
-                elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
-                    styles['right'] = mm(gso.offsetX)
-                    styles['position'] = 'absolute'
-                    wrapdiv = ET.Element('div', {'style':'height:'+mm(gso.height)})
-            elif gso.flags.flow == gso.flags.FLOW_BACK: # 본문과의 배치: 글 뒤로
-                pass
-            elif gso.flags.flow == gso.flags.FLOW_FRONT: # 본문과의 배치: 글 앞으로
-                pass
-        img.attrib['style'] = unicode(styles)
-        if wrapdiv is not None:
-            wrapdiv.append(img)
-            img = wrapdiv
-            wrapdiv = None
-        self.p.append(img)
-
 def makeCssPropsFromCharShape(doc, charShape):
     fonts = doc.docinfo.mappings[doc.FaceName]
     props = {}
@@ -339,7 +218,7 @@ def makeCssPropsFromCharShape(doc, charShape):
 
 def makeCssPropsFromParaShape(doc, paraShape):
     props = {}
-    margin = [doc.SHWPUNIT(x/2) for x in [paraShape.marginTop, paraShape.marginRight, paraShape.marginBottom, paraShape.marginLeft]]
+    margin = [doc.SHWPUNIT(x) for x in [paraShape.marginTop, paraShape.marginRight, paraShape.marginBottom, paraShape.marginLeft]]
     props['margin'] = compact_cssdir([pt(x) for x in margin])
 
     alignments = {
@@ -356,7 +235,7 @@ def makeCssPropsFromParaShape_Indent(doc, paraShape):
     props = {}
 
     props['text-indent'] = pt(doc.SHWPUNIT(paraShape.indent/2))
-    margin = [doc.SHWPUNIT(x/2) for x in [paraShape.marginTop, paraShape.marginRight, paraShape.marginBottom, paraShape.marginLeft]]
+    margin = [doc.SHWPUNIT(x) for x in [paraShape.marginTop, paraShape.marginRight, paraShape.marginBottom, paraShape.marginLeft]]
     # NOTE: difference between hwp indent and css text-indent
     # when indent value is less than 0,
     #   - paraShape.indent is applied to following lines, not beginning line
@@ -436,8 +315,10 @@ class View(object):
         self.init()
     def init(self):
         pass
-    def etree(self):
+    def etree(self, *args, **kwargs):
         raise NotImplemented
+    def __getattr__(self, name):
+        return getattr(self.model, name)
 
 class OffsetView(View):
     line_position = 'absolute'
@@ -449,16 +330,24 @@ class OffsetView(View):
             self.html.append(html)
 
     def addParagraphs(self, paragraphs):
+        prev_line = None
         for paragraph, paragraph_lines in paragraphs:
-            paragraph = Paragraph(self.doc, paragraph, offset=self)
-            for line, line_elements in paragraph_lines:
-                line = Line(self.doc, line, paragraph=paragraph)
+            paragraph = Paragraph(self.doc, paragraph, offset=self, page=self.getPage())
+            for line_number, (line, line_elements) in enumerate(paragraph_lines):
+                if prev_line is not None:
+                    prev_line.enableLineSpacing()
+                line = Line(self.doc, line, number_in_view=line_number, paragraph=paragraph, position=self.line_position)
                 for element in line_elements:
                     line.addElement(element)
                 paragraph.addLine(line)
+                prev_line = line
             self.addParagraph(paragraph)
 
+    def getPage(self):
+        return self.page
+
 class Document:
+    debug = False
     def __init__(self, model, **kwargs):
         self.model = model
         for k, v in kwargs.iteritems():
@@ -469,25 +358,26 @@ class Document:
         html.attrib['xmlns'] = 'http://www.w3.org/1999/xhtml'
         self.head = head = ET.SubElement(html, 'head')
         meta = ET.SubElement(head, 'meta', {'http-equiv':'Content-Type', 'content':'application/xhtml+xml; charset=utf-8'})
-        meta = ET.SubElement(head, 'meta', {'name' : 'HWP File Format Version' , 'content':'.'.join([str(x) for x in self.model.header.version]) })
+        meta = ET.SubElement(head, 'meta', {'name' : 'HWP File Format Version' , 'content':'.'.join([str(x) for x in self.header.version]) })
         self.style = style = ET.SubElement(head, 'style', {'type':'text/css'})
         style.text = ''
         self.stylenames, cssrules = self.makeStyles(self.model)
         style.text += ''.join([unicode(cssrule) for cssrule in cssrules])
-        for charShape in self.model.docinfo.mappings[self.model.CharShape]:
+        for charShape in self.docinfo.mappings[self.CharShape]:
             cssrule = CssRule()
             cssrule.selectors.append( '.CharShape-%d'%charShape.id )
             cssrule.props.update( makeCssPropsFromCharShape( self.model, charShape ) )
             style.text += unicode(cssrule)
-        for paraShape in self.model.docinfo.mappings[self.model.ParaShape]:
+        for paraShape in self.docinfo.mappings[self.ParaShape]:
             cssrule = CssRule()
             cssrule.selectors.append( '.ParaShape-%d'%paraShape.id )
             cssrule.props.update( makeCssPropsFromParaShape( self.model, paraShape ) )
             style.text += unicode(cssrule)
         style.text += unicode(CssRule('.Paper', {'page-break-after':'always', 'background-color':'white'}))
-        style.text += unicode(CssRule('.Page', {'position':'relative', 'background-color':'#eee'}))
+        style.text += unicode(CssRule('.Page', {'position':'relative', 'background':'url(page-background.png) repeat'}))
         style.text += unicode(CssRule('.Line', {'position':'absolute'}))
         style.text += unicode(CssRule('body', { 'background-color':'#ccc'}))
+        style.text += unicode(CssRule('.FootNoteRef', { 'vertical-align':'super' }))
 
         self.body = body = ET.SubElement(html, 'body')
 
@@ -511,12 +401,15 @@ class Document:
     def etree(self):
         return ET.ElementTree( self.html )
 
+    def __getattr__(self, name):
+        return getattr(self.model, name)
+
 class Section(View):
     def init(self):
         self.html = ET.Element('div', {'class':'Section'})
 
     def etree(self):
-        yield ET.Comment(repr(self.model))
+        if self.doc.debug: yield ET.Comment(repr(self.model))
         yield self.html
 
     def addPage(self, page):
@@ -526,19 +419,11 @@ class Section(View):
 class Paper(View):
     def init(self):
         self.html = html = ET.Element('div', {'class':'Paper'})
-        html.styles['margin'] = '0 auto'
-        page_offset = list(self.model.offset)
-        page_offset[2] = self.doc.model.HWPUNIT(page_offset[2] + self.model.headerOffset)
-        page_offset[3] = self.doc.model.HWPUNIT(page_offset[3] + self.model.footerOffset)
-        if self.model.attr.landscape:
-            # TODO
-            pass
-        else:
-            html.styles['width'] = mm( self.doc.model.HWPUNIT(self.model.width - page_offset[0] - page_offset[1]))
-            html.styles['min-height'] = str(self.doc.model.HWPUNIT(self.model.height - page_offset[2] - page_offset[3]).mm)+'mm'
-        page_offset[2] = page_offset[2]
-        page_offset[3] = page_offset[3]
-        html.styles['padding'] = compact_cssdir(cssdir( [mm(x) for x in page_offset] ))
+        html.styles['margin'] = '10pt auto'
+        html.styles['width'] = mm( self.width )
+        html.styles['min-height'] = mm ( self.height )
+        page_offset = [ self.doc.HWPUNIT(self.offsetTop + self.offsetHeader), self.offsetRight, self.doc.HWPUNIT(self.offsetBottom + self.offsetFooter), self.offsetLeft ]
+        html.styles['padding'] = compact_cssdir( [mm(x) for x in page_offset] )
         html.styles['border'] = '1px solid black'
     def etree(self):
         yield self.html
@@ -547,71 +432,87 @@ class Page(OffsetView):
     def init(self):
         self.paper = Paper(self.doc, self.model)
         self.html = ET.SubElement(self.paper.html, 'div', {'class':'Page'})
-        self.offsetY = 0
+        self.html.styles['width'] = mm ( self.width )
+        self.html.styles['min-height'] = mm( self.height )
+        self.footnotes = []
+
+    def getPage(self):
+        return self
 
     def etree(self):
+        if len(self.footnotes) > 0:
+            footnotes = ET.SubElement(self.html, 'div', {'class':'FootNotes'})
+            footnotes.styles['position'] = 'absolute'
+            footnotes.styles['bottom'] = '0'
+            footnotes.styles['border-top'] = '1px solid black'
+            footnotes.styles['padding-top'] = '.5em'
+            for fn in self.footnotes:
+                for html in fn.etree():
+                    footnotes.append(html)
         if len(self.html) == 0 and (self.html.text == None or len(self.html.text) == 0):
             self.html.text = u'\xa0'
         return self.paper.etree()
 
+    def addFootNote(self, fn):
+        self.footnotes.append(fn)
+
 class Paragraph(View):
     def init(self):
-        self.offsetY = self.offset.offsetY + self.model.lineSegs[0].offsetY
-
-        self.html = ET.Element('div', {'class':'Paragraph'})
-        html = self.html
-
-        paragraph_stylename = self.doc.stylenames.get(self.model.style, None)
-        if paragraph_stylename is None:
-            logging.warning('self.model style is missing')
-        else:
-            html.classes.append(paragraph_stylename)
-        if self.model.style.paragraphShapeId != self.model.paragraphShapeId:
-            html.classes.append('ParaShape-%d'%self.model.paragraphShapeId)
-        html.classes.append('CharShape-%d'%self.model.style.characterShapeId)
-
-        SHWPUNIT = self.doc.model.SHWPUNIT
-        paraShapeId = self.model.paragraphShapeId
-        paraShape = self.doc.model.docinfo.mappings[self.doc.model.ParaShape][paraShapeId]
-        self.left = SHWPUNIT(paraShape.marginLeft/2)
-        self.text_indent = SHWPUNIT(paraShape.indent/2)
+        self.childviews = []
+        SHWPUNIT = self.doc.SHWPUNIT
+        paraShapeId = self.paragraphShapeId
+        self.shape = self.doc.docinfo.mappings[self.doc.ParaShape][paraShapeId]
+        self.text_indent = SHWPUNIT(self.shape.indent/2)
 
     def etree(self):
+        self.html = ET.Element('div', {'class':'Paragraph'})
+
+        paragraph_stylename = self.doc.stylenames.get(self.style, None)
+        if paragraph_stylename is None:
+            logging.warning('self.model style is missing')
+            self.html.classes.append('ParaShape-%d'%self.style.paragraphShapeId)
+            self.html.classes.append('CharShape-%d'%self.style.characterShapeId)
+        else:
+            self.html.classes.append(paragraph_stylename)
+        if self.style.paragraphShapeId != self.paragraphShapeId:
+            self.html.classes.append('ParaShape-%d'%self.paragraphShapeId)
+
+        for child in self.childviews:
+            for html in child.etree():
+                self.html.append(html)
+
         if len(self.html) == 0 and (self.html.text == None or len(self.html.text) == 0):
             self.html.text = u'\xa0'
-        yield ET.Comment('Record #%d'%self.model.record.seqno)
-        yield ET.Comment(repr(self.model))
-        yield ET.Comment('left-margin: %s, text-indent: %s'%(pt(self.left), pt(self.text_indent)))
+        if self.doc.debug: yield ET.Comment('Record #%d'%self.record.seqno)
+        if self.doc.debug: yield ET.Comment(repr(self.model))
+        if self.doc.debug: yield ET.Comment('left-margin: %s, text-indent: %s'%(pt(self.shape.marginLeft), pt(self.text_indent)))
         yield self.html
 
     def addLine(self, line):
-        line.onAddToParagraph(self)
-        for html in line.etree():
-            self.html.append(html)
+        self.childviews.append(line)
 
     def buildTableTree(self, table):
         table = Table(self.doc, table)
-        if table.model.caption is not None:
-            caption = TableCaption(self.doc, table.model.caption)
-            for paragraphs in hwp50.getPagedParagraphs(caption.model.paragraphs):
+        if table.caption is not None:
+            caption = TableCaption(self.doc, table.caption, page=self.page)
+            for paragraphs in hwp50.getPagedParagraphs(caption.paragraphs):
                 caption.addParagraphs(paragraphs)
             table.addCaption(caption)
-        for row_number, row_cells in table.model.getRows():
+        for row_number, row_cells in table.getRows():
             tr = TableRow(self.doc, row_number)
             for cell in row_cells:
-                cell = TableCell(self.doc, cell)
-                for paragraphs in hwp50.getPagedParagraphs(cell.model.paragraphs):
+                cell = TableCell(self.doc, cell, page=self.page)
+                for paragraphs in hwp50.getPagedParagraphs(cell.paragraphs):
                     cell.addParagraphs(paragraphs)
                 tr.addCell(cell)
             table.addRow(tr)
         return table
 
-    def addControl(self, control, viewobj):
-        SHWPUNIT = self.doc.model.SHWPUNIT
+    def addControl(self, line, control, viewobj):
+        SHWPUNIT = self.doc.SHWPUNIT
         styles = CssDecls()
         styles['width'] = mm(control.width)
         styles['height'] = mm(control.height)
-        wrapdiv = None
         assert(not control.flags.inline)
         styles['display'] = 'block'
         if control.flags.flow == control.flags.FLOW_FLOAT: # 본문과의 배치: 어울림
@@ -645,89 +546,74 @@ class Paragraph(View):
         elif control.flags.flow == control.flags.FLOW_BLOCK: # 본문과의 배치: 자리차지
             styles['position'] = 'absolute'
 
-            SHWPUNIT = self.doc.model.SHWPUNIT
-            if control.flags.horzRelTo == control.flags.HORZ_RELTO_PAPER:
-                x = 0 # TODO
-            elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PAGE:
-                x = 0
-            elif control.flags.horzRelTo == control.flags.HORZ_RELTO_COLUMN:
-                x = 0 # TODO
-            elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PARAGRAPH:
-                x = self.left
-
             if control.flags.horzAlign == control.flags.HORZ_ALIGN_LEFT:
-                styles['left'] = mm(SHWPUNIT(x + control.margin[control.MARGIN_LEFT] + control.offsetX))
-            elif control.flags.horzAlign == control.flags.HORZ_ALIGN_CENTER:
-                styles['left'] = mm(control.offsetX) # TODO
+                if control.flags.horzRelTo == control.flags.HORZ_RELTO_PAPER:
+                    control_offset = control.offsetX - (self.page.offsetLeft)
+                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PAGE:
+                    control_offset = control.offsetX
+                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PARAGRAPH:
+                    control_offset = control.offsetX + self.shape.marginLeft
+                else:
+                    # TODO: COLUMN
+                    control_offset = control.offsetX
+                styles['left'] = mm(SHWPUNIT(control.margin[control.MARGIN_LEFT] + control_offset))
             elif control.flags.horzAlign == control.flags.HORZ_ALIGN_RIGHT:
-                styles['right'] = mm(control.offsetX) # TODO
+                if control.flags.horzRelTo == control.flags.HORZ_RELTO_PAPER:
+                    control_offset = control.offsetX - (self.page.offsetRight)
+                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PAGE:
+                    control_offset = control.offsetX
+                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PARAGRAPH:
+                    control_offset = control.offsetX + self.shape.marginRight
+                else:
+                    # TODO: COLUMN
+                    control_offset = control.offsetX
+                styles['right'] = mm(SHWPUNIT(control.margin[control.MARGIN_RIGHT] + control_offset))
+            elif control.flags.horzAlign == control.flags.HORZ_ALIGN_CENTER:
+                x = SHWPUNIT((self.page.width - control.width)/2 + control.offsetX)
+                # TODO: margin
+                styles['left'] = mm(x)
+            else:
+                logging.warning('TODO: handle horzAlign: %d'%control.flags.horzAlign)
+                styles['left'] = '0'
             
-            if control.flags.vertRelTo == control.flags.VERT_RELTO_PAPER:
-                styles['top'] = mm(SHWPUNIT(control.offsetY)) # TODO: minus page offset
-            elif control.flags.vertRelTo == control.flags.VERT_RELTO_PAGE:
-                styles['top'] = mm(control.offsetY)
-            elif control.flags.vertRelTo == control.flags.VERT_RELTO_PARAGRAPH:
-                y = SHWPUNIT(self.offsetY + control.offsetY + control.margin[control.MARGIN_TOP] - control.height)
-                styles['top'] = mm(y)
-
-            # TODO: VERT_ALIGN
+            if control.flags.vertRelTo == control.flags.VERT_RELTO_PARAGRAPH:
+                # hwp 2005(5.0.1.7) forces VERT_ALIGN to TOP when VERT_RELTO_PARAGRAPH
+                y = line.offsetY + control.offsetY + control.margin[control.MARGIN_TOP]
+                if y + control.height > self.page.height and control.flags.restrictedInPage:
+                    y -= control.height
+                styles['top'] = mm(SHWPUNIT(y))
+            else:
+                # VERT_RELTO_PAPER, VERT_RELTO_PAGE
+                if control.flags.vertAlign == control.flags.VERT_ALIGN_TOP:
+                    if control.flags.vertRelTo == control.flags.VERT_RELTO_PAPER:
+                        control_offset = control.offsetY - (self.page.offsetTop + self.page.offsetHeader)
+                    else:
+                        control_offset = control.offsetY
+                    styles['top'] = mm(SHWPUNIT(control_offset + control.margin[control.MARGIN_TOP]))
+                elif control.flags.vertAlign == control.flags.VERT_ALIGN_BOTTOM:
+                    if control.flags.vertRelTo == control.flags.VERT_RELTO_PAPER:
+                        control_offset = control.offsetY - (self.page.offsetBottom + self.page.offsetFooter)
+                    else:
+                        control_offset = control.offsetY
+                    styles['bottom'] = mm(SHWPUNIT(control_offset + control.margin[control.MARGIN_BOTTOM]))
+                elif control.flags.vertAlign == control.flags.VERT_ALIGN_CENTER:
+                    y = (self.page.height - control.height)/2 + control.offsetY
+                    # TODO: margin
+                    styles['top'] = mm(SHWPUNIT(y))
+                else:
+                    logging.warning('TODO: handle vertAlign: %d'%control.flags.vertAlign)
+                    styles['top'] = '0'
 
         elif control.flags.flow == control.flags.FLOW_BACK: # 본문과의 배치: 글 뒤로
-            logging.warning('unsupported: FLOW_BACK')
+            logging.warning('TODO: handle flow: FLOW_BACK')
         elif control.flags.flow == control.flags.FLOW_FRONT: # 본문과의 배치: 글 앞으로
-            logging.warning('unsupported: FLOW_FRONT')
+            logging.warning('TODO: handle flow: FLOW_FRONT')
         viewobj.html.attrib['style'] = unicode(styles)
-        if wrapdiv is not None:
-            for html in viewobj.etree():
-                wrapdiv.append(html)
-            self.html.append(wrapdiv)
-        else:
-            for html in viewobj.etree():
-                self.html.append(html)
+        self.childviews.append(viewobj)
 
-class Line(View):
-    def init(self):
-        self.html = ET.Element('div', {'class':'Line'})
-        html = self.html
-        html.styles['top'] = mm(self.model.offsetY)
-
-        SHWPUNIT = self.doc.model.SHWPUNIT
-
-        self.x = self.paragraph.left
-        if self.paragraph.text_indent >= 0:
-            if self.model.number_in_paragraph == 0:
-                self.x += self.paragraph.text_indent
-        else:
-            if self.model.number_in_paragraph != 0:
-                self.x -= self.paragraph.text_indent
-        self.x = SHWPUNIT(self.x)
-
-        html.styles['left'] = pt(self.x)
-        html.styles['width'] = mm(self.model.a5[0])
-        html.styles['height'] = pt(self.model.a2[1])
-        #html.styles['margin-top'] = mm(self.model.a3[1])
-    def onAddToParagraph(self, paragraph):
-        self.html.styles['position'] = paragraph.offset.line_position
-    def etree(self):
-        if len(self.html) == 0 and (self.html.text == None or len(self.html.text) == 0):
-            self.html.text = u'\xa0'
-        yield ET.Comment(repr(self.model))
-        yield ET.Comment('#%s line, x = %s' % (self.model.number_in_paragraph, pt(self.x)))
-        yield self.html
-    def addElement(self, elem):
-        if isinstance(elem, self.doc.model.Text):
-            self.addText(unicode(elem).replace(u' ', u'\xa0'), elem.charShapeId)
-        elif isinstance(elem, self.doc.model.ControlChar):
-            if elem.kinds == elem.char:
-                self.addControlChar(elem)
-            elif elem.kinds == elem.inline:
-                self.addInlineChar(elem)
-            else:
-                self.addExtendedControl(elem)
-        else:
-            self.addComment(repr(elem))
+class ElementContainerView(View):
     def addText(self, text, charShapeId):
-        if self.paragraph.model.style.characterShapeId == charShapeId:
+        if self.paragraph.style.characterShapeId == charShapeId:
             if len(self.html) == 0:
                 if self.html.text is None:
                     self.html.text = text
@@ -744,6 +630,8 @@ class Line(View):
             span.text = text
     def addComment(self, cmt):
         self.html.append(ET.Comment(repr(cmt)))
+    def addHtml(self, html):
+        self.html.append(html)
     def addControlChar(self, e):
         if e.ch == e.LINE_BREAK:
             br = ET.Element('br')
@@ -755,34 +643,121 @@ class Line(View):
             self.addText(u'\xa0', e.charShapeId) # unicode "&nbsp;"
         else:
             self.addText(e.ch, e.charShapeId)
+    def addField(self, field):
+        for html in field.etree():
+            self.html.append(html)
+    def addFootNoteRef(self, fn):
+        atno = fn.getAutoNumber()
+        html = ET.Element('span', {'class':'FootNoteRef'})
+        html.text = unicode(atno)
+        self.addHtml(html)
+
+class Line(ElementContainerView):
+    def init(self):
+        self.stack = [self]
+        self.html = ET.Element('div', {'class':'Line'})
+        html = self.html
+
+        styles = CssDecls()
+        styles['position'] = self.position
+        if self.position == 'absolute':
+            self.x = self.paragraph.shape.marginLeft
+            if self.paragraph.text_indent >= 0:
+                if self.number_in_paragraph == 0:
+                    self.x += self.paragraph.text_indent
+            else:
+                if self.number_in_paragraph != 0:
+                    self.x -= self.paragraph.text_indent
+            self.x = self.doc.SHWPUNIT(self.x)
+
+            styles['top'] = mm(self.offsetY)
+            styles['left'] = pt(self.x)
+            # 폭이 넓은 폰트의 경우 줄이 바뀌는 경우가 있어서: 좀 느슨하게 +10 정도 여유를 더 줌
+            styles['width'] = mm(self.doc.HWPUNIT(self.a5[0]+10))
+            styles['height'] = pt(self.height)
+        elif self.position == 'static':
+            self.x = 0
+            if self.paragraph.text_indent >= 0:
+                if self.number_in_paragraph == 0:
+                    self.x += self.paragraph.text_indent
+            else:
+                if self.number_in_paragraph != 0:
+                    self.x -= self.paragraph.text_indent
+            self.x = self.doc.SHWPUNIT(self.x)
+            styles['margin-left'] = mm(self.x)
+        html.attrib['style'] = unicode(styles)
+    def enableLineSpacing(self):
+        self.html.styles['margin-bottom'] = pt(self.marginBottom)
+    def etree(self):
+        if len(self.html) == 0 and (self.html.text == None or len(self.html.text) == 0):
+            self.html.text = u'\xa0'
+        if self.doc.debug: yield ET.Comment(repr(self.model))
+        if self.doc.debug: yield ET.Comment('#%s in paragraph, #%s in view, x = %s' % (self.number_in_paragraph, self.number_in_view, pt(self.x)))
+        yield self.html
+    def addElement(self, elem):
+        if isinstance(elem, self.doc.Text):
+            self.stack[-1].addText(unicode(elem).replace(u' ', u'\xa0'), elem.charShapeId)
+        elif isinstance(elem, self.doc.ControlChar):
+            if elem.kind == elem.char:
+                self.stack[-1].addControlChar(elem)
+            elif elem.kind == elem.inline:
+                self.addInlineChar(elem)
+            else:
+                self.addExtendedControl(elem)
+        else:
+            assert(False)
+            self.addComment(elem)
     def addInlineChar(self, e):
         if e.ch == e.TAB:
-            self.addText(e.ch, e.charShapeId)
+            self.stack[-1].addText(e.ch, e.charShapeId)
+        elif e.ch == e.FIELD_END:
+            field = self.stack.pop()
+            self.stack[-1].addField(field)
         else:
             self.addComment(e)
     def addExtendedControl(self, e):
-        if isinstance(e.control, self.doc.model.Table):
+        if isinstance(e.control, self.doc.Table):
             table = e.control
             tableobj = self.paragraph.buildTableTree(table)
             if table.flags.inline:
                 for html in tableobj.etree():
-                    self.html.append(html)
+                    self.stack[-1].addHtml(html)
             else:
-                self.paragraph.addControl(table, tableobj)
-        elif isinstance(e.control, self.doc.model.AutoNumber):
-            #addText(span, str(e.control))
-            pass
-        elif isinstance(e.control, self.doc.model.FieldStart):
-            pass
-        elif isinstance(e.control, self.doc.model.GShapeObject) and isinstance(e.control.shapecomponent, self.doc.model.ShapeComponent) and isinstance(e.control.shapecomponent.shape, self.doc.model.ShapePicture):
+                self.paragraph.addControl(self, table, tableobj)
+        elif isinstance(e.control, self.doc.AutoNumbering):
+            self.stack[-1].addComment(e.control)
+            self.stack[-1].addText(unicode(e.control), e.charShapeId)
+        elif e.ch == e.FIELD_START:
+            if isinstance(e.control, self.doc.FieldHyperLink):
+                field = FieldHyperLink(self.doc, e.control, paragraph=self.paragraph)
+                self.stack.append(field)
+            else:
+                field = Field(self.doc, e.control, paragraph=self.paragraph)
+                self.stack.append(field)
+        elif e.ch == e.BOOKMARK:
+            bookmark = ET.Element('a')
+            bookmark.attrib['name'] = e.control.data.name
+            self.stack[-1].addHtml(bookmark)
+        elif e.ch == e.FOOT_END_NOTE:
+            if isinstance(e.control, self.doc.FootNote):
+                fn = FootNote(self.doc, e.control, page=self.paragraph.page)
+                self.stack[-1].addFootNoteRef(fn)
+                for page_paragraphs in hwp50.getPagedParagraphs(fn.listhead.paragraphs):
+                    fn.addParagraphs(page_paragraphs)
+                self.paragraph.page.addFootNote(fn)
+            else:
+                self.stack[-1].addComment(e)
+        elif isinstance(e.control, self.doc.GShapeObject)\
+                and isinstance(e.control.shapecomponent, self.doc.ShapeComponent)\
+                and isinstance(e.control.shapecomponent.shape, self.doc.ShapePicture):
             gso = e.control
             img = Image(self.doc, gso.shapecomponent.shape)
             if gso.flags.inline:
                 for html in img.etree():
-                    self.html.append(html)
+                    self.stack[-1].addHtml(html)
             else:
-                self.paragraph.addControl(gso, img)
-        elif isinstance(e.control, self.doc.model.GShapeObject):
+                self.paragraph.addControl(self, gso, img)
+        elif isinstance(e.control, self.doc.GShapeObject):
             pass
 #                    style = CssDecls()
 #                    style['position'] = 'relative'
@@ -799,26 +774,32 @@ class Line(View):
         else:
             self.addComment(e)
 
-class Image(View):
+class Field(ElementContainerView):
     def init(self):
-        self.html = html = ET.Element('img')
-        bindata = self.model.pictureInfo.binData
-        if bindata.type == self.doc.model.BinEmbedded:
-            if self.doc.destination is not None:
-                html.attrib['src'] = self.doc.destination.addAttachment(str(bindata.name), bindata.datastream.read())
+        self.html = ET.Element('span', {'class':'Field'})
     def etree(self):
         yield ET.Comment(repr(self.model))
         yield self.html
 
-class TableCaption(OffsetView):
+class FieldHyperLink(Field):
     def init(self):
-        self.html = html = ET.Element('caption')
-        self.html.styles['position'] = 'absolute'
-        self.html.styles['width'] = mm(self.model.width)
-        if self.model.captflags.position == self.model.POS_BOTTOM:
-            pass#self.
+        self.html = ET.Element('a')
+        url = self.geturl()
+        if len(url) == 0:
+            url = '#'
+        if url[0] == '?':
+            url = '#' + url[1:]
+        self.html.attrib['href'] = url
+
+class Image(View):
+    def init(self):
+        self.html = html = ET.Element('img')
+        bindata = self.pictureInfo.binData
+        if bindata.type == self.doc.BinEmbedded:
+            if self.doc.destination is not None:
+                html.attrib['src'] = self.doc.destination.addAttachment(str(bindata.name), bindata.datastream.read())
     def etree(self):
-        yield ET.Comment(repr(self.model))
+        if self.doc.debug: yield ET.Comment(repr(self.model))
         yield self.html
 
 class TableRow(View):
@@ -835,57 +816,89 @@ class TableCell(OffsetView):
     def init(self):
         self.html = html = ET.Element('td')
 
-        if self.model.colspan > 1:
-            self.html.attrib['colspan'] = str(self.model.colspan)
-        if self.model.rowspan > 1:
-            self.html.attrib['rowspan'] = str(self.model.rowspan)
+        if self.colspan > 1:
+            self.html.attrib['colspan'] = str(self.colspan)
+        if self.rowspan > 1:
+            self.html.attrib['rowspan'] = str(self.rowspan)
 
         valign = {
-                self.model.VALIGN_TOP:'top',
-                self.model.VALIGN_MIDDLE:'middle',
-                self.model.VALIGN_BOTTOM:'bottom'
-                }.get(self.model.listflags & self.model.VALIGN_MASK, None)
+                self.VALIGN_TOP:'top',
+                self.VALIGN_MIDDLE:'middle',
+                self.VALIGN_BOTTOM:'bottom'
+                }.get(self.listflags & self.VALIGN_MASK, None)
         if valign is not None:
             self.html.attrib['valign'] = valign
 
-        style = makeCssBorder(self.model.borderFill.border)
-        style.update(makeCssBackground(self.doc.model, self.model.borderFill.fill))
+        style = makeCssBorder(self.borderFill.border)
+        style.update(makeCssBackground(self.doc.model, self.borderFill.fill))
         self.html.attrib['style'] = unicode(CssDecls(style))
 
         self.html.styles['padding'] = compact_cssdir(
-                cssdir([mm(x) for x in self.model.padding]))
+                cssdir([mm(x) for x in self.padding]))
 
-        self.html.styles['width'] = mm(self.model.width)
-        self.html.styles['height'] = pt(self.model.height)
+        self.html.styles['width'] = mm(self.width)
+        self.html.styles['height'] = pt(self.height)
     def etree(self):
         if len(self.html) == 0 and (self.html.text is None or len(self.html.text)):
             self.html.text = u'\xa0'
-        yield ET.Comment(repr(self.model))
+        if self.doc.debug: yield ET.Comment(repr(self.model))
+        yield self.html
+
+class TableCaption(OffsetView):
+    line_position = 'static'
+    def init(self):
+        self.html = ET.Element('div', {'class':'TableCaption'})
+        self.html.styles['width'] = mm(self.width)
+        if self.captflags.position == self.POS_BOTTOM:
+            self.html.styles['margin-top'] = mm(self.offset)
+        elif self.captflags.position == self.POS_TOP:
+            self.html.styles['margin-bottom'] = mm(self.offset)
+        else:
+            logging.warning('TODO: implement TableCaption position: POS_LEFT / POS_RIGHT')
+    def etree(self):
+        if self.doc.debug: yield ET.Comment(repr(self.model))
         yield self.html
 
 class Table(View):
     def init(self):
-        self.html = html = ET.Element('table')
-        html.attrib['cellspacing'] = unicode(self.model.body.cellspacing.px)
-        html.append(ET.Comment(' '))
+        self.html = ET.Element('div')
+
+        self.table_html = ET.SubElement(self.html, 'table')
+        self.table_html.attrib['cellspacing'] = unicode(self.body.cellspacing.px)
+        self.table_html.append(ET.Comment(' '))
 
         style = {}
-        style.update( makeCssBorder(self.model.borderFill.border) )
-        if self.model.body.cellspacing == 0:
+        style.update( makeCssBorder(self.borderFill.border) )
+        if self.body.cellspacing == 0:
             style['border-collapse'] = 'collapse'
-        style['width'] = mm(self.model.width)
-        style['height'] = mm(self.model.height)
-        style['margin'] = compact_cssdir(cssdir([mm(x) for x in self.model.margin]))
-        html.attrib['style'] = '; '.join(['%s:%s'%(k,v) for k, v in style.iteritems()])
+        #style['width'] = mm(self.width)
+        #style['height'] = mm(self.height)
+        #style['margin'] = compact_cssdir(cssdir([mm(x) for x in self.margin]))
+        self.table_html.attrib['style'] = unicode(CssDecls(style))
 
     def addCaption(self, caption):
-        for html in caption.etree():
-            self.html.append(html)
+        if caption.captflags.position == self.caption.POS_TOP:
+            for i, html in enumerate(caption.etree()):
+                self.html.insert(i, html)
+        else:
+            for html in caption.etree():
+                self.html.append(html)
     def addRow(self, row):
         for html in row.etree():
-            self.html.append(html)
+            self.table_html.append(html)
     def etree(self):
-        yield ET.Comment(repr(self.model))
+        if self.doc.debug: yield ET.Comment(repr(self.model))
+        yield self.html
+
+class FootNote(OffsetView):
+    line_position = 'static'
+    def init(self):
+        self.html = html = ET.Element('div', {'class':'FootNote'})
+
+    def etree(self):
+        if len(self.html) == 0 and (self.html.text is None or len(self.html.text)):
+            self.html.text = u'\xa0'
+        if self.doc.debug: yield ET.Comment(repr(self.model))
         yield self.html
 
 class HtmlConverter:
@@ -948,10 +961,10 @@ class HtmlConverter:
                             p.append(cmt)
                             span = newSpan()
                             continue
-                        elif isinstance(e.control, doc.AutoNumber):
+                        elif isinstance(e.control, doc.AutoNumbering):
                             addText(span, str(e.control))
                             continue
-                        elif isinstance(e.control, doc.FieldStart):
+                        elif isinstance(e.control, doc.FieldHyperlink):
                             pass
                         elif isinstance(e.control, doc.GShapeObject) and isinstance(e.control.shapecomponent, doc.ShapeComponent) and isinstance(e.control.shapecomponent.shape, doc.ShapePicture):
                             gso = e.control
@@ -1124,10 +1137,10 @@ class HtmlConverter:
 
     def makeTree(self, doc):
         doc = Document(doc, destination=self.destination)
-        for section in doc.model.sections:
+        for section in doc.sections:
             section = Section(doc, section)
-            for page_paragraphs in hwp50.getPagedParagraphs(section.model.paragraphs):
-                page = Page(doc, section.model.sectionDef.pages[0])
+            for page_paragraphs in hwp50.getPagedParagraphs(section.paragraphs):
+                page = Page(doc, section.sectionDef.pages[0])
                 page.addParagraphs(page_paragraphs)
                 section.addPage(page)
             for html in section.etree():
@@ -1152,6 +1165,7 @@ def main():
     import os.path
     rootname = os.path.splitext(os.path.basename(hwpfilename))[0]
 
+    Document.debug = False
     cvt = HtmlConverter()
     cvt.convert(doc, LocalDestination(rootname))
 if __name__ == '__main__':

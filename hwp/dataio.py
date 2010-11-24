@@ -32,14 +32,10 @@ class OutOfData(Exception):
     pass
 
 def readn(f, size):
-    if size == 0:
-        return ''
     data = f.read(size)
     datasize = len(data)
     if datasize == 0:
         raise Eof
-    if datasize < size:
-        raise OutOfData('%d bytes expected, %d bytes read'%(size, datasize))
     return data
 
 def extract_pairs(sequence):
@@ -59,21 +55,18 @@ def parseFields(model, f):
         fields = model.getFields()
     except:
         logging.debug('no fields definitions for %s : skipped'%(str(model.__class__)))
-        raise
+        fields = []
     for fieldModel, name in fields:
-        try:
-            if fieldModel is None:
-                value = None
-            else:
+        if fieldModel is None:
+            value = None
+        else:
+            try:
                 value = fieldModel.parse(f)
-
-            if isinstance(name, basestring):
-                setattr(model, name, value)
-            else:
-                name(model, value)
-        except:
-            logging.error( 'failed to parse a field named `%s\' as `%s\' of `%s\''%(name, fieldModel, model) )
-            raise
+            except Exception, e:
+                logging.warning( 'failed to parse a field named `%s\' as `%s\' of `%s\''%(name, fieldModel, model.__class__) )
+                logging.warning(str(e))
+                value = None
+        setattr(model, name, value)
 
 def parseFieldsWithType(Model, f):
     model = Model()
@@ -127,24 +120,24 @@ class DOUBLE(float):
         return cls(struct.unpack('<d', readn(f, 8))[0])
     parse = classmethod(parse)
 
-class CHID:
-    TABLE = 'tbl '
-    LINE = '$lin'
-    RECT = '$rec'
-    ELLI = '$ell'
-    ARC = '$arc'
-    POLY = '$pol'
-    CURV = '$cur'
-    EQED = 'eqed'
-    PICT = '$pic'
-    OLE = '$ole'
-    CONTAINER = '$con'
-    def parse(cls, f):
-        return cls.decode_bytes( readn(f,4) )
-    parse = classmethod(parse)
-    def decode_bytes(cls, data):
-        return data[3] + data[2] + data[1] + data[0]
-    decode_bytes = classmethod(decode_bytes)
+def Flags(_basetype, _bits):
+    d = dict(extract_swapped_pairs(_bits))
+    class _Flags(_basetype):
+        def __getattr__(self, name):
+            try:
+                bitsdef = d[name]
+                if isinstance(bitsdef, tuple):
+                    l, h = bitsdef
+                    h += 1
+                else:
+                    l = bitsdef
+                    h = l + 1
+                return int(self >> l) & int( (2**(h-l)) - 1)
+            except KeyError:
+                raise AttributeError('Invalid flag name: %s'%(name))
+        def __repr__(self):
+            return hex(self)+'='+str(dict([(name,getattr(self, name)) for name in d.keys()]))
+    return _Flags
 
 class ARRAY(list):
     def __init__(self, type, count):
@@ -232,6 +225,8 @@ class WCHAR:
 class BSTR:
     def parse(cls, f):
         size = UINT16.parse(f)
+        if size == 0:
+            return u''
         data = readn(f, 2*size)
         return decode_utf16le_besteffort(data)
     parse = classmethod(parse)
