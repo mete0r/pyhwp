@@ -369,7 +369,7 @@ class Document:
             style_text += unicode(CssRule('.CharShape-%d'%charShape.id, makeCssPropsFromCharShape( self.model, charShape )))
         for paraShape in self.docinfo.mappings[self.ParaShape]:
             style_text += unicode(CssRule('.ParaShape-%d'%paraShape.id, makeCssPropsFromParaShape( self.model, paraShape )))
-        style_text += unicode(CssRule('.Paper', {'page-break-after':'always', 'background-color':'white'}))
+        style_text += unicode(CssRule('.Paper', {'page-break-after':'always', 'background-color':'white', 'overflow':'hidden'}))
         style_text += unicode(CssRule('.Page', {'position':'relative', 'background':'url(page-background.png) repeat'}))
         style_text += unicode(CssRule('.Line', {'position':'absolute', 'white-space':'nowrap'}))
         style_text += unicode(CssRule('.FootNoteRef', { 'vertical-align':'super' }))
