@@ -147,7 +147,7 @@ def Enum(**kwargs):
     d = {}
     class _Enum(int):
         def __repr__(self):
-            return d[self]+'(%d)'%self
+            return d.get(self, '')+'(%d)'%self
     for name, v in kwargs.iteritems():
         d[v] = name
         setattr(_Enum, name, v)
