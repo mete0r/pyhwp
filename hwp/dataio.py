@@ -125,19 +125,33 @@ def Flags(_basetype, _bits):
     class _Flags(_basetype):
         def __getattr__(self, name):
             try:
+                type = int
                 bitsdef = d[name]
                 if isinstance(bitsdef, tuple):
-                    l, h = bitsdef
+                    if len(bitsdef) > 2:
+                        l, h, type = bitsdef
+                    else:
+                        l, h = bitsdef
                     h += 1
                 else:
                     l = bitsdef
                     h = l + 1
-                return int(self >> l) & int( (2**(h-l)) - 1)
+                return type(int(self >> l) & int( (2**(h-l)) - 1))
             except KeyError:
                 raise AttributeError('Invalid flag name: %s'%(name))
         def __repr__(self):
             return hex(self)+'='+str(dict([(name,getattr(self, name)) for name in d.keys()]))
     return _Flags
+
+def Enum(**kwargs):
+    d = {}
+    class _Enum(int):
+        def __repr__(self):
+            return d[self]+'(%d)'%self
+    for name, v in kwargs.iteritems():
+        d[v] = name
+        setattr(_Enum, name, v)
+    return _Enum
 
 class ARRAY(list):
     def __init__(self, type, count):

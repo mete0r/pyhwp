@@ -257,7 +257,7 @@ def defineModels(doc):
             if name == 'pt': return hwp2pt(self)
             raise AttributeError(name)
         def __repr__(self):
-            return repr(hwp2pt(self))+'pt'
+            return '%.1fpt(%.1fmm, 0x%x)'%(hwp2pt(self), hwp2mm(self), self)
 
     class SHWPUNIT(INT32):
         def __getattr__(self, name):
@@ -267,7 +267,7 @@ def defineModels(doc):
             if name == 'pt': return hwp2pt(self)
             raise AttributeError(name)
         def __repr__(self):
-            return repr(hwp2pt(self))+'pt'
+            return '%.1fpt(%.1fmm, 0x%x)'%(hwp2pt(self), hwp2mm(self), self)
     class HWPUNIT16(INT16):
         def __getattr__(self, name):
             if name == 'inch': return hwp2inch(self)
@@ -276,7 +276,7 @@ def defineModels(doc):
             if name == 'pt': return hwp2pt(self)
             raise AttributeError(name)
         def __repr__(self):
-            return repr(hwp2pt(self))+'pt'
+            return '%.1fpt(%.1fmm, 0x%x)'%(hwp2pt(self), hwp2mm(self), self)
 
     class Panose1:
         def getFields(self):
@@ -1001,54 +1001,67 @@ def defineModels(doc):
         def __init__(self):
             self.cells = []
 
-    class CommonControlFlags(dataio.Flags(UINT32, (
+    class CommonControl(Control):
+        Flow = dataio.Enum(
+            FLOAT  = 0,
+            BLOCK  = 1,
+            BACK   = 2,
+            FRONT  = 3,
+            )
+
+        TextSide = dataio.Enum(
+            BOTH = 0,
+            LEFT = 1,
+            RIGHT = 2,
+            LARGER = 3,
+            )
+
+        HorzAlign = dataio.Enum(
+            LEFT = 0,
+            CENTER = 1,
+            RIGHT = 2,
+            INSIDE = 3,
+            OUTSIDE = 4,
+            )
+
+        HorzRelTo = dataio.Enum(
+            PAPER = 0,
+            PAGE = 1,
+            COLUMN = 2,
+            PARAGRAPH = 3,
+            )
+
+        VertRelTo = dataio.Enum(
+            PAPER = 0,
+            PAGE = 1,
+            PARAGRAPH = 2,
+            )
+
+        VertAlign = dataio.Enum(
+            TOP = 0,
+            CENTER = 1,
+            BOTTOM = 2,
+            INSIDE = 3,
+            OUTSIDE = 4,
+            )
+
+        CommonControlFlags = dataio.Flags(UINT32, (
                 0, 'inline',
                 2, 'affectsLineSpacing',
-                (3, 4), 'vertRelTo',
-                (5, 7), 'vertAlign',
-                (8, 9), 'horzRelTo',
-                (10, 12), 'horzAlign',
+                (3, 4, VertRelTo), 'vertRelTo',
+                (5, 7, VertAlign), 'vertAlign',
+                (8, 9, HorzRelTo), 'horzRelTo',
+                (10, 12, HorzAlign), 'horzAlign',
                 13, 'restrictedInPage',
                 14, 'overwrap',
                 (15, 17), 'widthRelTo',
                 (18, 19), 'heightRelTo',
                 20, 'protectedSize',
-                (21, 23), 'flow',
-                (24, 25), 'textSide',
+                (21, 23, Flow), 'flow',
+                (24, 25, TextSide), 'textSide',
                 (26, 27), 'numberCategory'
-                ))):
-        FLOW_FLOAT  = 0
-        FLOW_BLOCK  = 1
-        FLOW_BACK   = 2
-        FLOW_FRONT  = 3
+                ))
 
-        TEXTSIDE_BOTH = 0
-        TEXTSIDE_LEFT = 1
-        TEXTSIDE_RIGHT = 2
-        TEXTSIDE_LARGER = 3
-
-        HORZ_ALIGN_LEFT = 0
-        HORZ_ALIGN_CENTER = 1
-        HORZ_ALIGN_RIGHT = 2
-        HORZ_ALIGN_INSIDE = 3
-        HORZ_ALIGN_OUTSIDE = 4
-
-        HORZ_RELTO_PAPER = 0
-        HORZ_RELTO_PAGE = 1
-        HORZ_RELTO_COLUMN = 2
-        HORZ_RELTO_PARAGRAPH = 3
-
-        VERT_RELTO_PAPER = 0
-        VERT_RELTO_PAGE = 1
-        VERT_RELTO_PARAGRAPH = 2
-
-        VERT_ALIGN_TOP = 0
-        VERT_ALIGN_CENTER = 1
-        VERT_ALIGN_BOTTOM = 2
-        VERT_ALIGN_INSIDE = 3
-        VERT_ALIGN_OUTSIDE = 4
-
-    class CommonControl(Control):
         MARGIN_LEFT = 0
         MARGIN_RIGHT = 1
         MARGIN_TOP = 2
@@ -1056,7 +1069,7 @@ def defineModels(doc):
         def getFields(self):
             for x in Control.getFields(self):
                 yield x
-            yield CommonControlFlags, 'flags',
+            yield self.CommonControlFlags, 'flags',
             yield SHWPUNIT, 'offsetY',    # DIFFSPEC
             yield SHWPUNIT, 'offsetX',    # DIFFSPEC
             yield HWPUNIT, 'width',
@@ -1198,17 +1211,19 @@ def defineModels(doc):
     Control.addsubtype(ColumnsDef)
 
     class NumberingControl(Control):
-        class Flags( dataio.Flags(UINT32, (
-                (0, 3), 'kind',
+        Kind = dataio.Enum(
+                PAGE = 0,
+                FOOTNOTE = 1,
+                ENDNOTE = 2,
+                PICTURE = 3,
+                TABLE = 4,
+                EQUATION = 5,
+                )
+        Flags = dataio.Flags(UINT32, (
+                (0, 3, Kind), 'kind',
                 (4, 11), 'footnoteShape',
                 12, 'superscript',
-                ))):
-            KIND_PAGE = 0
-            KIND_FOOTNOTE = 1
-            KIND_ENDNOTE = 2
-            KIND_PICTURE = 3
-            KIND_TABLE = 4
-            KIND_EQUATION = 5
+                ))
         def getFields(self):
             for x in Control.getFields(self):
                 yield x
@@ -1225,7 +1240,7 @@ def defineModels(doc):
         def __unicode__(self):
             prefix = u''
             suffix = u''
-            if self.flags.kind == self.flags.KIND_FOOTNOTE:
+            if self.flags.kind == self.Kind.FOOTNOTE:
                 if self.suffix != u'\x00':
                     suffix = self.suffix
             return prefix + unicode(self.number) + suffix
@@ -1241,21 +1256,23 @@ def defineModels(doc):
     class PageNumberPosition(Control):
         ''' 4.2.10.9. 쪽 번호 위치 '''
         chid = 'pgnp'
+        Position = dataio.Enum(
+                NONE = 0,
+                TOP_LEFT = 1,
+                TOP_CENTER = 2,
+                TOP_RIGHT = 3,
+                BOTTOM_LEFT = 4,
+                BOTTOM_CENTER = 5,
+                BOTTOM_RIGHT = 6,
+                OUTSIDE_TOP = 7,
+                OUTSIDE_BOTTOM = 8,
+                INSIDE_TOP = 9,
+                INSIDE_BOTTOM = 10,
+            )
         Flags = dataio.Flags(UINT32, (
             (0, 7), 'shape',
-            (8, 11), 'position',
+            (8, 11, Position), 'position',
             ))
-        NONE = 0
-        TOP_LEFT = 1
-        TOP_CENTER = 2
-        TOP_RIGHT = 3
-        BOTTOM_LEFT = 4
-        BOTTOM_CENTER = 5
-        BOTTOM_RIGHT = 6
-        OUTSIDE_TOP = 7
-        OUTSIDE_BOTTOM = 8
-        INSIDE_TOP = 9
-        INSIDE_BOTTOM = 10
         def getFields(self):
             for x in Control.getFields(self):
                 yield x

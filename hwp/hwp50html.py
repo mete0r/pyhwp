@@ -517,60 +517,60 @@ class Paragraph(View):
         styles['height'] = mm(control.height)
         assert(not control.flags.inline)
         styles['display'] = 'block'
-        if control.flags.flow == control.flags.FLOW_FLOAT: # 본문과의 배치: 어울림
+        if control.flags.flow == control.Flow.FLOAT: # 본문과의 배치: 어울림
             # float
-            if control.flags.textSide == control.flags.TEXTSIDE_LEFT:
+            if control.flags.textSide == control.TextSide.LEFT:
                 styles['float'] = 'right'
-                if control.flags.horzAlign == control.flags.HORZ_ALIGN_RIGHT:
+                if control.flags.horzAlign == control.HorzAlign.RIGHT:
                     styles['margin-right'] = mm(control.offsetX)
-                elif control.flags.horzAlign == control.flags.HORZ_ALIGN_LEFT:
+                elif control.flags.horzAlign == control.HorzAlign.LEFT:
                     #TODO styles['margin-right'] = mm(doc.SHWPUNIT( page_width - control.width - control.offsetX ))
                     pass
-            elif control.flags.textSide == control.flags.TEXTSIDE_RIGHT:
+            elif control.flags.textSide == control.TextSide.RIGHT:
                 styles['float'] = 'left'
-                if control.flags.horzAlign == control.flags.HORZ_ALIGN_LEFT:
+                if control.flags.horzAlign == control.HorzAlign.LEFT:
                     styles['margin-left'] = mm(control.offsetX)
-                elif control.flags.horzAlign == control.flags.HORZ_ALIGN_RIGHT:
+                elif control.flags.horzAlign == control.HorzAlign.RIGHT:
                     #TODO styles['margin-left'] = mm(doc.SHWPUNIT( page_width - control.width - control.offsetX ))
                     pass
-            elif control.flags.textSide == control.flags.TEXTSIDE_BOTH:
+            elif control.flags.textSide == control.TextSide.BOTH:
                 logging.warning('unsupported <본문 위치>: 양쪽')
                 styles['position'] = 'absolute'
-                if control.flags.horzAlign == control.flags.HORZ_ALIGN_LEFT:
+                if control.flags.horzAlign == control.HorzAlign.LEFT:
                     styles['left'] = mm(control.offsetX)
-                elif control.flags.horzAlign == control.flags.HORZ_ALIGN_CENTER:
+                elif control.flags.horzAlign == control.HorzAlign.CENTER:
                     styles['left'] = mm(control.offsetX) # TODO: + (50% of container)
-                elif control.flags.horzAlign == control.flags.HORZ_ALIGN_RIGHT:
+                elif control.flags.horzAlign == control.HorzAlign.RIGHT:
                     styles['right'] = mm(control.offsetX)
-            elif control.flags.textSide == control.flags.TEXTSIDE_LARGER:
+            elif control.flags.textSide == control.TextSide.LARGER:
                 logging.warning('unsupported <본문 위치>: 큰 쪽')
                 pass
-        elif control.flags.flow == control.flags.FLOW_BLOCK: # 본문과의 배치: 자리차지
+        elif control.flags.flow == control.Flow.BLOCK: # 본문과의 배치: 자리차지
             styles['position'] = 'absolute'
 
-            if control.flags.horzAlign == control.flags.HORZ_ALIGN_LEFT:
-                if control.flags.horzRelTo == control.flags.HORZ_RELTO_PAPER:
+            if control.flags.horzAlign == control.HorzAlign.LEFT:
+                if control.flags.horzRelTo == control.HorzRelTo.PAPER:
                     control_offset = control.offsetX - (self.page.offsetLeft)
-                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PAGE:
+                elif control.flags.horzRelTo == control.HorzRelTo.PAGE:
                     control_offset = control.offsetX
-                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PARAGRAPH:
+                elif control.flags.horzRelTo == control.HorzRelTo.PARAGRAPH:
                     control_offset = control.offsetX + self.shape.marginLeft
                 else:
                     # TODO: COLUMN
                     control_offset = control.offsetX
                 styles['left'] = mm(SHWPUNIT(control.margin[control.MARGIN_LEFT] + control_offset))
-            elif control.flags.horzAlign == control.flags.HORZ_ALIGN_RIGHT:
-                if control.flags.horzRelTo == control.flags.HORZ_RELTO_PAPER:
+            elif control.flags.horzAlign == control.HorzAlign.RIGHT:
+                if control.flags.horzRelTo == control.HorzRelTo.PAPER:
                     control_offset = control.offsetX - (self.page.offsetRight)
-                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PAGE:
+                elif control.flags.horzRelTo == control.HorzRelTo.PAGE:
                     control_offset = control.offsetX
-                elif control.flags.horzRelTo == control.flags.HORZ_RELTO_PARAGRAPH:
+                elif control.flags.horzRelTo == control.HorzRelTo.PARAGRAPH:
                     control_offset = control.offsetX + self.shape.marginRight
                 else:
                     # TODO: COLUMN
                     control_offset = control.offsetX
                 styles['right'] = mm(SHWPUNIT(control.margin[control.MARGIN_RIGHT] + control_offset))
-            elif control.flags.horzAlign == control.flags.HORZ_ALIGN_CENTER:
+            elif control.flags.horzAlign == control.HorzAlign.CENTER:
                 x = SHWPUNIT((self.page.width - control.width)/2 + control.offsetX)
                 # TODO: margin
                 styles['left'] = mm(x)
@@ -578,7 +578,7 @@ class Paragraph(View):
                 logging.warning('TODO: handle horzAlign: %d'%control.flags.horzAlign)
                 styles['left'] = '0'
             
-            if control.flags.vertRelTo == control.flags.VERT_RELTO_PARAGRAPH:
+            if control.flags.vertRelTo == control.VertRelTo.PARAGRAPH:
                 # hwp 2005(5.0.1.7) forces VERT_ALIGN to TOP when VERT_RELTO_PARAGRAPH
                 y = line.offsetY + control.offsetY + control.margin[control.MARGIN_TOP]
                 if y + control.height > self.page.height and control.flags.restrictedInPage:
@@ -586,19 +586,19 @@ class Paragraph(View):
                 styles['top'] = mm(SHWPUNIT(y))
             else:
                 # VERT_RELTO_PAPER, VERT_RELTO_PAGE
-                if control.flags.vertAlign == control.flags.VERT_ALIGN_TOP:
-                    if control.flags.vertRelTo == control.flags.VERT_RELTO_PAPER:
+                if control.flags.vertAlign == control.VertAlign.TOP:
+                    if control.flags.vertRelTo == control.VertRelTo.PAPER:
                         control_offset = control.offsetY - (self.page.offsetTop + self.page.offsetHeader)
                     else:
                         control_offset = control.offsetY
                     styles['top'] = mm(SHWPUNIT(control_offset + control.margin[control.MARGIN_TOP]))
-                elif control.flags.vertAlign == control.flags.VERT_ALIGN_BOTTOM:
-                    if control.flags.vertRelTo == control.flags.VERT_RELTO_PAPER:
+                elif control.flags.vertAlign == control.VertAlign.BOTTOM:
+                    if control.flags.vertRelTo == control.VertRelTo.PAPER:
                         control_offset = control.offsetY - (self.page.offsetBottom + self.page.offsetFooter)
                     else:
                         control_offset = control.offsetY
                     styles['bottom'] = mm(SHWPUNIT(control_offset + control.margin[control.MARGIN_BOTTOM]))
-                elif control.flags.vertAlign == control.flags.VERT_ALIGN_CENTER:
+                elif control.flags.vertAlign == control.VertAlign.CENTER:
                     y = (self.page.height - control.height)/2 + control.offsetY
                     # TODO: margin
                     styles['top'] = mm(SHWPUNIT(y))
@@ -606,9 +606,9 @@ class Paragraph(View):
                     logging.warning('TODO: handle vertAlign: %d'%control.flags.vertAlign)
                     styles['top'] = '0'
 
-        elif control.flags.flow == control.flags.FLOW_BACK: # 본문과의 배치: 글 뒤로
+        elif control.flags.flow == control.Flow.BACK: # 본문과의 배치: 글 뒤로
             logging.warning('TODO: handle flow: FLOW_BACK')
-        elif control.flags.flow == control.flags.FLOW_FRONT: # 본문과의 배치: 글 앞으로
+        elif control.flags.flow == control.Flow.FRONT: # 본문과의 배치: 글 앞으로
             logging.warning('TODO: handle flow: FLOW_FRONT')
         viewobj.html.attrib['style'] = unicode(styles)
         self.childviews.append(viewobj)
@@ -975,48 +975,48 @@ class HtmlConverter:
                             wrapdiv = None
                             if not gso.flags.inline:
                                 cssdecls['display'] = 'block'
-                                if gso.flags.flow == gso.flags.FLOW_FLOAT: # 본문과의 배치: 어울림
+                                if gso.flags.flow == gso.Flow.FLOAT: # 본문과의 배치: 어울림
                                     # float
-                                    if gso.flags.textSide == gso.flags.TEXTSIDE_LEFT:
+                                    if gso.flags.textSide == gso.TextSide.LEFT:
                                         cssdecls['float'] = 'right'
-                                        if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
+                                        if gso.flags.horzAlign == gso.HorzAlign.RIGHT:
                                             cssdecls['margin-right'] = mm(gso.offsetX)
-                                        elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
+                                        elif gso.flags.horzAlign == gso.HorzAlign.LEFT:
                                             #TODO cssdecls['margin-right'] = mm(doc.SHWPUNIT( page_width - gso.width - gso.offsetX ))
                                             pass
-                                    elif gso.flags.textSide == gso.flags.TEXTSIDE_RIGHT:
+                                    elif gso.flags.textSide == gso.TextSide.RIGHT:
                                         cssdecls['float'] = 'left'
-                                        if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
+                                        if gso.flags.horzAlign == gso.HorzAlign.LEFT:
                                             cssdecls['margin-left'] = mm(gso.offsetX)
-                                        elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
+                                        elif gso.flags.horzAlign == gso.HorzAlign.RIGHT:
                                             #TODO cssdecls['margin-left'] = mm(doc.SHWPUNIT( page_width - gso.width - gso.offsetX ))
                                             pass
-                                    elif gso.flags.textSide == gso.flags.TEXTSIDE_BOTH:
+                                    elif gso.flags.textSide == gso.TextSide.BOTH:
                                         logging.warning('unsupported <본문 위치>: 양쪽')
                                         cssdecls['position'] = 'absolute'
-                                        if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
+                                        if gso.flags.horzAlign == gso.HorzAlign.LEFT:
                                             cssdecls['left'] = mm(gso.offsetX)
-                                        elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_CENTER:
+                                        elif gso.flags.horzAlign == gso.HorzAlign.CENTER:
                                             cssdecls['left'] = mm(gso.offsetX) # TODO: + (50% of container)
-                                        elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
+                                        elif gso.flags.horzAlign == gso.HorzAlign.RIGHT:
                                             cssdecls['right'] = mm(gso.offsetX)
-                                    elif gso.flags.textSide == gso.flags.TEXTSIDE_LARGER:
+                                    elif gso.flags.textSide == gso.TextSide.LARGER:
                                         logging.warning('unsupported <본문 위치>: 큰 쪽')
                                         pass
-                                elif gso.flags.flow == gso.flags.FLOW_BLOCK: # 본문과의 배치: 자리차지
+                                elif gso.flags.flow == gso.Flow.BLOCK: # 본문과의 배치: 자리차지
                                     cssdecls['position'] = 'relative'
-                                    if gso.flags.horzAlign == gso.flags.HORZ_ALIGN_LEFT:
+                                    if gso.flags.horzAlign == gso.HorzAlign.LEFT:
                                         cssdecls['left'] = mm(gso.offsetX)
-                                    elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_CENTER:
+                                    elif gso.flags.horzAlign == gso.HorzAlign.CENTER:
                                         cssdecls['margin'] = 'auto'
                                         cssdecls['left'] = mm(gso.offsetX)
-                                    elif gso.flags.horzAlign == gso.flags.HORZ_ALIGN_RIGHT:
+                                    elif gso.flags.horzAlign == gso.HorzAlign.RIGHT:
                                         cssdecls['right'] = mm(gso.offsetX)
                                         cssdecls['position'] = 'absolute'
                                         wrapdiv = ET.Element('div', {'style':'height:'+mm(gso.height)})
-                                elif gso.flags.flow == gso.flags.FLOW_BACK: # 본문과의 배치: 글 뒤로
+                                elif gso.flags.flow == gso.Flow.BACK: # 본문과의 배치: 글 뒤로
                                     pass
-                                elif gso.flags.flow == gso.flags.FLOW_FRONT: # 본문과의 배치: 글 앞으로
+                                elif gso.flags.flow == gso.Flow.FRONT: # 본문과의 배치: 글 앞으로
                                     pass
                             img = self.makeImg(doc, e.control.shapecomponent.shape, cssdecls)
                             if wrapdiv is not None:
