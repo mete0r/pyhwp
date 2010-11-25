@@ -900,9 +900,9 @@ def defineModels(doc):
             if self.chid == CHID.CONTAINER:
                 yield N_ARRAY(WORD, CHID), 'controls',
 
-        shape = None
         def __init__(self):
-            self.paragraphs = []
+            shape = None
+            listheader = None
             self.subshapes = []
         def getSubModeler(self, rec):
             tagid = rec.tagid
@@ -923,7 +923,7 @@ def defineModels(doc):
             elif tagid == HWPTAG_LIST_HEADER:
                 return ListHeader, 'listheader'
             elif tagid == HWPTAG_PARA_HEADER:
-                return Paragraph, self.paragraphs.append
+                return Paragraph, self.listheader.paragraphs.append
             elif tagid == HWPTAG_SHAPE_COMPONENT:
                 return ShapeComponent, self.subshapes.append
         def __repr__(self):
@@ -979,9 +979,14 @@ def defineModels(doc):
             return 'TableCaption\n'+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
 
     class TableBody:
+        Split = dataio.Enum(
+                NONE = 0,
+                BY_CELL = 1,
+                SPLIT = 2,
+                )
         TableFlags = dataio.Flags(
                 UINT32, (
-                    (0, 1), 'splitPage',
+                    (0, 1, Split), 'splitPage',
                     2, 'repeatHeaderRow',
                     ))
         ZoneInfo = ARRAY(UINT16, 5)
