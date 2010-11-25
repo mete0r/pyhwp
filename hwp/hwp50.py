@@ -1238,6 +1238,34 @@ def defineModels(doc):
                 yield x
     Control.addsubtype(NewNumbering)
 
+    class PageNumberPosition(Control):
+        ''' 4.2.10.9. 쪽 번호 위치 '''
+        chid = 'pgnp'
+        Flags = dataio.Flags(UINT32, (
+            (0, 7), 'shape',
+            (8, 11), 'position',
+            ))
+        NONE = 0
+        TOP_LEFT = 1
+        TOP_CENTER = 2
+        TOP_RIGHT = 3
+        BOTTOM_LEFT = 4
+        BOTTOM_CENTER = 5
+        BOTTOM_RIGHT = 6
+        OUTSIDE_TOP = 7
+        OUTSIDE_BOTTOM = 8
+        INSIDE_TOP = 9
+        INSIDE_BOTTOM = 10
+        def getFields(self):
+            for x in Control.getFields(self):
+                yield x
+            yield self.Flags, 'pagenumberflags'
+            yield WCHAR, 'usersymbol'
+            yield WCHAR, 'prefix'
+            yield WCHAR, 'suffix'
+            yield WCHAR, 'dash'
+    Control.addsubtype(PageNumberPosition)
+
     class Header(Control):
         ''' 머리말 '''
         chid = 'head'
