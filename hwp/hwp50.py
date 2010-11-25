@@ -1403,8 +1403,12 @@ def defineModels(doc):
                 11, 'control',
                 21, 'new_number',
                 ))
+        Flags = dataio.Flags(UINT32, (
+                31, 'unknown',
+                (0, 30), 'chars',
+                ))
         def getFields(self):
-            yield UINT32, 'text',
+            yield self.Flags, 'text',
             yield self.ControlMask, 'controlMask',
             yield UINT16, 'paragraphShapeId',
             yield BYTE, 'styleId',
