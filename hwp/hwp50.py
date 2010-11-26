@@ -947,6 +947,7 @@ def defineModels(doc):
             yield HWPUNIT, 'height',
             yield ARRAY(HWPUNIT16, 4), 'padding',
             yield UINT16, 'borderFillId',
+            yield HWPUNIT, 'unknown_width',
         def __repr__(self):
             return 'TableCell\n'+'\n'.join([ ' - %s = %s'%(name, repr(getattr(self, name))) for type, name in self.getFields()])
         def getBorderFill(cell):
@@ -1050,6 +1051,26 @@ def defineModels(doc):
             OUTSIDE = 4,
             )
 
+        WidthRelTo = dataio.Enum(
+                PAPER = 0,
+                PAGE = 1,
+                COLUMN = 2,
+                PARAGRAPH = 3,
+                ABSOLUTE = 4)
+
+        HeightRelTo = dataio.Enum(
+                PAPER = 0,
+                PAGE = 1,
+                ABSOLUTE = 2,
+                )
+
+        NumberCategory = dataio.Enum(
+                NONE = 0,
+                FIGURE = 1,
+                TABLE = 2,
+                EQUATION = 3,
+                )
+
         CommonControlFlags = dataio.Flags(UINT32, (
                 0, 'inline',
                 2, 'affectsLineSpacing',
@@ -1058,13 +1079,13 @@ def defineModels(doc):
                 (8, 9, HorzRelTo), 'horzRelTo',
                 (10, 12, HorzAlign), 'horzAlign',
                 13, 'restrictedInPage',
-                14, 'overwrap',
-                (15, 17), 'widthRelTo',
-                (18, 19), 'heightRelTo',
-                20, 'protectedSize',
+                14, 'overwrapWithOtherObjects',
+                (15, 17, WidthRelTo), 'widthRelTo',
+                (18, 19, HeightRelTo), 'heightRelTo',
+                20, 'protectedSizeWhenVertRelToParagraph',
                 (21, 23, Flow), 'flow',
                 (24, 25, TextSide), 'textSide',
-                (26, 27), 'numberCategory'
+                (26, 27, NumberCategory), 'numberCategory'
                 ))
 
         MARGIN_LEFT = 0
@@ -1375,14 +1396,13 @@ def defineModels(doc):
     Control.addsubtype(Bookmark)
 
     class ParaCharShape(list):
+        def __init__(self, size):
+            self.size = size
         def parse(self, f):
-            try:
-                while True:
-                    pos = UINT32.parse(f)
-                    charShapeId = UINT32.parse(f)
-                    self.append((pos, charShapeId))
-            except Eof:
-                pass
+            for i in xrange(0, self.size):
+                pos = UINT32.parse(f)
+                charShapeId = UINT32.parse(f)
+                self.append((pos, charShapeId))
             return self
 
     class Paragraph:
@@ -1442,7 +1462,7 @@ def defineModels(doc):
                 paragraph.textdata.record = rec
                 rec.model = paragraph.textdata
             elif rec.tagid == HWPTAG_PARA_CHAR_SHAPE:
-                paragraph.charShapes = ParaCharShape()
+                paragraph.charShapes = ParaCharShape(paragraph.characterShapeCount)
                 paragraph.charShapes.parse(rec.bytestream())
                 paragraph.charShapes.record = rec
                 rec.model = paragraph.charShapes

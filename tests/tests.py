@@ -42,15 +42,17 @@ class ParagraphTest(unittest.TestCase):
 
     def testGetSegmentedElements(self):
         doc = self.sample
+        paragraphRec = doc.sections[0].records[0]
         paraTextRec = doc.sections[0].records[1]
         self.assertEquals(hwp50.HWPTAG_PARA_TEXT, paraTextRec.tagid)
 
+        paragraph = doc.Paragraph.parse(paragraphRec.bytestream())
         paraText = doc.ParaText()
         paraText.record = paraTextRec
 
         charShapeRec = doc.sections[0].records[2]
         self.assertEquals(hwp50.HWPTAG_PARA_CHAR_SHAPE, charShapeRec.tagid)
-        charShapes = doc.ParaCharShape()
+        charShapes = doc.ParaCharShape(paragraph.characterShapeCount)
         charShapes.parse(charShapeRec.bytestream())
 
         paragraph = doc.Paragraph()
@@ -66,6 +68,9 @@ class ParagraphTest(unittest.TestCase):
 
     def testGetShapedElements(self):
         doc = self.sample
+        paragraphRec = doc.sections[0].records[0]
+        paragraph = doc.Paragraph.parse(paragraphRec.bytestream())
+
         paraTextRec = doc.sections[0].records[1]
         self.assertEquals(hwp50.HWPTAG_PARA_TEXT, paraTextRec.tagid)
 
@@ -74,7 +79,7 @@ class ParagraphTest(unittest.TestCase):
 
         charShapeRec = doc.sections[0].records[2]
         self.assertEquals(hwp50.HWPTAG_PARA_CHAR_SHAPE, charShapeRec.tagid)
-        charShapes = doc.ParaCharShape()
+        charShapes = doc.ParaCharShape(paragraph.characterShapeCount)
         charShapes.parse(charShapeRec.bytestream())
 
         paragraph = doc.Paragraph()
@@ -277,14 +282,16 @@ class ParaTextTest(unittest.TestCase):
 
     def test_controlchars_by_chid(self):
         doc = self.sample
+        paragraphRec = doc.sections[0].records[0]
         paraTextRec = doc.sections[0].records[1]
         paraCharShapeRec = doc.sections[0].records[2]
         self.assertEquals(hwp50.HWPTAG_PARA_TEXT, paraTextRec.tagid)
         self.assertEquals(hwp50.HWPTAG_PARA_CHAR_SHAPE, paraCharShapeRec.tagid)
 
+        paragraph = doc.Paragraph.parse(paragraphRec.bytestream())
         paraText = doc.ParaText()
         paraText.decode(paraTextRec.bytes)
-        paraCharShapes = doc.ParaCharShape()
+        paraCharShapes = doc.ParaCharShape(paragraph.characterShapeCount)
         paraCharShapes.parse(paraCharShapeRec.bytestream())
 
         x = [c for c in paraText.controlchars_by_chid('secd')]
