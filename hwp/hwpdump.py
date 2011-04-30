@@ -3,7 +3,7 @@
 from hwp import hwp50, dataio
 import sys
 
-def main(argv):
+def hwpdump(argv):
     if len(argv) < 1:
         print 'filename required'
         return -1
@@ -37,8 +37,11 @@ def main(argv):
         p.prints( dataio.hexdump(rec.bytes, True) )
         print  '-' * 80
 
+def main():
+    hwpdump(list(sys.argv[1:]))
+
 if __name__ == '__main__':
-    main(list(sys.argv[1:]))
+    main()
 #    for f in [doc.streams.docinfo, doc.streams.section[0]]:
 #        idx = 0
 #        for rec in hwp50.getRecords(f):

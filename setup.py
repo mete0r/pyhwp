@@ -18,6 +18,12 @@ setup(
         install_requires=['OleFileIO_PL >=0.20'],
         provides=['hwp'],
 
+        entry_points = {
+            'console_scripts': [
+                'hwpdump = hwp.hwpdump:main',
+                ]
+            },
+
         classifiers=[
             'Development Status :: 2 - Pre-Alpha',
             'Intended Audience :: Developers',
