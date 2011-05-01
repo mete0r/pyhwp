@@ -19,146 +19,27 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import OleFileIO_PL as olefileio
-import zlib
-import os.path
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
-
-import dataio
-from dataio import *
 import logging
 import itertools
 
+from . import dataio
+from .dataio import *
+from .tagids import *
+from .pullparse import pullparse, STARTREC, ENDREC
+from .utils import cached_property
+from .filestructure import File
+
 # DIFFSPEC : Difference with the specification
-
-HWPTAG_BEGIN = 0x010
-# DocInfo Records
-tagnames = {
-    HWPTAG_BEGIN + 0 : 'HWPTAG_DOCUMENT_PROPERTIES',
-    HWPTAG_BEGIN + 1 : 'HWPTAG_ID_MAPPINGS',
-    HWPTAG_BEGIN + 2 : 'HWPTAG_BIN_DATA',
-    HWPTAG_BEGIN + 3 : 'HWPTAG_FACE_NAME',
-    HWPTAG_BEGIN + 4 : 'HWPTAG_BORDER_FILL',
-    HWPTAG_BEGIN + 5 : 'HWPTAG_CHAR_SHAPE',
-    HWPTAG_BEGIN + 6 : 'HWPTAG_TAB_DEF',
-    HWPTAG_BEGIN + 7 : 'HWPTAG_NUMBERING',
-    HWPTAG_BEGIN + 8 : 'HWPTAG_BULLET',
-    HWPTAG_BEGIN + 9 : 'HWPTAG_PARA_SHAPE',
-    HWPTAG_BEGIN + 10 : 'HWPTAG_STYLE',
-    HWPTAG_BEGIN + 11 : 'HWPTAG_DOC_DATA',
-    HWPTAG_BEGIN + 12 : 'HWPTAG_DISTRIBUTE_DOC_DATA',
-    # HWPTAG_BEGIN + 13 : RESERVED,
-    HWPTAG_BEGIN + 14 : 'HWPTAG_COMPATIBILITY_DOCUMENT',
-    HWPTAG_BEGIN + 15 : 'HWPTAG_LAYOUT_COMPATIBILITY',
-    # Section Records
-    HWPTAG_BEGIN + 50 : 'HWPTAG_PARA_HEADER',
-    HWPTAG_BEGIN + 51 : 'HWPTAG_PARA_TEXT',
-    HWPTAG_BEGIN + 52 : 'HWPTAG_PARA_CHAR_SHAPE',
-    HWPTAG_BEGIN + 53 : 'HWPTAG_PARA_LINE_SEG',
-    HWPTAG_BEGIN + 54 : 'HWPTAG_PARA_RANGE_TAG',
-    HWPTAG_BEGIN + 55 : 'HWPTAG_CTRL_HEADER',
-    HWPTAG_BEGIN + 56 : 'HWPTAG_LIST_HEADER',
-    HWPTAG_BEGIN + 57 : 'HWPTAG_PAGE_DEF',
-    HWPTAG_BEGIN + 58 : 'HWPTAG_FOOTNOTE_SHAPE',
-    HWPTAG_BEGIN + 59 : 'HWPTAG_PAGE_BORDER_FILL',
-    HWPTAG_BEGIN + 60 : 'HWPTAG_SHAPE_COMPONENT',
-    HWPTAG_BEGIN + 61 : 'HWPTAG_TABLE',
-    HWPTAG_BEGIN + 62 : 'HWPTAG_SHAPE_COMPONENT_LINE',
-    HWPTAG_BEGIN + 63 : 'HWPTAG_SHAPE_COMPONENT_RECTANGLE',
-    HWPTAG_BEGIN + 64 : 'HWPTAG_SHAPE_COMPONENT_ELLIPSE',
-    HWPTAG_BEGIN + 65 : 'HWPTAG_SHAPE_COMPONENT_ARC',
-    HWPTAG_BEGIN + 66 : 'HWPTAG_SHAPE_COMPONENT_POLYGON',
-    HWPTAG_BEGIN + 67 : 'HWPTAG_SHAPE_COMPONENT_CURVE',
-    HWPTAG_BEGIN + 68 : 'HWPTAG_SHAPE_COMPONENT_OLE',
-    HWPTAG_BEGIN + 69 : 'HWPTAG_SHAPE_COMPONENT_PICTURE',
-    HWPTAG_BEGIN + 70 : 'HWPTAG_SHAPE_COMPONENT_CONTAINER',
-    HWPTAG_BEGIN + 71 : 'HWPTAG_CTRL_DATA',
-    HWPTAG_BEGIN + 72 : 'HWPTAG_CTRL_EQEDIT',
-    # HWPTAG_BEGIN + 73 : RESERVED
-    HWPTAG_BEGIN + 74 : 'HWPTAG_SHAPE_COMPONENT_TEXTART',
-    # ...
-    HWPTAG_BEGIN + 78 : 'HWPTAG_FORBIDDEN_CHAR',
-}
-for k, v in tagnames.iteritems():
-    globals()[v] = k
-del k, v
-
-def decode_rechdr(f):
-    try:
-        # TagID, Level, Size
-        rechdr = UINT32.parse(f)
-        tagid = rechdr & 0x3ff
-        level = (rechdr >> 10) & 0x3ff
-        size = (rechdr >> 20) & 0xfff
-        if size == 0xfff:
-            size = UINT32.parse(f)
-        return (tagid, level, size)
-    except Eof:
-        return None
 
 class RecordsContainer(object):
     def __init__(self):
         self.records = []
 
-class Record:
-    def __init__(self, seqno, tagid, level, bytes):
-        self.seqno = seqno
-        self.tagid = tagid
-        self.level = level
-        self.bytes = bytes
-        self.subrecs = []
-        self.model = None
-    def __repr__(self):
-        return '<Record %d %s level=%d size=%d>'%(
-                self.seqno, tagnames.get(self.tagid, 'HWPTAG_BEGIN+%d'%(self.tagid - HWPTAG_BEGIN)),
-                self.level, len(self.bytes))
-    def bytestream(self):
-        return StringIO(self.bytes)
-
-
-def getRecords(f):
-    seqno = 0
-    while True:
-        rechdr = decode_rechdr(f)
-        if rechdr is None:
-            return
-        tagid, level, size = rechdr
-        bytes = dataio.readn(f, size)
-        yield Record(seqno, tagid, level, bytes)
-        seqno += 1
-
-STARTREC = 0
-ENDREC = 2
-def pullparseRecords(recordlist, records):
-    stack = []
-    for rec in records:
-        level = rec.level
-
-        while level < len(stack):
-            yield ENDREC, stack.pop()
-        while len(stack) < level:
-            raise Exception('invalid level: Record %d, level %d, expected level=%d'%(rec.seqno, level, len(stack)))
-        assert(len(stack) == level)
-
-        if len(stack) > 0:
-            stack[-1].subrecs.append(rec)
-        stack.append(rec)
-        yield STARTREC, rec
-
-    while 0 < len(stack):
-        yield ENDREC, stack.pop()
-
-def pullparse(recordlist, f):
-    return pullparseRecords(recordlist, getRecords(f))
-
 def buildModelTree(root, bytestream):
     context = root
     context_stack = []
     context_record_stack = []
-    for evt, rec in pullparse(root.records, bytestream):
+    for evt, rec in pullparse(bytestream):
         if evt == STARTREC:
             root.records.append(rec)
             try:
@@ -219,28 +100,6 @@ class CHID:
     def decode_bytes(cls, data):
         return data[3] + data[2] + data[1] + data[0]
     decode_bytes = classmethod(decode_bytes)
-
-class FileHeader:
-    Flags = dataio.Flags(UINT32, (
-        0, 'compressed',
-        1, 'password',
-        2, 'distributable',
-        3, 'script',
-        4, 'drm',
-        5, 'xmltemplate_storage',
-        6, 'history',
-        7, 'cert_signed',
-        8, 'cert_encrypted',
-        9, 'cert_signature_extra',
-        10, 'cert_drm',
-        11, 'ccl',
-        ))
-    def getFields(self):
-        yield BYTES(32), 'signature'
-        yield VERSION, 'version'
-        yield self.Flags, 'flags'
-        yield BYTES(216), 'reserved'
-fixup_parse(FileHeader)
 
 def defineModels(doc):
     inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
@@ -1800,117 +1659,32 @@ usage:
 def getPagedParagraphs(paragraphs):
     return groupByPage(getPagedParagraphs_x(paragraphs))
 
-class Document(olefileio.OleFileIO):
+class Document:
     dpi = 96
     inch_scale = 1
     modelsDefined = False
-    def __getattr__(self, name):
-        if not self.modelsDefined:
-            self.modelsDefined = True
-            models = defineModels(self)
-            self.__dict__.update(models)
-            if name in models:
-                return models[name]
 
-        if name == 'streams':
-            class Streams:
-                def __getattr__(streams, name):
-                    if name == 'fileheader':
-                        return self.openstream('FileHeader')
-                    elif name == 'docinfo':
-                        strm = self.openstream('DocInfo')
-                        if self.header.flags.compressed:
-                            strm = StringIO(zlib.decompress(strm.read(), -15)) # without gzip header
-                        return strm
-                    elif name == 'section':
-                        class SectionStreams:
-                            def __getitem__(sectionstreams, idx):
-                                try:
-                                    sec = self.openstream('BodyText/Section'+str(idx))
-                                    if self.header.flags.compressed:
-                                        sec = StringIO(zlib.decompress(sec.read(), -15))
-                                    return sec
-                                except IOError:
-                                    raise IndexError(idx)
-                        return SectionStreams()
-                    elif name == 'bindata':
-                        class BinDataStreams:
-                            def __getitem__(streams, name):
-                                try:
-                                    strm = self.openstream('BinData/%s'%name)
-                                    if self.header.flags.compressed:
-                                        strm = StringIO(zlib.decompress(strm.read(), -15))
-                                    return strm
-                                except IOError:
-                                    raise KeyError(name)
-                        return BinDataStreams()
-                    elif name == 'previewText':
-                        return self.openstream('PrvText')
-                    elif name == 'previewImage':
-                        return self.openstream('PrvImage')
-                    elif name == 'summaryinfo':
-                        return self.openstream('\005HwpSummaryInformation')
-                    raise AttributeError(name)
-            return Streams()
-        elif name == 'header':
-            header = FileHeader.parse(self.streams.fileheader)
-            self.__dict__[name] = header
-            return header
-        elif name == 'docinfo':
-            docinfo = self.DocInfo()
-            buildModelTree(docinfo, self.streams.docinfo)
-            self.__dict__[name] = docinfo
-            return docinfo
-        elif name == 'sections':
-            sections = self._sections()
-            self.__dict__[name] = sections
-            return sections
-        elif name == 'bindatas':
-            bindatas = self._bindatas()
-            self.__dict__[name] = bindatas
-            return bindatas
-        elif name == 'previewText':
-            return self.streams.previewText.read().decode('utf-16')
-        elif name == 'previewImage':
-            return self.streams.previewImage.read()
-        elif name == 'summaryinfo':
-            return self.streams.summaryinfo.read()
-        raise AttributeError(name)
+    def __init__(self, filename):
+        self.file = File(filename)
+        self.header = self.file.fileheader
+        models = defineModels(self)
+        self.__dict__.update(models)
 
-    def _sections(self):
-        class Sections:
-            def __getitem__(sections, idx):
-                sect = self.Section()
-                sect.idx = idx
-                buildModelTree(sect, self.streams.section[idx])
-                return sect
-            def __iter__(sections):
-                idxs = []
-                for e in self.listdir():
-                    if e[0] == 'BodyText' and e[1][0:7] == 'Section':
-                        idxs.append(int(e[1][7:]))
-                idxs.sort()
-                for k in idxs:
-                    yield sections[k]
-        return Sections()
+    def get_docinfo(self):
+        docinfo = self.DocInfo()
+        buildModelTree(docinfo, self.file.open_docinfo())
+        return docinfo
+    docinfo = cached_property(get_docinfo)
 
-    def _bindatas(self):
-        class BinDatas:
-            def __getitem__(sections, name):
-                return self.streams.bindata[name]
-            def __iter__(bindatas):
-                names = []
-                for e in self.listdir():
-                    if e[0] == 'BinData':
-                        names.append(e)
-                names.sort()
-                for k in names:
-                    yield k, bindatas[k].read()
-        return BinDatas()
+    def get_bodytext_section(self, sect_idx):
+        stream = self.file.open_bodytext_section(sect_idx)
+        sect = self.Section()
+        sect.idx = sect_idx
+        buildModelTree(sect, stream)
+        return sect
 
-    def streamNames(self):
-        for e in self.listdir():
-            yield os.path.join(*e)
+    def open_bindata(self, name):
+        return self.file.open_bindata(name)
 
 try:
     sample5017 = Document('sample2005.hwp')

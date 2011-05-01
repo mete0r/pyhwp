@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from hwp import hwp50, dataio
+from . import hwp50, dataio
 import sys
 
 def hwpdump(argv):
@@ -20,7 +20,7 @@ def hwpdump(argv):
             print 'section number required'
             return -1
         section_number = int(argv[2])
-        stream = doc.sections[section_number]
+        stream = doc.get_bodytext_section(section_number)
     elif stream_type == 'docinfo':
         stream = doc.docinfo
     else:
@@ -42,21 +42,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-#    for f in [doc.streams.docinfo, doc.streams.section[0]]:
-#        idx = 0
-#        for rec in hwp50.getRecords(f):
-#            tagname = hwp50.tagnames.get(rec.tagid, None)
-#            if tagname is None:
-#                tagname = '0x%x(HWPTAG_BEGIN + %d)'%(rec.tagid, rec.tagid - hwp50.HWPTAG_BEGIN)
-#            print '\t'*rec.level, idx, tagname, rec.size
-#
-#            record_type = doc.record_types.get(rec.tagid)
-#            if record_type is not None:
-#                try:
-#                    data = dataio.decodeModel(record_type, rec.datastream)
-#                    print '\t'*(rec.level+1), repr(data).replace('\n', '\n'+'\t'*(rec.level)), '\n'
-#                except:
-#                    pass
-#            print '\t'*(rec.level+1) + dataio.hexdump(rec.data).replace('\n', '\n'+'\t'*(rec.level+1))
-#
-#            idx += 1

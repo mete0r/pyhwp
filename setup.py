@@ -13,14 +13,15 @@ setup(
         author = 'mete0r',
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
-        packages = ['hwp'],
+        packages = ['hwp5'],
 
         install_requires=['OleFileIO_PL >=0.20'],
-        provides=['hwp'],
+        provides=['hwp5 (0.0)'],
 
         entry_points = {
             'console_scripts': [
-                'hwpdump = hwp.hwpdump:main',
+                'hwpdump = hwp5.hwpdump:main',
+                'hwpinfo = hwp5.hwpinfo:main',
                 ]
             },
 
