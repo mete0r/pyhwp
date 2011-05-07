@@ -1,28 +1,33 @@
-pyhwp: hwp file format python parser
+pyhwp: HWP 파일 포맷 파서 (파이썬)
 ====================================
 
-Project Hosting:
+프로젝트 호스팅:
   http://github.com/mete0r/pyhwp
 
-Requirements:
+설치 필요 요건:
  - python 2.6
  - OleFileIO_PL (>=2.0)
 
-Installation:
+설치:
 
- - you need pip (>=1.0.0) to install from a branch in a git repository
- - install by following command:
+ - git 저장소의 특정 브랜치로부터 설치하기 위해, 최신 파이썬 패키지 인스톨러(pip, 1.0.0 이상)이 필요합니다.
+ - 다음 명령으로 설치합니다:
 
    pip install git+git://github.com/mete0r/pyhwp.git@v0.0
 
-Usage:
+사용법:
 
   hwpview [filename]
 
-Limitation:
+제한사항:
 
- - this is an experimental release
- - pyhwp supports hwp 5.0 file version only
+ - 시험용 릴리즈입니다.
+ - HWP 5.0 파일 버젼만 지원합니다.
+ - 테이블, 각주 등이 포함된 간단하지 않은 페이지는 제대로 표시되지 않습니다.
 
-Author:
+라이센스:
+
+  GNU Affero Public License v3.0
+
+저자:
    mete0r <mete0r NOTHANKSSPAM sarangbang.or.kr>
