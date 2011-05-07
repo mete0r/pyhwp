@@ -21,6 +21,7 @@ setup(
         entry_points = {
             'console_scripts': [
                 'hwpdump = hwp.hwpdump:main',
+                'hwpview = hwp.hwpview:main',
                 ]
             },
 
