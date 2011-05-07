@@ -8,8 +8,8 @@ Project Hosting:
   http://github.com/mete0r/pyhwp
 
 Requirements:
- - python 2.3 or above
+ - python 2.6 or above
  - OleFileIO_PL (>=2.0)
 
 Author:
-   yoosung <mete0r@sarangbang.or.kr>
+   mete0r <mete0r@sarangbang.or.kr>
