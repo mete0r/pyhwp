@@ -5,8 +5,24 @@ Project Hosting:
   http://github.com/mete0r/pyhwp
 
 Requirements:
- - python 2.3 or above
+ - python 2.6
  - OleFileIO_PL (>=2.0)
+
+Installation:
+
+ - you need pip (>=1.0.0) to install from a branch in a git repository
+ - install by following command:
+
+   pip install git+git://github.com/mete0r/pyhwp.git@v0.0
+
+Usage:
+
+  hwpview [filename]
+
+Limitation:
+
+ - this is an experimental release
+ - pyhwp supports hwp 5.0 file version only
 
 Author:
    yoosung <mete0r@sarangbang.or.kr>
