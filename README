@@ -1,6 +1,9 @@
 pyhwp: hwp file format python parser
 ====================================
 
+ * CAUTION: master branch is not for use; checkout v0.0 branch instead
+   Please refer https://github.com/mete0r/pyhwp/tree/v0.0
+
 Project Hosting:
   http://github.com/mete0r/pyhwp
 
