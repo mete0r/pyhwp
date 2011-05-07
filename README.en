@@ -7,6 +7,7 @@ Project Hosting:
 Requirements:
  - python 2.6
  - OleFileIO_PL (>=2.0)
+ - PyGTK, PyGObject (for hwpview)
 
 Installation:
 

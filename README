@@ -7,6 +7,7 @@ pyhwp: HWP 파일 포맷 파서 (파이썬)
 설치 필요 요건:
  - python 2.6
  - OleFileIO_PL (>=2.0)
+ - PyGTK, PyGObject (for hwpview)
 
 설치:
 
