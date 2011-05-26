@@ -738,8 +738,11 @@ class Line(ElementContainerView):
                 self.stack.append(field)
         elif e.ch == e.BOOKMARK:
             bookmark = ET.Element('a')
-            bookmark.attrib['name'] = e.control.data.name
-            self.stack[-1].addHtml(bookmark)
+            try:
+                bookmark.attrib['name'] = e.control.data.name
+                self.stack[-1].addHtml(bookmark)
+            except Exception, e:
+                logging.exception(e)
         elif e.ch == e.FOOT_END_NOTE:
             if isinstance(e.control, self.doc.FootNote):
                 fn = e.control
@@ -749,6 +752,7 @@ class Line(ElementContainerView):
                 self.stack[-1].addComment(e)
         elif isinstance(e.control, self.doc.GShapeObject)\
                 and isinstance(e.control.shapecomponent, self.doc.ShapeComponent)\
+                and (getattr(e.control.shapecomponent, 'shape', None) is not None)\
                 and isinstance(e.control.shapecomponent.shape, self.doc.ShapePicture):
             gso = e.control
             img = Image(self.doc, gso.shapecomponent.shape)
