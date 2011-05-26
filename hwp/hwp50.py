@@ -1324,7 +1324,7 @@ def defineModels(doc):
         chid = 'foot'
         def getSubModeler(self, rec):
             if rec.tagid == HWPTAG_LIST_HEADER:
-                return ListFooter, 'listhead'
+                return ListHeader, 'listhead'
             if rec.tagid == HWPTAG_PARA_HEADER:
                 return Paragraph, self.listhead.paragraphs.append
     Control.addsubtype(Footer)
