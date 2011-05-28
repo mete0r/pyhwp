@@ -37,13 +37,13 @@ HWPTAG: HWPTAG_BIN_DATA
 ; 부모 모델 인스턴스의 종류나 상태에 따라 구체 모델이 결정된다.
 
 HWPTAG: HWPTAG_SHAPE_COMPONENT
-모델: ShapeComponent
+추상 모델: ShapeComponent
 구체 모델:
 	ShapeComponent : 부모타입이 ShapeComponent
 	PrimaryShapeComponent : 부모타입이 PrimaryShapeComponent
 
 HWPTAG: HWPTAG_LIST_HEADER
-모델: ListHeader
+추상 모델: ListHeader
 구체 모델:
 	ListHeader: 부모타입이 ShapeComponent
 	TableCaption, TableCell: 부모 타입이 Table

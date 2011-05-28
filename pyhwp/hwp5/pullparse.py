@@ -1,4 +1,4 @@
-from .recordstream import decode_record_stream
+from .recordstream import read_records
 
 STARTREC = 0
 ENDREC = 2
@@ -22,4 +22,4 @@ def pullparse_records(records):
         yield ENDREC, stack.pop()
 
 def pullparse(f):
-    return pullparse_records(decode_record_stream(f))
+    return pullparse_records(read_records(f))

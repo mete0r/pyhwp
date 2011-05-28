@@ -1672,19 +1672,19 @@ class Document:
 
     def get_docinfo(self):
         docinfo = self.DocInfo()
-        buildModelTree(docinfo, self.file.open_docinfo())
+        buildModelTree(docinfo, self.file.docinfo())
         return docinfo
     docinfo = cached_property(get_docinfo)
 
     def get_bodytext_section(self, sect_idx):
-        stream = self.file.open_bodytext_section(sect_idx)
+        stream = self.file.bodytext(sect_idx)
         sect = self.Section()
         sect.idx = sect_idx
         buildModelTree(sect, stream)
         return sect
 
     def open_bindata(self, name):
-        return self.file.open_bindata(name)
+        return self.file.bindata(name)
 
 try:
     sample5017 = Document('sample2005.hwp')
