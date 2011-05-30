@@ -812,7 +812,7 @@ class ControlChar(object):
     decode_bytes = classmethod(decode_bytes)
 
     def kind(self):
-        return self.kinds[self.ch].size
+        return self.kinds[self.ch]
     kind = property(kind)
 
     def code(self):
@@ -897,9 +897,9 @@ class ParaLineSeg(Element):
 
 class ParaRangeTag(BasicElement):
     def attributes(context):
-        yield UINT32, start
-        yield UINT32, end
-        yield UINT32, tag
+        yield UINT32, 'start'
+        yield UINT32, 'end'
+        yield UINT32, 'tag'
         # TODO: SPEC
     attributes = staticmethod(attributes)
 
@@ -964,7 +964,7 @@ class TextboxParagraphList(ListHeader):
     attributes = staticmethod(attributes)
 
 
-class Coord:
+class Coord(BasicModel):
     def attributes(context):
         yield SHWPUNIT, 'x',
         yield SHWPUNIT, 'y',
@@ -1796,7 +1796,25 @@ def main():
             recordid = kwargs.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
             hwptag = kwargs.get('hwptag', '')
             self.xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
+            if model is ParaText:
+                chunks = attributes.pop('chunks')
+            else:
+                pass
             self.xmlgen.startElement(model.__name__, dict(attritem2str(x) for x in attributes.items()))
+            if model is ParaText:
+                for (start, end), chunk in chunks:
+                    chunk_attr = dict(start=str(start), end=str(end))
+                    if isinstance(chunk, basestring):
+                        self.xmlgen.startElement('Text', chunk_attr)
+                        self.xmlgen.characters(chunk)
+                        self.xmlgen.endElement('Text')
+                    elif isinstance(chunk, ControlChar):
+                        chunk_attr['name'] = chunk.name
+                        chunk_attr['kind'] = chunk.kind.__name__
+                        self.xmlgen.startElement('ControlChar', chunk_attr)
+                        self.xmlgen.endElement('ControlChar')
+                    else:
+                        self.xmlgen._write('<!-- unknown chunk: (%d, %d), %s -->'%(start, end, chunk))
             unparsed = kwargs.get('unparsed', '')
             if len(unparsed) > 0:
                 self.xmlgen._write('<!-- UNPARSED\n')
