@@ -141,7 +141,7 @@ HWP 5.0 파일의 레코드 구조 스트림을 Paragraph 등 데이터 모델�
 
 저작자
 ------
-   mete0r <mete0r NOTHANKSSPAM sarangbang.or.kr>
+   mete0r \<mete0r NOTHANKSSPAM sarangbang.or.kr\>
 
 사용조건
 --------
