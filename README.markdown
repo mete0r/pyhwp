@@ -39,7 +39,7 @@ HWP 5.0 파일(.hwp)을 분석하는 파이썬 프로그램입니다. HWP 5.0 �
 사용방법
 --------
 
-### 1) `hwp5file`
+### 1) hwp5file
 
 HWP 5.0 복합파일에 포함된 스트림 파일 목록을 확인하고, 각각을 표준 출력으로 덤프할 수 있습니다.
 
@@ -49,17 +49,17 @@ HWP 5.0 복합파일에 포함된 스트림 파일 목록을 확인하고, 각�
 
 `<스트림 파일>`을 생략할 경우, 스트림 파일 목록을 출력합니다.
 
-예: `sample.hwp` 파일의 스트림 목록을 출력
+예: sample.hwp 파일의 스트림 목록을 출력
 
 		hwp5file sample.hwp
 
 `<스트림 파일>`에 스트림 파일의 상대 경로를 명시할 경우, 그 스트림을 출력합니다. 압축된 스트림은 압축된 그대로 출력합니다.
 
-예: `sample.hwp` 파일의 `DocInfo` 스트림을 출력
+예: sample.hwp 파일의 `DocInfo` 스트림을 출력
 
 		hwp5file sample.hwp DocInfo > docinfo.z
 
-예: `sample.hwp` 파일에 첨부된 `BinData/BIN0001.JPG`를 출력
+예: sample.hwp 파일에 첨부된 `BinData/BIN0001.JPG`를 출력
 
 		hwp5file sample.hwp BinData/BIN0001.JPG > BIN0001.JPG.z
 
@@ -88,11 +88,11 @@ HWP 5.0 복합파일에 포함된 스트림 파일 목록을 확인하고, 각�
 
 		hwp5file sample.hwp bodytext 0 > bodytext0.bin
 
-예: `sample.hwp` 파일에 첨부된 `BinData/BIN0001.JPG`를 압축 해제하여 출력
+예: sample.hwp 파일에 첨부된 `BinData/BIN0001.JPG`를 압축 해제하여 출력
 
 		hwp5file sample.hwp bindata BIN0001.JPG > bin0001.jpg
 
-### 2) `hwp5rec`
+### 2) hwp5rec
 
 레코드 구조 스트림 (`DocInfo`, `BodyText/Section<number>` 등)을 트리 형태로 덤프할 수 있습니다.
 
@@ -116,7 +116,7 @@ HWP 5.0 복합파일에 포함된 스트림 파일 목록을 확인하고, 각�
 
 		hwp5rec sample.hwp bodytext/0 26:29
 
-### 3) `hwp5bin`
+### 3) hwp5bin
 
 HWP 5.0 파일의 레코드 구조 스트림을 Paragraph 등 데이터 모델로 파싱, XML 파일로 변환해서 출력합니다.
 
@@ -127,6 +127,7 @@ HWP 5.0 파일의 레코드 구조 스트림을 Paragraph 등 데이터 모델�
 		hwp5bin <hwp파일이름> <레코드 스트림 파일>
 
 예:
+
 		hwp5bin sample.hwp docinfo > docinfo.xml
 		hwp5bin sample.hwp bodytext/0 > bodytext0.xml
 
@@ -134,7 +135,7 @@ HWP 5.0 파일의 레코드 구조 스트림을 Paragraph 등 데이터 모델�
 ------
    mete0r `<mete0r NOTHANKSSPAM sarangbang.or.kr>`
 
-사용허가
+사용조건
 --------
 pyhwp는 [GNU Affero General Public License v3.0](http://github.com/mete0r/pyhwp/raw/master/pyhwp/LICENSE)의 사용 조건에 따라 제공됩니다.
 
