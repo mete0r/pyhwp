@@ -7,11 +7,28 @@ import zlib
 from OleFileIO_PL import OleFileIO
 
 from .utils import cached_property
-from .dataio import UINT32, BYTES, VERSION
+from .dataio import UINT32, Struct
 from . import dataio
 
-class FileHeader(object):
-    Flags = dataio.Flags(UINT32, (
+class BYTES(type):
+    def __new__(mcs, size):
+        return type.__new__(mcs, 'BYTES%d'%size, (str,), dict(size=size))
+    def __init__(self, size):
+        return type.__init__(self, None, None, None)
+    def read(self, f, context=None):
+        if self.size < 0:
+            return f.read()
+        else:
+            return f.read(self.size)
+
+class VERSION(tuple):
+    def read(cls, f, context=None):
+        version = f.read(4)
+        return (ord(version[3]), ord(version[2]), ord(version[1]), ord(version[0]))
+    read = classmethod(read)
+
+class FileHeader(Struct):
+    Flags = dataio.Flags(UINT32,
         0, 'compressed',
         1, 'password',
         2, 'distributable',
@@ -24,18 +41,13 @@ class FileHeader(object):
         9, 'cert_signature_extra',
         10, 'cert_drm',
         11, 'ccl',
-        ))
+        )
     def attributes(cls, context):
         yield BYTES(32), 'signature'
         yield VERSION, 'version'
         yield cls.Flags, 'flags'
         yield BYTES(216), 'reserved'
     attributes = classmethod(attributes)
-
-    def parse(cls, f):
-        from .models import parse_model_attributes
-        return parse_model_attributes(cls, dict(), None, f)
-    parse = classmethod(parse)
 
 
 def recode(backend_stream, backend_encoding, frontend_encoding, errors='strict'):
@@ -65,7 +77,7 @@ class File(OleFileIO):
         return self.openstream('FileHeader')
 
     def parse_fileheader(self):
-        type, attributes = FileHeader.parse(self.open_fileheader())
+        attributes = FileHeader.read(self.open_fileheader())
         fileheader = FileHeader()
         fileheader.__dict__.update((name, type(attributes.get(name))) for type, name in FileHeader.attributes(dict()))
         return fileheader
@@ -96,6 +108,18 @@ class File(OleFileIO):
             sec = StringIO(zlib.decompress(sec.read(), -15))
         return sec
 
+    def viewtext(self, idx):
+        try:
+            sec = self.openstream('ViewText/Section'+str(idx))
+        except IOError:
+            raise IndexError(idx)
+        return sec
+
+    def viewtext_tail(self, idx):
+        f = self.viewtext(idx)
+        f.seek(4+256)
+        return f
+
     def bindata(self, name):
         try:
             strm = self.openstream('BinData/%s'%name)
@@ -103,6 +127,15 @@ class File(OleFileIO):
             raise KeyError(name)
         if self.fileheader.flags.compressed:
             strm = StringIO(zlib.decompress(strm.read(), -15))
+        return strm
+
+    def script(self, name):
+        try:
+            strm = self.openstream('Scripts/%s'%name)
+        except IOError:
+            raise KeyError(name)
+        if self.fileheader.flags.compressed:
+            return StringIO(zlib.decompress(strm.read(), -15))
         return strm
 
 def pop_arg(args, name):
@@ -120,22 +153,26 @@ def main():
     file = File(filename)
 
     if len(args) == 0:
-        op.print_help()
+        print '%s %s'%(file.fileheader.signature, '%d.%d.%d.%d'%file.fileheader.version)
+        print file.fileheader.flags, FileHeader.Flags.dictvalue(file.fileheader.flags)
         print ''
-        print 'Available <stream-specifier>s:'
-        print ''
-        print 'DECODED STREAMS'
-        print '---------------'
-        print 'bindata <filename> : BIN/<filename> (uncompressed)'
-        print 'docinfo : DocInfo (uncompressed, record stream)'
-        print 'bodytext <index> : BodyText/Section<index> (uncompressed, record stream)'
-        print 'preview_image'
-        print 'preview_text [charset] : (default charset=utf-8)'
-        print ''
-        print 'RAW STREAMS'
+        print 'Raw streams'
         print '-----------'
         for name in file.list_streams():
-            print name
+            print repr(name)
+        print ''
+        print 'Pseudo streams'
+        print '--------------'
+        print 'preview_text [charset] : (default charset=utf-8)'
+        print 'preview_image'
+        print 'summaryinfo : \\x05HwpSummaryInformation'
+        print 'docinfo : DocInfo (uncompressed, record stream)'
+        print 'bodytext <index> : BodyText/Section<index> (uncompressed, record stream)'
+        print 'bindata <filename> : BIN/<filename> (uncompressed)'
+        print 'script <filename> : Scripts/<filename> (uncompressed)'
+        print 'viewtext <index> : ViewText/Section<index> (a record)'
+        print 'viewtext_tail <index> : tail part of ViewText/Section<index> (block data)'
+        print ''
         return 0
 
     stream = pop_arg(args, 'stream')

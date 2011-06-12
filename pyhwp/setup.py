@@ -20,10 +20,10 @@ setup(
 
         entry_points = {
             'console_scripts': [
-                'hwpinfo = hwp5.hwpinfo:main',
                 'hwp5file = hwp5.filestructure:main',
                 'hwp5rec = hwp5.recordstream:main',
                 'hwp5bin = hwp5.models:main',
+                'hwp5xml = hwp5.hwpxml:main',
                 ]
             },
 

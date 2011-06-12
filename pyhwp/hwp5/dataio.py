@@ -39,40 +39,33 @@ def readn(f, size):
         raise Eof(f.tell())
     return data
 
-def extract_pairs(sequence):
-    first = None
-    for k in sequence:
-        if first == None:
-            first = k
-        else:
-            yield first, k
-            first = None
-def extract_swapped_pairs(sequence):
-    for x, y in extract_pairs(sequence):
-        yield y, x
-
-class Primitive(object):
-    def __init__(self, basetype, fmt):
-        self.basetype = basetype
-        self.fmt = fmt
-        self.calcsize = struct.calcsize(fmt)
-    def read(self, f):
+class Primitive(type):
+    def read(self, f, context=None):
         return struct.unpack(self.fmt, readn(f, self.calcsize))[0]
-    def parse(self, f):
-        return self, self.read(f)
-    def __call__(self, primitive):
-        return self.basetype(primitive)
 
-UINT32 = Primitive(long, '<I')
-INT32 = Primitive(int, '<i')
-UINT16 = Primitive(int, '<H')
-INT16 = Primitive(int, '<h')
-UINT8 = Primitive(int, '<B')
-INT8 = Primitive(int, '<b')
-WORD = UINT16
-BYTE = UINT8
-DOUBLE = Primitive(float, '<d')
-WCHAR = UINT16
+class _new(object):
+    def __init__(self, basetype):
+        self.basetype = basetype
+    def __call__(self, cls, *args, **kwargs):
+        return self.basetype.__new__(self.basetype, *args, **kwargs)
+
+def _Primitive(name, basetype, fmt):
+    return Primitive(name, (basetype,), dict(basetype=basetype,
+                                             fmt=fmt,
+                                             calcsize=struct.calcsize(fmt),
+                                             __new__=staticmethod(_new(basetype)),
+                                             __slots__=[]))
+
+UINT32 = _Primitive('UINT32', long, '<I')
+INT32 = _Primitive('INT32', int, '<i')
+UINT16 = _Primitive('UINT16', int, '<H')
+INT16 = _Primitive('INT16', int, '<h')
+UINT8 = _Primitive('UINT8', int, '<B')
+INT8 = _Primitive('INT8', int, '<b')
+WORD = _Primitive('WORD', int, '<H')
+BYTE = _Primitive('BYTE', int, '<B')
+DOUBLE = _Primitive('DOUBLE', float, '<d')
+WCHAR = _Primitive('WCHAR', int, '<H')
 
 def decode_utf16le_besteffort(s):
     while True:
@@ -83,175 +76,208 @@ def decode_utf16le_besteffort(s):
             s = s[:e.start] + '.'*(e.end-e.start) + s[e.end:]
             continue
 
-class BSTR(object):
-    def read(f):
-        size = UINT16.read(f)
+class BSTR(unicode):
+    __new__ = _new(unicode)
+    def read(f, context):
+        size = UINT16.read(f, None)
         if size == 0:
             return u''
         data = readn(f, 2*size)
         return decode_utf16le_besteffort(data)
     read = staticmethod(read)
 
-    def parse(self, f):
-        return self, self.read(f)
-
-    def __call__(self, primitive):
-        return primitive
-BSTR = BSTR()
-
 inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
 hwp2inch = lambda x: x / 7200.0
 hwp2mm = lambda x: inch2mm(hwp2inch(x))
 hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
-HWPUNIT = UINT32
-SHWPUNIT = INT32
-HWPUNIT16 = INT16
+HWPUNIT = _Primitive('HWPUNIT', long, '<I')
+SHWPUNIT = _Primitive('SHWPUNIT', int, '<i')
+HWPUNIT16 = _Primitive('HWPUNIT16', int, '<h')
 
-class COLORREF(int):
-    read = staticmethod(INT32.read)
-    def parse(cls, f):
-        return cls, cls.read(f)
-    parse = classmethod(parse)
-    __slots__ = []
-    def __getattr__(self, name):
-        if name == 'r': return self & 0xff
-        elif name == 'g': return (self & 0xff00) >> 8
-        elif name == 'b': return (self & 0xff0000) >> 16
-        elif name == 'a': return (self & 0xff000000) >> 24
-        elif name == 'rgb': return self.r, self.g, self.b
-    def __str__(self): return '#%02x%02x%02x'%(self.r, self.g, self.b)
-    def __repr__(self): return self.__class__.__name__+('(0x%02x, 0x%02x, 0x%02x)'%self.rgb)
-
-def Flags(_basetype, _bits):
-    d = dict(extract_swapped_pairs(_bits))
-    keys = d.keys()
-    class _Flags(_basetype.basetype):
-        __slots__ = []
-        read = staticmethod(_basetype.read)
-        def parse(cls, f):
-            return cls, cls(cls.read(f))
-        parse = classmethod(parse)
-        def __str__(self):
-            d = dict((name,getattr(self, name)) for name in keys)
-            return str(tuple([hex(self), d]))
-    class ItemDescriptor(object):
-        def __get__(self, instance, owner):
-            name = self.name
-            valuetype = int
-            itemdef = d[name]
-            if isinstance(itemdef, tuple):
-                if len(itemdef) > 2:
-                    l, h, valuetype = itemdef
-                else:
-                    l, h = itemdef
-                h += 1
+class BitGroupDescriptor(object):
+    def __init__(self, bitgroup):
+        self.bitgroup = bitgroup
+    def __get__(self, instance, owner):
+        valuetype = int
+        itemdef = self.bitgroup
+        if isinstance(itemdef, tuple):
+            if len(itemdef) > 2:
+                lsb, msb, valuetype = itemdef
             else:
-                l = itemdef
-                h = l + 1
-            return valuetype(int(instance >> l) & int( (2**(h-l)) - 1))
-    for name in keys:
-        desc = ItemDescriptor()
-        desc.name = name
-        setattr(_Flags, name, desc)
-    return _Flags
+                lsb, msb = itemdef
+        else:
+            lsb = msb = itemdef
+        return valuetype(int(instance >> lsb) & int( (2**(msb+1-lsb)) - 1))
 
-def Enum(**kwargs):
-    d = {}
-    class _Enum(int):
-        def __repr__(self):
-            return d.get(self, '')+'(%d)'%self
-    for name, v in kwargs.iteritems():
-        d[v] = name
-        setattr(_Enum, name, v)
-    return _Enum
+class FlagsType(type):
+    def __new__(mcs, name, bases, attrs):
+        basetype = attrs.pop('basetype')
+        bases = (basetype.basetype,)
+        bitgroup_names = attrs.keys()
+        attrs = dict((k, BitGroupDescriptor(v)) for k, v in attrs.iteritems())
+        attrs['read'] = classmethod(lambda cls, f, context: cls(basetype.read(f, context)))
+        attrs['__slots__'] = []
+        def _dictvalue(self):
+            d = dict((name, getattr(self, name)) for name in bitgroup_names)
+            #d['_rawvalue'] = basetype.basetype(self)
+            return d
+        attrs['dictvalue'] = staticmethod(_dictvalue)
+        def _str(self):
+            return str(_dictvalue(self))
+        #attrs['__str__'] = _str
+        attrs['__name__'] = name
+        return type.__new__(mcs, name, bases, attrs)
 
-class ARRAY(object):
-    def __init__(self, type, count):
-        self.type = type
-        self.count = count
-    def read(self, f):
+def _lex_flags_args(args):
+    for idx, arg in enumerate(args):
+        while True:
+            pushback = (yield idx, arg)
+            if pushback is arg:
+                yield
+                continue
+            break
+
+
+def _parse_flags_args(args):
+    args = _lex_flags_args(args)
+    try:
+        idx = -1
+        while True:
+            # lsb
+            try:
+                idx, lsb = args.next()
+            except StopIteration:
+                break
+            assert isinstance(lsb, int), '#%d arg is expected to be a int: %s'%(idx, repr(lsb))
+
+            # msb (default: lsb)
+            idx, x = args.next()
+            if isinstance(x, int):
+                msb = x
+            elif isinstance(x, (type, basestring)):
+                args.send(x) # pushback
+                msb = lsb
+            else:
+                assert False, '#%d arg is unexpected type: %s'%(idx, repr(x))
+
+            # type (default: int)
+            idx, x = args.next()
+            assert not isinstance(x, int), '#%d args is expected to be a type or name: %s'%(idx, repr(x))
+            if isinstance(x, type):
+                t = x
+            elif isinstance(x, basestring):
+                args.send(x) # pushback
+                t = int
+            else:
+                assert False, '#%d arg is unexpected type: %s'%(idx, repr(x))
+
+            # name
+            idx, name = args.next()
+            assert isinstance(name, basestring), '#%d args is expected to be a name: %s'%(idx, repr(name))
+
+            yield name, (lsb, msb, t)
+
+    except StopIteration:
+        assert False, '#%d arg is expected'%(idx+1)
+
+
+def Flags(basetype, *args):
+    attrs = dict(_parse_flags_args(args))
+    attrs['basetype'] = basetype
+    return FlagsType('Flags', (), attrs)
+
+
+enum_types = dict()
+class EnumType(type):
+    def __new__(mcs, name, bases, attrs):
+        items = attrs.pop('items')
+        moreitems = attrs.pop('moreitems')
+        names = dict()
+        registry = dict()
+        for k, v in moreitems.iteritems():
+            assert not k in attrs, 'name clashes: %s'%k
+            attrs[k] = v
+            names[v] = k
+            registry[k] = v
+        for v, k in enumerate(items):
+            assert not k in attrs, 'name clashes: %s'%k
+            attrs[k] = v
+            names[v] = k
+            registry[k] = v
+        def repr(self):
+            enum_name = type(self).__name__
+            item_name = names.get(self)
+            if item_name is not None:
+                return enum_name+'.'+item_name
+            else:
+                return '%s(%d)'%(enum_name, self)
+        attrs['__repr__'] = repr
+        attrs['__slots__'] = []
+        cls = type.__new__(mcs, name, bases, attrs)
+        enum_types[cls] = dict(items=registry, value_instances=dict(), names=names)
+        return cls
+    def __init__(cls, name, bases, attrs):
+        type.__init__(cls, name, bases, attrs)
+        for k, v in enum_types[cls]['items'].iteritems():
+            setattr(cls, k, cls(v))
+    def __call__(cls, value):
+        if isinstance(value, cls):
+            return value
+        value_instances = enum_types[cls]['value_instances']
+        instance = super(EnumType, cls).__call__(value)
+        return value_instances.setdefault(value, instance)
+    def name_for(cls, value):
+        return enum_types[cls]['names'].get(value)
+
+def Enum(*items, **moreitems):
+    attrs = dict(items=items, moreitems=moreitems)
+    return EnumType('Enum', (int,), attrs)
+
+
+class ARRAY(type):
+    _instances = dict()
+
+    def _typeargs(itemtype, count):
+        return 'ARRAY', (tuple,), dict(itemtype=itemtype, size=count, __new__=staticmethod(_new(tuple)))
+    _typeargs = staticmethod(_typeargs)
+
+    def __new__(mcs, itemtype, count):
+        t = type.__new__(mcs, *mcs._typeargs(itemtype, count))
+        return mcs._instances.setdefault((itemtype,count), t)
+
+    def __init__(self, itemtype, count):
+        return type.__init__(self, *self._typeargs(itemtype, count))
+
+    def read(self, f, context=None):
         result = []
-        for i in range(0, self.count):
-            type, value = self.type.parse(f)
+        for i in range(0, self.size):
+            value = self.itemtype.read(f, context)
             result.append( value )
         return tuple(result)
-    def parse(self, f):
-        return self, self.read(f)
-    def __call__(self, value):
-        return value
 
-class N_ARRAY(object):
-    def __init__(self, countType, type):
-        self.countType = countType
-        self.type = type
-    def read(self, f):
+class N_ARRAY(type):
+    _instances = dict()
+
+    def _typeargs(counttype, itemtype):
+        return 'N_ARRAY', (list,), dict(itemtype=itemtype, counttype=counttype, __new__=staticmethod(_new(list)))
+    _typeargs = staticmethod(_typeargs)
+
+    def __new__(mcs, counttype, itemtype):
+        instance = type.__new__(mcs, *mcs._typeargs(counttype, itemtype))
+        return mcs._instances.setdefault((counttype,itemtype), instance)
+
+    def __init__(self, counttype, itemtype):
+        return type.__init__(self, *self._typeargs(counttype, itemtype))
+
+    def read(self, f, context):
         result = []
-        count = self.countType.read(f)
+        count = self.counttype.read(f, context)
         for i in range(0, count):
-            type, value = self.type.parse(f)
+            value = self.itemtype.read(f, context)
             result.append( value )
         return result
-    def parse(self, f):
-        return self, self.read(f)
-    def __call__(self, value):
-        return value
 
-class Matrix(list):
-    def read(f):
-        return ARRAY(ARRAY(DOUBLE, 3), 2).read(f) + ((0.0, 0.0, 1.0),)
-    read = staticmethod(read)
-
-    def parse(cls, f):
-        return cls, cls.read(f)
-    parse = classmethod(parse)
-
-    def applyTo(self, (x, y)):
-        ret = []
-        for row in self:
-            ret.append(row[0] * x + row[1] * y + row[2] * 1)
-        return (ret[0], ret[1])
-    def scale(self, (w, h)):
-        ret = []
-        for row in self:
-            ret.append(row[0] * w + row[1] * h + row[2] * 0)
-        return (ret[0], ret[1])
-    def product(self, mat):
-        ret = Matrix()
-        rs = [0, 1, 2]
-        cs = [0, 1, 2]
-        for r in rs:
-            row = []
-            for c in cs:
-                row.append( self[r][c] * mat[c][r])
-            ret.append(row)
-        return ret
-
-class BYTES(object):
-    def __init__(self, size=-1):
-        self.size = size
-    def read(self, f):
-        if self.size < 0:
-            return f.read()
-        else:
-            return f.read(self.size)
-    def parse(self, f):
-        return BYTES, self.read(f)
-
-    def __call__(self, value):
-        return value
-
-class VERSION:
-    def read(self, f):
-        version = readn(f, 4)
-        return (ord(version[3]), ord(version[2]), ord(version[1]), ord(version[0]))
-    def parse(self, f):
-        return self, self.read(f)
-    def __call__(self, value):
-        return value
-
-VERSION = VERSION()
-
-def parse_model_attributes(model, attributes, context, stream):
+def read_struct_attributes(model, attributes, context, stream):
     try:
         gen = model.attributes(context)
     except Exception, e:
@@ -263,29 +289,54 @@ def parse_model_attributes(model, attributes, context, stream):
         type, identifier = gen.next()
         while True:
             try:
-                type, value = type.parse(stream)
-
+                value = type.read(stream, context)
             except Exception, e:
                 logging.exception(e)
                 msg = 'can\'t parse %s named "%s" of %s' % (type, identifier, model)
                 raise Exception(msg, e)
             attributes[identifier] = value
-            type, identifier = gen.send(type(value))
+            type, identifier = gen.send(value)
     except StopIteration:
         pass
-    return model, attributes
+    return attributes
 
+def match_attribute_types(types_generator, values):
+    try:
+        t, name = types_generator.next()
+        while True:
+            if name in values:
+                value = values.pop(name)
+                yield name, (t, value)
+            else:
+                value = t()
+            t, name = types_generator.send(value)
+    except StopIteration:
+        pass
 
-class BasicModel(object):
-    def __init__(self, attributes):
-        self.__dict__.update(attributes)
+def typed_struct_attributes(struct, attributes, context):
+    types = struct.attributes(context)
+    attributes = dict(attributes)
+    for x in match_attribute_types(types, attributes):
+        yield x
+    for name, value in attributes.iteritems():
+        yield name, (type(value), value)
 
-    def parse(cls, f):
-        return parse_model_attributes(cls, dict(), None, f)
-    parse = classmethod(parse)
+class StructType(type):
+    def __init__(cls, name, bases, attrs):
+        super(StructType, cls).__init__(name, bases, attrs)
+        for k, v in attrs.iteritems():
+            if isinstance(v, EnumType):
+                v.__name__ = k
+            elif isinstance(v, FlagsType):
+                v.__name__ = k
 
-    def __str__(self):
-        return str(self.__dict__)
+class Struct(object):
+
+    __metaclass__ = StructType
+
+    def read(cls, f, context=None):
+        return read_struct_attributes(cls, dict(), context, f)
+    read = classmethod(read)
 
 def dumpbytes(data, crust=False):
     offsbase = 0
