@@ -14,12 +14,14 @@ HWP 5.0 파일(.hwp)을 분석하는 파이썬 프로그램입니다. HWP 5.0 �
 2. DocInfo, BodyText/SectionX 등의 레코드 구조 스트림들을 레코드 단위로 잘라 
    읽어내기
 3. 레코드 구조를 XML로 출력하기
+4. HWP 파일을 XML로 변환하기
 
 각각의 단계에 대응하는 다음 실행파일이 존재합니다:
 
 		hwp5file <hwp파일이름> [<스트림 파일>]
 		hwp5rec <hwp파일이름> <레코드 스트림 파일> [<덤프할 레코드 범위>]
 		hwp5bin <hwp파일이름> <레코드 스트림 파일>
+		hwp5xml <hwp파일이름>
 
 프로젝트 호스팅
 ---------------
@@ -138,6 +140,22 @@ HWP 5.0 파일의 레코드 구조 스트림을 Paragraph 등 데이터 모델�
 
 		hwp5bin sample.hwp docinfo > docinfo.xml
 		hwp5bin sample.hwp bodytext/0 > bodytext0.xml
+
+### 4) hwp5xml
+
+HWP 5.0 파일을 XML 파일로 변환합니다. 첨부된 이미지 등은 포함되지 않으며, 
+DocInfo 스트림과 BodyText 스트림들만이 변환됩니다.
+
+(출력 XML의 형식은 pyhwp에서 임시로 정의한 것으로, 현재 계속 변경 중입니다.
+pyhwp가 어느 정도 성숙하면 XML 정의를 확정할 계획입니다.)
+
+사용법:
+
+		hwp5xml <hwp파일이름>
+
+예:
+
+		hwp5xml sample.hwp > sample.xml
 
 저작자
 ------
