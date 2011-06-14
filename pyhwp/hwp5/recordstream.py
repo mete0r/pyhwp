@@ -104,100 +104,90 @@ def link_records(records):
 
 def main():
     import sys
-    import logging
-    import itertools
     from .filestructure import File
+    from ._scriptutils import OptionParser, args_pop, args_pop_range, getlogger
 
-    from optparse import OptionParser as OP
-    op = OP(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
-    op.add_option('-f', '--output-format', dest='oformat', default='hex',
-            help='output format for record: hex, python or raw [default: hex]')
+    op = OptionParser(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
+    op.add_option('-f', '--format', dest='format', default='hex',
+            help='output format: hex, raw or nul [default: hex]')
 
     options, args = op.parse_args()
-    try:
-        filename = args.pop(0)
-    except IndexError:
-        print 'the input filename is required'
-        op.print_help()
-        return -1
 
-    class RawFormat:
+    logger = getlogger(options)
+
+    filename = args_pop(args, 'filename')
+    if filename == '-':
+        filename = 'STDIN'
+        streamname = 'STDIN'
+        file = sys.stdin
+        bytestream = file
+    else:
+        file = File(filename)
+        streamname = args_pop(args, '<record-stream>')
+        bytestream = file.pseudostream(streamname)
+
+    records = read_records(bytestream, streamname, filename)
+
+    from itertools import islice as ranged_records
+    record_range = args_pop_range(args)
+    if record_range:
+        records = ranged_records(records, *record_range)
+
+    def initlevel(records):
+        level = None
+        for rec in records:
+            if level is None:
+                level = rec.level
+            rec.level -= level
+            #logger.info('### record level : %d', rec.level)
+            yield rec
+    records = initlevel(records)
+
+    records = link_records(records)
+
+
+    def count_tagids(records):
+        occurrences = dict()
+        for rec in records:
+            occurrences.setdefault(rec.tag, 0)
+            occurrences[rec.tag] += 1
+            yield rec
+        for tag, count in occurrences.iteritems():
+            logger.info('%30s: %d', tag, count)
+    records = count_tagids(records)
+
+    class RecordFormatter(object):
+        def __init__(self, out):
+            self.out = out
+        def write(self, rec):
+            raise NotImplementedError
+    class RawFormat(RecordFormatter):
         def write(self, rec):
             bytes = encode_record_header(rec) + rec.payload 
-            sys.stdout.write( bytes )
-    class PythonStringFormat:
-        def write(self, rec):
-            bytes = encode_record_header(rec) + rec.payload 
-            sys.stdout.write( bytes.encode('string_escape') )
-    class HexFormat:
-        out = dataio.IndentedOutput(sys.stdout, 0)
-        p = dataio.Printer(out)
+            self.out.write( bytes )
+    class HexFormat(RecordFormatter):
+        def __init__(self, out):
+            out = dataio.IndentedOutput(out, 0)
+            super(HexFormat, self).__init__(out)
+            self.p = dataio.Printer(out)
         def write(self, rec):
             self.out.level = rec.level
             self.p.prints( rec )
             self.p.prints( dataio.hexdump(rec.payload, True) )
-            print  '-' * 80
-    formats = dict(hex=HexFormat(), raw=RawFormat(), python=PythonStringFormat())
-    oformat = formats[options.oformat]
+            self.out.write( '-' * 80 + '\n' )
+    class NulFormat(RecordFormatter):
+        def write(self, rec):
+            pass
 
-    file = File(filename)
+    formats = dict(hex=HexFormat, raw=RawFormat, nul=NulFormat)
+    oformat = formats[options.format](options.outfile)
 
-    logging.info( (file.fileheader.version, filename) )
-
-    try:
-        stream_specifier = args.pop(0)
-    except IndexError:
-        print '<record-stream> is not specified'
-        op.print_help()
-        print 'Available <record-stream>s:'
-        print ''
-        print 'docinfo'
-        print 'bodytext/<idx>'
-        return -1
-
-    stream_spec = stream_specifier.split('/')
-    stream_name = stream_spec[0]
-    stream_args = stream_spec[1:]
-
-    method = getattr(file, stream_name)
-    bytestream = method(*stream_args)
-    records = read_records(bytestream, stream_specifier, filename)
-    records = link_records(records)
-
-    def nth(iterable, n):
-        return next(itertools.islice(iterable, n, None))
-
-    def dump_record(records, recidx):
-        rec = nth(records, int(recidx))
-        logging.info( 'payload size = %d\n', len(rec.payload) )
+    for rec in records:
         oformat.write(rec)
 
-    def dump_records(records):
-        out = dataio.IndentedOutput(sys.stdout, 0)
-        p = dataio.Printer(out)
-        for rec in records:
-            oformat.write(rec)
-
-    if len(args) == 0:
-        dump_records(records)
-    else:
-        range = args.pop(0)
-        separator = range.find(':')
-        if separator == -1:
-            dump_record(records, range)
-        else:
-            start = range[:separator]
-            end = range[separator+1:]
-            if start != '':
-                start = int(start)
-                records = itertools.islice(records, start, None)
-            else:
-                start = 0
-            if end != '':
-                end = int(end)
-                count = end-start
-                records = itertools.islice(records, count)
-            dump_records(records)
+    while True:
+        if '' == bytestream.read(4096):
+            return
 
 if __name__ == '__main__':
     main()

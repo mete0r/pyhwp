@@ -36,7 +36,11 @@ def readn(f, size):
     data = f.read(size)
     datasize = len(data)
     if datasize == 0:
-        raise Eof(f.tell())
+        try:
+            pos = f.tell()
+        except IOError:
+            pos = '<UNKNOWN>'
+        raise Eof(pos)
     return data
 
 class Primitive(type):

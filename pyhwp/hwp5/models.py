@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 from .dataio import readn, read_struct_attributes, match_attribute_types,\
         StructType, Struct, Flags, Enum, BYTE, WORD, UINT32, UINT16, INT32, INT16, UINT8, INT8,\
         DOUBLE, ARRAY, N_ARRAY, SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR
@@ -1722,6 +1721,12 @@ class ModelEventHandler(object):
     def endModel(self, model):
         raise NotImplementedError
 
+def wrap_modelevents(wrapper_model, modelevents):
+    yield STARTEVENT, wrapper_model
+    for mev in modelevents:
+        yield mev
+    yield ENDEVENT, wrapper_model
+
 def dispatch_model_events(handler, events):
     for event, (model, attributes, context) in events:
         if event == STARTEVENT:
@@ -1733,54 +1738,37 @@ def main():
     import sys
     import logging
     import itertools
+    from ._scriptutils import OptionParser, args_pop, args_pop_range
     from .filestructure import File
+    from .recordstream import read_records
 
-    from optparse import OptionParser as OP
-    op = OP(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
-    op.add_option('-V', '--hwp-version', dest='print_hwp_version', action='store_true', default=False,
-            help='print hwp5 file format version')
-    op.add_option('', '--loglevel', dest='loglevel', default='warning', help='log level (debug, info, warning, error, critical)')
-    op.add_option('', '--pass', dest='passes', type='int', default=2)
+    op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
+    op.add_option('--pass', dest='passes', type='int', default=2, help='parsing pass: 1 <= PASSES <= 3 [default: 2]')
+    op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
 
     options, args = op.parse_args()
-    try:
-        filename = args.pop(0)
-    except IndexError:
-        print 'the input filename is required'
-        op.print_help()
-        return -1
 
-    file = File(filename)
-    if options.print_hwp_version:
-        print file.fileheader.version
+    out = options.outfile
 
-    from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
-    loglevels = dict(debug=DEBUG, info=INFO, warning=WARNING, error=ERROR, critical=CRITICAL)
-    loglevel = loglevels[options.loglevel]
+    filename = args_pop(args, 'filename')
+    if filename == '-':
+        filename = 'STDIN'
+        streamname = 'STDIN'
+        bytestream = sys.stdin
+        version = args_pop(args, 'version').split('.')
+    else:
+        file = File(filename)
+        streamname = args_pop(args, '<record-stream>')
+        bytestream = file.pseudostream(streamname)
+        version = file.fileheader.version
 
-    logger = logging.getLogger()
-    logger.setLevel(loglevels.get(options.loglevel, WARNING))
-    loghandler = logging.StreamHandler(sys.stdout)
-    loghandler.setFormatter(logging.Formatter('<!-- %(message)s -->'))
-    logger.addHandler(loghandler)
-
-    try:
-        stream_specifier = args.pop(0)
-    except IndexError:
-        print '<record-stream> is not specified'
-        op.print_help()
-        print 'Available <record-stream>s:'
-        print ''
-        print 'docinfo'
-        print 'bodytext/<idx>'
-        return -1
+    records = read_records(bytestream, streamname, filename)
 
     from xml.sax.saxutils import XMLGenerator
-    xmlgen = XMLGenerator(sys.stdout, 'utf-8')
-    class XmlHandler(ModelEventHandler):
+    xmlgen = XMLGenerator(out, 'utf-8')
+    class XmlFormat(ModelEventHandler):
         def startDocument(self):
             xmlgen.startDocument()
-            xmlgen.startElement('Records', dict(filename=filename, streamid=stream_specifier))
         def startModel(self, model, attributes, **context):
             def xmlattrval(v):
                 if isinstance(v, basestring):
@@ -1794,15 +1782,18 @@ def main():
                     name, (type, value) = item
                     return name, xmlattrval(value)
                 except Exception, e:
-                    logging.error('can\'t serialize xml attribute %s: %s'%(name, repr(v)))
-                    logging.exception(e)
+                    context['logging'].error('can\'t serialize xml attribute %s: %s'%(name, repr(v)))
+                    context['logging'].exception(e)
                     raise
             recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
             hwptag = context.get('hwptag', '')
-            if loglevel <= logging.INFO:
+            if options.loglevel <= logging.INFO:
                 xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
             if model is ParaText:
-                chunks = attributes.pop('chunks')
+                if 'chunks' in attributes:
+                    chunks = attributes.pop('chunks')
+                else:
+                    chunks = None
             else:
                 pass
             if model is Text:
@@ -1813,12 +1804,9 @@ def main():
             typed_attributes = typed_model_attributes(model, attributes, context)
             xmlgen.startElement(model.__name__, dict(xmlattr(x) for x in typed_attributes))
 
-            #from .hwpxml import startelement
-            #for x in startelement(context, xmlgen, (model, attributes)): x[0](*x[1:])
-
             if model is Text and text is not None:
                 xmlgen.characters(text)
-            if model is ParaText:
+            if model is ParaText and chunks is not None:
                 for (start, end), chunk in chunks:
                     chunk_attr = dict(start=str(start), end=str(end))
                     if isinstance(chunk, basestring):
@@ -1832,7 +1820,7 @@ def main():
                         xmlgen.endElement('ControlChar')
                     else:
                         xmlgen._write('<!-- unknown chunk: (%d, %d), %s -->'%(start, end, chunk))
-            if loglevel <= logging.INFO:
+            if options.loglevel <= logging.INFO:
                 unparsed = context.get('unparsed', '')
                 if len(unparsed) > 0:
                     xmlgen._write('<!-- UNPARSED\n')
@@ -1841,21 +1829,41 @@ def main():
         def endModel(self, model):
             xmlgen.endElement(model.__name__)
         def endDocument(self):
-            xmlgen.endElement('Records')
             xmlgen.endDocument()
+        def getlogger():
+            return getlogger(options, loghandler(out, logformat_xml))
 
-    oformat = XmlHandler()
-    context = create_context(file, logging=logger)
+    class NulFormat(ModelEventHandler):
+        def startDocument(self): pass
+        def endDocument(self): pass
+        def startModel(self, model, attributes, **context): pass
+        def endModel(self, model): pass
 
-    stream_spec = stream_specifier.split('/')
-    stream_name = stream_spec[0]
-    stream_args = stream_spec[1:]
+    from ._scriptutils import getlogger, loghandler, logformat_xml
+    if options.format == 'xml':
+        logger = getlogger(options, loghandler(out, logformat_xml))
+    else:
+        logger = getlogger(options)
 
-    method = getattr(file, stream_name)
-    bytestream = method(*stream_args)
-    from .recordstream import read_records
-    records = read_records(bytestream, stream_specifier, filename)
+    formats = dict(xml=XmlFormat, nul=NulFormat)
+    oformat = formats[options.format]()
+
+    context = create_context(version=version, logging=logger)
     models = parse_models(context, records, options.passes)
+
+    def statistics(models):
+        occurrences = dict()
+        for event, (model, attributes, context) in models:
+            if event is STARTEVENT:
+                occurrences.setdefault(model, 0)
+                occurrences[model] += 1
+            yield event, (model, attributes, context)
+        for model, count in occurrences.iteritems():
+            logger.info('%30s: %d', model.__name__, count)
+    models = statistics(models)
+
+    class Records(object): pass
+    models = wrap_modelevents((Records, dict(filename=filename, streamid=streamname), dict(context)), models)
 
     oformat.startDocument()
     dispatch_model_events(oformat, models)

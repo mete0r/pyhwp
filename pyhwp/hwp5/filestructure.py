@@ -7,7 +7,7 @@ import zlib
 from OleFileIO_PL import OleFileIO
 
 from .utils import cached_property
-from .dataio import UINT32, Struct
+from .dataio import INT32, UINT32, UINT16, Flags, Struct, ARRAY, N_ARRAY
 from . import dataio
 
 class BYTES(type):
@@ -28,7 +28,7 @@ class VERSION(tuple):
     read = classmethod(read)
 
 class FileHeader(Struct):
-    Flags = dataio.Flags(UINT32,
+    Flags = Flags(UINT32,
         0, 'compressed',
         1, 'password',
         2, 'distributable',
@@ -47,6 +47,38 @@ class FileHeader(Struct):
         yield VERSION, 'version'
         yield cls.Flags, 'flags'
         yield BYTES(216), 'reserved'
+    attributes = classmethod(attributes)
+
+class TextField(unicode):
+    def read(cls, f, context=None):
+        unk0 = UINT32.read(f, None) # 1f
+        assert unk0 == 0x1f
+        size = UINT32.read(f, None)
+        if size > 0:
+            data = f.read(2*(size))
+        else:
+            data = ''
+        if size & 1:
+            f.read(2)
+        return data.decode('utf-16le', 'replace')
+    read = classmethod(read)
+
+class SummaryInfo(Struct):
+    def attributes(cls, context):
+        if context['version'] < (5, 0, 1, 0):
+            yield ARRAY(UINT32, 0230/4), '_unk0'
+        else:
+            yield ARRAY(UINT32, 0250/4), '_unk0'
+        yield TextField, 'title'
+        yield TextField, 'subject'
+        yield TextField, 'author'
+        yield TextField, 'datetime'
+        yield TextField, 'keywords'
+        yield TextField, 'etc'
+        yield TextField, 'hidden_username'
+        yield TextField, 'hidden_progversion'
+        yield ARRAY(ARRAY(UINT16, 6), 3), '_unk1'
+        #yield ARRAY(N_ARRAY(UINT32, UINT32), 2), '_unk2'
     attributes = classmethod(attributes)
 
 
@@ -73,25 +105,33 @@ class File(OleFileIO):
         l.sort()
         return l
 
-    def open_fileheader(self):
+    def _fileheader(self):
         return self.openstream('FileHeader')
 
-    def parse_fileheader(self):
-        attributes = FileHeader.read(self.open_fileheader())
+    def fileheader(self):
+        attributes = FileHeader.read(self._fileheader())
         fileheader = FileHeader()
         fileheader.__dict__.update((name, type(attributes.get(name))) for type, name in FileHeader.attributes(dict()))
         return fileheader
-    fileheader = cached_property(parse_fileheader)
+    fileheader = cached_property(fileheader)
 
-    def preview_text(self, charset='utf-8'):
-        import locale
+    def _summaryinfo(self):
+        return self.openstream('\005HwpSummaryInformation')
+
+    def summaryinfo(self):
+        f = self._summaryinfo()
+        context = dict(version=self.fileheader.version)
+        summaryinfo = SummaryInfo.read(f, context)
+        #print '#### %o'%f.tell()
+        return summaryinfo
+    summaryinfo = property(summaryinfo)
+
+    def preview_text(self):
+        charset = 'utf-8'
         return recode(self.openstream('PrvText'), 'utf-16le', charset)
 
     def preview_image(self):
         return self.openstream('PrvImage')
-
-    def summaryinfo(self):
-        return self.openstream('\005HwpSummaryInformation')
 
     def docinfo(self):
         strm = self.openstream('DocInfo')
@@ -138,49 +178,59 @@ class File(OleFileIO):
             return StringIO(zlib.decompress(strm.read(), -15))
         return strm
 
-def pop_arg(args, name):
-    try:
-        return args.pop(0)
-    except IndexError:
-        raise Exception('%s is required'%name)
+    def pseudostream(self, name):
+        args = name.split('/', 1)
+        name = args.pop(0)
+        pseudostream = getattr(self, name, None)
+        if pseudostream:
+            return pseudostream(*args)
 
 def main():
-    from optparse import OptionParser as OP
-    op = OP(usage='usage: %prog [options] filename <stream-specifier>')
+    from ._scriptutils import OptionParser, args_pop
+    op = OptionParser(usage='usage: %prog [options] filename <stream>')
     options, args = op.parse_args()
 
-    filename = pop_arg(args, 'filename')
+    filename = args_pop(args, 'filename')
     file = File(filename)
 
     if len(args) == 0:
-        print '%s %s'%(file.fileheader.signature, '%d.%d.%d.%d'%file.fileheader.version)
-        print file.fileheader.flags, FileHeader.Flags.dictvalue(file.fileheader.flags)
+        print 'FileHeader'
+        print '----------'
+        print 'signature:%s'%file.fileheader.signature
+        print '  version: %d.%d.%d.%d'%file.fileheader.version
+        print '    flags: 0x%x'%file.fileheader.flags
+        for k, v in FileHeader.Flags.dictvalue(file.fileheader.flags).iteritems():
+            print '%20s: %d'%(k, v)
+        print ''
+        print 'Pseudo streams'
+        print '--------------'
+        print '          _fileheader : synonym of FileHeader'
+        print '         _summaryinfo : synonym of \\x05HwpSummaryInformation'
+        print '         preview_text : PrvText (UTF-8)'
+        print '        preview_image : synonym of PrvImage'
+        print '              docinfo : DocInfo (uncompressed, record stream)'
+        print '     bodytext/<index> : BodyText/Section<index> (uncompressed, record stream)'
+        print '   bindata/<filename> : BIN/<filename> (uncompressed)'
+        print '    script/<filename> : Scripts/<filename> (uncompressed)'
+        print '     viewtext/<index> : ViewText/Section<index> (a record)'
+        print 'viewtext_tail/<index> : tail part of ViewText/Section<index> (block data)'
         print ''
         print 'Raw streams'
         print '-----------'
         for name in file.list_streams():
-            print repr(name)
+            print name.encode('string_escape')
         print ''
-        print 'Pseudo streams'
-        print '--------------'
-        print 'preview_text [charset] : (default charset=utf-8)'
-        print 'preview_image'
-        print 'summaryinfo : \\x05HwpSummaryInformation'
-        print 'docinfo : DocInfo (uncompressed, record stream)'
-        print 'bodytext <index> : BodyText/Section<index> (uncompressed, record stream)'
-        print 'bindata <filename> : BIN/<filename> (uncompressed)'
-        print 'script <filename> : Scripts/<filename> (uncompressed)'
-        print 'viewtext <index> : ViewText/Section<index> (a record)'
-        print 'viewtext_tail <index> : tail part of ViewText/Section<index> (block data)'
-        print ''
+        print 'SummaryInfo'
+        print '-----------'
+        for k, v in file.summaryinfo.iteritems():
+            if isinstance(v, unicode):
+                v = v.encode('utf-8')
+            print '%20s: %s'%(k, v)
         return 0
 
-    stream = pop_arg(args, 'stream')
-    try:
-        method = getattr(file, stream)
-    except AttributeError:
-        stream = file.openstream(stream)
-    else:
-        stream = method(*args)
+    streamname = args_pop(args, '<stream>')
+    stream = file.pseudostream(streamname)
+    if not stream:
+        stream = file.openstream(streamname)
     import sys
     sys.stdout.write(stream.read())

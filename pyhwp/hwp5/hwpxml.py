@@ -96,42 +96,29 @@ def main():
     import logging
     import itertools
     from .filestructure import File
-    from .models import STARTEVENT, ENDEVENT
 
-    from optparse import OptionParser as OP
-    op = OP(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
-    op.add_option('', '--loglevel', dest='loglevel', default='warning', help='log level (debug, info, warning, error, critical)')
+    from ._scriptutils import OptionParser, args_pop
+    op = OptionParser(usage='usage: %prog [options] filename')
+    op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
 
     options, args = op.parse_args()
-    try:
-        filename = args.pop(0)
-    except IndexError:
-        print 'the input filename is required'
-        op.print_help()
-        return -1
 
+    out = options.outfile
+
+    filename = args_pop(args, 'filename')
     file = File(filename)
 
-    from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
-    loglevels = dict(debug=DEBUG, info=INFO, warning=WARNING, error=ERROR, critical=CRITICAL)
-    loglevel = loglevels[options.loglevel]
-
-    logger = logging.getLogger()
-    logger.setLevel(loglevels.get(options.loglevel, WARNING))
-    loghandler = logging.StreamHandler(sys.stdout)
-    loghandler.setFormatter(logging.Formatter('<!-- %(message)s -->'))
-    logger.addHandler(loghandler)
-
     from xml.sax.saxutils import XMLGenerator
-    xmlgen = XMLGenerator(sys.stdout, 'utf-8')
+    xmlgen = XMLGenerator(out, 'utf-8')
     from .models import ModelEventHandler, Text
-    class XmlHandler(ModelEventHandler):
+    from .dataio import hexdump
+    class XmlFormat(ModelEventHandler):
         def startDocument(self):
             xmlgen.startDocument()
         def startModel(self, model, attributes, **context):
             recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
             hwptag = context.get('hwptag', '')
-            if loglevel <= logging.INFO:
+            if options.loglevel <= logging.INFO:
                 xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
             if model is Text:
                 text = attributes.pop('text')
@@ -142,29 +129,35 @@ def main():
 
             if model is Text and text is not None:
                 xmlgen.characters(text)
-            if loglevel <= logging.INFO:
+            if options.loglevel <= logging.INFO:
                 unparsed = context.get('unparsed', '')
                 if len(unparsed) > 0:
                     xmlgen._write('<!-- UNPARSED\n')
-                    xmlgen._write(dataio.hexdump(unparsed, True))
+                    xmlgen._write(hexdump(unparsed, True))
                     xmlgen._write('\n-->')
         def endModel(self, model):
             xmlgen.endElement(model.__name__)
         def endDocument(self):
             xmlgen.endDocument()
 
-    oformat = XmlHandler()
+    class NulFormat(ModelEventHandler):
+        def startDocument(self): pass
+        def endDocument(self): pass
+        def startModel(self, model, attributes, **context): pass
+        def endModel(self, model): pass
 
-    def wrap_modelevents(wrapper_model, modelevents):
-        yield STARTEVENT, wrapper_model
-        for mev in modelevents:
-            yield mev
-        yield ENDEVENT, wrapper_model
+    formats = dict(xml=XmlFormat, nul=NulFormat)
+    oformat = formats[options.format]()
 
     from .recordstream import read_records
-    from .models import parse_models
+    from .models import parse_models, wrap_modelevents
     from .models import create_context
     from .models import dispatch_model_events
+    from ._scriptutils import getlogger, loghandler, logformat_xml
+    if options.format == 'xml':
+        logger = getlogger(options, loghandler(out, logformat_xml))
+    else:
+        logger = getlogger(options)
     context = create_context(file, logging=logger)
 
     class HwpDoc(object): pass
