@@ -334,13 +334,11 @@ class StructType(type):
             elif isinstance(v, FlagsType):
                 v.__name__ = k
 
-class Struct(object):
-
-    __metaclass__ = StructType
-
     def read(cls, f, context=None):
         return read_struct_attributes(cls, dict(), context, f)
-    read = classmethod(read)
+
+class Struct(object):
+    __metaclass__ = StructType
 
 def dumpbytes(data, crust=False):
     offsbase = 0

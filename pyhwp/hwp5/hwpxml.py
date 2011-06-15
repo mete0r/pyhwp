@@ -1,5 +1,5 @@
 from .filestructure import VERSION
-from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType
+from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .models import typed_model_attributes, COLORREF
 from itertools import chain
@@ -25,6 +25,11 @@ def expanded_xmlattribute((name, (t, value))):
         yield name, '.'.join(str(x) for x in value)
     elif t in (HWPUNIT, SHWPUNIT, HWPUNIT16):
         yield name, str(value)
+    elif t is WCHAR:
+        if value == 0:
+            yield name, u''
+        else:
+            yield name, unichr(value)
     else:
         yield name, xmlattrval(value)
 
@@ -32,15 +37,16 @@ def xmlattrnames(attrs):
     for k, v in attrs:
         yield k.replace('_', '-'), v
 
-def xmlattr_uniqnames(attrs):
+def xmlattr_uniqnames(context, attrs):
     names = set([])
     for k, v in attrs:
         assert not k in names, 'name clashes: %s'%k
         yield k, v
         names.add(k)
 
-def xmlattributes_for_plainvalues(plainvalues):
-    return dict(xmlattr_uniqnames(chain(*(xmlattrnames(expanded_xmlattribute(ntv)) for ntv in plainvalues.iteritems()))))
+def xmlattributes_for_plainvalues(context, plainvalues):
+    return dict(xmlattr_uniqnames(context,
+                                  chain(*(xmlattrnames(expanded_xmlattribute(ntv)) for ntv in plainvalues.iteritems()))))
 
 def separate_plainvalues(logging, typed_attributes):
     d = []
@@ -69,12 +75,10 @@ def startelement(context, xmlgen, (model, attributes)):
         typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
     else:
         typed_attributes = typed_model_attributes(model, attributes, context)
-    try:
-        import logging
-        typed_attributes, plainvalues = separate_plainvalues(context.get('logging', logging), typed_attributes)
-        yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(plainvalues)
-    except Exception, e:
-        raise e
+
+    import logging
+    typed_attributes, plainvalues = separate_plainvalues(context['logging'], typed_attributes)
+    yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)
     for _name, (_type, _value) in typed_attributes:
         if isinstance(_value, dict):
             assert isinstance(_value, dict)
@@ -116,10 +120,13 @@ def main():
         def startDocument(self):
             xmlgen.startDocument()
         def startModel(self, model, attributes, **context):
+            if options.loglevel <= logging.DEBUG:
+                xmlgen._write('<!-- hwpxml.XmlFormat: model: %s, %s -->'%(model.__name__, attributes))
+                xmlgen._write('<!-- hwpxml.XmlFormat: context: %s -->'%context)
             recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
             hwptag = context.get('hwptag', '')
             if options.loglevel <= logging.INFO:
-                xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
+                xmlgen._write('<!-- hwpxml.XmlFormat: rec:%d %s -->'%(recordid[2], hwptag))
             if model is Text:
                 text = attributes.pop('text')
             else:
