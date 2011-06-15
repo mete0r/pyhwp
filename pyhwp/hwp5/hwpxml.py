@@ -37,7 +37,7 @@ def xmlattrnames(attrs):
     for k, v in attrs:
         yield k.replace('_', '-'), v
 
-def xmlattr_uniqnames(context, attrs):
+def xmlattr_uniqnames(attrs):
     names = set([])
     for k, v in attrs:
         assert not k in names, 'name clashes: %s'%k
@@ -45,8 +45,7 @@ def xmlattr_uniqnames(context, attrs):
         names.add(k)
 
 def xmlattributes_for_plainvalues(context, plainvalues):
-    return dict(xmlattr_uniqnames(context,
-                                  chain(*(xmlattrnames(expanded_xmlattribute(ntv)) for ntv in plainvalues.iteritems()))))
+    return dict(xmlattr_uniqnames(chain(*(xmlattrnames(expanded_xmlattribute(ntv)) for ntv in plainvalues.iteritems()))))
 
 def separate_plainvalues(logging, typed_attributes):
     d = []

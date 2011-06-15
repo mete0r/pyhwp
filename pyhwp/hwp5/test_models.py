@@ -27,7 +27,7 @@ class BinEmbeddedTest(TestCase):
         tag_model = BinData
         model_type, attributes = tag_model.parse_pass1(dict(), self.ctx, record.bytestream())
         self.assertTrue(BinEmbedded, model_type)
-        self.assertEquals(2, attributes['storageId'])
+        self.assertEquals(2, attributes['storage_id'])
         self.assertEquals('jpg', attributes['ext'])
 
 class TableTest(TestCase):
@@ -41,14 +41,14 @@ class TableTest(TestCase):
         model_type, attributes = result
         self.assertTrue(TableControl, model_type)
 
-        self.assertEquals(1453501933, attributes['instanceId'])
-        self.assertEquals(0x0, attributes['offsetX'])
-        self.assertEquals(0x0, attributes['offsetY'])
+        self.assertEquals(1453501933, attributes['instance_id'])
+        self.assertEquals(0x0, attributes['x'])
+        self.assertEquals(0x0, attributes['y'])
         self.assertEquals(0x1044, attributes['height'])
         self.assertEquals(0x9e06, attributes['width'])
         self.assertEquals(0, attributes['unknown1'])
         self.assertEquals(0x82a2311L, attributes['flags'])
-        self.assertEquals(0, attributes['zOrder'])
+        self.assertEquals(0, attributes['z_order'])
         self.assertEquals((283, 283, 283, 283), attributes['margin'])
         self.assertEquals('tbl ' , attributes['chid'])
 
@@ -63,7 +63,7 @@ class ListHeaderTest(TestCase):
         self.assertEquals(ListHeader, tag_model)
         payload_stream = record.bytestream()
         model, attributes = tag_model.parse_pass1(dict(), self.ctx, payload_stream)
-        self.assertEquals(1, attributes['nParagraphs'])
+        self.assertEquals(1, attributes['paragraphs'])
         self.assertEquals(0x20L, attributes['listflags'])
         self.assertEquals(0, attributes['unknown1'])
         self.assertEquals(8, payload_stream.tell())
@@ -77,11 +77,11 @@ class TableBodyTest(TestCase):
         event, (context, model, attributes, stream) = parse_models_pass1(self.ctx, [record]).next()
         self.assertEquals(TableBody, model)
         self.assertEquals((141, 141, 141, 141), attributes['padding'])
-        self.assertEquals(0x4000006L, attributes['attr'])
-        self.assertEquals(2, attributes['nCols'])
-        self.assertEquals(2, attributes['nRows'])
-        self.assertEquals(1, attributes['borderFillId'])
-        self.assertEquals((2, 2), attributes['rowSizes'])
+        self.assertEquals(0x4000006L, attributes['flags'])
+        self.assertEquals(2, attributes['cols'])
+        self.assertEquals(2, attributes['rows'])
+        self.assertEquals(1, attributes['borderfill_id'])
+        self.assertEquals((2, 2), attributes['rowcols'])
         self.assertEquals(0, attributes['cellspacing'])
         self.assertEquals([], attributes['validZones'])
 
@@ -139,13 +139,13 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(TableCaption, model)
         self.assertEquals(22, stream.tell())
         # ListHeader attributes
-        self.assertEquals(2, attributes['nParagraphs'])
+        self.assertEquals(2, attributes['paragraphs'])
         self.assertEquals(0x0L, attributes['listflags'])
         self.assertEquals(0, attributes['unknown1'])
         # TableCaption attributes
-        self.assertEquals(3, attributes['captflags'])
+        self.assertEquals(3, attributes['flags'])
         self.assertEquals(8504L, attributes['width'])
-        self.assertEquals(850, attributes['offset'])
+        self.assertEquals(850, attributes['separation'])
         self.assertEquals(40454L, attributes['maxsize'])
 
         tablecell = result[3]
@@ -153,7 +153,7 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(TableCell, model)
         self.assertEquals(38, stream.tell())
         # ListHeader attributes
-        self.assertEquals(1, attributes['nParagraphs'])
+        self.assertEquals(1, attributes['paragraphs'])
         self.assertEquals(0x20L, attributes['listflags'])
         self.assertEquals(0, attributes['unknown1'])
         # TableCell attributes
@@ -164,7 +164,7 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(0x4f03, attributes['width'])
         self.assertEquals(0x11a, attributes['height'])
         self.assertEquals((141, 141, 141, 141), attributes['padding'])
-        self.assertEquals(1, attributes['borderFillId'],)
+        self.assertEquals(1, attributes['borderfill_id'],)
         self.assertEquals(0x4f03, attributes['unknown_width'])
 
 from .models import build_subtree, tree_events

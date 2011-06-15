@@ -4,10 +4,11 @@ from .dataio import Struct
 from .dataio import INT32, BSTR
 from .hwpxml import element
 from xml.sax.saxutils import XMLGenerator
-import sys
+import sys, logging
 
 class TestHello(TestCase):
     def test_hello(self):
+        context = dict(logging=logging)
         xmlgen = XMLGenerator(sys.stdout, 'utf-8')
         class SomeStruct(Struct):
             @staticmethod
@@ -18,7 +19,7 @@ class TestHello(TestCase):
             @staticmethod
             def attributes(context):
                 yield SomeStruct, 'somestruct'
-        result = element(dict(), xmlgen, (SomeStruct2, dict(somestruct=dict(a=1, b=u'b'))))
+        result = element(context, xmlgen, (SomeStruct2, dict(somestruct=dict(a=1, b=u'b'))))
         result = list(result)
         #for x in result: x[0](*x[1:])
         expected = [
@@ -29,7 +30,7 @@ class TestHello(TestCase):
                 ]
         self.assertEquals(expected, result)
 
-        result = element(dict(), xmlgen, (SomeStruct, dict(a=1, b=u'b', c=dict(foo=1))))
+        result = element(context, xmlgen, (SomeStruct, dict(a=1, b=u'b', c=dict(foo=1))))
         result = list(result)
         #for x in result: x[0](*x[1:])
         expected = [
