@@ -33,7 +33,7 @@ def expanded_xmlattribute((name, (t, value))):
     else:
         yield name, xmlattrval(value)
 
-def xmlattrnames(attrs):
+def xmlattr_dashednames(attrs):
     for k, v in attrs:
         yield k.replace('_', '-'), v
 
@@ -45,7 +45,9 @@ def xmlattr_uniqnames(attrs):
         names.add(k)
 
 def xmlattributes_for_plainvalues(context, plainvalues):
-    return dict(xmlattr_uniqnames(chain(*(xmlattrnames(expanded_xmlattribute(ntv)) for ntv in plainvalues.iteritems()))))
+    ntvs = plainvalues.iteritems()
+    ntvs = chain(*(expanded_xmlattribute(ntv) for ntv in ntvs))
+    return dict(xmlattr_uniqnames(xmlattr_dashednames(ntvs)))
 
 def separate_plainvalues(logging, typed_attributes):
     d = []
