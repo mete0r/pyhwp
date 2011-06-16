@@ -231,7 +231,7 @@ class EnumType(type):
         instance = super(EnumType, cls).__call__(value)
         return value_instances.setdefault(value, instance)
     def name_for(cls, value):
-        return enum_types[cls]['names'].get(value)
+        return enum_types[cls]['names'].get(value, str(value))
 
 def Enum(*items, **moreitems):
     attrs = dict(items=items, moreitems=moreitems)
