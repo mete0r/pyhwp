@@ -1,7 +1,7 @@
 from .filestructure import VERSION
 from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
-from .models import typed_model_attributes, COLORREF
+from .models import typed_model_attributes, COLORREF, BinStorageId
 from itertools import chain
 
 def xmlattrval(value):
@@ -30,6 +30,8 @@ def expanded_xmlattribute((name, (t, value))):
             yield name, u''
         else:
             yield name, unichr(value)
+    elif t is BinStorageId:
+        yield name, 'BIN%04d'%value
     else:
         yield name, xmlattrval(value)
 

@@ -114,28 +114,26 @@ class IdMappings(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class BinData(AttributeDeterminedRecordModel):
+class BinData(BasicRecordModel):
     tagid = HWPTAG_BIN_DATA
-    def attributes(context):
-        yield UINT16, 'flags'
-    attributes = staticmethod(attributes)
-
-    key_attribute = 'flags'
-    def concrete_type_by_attribute(cls, flags):
-        return [BinLink, BinEmbedded, BinStorage][flags & 3]
-    concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
+    def attributes(cls, context):
+        flags = yield UINT16, 'flags'
+        yield [BinLink, BinEmbedded, BinStorage][flags & 3], 'data'
+    attributes = classmethod(attributes)
 
 
-class BinLink(BinData):
+class BinLink(Struct):
     def attributes(context):
         yield BSTR, 'abspath'
         yield BSTR, 'relpath'
     attributes = staticmethod(attributes)
 
+class BinStorageId(UINT16):
+    pass
 
-class BinEmbedded(BinData):
+class BinEmbedded(Struct):
     def attributes(context):
-        yield UINT16, 'storage_id'
+        yield BinStorageId, 'storage_id'
         yield BSTR, 'ext'
     attributes = staticmethod(attributes)
 
@@ -144,7 +142,7 @@ class BinEmbedded(BinData):
     name = property(get_name)
 
 
-class BinStorage(BinData):
+class BinStorage(Struct):
     def attributes(context):
         yield UINT16, 'storage_id'
     attributes = staticmethod(attributes)
@@ -345,11 +343,41 @@ class Bullet(BasicRecordModel):
 
 
 class ParaShape(BasicRecordModel):
+    ''' 4.1.10. 문단 모양 '''
     tagid = HWPTAG_PARA_SHAPE
+    LineSpacingType = Enum(RATIO=0, FIXED=1, SPACEONLY=2, MINIMUM=3)
+    Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4, DISTRIBUTE_SPACE=5)
+    VAlign = Enum(FONT=0, TOP=1, CENTER=2, BOTTOM=3)
+    LineBreakAlphabet = Enum(WORD=0, HYPHEN=1, CHAR=2)
+    LineBreakHangul = Enum(WORD=0, CHAR=1)
+    HeadShape = Enum(NONE=0, OUTLINE=1, NUMBER=2, BULLET=3)
     Flags = Flags(UINT32,
-            0, 1, 'lineSpacingType',
-            2, 4, 'textAlign',
-            # TODO
+            0, 1, LineSpacingType, 'linespacing_type',
+            2, 4, Align, 'align',
+            5, 6, LineBreakAlphabet, 'linebreak_alphabet',
+            7, LineBreakHangul, 'linebreak_hangul',
+            8, 'use_paper_grid',
+            9, 15, 'minimum_space', # 공백 최소값
+            16, 'protect_single_line', # 외톨이줄 보호
+            17, 'with_next_paragraph', # 다음 문단과 함께
+            18, 'protect', # 문단 보호
+            19, 'start_new_page', # 문단 앞에서 항상 쪽 나눔
+            20, 21, VAlign, 'valign', 
+            22, 'lineheight_along_fontsize', # 글꼴에 어울리는 줄 높이
+            23, 24, HeadShape, 'head_shape', # 문단 머리 모양
+            25, 27, 'level', # 문단 수준
+            28, 'linked_border', # 문단 테두리 연결 여부
+            29, 'ignore_margin', # 문단 여백 무시
+            30, 'tail_shape', # 문단 꼬리 모양
+            )
+    Flags2 = dataio.Flags(UINT32,
+            0, 1, 'in_single_line',
+            2, 3, 'reserved',
+            4, 'autospace_alphabet',
+            5, 'autospace_number',
+            )
+    Flags3 = dataio.Flags(UINT32,
+            0, 4, LineSpacingType, 'linespacing_type3'
             )
     def attributes(cls, context):
         yield cls.Flags, 'parashapeflags',
@@ -367,8 +395,8 @@ class ParaShape(BasicRecordModel):
         yield HWPUNIT16,  'border_top',
         yield HWPUNIT16,  'border_bottom',
         if context['version'] > (5, 0, 1, 6):
-            yield UINT32, 'attr2',       # above 5016
-            #yield UINT32, 'attr3',       # DIFFSPEC
+            yield cls.Flags2, 'flags2',       # above 5016
+            #yield cls.Flags3, 'flags3',       # DIFFSPEC
             #yield UINT32, 'lineSpacing', # DIFFSPEC
     attributes = classmethod(attributes)
 
@@ -391,12 +419,10 @@ class Style(BasicRecordModel):
 
 class DocData(BasicRecordModel):
     tagid = HWPTAG_DOC_DATA
-    pass
 
 
 class DistributeDocData(BasicRecordModel):
     tagid = HWPTAG_DISTRIBUTE_DOC_DATA
-    pass
 
 
 class CompatibleDocument(BasicRecordModel):
@@ -1075,12 +1101,33 @@ class PictureInfo(Struct):
     attributes = staticmethod(attributes)
 
 
+class BorderLine(Struct):
+    ''' 표 81. 테두리 선 정보 '''
+
+    LineEnd = Enum('round', 'flat')
+    ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect', 'diamondfilled', 'disc', 'rectfilled')
+    ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal', 'abitlarge', 'large', 'larger', 'largest')
+    Flags = Flags(UINT32, 
+            0, 5, 'type',
+            6, 9, LineEnd, 'line_end',
+            10, 15, ArrowShape, 'arrow_start',
+            16, 21, ArrowShape, 'arrow_end',
+            22, 25, ArrowSize, 'arrow_start_size',
+            26, 29, ArrowSize, 'arrow_end_size',
+            30, 'arrow_start_fill',
+            31, 'arrow_end_fill')
+
+    def attributes(cls, context):
+        yield COLORREF, 'color'
+        yield INT32, 'width'
+        yield cls.Flags, 'flags'
+    attributes = classmethod(attributes)
+
 class ShapePicture(BasicRecordModel):
+    ''' 4.2.9.4. 그림 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_PICTURE
     def attributes(context):
-        yield COLORREF, 'border_color',
-        yield INT32, 'border_width',
-        yield UINT32, 'border_attr',
+        yield BorderLine, 'border'
         yield ARRAY(ARRAY(INT32,2), 4), 'rect',
         yield ARRAY(INT32, 4), 'crop',
         yield ARRAY(UINT16, 4), 'padding',
@@ -1590,7 +1637,7 @@ def pass3_lineseg_charshaped_texts(event_prefixed_cmas):
                             yield STARTEVENT, textitem
                             yield ENDEVENT, textitem
                         elif isinstance(chunk, ControlChar):
-                            ctrlch = (paratext_context, ControlChar, dict(name=chunk.name, kind=chunk.kind, characterShapeId=shape), paratext_stream)
+                            ctrlch = (paratext_context, ControlChar, dict(name=chunk.name, char=unichr(chunk.code), kind=chunk.kind, characterShapeId=shape), paratext_stream)
                             yield STARTEVENT, ctrlch
                             yield ENDEVENT, ctrlch
                     yield ENDEVENT, (paralineseg[0], ParaLineSeg.LineSeg, lineseg, paralineseg[3])

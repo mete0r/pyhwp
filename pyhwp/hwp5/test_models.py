@@ -27,8 +27,8 @@ class BinEmbeddedTest(TestCase):
         tag_model = BinData
         model_type, attributes = tag_model.parse_pass1(dict(), self.ctx, record.bytestream())
         self.assertTrue(BinEmbedded, model_type)
-        self.assertEquals(2, attributes['storage_id'])
-        self.assertEquals('jpg', attributes['ext'])
+        self.assertEquals(2, attributes['data']['storage_id'])
+        self.assertEquals('jpg', attributes['data']['ext'])
 
 class TableTest(TestCase):
     ctx = TestContext()
