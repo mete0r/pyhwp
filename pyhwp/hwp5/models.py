@@ -1658,7 +1658,10 @@ def pass3_lineseg_charshaped_texts(event_prefixed_cmas):
                             yield STARTEVENT, textitem
                             yield ENDEVENT, textitem
                         elif isinstance(chunk, ControlChar):
-                            ctrlch = (paratext_context, ControlChar, dict(name=chunk.name, char=unichr(chunk.code), kind=chunk.kind, characterShapeId=shape), paratext_stream)
+                            chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
+                            if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
+                                chunk_attributes['char'] = unichr(chunk.code)
+                            ctrlch = (paratext_context, ControlChar, chunk_attributes, paratext_stream)
                             yield STARTEVENT, ctrlch
                             yield ENDEVENT, ctrlch
                     yield ENDEVENT, (paralineseg[0], ParaLineSeg.LineSeg, lineseg, paralineseg[3])
