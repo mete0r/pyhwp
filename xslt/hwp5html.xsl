@@ -107,7 +107,7 @@
     <xsl:template match="TableCell">
         <xsl:element name="td">
             <xsl:attribute name="class">borderfill-<xsl:value-of select="@borderfill-id"/></xsl:attribute>
-            <xsl:attribute name="style"> width:<xsl:value-of select="@width div 100"/>pt;/*=<xsl:number value="@width"/>*/ height:<xsl:value-of select="@height div 100"/>pt;/*=<xsl:number value="@height"/>*/ </xsl:attribute>
+            <xsl:attribute name="style">width:<xsl:value-of select="@width div 100"/>pt; height:<xsl:value-of select="@height div 100"/>pt;</xsl:attribute>
             <xsl:attribute name="rowspan"><xsl:value-of select="@rowspan"/></xsl:attribute>
             <xsl:attribute name="colspan"><xsl:value-of select="@colspan"/></xsl:attribute>
             <xsl:apply-templates />
@@ -131,7 +131,7 @@
                     <xsl:attribute name="src"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/BinEmbedded/@storage-id"/>.<xsl:value-of select="$bindata/BinEmbedded/@ext"/></xsl:attribute>
                 </xsl:when>
             </xsl:choose>
-            <xsl:attribute name="style"> width:<xsl:value-of select="../@width div 100"/>pt; height:<xsl:value-of select="../@height div 100"/>pt;</xsl:attribute>
+            <xsl:attribute name="style">width:<xsl:value-of select="../@width div 100"/>pt; height:<xsl:value-of select="../@height div 100"/>pt;</xsl:attribute>
         </xsl:element>
     </xsl:template>
 </xsl:stylesheet>
