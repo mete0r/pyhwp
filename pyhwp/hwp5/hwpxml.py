@@ -17,7 +17,7 @@ def xmlattrval(value):
 def expanded_xmlattribute((name, (t, value))):
     if isinstance(t, FlagsType):
         yield name, hex(int(value))
-        for k, v in t.dictvalue(value).iteritems():
+        for k, v in t.dictvalue(t(value)).iteritems():
             yield k, xmlattrval(v)
     elif t is COLORREF:
         yield name, xmlattrval( t(value) )

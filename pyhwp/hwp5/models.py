@@ -776,7 +776,6 @@ class Paragraph(BasicRecordModel):
         yield UINT32, 'instance_id',
     attributes = classmethod(attributes)
 
-
 class ControlChar(object):
     class CHAR(object):
         size = 1
@@ -899,9 +898,19 @@ class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
     def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
         nCharShapes = parent_attributes['charshapes']
-        attributes['charshapes'] = ARRAY(ARRAY(UINT32, 2), nCharShapes).read(stream)
+        #attributes['charshapes'] = ARRAY(ARRAY(UINT32, 2), nCharShapes).read(stream)
+        attributes = cls.decode(stream.read(), context)
         return cls, attributes
     parse_with_parent = classmethod(parse_with_parent)
+
+    def decode(cls, payload, context=None):
+        import struct
+        fmt = 'II'
+        unitsize = struct.calcsize('<'+fmt)
+        unitcount = len(payload) / unitsize
+        values = struct.unpack('<'+(fmt*unitcount), payload)
+        return dict(charshapes=(tuple(values[i*2:i*2+2]) for i in range(0, unitcount)))
+    decode = classmethod(decode)
 
 
 class ParaLineSeg(RecordModel):
@@ -924,9 +933,21 @@ class ParaLineSeg(RecordModel):
 
     def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
         nLineSegs = parent_attributes['linesegs']
-        attributes['linesegs'] = ARRAY(cls.LineSeg, nLineSegs).read(stream)
+        #attributes['linesegs'] = ARRAY(cls.LineSeg, nLineSegs).read(stream)
+        attributes['linesegs'] = cls.decode(attributes, context, stream.read())
         return cls, attributes
     parse_with_parent = classmethod(parse_with_parent)
+
+    def decode(cls, attributes, context, payload):
+        from itertools import izip
+        import struct
+        unitfmt = 'iiiiiiiiHH'
+        unitsize = struct.calcsize('<'+unitfmt)
+        unitcount = len(payload) / unitsize
+        values = struct.unpack('<'+unitfmt*unitcount, payload)
+        names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below', 'x', 'width', 'a8', 'flags']
+        return (dict(izip(names, tuple(values[i*11:i*11+11]))) for i in range(0, unitcount))
+    decode = classmethod(decode)
 
 
 class ParaRangeTag(BasicRecordModel):
@@ -1849,6 +1870,7 @@ def main():
 
     records = read_records(bytestream, streamname, filename)
 
+    import types
     from xml.sax.saxutils import XMLGenerator
     xmlgen = XMLGenerator(out, 'utf-8')
     class XmlFormat(ModelEventHandler):
@@ -1860,6 +1882,8 @@ def main():
                     return v
                 elif isinstance(v, type):
                     return v.__name__
+                elif isinstance(v, types.GeneratorType):
+                    return str(list(v))
                 else:
                     return str(v)
             def xmlattr(item):
@@ -1867,7 +1891,7 @@ def main():
                     name, (type, value) = item
                     return name, xmlattrval(value)
                 except Exception, e:
-                    context['logging'].error('can\'t serialize xml attribute %s: %s'%(name, repr(v)))
+                    context['logging'].error('can\'t serialize xml attribute %s: %s'%(name, repr(value)))
                     context['logging'].exception(e)
                     raise
             recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
