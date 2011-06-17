@@ -105,6 +105,12 @@ class File(OleFileIO):
         l.sort()
         return l
 
+    def list_bindata(self):
+        for name in self.list_streams():
+            prefix = 'BinData/'
+            if name.startswith(prefix):
+                yield name[len(prefix):]
+
     def _fileheader(self):
         return self.openstream('FileHeader')
 
@@ -229,6 +235,15 @@ def main():
         return 0
 
     streamname = args_pop(args, '<stream>')
+    if streamname == 'list':
+        streamname = args_pop(args, 'bindata | bodytext')
+        if streamname == 'bindata':
+            for name in file.list_bindata():
+                print name
+        elif streamname == 'bodytext':
+            for idx in file.list_bodytext_sections():
+                print 'bodytext/%d'%idx
+        return 0
     stream = file.pseudostream(streamname)
     if not stream:
         stream = file.openstream(streamname)

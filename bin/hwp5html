@@ -1,3 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 BASEDIR=`dirname $0`/..
-$BASEDIR/bin/hwp5xml $* | xmllint --format - | xsltproc $BASEDIR/xslt/hwp5html.xsl - | xmllint --format -
+HWPFILE=$1
+FILENAME=$(basename $1)
+FILENAMEBUTEXT=${FILENAME%.*}
+mkdir -p $FILENAMEBUTEXT/bindata
+$BASEDIR/bin/hwp5xml $HWPFILE | xmllint --format - | xsltproc $BASEDIR/xslt/hwp5html.xsl - | xmllint --format - > $FILENAMEBUTEXT/index.html
+for fn in `$BASEDIR/bin/hwp5file $HWPFILE list bindata`; do
+	$BASEDIR/bin/hwp5file $HWPFILE bindata/$fn > $FILENAMEBUTEXT/bindata/$fn
+done
