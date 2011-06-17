@@ -31,7 +31,7 @@ def expanded_xmlattribute((name, (t, value))):
         else:
             yield name, unichr(value)
     elif t is BinStorageId:
-        yield name, 'BIN%04d'%value
+        yield name, 'BIN%04X'%value
     else:
         yield name, xmlattrval(value)
 
