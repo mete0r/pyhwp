@@ -108,6 +108,8 @@
         <xsl:element name="td">
             <xsl:attribute name="class">borderfill-<xsl:value-of select="@borderfill-id"/></xsl:attribute>
             <xsl:attribute name="style"> width:<xsl:value-of select="@width div 100"/>pt;/*=<xsl:number value="@width"/>*/ height:<xsl:value-of select="@height div 100"/>pt;/*=<xsl:number value="@height"/>*/ </xsl:attribute>
+            <xsl:attribute name="rowspan"><xsl:value-of select="@rowspan"/></xsl:attribute>
+            <xsl:attribute name="colspan"><xsl:value-of select="@colspan"/></xsl:attribute>
             <xsl:apply-templates />
         </xsl:element>
     </xsl:template>
