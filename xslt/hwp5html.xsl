@@ -1,65 +1,14 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <xsl:output method="xml" encoding="utf-8" indent="yes"/>
+    <xsl:output method="xml" encoding="utf-8" indent="yes"
+        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+        />
     <xsl:template match="/">
-        <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
         <html>
             <head>
                 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-                <xsl:element name="style">
-                    <xsl:attribute name="type">text/css</xsl:attribute>
-                    <xsl:for-each select="HwpDoc/DocInfo/IdMappings/Style">
-                        .style-<xsl:value-of select="@next-style-id"/> {
-                        }
-                    </xsl:for-each>
-                    <xsl:for-each select="HwpDoc/DocInfo/IdMappings/ParaShape">
-                        .parashape-<xsl:number value="position()-1" /> {
-                        <xsl:choose>
-                            <xsl:when test="@linespacing-type = 'ratio'">
-                                line-height: <xsl:value-of select="@linespacing-before-2007"/>%;
-                            </xsl:when>
-                        </xsl:choose>
-                            margin:
-                                <xsl:value-of select="@doubled-margin-top div 100 div 2"/>pt
-                                <xsl:value-of select="@doubled-margin-right div 100 div 2"/>pt
-                                <xsl:value-of select="@doubled-margin-bottom div 100 div 2"/>pt
-                                <xsl:value-of select="@doubled-margin-left div 100 div 2"/>pt;
-                        }
-                    </xsl:for-each>
-                    <xsl:for-each select="HwpDoc/DocInfo/IdMappings/CharShape">
-                        .charshape-<xsl:number value="position()-1" /> {
-                            /* fontface-ko <xsl:value-of select="FaceNameRef/@ko"/> */
-                            color: <xsl:value-of select="@text-color"/>;
-                            font-size: <xsl:value-of select="@basesize div 100"/>pt;
-                            <xsl:if test="@italic = 1">
-                                font-style: italic;
-                            </xsl:if>
-                            <xsl:if test="@bold = 1">
-                                font-weight: bold;
-                            </xsl:if>
-                        }
-                    </xsl:for-each>
-                    <xsl:for-each select="HwpDoc/DocInfo/IdMappings/BorderFill">
-                        .borderfill-<xsl:number value="position()" /> {
-                            border-left-color: <xsl:value-of select="Border[@attribute-name='left']/@color" />;
-                            border-left-style: solid; /* Border.style: <xsl:value-of select="Border[@attribute-name='left']/@style" />; */
-                            border-left-width: 1px; /* Border.width: <xsl:value-of select="Border[@attribute-name='left']/@width" />; */
-
-                            border-right-color: <xsl:value-of select="Border[@attribute-name='right']/@color" />;
-                            border-right-style: solid; /* Border.style: <xsl:value-of select="Border[@attribute-name='right']/@style" />; */
-                            border-right-width: 1px; /* Border.width: <xsl:value-of select="Border[@attribute-name='right']/@width" />; */
-
-                            border-top-color: <xsl:value-of select="Border[@attribute-name='top']/@color" />;
-                            border-top-style: solid; /* Border.style: <xsl:value-of select="Border[@attribute-name='top']/@style" />; */
-                            border-top-width: 1px; /* Border.width: <xsl:value-of select="Border[@attribute-name='top']/@width" />; */
-
-                            border-bottom-color: <xsl:value-of select="Border[@attribute-name='bottom']/@color" />;
-                            border-bottom-style: solid; /* Border.style: <xsl:value-of select="Border[@attribute-name='bottom']/@style" />; */
-                            border-bottom-width: 1px; /* Border.width: <xsl:value-of select="Border[@attribute-name='bottom']/@width" />; */
-                        }
-                    </xsl:for-each>
-
-                </xsl:element>
+                <link rel="stylesheet" href="styles.css" type="text/css"/>
             </head>
             <xsl:element name="body">
                 <xsl:for-each select="HwpDoc/BodyText">
@@ -71,7 +20,8 @@
 
     <xsl:template match="Paragraph">
         <xsl:element name="p">
-            <xsl:attribute name="class"><xsl:value-of select="concat('style-',@style-id)"/> parashape-<xsl:value-of select="@parashape-id"/></xsl:attribute>
+            <xsl:variable name="styleid" select="@style-id"/>
+            <xsl:attribute name="class"><xsl:value-of select="translate(/HwpDoc/DocInfo/IdMappings/Style[number($styleid)+1]/@name, ' ', '-')" /> parashape-<xsl:value-of select="@parashape-id"/></xsl:attribute>
             <xsl:apply-templates />
         </xsl:element>
     </xsl:template>

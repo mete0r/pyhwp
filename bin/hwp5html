@@ -10,4 +10,6 @@ mkdir -p $FILENAMEBUTEXT/bindata
 for fn in `$BASEDIR/bin/hwp5file $HWPFILE list bindata`; do
 	$BASEDIR/bin/hwp5file $HWPFILE BinData/$fn | $BASEDIR/bin/rawzlib > $FILENAMEBUTEXT/bindata/$fn &
 done
-$BASEDIR/bin/hwp5xml $HWPFILE | xmllint --format - | xsltproc $BASEDIR/xslt/hwp5html.xsl - | xmllint --format - > $FILENAMEBUTEXT/index.html
+$BASEDIR/bin/hwp5xml $HWPFILE | xmllint --format - > $FILENAMEBUTEXT/index.xml
+xsltproc $BASEDIR/xslt/hwp5css.xsl $FILENAMEBUTEXT/index.xml > $FILENAMEBUTEXT/styles.css
+xsltproc $BASEDIR/xslt/hwp5html.xsl $FILENAMEBUTEXT/index.xml | xmllint --format - > $FILENAMEBUTEXT/index.html
