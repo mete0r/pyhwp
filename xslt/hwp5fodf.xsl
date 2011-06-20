@@ -259,12 +259,13 @@
 
   <xsl:template match="Paragraph">
       <xsl:element name="text:p">
-          <xsl:apply-templates />
+        <xsl:apply-templates select="LineSeg/Text"/>
       </xsl:element>
+      <xsl:apply-templates select="LineSeg/TableControl"/>
   </xsl:template>
 
   <xsl:template match="Text">
-      <xsl:element name="text:span"><xsl:value-of select="text()"/></xsl:element>
+    <xsl:element name="text:span"><xsl:value-of select="text()"/></xsl:element>
   </xsl:template>
 
   <xsl:template match="ControlChar"></xsl:template>
@@ -285,6 +286,20 @@
   </xsl:template>
 
   <xsl:template match="TableControl">
+    <table:table>
+      <table:table-column>
+      <xsl:attribute name="table:number-columns-repeated"><xsl:value-of select="TableBody/@cols"/></xsl:attribute>
+      </table:table-column>
+      <xsl:for-each select="TableBody/TableRow">
+        <table:table-row>
+          <xsl:for-each select="TableCell">
+            <table:table-cell>
+              <xsl:apply-templates />
+            </table:table-cell>
+          </xsl:for-each>
+        </table:table-row>
+      </xsl:for-each>
+    </table:table>
     <!--
     <table:table table:name="표1" table:style-name="표1">
       <table:table-column table:style-name="표1.A" table:number-columns-repeated="3"/>
