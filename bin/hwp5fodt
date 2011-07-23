@@ -11,6 +11,6 @@ for fn in `$BASEDIR/bin/hwp5file $HWPFILE list bindata`; do
 	$BASEDIR/bin/hwp5file $HWPFILE BinData/$fn | $BASEDIR/bin/rawzlib > $FILENAMEBUTEXT/bindata/$fn &
 done
 $BASEDIR/bin/hwp5xml $HWPFILE | xmllint --format - > $FILENAMEBUTEXT/index.xml
-xsltproc $BASEDIR/xslt/hwp5fodt.xsl $FILENAMEBUTEXT/index.xml > $FILENAMEBUTEXT.fodt
-xsltproc $BASEDIR/xslt/hwp5css.xsl $FILENAMEBUTEXT/index.xml > $FILENAMEBUTEXT/styles.css
-xsltproc $BASEDIR/xslt/hwp5html.xsl $FILENAMEBUTEXT/index.xml | xmllint --format - > $FILENAMEBUTEXT/index.html
+xsltproc $BASEDIR/pyhwp/hwp5/xsl/hwp5fodt.xsl $FILENAMEBUTEXT/index.xml > $FILENAMEBUTEXT.fodt
+xsltproc $BASEDIR/pyhwp/hwp5/xsl/hwp5css.xsl $FILENAMEBUTEXT/index.xml > $FILENAMEBUTEXT/styles.css
+xsltproc $BASEDIR/pyhwp/hwp5/xsl/hwp5html.xsl $FILENAMEBUTEXT/index.xml | xmllint --format - > $FILENAMEBUTEXT/index.html

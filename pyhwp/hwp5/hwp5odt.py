@@ -119,11 +119,15 @@ def hwpxml_function(f, hwpfilename):
     flatxml(hwpfile, logging, XmlFormat(f))
 
 def content_function(f, hwpxmlfilename):
+    import pkg_resources
+    content_xsl = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
     import subprocess
-    p = subprocess.Popen(['xsltproc', 'xslt/odt-content.xsl', hwpxmlfilename], stdout=f)
+    p = subprocess.Popen(['xsltproc', content_xsl, hwpxmlfilename], stdout=f)
     p.wait()
 
 def styles_function(f, hwpxmlfilename):
+    import pkg_resources
+    styles_xsl = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
     import subprocess
-    p = subprocess.Popen(['xsltproc', 'xslt/odt-styles.xsl', hwpxmlfilename], stdout=f)
+    p = subprocess.Popen(['xsltproc', styles_xsl, hwpxmlfilename], stdout=f)
     p.wait()

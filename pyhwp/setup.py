@@ -14,6 +14,7 @@ setup(
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
         packages = ['hwp5'],
+        package_data = dict(hwp5=['xsl/*.xsl']),
 
         install_requires=['OleFileIO_PL >=0.20'],
         provides=['hwp5 (0.0)'],
