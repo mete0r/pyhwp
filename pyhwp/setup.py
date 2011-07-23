@@ -25,6 +25,7 @@ setup(
                 'hwp5bin = hwp5.models:main',
                 'hwp5xml = hwp5.hwpxml:main',
                 'rawzlib = hwp5.zlib_raw_codec:main',
+                'hwp5odt = hwp5.hwp5odt:main',
                 ]
             },
 
