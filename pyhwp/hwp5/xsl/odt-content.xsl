@@ -103,16 +103,17 @@
 
   <xsl:template match="ControlChar"></xsl:template>
 
-  <!-- TODO: rowspan/colspan -->
   <xsl:template match="TableControl">
     <table:table>
       <table:table-column>
-      <xsl:attribute name="table:number-columns-repeated"><xsl:value-of select="TableBody/@cols"/></xsl:attribute>
+        <xsl:attribute name="table:number-columns-repeated"><xsl:value-of select="TableBody/@cols"/></xsl:attribute>
       </table:table-column>
       <xsl:for-each select="TableBody/TableRow">
         <table:table-row>
           <xsl:for-each select="TableCell">
             <table:table-cell>
+              <xsl:attribute name="table:number-columns-spanned"><xsl:value-of select="@colspan"/></xsl:attribute>
+              <xsl:attribute name="table:number-rows-spanned"><xsl:value-of select="@rowspan"/></xsl:attribute>
               <xsl:apply-templates />
             </table:table-cell>
           </xsl:for-each>
