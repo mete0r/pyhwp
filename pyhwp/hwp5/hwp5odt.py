@@ -8,7 +8,7 @@ def main():
 def make(hwpfilename):
     root = os.path.basename(hwpfilename)
     if root.lower().endswith('.hwp'):
-        root = rootname[0:-4]
+        root = root[0:-4]
 
     from .filestructure import File
     hwpfile = File(hwpfilename)
