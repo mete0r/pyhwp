@@ -131,6 +131,34 @@ class XmlFormat(ModelEventHandler):
     def endDocument(self):
         self.xmlgen.endDocument()
 
+def remove_redundant_facenames(event_prefixed_mac):
+    ''' remove redundant FaceNames '''
+    from .models import FaceName, CharShape, build_subtree, STARTEVENT
+    facenames = []
+    removed_facenames = dict()
+    facename_idx = 0
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if event == STARTEVENT and model == FaceName:
+            if not attributes in facenames:
+                facenames.append(attributes)
+                yield event, item
+            else:
+                # suck this out from the event stream
+                build_subtree(event_prefixed_mac)
+                removed_facenames[facename_idx] = facenames.index(attributes)
+            facename_idx += 1
+        else:
+            if event == STARTEVENT and model == CharShape:
+                fface = attributes['font_face']
+                fface2 = dict()
+                for k, v in fface.iteritems():
+                    if v in removed_facenames:
+                        v = removed_facenames[v]
+                    fface2[k] = v
+                attributes['font_face'] = fface2
+            yield event, item
+
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
 
@@ -150,6 +178,8 @@ def flatxml(hwpfile, logger, oformat):
     docinfo = DocInfo, dict(), dict(context)
     docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
     docinfo_events = wrap_modelevents(docinfo, parse_models(context, docinfo_records))
+
+    docinfo_events = remove_redundant_facenames(docinfo_events)
 
     bodytext = BodyText, dict(), dict(context)
     bodytext_events = []
