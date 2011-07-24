@@ -78,6 +78,9 @@
         <style:font-face style:name="명조" svg:font-family="'은 바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
         <style:font-face style:name="고딕" svg:font-family="'은 돋움'" style:font-family-generic="swiss" style:font-pitch="variable"/>
         <style:font-face style:name="Lohit Hindi" svg:font-family="'Lohit Hindi'" style:font-family-generic="system" style:font-pitch="variable"/>
+        <xsl:for-each select="HwpDoc/DocInfo">
+          <xsl:apply-templates select="IdMappings/FaceName" />
+        </xsl:for-each>
       </office:font-face-decls>
       <office:styles>
         <style:default-style style:family="graphic">
@@ -179,6 +182,10 @@
         <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
         <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
         <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+
+        <xsl:for-each select="HwpDoc/DocInfo">
+          <xsl:apply-templates select="IdMappings/Style" />
+        </xsl:for-each>
       </office:styles>
       <office:automatic-styles>
         <style:page-layout style:name="Mpm1">
@@ -193,5 +200,92 @@
         <style:master-page style:name="Standard" style:page-layout-name="Mpm1"/>
       </office:master-styles>
     </office:document-styles>
+  </xsl:template>
+
+  <xsl:template match="FaceName">
+    <xsl:element name="style:font-face">
+      <xsl:attribute name="style:name"><xsl:value-of select="@name"/></xsl:attribute>
+      <xsl:attribute name="svg:font-family">'<xsl:value-of select="@name"/>'</xsl:attribute>
+      <!-- Panose1/@serif-style -->
+      <!-- 2..10 : serif(roman) -->
+      <!-- 11~15 : sans-serif(swiss) -->
+      <xsl:attribute name="style:font-family-generic">
+        <xsl:choose>
+          <xsl:when test="Panose1/@serif-style &lt; 11"><xsl:text>roman</xsl:text></xsl:when>
+          <xsl:when test="Panose1/@serif-style &gt;= 11"><xsl:text>swiss</xsl:text></xsl:when>
+        </xsl:choose>
+      </xsl:attribute>
+      <!-- TODO: Panose1/@proportion -->
+      <xsl:attribute name="style:font-pitch">variable</xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="Style">
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name"><xsl:value-of select="@local-name" /></xsl:attribute>
+      <!--
+      <xsl:attribute name="style:parent-style-name"/>
+      -->
+      <xsl:variable name="styles" select="/HwpDoc/DocInfo/IdMappings/Style" />
+      <xsl:variable name="next-style-id" select="@next-style-id + 1"/>
+      <xsl:attribute name="style:next-style-name"><xsl:value-of select="$styles[$next-style-id]/@local-name" /></xsl:attribute>
+      <xsl:attribute name="style:family">paragraph</xsl:attribute>
+      <xsl:attribute name="style:class">text</xsl:attribute>
+      <xsl:variable name="charshapeid" select="@charshape-id + 1"/>
+      <xsl:variable name="parashapeid" select="@parashape-id + 1"/>
+      <xsl:variable name="charshapes" select="/HwpDoc/DocInfo/IdMappings/CharShape" />
+      <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
+      <xsl:variable name="charshape" select="$charshapes[number($charshapeid)]"/>
+      <xsl:variable name="parashape" select="$parashapes[number($parashapeid)]"/>
+      <xsl:call-template name="parashape-to-paragraph-properties">
+        <xsl:with-param name="parashape" select="$parashape"/>
+      </xsl:call-template>
+      <xsl:call-template name="charshape-to-text-properties">
+        <xsl:with-param name="charshape" select="$charshape"/>
+      </xsl:call-template>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="parashape-to-paragraph-properties">
+    <xsl:param name="parashape"/>
+    <xsl:element name="style:paragraph-properties">
+      <xsl:attribute name="fo:margin-top"><xsl:value-of select="number($parashape/@doubled-margin-top) div 200"/>pt</xsl:attribute>
+      <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="number($parashape/@doubled-margin-bottom) div 200"/>pt</xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="charshape-to-text-properties">
+    <xsl:param name="charshape"/>
+    <xsl:variable name="facenames" select="/HwpDoc/DocInfo/IdMappings/FaceName" />
+    <xsl:variable name="fontface" select="$charshape/FontFace"/>
+    <xsl:variable name="facename-en-id" select="$fontface/@en + 1"/>
+    <xsl:variable name="facename-en" select="$facenames[$facename-en-id]/@name"/>
+    <xsl:variable name="facename-ko-id" select="$fontface/@ko + 1"/>
+    <xsl:variable name="facename-ko" select="$facenames[$facename-ko-id]/@name"/>
+    <xsl:element name="style:text-properties">
+      <xsl:attribute name="style:font-name"><xsl:value-of select="$facename-en"/></xsl:attribute>
+      <xsl:attribute name="style:font-name-asian"><xsl:value-of select="$facename-ko"/></xsl:attribute>
+      <xsl:attribute name="fo:font-size"><xsl:value-of select="$charshape/@basesize div 100"/>pt</xsl:attribute>
+      <xsl:attribute name="style:font-size-asian"><xsl:value-of select="$charshape/@basesize div 100"/>pt</xsl:attribute>
+      <!-- 15.4.25 Font Style -->
+      <xsl:if test="$charshape/@italic = 1">
+        <xsl:attribute name="fo:font-style">italic</xsl:attribute>
+      </xsl:if>
+      <!-- 15.4.28 Underlining Type -->
+      <xsl:choose>
+        <xsl:when test="$charshape/@underline = 'none'">
+          <xsl:attribute name="text:text-underline-type">none</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="text:text-underline-type">single</xsl:attribute>
+          <!-- 15.4.31 Underline Color -->
+          <xsl:attribute name="text:text-underline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+      <!-- 15.4.32 Font Weight -->
+      <xsl:if test="$charshape/@bold = 1">
+        <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
+      </xsl:if>
+    </xsl:element>
   </xsl:template>
 </xsl:stylesheet>
