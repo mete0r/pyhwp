@@ -93,6 +93,7 @@
   <xsl:template match="Paragraph">
       <xsl:element name="text:p">
         <xsl:apply-templates select="LineSeg/Text"/>
+        <xsl:apply-templates select="LineSeg/GShapeObjectControl"/>
       </xsl:element>
       <xsl:apply-templates select="LineSeg/TableControl"/>
   </xsl:template>
@@ -123,18 +124,27 @@
   </xsl:template>
 
   <xsl:template match="GShapeObjectControl">
-    <!--
     <xsl:element name="draw:frame">
+        <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+        <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
+        <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
+        <xsl:attribute name="svg:width"><xsl:value-of select="@width div 100"/>pt</xsl:attribute>
+        <xsl:attribute name="svg:height"><xsl:value-of select="@height div 100"/>pt</xsl:attribute>
+        <xsl:attribute name="draw:z-index"><xsl:value-of select="@z-order"/></xsl:attribute>
         <xsl:apply-templates />
     </xsl:element>
-    -->
-    <!--
-    <draw:frame draw:style-name="fr1" draw:name="그림1" text:anchor-type="paragraph" svg:x="2.718cm" svg:y="0.291cm" svg:width="0.452cm" svg:height="0.452cm" draw:z-index="0">
-      <draw:image>
-        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAA3WAAAN1gGQb3mcAAAACXZwQWcAAAAQAAAAEABcxq3DAAACV0lEQVQ4y32TMU9UQRDHf7tvOY47uAgel4tBhUKIJoZE0YbSSiBoQW2hFQnfwEjHF7CHjg6auwIaGm20wwYS6AUSNCdwB++93RmLd4AK+E+2mp2Z339n1szPzyMiuZmZmTelUmlIVZV/1Gg04u97e6tTk5Nb09PT1Ov1i5grFos453qq1epcX1/fqIj8lWyMoVwu09vb+2pjY2OuVqt9mZh4ydraelYgu6ZGVW0cxxwfHXEFAegqFJ4Oj4ws1ur1tysrq1/Hx8fZ3NzEqiqqioggISDBo8Ejf5zgPa1mE+fco8H7gx+Xl5eHFxYWMgJVRUWREGgGy4GWMBiczTp3O6En8qTHx+zu7HJycvK8Uql8WFpafDc7O5s4VUHUggR2G8r6foHIGMoFcEa519Hkcf4EVaVcvk2l0o/3fnRs7FkpSZJDJ6JYq/gg2NY+xZ+HEPWgSYGunhLdnZDr6ECBrnyefD5Po9HAGINzUduCCiLCj4M9vn3+hNoctrNIrrsf/3CIgQe3EBGstVhrCSG0cxSnKqha0jTlbnWA1y+msJHD2ggbWaqlDpwD0YjIWkQE7z3njV02ASX1nr5iJ08GctkYVQBB8bRagDFYazHGEEJAJJueU1HUKiEEkjTlLEnh6jISRREG8N7jQ5tAFCcqWL3EclHETVLNGgXffoNzCypZIE1T4ji+NtkYk1EYkxFcWGhvYkYgOOduKMCF/4ygXSCOY3zkpdVqnlprUiDwf0WtVvP07OxMfAi4nZ1dUP3Vlc+/z+Vyd5Rr/9IlCZg4Sfa2trePQPkN6rGAJMLKdHsAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTAtMDUtMjRUMDc6NDI6MTctMDY6MDB3nikDAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDEwLTA1LTI0VDA3OjQyOjE3LTA2OjAwBsORvwAAADV0RVh0TGljZW5zZQBodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9saWNlbnNlcy9MR1BMLzIuMS87wbQYAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAA90RVh0U291cmNlAG51b3ZlWFQy6iA23AAAACJ0RVh0U291cmNlX1VSTABodHRwOi8vbnVvdmV4dC5wd3NwLm5ldJGJxy0AAAAASUVORK5CYII=</office:binary-data>
-      </draw:image>
-    </draw:frame>
-    -->
   </xsl:template>
 
+  <xsl:template match="ShapeComponent/ShapePicture">
+    <xsl:variable name="binpath" select="'bindata/'"/>
+    <xsl:variable name="bindataid" select="PictureInfo/@bindata-id"/>
+    <xsl:variable name="bindata" select="/HwpDoc/DocInfo/IdMappings/BinData[number($bindataid)]"/>
+    <xsl:element name="draw:image">
+        <xsl:choose>
+            <xsl:when test="$bindata/BinEmbedded">
+                <xsl:attribute name="xlink:href"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/BinEmbedded/@storage-id"/>.<xsl:value-of select="$bindata/BinEmbedded/@ext"/></xsl:attribute>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:element>
+  </xsl:template>
 </xsl:stylesheet>

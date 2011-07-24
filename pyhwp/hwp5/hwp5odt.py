@@ -12,40 +12,62 @@ def make(hwpfilename):
 
     name = rootname
 
+    from .filestructure import File
+    hwpfile = File(hwpfilename)
+
     if not os.path.exists(name):
         os.mkdir(name)
     if not os.path.exists(name+'/META-INF'):
         os.mkdir(name+'/META-INF')
+    if not os.path.exists(name+'/bindata'):
+        os.mkdir(name+'/bindata')
 
     hwpxmlfilename = name+'.xml'
     hwpxmlfile = file(hwpxmlfilename, 'w')
     try:
-        hwpxml_function(hwpxmlfile, hwpfilename)
+        hwpxml_function(hwpxmlfile, hwpfile)
     finally:
         hwpxmlfile.close()
 
     files = []
+
+    for bindata_name in hwpfile.list_bindata():
+        bindata = hwpfile.bindata(bindata_name)
+
+        f = file(name+'/bindata/'+bindata_name, 'w')
+        try:
+            f.write(bindata.read())
+        finally:
+            f.close()
+        files.append(dict(full_path='bindata/'+bindata_name))
     
     f = file(name+'/content.xml', 'w')
     try:
         content_function(f, hwpxmlfilename)
     finally:
         f.close()
-    files.append('content.xml')
+    files.append(dict(full_path='content.xml', media_type='text/xml'))
 
     f = file(name+'/styles.xml', 'w')
     try:
         styles_function(f, hwpxmlfilename)
     finally:
         f.close()
-    files.append('styles.xml')
+    files.append(dict(full_path='styles.xml', media_type='text/xml'))
 
     f = file(name+'/manifest.rdf', 'w')
     try:
         manifest_rdf(f)
     finally:
         f.close()
-    files.append('manifest.rdf')
+    files.append(dict(full_path='manifest.rdf', media_type='application/rdf+xml'))
+
+    f = file(name+'/META-INF/manifest.xml', 'w')
+    try:
+        manifest_xml(f, files)
+    finally:
+        f.close()
+    files.append('META-INF/manifest.xml')
 
     f = file(name+'/mimetype', 'w')
     try:
@@ -54,25 +76,21 @@ def make(hwpfilename):
         f.close()
     files.append('mimetype')
 
-    f = file(name+'/META-INF/manifest.xml', 'w')
-    try:
-        manifest_xml(f)
-    finally:
-        f.close()
-    files.append('META-INF/manifest.xml')
-
     from zipfile import ZipFile
     zf = ZipFile(name+'.odt', 'w')
     for filename in files:
+        if isinstance(filename, dict):
+            filename = filename['full_path']
         zf.write(name+'/'+filename, filename)
-        os.unlink(name+'/'+filename)
+        #os.unlink(name+'/'+filename)
     zf.close()
 
-    os.unlink(name+'.xml')
-    os.rmdir(name+'/META-INF')
-    os.rmdir(name)
+    #os.unlink(name+'.xml')
+    #os.rmdir(name+'/META-INF')
+    #os.rmdir(name+'/bindata')
+    #os.rmdir(name)
 
-def manifest_xml(f):
+def manifest_xml(f, files):
     from xml.sax.saxutils import XMLGenerator
     xml = XMLGenerator(f, 'utf-8')
     xml.startDocument()
@@ -95,9 +113,14 @@ def manifest_xml(f):
 
     startElement( 'manifest', dict() )
     file_entry('/', 'application/vnd.oasis.opendocument.text', version='1.2')
-    file_entry('content.xml', 'text/xml')
-    file_entry('manifest.rdf', 'application/rdf+xml')
-    file_entry('styles.xml', 'text/xml')
+    #file_entry('content.xml', 'text/xml')
+    #file_entry('manifest.rdf', 'application/rdf+xml')
+    #file_entry('styles.xml', 'text/xml')
+    for e in files:
+        e = dict(e)
+        full_path = e.pop('full_path')
+        media_type = e.pop('media_type', 'application/octet-stream')
+        file_entry(full_path, media_type)
     endElement( 'manifest' )
 
     xml.endPrefixMapping(prefix)
@@ -111,11 +134,9 @@ def manifest_rdf(f):
 def mimetype(f):
     f.write('application/vnd.oasis.opendocument.text')
 
-def hwpxml_function(f, hwpfilename):
+def hwpxml_function(f, hwpfile):
     import logging
-    from .filestructure import File
     from .hwpxml import flatxml, XmlFormat
-    hwpfile = File(hwpfilename)
     flatxml(hwpfile, logging, XmlFormat(f))
 
 def content_function(f, hwpxmlfilename):
