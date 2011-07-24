@@ -34,6 +34,7 @@
   office:version="1.2"
   grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl"
   office:mimetype="application/vnd.oasis.opendocument.text">
+  <xsl:import href="odt-common.xsl" />
   <xsl:output method="xml" encoding="utf-8" indent="yes" />
   <xsl:template match="/">
     <office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
@@ -73,7 +74,27 @@
                              office:mimetype="application/vnd.oasis.opendocument.text">
       <office:scripts/>
       <office:font-face-decls/>
-      <office:automatic-styles/>
+      <office:automatic-styles>
+        <xsl:for-each select="HwpDoc/BodyText//Paragraph">
+          <xsl:variable name="style-id" select="@style-id + 1" />
+          <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
+          <xsl:variable name="style-parashape-id" select="$style/@parashape-id + 1"/>
+          <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
+          <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
+          <xsl:variable name="parashape" select="$parashapes[number($parashape-id)]"/>
+          <xsl:if test="$style-parashape-id != $parashape-id">
+            <xsl:element name="style:style">
+              <xsl:attribute name="style:family">paragraph</xsl:attribute>
+              <xsl:attribute name="style:class">text</xsl:attribute>
+              <xsl:attribute name="style:name">Paragraph-<xsl:value-of select="@paragraph-id + 1" /></xsl:attribute>
+              <xsl:attribute name="style:parent-style-name"><xsl:value-of select="$style/@local-name" /></xsl:attribute>
+              <xsl:call-template name="parashape-to-paragraph-properties">
+                <xsl:with-param name="parashape" select="$parashape"/>
+              </xsl:call-template>
+            </xsl:element>
+          </xsl:if>
+        </xsl:for-each>
+      </office:automatic-styles>
       <office:body>
         <office:text>
           <text:sequence-decls>
@@ -92,6 +113,20 @@
 
   <xsl:template match="Paragraph">
       <xsl:element name="text:p">
+        <xsl:variable name="style-id" select="@style-id + 1" />
+        <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
+        <xsl:variable name="style-parashape-id" select="$style/@parashape-id + 1"/>
+        <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
+        <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
+        <xsl:variable name="parashape" select="$parashapes[number($parashape-id)]"/>
+        <xsl:choose>
+          <xsl:when test="$style-parashape-id != $parashape-id">
+            <xsl:attribute name="text:style-name">Paragraph-<xsl:value-of select="@paragraph-id + 1"/></xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="text:style-name"><xsl:value-of select="$style/@local-name"/></xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:apply-templates select="LineSeg/Text"/>
         <xsl:apply-templates select="LineSeg/GShapeObjectControl"/>
       </xsl:element>

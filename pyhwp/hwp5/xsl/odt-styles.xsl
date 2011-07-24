@@ -35,6 +35,7 @@
   office:version="1.2"
   grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl"
   office:mimetype="application/vnd.oasis.opendocument.text">
+  <xsl:import href="odt-common.xsl" />
   <xsl:output method="xml" encoding="utf-8" indent="yes" />
   <xsl:template match="/">
     <office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
@@ -243,49 +244,6 @@
       <xsl:call-template name="charshape-to-text-properties">
         <xsl:with-param name="charshape" select="$charshape"/>
       </xsl:call-template>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template name="parashape-to-paragraph-properties">
-    <xsl:param name="parashape"/>
-    <xsl:element name="style:paragraph-properties">
-      <xsl:attribute name="fo:margin-top"><xsl:value-of select="number($parashape/@doubled-margin-top) div 200"/>pt</xsl:attribute>
-      <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="number($parashape/@doubled-margin-bottom) div 200"/>pt</xsl:attribute>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template name="charshape-to-text-properties">
-    <xsl:param name="charshape"/>
-    <xsl:variable name="facenames" select="/HwpDoc/DocInfo/IdMappings/FaceName" />
-    <xsl:variable name="fontface" select="$charshape/FontFace"/>
-    <xsl:variable name="facename-en-id" select="$fontface/@en + 1"/>
-    <xsl:variable name="facename-en" select="$facenames[$facename-en-id]/@name"/>
-    <xsl:variable name="facename-ko-id" select="$fontface/@ko + 1"/>
-    <xsl:variable name="facename-ko" select="$facenames[$facename-ko-id]/@name"/>
-    <xsl:element name="style:text-properties">
-      <xsl:attribute name="style:font-name"><xsl:value-of select="$facename-en"/></xsl:attribute>
-      <xsl:attribute name="style:font-name-asian"><xsl:value-of select="$facename-ko"/></xsl:attribute>
-      <xsl:attribute name="fo:font-size"><xsl:value-of select="$charshape/@basesize div 100"/>pt</xsl:attribute>
-      <xsl:attribute name="style:font-size-asian"><xsl:value-of select="$charshape/@basesize div 100"/>pt</xsl:attribute>
-      <!-- 15.4.25 Font Style -->
-      <xsl:if test="$charshape/@italic = 1">
-        <xsl:attribute name="fo:font-style">italic</xsl:attribute>
-      </xsl:if>
-      <!-- 15.4.28 Underlining Type -->
-      <xsl:choose>
-        <xsl:when test="$charshape/@underline = 'none'">
-          <xsl:attribute name="text:text-underline-type">none</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="text:text-underline-type">single</xsl:attribute>
-          <!-- 15.4.31 Underline Color -->
-          <xsl:attribute name="text:text-underline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
-      <!-- 15.4.32 Font Weight -->
-      <xsl:if test="$charshape/@bold = 1">
-        <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
-      </xsl:if>
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>

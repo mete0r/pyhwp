@@ -131,6 +131,16 @@ class XmlFormat(ModelEventHandler):
     def endDocument(self):
         self.xmlgen.endDocument()
 
+def give_paragraphs_unique_id(event_prefixed_mac):
+    paragraph_id = 0
+    from .models import Paragraph, STARTEVENT
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if event == STARTEVENT and model == Paragraph:
+            attributes['paragraph_id'] = paragraph_id
+            paragraph_id += 1
+        yield event, item
+
 def remove_redundant_facenames(event_prefixed_mac):
     ''' remove redundant FaceNames '''
     from .models import FaceName, CharShape, build_subtree, STARTEVENT
@@ -192,6 +202,9 @@ def flatxml(hwpfile, logger, oformat):
 
     hwpdoc_events = chain(docinfo_events, bodytext_events)
     hwpdoc_events = wrap_modelevents(hwpdoc, hwpdoc_events)
+
+    # for easy references in styles
+    hwpdoc_events = give_paragraphs_unique_id(hwpdoc_events)
 
     oformat.startDocument()
     dispatch_model_events(oformat, hwpdoc_events)
