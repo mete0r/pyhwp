@@ -85,6 +85,7 @@ def startelement(context, xmlgen, (model, attributes)):
     for _name, (_type, _value) in typed_attributes:
         if isinstance(_value, dict):
             assert isinstance(_value, dict)
+            _value = dict(_value)
             _value['attribute-name'] = _name
             for x in element(context, xmlgen, (_type, _value)): yield x
         else:
@@ -129,7 +130,6 @@ class XmlFormat(ModelEventHandler):
         self.xmlgen.endElement(model.__name__)
     def endDocument(self):
         self.xmlgen.endDocument()
-
 
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
