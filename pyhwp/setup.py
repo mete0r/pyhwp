@@ -7,7 +7,7 @@ if version < '2.2.3':
 from setuptools import setup
 setup(
         name='pyhwp',
-        version='0.0',
+        version='0.1a3',
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
         author = 'mete0r',
@@ -17,7 +17,6 @@ setup(
         package_data = dict(hwp5=['xsl/*.xsl']),
 
         install_requires=['OleFileIO_PL >=0.20'],
-        provides=['hwp5 (0.0)'],
 
         entry_points = {
             'console_scripts': [
