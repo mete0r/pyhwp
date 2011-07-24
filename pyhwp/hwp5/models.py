@@ -539,7 +539,7 @@ class CommonControl(Control):
             2, 'affect_line_spacing',
             3, 4, VRelTo, 'vrelto',
             5, 7, VAlign, 'valign',
-            8, 9, HRelTo, 'vrelto',
+            8, 9, HRelTo, 'hrelto',
             10, 12, HAlign, 'halign',
             13, 'restrict_in_page',
             14, 'overlap_others',
