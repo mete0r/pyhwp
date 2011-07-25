@@ -7,7 +7,7 @@ if version < '2.2.3':
 from setuptools import setup
 setup(
         name='pyhwp',
-        version='0.1a3',
+        version='0.1a4',
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
         author = 'mete0r',
