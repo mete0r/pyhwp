@@ -23,7 +23,8 @@ HWP 5.0 파일(.hwp)을 분석하는 파이썬 프로그램입니다. HWP 5.0 �
 		hwp5bin <hwp파일이름> <레코드 스트림 파일>
 		hwp5xml <hwp파일이름>
 
-또한 다음의 파일 형식으로 낮은 품질의 변환이 가능합니다.
+또한 다음의 파일 형식으로 낮은 품질의 변환이 가능합니다. (libxslt의 xsltproc 
+필요)
 
 		hwp5txt <hwp파일이름>
 		hwp5html <hwp파일이름>
@@ -38,6 +39,7 @@ HWP 5.0 파일(.hwp)을 분석하는 파이썬 프로그램입니다. HWP 5.0 �
 --------
 
  - python 2.5.4 이상
+ - xsltproc (hwp5odt, hwp5html, hwp5odt)
 
 설치방법
 --------
@@ -163,9 +165,9 @@ pyhwp가 어느 정도 성숙하면 XML 정의를 확정할 계획입니다.)
 
 		hwp5xml sample.hwp > sample.xml
 
-저작자
+기여자
 ------
-   mete0r \<mete0r NOTHANKSSPAM sarangbang.or.kr\>
+   메인테이너: mete0r \<mete0r NOTHANKSSPAM sarangbang.or.kr\>
 
 사용조건
 --------
