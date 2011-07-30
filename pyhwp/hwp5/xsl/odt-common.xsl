@@ -80,6 +80,8 @@
       <!-- 15.4.25 Font Style -->
       <xsl:if test="$charshape/@italic = 1">
         <xsl:attribute name="fo:font-style">italic</xsl:attribute>
+        <xsl:attribute name="style:font-style-asian">italic</xsl:attribute>
+        <xsl:attribute name="style:font-style-complex">italic</xsl:attribute>
       </xsl:if>
       <!-- 15.4.28 Underlining Type -->
       <xsl:choose>
@@ -95,6 +97,8 @@
       <!-- 15.4.32 Font Weight -->
       <xsl:if test="$charshape/@bold = 1">
         <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
+        <xsl:attribute name="style:font-weight-asian">bold</xsl:attribute>
+        <xsl:attribute name="style:font-weight-complex">bold</xsl:attribute>
       </xsl:if>
     </xsl:element>
   </xsl:template>
