@@ -76,6 +76,7 @@
       <office:font-face-decls/>
       <office:automatic-styles>
         <xsl:for-each select="HwpDoc/BodyText//Paragraph">
+          <xsl:variable name="paragraph-id" select="@paragraph-id + 1"/>
           <xsl:variable name="style-id" select="@style-id + 1" />
           <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
           <xsl:variable name="style-parashape-id" select="$style/@parashape-id + 1"/>
@@ -93,6 +94,26 @@
               </xsl:call-template>
             </xsl:element>
           </xsl:if>
+
+          <xsl:variable name="style-charshape-id" select="$style/@charshape-id + 1"/>
+          <xsl:for-each select="LineSeg">
+            <xsl:variable name="lineseg-pos" select="position()" />
+            <xsl:for-each select="Text">
+              <xsl:variable name="text-pos" select="position()" />
+              <xsl:variable name="charshape-id" select="@charshape-id + 1" />
+              <xsl:variable name="charshapes" select="/HwpDoc/DocInfo/IdMappings/CharShape" />
+              <xsl:variable name="charshape" select="$charshapes[number($charshape-id)]"/>
+              <xsl:if test="$style-charshape-id != $charshape-id">
+                <xsl:element name="style:style">
+                  <xsl:attribute name="style:family">text</xsl:attribute>
+                  <xsl:attribute name="style:name">p<xsl:value-of select="$paragraph-id" />-<xsl:value-of select="$lineseg-pos"/>-<xsl:value-of select="$text-pos"/></xsl:attribute>
+                  <xsl:call-template name="charshape-to-text-properties">
+                    <xsl:with-param name="charshape" select="$charshape"/>
+                  </xsl:call-template>
+                </xsl:element>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:for-each>
         </xsl:for-each>
       </office:automatic-styles>
       <office:body>
@@ -127,14 +148,36 @@
             <xsl:attribute name="text:style-name"><xsl:value-of select="$style/@local-name"/></xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="LineSeg/Text"/>
-        <xsl:apply-templates select="LineSeg/GShapeObjectControl"/>
+        <xsl:apply-templates select="LineSeg">
+          <xsl:with-param name="paragraph" select="."/>
+        </xsl:apply-templates>
       </xsl:element>
       <xsl:apply-templates select="LineSeg/TableControl"/>
   </xsl:template>
 
+  <xsl:template match="LineSeg">
+    <xsl:param name="paragraph" />
+    <xsl:apply-templates select="Text|GShapeObjectControl|ControlChar">
+      <xsl:with-param name="paragraph" select="$paragraph"/>
+      <xsl:with-param name="lineseg-pos" select="position()"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
   <xsl:template match="Text">
-    <xsl:element name="text:span"><xsl:value-of select="text()"/></xsl:element>
+    <xsl:param name="paragraph"/>
+    <xsl:param name="lineseg-pos"/>
+    <xsl:variable name="text-pos" select="position()"/>
+    <xsl:variable name="paragraph-id" select="$paragraph/@paragraph-id + 1" />
+    <xsl:variable name="style-id" select="$paragraph/@style-id + 1" />
+    <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]" />
+    <xsl:variable name="style-charshape-id" select="$style/@charshape-id + 1" />
+    <xsl:element name="text:span">
+      <xsl:variable name="charshape-id" select="@charshape-id + 1" />
+      <xsl:if test="$style-charshape-id != $charshape-id">
+        <xsl:attribute name="text:style-name">p<xsl:value-of select="$paragraph-id"/>-<xsl:value-of select="$lineseg-pos"/>-<xsl:value-of select="$text-pos"/></xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="text()"/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="ControlChar"></xsl:template>
