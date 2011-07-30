@@ -189,16 +189,31 @@
         </xsl:for-each>
       </office:styles>
       <office:automatic-styles>
-        <style:page-layout style:name="Mpm1">
-          <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm">
-            <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
-          </style:page-layout-properties>
-          <style:header-style/>
-          <style:footer-style/>
-        </style:page-layout>
+        <xsl:for-each select="/HwpDoc/BodyText/Paragraph/LineSeg/SectionDef/PageDef">
+          <xsl:element name="style:page-layout">
+            <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
+            <xsl:element name="style:page-layout-properties">
+              <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
+              <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(number(@top-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(number(@left-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(number(@right-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(number(@bottom-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+            </xsl:element>
+            <style:header-style/>
+            <style:footer-style/>
+          </xsl:element>
+        </xsl:for-each>
       </office:automatic-styles>
       <office:master-styles>
-        <style:master-page style:name="Standard" style:page-layout-name="Mpm1"/>
+        <xsl:for-each select="/HwpDoc/BodyText/Paragraph/LineSeg/SectionDef/PageDef">
+          <xsl:element name="style:master-page">
+            <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
+            <xsl:attribute name="style:page-layout-name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
+          </xsl:element>
+        </xsl:for-each>
       </office:master-styles>
     </office:document-styles>
   </xsl:template>
