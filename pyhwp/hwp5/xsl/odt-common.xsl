@@ -49,6 +49,16 @@
           <xsl:when test="$parashape/@align = 'distribute-space'">justify</xsl:when>
         </xsl:choose>
       </xsl:attribute>
+      <xsl:variable name="margin-left" select="number($parashape/@doubled-margin-left)"/>
+      <xsl:variable name="indent" select="number($parashape/@indent)"/>
+      <xsl:attribute name="fo:text-indent"><xsl:value-of select="$indent div 200"/>pt</xsl:attribute>
+      <xsl:attribute name="fo:margin-left">
+        <xsl:choose>
+          <xsl:when test="$indent &lt; 0"><xsl:value-of select="($margin-left - $indent) div 200"/>pt</xsl:when>
+          <xsl:otherwise><xsl:value-of select="$margin-left div 200"/>pt</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:attribute name="fo:margin-right"><xsl:value-of select="number($parashape/@doubled-margin-right) div 200"/>pt</xsl:attribute>
       <xsl:attribute name="fo:margin-top"><xsl:value-of select="number($parashape/@doubled-margin-top) div 200"/>pt</xsl:attribute>
       <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="number($parashape/@doubled-margin-bottom) div 200"/>pt</xsl:attribute>
     </xsl:element>
