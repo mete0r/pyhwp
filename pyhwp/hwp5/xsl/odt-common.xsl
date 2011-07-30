@@ -39,6 +39,16 @@
   <xsl:template name="parashape-to-paragraph-properties">
     <xsl:param name="parashape"/>
     <xsl:element name="style:paragraph-properties">
+      <xsl:attribute name="fo:text-align">
+        <xsl:choose>
+          <xsl:when test="$parashape/@align = 'both'">justify</xsl:when>
+          <xsl:when test="$parashape/@align = 'left'">left</xsl:when>
+          <xsl:when test="$parashape/@align = 'right'">right</xsl:when>
+          <xsl:when test="$parashape/@align = 'center'">center</xsl:when>
+          <xsl:when test="$parashape/@align = 'distribute'">justify</xsl:when>
+          <xsl:when test="$parashape/@align = 'distribute-space'">justify</xsl:when>
+        </xsl:choose>
+      </xsl:attribute>
       <xsl:attribute name="fo:margin-top"><xsl:value-of select="number($parashape/@doubled-margin-top) div 200"/>pt</xsl:attribute>
       <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="number($parashape/@doubled-margin-bottom) div 200"/>pt</xsl:attribute>
     </xsl:element>
