@@ -194,8 +194,16 @@
             <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
             <xsl:element name="style:page-layout-properties">
               <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
-              <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:choose>
+                <xsl:when test="@orientation = 'portrait'">
+                  <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+                  <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+                </xsl:when>
+                <xsl:when test="@orientation = 'landscape'">
+                  <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+                  <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+                </xsl:when>
+              </xsl:choose>
               <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(number(@top-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
               <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(number(@left-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
               <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(number(@right-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
@@ -208,9 +216,10 @@
         </xsl:for-each>
       </office:automatic-styles>
       <office:master-styles>
-        <xsl:for-each select="/HwpDoc/BodyText/Paragraph/LineSeg/SectionDef/PageDef">
+        <xsl:for-each select="/HwpDoc/BodyText/Section/Paragraph/LineSeg/SectionDef/PageDef">
           <xsl:element name="style:master-page">
-            <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
+            <!-- 마스터 페이지의 번호는 적용될 문단 번호로 지정된다. -->
+            <xsl:attribute name="style:name">MasterPage-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
             <xsl:attribute name="style:page-layout-name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
           </xsl:element>
         </xsl:for-each>
