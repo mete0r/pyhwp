@@ -386,7 +386,7 @@ class ParaShape(BasicRecordModel):
         yield SHWPUNIT,  'indent',
         yield INT32,  'doubled_margin_top',    # 1/7200 * 2
         yield INT32,  'doubled_margin_bottom', # 1/7200 * 2
-        yield SHWPUNIT,  'linespacing_before_2007',
+        yield SHWPUNIT,  'linespacing',
         yield UINT16, 'tabdef_id',
         yield UINT16, 'numbering_bullet_id',
         yield UINT16, 'borderfill_id',

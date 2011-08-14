@@ -69,20 +69,20 @@
           줄 간격: 글자에 따라
         -->
         <xsl:when test="$parashape/@linespacing-type = 'ratio'">
-          <xsl:attribute name="fo:line-height"><xsl:value-of select="number($parashape/@linespacing-before-2007)"/>%</xsl:attribute>
+          <xsl:attribute name="fo:line-height"><xsl:value-of select="number($parashape/@linespacing)"/>%</xsl:attribute>
         </xsl:when>
         <!--
           줄 간격: 고정 값
         -->
         <xsl:when test="$parashape/@linespacing-type = 'fixed'">
-          <xsl:attribute name="fo:line-height"><xsl:value-of select="number($parashape/@linespacing-before-2007) div 200"/>pt</xsl:attribute>
+          <xsl:attribute name="fo:line-height"><xsl:value-of select="number($parashape/@linespacing) div 200"/>pt</xsl:attribute>
           <xsl:attribute name="style:vertical-align">top</xsl:attribute>
         </xsl:when>
         <!--
           줄 간격: 여백만 지정
         -->
         <xsl:when test="$parashape/@linespacing-type = 'spaceonly'">
-          <xsl:attribute name="style:line-spacing"><xsl:value-of select="number($parashape/@linespacing-before-2007) div 200 div 2"/>pt</xsl:attribute>
+          <xsl:attribute name="style:line-spacing"><xsl:value-of select="number($parashape/@linespacing) div 200 div 2"/>pt</xsl:attribute>
           <xsl:attribute name="style:vertical-align">top</xsl:attribute>
         </xsl:when>
       </xsl:choose>
