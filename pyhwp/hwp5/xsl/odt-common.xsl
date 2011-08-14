@@ -63,16 +63,50 @@
       <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="number($parashape/@doubled-margin-bottom) div 200"/>pt</xsl:attribute>
       <!--
         줄 간격
+
+        전반적으로 글자를 줄 내에서 수직 배치하는 방식에서 차이가 있는 것 같다.
+        hwp5의 줄 간격 관련 속성을 odt에 있는 비슷한 속성으로 단순 변환하는
+        것만으로는 꽤 차이가 나며, 아래와 같이 좀 더 부가적인 조정을 하더라도
+        여전히 미묘한 차이가 생긴다.
+
+        이러한 상황을 개선하기 위해선 폰트의 metric에 대한 이해가 선행되어야 할
+        것으로 보인다. (아마도 폰트의 leading 값과 관련있는 것으로 추측된다.)
+
+        samples/linespacing.hwp로 비교해볼 수 있다.
       -->
       <xsl:choose>
         <!--
           줄 간격: 글자에 따라
+
+          폰트 크기에 지정된 비율을 적용한 값을 줄의 높이로 설정하기 위해,
+          fo:line-height을 사용한다.
+
+          NOTE: 같은 폰트 크기/비율을 지정해도 libreoffice에서는 줄 간격이 좀
+          더 넓게 나타난다. (samples/linespacing.hwp의 "글자에 따라 100%"를 ODT
+          변환 후와 비교) 이는 아마도 비율을 적용할 때 폰트의 leading에 대한
+          처리방식이 다르기 때문이 아닐까 한다. (hwp5는 폰트의 em-box 크기만을
+          고려하는 듯 하며, libreoffice는 여기에 아마도 폰트의 leading을
+          포함시키는 듯 하다.
         -->
         <xsl:when test="$parashape/@linespacing-type = 'ratio'">
           <xsl:attribute name="fo:line-height"><xsl:value-of select="number($parashape/@linespacing)"/>%</xsl:attribute>
         </xsl:when>
         <!--
           줄 간격: 고정 값
+
+          지정된 값을 fo:line-height로 적용한다.
+
+          NOTE: hwp5에서는 글자를 줄 공간의 위 (또는 위에 가깝게) 배치하는
+          반면, libreoffice에서는 기본적으로 줄 공간의 아래에 가깝게
+          배치한다(baseline 정렬). 따라서 추가적으로 style:vertical-align을
+          top으로 지정하였다.
+
+          그래도 여전히 미묘한 차이가 발생하는데, samples/linespacing.hwp의 맨
+          위 'HHHH..' 블럭과 '고정 값 100%'를 각각 ODT 변환 후와 비교해보면,
+          libreoffice의 경우 'HHHH..' 블럭은 거의 비슷하게 나타나는 반면 '고정
+          값 100%'는 줄의 아래 부분이 잘린 채 나타난다. 이는 한글 문자의 윗
+          부분에 약간의 공백을 좀 더 들어가면서 전체적으로 줄 공간 내에서
+          글자들이 약간 아래로 밀려나기 때문으로 보인다.
         -->
         <xsl:when test="$parashape/@linespacing-type = 'fixed'">
           <xsl:attribute name="fo:line-height"><xsl:value-of select="number($parashape/@linespacing) div 200"/>pt</xsl:attribute>
@@ -80,10 +114,17 @@
         </xsl:when>
         <!--
           줄 간격: 여백만 지정
+
+          지정된 값을 style:line-spacing에 적용한다.
+
+          NOTE: style:line-spacing은 글자의 위/아래에 지정된 공간을 배치한다.
+          따라서 hwp5에서 지정된 값을 반으로 나누어 적용하였다.  그래도 미묘한
+          차이가 나는 데, samples/linespacing.hwp의 "여백만 지정 20pt"를
+          선택/반전하여 보면, hwp5는 글자(와 윗줄)이 줄 공간의 맨 위에 거의 딱
+          붙어 배치되는데 반해, libreoffice에서는 약간의 공간이 더 들어간다.
         -->
         <xsl:when test="$parashape/@linespacing-type = 'spaceonly'">
           <xsl:attribute name="style:line-spacing"><xsl:value-of select="number($parashape/@linespacing) div 200 div 2"/>pt</xsl:attribute>
-          <xsl:attribute name="style:vertical-align">top</xsl:attribute>
         </xsl:when>
       </xsl:choose>
     </xsl:element>
