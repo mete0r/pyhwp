@@ -184,6 +184,7 @@ def flatxml(hwpfile, logger, oformat):
     class HwpDoc(object): pass
     class DocInfo(object): pass
     class BodyText(object): pass
+    class Section(object): pass
     hwpdoc = HwpDoc, dict(version=hwpfile.fileheader.version), dict(context)
     docinfo = DocInfo, dict(), dict(context)
     docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
@@ -194,8 +195,10 @@ def flatxml(hwpfile, logger, oformat):
     bodytext = BodyText, dict(), dict(context)
     bodytext_events = []
     for idx in hwpfile.list_bodytext_sections():
+        section = Section, dict(), dict(context)
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
+        section_events = wrap_modelevents(section, section_events)
         bodytext_events.append(section_events)
     bodytext_events = chain(*bodytext_events)
     bodytext_events = wrap_modelevents(bodytext, bodytext_events)

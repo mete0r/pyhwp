@@ -132,6 +132,10 @@
     </office:document-content>
   </xsl:template>
 
+  <xsl:template match="Section">
+    <xsl:apply-templates />
+  </xsl:template>
+
   <xsl:template match="Paragraph">
       <xsl:element name="text:p">
         <xsl:variable name="style-id" select="@style-id + 1" />

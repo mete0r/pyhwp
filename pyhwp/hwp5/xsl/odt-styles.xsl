@@ -189,7 +189,7 @@
         </xsl:for-each>
       </office:styles>
       <office:automatic-styles>
-        <xsl:for-each select="/HwpDoc/BodyText/Paragraph/LineSeg/SectionDef/PageDef">
+          <xsl:for-each select="/HwpDoc/BodyText//Paragraph/LineSeg/SectionDef/PageDef">
           <xsl:element name="style:page-layout">
             <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../../../@paragraph-id + 1"/></xsl:attribute>
             <xsl:element name="style:page-layout-properties">
