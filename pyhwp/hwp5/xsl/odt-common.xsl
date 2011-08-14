@@ -88,10 +88,20 @@
         <xsl:when test="$charshape/@underline = 'none'">
           <xsl:attribute name="text:text-underline-type">none</xsl:attribute>
         </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="text:text-underline-type">single</xsl:attribute>
+        <xsl:when test="$charshape/@underline = 'underline'">
+          <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
+          <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
+          <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
           <!-- 15.4.31 Underline Color -->
-          <xsl:attribute name="text:text-underline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
+          <xsl:attribute name="style:text-underline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
+        </xsl:when>
+        <xsl:when test="$charshape/@underline = 'upperline'">
+          <xsl:attribute name="style:text-overline-type">single</xsl:attribute>
+          <xsl:attribute name="style:text-overline-style">solid</xsl:attribute>
+          <xsl:attribute name="style:text-overline-width">auto</xsl:attribute>
+          <xsl:attribute name="style:text-overline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
       <!-- 15.4.32 Font Weight -->
