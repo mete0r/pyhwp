@@ -167,7 +167,7 @@ pyhwp가 어느 정도 성숙하면 XML 정의를 확정할 계획입니다.)
 
 기여자
 ------
-   메인테이너: mete0r \<mete0r NOTHANKSSPAM sarangbang.or.kr\>
+   메인테이너: mete0r_kr @twitter
 
 사용조건
 --------
