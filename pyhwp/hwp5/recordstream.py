@@ -104,8 +104,8 @@ def link_records(records):
 
 def main():
     import sys
-    from .filestructure import File
-    from ._scriptutils import OptionParser, args_pop, args_pop_range, getlogger
+    from .filestructure import open
+    from ._scriptutils import OptionParser, args_pop, args_pop_range, getlogger, open_or_exit
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
     op.add_option('-f', '--format', dest='format', default='hex',
@@ -122,7 +122,7 @@ def main():
         file = sys.stdin
         bytestream = file
     else:
-        file = File(filename)
+        file = open_or_exit(open, filename)
         streamname = args_pop(args, '<record-stream>')
         bytestream = file.pseudostream(streamname)
 

@@ -50,3 +50,9 @@ class TestModuleFunctions(TestCase):
         olefile = OleFileIO(sample_filename)
         fileheader = FS.get_fileheader(olefile)
         assert isinstance(fileheader, FS.FileHeader)
+
+    def test_open(self):
+        f = FS.open(sample_filename)
+        assert isinstance(f, FS.File)
+
+        self.assertRaises(FS.BadFormatError, FS.open, nonole_filename)

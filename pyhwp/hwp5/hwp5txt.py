@@ -27,9 +27,10 @@ def make(hwp5_filename):
 
 def hwp5xml(f, hwp5_filename):
     import logging
-    from .filestructure import File
+    from .filestructure import open
+    from ._scriptutils import open_or_exit
     from .hwpxml import flatxml, XmlFormat
-    hwpfile = File(hwp5_filename)
+    hwpfile = open_or_exit(open, hwp5_filename)
     flatxml(hwpfile, logging, XmlFormat(f))
 
 def xslt_plaintext(f, hwpxmlfilename):

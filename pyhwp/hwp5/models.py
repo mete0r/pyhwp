@@ -1847,8 +1847,8 @@ def main():
     import sys
     import logging
     import itertools
-    from ._scriptutils import OptionParser, args_pop, args_pop_range
-    from .filestructure import File
+    from ._scriptutils import OptionParser, args_pop, args_pop_range, open_or_exit
+    from .filestructure import open
     from .recordstream import read_records
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
@@ -1866,7 +1866,7 @@ def main():
         bytestream = sys.stdin
         version = args_pop(args, 'version').split('.')
     else:
-        file = File(filename)
+        file = open_or_exit(open, filename)
         streamname = args_pop(args, '<record-stream>')
         bytestream = file.pseudostream(streamname)
         version = file.fileheader.version

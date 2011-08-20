@@ -10,8 +10,9 @@ def make(hwpfilename):
     if root.lower().endswith('.hwp'):
         root = root[0:-4]
 
-    from .filestructure import File
-    hwpfile = File(hwpfilename)
+    from .filestructure import open
+    from ._scriptutils import open_or_exit
+    hwpfile = open_or_exit(open, hwpfilename)
 
     if not os.path.exists(root):
         os.mkdir(root)

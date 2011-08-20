@@ -188,6 +188,15 @@ def list_bindata(olefile):
         if name.startswith(prefix):
             yield name[len(prefix):]
 
+class BadFormatError(Exception):
+    def __str__(self):
+        return '%s: \'%s\''%(self.args)
+
+def open(filename):
+    if not is_hwp5file(filename):
+        raise BadFormatError('Not an hwp5 file', filename)
+    return File(filename)
+
 class File(OleFileIO):
 
     list_streams = list_streams
@@ -236,12 +245,12 @@ class File(OleFileIO):
             return pseudostream(*args)
 
 def main():
-    from ._scriptutils import OptionParser, args_pop
+    from ._scriptutils import OptionParser, args_pop, open_or_exit
     op = OptionParser(usage='usage: %prog [options] filename <stream>')
     options, args = op.parse_args()
 
     filename = args_pop(args, 'filename')
-    file = File(filename)
+    file = open_or_exit(open, filename)
 
     if len(args) == 0:
         print 'FileHeader'

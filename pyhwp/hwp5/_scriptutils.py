@@ -82,3 +82,10 @@ def args_pop_range(args):
             else:
                 end = None
         return (start, end)
+
+def open_or_exit(open, filename):
+    try:
+        return open(filename)
+    except Exception, e:
+        sys.stderr.write('%s\n'%(str(e)))
+        sys.exit(-1)
