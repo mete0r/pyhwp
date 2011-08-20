@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 import os.path
 try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
 import zlib
-from OleFileIO_PL import OleFileIO
+from OleFileIO_PL import OleFileIO, isOleFile
 
 from .utils import cached_property
 from .dataio import INT32, UINT32, UINT16, Flags, Struct, ARRAY, N_ARRAY
@@ -90,42 +91,115 @@ def recode(backend_stream, backend_encoding, frontend_encoding, errors='strict')
     wr = codecs.getwriter(backend_encoding)
     return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
 
+def is_hwp5file(filename):
+    if not isOleFile(filename):
+        return False
+    olefile = OleFileIO(filename)
+    return olefile.exists('FileHeader')
+
+def open_fileheader(olefile):
+    return olefile.openstream('FileHeader')
+
+def get_fileheader(olefile):
+    f = open_fileheader(olefile)
+    attributes = FileHeader.read(f)
+    fileheader = FileHeader()
+    fileheader.__dict__.update((name, type(attributes.get(name))) for type, name in FileHeader.attributes(dict()))
+    return fileheader
+
+def open_summaryinfo(olefile):
+    return olefile.openstream('\005HwpSummaryInformation')
+
+def open_previewtext(olefile, charset=None):
+    f = olefile.openstream('PrvText')
+    if charset:
+        f = recode(f, 'utf-16le', charset)
+    return f
+
+def open_previewimage(olefile):
+    return olefile.openstream('PrvImage')
+
+def open_docinfo(olefile, compressed=True):
+    f = olefile.openstream('DocInfo')
+    if compressed:
+        f = StringIO(zlib.decompress(f.read(), -15)) # without gzip header
+    return f
+
+def open_bodytext(olefile, idx, compressed=True):
+    try:
+        f = olefile.openstream('BodyText/Section'+str(idx))
+    except IOError:
+        raise IndexError(idx)
+    if compressed:
+        f = StringIO(zlib.decompress(f.read(), -15))
+    return f
+
+def open_viewtext(olefile, idx):
+    try:
+        f = olefile.openstream('ViewText/Section'+str(idx))
+    except IOError:
+        raise IndexError(idx)
+    return f
+
+def open_viewtext_head(olefile, idx):
+    f = open_viewtext(olefile, idx)
+    head = f.read(4+256)
+    return StringIO(head)
+
+def open_viewtext_tail(olefile, idx):
+    f = open_viewtext(olefile, idx)
+    f.seek(4+256)
+    return f
+
+def open_bindata(olefile, name, compressed=True):
+    try:
+        f = olefile.openstream('BinData/%s'%name)
+    except IOError:
+        raise KeyError(name)
+    if compressed:
+        f = StringIO(zlib.decompress(f.read(), -15))
+    return f
+
+def open_script(olefile, name, compressed=True):
+    try:
+        f = olefile.openstream('Scripts/%s'%name)
+    except IOError:
+        raise KeyError(name)
+    if compressed:
+        return StringIO(zlib.decompress(f.read(), -15))
+    return f
+
+def list_streams(olefile):
+    for e in olefile.listdir():
+        yield os.path.join(*e)
+
+def list_sections(olefile):
+    prefix = 'BodyText/Section'
+    l = []
+    for name in list_streams(olefile):
+        if name.startswith(prefix):
+            l.append( int(name[len(prefix):]) )
+    l.sort()
+    return l
+
+def list_bindata(olefile):
+    for name in list_streams(olefile):
+        prefix = 'BinData/'
+        if name.startswith(prefix):
+            yield name[len(prefix):]
+
 class File(OleFileIO):
 
-    def list_streams(self):
-        for e in self.listdir():
-            yield os.path.join(*e)
+    list_streams = list_streams
+    list_bodytext_sections = list_sections
+    list_bindata = list_bindata
 
-    def list_bodytext_sections(self):
-        l = []
-        for name in self.list_streams():
-            prefix = 'BodyText/Section'
-            if name.startswith(prefix):
-                l.append( int(name[len(prefix):]) )
-        l.sort()
-        return l
+    _fileheader = open_fileheader
+    fileheader = cached_property(get_fileheader)
 
-    def list_bindata(self):
-        for name in self.list_streams():
-            prefix = 'BinData/'
-            if name.startswith(prefix):
-                yield name[len(prefix):]
-
-    def _fileheader(self):
-        return self.openstream('FileHeader')
-
-    def fileheader(self):
-        attributes = FileHeader.read(self._fileheader())
-        fileheader = FileHeader()
-        fileheader.__dict__.update((name, type(attributes.get(name))) for type, name in FileHeader.attributes(dict()))
-        return fileheader
-    fileheader = cached_property(fileheader)
-
-    def _summaryinfo(self):
-        return self.openstream('\005HwpSummaryInformation')
-
+    _summaryinfo = open_summaryinfo
     def summaryinfo(self):
-        f = self._summaryinfo()
+        f = open_summaryinfo(self)
         context = dict(version=self.fileheader.version)
         summaryinfo = SummaryInfo.read(f, context)
         #print '#### %o'%f.tell()
@@ -133,56 +207,26 @@ class File(OleFileIO):
     summaryinfo = property(summaryinfo)
 
     def preview_text(self):
-        charset = 'utf-8'
-        return recode(self.openstream('PrvText'), 'utf-16le', charset)
+        return open_previewtext(self, 'utf-8')
 
     def preview_image(self):
-        return self.openstream('PrvImage')
+        return open_previewimage(self)
 
     def docinfo(self):
-        strm = self.openstream('DocInfo')
-        if self.fileheader.flags.compressed:
-            strm = StringIO(zlib.decompress(strm.read(), -15)) # without gzip header
-        return strm
+        return open_docinfo(self, self.fileheader.flags.compressed)
 
     def bodytext(self, idx):
-        try:
-            sec = self.openstream('BodyText/Section'+str(idx))
-        except IOError:
-            raise IndexError(idx)
-        if self.fileheader.flags.compressed:
-            sec = StringIO(zlib.decompress(sec.read(), -15))
-        return sec
+        return open_bodytext(self, idx, self.fileheader.flags.compressed)
 
-    def viewtext(self, idx):
-        try:
-            sec = self.openstream('ViewText/Section'+str(idx))
-        except IOError:
-            raise IndexError(idx)
-        return sec
-
-    def viewtext_tail(self, idx):
-        f = self.viewtext(idx)
-        f.seek(4+256)
-        return f
+    viewtext = open_viewtext
+    viewtext_head = open_viewtext_head
+    viewtext_tail = open_viewtext_tail
 
     def bindata(self, name):
-        try:
-            strm = self.openstream('BinData/%s'%name)
-        except IOError:
-            raise KeyError(name)
-        if self.fileheader.flags.compressed:
-            strm = StringIO(zlib.decompress(strm.read(), -15))
-        return strm
+        return open_bindata(self, name, self.fileheader.flags.compressed)
 
     def script(self, name):
-        try:
-            strm = self.openstream('Scripts/%s'%name)
-        except IOError:
-            raise KeyError(name)
-        if self.fileheader.flags.compressed:
-            return StringIO(zlib.decompress(strm.read(), -15))
-        return strm
+        return open_script(self, name, self.fileheader.flags.compressed)
 
     def pseudostream(self, name):
         args = name.split('/', 1)
@@ -218,7 +262,8 @@ def main():
         print '     bodytext/<index> : BodyText/Section<index> (uncompressed, record stream)'
         print '   bindata/<filename> : BIN/<filename> (uncompressed)'
         print '    script/<filename> : Scripts/<filename> (uncompressed)'
-        print '     viewtext/<index> : ViewText/Section<index> (a record)'
+        print '     viewtext/<index> : ViewText/Section<index>'
+        print 'viewtext_head/<index> : head part of ViewText/Section<index> (a record)'
         print 'viewtext_tail/<index> : tail part of ViewText/Section<index> (block data)'
         print ''
         print 'Raw streams'
