@@ -750,10 +750,10 @@ class Paragraph(BasicRecordModel):
     tagid = HWPTAG_PARA_HEADER
 
     SplitFlags = Flags(BYTE,
-            0, 'section',
+            0, 'new_section',
             1, 'multicolumn',
-            2, 'page',
-            3, 'column',
+            2, 'new_page',
+            3, 'new_column',
             )
     ControlMask = Flags(UINT32,
             2, 'unknown1',

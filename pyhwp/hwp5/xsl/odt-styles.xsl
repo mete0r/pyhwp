@@ -262,9 +262,11 @@
       <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
       <xsl:variable name="charshape" select="$charshapes[number($charshapeid)]"/>
       <xsl:variable name="parashape" select="$parashapes[number($parashapeid)]"/>
+      <xsl:element name="style:paragraph-properties">
       <xsl:call-template name="parashape-to-paragraph-properties">
         <xsl:with-param name="parashape" select="$parashape"/>
       </xsl:call-template>
+      </xsl:element>
       <xsl:call-template name="charshape-to-text-properties">
         <xsl:with-param name="charshape" select="$charshape"/>
       </xsl:call-template>

@@ -38,7 +38,6 @@
   <xsl:output method="xml" encoding="utf-8" indent="yes" />
   <xsl:template name="parashape-to-paragraph-properties">
     <xsl:param name="parashape"/>
-    <xsl:element name="style:paragraph-properties">
       <xsl:attribute name="fo:text-align">
         <xsl:choose>
           <xsl:when test="$parashape/@align = 'both'">justify</xsl:when>
@@ -127,7 +126,6 @@
           <xsl:attribute name="style:line-spacing"><xsl:value-of select="number($parashape/@linespacing) div 200 div 2"/>pt</xsl:attribute>
         </xsl:when>
       </xsl:choose>
-    </xsl:element>
   </xsl:template>
 
   <xsl:template name="charshape-to-text-properties">

@@ -83,7 +83,7 @@
           <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
           <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
           <xsl:variable name="parashape" select="$parashapes[number($parashape-id)]"/>
-          <xsl:if test="$style-parashape-id != $parashape-id">
+          <xsl:if test="$style-parashape-id != $parashape-id or @new-page = '1'">
             <xsl:element name="style:style">
               <xsl:attribute name="style:family">paragraph</xsl:attribute>
               <xsl:attribute name="style:class">text</xsl:attribute>
@@ -93,9 +93,14 @@
                 <!-- 마스터 페이지의 번호는 적용될 문단 번호로 지정된다. -->
                 <xsl:attribute name="style:master-page-name">MasterPage-<xsl:value-of select="$paragraph-id"/></xsl:attribute>
               </xsl:for-each>
+              <xsl:element name="style:paragraph-properties">
               <xsl:call-template name="parashape-to-paragraph-properties">
                 <xsl:with-param name="parashape" select="$parashape"/>
               </xsl:call-template>
+                <xsl:if test="@new-page = '1'">
+                  <xsl:attribute name="fo:break-before">page</xsl:attribute>
+                </xsl:if>
+              </xsl:element>
             </xsl:element>
           </xsl:if>
 
@@ -149,7 +154,7 @@
         <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
         <xsl:variable name="parashape" select="$parashapes[number($parashape-id)]"/>
         <xsl:choose>
-          <xsl:when test="$style-parashape-id != $parashape-id">
+          <xsl:when test="$style-parashape-id != $parashape-id or @new-page='1'">
             <xsl:attribute name="text:style-name">Paragraph-<xsl:value-of select="@paragraph-id + 1"/></xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
