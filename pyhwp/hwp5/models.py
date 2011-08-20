@@ -1716,10 +1716,14 @@ def build_subtree(event_prefixed_items_iterator):
 
 def tree_events(rootitem, childs):
     yield STARTEVENT, rootitem
+    for k in tree_events_childs(childs):
+        yield k
+    yield ENDEVENT, rootitem
+
+def tree_events_childs(childs):
     for child in childs:
         for k in tree_events(*child):
             yield k
-    yield ENDEVENT, rootitem
 
 def pass3_field_start_end_pair(event_prefixed_cmas):
     stack = []
