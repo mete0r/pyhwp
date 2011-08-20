@@ -751,7 +751,7 @@ class Paragraph(BasicRecordModel):
 
     SplitFlags = Flags(BYTE,
             0, 'new_section',
-            1, 'multicolumn',
+            1, 'new_columnsdef',
             2, 'new_page',
             3, 'new_column',
             )
@@ -1207,10 +1207,12 @@ class ColumnsDef(Control):
     ''' 4.2.10.2. 단 정의 '''
     chid = CHID.COLD
 
+    Kind = Enum('normal', 'distribute', 'parallel')
+    Direction = Enum('l2r', 'r2l', 'both')
     Flags = Flags(UINT16,
-            0, 1, 'kind',
+            0, 1, Kind, 'kind',
             2, 9, 'count',
-            10, 11, 'direction',
+            10, 11, Direction, 'direction',
             12, 'same_widths',
             )
     def attributes(cls, context):
