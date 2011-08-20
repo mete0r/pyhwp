@@ -89,10 +89,10 @@
               <xsl:attribute name="style:class">text</xsl:attribute>
               <xsl:attribute name="style:name">Paragraph-<xsl:value-of select="@paragraph-id + 1" /></xsl:attribute>
               <xsl:attribute name="style:parent-style-name"><xsl:value-of select="$style/@local-name" /></xsl:attribute>
-              <xsl:for-each select="LineSeg/SectionDef/PageDef">
+              <xsl:if test="@new-section = '1'">
                 <!-- 마스터 페이지의 번호는 적용될 문단 번호로 지정된다. -->
                 <xsl:attribute name="style:master-page-name">MasterPage-<xsl:value-of select="$paragraph-id"/></xsl:attribute>
-              </xsl:for-each>
+              </xsl:if>
               <xsl:element name="style:paragraph-properties">
               <xsl:call-template name="parashape-to-paragraph-properties">
                 <xsl:with-param name="parashape" select="$parashape"/>
@@ -141,7 +141,7 @@
     </office:document-content>
   </xsl:template>
 
-  <xsl:template match="Section">
+  <xsl:template match="SectionDef">
     <xsl:apply-templates />
   </xsl:template>
 

@@ -169,6 +169,30 @@ def remove_redundant_facenames(event_prefixed_mac):
                 attributes['font_face'] = fface2
             yield event, item
 
+def wrap_section(event_prefixed_mac):
+    ''' make a Section '''
+    from .models import STARTEVENT, ENDEVENT, SectionDef
+    from .models import build_subtree, tree_events_childs
+    starting_buffer = list()
+    started = False
+    sectiondef = None
+    for event, item in event_prefixed_mac:
+        if started:
+            yield event, item
+        else:
+            model, attributes, context = item
+            if model is SectionDef and event is STARTEVENT:
+                sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
+                yield STARTEVENT, sectiondef
+                for k in tree_events_childs(sectiondef_childs):
+                    yield k
+                for evented_item in starting_buffer:
+                    yield evented_item
+                started = True
+            else:
+                starting_buffer.append((event, item))
+    yield ENDEVENT, sectiondef
+
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
 
@@ -184,7 +208,6 @@ def flatxml(hwpfile, logger, oformat):
     class HwpDoc(object): pass
     class DocInfo(object): pass
     class BodyText(object): pass
-    class Section(object): pass
     hwpdoc = HwpDoc, dict(version=hwpfile.fileheader.version), dict(context)
     docinfo = DocInfo, dict(), dict(context)
     docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
@@ -195,10 +218,9 @@ def flatxml(hwpfile, logger, oformat):
     bodytext = BodyText, dict(), dict(context)
     bodytext_events = []
     for idx in hwpfile.list_bodytext_sections():
-        section = Section, dict(), dict(context)
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
-        section_events = wrap_modelevents(section, section_events)
+        section_events = wrap_section(section_events)
         bodytext_events.append(section_events)
     bodytext_events = chain(*bodytext_events)
     bodytext_events = wrap_modelevents(bodytext, bodytext_events)
