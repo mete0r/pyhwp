@@ -49,7 +49,8 @@ class TableTest(TestCase):
         self.assertEquals(0, attributes['unknown1'])
         self.assertEquals(0x82a2311L, attributes['flags'])
         self.assertEquals(0, attributes['z_order'])
-        self.assertEquals((283, 283, 283, 283), attributes['margin'])
+        self.assertEquals(dict(left=283, right=283, top=283, bottom=283),
+                          attributes['margin'])
         self.assertEquals('tbl ' , attributes['chid'])
 
 class ListHeaderTest(TestCase):
@@ -76,7 +77,8 @@ class TableBodyTest(TestCase):
 
         event, (context, model, attributes, stream) = parse_models_pass1(self.ctx, [record]).next()
         self.assertEquals(TableBody, model)
-        self.assertEquals((141, 141, 141, 141), attributes['padding'])
+        self.assertEquals(dict(left=141, right=141, top=141, bottom=141),
+                          attributes['padding'])
         self.assertEquals(0x4000006L, attributes['flags'])
         self.assertEquals(2, attributes['cols'])
         self.assertEquals(2, attributes['rows'])
@@ -174,7 +176,8 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(1, attributes['rowspan'])
         self.assertEquals(0x4f03, attributes['width'])
         self.assertEquals(0x11a, attributes['height'])
-        self.assertEquals((141, 141, 141, 141), attributes['padding'])
+        self.assertEquals(dict(left=141, right=141, top=141, bottom=141),
+                          attributes['padding'])
         self.assertEquals(1, attributes['borderfill_id'],)
         self.assertEquals(0x4f03, attributes['unknown_width'])
 

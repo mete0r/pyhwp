@@ -521,7 +521,13 @@ class Control(AttributeDeterminedRecordModel):
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
 
 
-MarginPadding = ARRAY(HWPUNIT16, 4)
+class Spaces(Struct):
+    def attributes(context):
+        yield HWPUNIT16, 'left'
+        yield HWPUNIT16, 'right'
+        yield HWPUNIT16, 'top'
+        yield HWPUNIT16, 'bottom'
+    attributes = staticmethod(attributes)
 
 class CommonControl(Control):
     Flow = Enum(FLOAT=0, BLOCK=1, BACK=2, FRONT=3)
@@ -563,7 +569,7 @@ class CommonControl(Control):
         yield HWPUNIT, 'height',
         yield INT16, 'z_order',
         yield INT16, 'unknown1',
-        yield MarginPadding, 'margin',
+        yield Spaces, 'margin',
         yield UINT32, 'instance_id',
         if context['version'] > (5, 0, 0, 4):
             yield INT16, 'unknown2',
@@ -688,7 +694,7 @@ class PageBorderFill(BasicRecordModel):
         )
     def attributes(cls, context):
         yield cls.Flags, 'flags'
-        yield MarginPadding, 'margin'
+        yield Spaces, 'margin'
         yield UINT16, 'borderfill_id'
     attributes = classmethod(attributes)
 
@@ -715,7 +721,7 @@ class TableCell(ListHeader):
         yield UINT16, 'rowspan',
         yield HWPUNIT, 'width',
         yield HWPUNIT, 'height',
-        yield MarginPadding, 'padding',
+        yield Spaces, 'padding',
         yield UINT16, 'borderfill_id',
         yield HWPUNIT, 'unknown_width',
     attributes = staticmethod(attributes)
@@ -738,7 +744,7 @@ class TableBody(BasicRecordModel):
         nRows = yield UINT16, 'rows'
         yield UINT16, 'cols'
         yield HWPUNIT16, 'cellspacing'
-        yield MarginPadding, 'padding'
+        yield Spaces, 'padding'
         yield ARRAY(UINT16, nRows), 'rowcols'
         yield UINT16, 'borderfill_id'
         if context['version'] > (5, 0, 0, 6):
@@ -1043,7 +1049,7 @@ class ShapeComponent(RecordModel):
 
 class TextboxParagraphList(ListHeader):
     def attributes(context):
-        yield MarginPadding, 'padding'
+        yield Spaces, 'padding'
         yield HWPUNIT, 'maxwidth'
     attributes = staticmethod(attributes)
 
