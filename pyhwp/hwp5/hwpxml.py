@@ -4,6 +4,7 @@ from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .models import typed_model_attributes, COLORREF, BinStorageId
 from .models import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
 from .models import FaceName, CharShape, SectionDef, Paragraph, TableControl
+from .models import Spaces
 from itertools import chain
 
 def xmlattrval(value):
@@ -21,6 +22,9 @@ def expanded_xmlattribute((name, (t, value))):
         yield name, hex(int(value))
         for k, v in t.dictvalue(t(value)).iteritems():
             yield k, xmlattrval(v)
+    elif t is Spaces:
+        for pos in ('left', 'right', 'top', 'bottom'):
+            yield '-'.join([name, pos]), xmlattrval(value.get(pos))
     elif t is COLORREF:
         yield name, xmlattrval( t(value) )
     elif t is VERSION:
@@ -56,16 +60,20 @@ def xmlattributes_for_plainvalues(context, plainvalues):
 def separate_plainvalues(logging, typed_attributes):
     d = []
     p = dict()
-    for name, (t, value) in typed_attributes:
+    for named_item in typed_attributes:
+        name, item = named_item
+        t, value = item
         try:
-            if isinstance(value, dict):
+            if t is Spaces:
+                p[name] = item
+            elif isinstance(value, dict):
                 if not issubclass(t, Struct):
                     logging.warning('%s is not a Struct', name)
-                d.append( (name, (t, value)) )
+                d.append( named_item )
             elif isinstance(t, (ARRAY, N_ARRAY)) and issubclass(t.itemtype, Struct):
-                d.append( (name, (t, value)) )
+                d.append( named_item )
             else:
-                p[name] = (t, value)
+                p[name] = item
         except Exception, e:
             logging.error('%s', (name, t, value))
             logging.error('%s', t.__dict__)
