@@ -166,6 +166,58 @@
             </xsl:element>
           </xsl:element>
         </xsl:for-each>
+        <xsl:for-each select="HwpDoc/BodyText/SectionDef//GShapeObjectControl">
+          <xsl:element name="style:style">
+            <xsl:attribute name="style:name">DrawFrame-<xsl:value-of select="@gshape-id + 1"/></xsl:attribute>
+            <xsl:attribute name="style:family">graphic</xsl:attribute>
+            <!-- 15.27 Frame Formatting Properties -->
+            <xsl:element name="style:graphic-properties">
+              <!-- 15.27.4 Left and Right Margins -->
+              <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+              <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+              <!-- 15.27.5 Top and Bottom Margins -->
+              <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+              <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+              <xsl:choose>
+                <xsl:when test="@inline = 0">
+                  <!-- 15.27.21 Wrapping -->
+                  <xsl:choose>
+                    <xsl:when test="@flow = 'float'">
+                      <xsl:choose>
+                        <xsl:when test="@text-side = 'both'">
+                          <xsl:attribute name="style:wrap">parallel</xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="@text-side = 'left'">
+                          <xsl:attribute name="style:wrap">left</xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="@text-side = 'right'">
+                          <xsl:attribute name="style:wrap">right</xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="@text-side = 'larger'">
+                          <xsl:attribute name="style:wrap">biggest</xsl:attribute>
+                        </xsl:when>
+                      </xsl:choose>
+                    </xsl:when>
+                    <xsl:when test="@flow = 'block'">
+                      <xsl:attribute name="style:wrap">none</xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="@flow = 'back'">
+                      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="@flow = 'front'">
+                      <!-- 해당하는 것이 없음 : 가장 비슷한 run-through를 채택 -->
+                      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
+                    </xsl:when>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise> <!-- when @inline = 1 -->
+                  <xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
+                  <xsl:attribute name="style:vertical-pos">top</xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:element>
+          </xsl:element>
+        </xsl:for-each>
       </office:automatic-styles>
       <office:body>
         <office:text>
@@ -258,13 +310,38 @@
   </xsl:template>
 
   <xsl:template match="GShapeObjectControl">
+    <!-- 9.3 Frames -->
     <xsl:element name="draw:frame">
-        <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
-        <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
-        <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
-        <xsl:attribute name="svg:width"><xsl:value-of select="@width div 100"/>pt</xsl:attribute>
-        <xsl:attribute name="svg:height"><xsl:value-of select="@height div 100"/>pt</xsl:attribute>
+        <!-- common-draw-style-name-attlist -->
+        <xsl:attribute name="draw:style-name">DrawFrame-<xsl:value-of select="@gshape-id + 1"/></xsl:attribute>
+        <!-- common-draw-position-attlist -->
+        <xsl:if test="@inline = 0">
+          <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
+          <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
+        </xsl:if>
+        <!-- common-text-anchor-attlist -->
+        <xsl:choose>
+          <xsl:when test="@inline = 1">
+            <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <!-- common-draw-z-index-attlist -->
         <xsl:attribute name="draw:z-index"><xsl:value-of select="@z-order"/></xsl:attribute>
+        <!-- 15.27.1 Frame Widths -->
+        <xsl:choose>
+          <xsl:when test="@width-relto = 'absolute'">
+            <xsl:attribute name="svg:width"><xsl:value-of select="round(@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+          </xsl:when>
+        </xsl:choose>
+        <!-- 15.27.2 Frame Heights -->
+        <xsl:choose>
+          <xsl:when test="@height-relto = 'absolute'">
+            <xsl:attribute name="svg:height"><xsl:value-of select="round(@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+          </xsl:when>
+        </xsl:choose>
         <xsl:apply-templates />
     </xsl:element>
   </xsl:template>
