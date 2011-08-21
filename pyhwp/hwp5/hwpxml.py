@@ -169,8 +169,8 @@ def remove_redundant_facenames(event_prefixed_mac):
                 attributes['font_face'] = fface2
             yield event, item
 
-def wrap_section(event_prefixed_mac):
-    ''' make a Section '''
+def wrap_section(sect_id, event_prefixed_mac):
+    ''' wrap a section with SectionDef '''
     from .models import STARTEVENT, ENDEVENT, SectionDef
     from .models import build_subtree, tree_events_childs
     starting_buffer = list()
@@ -183,6 +183,7 @@ def wrap_section(event_prefixed_mac):
             model, attributes, context = item
             if model is SectionDef and event is STARTEVENT:
                 sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
+                attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
                 for k in tree_events_childs(sectiondef_childs):
                     yield k
@@ -220,7 +221,7 @@ def flatxml(hwpfile, logger, oformat):
     for idx in hwpfile.list_bodytext_sections():
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
-        section_events = wrap_section(section_events)
+        section_events = wrap_section(idx, section_events)
         bodytext_events.append(section_events)
     bodytext_events = chain(*bodytext_events)
     bodytext_events = wrap_modelevents(bodytext, bodytext_events)
