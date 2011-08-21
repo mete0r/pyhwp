@@ -2,6 +2,8 @@ from .filestructure import VERSION
 from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .models import typed_model_attributes, COLORREF, BinStorageId
+from .models import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
+from .models import SectionDef, Paragraph, FaceName, CharShape
 from itertools import chain
 
 def xmlattrval(value):
@@ -133,7 +135,6 @@ class XmlFormat(ModelEventHandler):
 
 def give_paragraphs_unique_id(event_prefixed_mac):
     paragraph_id = 0
-    from .models import Paragraph, STARTEVENT
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if event == STARTEVENT and model == Paragraph:
@@ -143,7 +144,6 @@ def give_paragraphs_unique_id(event_prefixed_mac):
 
 def remove_redundant_facenames(event_prefixed_mac):
     ''' remove redundant FaceNames '''
-    from .models import FaceName, CharShape, build_subtree, STARTEVENT
     facenames = []
     removed_facenames = dict()
     facename_idx = 0
@@ -171,8 +171,6 @@ def remove_redundant_facenames(event_prefixed_mac):
 
 def wrap_section(sect_id, event_prefixed_mac):
     ''' wrap a section with SectionDef '''
-    from .models import STARTEVENT, ENDEVENT, SectionDef
-    from .models import build_subtree, tree_events_childs
     starting_buffer = list()
     started = False
     sectiondef = None
