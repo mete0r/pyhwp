@@ -3,7 +3,7 @@ from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, 
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .models import typed_model_attributes, COLORREF, BinStorageId
 from .models import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
-from .models import SectionDef, Paragraph, FaceName, CharShape
+from .models import FaceName, CharShape, SectionDef, Paragraph, TableControl
 from itertools import chain
 
 def xmlattrval(value):
@@ -133,13 +133,18 @@ class XmlFormat(ModelEventHandler):
     def endDocument(self):
         self.xmlgen.endDocument()
 
-def give_paragraphs_unique_id(event_prefixed_mac):
+def give_elements_unique_id(event_prefixed_mac):
     paragraph_id = 0
+    table_id = 0
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
-        if event == STARTEVENT and model == Paragraph:
-            attributes['paragraph_id'] = paragraph_id
-            paragraph_id += 1
+        if event == STARTEVENT:
+            if model == Paragraph:
+                attributes['paragraph_id'] = paragraph_id
+                paragraph_id += 1
+            if model == TableControl:
+                attributes['table_id'] = table_id
+                table_id += 1
         yield event, item
 
 def remove_redundant_facenames(event_prefixed_mac):
@@ -228,7 +233,7 @@ def flatxml(hwpfile, logger, oformat):
     hwpdoc_events = wrap_modelevents(hwpdoc, hwpdoc_events)
 
     # for easy references in styles
-    hwpdoc_events = give_paragraphs_unique_id(hwpdoc_events)
+    hwpdoc_events = give_elements_unique_id(hwpdoc_events)
 
     oformat.startDocument()
     dispatch_model_events(oformat, hwpdoc_events)
