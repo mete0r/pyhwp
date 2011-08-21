@@ -75,7 +75,7 @@
       <office:scripts/>
       <office:font-face-decls/>
       <office:automatic-styles>
-        <xsl:for-each select="HwpDoc/BodyText//Paragraph">
+        <xsl:for-each select="HwpDoc/BodyText/SectionDef/Paragraph">
           <xsl:variable name="paragraph-id" select="@paragraph-id + 1"/>
           <xsl:variable name="style-id" select="@style-id + 1" />
           <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
@@ -90,8 +90,7 @@
               <xsl:attribute name="style:name">Paragraph-<xsl:value-of select="@paragraph-id + 1" /></xsl:attribute>
               <xsl:attribute name="style:parent-style-name"><xsl:value-of select="$style/@local-name" /></xsl:attribute>
               <xsl:if test="@new-section = '1'">
-                <!-- 마스터 페이지의 번호는 적용될 문단 번호로 지정된다. -->
-                <xsl:attribute name="style:master-page-name">MasterPage-<xsl:value-of select="$paragraph-id"/></xsl:attribute>
+                <xsl:attribute name="style:master-page-name">MasterPage-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
               </xsl:if>
               <xsl:element name="style:paragraph-properties">
               <xsl:call-template name="parashape-to-paragraph-properties">

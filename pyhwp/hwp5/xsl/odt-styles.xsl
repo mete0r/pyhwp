@@ -189,10 +189,9 @@
         </xsl:for-each>
       </office:styles>
       <office:automatic-styles>
-          <xsl:for-each select="/HwpDoc/BodyText/SectionDef/PageDef">
+        <xsl:for-each select="/HwpDoc/BodyText/SectionDef/PageDef">
           <xsl:element name="style:page-layout">
-            <xsl:variable name="paragraph-id" select="../Paragraph[1]/@paragraph-id + 1"/>
-            <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="$paragraph-id"/></xsl:attribute>
+            <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
             <xsl:element name="style:page-layout-properties">
               <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
               <xsl:choose>
@@ -218,11 +217,9 @@
       </office:automatic-styles>
       <office:master-styles>
         <xsl:for-each select="/HwpDoc/BodyText/SectionDef/PageDef">
-          <xsl:variable name="paragraph-id" select="../Paragraph[1]/@paragraph-id + 1"/>
           <xsl:element name="style:master-page">
-            <!-- 마스터 페이지의 번호는 적용될 문단 번호로 지정된다. -->
-            <xsl:attribute name="style:name">MasterPage-<xsl:value-of select="$paragraph-id"/></xsl:attribute>
-            <xsl:attribute name="style:page-layout-name">PageLayout-<xsl:value-of select="$paragraph-id"/></xsl:attribute>
+            <xsl:attribute name="style:name">MasterPage-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
+            <xsl:attribute name="style:page-layout-name">PageLayout-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
           </xsl:element>
         </xsl:for-each>
       </office:master-styles>
