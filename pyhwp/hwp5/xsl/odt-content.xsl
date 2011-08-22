@@ -310,6 +310,17 @@
   </xsl:template>
 
   <xsl:template match="GShapeObjectControl">
+    <xsl:choose>
+      <xsl:when test="ShapeComponent/@chid = '$pic'">
+        <xsl:apply-templates select="." mode="draw-frame"/>
+      </xsl:when>
+      <xsl:when test="ShapeComponent/@chid = '$rec'">
+        <xsl:apply-templates select="ShapeComponent/ShapeRectangle" mode="in-gso"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="GShapeObjectControl" mode="draw-frame">
     <!-- 9.3 Frames -->
     <xsl:element name="draw:frame">
         <!-- common-draw-style-name-attlist -->
@@ -358,4 +369,30 @@
         </xsl:choose>
     </xsl:element>
   </xsl:template>
+
+  <xsl:template match="ShapeComponent/ShapeRectangle" mode="in-gso">
+    <xsl:variable name="width" select="Array/Coord[2]/@x - Array/Coord[1]/@x"/>
+    <xsl:variable name="height" select="Array/Coord[3]/@y - Array/Coord[2]/@y"/>
+    <xsl:element name="draw:rect">
+      <xsl:apply-templates select=".." mode="draw-object-properties"/>
+      <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:for-each select="../TextboxParagraphList">
+        <xsl:apply-templates />
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="GShapeObjectControl/ShapeComponent" mode="draw-object-properties">
+    <xsl:variable name="gso" select=".."/>
+    <xsl:variable name="x" select="$gso/@x + @x-in-group"/>
+    <xsl:variable name="y" select="$gso/@y + @y-in-group"/>
+
+    <!-- TODO -->
+    <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+
+    <xsl:attribute name="svg:x"><xsl:value-of select="round($x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:attribute name="svg:y"><xsl:value-of select="round($y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+  </xsl:template>
+
 </xsl:stylesheet>
