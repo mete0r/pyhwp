@@ -222,10 +222,11 @@ class FillNone(Fill):
 
 
 class FillColorPattern(Fill):
+    ''' 표 23 채우기 정보 '''
     def attributes(context):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
-        yield UINT32, 'pattern_type',
+        yield INT32, 'pattern_type',
         yield UINT32, 'unknown',
     attributes = staticmethod(attributes)
 
