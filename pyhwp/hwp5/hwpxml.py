@@ -4,7 +4,7 @@ from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .models import typed_model_attributes, COLORREF, BinStorageId
 from .models import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
 from .models import FaceName, CharShape, SectionDef, Paragraph
-from .models import TableControl, GShapeObjectControl
+from .models import TableControl, GShapeObjectControl, ShapeComponent
 from .models import Spaces
 from itertools import chain
 
@@ -146,6 +146,7 @@ def give_elements_unique_id(event_prefixed_mac):
     paragraph_id = 0
     table_id = 0
     gshape_id = 0
+    shape_id = 0
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if event == STARTEVENT:
@@ -158,6 +159,9 @@ def give_elements_unique_id(event_prefixed_mac):
             elif model == GShapeObjectControl:
                 attributes['gshape_id'] = gshape_id
                 gshape_id += 1
+            elif model == ShapeComponent:
+                attributes['shape_id'] = shape_id
+                shape_id += 1
         yield event, item
 
 def remove_redundant_facenames(event_prefixed_mac):
