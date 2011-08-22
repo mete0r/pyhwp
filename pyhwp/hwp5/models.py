@@ -1008,7 +1008,13 @@ class ScaleRotationMatrix(Struct):
     attributes = staticmethod(attributes)
 
 class ShapeComponent(RecordModel):
+    ''' 4.2.9.2 그리기 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT
+    FillFlags = Flags(UINT16,
+            8, 'fill_colorpattern',
+            9, 'fill_image',
+            10, 'fill_gradation',
+            )
     Flags = Flags(UINT32,
             0, 'flip'
             )
@@ -1031,6 +1037,15 @@ class ShapeComponent(RecordModel):
         yield ARRAY(ScaleRotationMatrix, nMatrices), 'scalerotations'
         if chid == CHID.CONTAINER:
             yield N_ARRAY(WORD, CHID), 'controls',
+        elif chid == CHID.RECT:
+            yield BorderLine, 'border'
+            fill_flags = yield cls.FillFlags, 'fill_flags'
+            yield UINT16, 'unknown'
+            yield UINT8, 'unknown1'
+            if fill_flags.fill_colorpattern:
+                yield FillColorPattern, 'colorpattern'
+            if fill_flags.fill_gradation:
+                yield FillGradation, 'gradation'
     attributes = classmethod(attributes)
 
     def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
