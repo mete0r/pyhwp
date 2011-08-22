@@ -218,6 +218,9 @@
             </xsl:element>
           </xsl:element>
         </xsl:for-each>
+        <xsl:for-each select="HwpDoc/BodyText/SectionDef//ShapeComponent">
+          <xsl:apply-templates select="ShapeRectangle" mode="style"/>
+        </xsl:for-each>
       </office:automatic-styles>
       <office:body>
         <office:text>
@@ -373,10 +376,61 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="ShapeComponent/ShapeRectangle" mode="style">
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="style:family">graphic</xsl:attribute>
+      <xsl:element name="style:graphic-properties">
+        <xsl:choose>
+          <xsl:when test="../@fill-colorpattern = 1">
+            <!--
+            <xsl:choose>
+              <xsl:when test="../FillColorPattern/@pattern-type = 'horizontal'"/>
+              <xsl:when test="../FillColorPattern/@pattern-type = 'vertical'"/>
+              <xsl:when test="../FillColorPattern/@pattern-type = 'backslash'"/>
+              <xsl:when test="../FillColorPattern/@pattern-type = 'slash'"/>
+              <xsl:when test="../FillColorPattern/@pattern-type = 'grid'"/>
+              <xsl:when test="../FillColorPattern/@pattern-type = 'cross'"/>
+              <xsl:otherwise/>
+            </xsl:choose>
+            -->
+            <xsl:attribute name="draw:fill">solid</xsl:attribute>
+            <xsl:attribute name="draw:fill-color"><xsl:value-of select="../FillColorPattern/@background-color"/></xsl:attribute>
+          </xsl:when>
+          <!--
+          <xsl:when test="../@fill-gradation = 1">
+            <xsl:attribute name="draw:fill">gradient</xsl:attribute>
+          </xsl:when>
+          -->
+          <xsl:otherwise>
+            <xsl:attribute name="draw:fill">none</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="../BorderLine/@stroke = 'none'">
+            <xsl:attribute name="draw:stroke">none</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="../BorderLine/@stroke = 'solid'">
+            <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+          </xsl:when>
+          <!--
+          <xsl:when test="../BorderLine/@stroke = 'dashed'">
+            <xsl:attribute name="draw:stroke">dashed</xsl:attribute>
+          </xsl:when>
+          -->
+          <xsl:otherwise>
+            <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="ShapeComponent/ShapeRectangle" mode="in-gso">
     <xsl:variable name="width" select="Array/Coord[2]/@x - Array/Coord[1]/@x"/>
     <xsl:variable name="height" select="Array/Coord[3]/@y - Array/Coord[2]/@y"/>
     <xsl:element name="draw:rect">
+      <xsl:attribute name="draw:style-name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
       <xsl:apply-templates select=".." mode="draw-object-properties"/>
       <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
