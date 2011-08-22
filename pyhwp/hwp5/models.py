@@ -1054,7 +1054,11 @@ class TextboxParagraphList(ListHeader):
     attributes = staticmethod(attributes)
 
 
-Coord = ARRAY(SHWPUNIT, 2)
+class Coord(Struct):
+    def attributes(context):
+        yield SHWPUNIT, 'x'
+        yield SHWPUNIT, 'y'
+    attributes = staticmethod(attributes)
 
 class ShapeLine(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
