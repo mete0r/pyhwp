@@ -101,10 +101,10 @@ def startelement(context, xmlgen, (model, attributes)):
             for x in element(context, xmlgen, (_type, _value)): yield x
         else:
             assert isinstance(_value, (tuple, list)) and issubclass(_type.itemtype, Struct), (_value, _type)
-            yield xmlgen.startElement, 'ListAttribute', {'attribute-name':_name}
+            yield xmlgen.startElement, 'Array', {'name':_name}
             for _itemvalue in _value:
                 for x in element(context, xmlgen, (_type.itemtype, _itemvalue)): yield x
-            yield xmlgen.endElement, 'ListAttribute'
+            yield xmlgen.endElement, 'Array'
 
 def element(context, xmlgen, (model, attributes)):
     for x in startelement(context, xmlgen, (model, attributes)): yield x
