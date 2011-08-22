@@ -317,6 +317,9 @@
       <xsl:when test="ShapeComponent/@chid = '$rec'">
         <xsl:apply-templates select="ShapeComponent/ShapeRectangle" mode="in-gso"/>
       </xsl:when>
+      <xsl:when test="ShapeComponent/@chid = '$lin'">
+        <xsl:apply-templates select="ShapeComponent/ShapeLine" mode="in-gso"/>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
@@ -380,6 +383,20 @@
       <xsl:for-each select="../TextboxParagraphList">
         <xsl:apply-templates />
       </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ShapeComponent/ShapeLine" mode="in-gso">
+    <xsl:variable name="gso" select="../.."/>
+    <xsl:variable name="x1" select="$gso/@x + Array/Coord[1]/@x"/>
+    <xsl:variable name="y1" select="$gso/@y + Array/Coord[1]/@y"/>
+    <xsl:variable name="x2" select="$gso/@x + Array/Coord[2]/@x"/>
+    <xsl:variable name="y2" select="$gso/@y + Array/Coord[2]/@y"/>
+    <xsl:element name="draw:line">
+      <xsl:attribute name="svg:x1"><xsl:value-of select="round($x1 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:y1"><xsl:value-of select="round($y1 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:x2"><xsl:value-of select="round($x2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:y2"><xsl:value-of select="round($y2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
     </xsl:element>
   </xsl:template>
 
