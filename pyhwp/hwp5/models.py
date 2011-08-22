@@ -223,12 +223,15 @@ class FillNone(Fill):
 
 class FillColorPattern(Fill):
     ''' 표 23 채우기 정보 '''
-    def attributes(context):
+    PatternTypeEnum = Enum(NONE=255, HORIZONTAL=0, VERTICAL=1, BACKSLASH=2, SLASH=3, GRID=4, CROSS=5)
+    PatternTypeFlags = Flags(INT32,
+            0, 7, PatternTypeEnum, 'pattern_type')
+    def attributes(cls, context):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
-        yield INT32, 'pattern_type',
+        yield cls.PatternTypeFlags, 'pattern_type_flags',
         yield UINT32, 'unknown',
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class FillGradation(Fill):
