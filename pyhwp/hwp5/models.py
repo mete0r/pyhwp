@@ -1154,11 +1154,12 @@ class PictureInfo(Struct):
 class BorderLine(Struct):
     ''' 표 81. 테두리 선 정보 '''
 
+    StrokeType = Enum('none', 'solid', 'dashed', 'dotted') # TODO: more types
     LineEnd = Enum('round', 'flat')
     ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect', 'diamondfilled', 'disc', 'rectfilled')
     ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal', 'abitlarge', 'large', 'larger', 'largest')
     Flags = Flags(UINT32, 
-            0, 5, 'type',
+            0, 5, StrokeType, 'stroke',
             6, 9, LineEnd, 'line_end',
             10, 15, ArrowShape, 'arrow_start',
             16, 21, ArrowShape, 'arrow_end',
