@@ -29,7 +29,8 @@ def hwp5xml(f, hwp5_filename):
     import logging
     from .filestructure import open
     from ._scriptutils import open_or_exit
-    from .xmlmodel import flatxml, XmlFormat
+    from .xmlmodel import flatxml
+    from .xmlformat import XmlFormat
     hwpfile = open_or_exit(open, hwp5_filename)
     flatxml(hwpfile, logging, XmlFormat(f))
 
