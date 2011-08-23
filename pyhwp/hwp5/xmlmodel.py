@@ -119,11 +119,11 @@ class XmlFormat(ModelEventHandler):
     def startDocument(self):
         self.xmlgen.startDocument()
     def startModel(self, model, attributes, **context):
-        context['logging'].debug('hwpxml.XmlFormat: model: %s, %s', model.__name__, attributes)
-        context['logging'].debug('hwpxml.XmlFormat: context: %s', context)
+        context['logging'].debug('xmlmodel.XmlFormat: model: %s, %s', model.__name__, attributes)
+        context['logging'].debug('xmlmodel.XmlFormat: context: %s', context)
         recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
         hwptag = context.get('hwptag', '')
-        context['logging'].info('hwpxml.XmlFormat: rec:%d %s', recordid[2], hwptag)
+        context['logging'].info('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
         if model is Text:
             text = attributes.pop('text')
         else:

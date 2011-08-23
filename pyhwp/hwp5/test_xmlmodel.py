@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from .dataio import Struct
 from .dataio import INT32, BSTR
-from .hwpxml import element
+from .xmlmodel import element
 from xml.sax.saxutils import XMLGenerator
 import sys, logging
 
@@ -42,7 +42,7 @@ class TestHello(TestCase):
         self.assertEquals(expected, result)
 
     def test_xmlattr_uniqnames(self):
-        from .hwpxml import xmlattr_uniqnames
+        from .xmlmodel import xmlattr_uniqnames
         a = [('a', 1), ('b', 2)]
         self.assertEquals([('a', 1), ('b', 2)], list(xmlattr_uniqnames(a)))
 
