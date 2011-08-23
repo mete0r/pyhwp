@@ -1603,15 +1603,10 @@ def parse_models_pass2(event_prefixed_cmas):
     event_prefixed_cmas = prefix_event(level_prefixed_cmas)
     return event_prefixed_cmas
 
-def parse_models_pass3(event_prefixed_cmas):
-    return event_prefixed_cmas
-
 def parse_models(context, records, passes=3):
     result = parse_models_pass1(context, records)
     if passes >= 2:
         result = parse_models_pass2(result)
-    if passes >= 3:
-        result = parse_models_pass3(result)
     for event, (context, model, attributes, stream) in result:
         if stream is not None:
             context['unparsed'] = stream.read()
@@ -1652,7 +1647,7 @@ def main():
     from .recordstream import read_records
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
-    op.add_option('--pass', dest='passes', type='int', default=2, help='parsing pass: 1 <= PASSES <= 3 [default: 2]')
+    op.add_option('--pass', dest='passes', type='int', default=2, help='parsing pass: 1, 2 [default: 2]')
     op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
 
     options, args = op.parse_args()
