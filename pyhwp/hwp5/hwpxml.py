@@ -1,11 +1,11 @@
 from .filestructure import VERSION
 from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
-from .models import typed_model_attributes, COLORREF, BinStorageId
-from .models import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
-from .models import FaceName, CharShape, SectionDef, Paragraph
-from .models import TableControl, GShapeObjectControl, ShapeComponent
-from .models import Spaces
+from .binmodel import typed_model_attributes, COLORREF, BinStorageId
+from .binmodel import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
+from .binmodel import FaceName, CharShape, SectionDef, Paragraph
+from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
+from .binmodel import Spaces
 from itertools import chain
 
 def xmlattrval(value):
@@ -111,7 +111,7 @@ def element(context, xmlgen, (model, attributes)):
     yield xmlgen.endElement, model.__name__
 
 from xml.sax.saxutils import XMLGenerator
-from .models import ModelEventHandler, Text
+from .binmodel import ModelEventHandler, Text
 from .dataio import hexdump
 class XmlFormat(ModelEventHandler):
     def __init__(self, out):
@@ -221,9 +221,9 @@ def flatxml(hwpfile, logger, oformat):
     oformat - output formatter
     '''
     from .recordstream import read_records
-    from .models import parse_models, wrap_modelevents
-    from .models import create_context
-    from .models import dispatch_model_events
+    from .binmodel import parse_models, wrap_modelevents
+    from .binmodel import create_context
+    from .binmodel import dispatch_model_events
     context = create_context(hwpfile, logging=logger)
 
     class HwpDoc(object): pass

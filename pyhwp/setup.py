@@ -22,7 +22,7 @@ setup(
             'console_scripts': [
                 'hwp5file = hwp5.filestructure:main',
                 'hwp5rec = hwp5.recordstream:main',
-                'hwp5bin = hwp5.models:main',
+                'hwp5bin = hwp5.binmodel:main',
                 'hwp5xml = hwp5.hwpxml:main',
                 'rawzlib = hwp5.zlib_raw_codec:main',
                 'hwp5odt = hwp5.hwp5odt:main',
