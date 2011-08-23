@@ -192,6 +192,111 @@ def remove_redundant_facenames(event_prefixed_mac):
                 attributes['font_face'] = fface2
             yield event, item
 
+def make_ranged_shapes(shapes):
+    last = None
+    for item in shapes:
+        if last is not None:
+            yield (last[0], item[0]), last[1]
+        last = item
+    yield (item[0], 0x7fffffff), item[1]
+
+def split_and_shape(chunks, ranged_shapes):
+    (chunk_start, chunk_end), chunk_attr, chunk = chunks.next()
+    for (shape_start, shape_end), shape in ranged_shapes:
+        while True:
+            # case 0: chunk has left intersection
+            #        vvvv
+            #      ----...
+            if chunk_start < shape_start:
+                assert False
+
+            # case 1: chunk is far right: get next shape
+            #         vvvv
+            #             ----
+            if shape_end <= chunk_start:        # (1)
+                break
+
+            assert chunk_start < shape_end      # by (1)
+            assert shape_start <= chunk_start
+            # case 2: chunk has left intersection
+            #         vvvv
+            #         ..----
+            if shape_end < chunk_end:           # (2)
+                prev = (chunk_start, shape_end), chunk[:shape_end-chunk_start]
+                next = (shape_end, chunk_end), chunk[shape_end-chunk_start:]
+                (chunk_start, chunk_end), chunk = prev
+            else:
+                next = None
+
+            assert chunk_end <= shape_end       # by (2)
+            yield (chunk_start, chunk_end), (shape, chunk_attr), chunk
+
+            if next is not None:
+                (chunk_start, chunk_end), chunk = next
+                continue
+
+            (chunk_start, chunk_end), chunk_attr, chunk = chunks.next()
+
+def line_segmented(chunks, ranged_linesegs):
+    prev_lineseg = None
+    line = None
+    for (chunk_start, chunk_end), (lineseg, chunk_attr), chunk in split_and_shape(chunks, ranged_linesegs):
+        if lineseg is not prev_lineseg:
+            if line is not None:
+                yield prev_lineseg, line
+            line = []
+        line.append( ((chunk_start, chunk_end), chunk_attr, chunk) )
+        prev_lineseg = lineseg
+    if line is not None:
+        yield prev_lineseg, line
+
+def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
+    ''' lineseg/charshaped text chunks '''
+    from .binmodel import ParaText, ParaLineSeg, ParaCharShape
+    from .binmodel import ControlChar
+    stack = [] # stack of ancestor Paragraphs
+    for event, item in event_prefixed_mac:
+        model, attributes, context = item
+        if model is Paragraph:
+            if event == STARTEVENT:
+                stack.append(dict())
+                yield STARTEVENT, item
+            else:
+                paratext = stack[-1].get(ParaText)
+                paracharshape = stack[-1].get(ParaCharShape)
+                paralineseg = stack[-1].get(ParaLineSeg)
+                if paratext is None:
+                    paratext = ParaText, dict(chunks=[((0,0),'')]), dict(context)
+                paratext_model, paratext_attributes, paratext_context = paratext
+                chunks = ((range, None, chunk) for range, chunk in paratext_attributes['chunks'])
+                charshapes = paracharshape[1]['charshapes']
+                shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
+                linesegs = ((lineseg['chpos'], lineseg) for lineseg in paralineseg[1]['linesegs'])
+                lined_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
+                for lineseg, line in lined_chunks:
+                    yield STARTEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
+                    for (startpos, endpos), (shape, none), chunk in line:
+                        if isinstance(chunk, basestring):
+                            textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
+                            yield STARTEVENT, textitem
+                            yield ENDEVENT, textitem
+                        elif isinstance(chunk, ControlChar):
+                            chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
+                            if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
+                                chunk_attributes['char'] = unichr(chunk.code)
+                            ctrlch = (ControlChar, chunk_attributes, paratext_context)
+                            yield STARTEVENT, ctrlch
+                            yield ENDEVENT, ctrlch
+                    yield ENDEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
+                yield ENDEVENT, (model, attributes, context)
+                stack.pop()
+        #elif model in (ParaText, ParaCharShape):
+        elif model in (ParaText, ParaCharShape, ParaLineSeg):
+            if event == STARTEVENT:
+                stack[-1][model] = model, attributes, context
+        else:
+            yield event, (model, attributes, context)
+
 def wrap_section(sect_id, event_prefixed_mac):
     ''' wrap a section with SectionDef '''
     starting_buffer = list()
@@ -373,6 +478,7 @@ def flatxml(hwpfile, logger, oformat):
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
 
+        section_events = make_texts_linesegmented_and_charshaped(section_events)
         section_events = make_extended_controls_inline(section_events)
         section_events = match_field_start_end(section_events)
         section_events = make_paragraphs_children_of_listheader(section_events)
