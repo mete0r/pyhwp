@@ -3,7 +3,7 @@ from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, 
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .binmodel import typed_model_attributes, COLORREF, BinStorageId
 from .binmodel import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
-from .binmodel import FaceName, CharShape, SectionDef, Paragraph
+from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
 from .binmodel import Spaces
@@ -215,6 +215,31 @@ def wrap_section(sect_id, event_prefixed_mac):
                 starting_buffer.append((event, item))
     yield ENDEVENT, sectiondef
 
+def make_paragraphs_children_of_listheader(event_prefixed_mac, parentmodel=ListHeader, childmodel=Paragraph):
+    ''' make paragraphs children of the listheader '''
+    stack = []
+    level = 0
+    for event, item in event_prefixed_mac:
+        model, attributes, context = item
+        if event is STARTEVENT:
+            level += 1
+        if len(stack) > 0 and ((event is STARTEVENT and stack[-1][0] == level and model is not childmodel) or
+                               (event is ENDEVENT and stack[-1][0]-1 == level)):
+            lh_level, lh_item = stack.pop()
+            yield ENDEVENT, lh_item
+
+        if issubclass(model, parentmodel):
+            if event is STARTEVENT:
+                stack.append((level, item))
+                yield event, item
+            else:
+                pass
+        else:
+            yield event, item
+
+        if event is ENDEVENT:
+            level -= 1
+
 class TableRow: pass
 def restructure_tablebody(event_prefixed_mac):
     from collections import deque
@@ -280,7 +305,11 @@ def flatxml(hwpfile, logger, oformat):
     for idx in hwpfile.list_bodytext_sections():
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
+
+        section_events = make_paragraphs_children_of_listheader(section_events)
+        section_events = make_paragraphs_children_of_listheader(section_events, TableBody, TableCell)
         section_events = restructure_tablebody(section_events)
+
         section_events = wrap_section(idx, section_events)
         bodytext_events.append(section_events)
     bodytext_events = chain(*bodytext_events)

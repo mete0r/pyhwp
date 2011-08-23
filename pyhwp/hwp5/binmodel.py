@@ -1771,37 +1771,10 @@ def pass3_field_start_end_pair(event_prefixed_cmas):
         else:
             yield event, cmas
 
-def pass3_listheader_paragraphs(event_prefixed_cmas, parentmodel=ListHeader, childmodel=Paragraph):
-    ''' make paragraphs children of the listheader '''
-    stack = []
-    level = 0
-    for event, cmas in event_prefixed_cmas:
-        (context, model, attributes, stream) = cmas
-        if event is STARTEVENT:
-            level += 1
-        if len(stack) > 0 and ((event is STARTEVENT and stack[-1][0] == level and model is not childmodel) or
-                               (event is ENDEVENT and stack[-1][0]-1 == level)):
-            lh_level, lh_cmas = stack.pop()
-            yield ENDEVENT, lh_cmas
-
-        if issubclass(model, parentmodel):
-            if event is STARTEVENT:
-                stack.append((level, cmas))
-                yield event, cmas
-            else:
-                pass
-        else:
-            yield event, cmas
-
-        if event is ENDEVENT:
-            level -= 1
-
 def parse_models_pass3(event_prefixed_cmas):
     event_prefixed_cmas = pass3_lineseg_charshaped_texts(event_prefixed_cmas)
     event_prefixed_cmas = pass3_inline_extended_controls(event_prefixed_cmas)
     event_prefixed_cmas = pass3_field_start_end_pair(event_prefixed_cmas)
-    event_prefixed_cmas = pass3_listheader_paragraphs(event_prefixed_cmas)
-    event_prefixed_cmas = pass3_listheader_paragraphs(event_prefixed_cmas, TableBody, TableCell)
     return event_prefixed_cmas
 
 def parse_models(context, records, passes=3):
