@@ -5,6 +5,7 @@ from .binmodel import typed_model_attributes, COLORREF, BinStorageId
 from .binmodel import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
 from .binmodel import FaceName, CharShape, SectionDef, Paragraph
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
+from .binmodel import TableBody, TableCell
 from .binmodel import Spaces
 from itertools import chain
 
@@ -214,6 +215,44 @@ def wrap_section(sect_id, event_prefixed_mac):
                 starting_buffer.append((event, item))
     yield ENDEVENT, sectiondef
 
+class TableRow: pass
+def restructure_tablebody(event_prefixed_mac):
+    from collections import deque
+    stack = []
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if model is TableBody:
+            if event is STARTEVENT:
+                rowcols = deque()
+                for cols in attributes.pop('rowcols'):
+                    if cols == 1:
+                        rowcols.append(3)
+                    else:
+                        rowcols.append(1)
+                        for i in range(0, cols-2):
+                            rowcols.append(0)
+                        rowcols.append(2)
+                stack.append((context, rowcols))
+                yield event, item
+            else:
+                yield event, item
+                stack.pop()
+        elif model is TableCell:
+            table_context, rowcols = stack[-1]
+            row_context = dict(table_context)
+            if event is STARTEVENT:
+                how = rowcols[0]
+                if how & 1:
+                    yield STARTEVENT, (TableRow, dict(), row_context)
+            yield event, item
+            if event is ENDEVENT:
+                how = rowcols.popleft()
+                if how & 2:
+                    yield ENDEVENT, (TableRow, dict(), row_context)
+        else:
+            yield event, item
+
+
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
 
@@ -241,6 +280,7 @@ def flatxml(hwpfile, logger, oformat):
     for idx in hwpfile.list_bodytext_sections():
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
+        section_events = restructure_tablebody(section_events)
         section_events = wrap_section(idx, section_events)
         bodytext_events.append(section_events)
     bodytext_events = chain(*bodytext_events)

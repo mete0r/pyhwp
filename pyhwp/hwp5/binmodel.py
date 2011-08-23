@@ -1796,50 +1796,12 @@ def pass3_listheader_paragraphs(event_prefixed_cmas, parentmodel=ListHeader, chi
         if event is ENDEVENT:
             level -= 1
 
-def pass3_tablebody(event_prefixed_cmas):
-    from collections import deque
-    class TableRow: pass
-    stack = []
-    for event, item in event_prefixed_cmas:
-        (context, model, attributes, stream) = item
-        if model is TableBody:
-            if event is STARTEVENT:
-                rowcols = deque()
-                for cols in attributes.pop('rowcols'):
-                    if cols == 1:
-                        rowcols.append(3)
-                    else:
-                        rowcols.append(1)
-                        for i in range(0, cols-2):
-                            rowcols.append(0)
-                        rowcols.append(2)
-                stack.append((context, rowcols))
-                yield event, item
-            else:
-                yield event, item
-                stack.pop()
-        elif model is TableCell:
-            table_context, rowcols = stack[-1]
-            row_context = dict(table_context)
-            if event is STARTEVENT:
-                how = rowcols[0]
-                if how & 1:
-                    yield STARTEVENT, (row_context, TableRow, dict(), None)
-            yield event, item
-            if event is ENDEVENT:
-                how = rowcols.popleft()
-                if how & 2:
-                    yield ENDEVENT, (row_context, TableRow, dict(), None)
-        else:
-            yield event, item
-
 def parse_models_pass3(event_prefixed_cmas):
     event_prefixed_cmas = pass3_lineseg_charshaped_texts(event_prefixed_cmas)
     event_prefixed_cmas = pass3_inline_extended_controls(event_prefixed_cmas)
     event_prefixed_cmas = pass3_field_start_end_pair(event_prefixed_cmas)
     event_prefixed_cmas = pass3_listheader_paragraphs(event_prefixed_cmas)
     event_prefixed_cmas = pass3_listheader_paragraphs(event_prefixed_cmas, TableBody, TableCell)
-    event_prefixed_cmas = pass3_tablebody(event_prefixed_cmas)
     return event_prefixed_cmas
 
 def parse_models(context, records, passes=3):
