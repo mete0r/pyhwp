@@ -1755,26 +1755,9 @@ def tree_events_childs(childs):
         for k in tree_events(*child):
             yield k
 
-def pass3_field_start_end_pair(event_prefixed_cmas):
-    stack = []
-    for event, cmas in event_prefixed_cmas:
-        (context, model, attributes, stream) = cmas
-        if issubclass(model, Field):
-            if event is STARTEVENT:
-                stack.append(cmas)
-                yield event, cmas
-            else:
-                pass
-        elif model is ControlChar and attributes['name'] == 'FIELD_END':
-            if event is ENDEVENT:
-                yield event, stack.pop()
-        else:
-            yield event, cmas
-
 def parse_models_pass3(event_prefixed_cmas):
     event_prefixed_cmas = pass3_lineseg_charshaped_texts(event_prefixed_cmas)
     event_prefixed_cmas = pass3_inline_extended_controls(event_prefixed_cmas)
-    event_prefixed_cmas = pass3_field_start_end_pair(event_prefixed_cmas)
     return event_prefixed_cmas
 
 def parse_models(context, records, passes=3):

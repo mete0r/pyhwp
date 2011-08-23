@@ -240,6 +240,23 @@ def make_paragraphs_children_of_listheader(event_prefixed_mac, parentmodel=ListH
         if event is ENDEVENT:
             level -= 1
 
+def match_field_start_end(event_prefixed_mac):
+    from .binmodel import Field, ControlChar
+    stack = []
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if issubclass(model, Field):
+            if event is STARTEVENT:
+                stack.append(item)
+                yield event, item
+            else:
+                pass
+        elif model is ControlChar and attributes['name'] == 'FIELD_END':
+            if event is ENDEVENT:
+                yield event, stack.pop()
+        else:
+            yield event, item
+
 class TableRow: pass
 def restructure_tablebody(event_prefixed_mac):
     from collections import deque
@@ -306,6 +323,7 @@ def flatxml(hwpfile, logger, oformat):
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
 
+        section_events = match_field_start_end(section_events)
         section_events = make_paragraphs_children_of_listheader(section_events)
         section_events = make_paragraphs_children_of_listheader(section_events, TableBody, TableCell)
         section_events = restructure_tablebody(section_events)
