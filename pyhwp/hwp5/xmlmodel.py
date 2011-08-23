@@ -2,7 +2,7 @@ from .filestructure import VERSION
 from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT, hwp2pt, hwp2mm, hwp2inch
 from .binmodel import typed_model_attributes, COLORREF, BinStorageId
-from .binmodel import STARTEVENT, ENDEVENT, build_subtree, tree_events_childs
+from .binmodel import STARTEVENT, ENDEVENT
 from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
@@ -215,6 +215,56 @@ def wrap_section(sect_id, event_prefixed_mac):
                 starting_buffer.append((event, item))
     yield ENDEVENT, sectiondef
 
+def build_subtree(event_prefixed_items_iterator):
+    childs = []
+    for event, item in event_prefixed_items_iterator:
+        if event == STARTEVENT:
+            childs.append(build_subtree(event_prefixed_items_iterator))
+        elif event == ENDEVENT:
+            return item, childs
+
+def tree_events(rootitem, childs):
+    yield STARTEVENT, rootitem
+    for k in tree_events_childs(childs):
+        yield k
+    yield ENDEVENT, rootitem
+
+def tree_events_childs(childs):
+    for child in childs:
+        for k in tree_events(*child):
+            yield k
+
+def make_extended_controls_inline(event_prefixed_mac, stack=None):
+    ''' inline extended-controls into paragraph texts '''
+    from .binmodel import ControlChar, Control
+    if stack is None:
+        stack = [] # stack of ancestor Paragraphs
+    for event, item in event_prefixed_mac:
+        model, attributes, context = item
+        if model is Paragraph:
+            if event == STARTEVENT:
+                stack.append(dict())
+                yield STARTEVENT, item
+            else:
+                yield ENDEVENT, item
+                stack.pop()
+        elif model is ControlChar:
+            if event is STARTEVENT:
+                if attributes['kind'] is ControlChar.EXTENDED:
+                    control_subtree = stack[-1].get(Control).pop(0)
+                    tev = tree_events(*control_subtree)
+                    yield tev.next() # to evade the Control/STARTEVENT trigger in parse_models_pass3()
+                    for k in make_extended_controls_inline(tev, stack):
+                        yield k
+                else:
+                    yield STARTEVENT, item
+                    yield ENDEVENT, item
+        elif issubclass(model, Control) and event == STARTEVENT:
+            control_subtree = build_subtree(event_prefixed_mac)
+            stack[-1].setdefault(Control, []).append( control_subtree )
+        else:
+            yield event, item
+
 def make_paragraphs_children_of_listheader(event_prefixed_mac, parentmodel=ListHeader, childmodel=Paragraph):
     ''' make paragraphs children of the listheader '''
     stack = []
@@ -323,6 +373,7 @@ def flatxml(hwpfile, logger, oformat):
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
         section_events = parse_models(context, section_records)
 
+        section_events = make_extended_controls_inline(section_events)
         section_events = match_field_start_end(section_events)
         section_events = make_paragraphs_children_of_listheader(section_events)
         section_events = make_paragraphs_children_of_listheader(section_events, TableBody, TableCell)

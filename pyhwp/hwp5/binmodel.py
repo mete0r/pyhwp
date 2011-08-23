@@ -1706,58 +1706,8 @@ def pass3_lineseg_charshaped_texts(event_prefixed_cmas):
         else:
             yield event, (context, model, attributes, stream)
 
-def pass3_inline_extended_controls(event_prefixed_cmas, stack=None):
-    ''' inline extended-controls into paragraph texts '''
-    if stack is None:
-        stack = [] # stack of ancestor Paragraphs
-    for event, (context, model, attributes, stream) in event_prefixed_cmas:
-        if model is Paragraph:
-            if event == STARTEVENT:
-                stack.append(dict())
-                yield STARTEVENT, (context, model, attributes, stream)
-            else:
-                yield ENDEVENT, (context, model, attributes, stream)
-                stack.pop()
-        elif model is ControlChar:
-            ctrlch = context, model, attributes, stream
-            if event is STARTEVENT:
-                if attributes['kind'] is ControlChar.EXTENDED:
-                    control_subtree = stack[-1].get(Control).pop(0)
-                    tev = tree_events(*control_subtree)
-                    yield tev.next() # to evade the Control/STARTEVENT trigger in parse_models_pass3()
-                    for k in pass3_inline_extended_controls(tev, stack):
-                        yield k
-                else:
-                    yield STARTEVENT, ctrlch
-                    yield ENDEVENT, ctrlch
-        elif issubclass(model, Control) and event == STARTEVENT:
-            control_subtree = build_subtree(event_prefixed_cmas)
-            stack[-1].setdefault(Control, []).append( control_subtree )
-        else:
-            yield event, (context, model, attributes, stream)
-
-def build_subtree(event_prefixed_items_iterator):
-    childs = []
-    for event, item in event_prefixed_items_iterator:
-        if event == STARTEVENT:
-            childs.append(build_subtree(event_prefixed_items_iterator))
-        elif event == ENDEVENT:
-            return item, childs
-
-def tree_events(rootitem, childs):
-    yield STARTEVENT, rootitem
-    for k in tree_events_childs(childs):
-        yield k
-    yield ENDEVENT, rootitem
-
-def tree_events_childs(childs):
-    for child in childs:
-        for k in tree_events(*child):
-            yield k
-
 def parse_models_pass3(event_prefixed_cmas):
     event_prefixed_cmas = pass3_lineseg_charshaped_texts(event_prefixed_cmas)
-    event_prefixed_cmas = pass3_inline_extended_controls(event_prefixed_cmas)
     return event_prefixed_cmas
 
 def parse_models(context, records, passes=3):

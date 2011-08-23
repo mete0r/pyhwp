@@ -49,3 +49,30 @@ class TestHello(TestCase):
         a = [('a', 1), ('a', 2)]
         result = xmlattr_uniqnames(a)
         self.assertRaises(Exception, list, result)
+
+class TestTreeEvents(TestCase):
+    def test_tree_events(self):
+        from .binmodel import STARTEVENT, ENDEVENT
+        from .xmlmodel import build_subtree, tree_events
+        event_prefixed_items = [ (STARTEVENT, 'a'), (ENDEVENT, 'a') ]
+        rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))
+        self.assertEquals('a', rootitem)
+        self.assertEquals(0, len(childs))
+
+        event_prefixed_items = [ (STARTEVENT, 'a'), (STARTEVENT, 'b'), (ENDEVENT, 'b'), (ENDEVENT, 'a') ]
+        self.assertEquals( ('a', [('b', [])]), build_subtree(iter(event_prefixed_items[1:])))
+
+        event_prefixed_items = [
+            (STARTEVENT, 'a'),
+                (STARTEVENT, 'b'),
+                    (STARTEVENT, 'c'), (ENDEVENT, 'c'),
+                    (STARTEVENT, 'd'), (ENDEVENT, 'd'),
+                (ENDEVENT, 'b'),
+            (ENDEVENT, 'a')]
+
+        result = build_subtree(iter(event_prefixed_items[1:]))
+        self.assertEquals( ('a', [('b', [('c', []), ('d', [])])]), result)
+
+        back = list(tree_events(*result))
+        self.assertEquals(event_prefixed_items, back)
+

@@ -181,31 +181,6 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(1, attributes['borderfill_id'],)
         self.assertEquals(0x4f03, attributes['unknown_width'])
 
-from .binmodel import build_subtree, tree_events
-class TestTreeEvents(TestCase):
-    def test_tree_events(self):
-        event_prefixed_items = [ (STARTEVENT, 'a'), (ENDEVENT, 'a') ]
-        rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals('a', rootitem)
-        self.assertEquals(0, len(childs))
-
-        event_prefixed_items = [ (STARTEVENT, 'a'), (STARTEVENT, 'b'), (ENDEVENT, 'b'), (ENDEVENT, 'a') ]
-        self.assertEquals( ('a', [('b', [])]), build_subtree(iter(event_prefixed_items[1:])))
-
-        event_prefixed_items = [
-            (STARTEVENT, 'a'),
-                (STARTEVENT, 'b'),
-                    (STARTEVENT, 'c'), (ENDEVENT, 'c'),
-                    (STARTEVENT, 'd'), (ENDEVENT, 'd'),
-                (ENDEVENT, 'b'),
-            (ENDEVENT, 'a')]
-
-        result = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals( ('a', [('b', [('c', []), ('d', [])])]), result)
-
-        back = list(tree_events(*result))
-        self.assertEquals(event_prefixed_items, back)
-
 from .binmodel import make_ranged_shapes, split_and_shape
 class TestShapedText(TestCase):
     def test_make_shape_range(self):
