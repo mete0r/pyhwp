@@ -5,4 +5,5 @@ def test_suite():
     import test_dataio
     import test_hwpxml
     import test_filestructure
-    return TS((TL.loadTestsFromModule(m) for m in [test_filestructure, test_models, test_dataio, test_hwpxml]))
+    import test_odtxsl
+    return TS((TL.loadTestsFromModule(m) for m in [test_filestructure, test_models, test_dataio, test_hwpxml, test_odtxsl]))
