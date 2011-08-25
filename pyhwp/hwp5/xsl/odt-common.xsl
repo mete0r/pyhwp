@@ -148,18 +148,32 @@
         <xsl:attribute name="style:font-style-complex">italic</xsl:attribute>
       </xsl:if>
       <!-- 15.4.28 Underlining Type -->
+      <!-- 15.4.31 Underline Color -->
       <xsl:choose>
         <xsl:when test="$charshape/@underline = 'none'">
-          <xsl:attribute name="text:text-underline-type">none</xsl:attribute>
+          <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
+          <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
+          <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
         </xsl:when>
         <xsl:when test="$charshape/@underline = 'underline'">
           <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
           <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
           <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
-          <!-- 15.4.31 Underline Color -->
           <xsl:attribute name="style:text-underline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
+          <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
+          <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="$charshape/@underline = 'unknown'">
+          <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
+          <xsl:attribute name="style:text-line-through-type">single</xsl:attribute>
+          <xsl:attribute name="style:text-line-through-style">solid</xsl:attribute>
+          <xsl:attribute name="style:text-line-through-width">auto</xsl:attribute>
+          <xsl:attribute name="style:text-line-through-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
+          <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
         </xsl:when>
         <xsl:when test="$charshape/@underline = 'upperline'">
+          <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
+          <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
           <xsl:attribute name="style:text-overline-type">single</xsl:attribute>
           <xsl:attribute name="style:text-overline-style">solid</xsl:attribute>
           <xsl:attribute name="style:text-overline-width">auto</xsl:attribute>
