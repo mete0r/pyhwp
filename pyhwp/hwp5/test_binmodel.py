@@ -2,10 +2,10 @@ from unittest import TestCase, makeSuite
 from StringIO import StringIO
 
 from .recordstream import Record, read_records
-from .models import tag_models, parse_models_pass1, parse_models_pass2, prefix_event, prefix_ancestors
-from .models import BinData, BinEmbedded, TableControl, ListHeader, TableCaption, TableCell, TableBody
-from .models import STARTEVENT, ENDEVENT
-from . import models
+from .binmodel import tag_models, parse_models_pass1, parse_models_pass2, prefix_event, prefix_ancestors
+from .binmodel import BinData, BinEmbedded, TableControl, ListHeader, TableCaption, TableCell, TableBody
+from .binmodel import STARTEVENT, ENDEVENT
+from . import binmodel
 
 def TestContext(**ctx):
     ''' test context '''
@@ -118,7 +118,7 @@ class LineSegTest(TestCase):
         data = '00000000481e0000e8030000e80300005203000058020000dc0500003ca00000000006003300000088240000e8030000e80300005203000058020000dc0500003ca000000000060067000000c82a0000e8030000e80300005203000058020000dc0500003ca0000000000600'
         import binascii
         data = binascii.a2b_hex(data)
-        from .models import ParaLineSeg
+        from .binmodel import ParaLineSeg
         lines = list(ParaLineSeg.decode(dict(), dict(), data))
         self.assertEquals(0, lines[0]['chpos'])
         self.assertEquals(51, lines[1]['chpos'])
@@ -181,78 +181,7 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(1, attributes['borderfill_id'],)
         self.assertEquals(0x4f03, attributes['unknown_width'])
 
-from .models import build_subtree, tree_events
-class TestTreeEvents(TestCase):
-    def test_tree_events(self):
-        event_prefixed_items = [ (STARTEVENT, 'a'), (ENDEVENT, 'a') ]
-        rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals('a', rootitem)
-        self.assertEquals(0, len(childs))
-
-        event_prefixed_items = [ (STARTEVENT, 'a'), (STARTEVENT, 'b'), (ENDEVENT, 'b'), (ENDEVENT, 'a') ]
-        self.assertEquals( ('a', [('b', [])]), build_subtree(iter(event_prefixed_items[1:])))
-
-        event_prefixed_items = [
-            (STARTEVENT, 'a'),
-                (STARTEVENT, 'b'),
-                    (STARTEVENT, 'c'), (ENDEVENT, 'c'),
-                    (STARTEVENT, 'd'), (ENDEVENT, 'd'),
-                (ENDEVENT, 'b'),
-            (ENDEVENT, 'a')]
-
-        result = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals( ('a', [('b', [('c', []), ('d', [])])]), result)
-
-        back = list(tree_events(*result))
-        self.assertEquals(event_prefixed_items, back)
-
-from .models import make_ranged_shapes, split_and_shape
-class TestShapedText(TestCase):
-    def test_make_shape_range(self):
-        charshapes = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
-        ranged_shapes = make_ranged_shapes(charshapes)
-        self.assertEquals([((0, 4), 'A'), ((4, 6), 'B'), ((6, 10), 'C'), ((10, 0x7fffffff), 'D')], list(ranged_shapes))
-
-    def test_split(self):
-        chunks = [((0, 3), None, 'aaa'), ((3, 6), None, 'bbb'), ((6, 9), None, 'ccc'), ((9, 12), None, 'ddd')]
-        charshapes = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
-        shaped_chunks = split_and_shape(iter(chunks), make_ranged_shapes(charshapes))
-        shaped_chunks = list(shaped_chunks)
-        self.assertEquals([
-            ((0,3), ('A',None), 'aaa'),
-            ((3,4), ('A',None), 'b'),
-            ((4,6), ('B',None), 'bb'),
-            ((6,9), ('C',None), 'ccc'),
-            ((9, 10), ('C',None), 'd'),
-            ((10, 12), ('D',None), 'dd')],
-                shaped_chunks)
-
-        # split twice
-        chunks = [((0, 112), None, 'x'*112)]
-        charshapes = [(0, 'a'), (3, 'b'), (5,'c')]
-        linesegs = [(0, 'A'), (51,'B'), (103,'C')]
-        shaped = split_and_shape(iter(chunks), make_ranged_shapes(charshapes))
-        shaped = list(shaped)
-        self.assertEquals([((0, 3), ('a', None), 'xxx'), ((3, 5), ('b',None), 'xx'), ((5,112), ('c',None), 'x'*107)], shaped)
-        lines = split_and_shape(iter(shaped), make_ranged_shapes(linesegs))
-        lines = list(lines)
-        self.assertEquals([
-            ((0,3), ('A', ('a', None)), 'xxx'), 
-            ((3,5), ('A', ('b', None)), 'xx'), 
-            ((5,51), ('A', ('c', None)), 'x'*(51-5)), 
-            ((51,103), ('B', ('c', None)), 'x'*(103-51)), 
-            ((103,112), ('C', ('c', None)), 'x'*(112-103)), ], lines)
-
-from .models import line_segmented
-class TestLineSeg(TestCase):
-    def test_line_segmented(self):
-        chunks = [((0, 3), None, 'aaa'), ((3, 6), None, 'bbb'), ((6, 9), None, 'ccc'), ((9, 12), None, 'ddd')]
-        linesegs = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
-        lines = line_segmented(iter(chunks), make_ranged_shapes(linesegs))
-        lines = list(lines)
-        self.assertEquals([ ('A', [((0, 3), None, 'aaa'), ((3,4), None, 'b')]), ('B', [((4,6),None,'bb')]), ('C', [((6,9),None,'ccc'), ((9,10),None,'d')]), ('D', [((10,12),None,'dd')]) ], lines)
-
-from .models import RecordModel, typed_model_attributes
+from .binmodel import RecordModel, typed_model_attributes
 from .dataio import INT32, BSTR
 class TestTypedModelAttributes(TestCase):
     def test_typed_model_attributes(self):
@@ -274,7 +203,7 @@ class TestTypedModelAttributes(TestCase):
 class TestRecordModel(TestCase):
     def test_assign_enum_flags_name(self):
         from .dataio import Flags, Enum, UINT32
-        from .models import RecordModel
+        from .binmodel import RecordModel
         class FooRecord(RecordModel):
             Bar = Flags(UINT32)
             Baz = Enum()
@@ -283,7 +212,7 @@ class TestRecordModel(TestCase):
             
 class TestControlType(TestCase):
     def test_ControlType(self):
-        from .models import Control
+        from .binmodel import Control
         class FooControl(Control):
             chid = 'foo!'
         try:

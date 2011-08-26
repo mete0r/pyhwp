@@ -130,7 +130,8 @@ def mimetype(f):
 
 def generate_hwp5xml(f, hwpfile):
     import logging
-    from .hwpxml import flatxml, XmlFormat
+    from .xmlmodel import flatxml
+    from .xmlformat import XmlFormat
     flatxml(hwpfile, logging, XmlFormat(f))
 
 def xslt_odt_content(f, hwpxmlfilename):
