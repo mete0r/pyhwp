@@ -368,6 +368,7 @@ def main():
     import logging
     import itertools
     from .filestructure import open
+    from .binmodel import ModelEventHandler
 
     from ._scriptutils import OptionParser, args_pop, open_or_exit
     op = OptionParser(usage='usage: %prog [options] filename')
