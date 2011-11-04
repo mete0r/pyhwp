@@ -60,6 +60,14 @@ def xmlattributes_for_plainvalues(context, plainvalues):
     ntvs = chain(*(expanded_xmlattribute(ntv) for ntv in ntvs))
     return dict(xmlattr_uniqnames(xmlattr_dashednames(ntvs)))
 
+def is_complex_type(type, value):
+    if isinstance(value, dict):
+        return True
+    elif isinstance(type, ArrayType) and issubclass(type.itemtype, Struct):
+        return True
+    else:
+        return False
+
 def separate_plainvalues(typed_attributes):
     d = []
     p = dict()
@@ -69,11 +77,7 @@ def separate_plainvalues(typed_attributes):
         try:
             if t is Margin:
                 p[name] = item
-            elif isinstance(value, dict):
-                if not issubclass(t, Struct):
-                    logger.warning('%s is not a Struct', name)
-                d.append( named_item )
-            elif isinstance(t, ArrayType) and issubclass(t.itemtype, Struct):
+            elif is_complex_type(t, value):
                 d.append( named_item )
             else:
                 p[name] = item
