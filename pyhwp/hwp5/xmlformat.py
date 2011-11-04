@@ -1,7 +1,7 @@
 from itertools import chain
 from xml.sax.saxutils import XMLGenerator
 from .filestructure import VERSION
-from .dataio import typed_struct_attributes, Struct, ARRAY, N_ARRAY, FlagsType, EnumType, WCHAR
+from .dataio import typed_struct_attributes, Struct, ArrayType, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT
 from .dataio import hexdump
 from .binmodel import typed_model_attributes, COLORREF, BinStorageId, Spaces, Text
@@ -70,7 +70,7 @@ def separate_plainvalues(logging, typed_attributes):
                 if not issubclass(t, Struct):
                     logging.warning('%s is not a Struct', name)
                 d.append( named_item )
-            elif isinstance(t, (ARRAY, N_ARRAY)) and issubclass(t.itemtype, Struct):
+            elif isinstance(t, ArrayType) and issubclass(t.itemtype, Struct):
                 d.append( named_item )
             else:
                 p[name] = item

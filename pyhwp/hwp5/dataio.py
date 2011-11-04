@@ -238,48 +238,46 @@ def Enum(*items, **moreitems):
     return EnumType('Enum', (int,), attrs)
 
 
-class ARRAY(type):
-    _instances = dict()
+class ArrayType(type):
+    def __init__(cls, name, bases, attrs):
+        super(ArrayType, cls).__init__(name, bases, attrs)
+        assert 'itemtype' in attrs
 
-    def _typeargs(itemtype, count):
-        return 'ARRAY', (tuple,), dict(itemtype=itemtype, size=count, __new__=staticmethod(_new(tuple)))
-    _typeargs = staticmethod(_typeargs)
-
-    def __new__(mcs, itemtype, count):
-        t = type.__new__(mcs, *mcs._typeargs(itemtype, count))
-        return mcs._instances.setdefault((itemtype,count), t)
-
-    def __init__(self, itemtype, count):
-        return type.__init__(self, *self._typeargs(itemtype, count))
-
-    def read(self, f, context=None):
+ARRAY_instances = dict()
+def ARRAY(itemtype, count):
+    key = (itemtype, count)
+    instance = ARRAY_instances.get(key)
+    if instance is not None:
+        return instance
+    def read(cls, f, context=None):
         result = []
-        for i in range(0, self.size):
-            value = self.itemtype.read(f, context)
+        for i in range(0, count):
+            value = itemtype.read(f, context)
             result.append( value )
         return tuple(result)
+    attrs = dict(itemtype=itemtype, size=count, read=classmethod(read))
+    t = ArrayType('ARRAY', (tuple,), attrs)
+    ARRAY_instances[key] = t
+    return t
 
-class N_ARRAY(type):
-    _instances = dict()
-
-    def _typeargs(counttype, itemtype):
-        return 'N_ARRAY', (list,), dict(itemtype=itemtype, counttype=counttype, __new__=staticmethod(_new(list)))
-    _typeargs = staticmethod(_typeargs)
-
-    def __new__(mcs, counttype, itemtype):
-        instance = type.__new__(mcs, *mcs._typeargs(counttype, itemtype))
-        return mcs._instances.setdefault((counttype,itemtype), instance)
-
-    def __init__(self, counttype, itemtype):
-        return type.__init__(self, *self._typeargs(counttype, itemtype))
-
-    def read(self, f, context):
+N_ARRAY_instances = dict()
+def N_ARRAY(counttype, itemtype):
+    key = (counttype, itemtype)
+    instance = N_ARRAY_instances.get(key)
+    if instance is not None:
+        return instance
+    def read(cls, f, context):
         result = []
-        count = self.counttype.read(f, context)
+        count = counttype.read(f, context)
         for i in range(0, count):
-            value = self.itemtype.read(f, context)
+            value = itemtype.read(f, context)
             result.append( value )
         return result
+    attrs = dict(itemtype=itemtype, counttype=counttype, read=classmethod(read))
+    t = ArrayType('N_ARRAY', (list,), attrs)
+    N_ARRAY_instances[key] = t
+    return t
+
 
 def read_struct_attributes(model, attributes, context, stream):
     try:
