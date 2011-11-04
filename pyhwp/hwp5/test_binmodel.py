@@ -3,7 +3,7 @@ from StringIO import StringIO
 
 from .recordstream import Record, read_records
 from .binmodel import tag_models, parse_models_pass1, parse_models_pass2, prefix_event, prefix_ancestors
-from .binmodel import BinData, BinEmbedded, TableControl, ListHeader, TableCaption, TableCell, TableBody
+from .binmodel import BinData, TableControl, ListHeader, TableCaption, TableCell, TableBody
 from .binmodel import STARTEVENT, ENDEVENT
 from . import binmodel
 
@@ -26,9 +26,10 @@ class BinEmbeddedTest(TestCase):
 
         tag_model = BinData
         model_type, attributes = tag_model.parse_pass1(dict(), self.ctx, record.bytestream())
-        self.assertTrue(BinEmbedded, model_type)
-        self.assertEquals(2, attributes['data']['storage_id'])
-        self.assertEquals('jpg', attributes['data']['ext'])
+        self.assertTrue(BinData, model_type)
+        self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(attributes['flags']).storage)
+        self.assertEquals(2, attributes['storage_id'])
+        self.assertEquals('jpg', attributes['ext'])
 
 class TableTest(TestCase):
     ctx = TestContext()

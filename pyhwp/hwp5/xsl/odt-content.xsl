@@ -369,8 +369,8 @@
     <xsl:variable name="bindata" select="/HwpDoc/DocInfo/IdMappings/BinData[number($bindataid)]"/>
     <xsl:element name="draw:image">
         <xsl:choose>
-            <xsl:when test="$bindata/BinEmbedded">
-                <xsl:attribute name="xlink:href"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/BinEmbedded/@storage-id"/>.<xsl:value-of select="$bindata/BinEmbedded/@ext"/></xsl:attribute>
+            <xsl:when test="$bindata/@storage = 'embedding'">
+                <xsl:attribute name="xlink:href"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/@storage-id"/>.<xsl:value-of select="$bindata/@ext"/></xsl:attribute>
             </xsl:when>
         </xsl:choose>
     </xsl:element>

@@ -116,37 +116,27 @@ class IdMappings(BasicRecordModel):
 
 class BinData(BasicRecordModel):
     tagid = HWPTAG_BIN_DATA
+    StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
+    CompressionType = Enum(STORAGE_DEFAULT=0, YES=1, NO=2)
+    AccessState = Enum(NEVER=0, OK=1, FAILED=2, FAILED_IGNORED=3)
+    Flags = Flags(INT16,
+            0, 3, StorageType, 'storage',
+            4, 5, CompressionType, 'compression',
+            16, 17, AccessState, 'access')
     def attributes(cls, context):
-        flags = yield UINT16, 'flags'
-        yield [BinLink, BinEmbedded, BinStorage][flags & 3], 'data'
+        flags = yield cls.Flags, 'flags'
+        if flags.storage == cls.StorageType.LINK:
+            yield BSTR, 'abspath'
+            yield BSTR, 'relpath'
+        elif flags.storage == cls.StorageType.EMBEDDING:
+            yield BinStorageId, 'storage_id'
+            yield BSTR, 'ext'
+        elif flags.storage == cls.StorageType.STORAGE:
+            yield BinStorageId, 'storage_id'
     attributes = classmethod(attributes)
-
-
-class BinLink(Struct):
-    def attributes(context):
-        yield BSTR, 'abspath'
-        yield BSTR, 'relpath'
-    attributes = staticmethod(attributes)
 
 class BinStorageId(UINT16):
     pass
-
-class BinEmbedded(Struct):
-    def attributes(context):
-        yield BinStorageId, 'storage_id'
-        yield BSTR, 'ext'
-    attributes = staticmethod(attributes)
-
-    def get_name(self):
-        return 'BIN%04X.%s'%(self.storage_id, self.ext) # DIFFSPEC
-    name = property(get_name)
-
-
-class BinStorage(Struct):
-    def attributes(context):
-        yield UINT16, 'storage_id'
-    attributes = staticmethod(attributes)
-
 
 class AlternateFont(Struct):
     def attributes(context):
