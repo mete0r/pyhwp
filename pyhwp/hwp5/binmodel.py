@@ -422,9 +422,12 @@ class DistributeDocData(BasicRecordModel):
 class CompatibleDocument(BasicRecordModel):
     tagid = HWPTAG_COMPATIBLE_DOCUMENT
     Target = Enum(DEFAULT=0, HWP2007=1, MSWORD=2)
-    def attributes(context):
-        yield Target, 'target'
-    attributes = staticmethod(attributes)
+    Flags = dataio.Flags(UINT32,
+            0, 1, 'target',
+            )
+    def attributes(cls, context):
+        yield cls.Flags, 'flags'
+    attributes = classmethod(attributes)
 
 
 class LayoutCompatibility(BasicRecordModel):
