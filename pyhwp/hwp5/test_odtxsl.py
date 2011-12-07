@@ -161,6 +161,13 @@ def xpath1(root, path):
 
 class TestODTXSL(TestCase):
 
+    def test_issue30_noindent(self):
+        odt = example_to_odt('issue30.hwp')
+        span = xpath1(odt.content, '//text:p/text:span')
+        # 첫번째 span의 다음에 new line 문자나 공백이 있으면 안된다.
+        #print len(span.tail), type(span.tail), '"', span.tail.encode('string_escape'), '"'
+        assert span.tail is None
+
     def test_styles(self):
         ''' 스타일 '''
         odt = example_to_odt('charshape.hwp')

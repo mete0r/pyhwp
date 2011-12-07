@@ -35,7 +35,7 @@
   grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl"
   office:mimetype="application/vnd.oasis.opendocument.text">
   <xsl:import href="odt-common.xsl" />
-  <xsl:output method="xml" encoding="utf-8" indent="yes" />
+  <xsl:output method="xml" encoding="utf-8" indent="no" />
   <xsl:template match="/">
     <office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
                              xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
