@@ -195,20 +195,31 @@ class BadFormatError(Exception):
 def open(filename):
     if not is_hwp5file(filename):
         raise BadFormatError('Not an hwp5 file', filename)
-    return File(filename)
+    olefile = OleFileIO(filename)
+    return File(olefile)
 
-class File(OleFileIO):
+class File(object):
 
-    list_streams = list_streams
-    list_bodytext_sections = list_sections
-    list_bindata = list_bindata
+    def __init__(self, olefile):
+        self.olefile = olefile
 
-    _fileheader = open_fileheader
-    fileheader = cached_property(get_fileheader)
+    def list_streams(self):
+        return list_streams(self.olefile)
 
-    _summaryinfo = open_summaryinfo
+    def list_bodytext_sections(self):
+        return list_sections(self.olefile)
+
+    def list_bindata(self):
+        return list_bindata(self.olefile)
+
+    def _fileheader(self):
+        return open_fileheader(self.olefile)
+    fileheader = cached_property(lambda self: get_fileheader(self.olefile))
+
+    def _summaryinfo(self):
+        return open_summaryinfo(self.olefile)
     def summaryinfo(self):
-        f = open_summaryinfo(self)
+        f = open_summaryinfo(self.olefile)
         context = dict(version=self.fileheader.version)
         summaryinfo = SummaryInfo.read(f, context)
         #print '#### %o'%f.tell()
@@ -216,26 +227,31 @@ class File(OleFileIO):
     summaryinfo = property(summaryinfo)
 
     def preview_text(self):
-        return open_previewtext(self, 'utf-8')
+        return open_previewtext(self.olefile, 'utf-8')
 
     def preview_image(self):
-        return open_previewimage(self)
+        return open_previewimage(self.olefile)
 
     def docinfo(self):
-        return open_docinfo(self, self.fileheader.flags.compressed)
+        return open_docinfo(self.olefile, self.fileheader.flags.compressed)
 
     def bodytext(self, idx):
-        return open_bodytext(self, idx, self.fileheader.flags.compressed)
+        return open_bodytext(self.olefile, idx, self.fileheader.flags.compressed)
 
-    viewtext = open_viewtext
-    viewtext_head = open_viewtext_head
-    viewtext_tail = open_viewtext_tail
+    def viewtext(self, idx):
+        return open_viewtext(self.olefile, idx)
+
+    def viewtext_head(self, idx):
+        return open_viewtext_head(self.olefile, idx)
+
+    def viewtext_tail(self, idx):
+        return open_viewtext_tail(self.olefile, idx)
 
     def bindata(self, name):
-        return open_bindata(self, name, self.fileheader.flags.compressed)
+        return open_bindata(self.olefile, name, self.fileheader.flags.compressed)
 
     def script(self, name):
-        return open_script(self, name, self.fileheader.flags.compressed)
+        return open_script(self.olefile, name, self.fileheader.flags.compressed)
 
     def pseudostream(self, name):
         args = name.split('/', 1)
