@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry"
+                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                    oor:package="org.openoffice.TypeDetection"
+                    oor:name="Types">
+  <node oor:name="Types">
+    <node oor:name="writer_pyhwp_HWPv5" oor:op="fuse">
+      <prop oor:name="DetectService"><value>pyhwp.Detector</value></prop>
+      <prop oor:name="URLPattern"/>
+      <prop oor:name="Extensions"><value>hwp</value></prop>
+      <prop oor:name="MediaType"><value>application/x-hwp</value></prop>
+      <prop oor:name="Preferred"><value>true</value></prop>
+      <prop oor:name="PreferredFilter"><value>writer_pyhwp_HWPv5</value></prop>
+      <prop oor:name="UIName">
+          <value xml:lang="x-default">HWP Document Format v5</value>
+      </prop>
+      <prop oor:name="ClipboardFormat"/>
+    </node>
+  </node>
+</oor:component-data>

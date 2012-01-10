@@ -1,0 +1,7 @@
+
+http://www.openoffice.org/framework/documentation/filters/example.html
+- reading of the entire filters configuration
+- register a new filter
+
+libreoffice-wiki-publisher
+- how to write Types.xcu, Filter.xcu
