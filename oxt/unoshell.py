@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import uno
 localContext = uno.getComponentContext()
 resolver = localContext.ServiceManager.createInstanceWithContext(
@@ -30,6 +31,10 @@ class Fac(pyhwp.Fac):
     def typedetect(self):
         return TypeDetect(self.typedetection)
 
+    @property
+    def filterfac(self):
+        return context.ServiceManager.createInstance('com.sun.star.document.FilterFactory')
+
     def open_filestream(self, path):
         import os.path
         url = uno.systemPathToFileUrl(os.path.realpath(path))
@@ -44,15 +49,44 @@ class Fac(pyhwp.Fac):
         fin = self.open_filestream(path)
         return File_Stream(fin)
 
-    def open_hwp(self, path):
-        olefile = self.OleFileIO(path)
-        from hwp5.filestructure import File
-        return File(olefile)
+    def HwpFileFromPath(self, path):
+        inputstream = self.open_filestream(path)
+        return self.HwpFileFromInputStream(inputstream)
 
     def MediaDescriptor(self, path):
         url = fileurl(path)
         return dict_to_propseq(dict(URL=url))
 
+    def mktmpfile(self):
+        return File_Stream(self.TempFile())
+
+    def hwp5file_convert_to_odtpkg(self, hwp5file, path):
+        tmpfile2 = self.hwp5file_convert_to_odtpkg_file(hwp5file)
+        try:
+            data = tmpfile2.read()
+            print len(data)
+            f = file(path, 'w')
+            try:
+                f.write(data)
+            finally:
+                f.close()
+        finally:
+            tmpfile2.close()
+
+    def HwpXmlFileFromPath(self, path):
+        hwpfile = self.HwpFileFromPath(path)
+
+        #tmpfile = self.mktmpfile()
+        import tempfile, os
+        #tmpfile_fd, tmpfile_name = tempfile.mkstemp()
+        #tmpfile = os.fdopen(tmpfile_fd, 'w+b')
+        tmpfile = tempfile.TemporaryFile()
+        tmpfile_name = None
+
+        from hwp5.hwp5odt import generate_hwp5xml
+        generate_hwp5xml(hwpfile, tmpfile)
+        tmpfile.seek(0)
+        return tmpfile, tmpfile_name
 
 class TypeDetect(object):
     def __init__(self, typedetection):
