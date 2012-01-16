@@ -483,12 +483,7 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
         odtpkg_file = self.fac.hwp5file_convert_to_odtpkg_file(hwpfile)
         logging.debug('hwp to odtpkg completed')
 
-        #odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
-
-        temp = self.fac.TempFile()
-        File_Stream(temp).write(odtpkg_file.read())
-        temp.seek(0)
-        odtpkg_stream = temp
+        odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
 
         odtpkg_storage = self.fac.StorageFromInputStream(odtpkg_stream)
 
