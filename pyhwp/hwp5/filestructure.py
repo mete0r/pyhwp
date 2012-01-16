@@ -203,6 +203,10 @@ class File(object):
     def __init__(self, olefile):
         self.olefile = olefile
 
+    def close(self):
+        if hasattr(self.olefile, 'close'):
+            self.olefile.close()
+
     def list_streams(self):
         return list_streams(self.olefile)
 
