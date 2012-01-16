@@ -5,3 +5,126 @@ http://www.openoffice.org/framework/documentation/filters/example.html
 
 libreoffice-wiki-publisher
 - how to write Types.xcu, Filter.xcu
+
+
+TypeDetection:
+	filter/source/config/cache/typedetection.cxx
+
+FilterFactory:
+	filter/source/config/cache/filterfactory.cxx
+
+OwnSubFilter:
+	sfx2/source/doc/ownsubfilterservice.cxx
+
+xmloff
+
+writer8 'Deep' DetectService: com.sun.star.text.FormatDetector
+	sw/source/ui/uno/swdetect.cxx
+
+
+from framework/source/loadenv/loadenv.cxx:
+
+726│     // (iii) If a FrameLoader service (or at least
+727│     //      a Filter) can be found, which supports
+728│     //      this URL - it must be a loadable content.
+729│     //      Because both items are registered for types
+730│     //      its enough to check for frame loaders only.
+731│     //      Mos of our filters are handled by our global
+732│     //      default loader. But there exist some specialized
+733│     //      loader, which does not work on top of filters!
+734│     //      So its not enough to search on the filter configuration.
+735│     //      Further its not enough to search for types!
+736│     //      Because there exist some types, which are referenced by
+737│     //      other objects ... but not by filters nor frame loaders!
+
+create FrameLoaderFactory
+FrameLoaderFactory.createSubSetEnumerationByProperties( "Types" = [ types... ] ) 
+-> create a com.sun.star.comp.office.FrameLoader()
+and FrameLoader->load(descriptor, frame)
+
+sfx2/source/view/frmloader.cxx
+SfxFrameLoaderImpl::impl_determineFilter()
+
+sfx2/source/doc/sfxbasemodel.cxx
+SfxBaseModel::load(seqArguments)
+arg[0] = ''
+MacroExecutionMode = 3
+UpdateDocMode = 2
+FileName = fullurl
+Stream = stream
+StatusIndicator =
+Frame =
+UCBContent =
+FrameName =
+URL =
+InputStream = stream
+Referer = private:user
+InteractionHandler = interactionhandler
+TypeName = writer8
+FilterName = writer8
+DocumentService = com.sun.star.text.TextDocument
+
+SfxObjectShell::DoLoad (this=0x8ae3100, pMed=0x8d111a8) at 
+/home/mete0r/prj/libreoffice/sfx2/source/doc/objstor.cxx:584
+
+	SfxObjectShell::HandleFilter at
+	/home/mete0r/prj/libreoffice/sfx2/source/doc/objstor.cxx:841
+
+	at 647: xStorage = pMedium->GetStorage()
+	at sfx2/source/doc/docfile.cxx:1303 : 
+	comphelper::OStorageHelper::GetStorageFactory->createInstanceWithArguments( 
+	(inputstream, embed::ElementModes::Read)
+
+SfxObjectShell::LoadOwnFormat at
+/home/mete0r/prj/libreoffice/sfx2/source/doc/objstor.cxx:2962
+
+SwDocShell::Load() at
+/home/mete0r/prj/libreoffice/sfx2/source/ui/app/docshini.cxx:540
+
+SfxObjectShell::Load() at
+/home/mete0r/prj/libreoffice/sfx2/source/doc/objstor.cxx:460
+
+SfxObjectShell::GeneralInit_Impl() at
+/home/mete0r/prj/libreoffice/sfx2/source/doc/objstor.cxx:415
+
+SwReader::Read() at
+/home/mete0r/prj/libreoffice/sfx2/source/filter/basflt/shellio.cxx
+
+XMLReader::Read() at
+/home/mete0r/prj/libreoffice/sw/source/filter/xml/swxml.cxx
+
+line 728
+- filterargs:
+	xInfoSet = create a XPropertySet
+	xStatusIndicator
+	xGraphicResolver = create SvXMLGraphicHelper(xStorage)
+	xObjectResolver = create SvXMLEmbeddedObjectHelper(xStorage,
+							   rDoc.GetPersist())
+	aLateInitSettings = create com.sun.star.document.NamedPropertyValues
+
+line 892
+- XDocumentMetadataAccess xDMA = xModel
+- baseuri = sfx2::createBaseURI(context, storage, 
+  "file:///home/mete0r/prj/pyhwp/5017.odt", "");
+- xDMA.loadMetadataFromStorage(storage, baseuri, interactionhandler)
+	SfxBaseModel::loadMetadataFromStorage() at 
+	sfx2/source/doc/sfxbasemodel.cxx:4325
+	DocumentMetadataAccess::loadMetadataFromStorage() at
+	sfx2/source/doc/DocumentMetadataAccess.cxx:1098
+	- baseuri = "file:///home/mete0r/prj/pyhwp/5017.odt/"
+
+line 922
+parse streams:
+	Meta.xml com.sun.star.comp.Writer.XMLOasisMetaImporter
+	settings.xml com.sun.star.comp.Writer.XMLOasisSettingsImporter
+	styles.xml
+	content.xml
+
+XMLReader::ReadThroughComponent() at
+/home/mete0r/prj/libreoffice/sfx2/source/filter/filter/xml/swxml.cxx:142
+- create ""com.sun.star.comp.Writer.XMLOasisStylesImporter" and SAX Parser
+- parse styles.xml
+
+- create ""com.sun.star.comp.Writer.XMLOasisContentImporter" and SAX Parser
+- parse content.xml
+
