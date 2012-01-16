@@ -96,6 +96,16 @@ class Fac(object):
         self.readThroughComponent(storage, doc, 'styles.xml', 'com.sun.star.comp.Writer.XMLOasisStylesImporter', filterargs, '')
         self.readThroughComponent(storage, doc, 'content.xml', 'com.sun.star.comp.Writer.XMLOasisContentImporter', filterargs, '')
 
+    def load_hwp5file_into_doc(self, hwp5file, doc, statusindicator=None):
+        odtpkg_file = self.hwp5file_convert_to_odtpkg_file(hwp5file)
+        logging.debug('hwp to odtpkg completed')
+
+        odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
+
+        odtpkg_storage = self.StorageFromInputStream(odtpkg_stream)
+
+        self.load_odt_from_storage(doc, odtpkg_storage, statusindicator)
+
     def saxParser(self):
         return self.context.ServiceManager.createInstance('com.sun.star.xml.sax.Parser')
 
@@ -479,15 +489,7 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
 
         inputstream = desc['InputStream']
         hwpfile = self.fac.HwpFileFromInputStream(inputstream)
-
-        odtpkg_file = self.fac.hwp5file_convert_to_odtpkg_file(hwpfile)
-        logging.debug('hwp to odtpkg completed')
-
-        odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
-
-        odtpkg_storage = self.fac.StorageFromInputStream(odtpkg_stream)
-
-        self.fac.load_odt_from_storage(self.target, odtpkg_storage, statusindicator)
+        self.fac.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
         return True
 
     def cancel(self):
