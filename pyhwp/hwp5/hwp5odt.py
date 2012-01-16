@@ -5,6 +5,73 @@ def main():
     hwpfilename = sys.argv[1]
     make(hwpfilename)
 
+class ODTPackage(object):
+    def __init__(self, path_or_zipfile):
+        self.files = []
+
+        if isinstance(path_or_zipfile, basestring):
+            from zipfile import ZipFile
+            zipfile = ZipFile(path_or_zipfile, 'w')
+        else:
+            zipfile = path_or_zipfile
+        self.zf = zipfile
+
+    def insert_stream(self, f, path, media_type):
+        self.zf.writestr(path, f.read())
+        self.files.append(dict(full_path=path, media_type=media_type))
+
+    def close(self):
+
+        from cStringIO import StringIO
+        manifest = StringIO()
+        manifest_xml(manifest, self.files)
+        manifest.seek(0)
+        self.zf.writestr('META-INF/manifest.xml', manifest.getvalue())
+        self.zf.writestr('mimetype', 'application/vnd.oasis.opendocument.text')
+
+        self.zf.close()
+
+def make_odtpkg(odtpkg, styles, content, additional_files):
+    from cStringIO import StringIO
+
+    rdf = StringIO()
+    manifest_rdf(rdf)
+    rdf.seek(0)
+    odtpkg.insert_stream(rdf, 'manifest.rdf', 'application/rdf+xml')
+    odtpkg.insert_stream(styles, 'styles.xml', 'text/xml')
+    odtpkg.insert_stream(content, 'content.xml', 'text/xml')
+    for additional in additional_files:
+        odtpkg.insert_stream(*additional)
+
+def hwp5file_convert_to_odtpkg(hwpfile, odtpkg):
+    import tempfile
+    hwpxmlfile = tempfile.TemporaryFile()
+    try:
+        generate_hwp5xml(hwpxmlfile, hwpfile)
+
+        xslt_styles = xsltproc(xsl.styles)
+        xslt_content = xsltproc(xsl.content)
+
+        styles = tempfile.TemporaryFile()
+        hwpxmlfile.seek(0)
+        xslt_styles(hwpxmlfile, styles)
+        styles.seek(0)
+
+        content = tempfile.TemporaryFile()
+        hwpxmlfile.seek(0)
+        xslt_content(hwpxmlfile, content)
+        content.seek(0)
+
+        def additional_files():
+            for bindata_name in hwpfile.list_bindata():
+                bindata = hwpfile.bindata(bindata_name)
+                yield bindata, 'bindata/'+bindata_name, 'application/octet-stream'
+
+        make_odtpkg(odtpkg, styles, content, additional_files())
+
+    finally:
+        hwpxmlfile.close()
+
 def make(hwpfilename):
     root = os.path.basename(hwpfilename)
     if root.lower().endswith('.hwp'):
@@ -14,80 +81,15 @@ def make(hwpfilename):
     from ._scriptutils import open_or_exit
     hwpfile = open_or_exit(open, hwpfilename)
 
-    if not os.path.exists(root):
-        os.mkdir(root)
-    if not os.path.exists(root+'/META-INF'):
-        os.mkdir(root+'/META-INF')
-    if not os.path.exists(root+'/bindata'):
-        os.mkdir(root+'/bindata')
-
-    hwpxmlfilename = root+'.xml'
-    hwpxmlfile = file(hwpxmlfilename, 'w')
     try:
-        generate_hwp5xml(hwpxmlfile, hwpfile)
-    finally:
-        hwpxmlfile.close()
-
-    files = []
-
-    for bindata_name in hwpfile.list_bindata():
-        bindata = hwpfile.bindata(bindata_name)
-
-        f = file(root+'/bindata/'+bindata_name, 'w')
+        odtpkg = ODTPackage(root+'.odt')
         try:
-            f.write(bindata.read())
+            hwp5file_convert_to_odtpkg(hwpfile, odtpkg)
         finally:
-            f.close()
-        files.append(dict(full_path='bindata/'+bindata_name))
-    
-    f = file(root+'/content.xml', 'w')
-    try:
-        xslt_odt_content(f, hwpxmlfilename)
+            odtpkg.close()
     finally:
-        f.close()
-    files.append(dict(full_path='content.xml', media_type='text/xml'))
+        hwpfile.close()
 
-    f = file(root+'/styles.xml', 'w')
-    try:
-        xslt_odt_styles(f, hwpxmlfilename)
-    finally:
-        f.close()
-    files.append(dict(full_path='styles.xml', media_type='text/xml'))
-
-    f = file(root+'/manifest.rdf', 'w')
-    try:
-        manifest_rdf(f)
-    finally:
-        f.close()
-    files.append(dict(full_path='manifest.rdf', media_type='application/rdf+xml'))
-
-    f = file(root+'/META-INF/manifest.xml', 'w')
-    try:
-        manifest_xml(f, files)
-    finally:
-        f.close()
-    files.append('META-INF/manifest.xml')
-
-    f = file(root+'/mimetype', 'w')
-    try:
-        mimetype(f)
-    finally:
-        f.close()
-    files.append('mimetype')
-
-    from zipfile import ZipFile
-    zf = ZipFile(root+'.odt', 'w')
-    for filename in files:
-        if isinstance(filename, dict):
-            filename = filename['full_path']
-        zf.write(root+'/'+filename, filename)
-        os.unlink(root+'/'+filename)
-    zf.close()
-
-    os.unlink(root+'.xml')
-    os.rmdir(root+'/META-INF')
-    os.rmdir(root+'/bindata')
-    os.rmdir(root)
 
 def manifest_xml(f, files):
     from xml.sax.saxutils import XMLGenerator
