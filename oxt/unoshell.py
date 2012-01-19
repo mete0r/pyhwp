@@ -74,19 +74,23 @@ class Fac(pyhwp.Fac):
             tmpfile2.close()
 
     def HwpXmlFileFromPath(self, path):
+        inputstream = self.HwpXmlInputStreamFromPath(path)
+        return File_Stream(inputstream)
+
+    def HwpXmlInputStreamFromPath(self, path):
         hwpfile = self.HwpFileFromPath(path)
 
-        #tmpfile = self.mktmpfile()
-        import tempfile, os
-        #tmpfile_fd, tmpfile_name = tempfile.mkstemp()
-        #tmpfile = os.fdopen(tmpfile_fd, 'w+b')
-        tmpfile = tempfile.TemporaryFile()
-        tmpfile_name = None
+        tempfile = self.TempFile()
+        tmpfile = File_Stream(tempfile)
 
         from hwp5.hwp5odt import generate_hwp5xml
-        generate_hwp5xml(hwpfile, tmpfile)
+        generate_hwp5xml(tmpfile, hwpfile)
         tmpfile.seek(0)
-        return tmpfile, tmpfile_name
+        return tempfile
+
+    @property
+    def hwpxmlfile(self):
+        return self.HwpXmlFileFromPath('../samples/5017.hwp')
 
 class TypeDetect(object):
     def __init__(self, typedetection):
