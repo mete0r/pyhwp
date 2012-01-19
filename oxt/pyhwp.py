@@ -128,6 +128,103 @@ class Fac(object):
         tempfile = self.TempFile()
         return self.StorageFromStream(self.TempFile())
 
+    def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
+        from com.sun.star.beans import NamedValue
+        args = (NamedValue('StylesheetURL', stylesheet_url),
+                NamedValue('SourceURL', source_url),
+                NamedValue('SourceBaseURL', source_url_base))
+        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.comp.documentconversion.LibXSLTTransformer', args)
+
+    def xsltproc_with_LibXSLTTransforrmer(self, stylesheet_path):
+        stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
+        import unohelper
+        from com.sun.star.io import XOutputStream
+        class OutputStreamToFileLikeNonClosing(unohelper.Base, XOutputStream):
+            def __init__(self, f):
+                self.f = f
+
+            def writeBytes(self, bytesequence):
+                self.f.write(bytesequence.value)
+
+            def flush(self):
+                self.f.flush()
+
+            def closeOutput(self):
+                # non closing
+                pass
+
+        class InputStreamFromFileLikeNonClosing(InputStreamFromFileLike):
+            def closeInput(self):
+                # non closing
+                pass
+
+        def transform(stdin=None, stdout=None):
+
+            if stdin:
+                inputstream = InputStreamFromFileLikeNonClosing(stdin)
+            else:
+                inputstream = p_outputstream = self.pipe()
+
+            if stdout:
+                outputstream = OutputStreamToFileLikeNonClosing(stdout)
+            else:
+                p_inputstream = outputstream = self.pipe()
+
+            transformer = self.LibXSLTTransformer(stylesheet_url, '', '')
+            transformer.setInputStream(inputstream)
+            transformer.setOutputStream(outputstream)
+            if stdin and stdout:
+                import os
+                pin, pout = os.pipe()
+                pin = os.fdopen(pin, 'r')
+                pout = os.fdopen(pout, 'w')
+                from com.sun.star.io import XStreamListener
+                class Listener(unohelper.Base, XStreamListener):
+                    def __init__(self):
+                        # workaround for a bug in LibXSLTTransformer:
+                        #
+                        # we should retain a reference to the LibXSLTTransformer
+                        # while transforming is ongoing or the transformer
+                        # will be disposed and the internal Reader thread crashes!
+                        # (the Reader thread seems not retain the reference to the
+                        # transformer instance.)
+                        self.t = transformer
+                    def started(self):
+                        print 'XSLT started'
+                    def closed(self):
+                        print 'XSLT closed'
+                        pout.close()
+                        self.t = None
+                    def terminated(self):
+                        print 'XSLT terminated'
+                        pout.close()
+                        self.t = None
+                    def error(self, exception):
+                        print 'XSLT error:', exception
+                        print exception
+                        pout.close()
+                        self.t = None
+                    def disposing(self, source):
+                        print 'XSLT disposing:', source
+                        pout.close()
+                        self.t = None
+                transformer.addListener(Listener())
+
+            transformer.start()
+
+            if stdin is None and stdout is None:
+                return File_Stream(p_inputstream), File_Stream(p_outputstream)
+            elif stdin is None:
+                return File_Stream(p_outputstream)
+            elif stdout is None:
+                return File_Stream(p_inputstream)
+            else:
+                pin.read()
+                pin.close()
+                print 'XSLT transform over!'
+
+        return transform
+
     def hwp5file_convert_to_odtpkg_file(self, hwp5file):
         from tempfile import TemporaryFile
         tmpfile = TemporaryFile()
@@ -139,7 +236,14 @@ class Fac(object):
         from hwp5.hwp5odt import ODTPackage
         odtpkg = ODTPackage(zf)
         try:
-            from hwp5.hwp5odt import hwp5file_convert_to_odtpkg
+            from hwp5.hwp5odt import hwp5file_to_odtpkg_converter
+
+            # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
+            # we use default xsltproc which uses external `xsltproc' program
+            #xsltproc = self.xsltproc_with_LibXSLTTransformer
+            from hwp5.hwp5odt import xsltproc
+
+            hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
             hwp5file_convert_to_odtpkg(hwp5file, odtpkg)
         finally:
             odtpkg.close()

@@ -92,6 +92,16 @@ class Fac(pyhwp.Fac):
     def hwpxmlfile(self):
         return self.HwpXmlFileFromPath('../samples/5017.hwp')
 
+    @property
+    def libXSLTTransformer_styles(self):
+        from hwp5.hwp5odt import xsl
+        return self.xsltproc(xsl.styles)
+
+    @property
+    def libXSLTTransformer_content(self):
+        from hwp5.hwp5odt import xsl
+        return self.xsltproc(xsl.content)
+
 class TypeDetect(object):
     def __init__(self, typedetection):
         self.typedetection = typedetection
