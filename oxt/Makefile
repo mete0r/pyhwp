@@ -2,7 +2,7 @@ OXTPKG=pyhwp.oxt
 UNOPKG=unopkg
 SOFFICE=soffice
 
-SRC=description.xml pyhwp.py Addons.xcu Types.xcu Filter.xcu META-INF/manifest.xml
+SRC=description.xml pyhwp.py Types.xcu Filter.xcu META-INF/manifest.xml registration/COPYING.txt description/*.txt
 
 $(OXTPKG): $(SRC)
 	-mkdir pythonpath

@@ -1,0 +1,3 @@
+This extension enables you to read HWP Documents (v5 formats only).
+
+- `xsltproc' external program is required.
