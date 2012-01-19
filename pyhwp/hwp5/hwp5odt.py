@@ -43,34 +43,36 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
     for additional in additional_files:
         odtpkg.insert_stream(*additional)
 
-def hwp5file_convert_to_odtpkg(hwpfile, odtpkg):
-    import tempfile
-    hwpxmlfile = tempfile.TemporaryFile()
-    try:
-        generate_hwp5xml(hwpxmlfile, hwpfile)
+def hwp5file_to_odtpkg_converter(xsltproc):
+    def convert(hwpfile, odtpkg):
+        import tempfile
+        hwpxmlfile = tempfile.TemporaryFile()
+        try:
+            generate_hwp5xml(hwpxmlfile, hwpfile)
 
-        xslt_styles = xsltproc(xsl.styles)
-        xslt_content = xsltproc(xsl.content)
+            xslt_styles = xsltproc(xsl.styles)
+            xslt_content = xsltproc(xsl.content)
 
-        styles = tempfile.TemporaryFile()
-        hwpxmlfile.seek(0)
-        xslt_styles(hwpxmlfile, styles)
-        styles.seek(0)
+            styles = tempfile.TemporaryFile()
+            hwpxmlfile.seek(0)
+            xslt_styles(hwpxmlfile, styles)
+            styles.seek(0)
 
-        content = tempfile.TemporaryFile()
-        hwpxmlfile.seek(0)
-        xslt_content(hwpxmlfile, content)
-        content.seek(0)
+            content = tempfile.TemporaryFile()
+            hwpxmlfile.seek(0)
+            xslt_content(hwpxmlfile, content)
+            content.seek(0)
 
-        def additional_files():
-            for bindata_name in hwpfile.list_bindata():
-                bindata = hwpfile.bindata(bindata_name)
-                yield bindata, 'bindata/'+bindata_name, 'application/octet-stream'
+            def additional_files():
+                for bindata_name in hwpfile.list_bindata():
+                    bindata = hwpfile.bindata(bindata_name)
+                    yield bindata, 'bindata/'+bindata_name, 'application/octet-stream'
 
-        make_odtpkg(odtpkg, styles, content, additional_files())
+            make_odtpkg(odtpkg, styles, content, additional_files())
 
-    finally:
-        hwpxmlfile.close()
+        finally:
+            hwpxmlfile.close()
+    return convert
 
 def make(hwpfilename):
     root = os.path.basename(hwpfilename)
@@ -80,6 +82,8 @@ def make(hwpfilename):
     from .filestructure import open
     from ._scriptutils import open_or_exit
     hwpfile = open_or_exit(open, hwpfilename)
+
+    hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
 
     try:
         odtpkg = ODTPackage(root+'.odt')
@@ -220,3 +224,5 @@ def xsltproc(xsl_filepath):
         logging.debug('xsltproc process end')
     transform.__doc__ = transform.__doc__%xsl_filepath
     return transform
+
+hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
