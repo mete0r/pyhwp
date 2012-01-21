@@ -43,9 +43,6 @@ class Fac(object):
     def StorageFromInputStream(self, inputstream):
         return self.storage_factory.createInstanceWithArguments( (inputstream, 1) ) # com.sun.star.embed.ElementModes.READ
 
-    def StorageFromStream(self, stream):
-        return self.storage_factory.createInstanceWithArguments( (stream, 4) ) # com.sun.star.embed.ElementModes.READ
-
     def OLESimpleStorage(self, *args):
         return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.embed.OLESimpleStorage', args)
 
@@ -112,24 +109,11 @@ class Fac(object):
     def saxParser(self):
         return self.context.ServiceManager.createInstance('com.sun.star.xml.sax.Parser')
 
-    def WriterXMLImporter(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.comp.Writer.XMLImporter')
-
-    def WriterXMLContentImporter(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.comp.Writer.XMLContentImporter')
-
-    def TempFile(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.io.TempFile')
-
     def HwpFileFromInputStream(self, inputstream):
         olestorage = self.OLESimpleStorage(inputstream)
         olefile = OleFileIO_from_OLESimpleStorage(olestorage)
         from hwp5.filestructure import File
         return File(olefile)
-
-    def TempStorage(self):
-        tempfile = self.TempFile()
-        return self.StorageFromStream(self.TempFile())
 
     def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
         from com.sun.star.beans import NamedValue
@@ -254,111 +238,6 @@ class Fac(object):
         tmpfile2.seek(0)
         return tmpfile2
 
-    def PropertySequence(self, **kwargs):
-        return dict_to_propseq(kwargs)
-
-    def flatxml(self, hwp5file):
-        import tempfile
-        from hwp5.hwp5odt import generate_hwp5xml
-        from hwp5.hwp5odt import xsltproc, xsl
-
-        hwp5xml_file = tempfile.TemporaryFile()
-        generate_hwp5xml(hwp5xml_file, hwp5file)
-        return hwp5xml_file
-
-    def hwpfile_to_doc(self, hwpfile, doc):
-        import tempfile
-        from hwp5.hwp5odt import generate_hwp5xml
-        from hwp5.hwp5odt import xsltproc, xsl
-
-        hwpxml = tempfile.TemporaryFile()
-        try:
-            generate_hwp5xml(hwpxml, hwpfile)
-
-            try:
-                hwpxml.seek(0)
-                content = tempfile.TemporaryFile()
-                xsltproc(xsl.content)(hwpxml, content)
-
-                content.seek(0)
-                inputstream = InputStreamFromFileLike(content)
-                self.parse_odt_content_stream_into_doc(inputstream, doc)
-            finally:
-                content.close()
-        finally:
-            hwpxml.close()
-
-    def xslted_stream(self, xsltproc, xsl_filename, infile):
-        transform = xsltproc(xsl_filename)
-
-        import os
-        i, o = os.pipe()
-        pipein = os.fdopen(i, 'r')
-        pipeout = os.fdopen(o, 'w')
-        def run():
-            logging.debug('XSLT starts...')
-            transform(infile, pipeout)
-            logging.debug('XSLT end')
-            pipeout.close()
-            logging.debug('XSLT pipeout closed')
-
-        def detached_run(run):
-            import threading
-            t = threading.Thread(target=run)
-            t.daemon = True
-            logging.debug('XSLT thread starting...')
-            t.start()
-
-        detached_run(log_exception(run))
-        return InputStreamFromFileLike(pipein)
-
-    def hwp5xml_odt_content_stream(self, hwp5xml_file):
-        from hwp5.hwp5odt import xsltproc, xsl
-        return self.xslted_stream(xsltproc, xsl.content, hwp5xml_file)
-
-    def parse_stream_into_doc(self, stream, dochandler, doc):
-        from com.sun.star.xml.sax import InputSource
-        inputsource = InputSource()
-        inputsource.aInputStream = stream
-        inputsource.sEncoding = 'utf-8'
-
-        dochandler.setTargetDocument(doc)
-
-        parser = self.saxParser()
-        parser.setDocumentHandler(dochandler)
-        parser.parseStream(inputsource)
-
-    def parse_odt_content_stream_into_doc(self, stream, doc):
-        return self.parse_stream_into_doc(stream, self.WriterXMLContentImporter(), doc)
-
-    def parse_fodt_stream_into_doc(self, stream, doc):
-        from com.sun.star.xml.sax import InputSource
-        inputsource = InputSource()
-        inputsource.aInputStream = stream
-        inputsource.sEncoding = 'utf-8'
-
-        dochandler = self.WriterXMLImporter()
-        dochandler.setTargetDocument(doc)
-
-        parser = self.saxParser()
-        parser.setDocumentHandler(dochandler)
-        parser.parseStream(inputsource)
-
-    def SAXParser(self, dochandler):
-        parser = self.saxParser()
-        parser.setDocumentHandler(dochandler)
-        def consume(stream):
-            from com.sun.star.xml.sax import InputSource
-            inputsource = InputSource()
-            inputsource.aInputStream = stream
-            inputsource.sEncoding = 'utf-8'
-            parser.parseStream(inputsource)
-        return consume
-
-    def FlatXMLImporter(self, doc):
-        handler = self.WriterXMLImporter()
-        handler.setTargetDocument(doc)
-        return self.SAXParser(handler)
 
 class File_Stream(object):
     def __init__(self, stream):
@@ -509,26 +388,6 @@ class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
         finally:
             self.f.seek(pos)
 
-class ODTPackage(object):
-    def __init__(self, storage):
-        self.storage = storage
-
-    def insert_stream(self, f, path, media_type):
-        print path, media_type
-        storage = self.storage
-        WRITE = 4 # = com.sun.star.embed.ElementModes.WRITE
-
-        path_segments = path.split('/')
-        intermediates = path_segments[:-1]
-        name = path_segments[-1]
-        for segment in intermediates:
-            storage = storage.openStorageElement(segment, WRITE)
-        stream = storage.openStreamElement(name, WRITE)
-        File_Stream(stream).write(f.read())
-
-    def close(self):
-        self.storage.commit()
-
 @implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
 class Detector(unohelper.Base, XExtendedFilterDetection):
     def __init__(self, ctx):
@@ -601,42 +460,4 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
 
     def cancel(self):
         logging.debug('Importer cancel')
-
-@implementation('pyhwp.HelloWorld', 'com.sun.star.task.Job')
-class HelloWorldJob(unohelper.Base, XJobExecutor):
-    def __init__(self, ctx):
-        self.ctx = ctx
-
-    @log_exception
-    def trigger(self, args):
-
-        logging.debug('args: '+str(args))
-
-        packman = self.ctx.getValueByName('/singletons/com.sun.star.deployment.PackageInformationProvider')
-        oxt_location = packman.getPackageLocation('pyhwp')
-        logging.debug('location: %s', oxt_location)
-        oxt_path = uno.fileUrlToSystemPath(oxt_location)
-        logging.debug('oxt path: %s', oxt_path)
-
-        desktop = self.ctx.ServiceManager.createInstanceWithContext(
-                'com.sun.star.frame.Desktop', self.ctx)
-
-        model = desktop.getCurrentComponent()
-
-        text = model.Text
-
-        cursor = text.createTextCursor()
-
-        import sys
-
-        for path in sys.path:
-            text.insertString(cursor, path+'\n', False)
-
-        import hwp5
-        import pkg_resources
-        xslpath = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
-        logging.debug('odt-content.xsl: %s', xslpath)
-
-        text.insertString(cursor, 'hello world', False)
-
 

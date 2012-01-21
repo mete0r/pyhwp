@@ -57,6 +57,16 @@ class Fac(pyhwp.Fac):
         url = fileurl(path)
         return dict_to_propseq(dict(URL=url))
 
+    def TempFile(self):
+        return self.context.ServiceManager.createInstance('com.sun.star.io.TempFile')
+
+    def StorageFromStream(self, stream):
+        return self.storage_factory.createInstanceWithArguments( (stream, 4) ) # com.sun.star.embed.ElementModes.READ
+
+    def TempStorage(self):
+        tempfile = self.TempFile()
+        return self.StorageFromStream(self.TempFile())
+
     def mktmpfile(self):
         return File_Stream(self.TempFile())
 
@@ -125,6 +135,26 @@ class TypeDetect(object):
             extensions = t['Extensions']
             if isinstance(extensions, tuple) and ext in extensions:
                 yield t
+
+class ODTPackage(object):
+    def __init__(self, storage):
+        self.storage = storage
+
+    def insert_stream(self, f, path, media_type):
+        print path, media_type
+        storage = self.storage
+        WRITE = 4 # = com.sun.star.embed.ElementModes.WRITE
+
+        path_segments = path.split('/')
+        intermediates = path_segments[:-1]
+        name = path_segments[-1]
+        for segment in intermediates:
+            storage = storage.openStorageElement(segment, WRITE)
+        stream = storage.openStreamElement(name, WRITE)
+        File_Stream(stream).write(f.read())
+
+    def close(self):
+        self.storage.commit()
 
 def fileurl(path):
     import os.path
