@@ -83,13 +83,16 @@ class Fac(object):
     def PropertySet(self):
         return self.context.ServiceManager.createInstance('com.sun.star.beans.PropertySet')
 
+    def GraphicObjectResolver(self, storage):
+        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.comp.Svx.GraphicImportHelper', (storage,))
+
     def load_odt_from_storage(self, doc, storage, statusindicator=None):
         infoset = self.PropertySet()
         url = ''
         uri = self.createBaseURI(storage, url, '')
         doc.loadMetadataFromStorage(storage, uri, None)
         #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', (infoset, None), '')
-        graphicresolver = None
+        graphicresolver = self.GraphicObjectResolver(storage)
         objectresolver = None
         lateinitsettings = None
         filterargs = (infoset, statusindicator, graphicresolver, objectresolver, lateinitsettings)

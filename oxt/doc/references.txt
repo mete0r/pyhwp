@@ -93,14 +93,19 @@ SwReader::Read() at
 XMLReader::Read() at
 /home/mete0r/prj/libreoffice/sw/source/filter/xml/swxml.cxx
 
+line 562:
+	xGraphicResolver = SvXMLGraphicHelper::Create(xStorage)
+	xObjectResolver = create SvXMLEmbeddedObjectHelper(xStorage,
+							   rDoc.GetPersist())
+
 line 728
 - filterargs:
 	xInfoSet = create a XPropertySet
 	xStatusIndicator
-	xGraphicResolver = create SvXMLGraphicHelper(xStorage)
-	xObjectResolver = create SvXMLEmbeddedObjectHelper(xStorage,
-							   rDoc.GetPersist())
-	aLateInitSettings = create com.sun.star.document.NamedPropertyValues
+	xGraphicResolver = xGraphicResolver
+	xObjectResolver = xObjectResolver
+	aLateInitSettings = NamedValue("LateInitSettings",
+					com.sun.star.document.NamedPropertyValues())
 
 line 892
 - XDocumentMetadataAccess xDMA = xModel
@@ -128,3 +133,144 @@ XMLReader::ReadThroughComponent() at
 - create ""com.sun.star.comp.Writer.XMLOasisContentImporter" and SAX Parser
 - parse content.xml
 
+
+
+그림 객체 Import
+
+SvXMLImport 초기화
+
+SvXMLImport::initialize() (from SwXMLImport)
+- BaseURI: file:///home/mete0r/prj/pyhwp/5017.odt -> mpImpl->aBaseURL/aDocBaseURL
+- StreamRelPath: '' -> sRelPath
+- StreamName: 'styles.xml' -> sName
+
+ResolveGraphicObjectURL()이 호출되는 건 XMLOasisContentImporter
+
+
+[xxx.odt, 5017.odt]
+in xmloff/source/text/XMLTextFrameContext.cxx:1418
+XMLTextCreateFrameContext::CreateChildContext()
+
+at line 1450:
+pContext = GetImport().GetShapeImport()
+		->CreateFrameChildContext(rLocalName='image'...)
+pContext: an instance of SvXMLImportContext
+m_xImplContext = pContext
+
+[xxx.odt]
+in XMLTextFrameContext_Impl::Create()
+sHRef: "Picture/123.jpg"
+
+in xmloff/source/text/XMLTextFrameContext.cxx:566
+create an instance of "com.sun.star.text.GraphicObject" and get PropertySet
+
+get XMLTextImportHelper
+
+at line 724:
+sHRef = GetImport().ResolveGraphicObjectURL(sHRef, load_on_demand = true)
+sHRef: "vnd.sun.star.Package:Picture/123.jpg"
+
+at line 758:
+xTxtCntnt = xPropSet
+xTextImportHelper->insertTextContent(xTxtCntnt)
+
+
+
+[5017.odt]:
+
+GetImport() : an instance of SvXMLImport
+SvXMLImport has a mxGraphicResolver
+mxGraphicResolver: XGraphicObjectResolver
+
+#1  0x038e4dc1 in SvXMLImport::startElement (this=0x9620f80, rName="draw:image", xAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/core/xmlimp.cxx:647
+	#0  XMLTextFrameContext::CreateChildContext (this=0x9515558, p_nPrefix=4, rLocalName="image", xAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/text/XMLTextFrameContext.cxx:1418
+		namespace: draw (XML_TEXT_FRAME_GRAPHIC)
+		m_HasAutomaticStyleWithoutParentStyle = 1
+		at 1450: pContext = GetImport()->GetShapeImport()->CreateFrameChildChildContext()
+			#0  XMLShapeImportHelper::CreateFrameChildContext (this=0x8fc3ab0, rImport=..., p_nPrefix=4, rLocalName="image", rAttrList=..., rShapes=..., rFrameAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/draw/shapeimport.cxx:689
+				pContext = new SdXMLGraphicObjectShapeContext()
+				at 734: pContext->processAttribute() for attr in xAttrList
+					href: 'bindata/BIN0002.jpg' --> maURL
+					style-name: 'DrawFrame-1'
+					x: '111.73pt'
+					y: '4.9pt'
+					anchor-type: 'paragraph'
+					z-index: '2'
+					width: 57.68mm
+					height: 34.61mm
+
+		returns
+
+#1  0x038e4dc1 in SvXMLImport::startElement (this=0x9620f80, rName="draw:image", xAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/core/xmlimp.cxx:687
+	#3  0x0395b743 in SdXMLGraphicObjectShapeContext::StartElement (this=0x95bca30)
+		at /home/mete0r/prj/libreoffice/xmloff/source/draw/ximpshap.cxx:2362
+			pService: "com.sun.star.drawing.GraphicShapeObject"
+			#2  0x039576e9 in SdXMLShapeContext::AddShape (this=0x95bca30, pServiceName=0x3a97430 "com.sun.star.drawing.GraphicObjectShape") at /home/mete0r/prj/libreoffice/xmloff/source/draw/ximpshap.cxx:523
+				xShape = createInstance of pServiceName
+			#1  0x03957063 in SdXMLShapeContext::AddShape (this=0x95bca30, xShape=...)
+				XMLShapeImportHelper = GetImport().GetShapeImport()
+				at /home/mete0r/prj/libreoffice/xmloff/source/draw/ximpshap.cxx:446
+			#0  XMLTextShapeImportHelper::addShape (this=0x8e85588, rShape=..., xAttrList=..., rShapes=...)
+				rImport: maybe TextDocument
+				xTxtImport = rImport.GetTextImport() at line 94
+
+				at /home/mete0r/prj/libreoffice/xmloff/source/text/XMLTextShapeImportHelper.cxx:140
+				XTextContent->InsertTextContent()
+		at 2388
+			mbIsPlaceholder: false
+			maURL: 'bindata/BIN0002.jpg'
+			aAny = GetImport().ResolveGraphicObjectURL( maURL, GetImport().isGraphicLoadOnDemandSupported() )
+			aAny: 'vnd.sun.star.Package:bindata/BIN0002.jpg'
+			mxShape.setPropertyValue('GraphicURL', aAny)
+			mxShape.setPropertyValue('GraphicStreamURL', aAny)
+
+
+[xxx.odt]:
+#1  0x038e4dc1 in SvXMLImport::startElement (this=0x9620f80, rName="draw:image", xAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/core/xmlimp.cxx:647
+	#0  XMLTextFrameContext::CreateChildContext (this=0x9515558, p_nPrefix=4, rLocalName="image", xAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/text/XMLTextFrameContext.cxx:1418
+		namespace: draw (XML_TEXT_FRAME_GRAPHIC)
+		m_HasAutomaticStyleWithoutParentStyle = 0
+
+		at line 1492
+		pContext = new XMLTextFrameContext_Impl()
+	#1  0x03a180c8 in XMLTextFrameContext_Impl (this=0x93cd8a0, rImport=..., nPrfx=<value optimized out>, rLName="image", rAttrList=..., eATyp=com::sun::star::text::TextContentAnchorType_AT_PARAGRAPH, nNewType=2, rFrameAttrList=...) at /home/mete0r/prj/libreoffice/xmloff/source/text/XMLTextFrameContext.cxx:1067
+	#0  XMLTextFrameContext_Impl::Create (this=0x93cd8a0) at /home/mete0r/prj/libreoffice/xmloff/source/text/XMLTextFrameContext.cxx:758
+		nType = 2
+		XMLTextImportHeler xTextImportHelper.InsertTextContent()
+		sHRef = 'vnd.sun.star.Package:Pictures/1234...1234.jpg'
+
+
+
+sdr::contact::ViewObjectContactOfGraphic::doAsynchGraphicLoading() 에서부터 이미지 로딩
+
+
+1. ODT 패키지를 로딩할 때, 패키지에 포함된 그림 파일들을 바로 이어서 로딩하거나, LoadOnDemand 할 수 있음.
+   SvXMLImport::ResolveGraphicObjectURL(url, loadondemand) 참조.
+
+   그런데 SdXMLGraphicObjectShapeContext::StartElement()는 (line 2388 부근에서) SvXMLImport::ResolveGraphicObjectURL을 호출할 때
+   SvXMLImport::IsGraphicLoadOnDemandSupported()를 호출하는데, SvXMLImport는 기본값으로 true를 반환하며, SwXMLImport도 마찬가지인 듯 하다.
+
+   그래서 패키지를 처음 로딩할 때 이미지가 로딩되지 않고, 이후에 UI에서 on demand로 이미지를 로딩하는 듯 하다.
+   (sdr::contact::ViewObjectContactOfGraphic::doAsynchGraphicLoading()에서부터 추적)
+
+   그런데 실제로는 load on demand 과정에서 실패하는데, Storage에서 그림 스트림을 얻어내는 과정에서 실패한다.
+   (comphelper::OStorageHelper::GetStreamAtPackageURL()에서부터 추적)
+   
+   일단 패키지 Storage가 (hwp에서 odt로 변환한) 임시 파일에 기반해 있기 때문에
+   추후 on demand 과정에서는 이 파일이 이미 사라졌기 때문이 아닌가 추측해볼 수 있는데,
+   hwp5file_convert_to_odtpkg_file()에서 임시파일 대신 특정한 위치에 고정된 파일을 만들어서
+   실험해봤을 때도 역시 그림 스트림을 얻어내는데서 실패하는 것으로 보아, 다른 이유일 수도 있음.
+
+2. on demand 로딩을 포기하고 content.xml을 로딩하면서 그림들도 함께 로딩되도록 하면, 그림들이 제대로 로딩되는 것을
+   확인할 수 있다:
+
+   com.sun.star.comp.Writer.XMLOasisContentImporter를 초기화할 때, 필터 인자로 graphic resolver를 다음처럼 초기화하여 넘겨준다.
+
+   createInstanceWithArguments('com.sun.star.comp.Svx.GraphicImportHelper', (storage,))
+   
+   그리고 디버거상에서 SvXMLImporter::initialize()를 수행한 뒤, mbIsGraphicLoadOnDemandSupported = false로 강제로
+   설정한 뒤 진행하면 그림들이 제대로 로딩됨을 확인할 수 있다.
+
+   그런데 문제는 SvXMLImporter::mbIsGraphicLoadOnDemandSupported는 처음에 true로 설정된 뒤, 바뀌지 않는다는 것이다. 위처럼
+   디버거 상에서 강제로 false로 설정해주지 않는 한, SvXMLImporter::ResolveGraphicObjectURL(url, loadondemand)는 늘 두번째
+   인자를 true로 불리게 된다. (SdXMLGraphicObjectShapeContext::StartElement()의 라인 2388 부근)
