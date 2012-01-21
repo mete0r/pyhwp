@@ -351,31 +351,31 @@ class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
         self.f = f
 
     def readBytes(self, aData, nBytesToRead):
-        logging.debug('InputStream.readBytes(%d)', nBytesToRead)
+        #logging.debug('InputStream.readBytes(%d)', nBytesToRead)
         data = self.f.read(nBytesToRead)
         return len(data), uno.ByteSequence(data)
 
     readSomeBytes = readBytes
 
     def skipBytes(self, nBytesToSkip):
-        logging.debug('InputStream.skipBytes(%d)', nBytesToSkip)
+        #logging.debug('InputStream.skipBytes(%d)', nBytesToSkip)
         data = self.f.read(nBytesToSkip)
 
     def available(self):
-        logging.debug('InputStream.available()')
+        #logging.debug('InputStream.available()')
         return 0
 
     def closeInput(self):
-        logging.debug('InputStream.close()')
+        #logging.debug('InputStream.close()')
         self.f.close()
 
     def seek(self, location):
-        logging.debug('InputStream.seek(%d)', location)
+        #logging.debug('InputStream.seek(%d)', location)
         self.f.seek(location)
 
     def getPosition(self):
         pos = self.f.tell()
-        logging.debug('InputStream.getPosition(): %d', pos)
+        #logging.debug('InputStream.getPosition(): %d', pos)
         return pos
 
     def getLength(self):
@@ -383,7 +383,7 @@ class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
         try:
             self.f.seek(0, 2)
             length = self.f.tell()
-            logging.debug('InputStream.getLength(): %d', length)
+            #logging.debug('InputStream.getLength(): %d', length)
             return length
         finally:
             self.f.seek(pos)
