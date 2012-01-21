@@ -5,7 +5,7 @@ resolver = localContext.ServiceManager.createInstanceWithContext(
         'com.sun.star.bridge.UnoUrlResolver', localContext)
 context = resolver.resolve('uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext')
 
-from pyhwp import OleFileIO_from_OLESimpleStorage, File_Stream
+from pyhwp import OleFileIO_from_OLESimpleStorage, FileFromStream
 from pyhwp import propseq_to_dict, dict_to_propseq
 import pyhwp
 
@@ -47,7 +47,7 @@ class Fac(pyhwp.Fac):
 
     def open(self, path):
         fin = self.open_filestream(path)
-        return File_Stream(fin)
+        return FileFromStream(fin)
 
     def HwpFileFromPath(self, path):
         inputstream = self.open_filestream(path)
@@ -68,7 +68,7 @@ class Fac(pyhwp.Fac):
         return self.StorageFromStream(self.TempFile())
 
     def mktmpfile(self):
-        return File_Stream(self.TempFile())
+        return FileFromStream(self.TempFile())
 
     def hwp5file_convert_to_odtpkg(self, hwp5file, path):
         tmpfile2 = self.hwp5file_convert_to_odtpkg_file(hwp5file)
@@ -85,13 +85,13 @@ class Fac(pyhwp.Fac):
 
     def HwpXmlFileFromPath(self, path):
         inputstream = self.HwpXmlInputStreamFromPath(path)
-        return File_Stream(inputstream)
+        return FileFromStream(inputstream)
 
     def HwpXmlInputStreamFromPath(self, path):
         hwpfile = self.HwpFileFromPath(path)
 
         tempfile = self.TempFile()
-        tmpfile = File_Stream(tempfile)
+        tmpfile = FileFromStream(tempfile)
 
         from hwp5.hwp5odt import generate_hwp5xml
         generate_hwp5xml(tmpfile, hwpfile)
@@ -151,7 +151,7 @@ class ODTPackage(object):
         for segment in intermediates:
             storage = storage.openStorageElement(segment, WRITE)
         stream = storage.openStreamElement(name, WRITE)
-        File_Stream(stream).write(f.read())
+        FileFromStream(stream).write(f.read())
 
     def close(self):
         self.storage.commit()

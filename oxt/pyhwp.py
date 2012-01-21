@@ -200,11 +200,11 @@ class Fac(object):
             transformer.start()
 
             if stdin is None and stdout is None:
-                return File_Stream(p_inputstream), File_Stream(p_outputstream)
+                return FileFromStream(p_inputstream), FileFromStream(p_outputstream)
             elif stdin is None:
-                return File_Stream(p_outputstream)
+                return FileFromStream(p_outputstream)
             elif stdout is None:
-                return File_Stream(p_inputstream)
+                return FileFromStream(p_inputstream)
             else:
                 pin.read()
                 pin.close()
@@ -239,7 +239,7 @@ class Fac(object):
         return tmpfile2
 
 
-class File_Stream(object):
+class FileFromStream(object):
     def __init__(self, stream):
         self.stream = stream
 
@@ -328,7 +328,7 @@ class OleFileIO_from_OLESimpleStorage(object):
         path_segments = path.split('/')
         stream = container_find_element(self.storage, path_segments)
         if stream is not None:
-            return File_Stream(stream)
+            return FileFromStream(stream)
 
 def unofy_value(value):
     if isinstance(value, dict):
