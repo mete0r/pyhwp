@@ -912,7 +912,7 @@ class ParaCharShape(RecordModel):
         unitsize = struct.calcsize('<'+fmt)
         unitcount = len(payload) / unitsize
         values = struct.unpack('<'+(fmt*unitcount), payload)
-        return dict(charshapes=(tuple(values[i*2:i*2+2]) for i in range(0, unitcount)))
+        return dict(charshapes=list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount)))
     decode = classmethod(decode)
 
 
@@ -949,7 +949,7 @@ class ParaLineSeg(RecordModel):
         unitcount = len(payload) / unitsize
         values = struct.unpack('<'+unitfmt*unitcount, payload)
         names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below', 'x', 'width', 'a8', 'flags']
-        return (dict(izip(names, tuple(values[i*10:i*10+10]))) for i in range(0, unitcount))
+        return list(dict(izip(names, tuple(values[i*10:i*10+10]))) for i in range(0, unitcount))
     decode = classmethod(decode)
 
 
@@ -1675,8 +1675,6 @@ def main():
                     return v
                 elif isinstance(v, type):
                     return v.__name__
-                elif isinstance(v, types.GeneratorType):
-                    return str(list(v))
                 else:
                     return str(v)
             def xmlattr(item):
