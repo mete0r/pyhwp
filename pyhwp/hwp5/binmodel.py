@@ -1663,11 +1663,13 @@ def main():
 
     import types
     from xml.sax.saxutils import XMLGenerator
-    xmlgen = XMLGenerator(out, 'utf-8')
     class XmlFormat(ModelEventHandler):
+        def __init__(self, out):
+            self.xmlgen = XMLGenerator(out, 'utf-8')
         def startDocument(self):
-            xmlgen.startDocument()
+            self.xmlgen.startDocument()
         def startModel(self, model, attributes, **context):
+            xmlgen = self.xmlgen
             def xmlattrval(v):
                 if isinstance(v, basestring):
                     return v
@@ -1727,13 +1729,14 @@ def main():
                     xmlgen._write(dataio.hexdump(unparsed, True))
                     xmlgen._write('\n-->')
         def endModel(self, model):
-            xmlgen.endElement(model.__name__)
+            self.xmlgen.endElement(model.__name__)
         def endDocument(self):
-            xmlgen.endDocument()
+            self.xmlgen.endDocument()
         def getlogger():
             return getlogger(options, loghandler(out, logformat_xml))
 
     class NulFormat(ModelEventHandler):
+        def __init__(self, out): pass
         def startDocument(self): pass
         def endDocument(self): pass
         def startModel(self, model, attributes, **context): pass
@@ -1746,7 +1749,7 @@ def main():
         logger = getlogger(options)
 
     formats = dict(xml=XmlFormat, nul=NulFormat)
-    oformat = formats[options.format]()
+    oformat = formats[options.format](out)
 
     context = create_context(version=version, logging=logger)
     models = parse_models(context, records, options.passes)
