@@ -1000,25 +1000,27 @@ class ParaText(RecordModel):
 class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
 
-    def parse_with_parent(cls, attributes, context, (parent_context,
-                                                     parent_model)):
-        stream = context['stream']
-        parent_content = parent_model['content']
+    def attributes(context):
+        yield ARRAY(ARRAY(UINT16, 2), 1), 'charshapes'
+    attributes = staticmethod(attributes)
 
-        nCharShapes = parent_content['charshapes']
-        #attributes['charshapes'] = ARRAY(ARRAY(UINT32, 2), nCharShapes).read(stream)
-        attributes = cls.decode(stream.read(), context)
-        return cls, attributes
-    parse_with_parent = classmethod(parse_with_parent)
+    def parse_pass1(cls, context):
+        return cls, cls.read(context['stream'], context)
+    parse_pass1 = classmethod(parse_pass1)
 
-    def decode(cls, payload, context=None):
+    def read(cls, f, context):
+        bytes = f.read()
+        return dict(charshapes=cls.decode(bytes, context))
+    read = classmethod(read)
+
+    def decode(payload, context=None):
         import struct
         fmt = 'II'
         unitsize = struct.calcsize('<'+fmt)
         unitcount = len(payload) / unitsize
         values = struct.unpack('<'+(fmt*unitcount), payload)
-        return dict(charshapes=list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount)))
-    decode = classmethod(decode)
+        return list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount))
+    decode = staticmethod(decode)
 
 
 class ParaLineSeg(RecordModel):
@@ -1041,18 +1043,17 @@ class ParaLineSeg(RecordModel):
             yield cls.Flags, 'flags'
         attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, attributes, context, (parent_context,
-                                                     parent_model)):
-        stream = context['stream']
-        parent_content = parent_model['content']
+    def attributes(cls, context):
+        yield ARRAY(cls.LineSeg, 1), 'linesegs'
+    attributes = classmethod(attributes)
 
-        nLineSegs = parent_content['linesegs']
-        #attributes['linesegs'] = ARRAY(cls.LineSeg, nLineSegs).read(stream)
-        attributes['linesegs'] = cls.decode(attributes, context, stream.read())
-        return cls, attributes
-    parse_with_parent = classmethod(parse_with_parent)
+    def parse_pass1(cls, context):
+        payload = context['stream'].read()
+        linesegs = cls.decode(context, payload)
+        return cls, dict(linesegs=linesegs)
+    parse_pass1 = classmethod(parse_pass1)
 
-    def decode(cls, attributes, context, payload):
+    def decode(cls, context, payload):
         from itertools import izip
         import struct
         unitfmt = 'iiiiiiiiHH'

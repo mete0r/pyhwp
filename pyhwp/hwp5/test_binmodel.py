@@ -350,7 +350,7 @@ class LineSegTest(TestCase):
         import binascii
         data = binascii.a2b_hex(data)
         from .binmodel import ParaLineSeg
-        lines = list(ParaLineSeg.decode(dict(), dict(), data))
+        lines = list(ParaLineSeg.decode(dict(), data))
         self.assertEquals(0, lines[0]['chpos'])
         self.assertEquals(51, lines[1]['chpos'])
         self.assertEquals(103, lines[2]['chpos'])
