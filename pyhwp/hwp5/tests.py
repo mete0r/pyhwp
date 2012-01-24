@@ -8,4 +8,5 @@ def test_suite():
     import test_filestructure
     import test_storage
     import test_odtxsl
-    return TS((TL.loadTestsFromModule(m) for m in [test_storage, test_filestructure, test_binmodel, test_dataio, test_xmlmodel, test_xmlformat, test_odtxsl]))
+    tests = [test_storage, test_filestructure, test_binmodel, test_dataio, test_xmlmodel, test_xmlformat, test_odtxsl]
+    return TS((TL.loadTestsFromModule(m) for m in tests))
