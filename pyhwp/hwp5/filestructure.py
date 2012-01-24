@@ -198,6 +198,26 @@ def open(filename):
     olefile = OleFileIO(filename)
     return File(olefile)
 
+def walk(hwpfile, dirpath=''):
+    if dirpath == '' or dirpath == '/':
+        base = ''
+    else:
+        base = dirpath + '/'
+    names = hwpfile.listdir(dirpath)
+    files = []
+    dirs = []
+    for name in names:
+        path = base+name
+        if hwpfile.is_storage(path):
+            dirs.append(name)
+        else:
+            files.append(name)
+    yield dirpath, dirs, files
+    for name in dirs:
+        path = base+name
+        for x in walk(hwpfile, path):
+            yield x
+
 class File(object):
 
     def __init__(self, olefile):

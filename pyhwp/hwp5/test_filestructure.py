@@ -88,3 +88,18 @@ class TestModuleFunctions(TestCase):
         self.assertTrue(hwpfile.is_stream('BinData/BIN0003.png'))
         self.assertTrue(hwpfile.is_stream('Scripts/DefaultJScript'))
         self.assertTrue(hwpfile.is_stream('Scripts/JScriptVersion'))
+
+    def test_walk(self):
+        olefile = OleFileIO(sample_filename)
+        hwpfile = FS.File(olefile)
+        from hwp5.filestructure import walk
+
+        result = list(walk(hwpfile))
+        self.assertEquals('', result[0][0])
+        self.assertEquals(sorted(['BinData', 'BodyText', 'DocOptions', 'Scripts']),
+                          sorted(result[0][1]))
+        self.assertEquals(sorted(['\x05HwpSummaryInformation', 'DocInfo', 'FileHeader', 'PrvImage', 'PrvText']),
+                          sorted(result[0][2]))
+
+        for dirpath, dirs, files in walk(hwpfile):
+            print dirpath, dirs, files
