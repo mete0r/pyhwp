@@ -56,3 +56,18 @@ class TestModuleFunctions(TestCase):
         assert isinstance(f, FS.File)
 
         self.assertRaises(FS.BadFormatError, FS.open, nonole_filename)
+
+    def test_listdir(self):
+        olefile = OleFileIO(sample_filename)
+        hwpfile = FS.File(olefile)
+        self.assertEquals(sorted(['Section0']),
+                          sorted(hwpfile.listdir('BodyText')))
+        self.assertEquals(sorted(['BIN0002.jpg', 'BIN0002.png', 'BIN0003.png']),
+                          sorted(hwpfile.listdir('BinData')))
+        self.assertEquals(sorted(['DefaultJScript', 'JScriptVersion']),
+                          sorted(hwpfile.listdir('Scripts')))
+
+        expected = ['FileHeader', 'BodyText', 'BinData', 'Scripts', 'DocOptions', 'DocInfo',
+                    'PrvText', 'PrvImage', '\x05HwpSummaryInformation']
+        self.assertEquals(sorted(expected), sorted(hwpfile.listdir('/')))
+        self.assertEquals(sorted(expected), sorted(hwpfile.listdir('')))

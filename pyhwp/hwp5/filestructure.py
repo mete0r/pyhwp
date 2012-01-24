@@ -207,6 +207,30 @@ class File(object):
         if hasattr(self.olefile, 'close'):
             self.olefile.close()
 
+    def listdir(self, path):
+        if path == '' or path == '/':
+            # we use a list instead of a set
+            # for python 2.3 compatibility
+            yielded = []
+
+            for stream in self.olefile.listdir():
+                top_item = stream[0]
+                if top_item in yielded:
+                    continue
+                yielded.append(top_item)
+                yield top_item
+            return
+
+        if not self.olefile.exists(path):
+            raise IOError('not exists')
+        if self.olefile.get_type(path) != 1:
+            raise IOError('not a storage')
+        path_segments = path.split('/')
+        for stream in self.olefile.listdir():
+            if len(stream) == len(path_segments) + 1:
+                if stream[:-1] == path_segments:
+                    yield stream[-1]
+
     def list_streams(self):
         return list_streams(self.olefile)
 
