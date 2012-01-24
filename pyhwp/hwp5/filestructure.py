@@ -264,6 +264,33 @@ class File(object):
         if pseudostream:
             return pseudostream(*args)
 
+def unole():
+    import sys
+    from OleFileIO_PL import OleFileIO
+    import os.path
+
+    olefilepath = sys.argv[1]
+    olefile = OleFileIO(olefilepath)
+    olefilename = os.path.split(olefilepath)[-1]
+    base = '.'.join(olefilename.split('.')[:-1])
+    if not os.path.exists(base):
+        os.mkdir(base)
+    for path_segments in olefile.listdir():
+        if len(path_segments) > 0:
+            for i in range(0, len(path_segments)-1):
+                intermediate_path = os.path.join(base, *path_segments[:i+1])
+                if not os.path.exists(intermediate_path):
+                    os.mkdir(intermediate_path)
+        fout = file(os.path.join(base, *path_segments), 'w')
+        try:
+            fin = olefile.openstream(path_segments)
+            try:
+                fout.write(fin.read())
+            finally:
+                fin.close()
+        finally:
+            fout.close()
+
 def main():
     from ._scriptutils import OptionParser, args_pop, open_or_exit
     op = OptionParser(usage='usage: %prog [options] filename <stream>')
