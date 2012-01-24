@@ -71,3 +71,20 @@ class TestModuleFunctions(TestCase):
                     'PrvText', 'PrvImage', '\x05HwpSummaryInformation']
         self.assertEquals(sorted(expected), sorted(hwpfile.listdir('/')))
         self.assertEquals(sorted(expected), sorted(hwpfile.listdir('')))
+
+    def test_is_storage(self):
+        olefile = OleFileIO(sample_filename)
+        hwpfile = FS.File(olefile)
+        self.assertTrue(hwpfile.is_storage('BodyText'))
+        self.assertTrue(hwpfile.is_storage('BinData'))
+        self.assertTrue(hwpfile.is_storage('Scripts'))
+
+    def test_is_stream(self):
+        olefile = OleFileIO(sample_filename)
+        hwpfile = FS.File(olefile)
+        self.assertTrue(hwpfile.is_stream('BodyText/Section0'))
+        self.assertTrue(hwpfile.is_stream('BinData/BIN0002.jpg'))
+        self.assertTrue(hwpfile.is_stream('BinData/BIN0002.png'))
+        self.assertTrue(hwpfile.is_stream('BinData/BIN0003.png'))
+        self.assertTrue(hwpfile.is_stream('Scripts/DefaultJScript'))
+        self.assertTrue(hwpfile.is_stream('Scripts/JScriptVersion'))

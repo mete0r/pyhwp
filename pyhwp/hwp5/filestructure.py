@@ -231,6 +231,12 @@ class File(object):
                 if stream[:-1] == path_segments:
                     yield stream[-1]
 
+    def is_storage(self, path):
+        return self.olefile.get_type(path) == 1 # OleFileIO_PL.STGTY_STORAGE
+
+    def is_stream(self, path):
+        return self.olefile.get_type(path) == 2# OleFileIO_PL.STGTY_STREAM
+
     def list_streams(self):
         return list_streams(self.olefile)
 
