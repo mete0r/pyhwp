@@ -25,14 +25,10 @@ def iter_storage_leafs(stg, basepath=''):
         stg: an instance of Storage
     '''
     for name in stg:
-        if basepath == '' or basepath == '/':
-            path = name
-        else:
-            path = basepath+'/'+name
-
+        path = basepath + name
         item = stg[name]
         if isinstance(item, Storage):
-            for x in iter_storage_leafs(item, path):
+            for x in iter_storage_leafs(item, path+'/'):
                 yield x
         else:
             yield path
