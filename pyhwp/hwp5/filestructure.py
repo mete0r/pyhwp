@@ -286,6 +286,25 @@ class StorageWrapper(Storage):
         return self.stg[name]
 
 
+def uncompress(stream):
+    ''' uncompress inputstream
+
+        stream: a file-like readable
+        returns a file-like readable
+    '''
+    return StringIO(zlib.decompress(stream.read(), -15)) # without gzip header
+
+
+class CompressedStorage(StorageWrapper):
+    ''' uncompress streams in the underlying storage '''
+    def __getitem__(self, name):
+        item = self.stg[name]
+        if not isinstance(item, Storage):
+            return uncompress(item)
+        else:
+            return item
+
+
 class File(object):
 
     def __init__(self, olefile):

@@ -104,7 +104,8 @@ class TestModuleFunctions(TestCase):
         for dirpath, dirs, files in walk(hwpfile):
             print dirpath, dirs, files
 
-class TestOleStorage(TestCase):
+
+class TestBase(TestCase):
 
     @property
     def olefile(self):
@@ -113,6 +114,9 @@ class TestOleStorage(TestCase):
     @property
     def olestg(self):
         return FS.OleStorage(self.olefile)
+
+
+class TestOleStorage(TestBase):
 
     def test_iter(self):
         olestg = self.olestg
@@ -195,3 +199,11 @@ class TestStorageWrapper(TestCase):
         stg = FS.StorageWrapper(self.storage)
         self.assertEquals('fileheader', stg['FileHeader'].read())
         self.assertEquals('bin0001.jpg', stg['BinData']['BIN0001.jpg'].read())
+
+
+class TestCompressedStorage(TestBase):
+    def test_getitem(self):
+        stg = FS.CompressedStorage(self.olestg['BinData'])
+        data = stg['BIN0002.jpg'].read()
+        self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
+        self.assertEquals(15895, len(data))
