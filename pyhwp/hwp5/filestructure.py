@@ -373,6 +373,49 @@ class File(object):
         if pseudostream:
             return pseudostream(*args)
 
+def iter_storage_leafs(stg, basepath=''):
+    ''' iterate every leaf nodes in the storage
+
+        stg: an instance of Storage
+    '''
+    for name in stg:
+        if basepath == '' or basepath == '/':
+            path = name
+        else:
+            path = basepath+'/'+name
+
+        item = stg[name]
+        if isinstance(item, Storage):
+            for x in iter_storage_leafs(item, path):
+                yield x
+        else:
+            yield path
+
+
+def unpack(stg, outbase):
+    ''' unpack a storage into outbase directory
+
+        stg: an instance of Storage
+        outbase: path to a directory in filesystem (should not end with '/')
+    '''
+    import os, os.path
+    for name in stg:
+        outpath = os.path.join(outbase, name)
+        item = stg[name]
+        if isinstance(item, Storage):
+            os.mkdir(outpath)
+            unpack(item, outpath)
+        else:
+            try:
+                outfile = file(outpath, 'w')
+                try:
+                    outfile.write(item.read())
+                finally:
+                    outfile.close()
+            finally:
+                item.close()
+
+
 def unole():
     import sys
     from OleFileIO_PL import OleFileIO
@@ -380,25 +423,12 @@ def unole():
 
     olefilepath = sys.argv[1]
     olefile = OleFileIO(olefilepath)
+    olestg = OleStorage(olefile)
     olefilename = os.path.split(olefilepath)[-1]
     base = '.'.join(olefilename.split('.')[:-1])
     if not os.path.exists(base):
         os.mkdir(base)
-    for path_segments in olefile.listdir():
-        if len(path_segments) > 0:
-            for i in range(0, len(path_segments)-1):
-                intermediate_path = os.path.join(base, *path_segments[:i+1])
-                if not os.path.exists(intermediate_path):
-                    os.mkdir(intermediate_path)
-        fout = file(os.path.join(base, *path_segments), 'w')
-        try:
-            fin = olefile.openstream(path_segments)
-            try:
-                fout.write(fin.read())
-            finally:
-                fin.close()
-        finally:
-            fout.close()
+    unpack(olestg, base)
 
 def main():
     from ._scriptutils import OptionParser, args_pop, open_or_exit

@@ -144,3 +144,35 @@ class TestOleStorage(TestCase):
 
         bin0002 = bindata['BIN0002.jpg']
         self.assertTrue(hasattr(bin0002, 'read'))
+
+
+    def test_iter_storage_leafs(self):
+        from hwp5.filestructure import iter_storage_leafs
+        result = iter_storage_leafs(self.olestg)
+        expected = ['\x05HwpSummaryInformation', 'BinData/BIN0002.jpg', 'BinData/BIN0002.png', 'BinData/BIN0003.png',
+                    'BodyText/Section0', 'DocInfo', 'DocOptions/_LinkDoc', 'FileHeader', 'PrvImage', 'PrvText',
+                    'Scripts/DefaultJScript', 'Scripts/JScriptVersion']
+        self.assertEquals(sorted(expected), sorted(result))
+
+    def test_unpack(self):
+        from hwp5.filestructure import unpack
+        import shutil
+        import os, os.path
+
+        if os.path.exists('5017'):
+            shutil.rmtree('5017')
+        os.mkdir('5017')
+        unpack(self.olestg, '5017')
+
+        self.assertTrue(os.path.exists('5017/\x05HwpSummaryInformation'))
+        self.assertTrue(os.path.exists('5017/BinData/BIN0002.jpg'))
+        self.assertTrue(os.path.exists('5017/BinData/BIN0002.png'))
+        self.assertTrue(os.path.exists('5017/BinData/BIN0003.png'))
+        self.assertTrue(os.path.exists('5017/BodyText/Section0'))
+        self.assertTrue(os.path.exists('5017/DocInfo'))
+        self.assertTrue(os.path.exists('5017/DocOptions/_LinkDoc'))
+        self.assertTrue(os.path.exists('5017/FileHeader'))
+        self.assertTrue(os.path.exists('5017/PrvImage'))
+        self.assertTrue(os.path.exists('5017/PrvText'))
+        self.assertTrue(os.path.exists('5017/Scripts/DefaultJScript'))
+        self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
