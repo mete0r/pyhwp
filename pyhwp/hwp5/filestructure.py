@@ -100,12 +100,15 @@ def is_hwp5file(filename):
 def open_fileheader(olefile):
     return olefile.openstream('FileHeader')
 
-def get_fileheader(olefile):
-    f = open_fileheader(olefile)
+def decode_fileheader(f):
     attributes = FileHeader.read(f)
     fileheader = FileHeader()
     fileheader.__dict__.update((name, type(attributes.get(name))) for type, name in FileHeader.attributes(dict()))
     return fileheader
+
+def get_fileheader(olefile):
+    f = open_fileheader(olefile)
+    return decode_fileheader(f)
 
 def open_summaryinfo(olefile):
     return olefile.openstream('\005HwpSummaryInformation')
@@ -301,6 +304,44 @@ class CompressedStorage(StorageWrapper):
         item = self.stg[name]
         if not isinstance(item, Storage):
             return uncompress(item)
+        else:
+            return item
+
+
+class Hwp5File(StorageWrapper):
+    ''' represents HWPv5 File
+
+        Hwp5File(stg)
+
+        stg: an instance of Storage
+    '''
+
+    def __init__(self, stg):
+        self.stg = stg
+
+    @cached_property
+    def header(self):
+        return decode_fileheader(self.stg['FileHeader'])
+
+    BinDataStorage = StorageWrapper
+    BodyTextStorage = StorageWrapper
+    ScriptsStorage = StorageWrapper
+
+    storagemap = dict(BinData=BinDataStorage,
+                      BodyText=BodyTextStorage,
+                      Scripts=ScriptsStorage)
+
+    def __getitem__(self, name):
+        item = self.stg[name]
+
+        if self.header.flags.compressed:
+            if name in ('BinData', 'BodyText', 'Scripts'):
+                item = CompressedStorage(item)
+            elif name == 'DocInfo':
+                item = uncompress(item)
+
+        if name in self.storagemap:
+            return self.storagemap[name](item)
         else:
             return item
 

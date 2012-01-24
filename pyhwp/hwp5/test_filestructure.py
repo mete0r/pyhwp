@@ -207,3 +207,42 @@ class TestCompressedStorage(TestBase):
         data = stg['BIN0002.jpg'].read()
         self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
         self.assertEquals(15895, len(data))
+
+
+class TestHwp5File(TestBase):
+
+    @property
+    def hwp5file(self):
+        return FS.Hwp5File(self.olestg)
+
+    def test_fileheader(self):
+        fileheader = self.hwp5file.header
+        self.assertEquals((5,0,1,7), fileheader.version)
+        self.assertTrue(fileheader.flags.compressed)
+
+    def test_getitem_storage_classes(self):
+        hwp5file = self.hwp5file
+        self.assertTrue(isinstance(hwp5file['BinData'], FS.Hwp5File.BinDataStorage))
+        self.assertTrue(isinstance(hwp5file['BodyText'], FS.Hwp5File.BodyTextStorage))
+        self.assertTrue(isinstance(hwp5file['Scripts'], FS.Hwp5File.ScriptsStorage))
+
+    def test_unpack(self):
+        outpath = 'sample-5017'
+        import os, os.path, shutil
+        if os.path.exists(outpath):
+            shutil.rmtree(outpath)
+        os.mkdir(outpath)
+        FS.unpack(self.hwp5file, outpath)
+
+        self.assertTrue(os.path.exists('5017/\x05HwpSummaryInformation'))
+        self.assertTrue(os.path.exists('5017/BinData/BIN0002.jpg'))
+        self.assertTrue(os.path.exists('5017/BinData/BIN0002.png'))
+        self.assertTrue(os.path.exists('5017/BinData/BIN0003.png'))
+        self.assertTrue(os.path.exists('5017/BodyText/Section0'))
+        self.assertTrue(os.path.exists('5017/DocInfo'))
+        self.assertTrue(os.path.exists('5017/DocOptions/_LinkDoc'))
+        self.assertTrue(os.path.exists('5017/FileHeader'))
+        self.assertTrue(os.path.exists('5017/PrvImage'))
+        self.assertTrue(os.path.exists('5017/PrvText'))
+        self.assertTrue(os.path.exists('5017/Scripts/DefaultJScript'))
+        self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
