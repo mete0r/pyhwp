@@ -103,3 +103,44 @@ class TestModuleFunctions(TestCase):
 
         for dirpath, dirs, files in walk(hwpfile):
             print dirpath, dirs, files
+
+class TestOleStorage(TestCase):
+
+    @property
+    def olefile(self):
+        return OleFileIO(sample_filename)
+
+    @property
+    def olestg(self):
+        return FS.OleStorage(self.olefile)
+
+    def test_iter(self):
+        olestg = self.olestg
+        gen = iter(olestg)
+        import types
+        self.assertTrue(isinstance(gen, types.GeneratorType))
+        expected = ['FileHeader', 'BodyText', 'BinData', 'Scripts', 'DocOptions', 'DocInfo',
+                    'PrvText', 'PrvImage', '\x05HwpSummaryInformation']
+        self.assertEquals(sorted(expected), sorted(gen))
+
+    def test_getitem(self):
+        olestg = self.olestg
+
+        try:
+            a = olestg['non-exists']
+            self.fail('KeyError expected')
+        except KeyError:
+            pass
+
+        fileheader = olestg['FileHeader']
+        self.assertTrue(hasattr(fileheader, 'read'))
+        
+        bindata = olestg['BinData']
+        self.assertTrue(isinstance(bindata, FS.OleStorage))
+        self.assertEquals('BinData', bindata.path)
+
+        self.assertEquals(sorted(['BIN0002.jpg', 'BIN0002.png', 'BIN0003.png']),
+                          sorted(iter(bindata)))
+
+        bin0002 = bindata['BIN0002.jpg']
+        self.assertTrue(hasattr(bin0002, 'read'))

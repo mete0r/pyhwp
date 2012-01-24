@@ -218,6 +218,65 @@ def walk(hwpfile, dirpath=''):
         for x in walk(hwpfile, path):
             yield x
 
+
+class Storage(object):
+    def __iter__(self):
+        ''' generates item names '''
+        raise NotImplementedError()
+
+    def __getitem__(self, name):
+        ''' return the item specified by the name '''
+        raise NotImplementedError()
+
+def olefile_listdir(olefile, path):
+    if path == '' or path == '/':
+        # we use a list instead of a set
+        # for python 2.3 compatibility
+        yielded = []
+
+        for stream in olefile.listdir():
+            top_item = stream[0]
+            if top_item in yielded:
+                continue
+            yielded.append(top_item)
+            yield top_item
+        return
+
+    if not olefile.exists(path):
+        raise IOError('%s not exists'%path)
+    if olefile.get_type(path) != 1:
+        raise IOError('%s not a storage'%path)
+    path_segments = path.split('/')
+    for stream in olefile.listdir():
+        if len(stream) == len(path_segments) + 1:
+            if stream[:-1] == path_segments:
+                yield stream[-1]
+
+class OleStorage(Storage):
+
+    def __init__(self, olefile, path=''):
+        self.olefile = olefile
+        self.path = path # path DOES NOT end with '/'
+
+    def __iter__(self):
+        return olefile_listdir(self.olefile, self.path)
+
+    def __getitem__(self, name):
+        if self.path == '' or self.path == '/':
+            path = name
+        else:
+            path = self.path + '/' + name
+        if not self.olefile.exists(path):
+            raise KeyError('%s not found'%path)
+        t = self.olefile.get_type(path)
+        if t == 1: # Storage
+            return OleStorage(self.olefile, path)
+        elif t == 2: # Stream
+            return self.olefile.openstream(path)
+        else:
+            raise KeyError('%s is invalid'%path)
+
+
 class File(object):
 
     def __init__(self, olefile):
