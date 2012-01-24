@@ -277,6 +277,15 @@ class OleStorage(Storage):
             raise KeyError('%s is invalid'%path)
 
 
+class StorageWrapper(Storage):
+    def __init__(self, stg):
+        self.stg = stg
+    def __iter__(self):
+        return iter(self.stg)
+    def __getitem__(self, name):
+        return self.stg[name]
+
+
 class File(object):
 
     def __init__(self, olefile):
