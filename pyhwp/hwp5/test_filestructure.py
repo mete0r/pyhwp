@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from unittest import TestCase
 from hwp5 import filestructure as FS
 from OleFileIO_PL import OleFileIO
@@ -225,6 +226,11 @@ class TestHwp5File(TestBase):
         self.assertTrue(isinstance(hwp5file['BinData'], FS.Hwp5File.BinDataStorage))
         self.assertTrue(isinstance(hwp5file['BodyText'], FS.Hwp5File.BodyTextStorage))
         self.assertTrue(isinstance(hwp5file['Scripts'], FS.Hwp5File.ScriptsStorage))
+
+    def test_prv_text(self):
+        prvtext = self.hwp5file['PrvText']
+        expected = '한글 2005 예제 파일입니다.'
+        self.assertEquals(expected, prvtext.read()[0:len(expected)])
 
     def test_unpack(self):
         outpath = 'sample-5017'

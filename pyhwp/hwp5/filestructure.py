@@ -91,6 +91,17 @@ def recode(backend_stream, backend_encoding, frontend_encoding, errors='strict')
     wr = codecs.getwriter(backend_encoding)
     return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
 
+def recoder(backend_encoding, frontend_encoding, errors='strict'):
+    def recode(backend_stream):
+        import codecs
+        enc = codecs.getencoder(frontend_encoding)
+        dec = codecs.getdecoder(frontend_encoding)
+        rd = codecs.getreader(backend_encoding)
+        wr = codecs.getwriter(backend_encoding)
+        return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
+    return recode
+
+
 def is_hwp5file(filename):
     if not isOleFile(filename):
         return False
@@ -329,7 +340,8 @@ class Hwp5File(StorageWrapper):
 
     storagemap = dict(BinData=BinDataStorage,
                       BodyText=BodyTextStorage,
-                      Scripts=ScriptsStorage)
+                      Scripts=ScriptsStorage,
+                      PrvText=recoder('utf-16le', 'utf-8'))
 
     def __getitem__(self, name):
         item = self.stg[name]
