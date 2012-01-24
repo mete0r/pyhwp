@@ -484,7 +484,8 @@ def unpack(stg, outbase):
         outpath = os.path.join(outbase, name)
         item = stg[name]
         if isinstance(item, Storage):
-            os.mkdir(outpath)
+            if not os.path.exists(outpath):
+                os.mkdir(outpath)
             unpack(item, outpath)
         else:
             try:
