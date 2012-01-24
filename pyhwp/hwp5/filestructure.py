@@ -10,6 +10,7 @@ from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import INT32, UINT32, UINT16, Flags, Struct, ARRAY, N_ARRAY
 from . import dataio
+from .storage import Storage, StorageWrapper, iter_storage_leafs, unpack
 
 class BYTES(type):
     def __new__(mcs, size):
@@ -233,15 +234,6 @@ def walk(hwpfile, dirpath=''):
             yield x
 
 
-class Storage(object):
-    def __iter__(self):
-        ''' generates item names '''
-        raise NotImplementedError()
-
-    def __getitem__(self, name):
-        ''' return the item specified by the name '''
-        raise NotImplementedError()
-
 def olefile_listdir(olefile, path):
     if path == '' or path == '/':
         # we use a list instead of a set
@@ -289,15 +281,6 @@ class OleStorage(Storage):
             return self.olefile.openstream(path)
         else:
             raise KeyError('%s is invalid'%path)
-
-
-class StorageWrapper(Storage):
-    def __init__(self, stg):
-        self.stg = stg
-    def __iter__(self):
-        return iter(self.stg)
-    def __getitem__(self, name):
-        return self.stg[name]
 
 
 def uncompress(stream):
@@ -453,50 +436,6 @@ class File(object):
         pseudostream = getattr(self, name, None)
         if pseudostream:
             return pseudostream(*args)
-
-def iter_storage_leafs(stg, basepath=''):
-    ''' iterate every leaf nodes in the storage
-
-        stg: an instance of Storage
-    '''
-    for name in stg:
-        if basepath == '' or basepath == '/':
-            path = name
-        else:
-            path = basepath+'/'+name
-
-        item = stg[name]
-        if isinstance(item, Storage):
-            for x in iter_storage_leafs(item, path):
-                yield x
-        else:
-            yield path
-
-
-def unpack(stg, outbase):
-    ''' unpack a storage into outbase directory
-
-        stg: an instance of Storage
-        outbase: path to a directory in filesystem (should not end with '/')
-    '''
-    import os, os.path
-    for name in stg:
-        outpath = os.path.join(outbase, name)
-        item = stg[name]
-        if isinstance(item, Storage):
-            if not os.path.exists(outpath):
-                os.mkdir(outpath)
-            unpack(item, outpath)
-        else:
-            try:
-                outfile = file(outpath, 'w')
-                try:
-                    outfile.write(item.read())
-                finally:
-                    outfile.close()
-            finally:
-                item.close()
-
 
 def unole():
     import sys
