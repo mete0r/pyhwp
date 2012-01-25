@@ -283,6 +283,78 @@ class OleStorage(Storage):
             raise KeyError('%s is invalid'%path)
 
 
+class GeneratorReader(object):
+    ''' convert a string generator into file-like reader
+
+        def gen():
+            yield 'hello'
+            yield 'world'
+
+        f = GeneratorReader(gen())
+        assert 'hell' == f.read(4)
+        assert 'oworld' == f.read()
+    '''
+
+    def __init__(self, gen):
+        self.gen = gen
+        self.buffer = ''
+
+    def read(self, size=None):
+        if size is None:
+            d, self.buffer = self.buffer, ''
+            return d + ''.join(self.gen)
+
+        for data in self.gen:
+            self.buffer += data
+            bufsize = len(self.buffer)
+            if bufsize >= size:
+                size = min(bufsize, size)
+                d, self.buffer = self.buffer[:size], self.buffer[size:]
+                return d
+
+        d, self.buffer = self.buffer, ''
+        return d
+
+    def close(self):
+        self.gen = self.buffer = None
+
+
+import codecs
+import zlib
+class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
+    def __init__(self, errors='strict', wbits=15):
+        assert errors == 'strict'
+        self.errors = errors
+        self.wbits = wbits
+        self.reset()
+
+    def decode(self, input, final=False):
+        c = self.decompressobj.decompress(input)
+        if final:
+            c += self.decompressobj.flush()
+        return c
+
+    def reset(self):
+        self.decompressobj = zlib.decompressobj(self.wbits)
+
+
+def uncompress_gen(source, bufsize=4096):
+    dec = ZLibIncrementalDecoder(wbits=-15)
+    exausted = False
+    while not exausted:
+        input = source.read(bufsize)
+        if len(input) < bufsize:
+            exausted = True
+        yield dec.decode(input, exausted)
+
+def uncompress(source, bufsize=4096):
+    ''' uncompress inputstream
+
+        stream: a file-like readable
+        returns a file-like readable
+    '''
+    return GeneratorReader(uncompress_gen(source, bufsize))
+
 def uncompress(stream):
     ''' uncompress inputstream
 

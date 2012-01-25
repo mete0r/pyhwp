@@ -233,3 +233,80 @@ class TestHwp5File(TestBase):
         self.assertTrue(os.path.exists('5017/PrvText'))
         self.assertTrue(os.path.exists('5017/Scripts/DefaultJScript'))
         self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
+
+class TestGeneratorReader(object):
+    def test_generator_reader(self):
+        def data(self):
+            yield 'Hello world'
+            yield 'my name is'
+            yield 'gen'
+            yield 'reader'
+
+        from .filestructure import GeneratorReader
+
+        f = GeneratorReader(data())
+        self.assertEquals('Hel', f.read(3))
+        self.assertEquals('llo wo', f.read(6))
+        self.assertEquals('rldmy', f.read(5))
+        self.assertEquals(' name isgenr', f.read(12))
+        self.assertEquals('eader', f.read())
+
+        f = GeneratorReader(data())
+        self.assertEquals('Hel', f.read(3))
+        self.assertEquals('llo wo', f.read(6))
+        self.assertEquals('rldmy', f.read(5))
+        self.assertEquals(' name isgenreader', f.read())
+
+        f = GeneratorReader(data())
+        self.assertEquals('Hel', f.read(3))
+        self.assertEquals('llo wo', f.read(6))
+        self.assertEquals('rldmy', f.read(5))
+        self.assertEquals(' name isgenreader', f.read(1000))
+
+
+from .utils import cached_property
+class TestUncompress(TestCase):
+
+    @cached_property
+    def original_data(self):
+        f = file('/dev/urandom', 'r')
+        try:
+            return f.read(16384)
+        finally:
+            f.close()
+
+    @cached_property
+    def compressed_data(self):
+        import zlib
+        return zlib.compress(self.original_data)
+
+    def test_incremental_decode(self):
+        compressed_data = self.compressed_data
+
+        from .filestructure import ZLibIncrementalDecoder
+        dec = ZLibIncrementalDecoder(wbits=-15)
+        data = dec.decode(compressed_data[2:2048])
+        data += dec.decode(compressed_data[2048:2048+1024])
+        data += dec.decode(compressed_data[2048+1024:2048+1024+4096])
+        data += dec.decode(compressed_data[2048+1024+4096:], True)
+
+        self.assertEquals(self.original_data, data)
+
+    def test_uncompress(self):
+        from StringIO import StringIO
+
+        from .filestructure import uncompress_gen
+        gen = uncompress_gen(StringIO(self.compressed_data[2:]))
+        self.assertEquals(self.original_data, ''.join(gen))
+
+        print '-----'
+
+        from .filestructure import uncompress
+
+        f = uncompress(StringIO(self.compressed_data[2:]))
+        g = StringIO(self.original_data)
+
+        self.assertEquals(f.read(2048), g.read(2048))
+        self.assertEquals(f.read(1024), g.read(1024))
+        self.assertEquals(f.read(4096), g.read(4096))
+        self.assertEquals(f.read(), g.read())
