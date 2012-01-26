@@ -393,6 +393,16 @@ class Hwp5CompressedStreams(StorageWrapper):
         return item
 
 
+class Hwp5Stream(object):
+
+    def __init__(self, stg, name):
+        self.stg = stg
+        self.name = name
+
+    def open(self):
+        return self.stg[self.name]
+
+
 class Hwp5File(StorageWrapper):
     ''' represents HWPv5 File
 
@@ -440,6 +450,16 @@ class Hwp5File(StorageWrapper):
         elif name == 'Scripts':
             return self.ScriptsStorage(item)
         return item
+
+    docinfo_class = Hwp5Stream
+
+    @cached_property
+    def docinfo(self):
+        return self.docinfo_class(self, 'DocInfo')
+
+    @cached_property
+    def bodytext(self):
+        return self['BodyText']
 
 
 class File(object):

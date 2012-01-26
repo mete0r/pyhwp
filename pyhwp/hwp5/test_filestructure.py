@@ -234,6 +234,24 @@ class TestHwp5File(TestBase):
         self.assertTrue(os.path.exists('5017/Scripts/DefaultJScript'))
         self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
 
+    def test_docinfo(self):
+        hwp5file = self.hwp5file
+        docinfo = hwp5file.docinfo.open()
+        try:
+            data = docinfo.read()
+        finally:
+            docinfo.close()
+
+        import zlib
+        self.assertEquals(zlib.decompress(self.olestg['DocInfo'].read(), -15), data)
+
+    def test_bodytext(self):
+        bodytext = self.hwp5file.bodytext
+        from .storage import StorageWrapper
+        self.assertTrue(isinstance(bodytext, StorageWrapper))
+        self.assertEquals(['Section0'], list(bodytext))
+
+
 class TestGeneratorReader(object):
     def test_generator_reader(self):
         def data(self):
