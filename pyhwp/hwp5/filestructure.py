@@ -395,9 +395,10 @@ class Hwp5CompressedStreams(StorageWrapper):
 
 class Hwp5Stream(object):
 
-    def __init__(self, stg, name):
+    def __init__(self, stg, name, version):
         self.stg = stg
         self.name = name
+        self.version = version
 
     def open(self):
         return self.stg[self.name]
@@ -407,8 +408,32 @@ class SectionStorage(StorageWrapper):
 
     section_class = Hwp5Stream
 
+    def __init__(self, stg, version):
+        self.stg = stg
+        self.version = version
+
     def section(self, idx):
-        return self.section_class(self.stg['Section%d'%idx])
+        return self.section_class(self.stg, 'Section%d'%idx, self.version)
+
+    def section_indexes(self):
+        def gen():
+            for name in self.stg:
+                if name.startswith('Section'):
+                    idx = name[len('Section'):]
+                    try:
+                        idx = int(idx)
+                    except:
+                        pass
+                    else:
+                        yield idx
+        indexes = list(gen())
+        indexes.sort()
+        return indexes
+
+    @property
+    def sections(self):
+        return list(self.section(idx)
+                    for idx in self.section_indexes())
 
 
 class Hwp5File(StorageWrapper):
@@ -454,7 +479,7 @@ class Hwp5File(StorageWrapper):
         elif name == 'BinData':
             return self.BinDataStorage(item)
         elif name == 'BodyText':
-            return self.BodyTextStorage(item)
+            return self.BodyTextStorage(item, self.header.version)
         elif name == 'Scripts':
             return self.ScriptsStorage(item)
         return item
@@ -463,7 +488,7 @@ class Hwp5File(StorageWrapper):
 
     @cached_property
     def docinfo(self):
-        return self.docinfo_class(self, 'DocInfo')
+        return self.docinfo_class(self, 'DocInfo', self.header.version)
 
     @cached_property
     def bodytext(self):

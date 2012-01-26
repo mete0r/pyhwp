@@ -249,6 +249,9 @@ class TestHwp5File(TestBase):
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, FS.SectionStorage))
         self.assertEquals(['Section0'], list(bodytext))
+        section0 = bodytext.section(0)
+        self.assertEquals([0], bodytext.section_indexes())
+        self.assertEquals(1, len(bodytext.sections))
 
 
 class TestGeneratorReader(object):
