@@ -17,6 +17,8 @@ class StorageWrapper(Storage):
         return iter(self.stg)
     def __getitem__(self, name):
         return self.stg[name]
+    def __getattr__(self, name):
+        return getattr(self.stg, name)
 
 
 def iter_storage_leafs(stg, basepath=''):
@@ -57,5 +59,3 @@ def unpack(stg, outbase):
                     outfile.close()
             finally:
                 item.close()
-
-
