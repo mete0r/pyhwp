@@ -59,3 +59,15 @@ def unpack(stg, outbase):
                     outfile.close()
             finally:
                 item.close()
+
+
+def open_storage_item(stg, path):
+    if isinstance(path, basestring):
+        path_segments = path.split('/')
+    else:
+        path_segments = path
+
+    item = stg
+    for name in path_segments:
+        item = item[name]
+    return item
