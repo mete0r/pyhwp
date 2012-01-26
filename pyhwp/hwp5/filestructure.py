@@ -374,29 +374,12 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
-class Hwp5File(StorageWrapper):
-    ''' represents HWPv5 File
-
-        Hwp5File(stg)
-
-        stg: an instance of Storage
-    '''
-
-    def __init__(self, stg):
-        self.stg = stg
+class Hwp5CompressedStreams(StorageWrapper):
+    ''' handle compressed streams in HWPv5 files '''
 
     @cached_property
     def header(self):
         return decode_fileheader(self.stg['FileHeader'])
-
-    BinDataStorage = StorageWrapper
-    BodyTextStorage = StorageWrapper
-    ScriptsStorage = StorageWrapper
-
-    storagemap = dict(BinData=BinDataStorage,
-                      BodyText=BodyTextStorage,
-                      Scripts=ScriptsStorage,
-                      PrvText=recoder('utf-16le', 'utf-8'))
 
     def __getitem__(self, name):
         item = self.stg[name]
@@ -407,10 +390,56 @@ class Hwp5File(StorageWrapper):
             elif name == 'DocInfo':
                 item = uncompress(item)
 
-        if name in self.storagemap:
-            return self.storagemap[name](item)
-        else:
-            return item
+        return item
+
+
+class Hwp5File(StorageWrapper):
+    ''' represents HWPv5 File
+
+        Hwp5File(stg)
+
+        stg: an instance of Storage
+    '''
+
+    def __init__(self, stg):
+        self.stg = Hwp5CompressedStreams(stg)
+
+    def __iter__(self):
+        for name in self.stg:
+            for n in self.modify_name(name):
+                yield n
+
+    def __getitem__(self, name):
+        try:
+            item = self.stg[name]
+        except KeyError:
+            item = None
+
+        item = self.modify_item(name, item)
+
+        if item is None:
+            raise KeyError('%s is not found', item)
+        return item
+
+    BinDataStorage = StorageWrapper
+    BodyTextStorage = StorageWrapper
+    ScriptsStorage = StorageWrapper
+
+    def modify_name(self, name):
+        yield name
+        if name == 'PrvText':
+            yield name+'.utf8'
+
+    def modify_item(self, name, item):
+        if name == 'PrvText.utf8':
+            return recoder('utf-16le', 'utf-8')(self.stg['PrvText'])
+        elif name == 'BinData':
+            return self.BinDataStorage(item)
+        elif name == 'BodyText':
+            return self.BodyTextStorage(item)
+        elif name == 'Scripts':
+            return self.ScriptsStorage(item)
+        return item
 
 
 class File(object):

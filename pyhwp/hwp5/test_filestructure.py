@@ -209,7 +209,7 @@ class TestHwp5File(TestBase):
         self.assertTrue(isinstance(hwp5file['Scripts'], FS.Hwp5File.ScriptsStorage))
 
     def test_prv_text(self):
-        prvtext = self.hwp5file['PrvText']
+        prvtext = self.hwp5file['PrvText.utf8']
         expected = '한글 2005 예제 파일입니다.'
         self.assertEquals(expected, prvtext.read()[0:len(expected)])
 
