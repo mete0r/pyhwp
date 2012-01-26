@@ -247,8 +247,7 @@ class TestHwp5File(TestBase):
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
-        from .storage import StorageWrapper
-        self.assertTrue(isinstance(bodytext, StorageWrapper))
+        self.assertTrue(isinstance(bodytext, FS.SectionStorage))
         self.assertEquals(['Section0'], list(bodytext))
 
 

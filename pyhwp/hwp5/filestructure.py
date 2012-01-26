@@ -403,6 +403,14 @@ class Hwp5Stream(object):
         return self.stg[self.name]
 
 
+class SectionStorage(StorageWrapper):
+
+    section_class = Hwp5Stream
+
+    def section(self, idx):
+        return self.section_class(self.stg['Section%d'%idx])
+
+
 class Hwp5File(StorageWrapper):
     ''' represents HWPv5 File
 
@@ -432,7 +440,7 @@ class Hwp5File(StorageWrapper):
         return item
 
     BinDataStorage = StorageWrapper
-    BodyTextStorage = StorageWrapper
+    BodyTextStorage = SectionStorage
     ScriptsStorage = StorageWrapper
 
     def modify_name(self, name):

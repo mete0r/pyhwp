@@ -133,9 +133,17 @@ def bin2json_stream(f):
 
 
 from .storage import StorageWrapper
-class RecordStorage(StorageWrapper):
-    ''' Record Storage
-    '''
+
+class RecordStream(filestructure.Hwp5Stream):
+
+    def records(self):
+        return read_records(self.open(), '', '')
+
+
+class SectionStorage(filestructure.SectionStorage):
+
+    section_class = RecordStream
+
     def __iter__(self):
         for name in self.stg:
             yield name
@@ -154,7 +162,9 @@ class RecordStorage(StorageWrapper):
 class Hwp5File(filestructure.Hwp5File):
     ''' Hwp5File for 'rec' layer
     '''
-    BodyTextStorage = RecordStorage
+
+    docinfo_class = RecordStream
+    BodyTextStorage = SectionStorage
 
     def modify_name(self, name):
         if name == 'DocInfo':
