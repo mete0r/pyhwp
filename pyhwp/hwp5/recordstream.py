@@ -7,6 +7,7 @@ from .tagids import HWPTAG_BEGIN, tagnames
 from .dataio import UINT32, Eof
 from . import dataio
 from .utils import cached_property
+from . import filestructure
 
 class Record:
 
@@ -101,6 +102,74 @@ def link_records(records):
                 rec.parent = prev
         yield rec
         prev = rec
+
+def generate_simplejson_dumps(records, *args, **kwargs):
+    ''' generate simplejson.dumps()ed strings for each records
+
+        records: record iterable
+        args, kwargs: options for simplejson.dumps
+    '''
+    from .dataio import dumpbytes
+    import binascii
+    for rec in records:
+        d = dict(index=rec.seqno,
+                 tag=rec.tag,
+                 tagid=rec.tagid,
+                 treelevel=rec.level,
+                 payload=list(dumpbytes(rec.payload)))
+        if rec.filename:
+            d['filename'] = rec.filename
+        if rec.streamid:
+            d['streamid'] = rec.streamid
+        import simplejson # TODO: simplejson is for python2.5+
+        yield simplejson.dumps(d, *args, **kwargs) + '\n'
+
+def bin2json_stream(f):
+    ''' convert binary record stream into json stream '''
+    records = read_records(f, '', '')
+    gen = generate_simplejson_dumps(records, sort_keys=True, indent=2)
+    from .filestructure import GeneratorReader
+    return GeneratorReader(gen)
+
+
+from .storage import StorageWrapper
+class RecordStorage(StorageWrapper):
+    ''' Record Storage
+    '''
+    def __iter__(self):
+        for name in self.stg:
+            yield name
+            yield name+'.rec'
+
+    def __getitem__(self, name):
+        import os.path
+        root, ext = os.path.splitext(name)
+        if ext == '.rec':
+            item = self.stg[root]
+            if item:
+                return bin2json_stream(item)
+        return self.stg[name]
+
+
+class Hwp5File(filestructure.Hwp5File):
+    ''' Hwp5File for 'rec' layer
+    '''
+    BodyTextStorage = RecordStorage
+
+    def modify_name(self, name):
+        if name == 'DocInfo':
+            yield name
+            yield 'DocInfo.rec'
+        else:
+            for x in super(Hwp5File, self).modify_name(name):
+                yield x
+
+    def modify_item(self, name, item):
+        if name == 'DocInfo.rec':
+            return bin2json_stream(self.stg['DocInfo'])
+        else:
+            return super(Hwp5File, self).modify_item(name, item)
+
 
 def main():
     import sys
