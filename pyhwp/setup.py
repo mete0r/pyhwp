@@ -20,6 +20,7 @@ setup(
 
         entry_points = {
             'console_scripts': [
+                'hwp5proc = hwp5.proc:main',
                 'hwp5file = hwp5.filestructure:main',
                 'unole = hwp5.filestructure:unole',
                 'hwp5rec = hwp5.recordstream:main',
