@@ -23,9 +23,11 @@ class BinEmbeddedTest(TestCase):
     stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00\x6a\x00\x70\x00\x67\x00')
     def testParsePass1(self):
         record = read_records(self.stream, 'docinfo').next()
+        payload_stream = StringIO(record['payload'])
 
         tag_model = BinData
-        model_type, attributes = tag_model.parse_pass1(dict(), self.ctx, record.bytestream())
+        model_type, attributes = tag_model.parse_pass1(dict(), self.ctx,
+                                                       payload_stream)
         self.assertTrue(BinData, model_type)
         self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(attributes['flags']).storage)
         self.assertEquals(2, attributes['storage_id'])
@@ -37,8 +39,8 @@ class TableTest(TestCase):
     def testParsePass1(self):
         record = read_records(self.stream, 'bodytext/0').next()
 
-        model = tag_models[record.tagid]
-        result = model.parse_pass1(dict(), self.ctx, record.bytestream())
+        model = tag_models[record['tagid']]
+        result = model.parse_pass1(dict(), self.ctx, StringIO(record['payload']))
         model_type, attributes = result
         self.assertTrue(TableControl, model_type)
 
@@ -60,10 +62,11 @@ class ListHeaderTest(TestCase):
     stream = StringIO(record_bytes)
     def testParse(self):
         record = read_records(self.stream, 'bodytext/0').next()
+        record_tagid = record['tagid']
 
-        tag_model = tag_models[record.tagid]
+        tag_model = tag_models[record_tagid]
         self.assertEquals(ListHeader, tag_model)
-        payload_stream = record.bytestream()
+        payload_stream = StringIO(record['payload'])
         model, attributes = tag_model.parse_pass1(dict(), self.ctx, payload_stream)
         self.assertEquals(1, attributes['paragraphs'])
         self.assertEquals(0x20L, attributes['listflags'])

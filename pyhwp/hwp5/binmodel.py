@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
+
 from .dataio import readn, read_struct_attributes, match_attribute_types,\
         StructType, Struct, Flags, Enum, BYTE, WORD, UINT32, UINT16, INT32, INT16, UINT8, INT8,\
         DOUBLE, ARRAY, N_ARRAY, SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR
@@ -1524,18 +1529,24 @@ _check_tag_models()
 
 def pass1(context, records):
     for record in records:
+        tagid = record['tagid']
+        tag = record['tagname']
+        record_id = (record.get('filename', ''), record.get('streamid', ''),
+                     record['seqno'])
+        record_level = record['level']
+
         context = dict(context)
-        context['hwptag'] = record.tag
-        context['recordid'] = record.id
-        context['logging'].debug('Record %s at %s:%s:%d', record.tag, *record.id)
-        stream = record.bytestream()
-        model = tag_models.get(record.tagid, RecordModel)
+        context['hwptag'] = tag
+        context['recordid'] = record_id
+        context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
+        stream = StringIO(record['payload'])
+        model = tag_models.get(tagid, RecordModel)
         attributes = dict()
         parse_pass1 = getattr(model, 'parse_pass1', None)
         if parse_pass1 is not None:
             model, attributes = parse_pass1(attributes, context, stream)
         context['logging'].debug('pass1: %s, %s', model, attributes.keys())
-        yield record.level, (context, model, attributes, stream)
+        yield record_level, (context, model, attributes, stream)
 
 def parse_models_pass1(context, records):
     level_prefixed_cmas = pass1(context, records)

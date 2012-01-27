@@ -9,51 +9,21 @@ from . import dataio
 from .utils import cached_property
 from . import filestructure
 
-class Record:
+def tagname(tagid):
+    return tagnames.get(tagid, 'HWPTAG%d'%(tagid - HWPTAG_BEGIN))
 
-    def __init__(self, tagid, level, payload, seqno=None, streamid=None, filename=None):
-        self.filename = filename
-        self.streamid = streamid
-        self.seqno = seqno
-        self.tagid = tagid
-        self.level = level
-        self.payload = payload
-        self.parent = None
-        self.sister = None
-
-    def tag(self):
-        return tagnames.get(self.tagid, 'HWPTAG%d'%(self.tagid - HWPTAG_BEGIN))
-    tag = cached_property(tag)
-
-    def tag_verbose(self):
-        return tagnames.get(self.tagid, '<UNKNOWN>')+('(=0x%x, HWPTAG_BEGIN+%d)'%(self.tagid, self.tagid-HWPTAG_BEGIN))
-    tag_verbose = cached_property(tag_verbose)
-
-    def size(self):
-        return len(self.payload)
-    size = property(size)
-
-    def id(self):
-        return (self.filename, self.streamid, self.seqno)
-    id = property(id)
-
-    def __str__(self):
-        if self.parent is None:
-            parent = None
-        else:
-            parent = self.parent.seqno
-        if self.sister is None:
-            sister = None
-        else:
-            sister = self.sister.seqno
-        return '<Record:%d %s(0x%x) level=%d size=%d parent=%s sister=%s (%s:%s)>'%(
-                self.seqno, self.tag, self.tagid,
-                self.level, self.size, parent, sister,
-                self.filename, self.streamid,
-                )
-
-    def bytestream(self):
-        return StringIO(self.payload)
+def Record(tagid, level, payload, size=None, seqno=None, streamid=None, filename=None):
+    if size is None:
+        size = len(payload)
+    d = dict(tagid=tagid, tagname=tagname(tagid), level=level,
+                size=size, payload=payload)
+    if seqno is not None:
+        d['seqno'] = seqno
+    if streamid:
+        d['streamid'] = streamid
+    if filename:
+        d['filename'] = filename
+    return d
 
 def decode_record_header(f):
     try:
@@ -70,9 +40,9 @@ def decode_record_header(f):
 
 def encode_record_header(rec):
     import struct
-    size = len(rec.payload)
-    level = rec.level
-    tagid = rec.tagid
+    size = len(rec['payload'])
+    level = rec['level']
+    tagid = rec['tagid']
     if size < 0xfff:
         hdr = (size << 20) | (level << 10) | tagid
         return struct.pack('<I', hdr)
@@ -80,7 +50,7 @@ def encode_record_header(rec):
         hdr = (0xfff << 20) | (level << 10) | tagid
         return struct.pack('<II', hdr, size)
 
-def read_records(f, streamid, filename='<unknown>'):
+def read_records(f, streamid='', filename=''):
     seqno = 0
     while True:
         rechdr = decode_record_header(f)
@@ -88,18 +58,18 @@ def read_records(f, streamid, filename='<unknown>'):
             return
         tagid, level, size = rechdr
         payload = dataio.readn(f, size)
-        yield Record(tagid, level, payload, seqno, streamid, filename)
+        yield Record(tagid, level, payload, size, seqno, streamid, filename)
         seqno += 1
 
 def link_records(records):
     prev = None
     for rec in records:
         if prev is not None:
-            if rec.level == prev.level:
-                rec.sister = prev
-                rec.parent = prev.parent
-            elif rec.level == prev.level + 1:
-                rec.parent = prev
+            if rec['level'] == prev['level']:
+                rec['sister'] = prev
+                rec['parent'] = prev.get('parent')
+            elif rec['level'] == prev['level'] + 1:
+                rec['parent'] = prev
         yield rec
         prev = rec
 
@@ -110,23 +80,14 @@ def generate_simplejson_dumps(records, *args, **kwargs):
         args, kwargs: options for simplejson.dumps
     '''
     from .dataio import dumpbytes
-    import binascii
+    import simplejson # TODO: simplejson is for python2.5+
     for rec in records:
-        d = dict(index=rec.seqno,
-                 tag=rec.tag,
-                 tagid=rec.tagid,
-                 treelevel=rec.level,
-                 payload=list(dumpbytes(rec.payload)))
-        if rec.filename:
-            d['filename'] = rec.filename
-        if rec.streamid:
-            d['streamid'] = rec.streamid
-        import simplejson # TODO: simplejson is for python2.5+
-        yield simplejson.dumps(d, *args, **kwargs) + '\n'
+        rec['payload'] = list(dumpbytes(rec['payload']))
+        yield simplejson.dumps(rec, *args, **kwargs) + '\n'
 
 def bin2json_stream(f):
     ''' convert binary record stream into json stream '''
-    records = read_records(f, '', '')
+    records = read_records(f)
     gen = generate_simplejson_dumps(records, sort_keys=True, indent=2)
     from .filestructure import GeneratorReader
     return GeneratorReader(gen)
@@ -225,8 +186,8 @@ def main():
         level = None
         for rec in records:
             if level is None:
-                level = rec.level
-            rec.level -= level
+                level = rec['level']
+            rec['level'] -= level
             #logger.info('### record level : %d', rec.level)
             yield rec
     records = initlevel(records)
@@ -237,8 +198,9 @@ def main():
     def count_tagids(records):
         occurrences = dict()
         for rec in records:
-            occurrences.setdefault(rec.tag, 0)
-            occurrences[rec.tag] += 1
+            tagname = rec['tagname']
+            occurrences.setdefault(tagname, 0)
+            occurrences[tagname] += 1
             yield rec
         for tag, count in occurrences.iteritems():
             logger.info('%30s: %d', tag, count)
@@ -251,7 +213,7 @@ def main():
             raise NotImplementedError
     class RawFormat(RecordFormatter):
         def write(self, rec):
-            bytes = encode_record_header(rec) + rec.payload 
+            bytes = encode_record_header(rec) + rec['payload']
             self.out.write( bytes )
     class HexFormat(RecordFormatter):
         def __init__(self, out):
@@ -259,9 +221,10 @@ def main():
             super(HexFormat, self).__init__(out)
             self.p = dataio.Printer(out)
         def write(self, rec):
-            self.out.level = rec.level
-            self.p.prints( rec )
-            self.p.prints( dataio.hexdump(rec.payload, True) )
+            self.out.level = rec['level']
+            self.p.prints( (rec['seqno'], rec['tagid'], rec['tagname'],
+                            rec['size']) )
+            self.p.prints( dataio.hexdump(rec['payload'], True) )
             self.out.write( '-' * 80 + '\n' )
     class NulFormat(RecordFormatter):
         def write(self, rec):
