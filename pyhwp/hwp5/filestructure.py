@@ -472,6 +472,7 @@ class Hwp5File(ItemsModifyingStorage):
     def resolve_modifier(self, name):
         mapping = dict(PrvText=self.preview_text,
                        BodyText=self.bodytext,
+                       ViewText=self.viewtext,
                        DocInfo=self.docinfo)
         if name in mapping:
             return mapping[name]
@@ -479,6 +480,7 @@ class Hwp5File(ItemsModifyingStorage):
     docinfo_class = Hwp5Object
     preview_text_class = PreviewText
     bodytext_class = Sections
+    viewtext_class = Hwp5Object
 
     @cached_property
     def docinfo(self):
@@ -491,6 +493,10 @@ class Hwp5File(ItemsModifyingStorage):
     @cached_property
     def bodytext(self):
         return self.bodytext_class(self, 'BodyText', self.header.version)
+
+    @cached_property
+    def viewtext(self):
+        return self.viewtext_class(self, 'ViewText', self.header.version)
 
 
 class File(object):
