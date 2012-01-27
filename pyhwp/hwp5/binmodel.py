@@ -1536,6 +1536,21 @@ def _check_tag_models():
         assert tagid in tag_models, 'RecordModel for %s is missing!'%name
 _check_tag_models()
 
+def init_record_parsing_context(base, record):
+    ''' Initialize a context to parse the given record
+
+        the initializations includes followings:
+        - context = dict(base)
+        - context['record'] = record
+        - context['stream'] = record payload stream
+
+        `base': the base context, which will be shallow-copied into the new one
+        `record': to be parsed
+        returns new context
+    '''
+
+    return dict(base, record=record, stream=StringIO(record['payload']))
+
 def pass1(context, records):
     for record in records:
         tagid = record['tagid']

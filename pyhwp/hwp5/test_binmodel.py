@@ -18,6 +18,19 @@ def TestContext(**ctx):
         ctx['version'] = (5, 0, 0, 0)
     return ctx
 
+testcontext = TestContext()
+
+class TestRecordParsing(TestCase):
+    def test_init_record_parsing_context(self):
+        from .tagids import HWPTAG_BEGIN
+        from .binmodel import init_record_parsing_context, DocumentProperties
+        record = dict(tagid=HWPTAG_BEGIN, payload='abcd')
+        context = init_record_parsing_context(testcontext, record)
+
+        self.assertEquals(record, context['record'])
+        self.assertEquals('abcd', context['stream'].read())
+
+
 class BinEmbeddedTest(TestCase):
     ctx = TestContext()
     stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00\x6a\x00\x70\x00\x67\x00')
