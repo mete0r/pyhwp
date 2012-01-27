@@ -904,7 +904,10 @@ class ParaText(RecordModel):
 
 class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
-    def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
+    def parse_with_parent(cls, context, (parent_context, parent_record), stream, attributes):
+        parent_model = parent_record.get('model')
+        parent_attributes = parent_record.get('attributes')
+
         nCharShapes = parent_attributes['charshapes']
         #attributes['charshapes'] = ARRAY(ARRAY(UINT32, 2), nCharShapes).read(stream)
         attributes = cls.decode(stream.read(), context)
@@ -939,7 +942,10 @@ class ParaLineSeg(RecordModel):
             yield cls.Flags, 'flags'
         attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
+    def parse_with_parent(cls, context, (parent_context, parent_record), stream, attributes):
+        parent_model = parent_record.get('model')
+        parent_attributes = parent_record.get('attributes')
+
         nLineSegs = parent_attributes['linesegs']
         #attributes['linesegs'] = ARRAY(cls.LineSeg, nLineSegs).read(stream)
         attributes['linesegs'] = cls.decode(attributes, context, stream.read())
@@ -1050,7 +1056,10 @@ class ShapeComponent(RecordModel):
                 yield FillGradation, 'gradation'
     attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
+    def parse_with_parent(cls, context, (parent_context, parent_record), stream, attributes):
+        parent_model = parent_record.get('model')
+        parent_attributes = parent_record.get('attributes')
+
         if parent_model is GShapeObjectControl:
             attributes['chid0'] = CHID.read(stream) # GSO-child ShapeComponent specific: it may be a GSO model's attribute, e.g. 'child_chid'
         return parse_model_attributes(cls, attributes, context, stream)
@@ -1539,14 +1548,18 @@ def pass1(context, records):
         context['hwptag'] = tag
         context['recordid'] = record_id
         context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
-        stream = StringIO(record['payload'])
-        model = tag_models.get(tagid, RecordModel)
-        attributes = dict()
+        context['stream'] = stream = StringIO(record['payload'])
+
+        record['model'] = model = tag_models.get(tagid, RecordModel)
+        record['attributes'] = attributes = dict()
+
         parse_pass1 = getattr(model, 'parse_pass1', None)
         if parse_pass1 is not None:
             model, attributes = parse_pass1(attributes, context, stream)
+        record['model'] = model
+        record['attributes'] = attributes
         context['logging'].debug('pass1: %s, %s', model, attributes.keys())
-        yield record_level, (context, model, attributes, stream)
+        yield record_level, (context, record)
 
 def parse_models_pass1(context, records):
     level_prefixed_cmas = pass1(context, records)
@@ -1587,22 +1600,34 @@ def prefix_ancestors(event_prefixed_items, root_item=None):
             parent = stack.pop()
 
 def pass2_child(ancestors_cmas):
-    for ancestors, (context, model, attributes, stream) in ancestors_cmas:
+    for ancestors, (context, record) in ancestors_cmas:
+        model = record['model']
+        attributes = record['attributes']
+        stream = context['stream']
+
         parent = ancestors[-1]
-        parent_context, parent_model, parent_attributes, parent_stream = parent
+        parent_context, parent_record = parent
+        parent_model = parent_record.get('model')
+        parent_attributes = parent_record.get('attributes')
+
         parse_child = getattr(parent_model, 'parse_child', None)
         if parse_child is not None:
             model, attributes = parse_child(parent_attributes, parent_context, (context, model, attributes, stream))
+        record['model'] = model
+        record['attributes'] = attributes
 
         parse_with_parent = getattr(model, 'parse_with_parent', None)
         if parse_with_parent is not None:
             model, attributes = model.parse_with_parent(context, parent, stream, attributes)
 
         context['logging'].debug('pass2: %s, %s', model, attributes.keys())
-        yield len(ancestors)-1, (context, model, attributes, stream)
+        record['model'] = model
+        record['attributes'] = attributes
+        yield len(ancestors)-1, (context, record)
 
 def parse_models_pass2(event_prefixed_cmas):
-    ancestors_prefixed_cmas = prefix_ancestors(event_prefixed_cmas, (None, None, None, None))
+    ancestors_prefixed_cmas = prefix_ancestors(event_prefixed_cmas, (dict(),
+                                                                     dict()))
     level_prefixed_cmas = pass2_child(ancestors_prefixed_cmas)
     event_prefixed_cmas = prefix_event(level_prefixed_cmas)
     return event_prefixed_cmas
@@ -1611,7 +1636,10 @@ def parse_models(context, records, passes=3):
     result = parse_models_pass1(context, records)
     if passes >= 2:
         result = parse_models_pass2(result)
-    for event, (context, model, attributes, stream) in result:
+    for event, (context, record) in result:
+        model = record['model']
+        attributes = record['attributes']
+        stream = context.get('stream')
         if stream is not None:
             context['unparsed'] = stream.read()
         yield event, (model, attributes, context)

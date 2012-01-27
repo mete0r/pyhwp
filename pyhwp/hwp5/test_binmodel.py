@@ -79,7 +79,10 @@ class TableBodyTest(TestCase):
     def testParsePass1(self):
         record = read_records(self.stream, 'bodytext/0').next()
 
-        event, (context, model, attributes, stream) = parse_models_pass1(self.ctx, [record]).next()
+        event, (context, record) = parse_models_pass1(self.ctx, [record]).next()
+        model = record['model']
+        attributes = record['attributes']
+
         self.assertEquals(TableBody, model)
         self.assertEquals(dict(left=141, right=141, top=141, bottom=141),
                           attributes['padding'])
@@ -143,7 +146,10 @@ class TableCaptionCellTest(TestCase):
             yield TableBody, set(name for type, name in TableBody.attributes(self.ctx))
             yield ListHeader, set(name for type, name in ListHeader.attributes(self.ctx))
         expected = list(expected())
-        self.assertEquals(expected, [(model, set(attributes.keys())) for ancestors, (context, model, attributes, stream) in prefix_ancestors(pass1)])
+        self.assertEquals(expected, [(record['model'],
+                                      set(record['attributes'].keys()))
+                                     for ancestors, (context, record) in
+                                     prefix_ancestors(pass1)])
         return pass1
 
     def testParsePass2(self):
@@ -152,7 +158,11 @@ class TableCaptionCellTest(TestCase):
 
         result = list(b for a, b in prefix_ancestors(pass2))
         tablecaption = result[1]
-        record, model, attributes, stream = tablecaption
+        context, record = tablecaption
+        model = record['model']
+        attributes = record['attributes']
+        stream = context['stream']
+
         self.assertEquals(TableCaption, model)
         self.assertEquals(22, stream.tell())
         # ListHeader attributes
@@ -166,7 +176,10 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(40454L, attributes['maxsize'])
 
         tablecell = result[3]
-        record, model, attributes, stream = tablecell
+        context, record = tablecell
+        model = record['model']
+        attributes = record['attributes']
+        stream = context['stream']
         self.assertEquals(TableCell, model)
         self.assertEquals(38, stream.tell())
         # ListHeader attributes
