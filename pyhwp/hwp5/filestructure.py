@@ -11,6 +11,7 @@ from .utils import cached_property
 from .dataio import INT32, UINT32, UINT16, Flags, Struct, ARRAY, N_ARRAY
 from . import dataio
 from .storage import Storage, StorageWrapper, iter_storage_leafs, unpack
+from .storage import ItemModifier, ItemsModifyingStorage
 
 class BYTES(type):
     def __new__(mcs, size):
@@ -393,7 +394,7 @@ class Hwp5CompressedStreams(StorageWrapper):
         return item
 
 
-class Hwp5Stream(object):
+class Hwp5Object(ItemModifier):
 
     def __init__(self, stg, name, version):
         self.stg = stg
@@ -404,20 +405,41 @@ class Hwp5Stream(object):
         return self.stg[self.name]
 
 
-class SectionStorage(StorageWrapper):
+class PreviewText(Hwp5Object):
 
-    section_class = Hwp5Stream
+    def other_formats(self):
+        return {'.utf8': recoder('utf-16le', 'utf-8')}
 
-    def __init__(self, stg, version):
+
+class SectionStorage(ItemsModifyingStorage):
+
+    def __init__(self, stg, version, section_class):
         self.stg = stg
         self.version = version
+        self.section_class = section_class
+
+    def resolve_modifier(self, name):
+        if name.startswith('Section'):
+            return self.section_class(self.stg, name, self.version)
+
+
+class Sections(Hwp5Object):
+
+    section_class = Hwp5Object
+    storage_class = SectionStorage
+
+    def conversion(self, item):
+        assert isinstance(item, Storage)
+        return self.storage_class(item, self.version, self.section_class)
 
     def section(self, idx):
-        return self.section_class(self.stg, 'Section%d'%idx, self.version)
+        stg = self.open()
+        return self.section_class(stg, 'Section%d'%idx, self.version)
 
     def section_indexes(self):
         def gen():
-            for name in self.stg:
+            stg  = self.open()
+            for name in stg:
                 if name.startswith('Section'):
                     idx = name[len('Section'):]
                     try:
@@ -436,7 +458,7 @@ class SectionStorage(StorageWrapper):
                     for idx in self.section_indexes())
 
 
-class Hwp5File(StorageWrapper):
+class Hwp5File(ItemsModifyingStorage):
     ''' represents HWPv5 File
 
         Hwp5File(stg)
@@ -447,52 +469,28 @@ class Hwp5File(StorageWrapper):
     def __init__(self, stg):
         self.stg = Hwp5CompressedStreams(stg)
 
-    def __iter__(self):
-        for name in self.stg:
-            for n in self.modify_name(name):
-                yield n
+    def resolve_modifier(self, name):
+        mapping = dict(PrvText=self.preview_text,
+                       BodyText=self.bodytext,
+                       DocInfo=self.docinfo)
+        if name in mapping:
+            return mapping[name]
 
-    def __getitem__(self, name):
-        try:
-            item = self.stg[name]
-        except KeyError:
-            item = None
-
-        item = self.modify_item(name, item)
-
-        if item is None:
-            raise KeyError('%s is not found', item)
-        return item
-
-    BinDataStorage = StorageWrapper
-    BodyTextStorage = SectionStorage
-    ScriptsStorage = StorageWrapper
-
-    def modify_name(self, name):
-        yield name
-        if name == 'PrvText':
-            yield name+'.utf8'
-
-    def modify_item(self, name, item):
-        if name == 'PrvText.utf8':
-            return recoder('utf-16le', 'utf-8')(self.stg['PrvText'])
-        elif name == 'BinData':
-            return self.BinDataStorage(item)
-        elif name == 'BodyText':
-            return self.BodyTextStorage(item, self.header.version)
-        elif name == 'Scripts':
-            return self.ScriptsStorage(item)
-        return item
-
-    docinfo_class = Hwp5Stream
+    docinfo_class = Hwp5Object
+    preview_text_class = PreviewText
+    bodytext_class = Sections
 
     @cached_property
     def docinfo(self):
         return self.docinfo_class(self, 'DocInfo', self.header.version)
 
     @cached_property
+    def preview_text(self):
+        return self.preview_text_class(self, 'PrvText', self.header.version)
+
+    @cached_property
     def bodytext(self):
-        return self['BodyText']
+        return self.bodytext_class(self, 'BodyText', self.header.version)
 
 
 class File(object):

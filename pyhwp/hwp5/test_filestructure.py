@@ -204,9 +204,9 @@ class TestHwp5File(TestBase):
 
     def test_getitem_storage_classes(self):
         hwp5file = self.hwp5file
-        self.assertTrue(isinstance(hwp5file['BinData'], FS.Hwp5File.BinDataStorage))
-        self.assertTrue(isinstance(hwp5file['BodyText'], FS.Hwp5File.BodyTextStorage))
-        self.assertTrue(isinstance(hwp5file['Scripts'], FS.Hwp5File.ScriptsStorage))
+        self.assertTrue(isinstance(hwp5file['BinData'], FS.StorageWrapper))
+        self.assertTrue(isinstance(hwp5file['BodyText'], FS.SectionStorage))
+        self.assertTrue(isinstance(hwp5file['Scripts'], FS.StorageWrapper))
 
     def test_prv_text(self):
         prvtext = self.hwp5file['PrvText.utf8']
@@ -231,11 +231,16 @@ class TestHwp5File(TestBase):
         self.assertTrue(os.path.exists('5017/FileHeader'))
         self.assertTrue(os.path.exists('5017/PrvImage'))
         self.assertTrue(os.path.exists('5017/PrvText'))
+        self.assertTrue(os.path.exists('5017/PrvText.utf8'))
         self.assertTrue(os.path.exists('5017/Scripts/DefaultJScript'))
         self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
 
+    def test_if_hwp5file_contains_other_formats(self):
+        self.assertTrue('PrvText.utf8' in list(self.hwp5file))
+
     def test_docinfo(self):
         hwp5file = self.hwp5file
+        self.assertTrue(isinstance(hwp5file.docinfo, FS.Hwp5Object))
         docinfo = hwp5file.docinfo.open()
         try:
             data = docinfo.read()
@@ -247,11 +252,9 @@ class TestHwp5File(TestBase):
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
-        self.assertTrue(isinstance(bodytext, FS.SectionStorage))
+        self.assertTrue(isinstance(bodytext, FS.Sections))
+        bodytext = bodytext.open()
         self.assertEquals(['Section0'], list(bodytext))
-        section0 = bodytext.section(0)
-        self.assertEquals([0], bodytext.section_indexes())
-        self.assertEquals(1, len(bodytext.sections))
 
 
 class TestGeneratorReader(object):
