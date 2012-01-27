@@ -214,26 +214,26 @@ class TestHwp5File(TestBase):
         self.assertEquals(expected, prvtext.read()[0:len(expected)])
 
     def test_unpack(self):
-        outpath = 'sample-5017'
+        outpath = 'test_unpack'
         import os, os.path, shutil
         if os.path.exists(outpath):
             shutil.rmtree(outpath)
         os.mkdir(outpath)
         FS.unpack(self.hwp5file, outpath)
 
-        self.assertTrue(os.path.exists('5017/\x05HwpSummaryInformation'))
-        self.assertTrue(os.path.exists('5017/BinData/BIN0002.jpg'))
-        self.assertTrue(os.path.exists('5017/BinData/BIN0002.png'))
-        self.assertTrue(os.path.exists('5017/BinData/BIN0003.png'))
-        self.assertTrue(os.path.exists('5017/BodyText/Section0'))
-        self.assertTrue(os.path.exists('5017/DocInfo'))
-        self.assertTrue(os.path.exists('5017/DocOptions/_LinkDoc'))
-        self.assertTrue(os.path.exists('5017/FileHeader'))
-        self.assertTrue(os.path.exists('5017/PrvImage'))
-        self.assertTrue(os.path.exists('5017/PrvText'))
-        self.assertTrue(os.path.exists('5017/PrvText.utf8'))
-        self.assertTrue(os.path.exists('5017/Scripts/DefaultJScript'))
-        self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
+        self.assertTrue(os.path.exists('test_unpack/\x05HwpSummaryInformation'))
+        self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.jpg'))
+        self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.png'))
+        self.assertTrue(os.path.exists('test_unpack/BinData/BIN0003.png'))
+        self.assertTrue(os.path.exists('test_unpack/BodyText/Section0'))
+        self.assertTrue(os.path.exists('test_unpack/DocInfo'))
+        self.assertTrue(os.path.exists('test_unpack/DocOptions/_LinkDoc'))
+        self.assertTrue(os.path.exists('test_unpack/FileHeader'))
+        self.assertTrue(os.path.exists('test_unpack/PrvImage'))
+        self.assertTrue(os.path.exists('test_unpack/PrvText'))
+        self.assertTrue(os.path.exists('test_unpack/PrvText.utf8'))
+        self.assertTrue(os.path.exists('test_unpack/Scripts/DefaultJScript'))
+        self.assertTrue(os.path.exists('test_unpack/Scripts/JScriptVersion'))
 
     def test_if_hwp5file_contains_other_formats(self):
         self.assertTrue('PrvText.utf8' in list(self.hwp5file))
