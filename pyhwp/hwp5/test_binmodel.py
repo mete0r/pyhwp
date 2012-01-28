@@ -39,7 +39,7 @@ class BinEmbeddedTest(TestCase):
         from .binmodel import init_record_parsing_context
         record = read_records(self.stream, 'docinfo').next()
         context = init_record_parsing_context(testcontext, record)
-        model_type, attributes = BinData.parse_pass1({}, context, context['stream'])
+        model_type, attributes = BinData.parse_pass1(context)
 
         self.assertTrue(BinData, model_type)
         self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(attributes['flags']).storage)
@@ -54,7 +54,7 @@ class TableTest(TestCase):
         from .binmodel import init_record_parsing_context
         record = read_records(self.stream, 'bodytext/0').next()
         context = init_record_parsing_context(testcontext, record)
-        model_type, attributes = Control.parse_pass1(dict(), context, context['stream'])
+        model_type, attributes = Control.parse_pass1(context)
 
         self.assertTrue(TableControl, model_type)
         self.assertEquals(1453501933, attributes['instance_id'])
@@ -78,7 +78,7 @@ class ListHeaderTest(TestCase):
         from .binmodel import init_record_parsing_context
         record = read_records(self.stream, 'bodytext/0').next()
         context = init_record_parsing_context(testcontext, record)
-        model, attributes = ListHeader.parse_pass1(dict(), context, context['stream'])
+        model, attributes = ListHeader.parse_pass1(context)
 
         self.assertEquals(1, attributes['paragraphs'])
         self.assertEquals(0x20L, attributes['listflags'])

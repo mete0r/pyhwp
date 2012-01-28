@@ -60,7 +60,10 @@ class BasicRecordModel(RecordModel):
     def attributes(context):
         if False: yield
     attributes = staticmethod(attributes)
-    parse_pass1 = classmethod(parse_model_attributes)
+    def parse_pass1(model, context):
+        attributes = dict()
+        return parse_model_attributes(model, attributes, context, context['stream'])
+    parse_pass1 = classmethod(parse_pass1)
 
 
 class AttributeDeterminedRecordModel(BasicRecordModel):
@@ -69,7 +72,9 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
         raise Exception()
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
 
-    def parse_pass1(model, attributes, context, stream):
+    def parse_pass1(model, context):
+        stream = context['stream']
+        attributes = dict()
         model, attributes = parse_model_attributes(model, attributes, context, stream)
         altered_model = model.concrete_type_by_attribute(attributes[model.key_attribute])
         if altered_model is not None:
@@ -1569,7 +1574,7 @@ def pass1(context, records):
 
         parse_pass1 = getattr(model, 'parse_pass1', None)
         if parse_pass1 is not None:
-            model, attributes = parse_pass1(attributes, context, context['stream'])
+            model, attributes = parse_pass1(context)
         record['model'] = model
         record['attributes'] = attributes
         context['logging'].debug('pass1: %s, %s', model, attributes.keys())
