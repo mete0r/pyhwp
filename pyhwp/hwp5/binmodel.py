@@ -1559,18 +1559,17 @@ def pass1(context, records):
                      record['seqno'])
         record_level = record['level']
 
-        context = dict(context)
+        context = init_record_parsing_context(context, record)
         context['hwptag'] = tag
         context['recordid'] = record_id
         context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
-        context['stream'] = stream = StringIO(record['payload'])
 
         record['model'] = model = tag_models.get(tagid, RecordModel)
         record['attributes'] = attributes = dict()
 
         parse_pass1 = getattr(model, 'parse_pass1', None)
         if parse_pass1 is not None:
-            model, attributes = parse_pass1(attributes, context, stream)
+            model, attributes = parse_pass1(attributes, context, context['stream'])
         record['model'] = model
         record['attributes'] = attributes
         context['logging'].debug('pass1: %s, %s', model, attributes.keys())

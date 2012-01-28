@@ -35,12 +35,12 @@ class BinEmbeddedTest(TestCase):
     ctx = TestContext()
     stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00\x6a\x00\x70\x00\x67\x00')
     def testParsePass1(self):
+        from .binmodel import BinData
+        from .binmodel import init_record_parsing_context
         record = read_records(self.stream, 'docinfo').next()
-        payload_stream = StringIO(record['payload'])
+        context = init_record_parsing_context(testcontext, record)
+        model_type, attributes = BinData.parse_pass1({}, context, context['stream'])
 
-        tag_model = BinData
-        model_type, attributes = tag_model.parse_pass1(dict(), self.ctx,
-                                                       payload_stream)
         self.assertTrue(BinData, model_type)
         self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(attributes['flags']).storage)
         self.assertEquals(2, attributes['storage_id'])
@@ -50,13 +50,13 @@ class TableTest(TestCase):
     ctx = TestContext()
     stream = StringIO('G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00\x00\x00')
     def testParsePass1(self):
+        from .binmodel import Control, TableControl
+        from .binmodel import init_record_parsing_context
         record = read_records(self.stream, 'bodytext/0').next()
+        context = init_record_parsing_context(testcontext, record)
+        model_type, attributes = Control.parse_pass1(dict(), context, context['stream'])
 
-        model = tag_models[record['tagid']]
-        result = model.parse_pass1(dict(), self.ctx, StringIO(record['payload']))
-        model_type, attributes = result
         self.assertTrue(TableControl, model_type)
-
         self.assertEquals(1453501933, attributes['instance_id'])
         self.assertEquals(0x0, attributes['x'])
         self.assertEquals(0x0, attributes['y'])
@@ -74,17 +74,16 @@ class ListHeaderTest(TestCase):
     record_bytes = 'H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00'
     stream = StringIO(record_bytes)
     def testParse(self):
+        from .binmodel import ListHeader
+        from .binmodel import init_record_parsing_context
         record = read_records(self.stream, 'bodytext/0').next()
-        record_tagid = record['tagid']
+        context = init_record_parsing_context(testcontext, record)
+        model, attributes = ListHeader.parse_pass1(dict(), context, context['stream'])
 
-        tag_model = tag_models[record_tagid]
-        self.assertEquals(ListHeader, tag_model)
-        payload_stream = StringIO(record['payload'])
-        model, attributes = tag_model.parse_pass1(dict(), self.ctx, payload_stream)
         self.assertEquals(1, attributes['paragraphs'])
         self.assertEquals(0x20L, attributes['listflags'])
         self.assertEquals(0, attributes['unknown1'])
-        self.assertEquals(8, payload_stream.tell())
+        self.assertEquals(8, context['stream'].tell())
 
 class TableBodyTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
