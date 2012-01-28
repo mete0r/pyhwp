@@ -22,8 +22,8 @@ from .tagids import tagnames, HWPTAG_BEGIN, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_I
 
 from . import dataio
 
-def parse_model_attributes(model, attributes, context, stream):
-    return model, read_struct_attributes(model, attributes, context, stream)
+def parse_model_attributes(model, attributes, context):
+    return model, read_struct_attributes(model, attributes, context, context['stream'])
 
 def typed_model_attributes(model, attributes, context):
     import inspect
@@ -62,7 +62,7 @@ class BasicRecordModel(RecordModel):
     attributes = staticmethod(attributes)
     def parse_pass1(model, context):
         attributes = dict()
-        return parse_model_attributes(model, attributes, context, context['stream'])
+        return parse_model_attributes(model, attributes, context)
     parse_pass1 = classmethod(parse_pass1)
 
 
@@ -73,12 +73,11 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
 
     def parse_pass1(model, context):
-        stream = context['stream']
         attributes = dict()
-        model, attributes = parse_model_attributes(model, attributes, context, stream)
+        model, attributes = parse_model_attributes(model, attributes, context)
         altered_model = model.concrete_type_by_attribute(attributes[model.key_attribute])
         if altered_model is not None:
-            return parse_model_attributes(altered_model, attributes, context, stream)
+            return parse_model_attributes(altered_model, attributes, context)
         return model, attributes
     parse_pass1 = classmethod(parse_pass1)
 
@@ -596,9 +595,9 @@ class TableControl(CommonControl):
             context['table_body'] = True
         elif child_model is ListHeader:
             if context.get('table_body', False):
-                return parse_model_attributes(TableCell, child_attributes, child_context, child_stream)
+                return parse_model_attributes(TableCell, child_attributes, child_context)
             else:
-                return parse_model_attributes(TableCaption, child_attributes, child_context, child_stream)
+                return parse_model_attributes(TableCaption, child_attributes, child_context)
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
 
@@ -1067,12 +1066,12 @@ class ShapeComponent(RecordModel):
 
         if parent_model is GShapeObjectControl:
             attributes['chid0'] = CHID.read(stream) # GSO-child ShapeComponent specific: it may be a GSO model's attribute, e.g. 'child_chid'
-        return parse_model_attributes(cls, attributes, context, stream)
+        return parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
     def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
         if child_model is ListHeader:
-            return parse_model_attributes(TextboxParagraphList, child_attributes, child_context, child_stream)
+            return parse_model_attributes(TextboxParagraphList, child_attributes, child_context)
         else:
             return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1288,7 +1287,7 @@ class HeaderFooter(Control):
 
     def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
         if child_model is ListHeader:
-            return parse_model_attributes(cls.ParagraphList, child_attributes, child_context, child_stream)
+            return parse_model_attributes(cls.ParagraphList, child_attributes, child_context)
         else:
             return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1423,7 +1422,7 @@ class BookmarkControl(Control):
 
     def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
         if child_model is ControlData:
-            return parse_model_attributes(BookmarkControlData, child_attributes, child_context, child_stream)
+            return parse_model_attributes(BookmarkControlData, child_attributes, child_context)
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
 

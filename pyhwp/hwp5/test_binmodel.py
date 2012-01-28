@@ -30,6 +30,10 @@ class TestRecordParsing(TestCase):
         self.assertEquals(record, context['record'])
         self.assertEquals('abcd', context['stream'].read())
 
+    def test_parse_model_attributes(self):
+        # TODO
+        pass
+
 
 class BinEmbeddedTest(TestCase):
     ctx = TestContext()
