@@ -6,6 +6,7 @@ from .binmodel import tag_models, parse_models_pass1, parse_models_pass2, prefix
 from .binmodel import BinData, TableControl, ListHeader, TableCaption, TableCell, TableBody
 from .binmodel import STARTEVENT, ENDEVENT
 from . import binmodel
+from .utils import cached_property
 
 def TestContext(**ctx):
     ''' test context '''
@@ -50,9 +51,65 @@ class BinEmbeddedTest(TestCase):
         self.assertEquals(2, attributes['storage_id'])
         self.assertEquals('jpg', attributes['ext'])
 
-class TableTest(TestCase):
+
+def nth(iterable, n, default=None):
+    from itertools import islice
+    return next(islice(iterable, n, None), default)
+
+class TestBase(TestCase):
     ctx = TestContext()
-    stream = StringIO('G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00\x00\x00')
+
+    @cached_property
+    def samples_dir(self):
+        return '../../../samples'
+
+    @cached_property
+    def sample_hwp(self):
+        return 'sample-5017.hwp'
+
+    @cached_property
+    def olefile(self):
+        from OleFileIO_PL import OleFileIO
+        return OleFileIO('/'.join([self.samples_dir, self.sample_hwp]))
+
+    @cached_property
+    def olestg(self):
+        from .filestructure import OleStorage
+        return OleStorage(self.olefile)
+
+    @cached_property
+    def hwp5file_rec(self):
+        from .recordstream import Hwp5File
+        return Hwp5File(self.olestg)
+
+    @cached_property
+    def bodytext(self):
+        hwp5file = self.hwp5file_rec
+        return hwp5file.bodytext
+
+
+class TableTest(TestBase):
+
+    @property
+    def stream(self):
+        return StringIO('G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00\x00\x00')
+
+    @cached_property
+    def tablecontrol_record(self):
+        return nth(self.bodytext.section(0).records(), 30)
+
+    @cached_property
+    def tablecaption_record(self):
+        return nth(self.bodytext.section(0).records(), 68)
+
+    @cached_property
+    def tablebody_record(self):
+        return nth(self.bodytext.section(0).records(), 31)
+
+    @cached_property
+    def tablecell_record(self):
+        return nth(self.bodytext.section(0).records(), 32)
+
     def testParsePass1(self):
         from .binmodel import Control, TableControl
         from .binmodel import init_record_parsing_context
@@ -72,6 +129,162 @@ class TableTest(TestCase):
         self.assertEquals(dict(left=283, right=283, top=283, bottom=283),
                           attributes['margin'])
         self.assertEquals('tbl ' , attributes['chid'])
+
+    def test_parse_child_table_body(self):
+        from .binmodel import init_record_parsing_context
+        record = self.tablecontrol_record
+        context = init_record_parsing_context(testcontext, record)
+
+        tablebody_record = self.tablebody_record
+        tablebody_context = init_record_parsing_context(testcontext, tablebody_record)
+        child = (tablebody_context, TableBody, dict())
+
+        self.assertFalse(context.get('table_body'))
+        child_model, child_attributes = TableControl.parse_child(dict(),
+                                                                 context, child)
+        # 'table_body' in table record context should have been changed to True
+        self.assertTrue(context['table_body'])
+        # model and attributes should not have been changed
+        self.assertEquals(TableBody, child_model)
+        self.assertEquals(dict(), child_attributes)
+
+    def test_parse_child_table_cell(self):
+        from .binmodel import init_record_parsing_context
+        from .binmodel import ListHeader, TableCell
+        record = self.tablecontrol_record
+        context = init_record_parsing_context(testcontext, record)
+
+        context['table_body'] = True
+
+        child_record = self.tablecell_record
+        child_context = init_record_parsing_context(testcontext, child_record)
+        child_model, child_attributes = ListHeader.parse_pass1(child_context)
+        self.assertEquals(ListHeader, child_model)
+        child = (child_context, child_model, child_attributes)
+
+        child_model, child_attributes = TableControl.parse_child(dict(),
+                                                                 context, child)
+        self.assertEquals(TableCell, child_model)
+        self.assertEquals(dict(padding=dict(top=141, right=141, bottom=141,
+                                            left=141),
+                               rowspan=1,
+                               colspan=1,
+                               borderfill_id=1,
+                               height=282,
+                               listflags=32L,
+                               width=20227,
+                               unknown1=0,
+                               unknown_width=20227,
+                               paragraphs=1,
+                               col=0,
+                               row=0), child_attributes)
+        self.assertEquals('', child_context['stream'].read())
+
+    def test_parse_child_table_caption(self):
+        from .binmodel import init_record_parsing_context
+        from .binmodel import ListHeader, TableCaption
+        record = self.tablecontrol_record
+        context = init_record_parsing_context(testcontext, record)
+
+        context['table_body'] = False
+
+        child_record = self.tablecaption_record
+        child_context = init_record_parsing_context(testcontext, child_record)
+        child_model, child_attributes = ListHeader.parse_pass1(child_context)
+        child = (child_context, child_model, child_attributes)
+
+        child_model, child_attributes = TableControl.parse_child(dict(),
+                                                                 context, child)
+        self.assertEquals(TableCaption, child_model)
+        self.assertEquals(dict(listflags=0,
+                               width=8504,
+                               maxsize=40454,
+                               unknown1=0,
+                               flags=3L,
+                               separation=850,
+                               paragraphs=2), child_attributes)
+        self.assertEquals('', child_context['stream'].read())
+
+
+class ShapeComponentTest(TestBase):
+
+    @cached_property
+    def sample_hwp(self):
+        return 'textbox.hwp'
+
+    @cached_property
+    def shapecomponent_record(self):
+        return nth(self.bodytext.section(0).records(), 19)
+
+    @cached_property
+    def textbox_paragraph_list_record(self):
+        return nth(self.bodytext.section(0).records(), 20)
+
+    def test_parse_shapecomponent_textbox_paragraph_list(self):
+        from .binmodel import init_record_parsing_context
+        from .binmodel import ListHeader, ShapeComponent, TextboxParagraphList
+        record = self.shapecomponent_record
+        context = init_record_parsing_context(testcontext, record)
+
+        child_record = self.textbox_paragraph_list_record
+        child_context = init_record_parsing_context(testcontext,
+                                                    child_record)
+        child_model, child_attributes = ListHeader.parse_pass1(child_context)
+        self.assertEquals(ListHeader, child_model)
+        child = (child_context, child_model, child_attributes)
+
+        child_model, child_attributes = ShapeComponent.parse_child(dict(),
+                                                                   context,
+                                                                   child)
+        self.assertEquals(TextboxParagraphList, child_model)
+        self.assertEquals(dict(listflags=32L,
+                               padding=dict(top=283, right=283, bottom=283,
+                                            left=283),
+                               unknown1=0,
+                               maxwidth=11763,
+                               paragraphs=1), child_attributes)
+        self.assertEquals('', child_context['stream'].read())
+
+
+class HeaderFooterTest(TestBase):
+
+    @cached_property
+    def sample_hwp(self):
+        return 'headerfooter.hwp'
+
+    @cached_property
+    def header_record(self):
+        return nth(self.bodytext.section(0).records(), 16)
+
+    @cached_property
+    def header_paragraph_list_record(self):
+        return nth(self.bodytext.section(0).records(), 17)
+
+    def test_parse_child(self):
+        from .binmodel import init_record_parsing_context
+        from .binmodel import ListHeader, Header
+        record = self.header_record
+        context = init_record_parsing_context(testcontext, record)
+
+        child_record = self.header_paragraph_list_record
+        child_context = init_record_parsing_context(testcontext,
+                                                    child_record)
+        child_model, child_attributes = ListHeader.parse_pass1(child_context)
+        child = (child_context, child_model, child_attributes)
+
+        child_model, child_attributes = Header.parse_child(dict(), context,
+                                                           child)
+        self.assertEquals(Header.ParagraphList, child_model)
+        self.assertEquals(dict(textrefsbitmap=0,
+                               numberrefsbitmap=0,
+                               height=4252,
+                               listflags=0,
+                               width=42520,
+                               unknown1=0,
+                               paragraphs=1), child_attributes)
+        # TODO
+        #self.assertEquals('', child_context['stream'].read())
+
 
 class ListHeaderTest(TestCase):
     ctx = TestContext()

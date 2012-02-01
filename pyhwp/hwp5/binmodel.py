@@ -590,7 +590,7 @@ class TableControl(CommonControl):
     borderFill = property(getBorderFill)
 
     def parse_child(cls, attributes, context, child):
-        child_context, child_model, child_attributes, child_stream = child
+        child_context, child_model, child_attributes = child
         if child_model is TableBody:
             context['table_body'] = True
         elif child_model is ListHeader:
@@ -980,7 +980,7 @@ class ParaRangeTag(BasicRecordModel):
 
 class GShapeObjectControl(CommonControl):
     chid = CHID.GSO
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         # TODO: ListHeader to Caption
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1069,7 +1069,7 @@ class ShapeComponent(RecordModel):
         return parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         if child_model is ListHeader:
             return parse_model_attributes(TextboxParagraphList, child_attributes, child_context)
         else:
@@ -1285,7 +1285,7 @@ class HeaderFooter(Control):
             yield BYTE, 'numberrefsbitmap'
         attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         if child_model is ListHeader:
             return parse_model_attributes(cls.ParagraphList, child_attributes, child_context)
         else:
@@ -1420,7 +1420,7 @@ class BookmarkControl(Control):
         if False: yield
     attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         if child_model is ControlData:
             return parse_model_attributes(BookmarkControlData, child_attributes, child_context)
         return child_model, child_attributes
@@ -1630,7 +1630,7 @@ def pass2_child(ancestors_cmas):
 
         parse_child = getattr(parent_model, 'parse_child', None)
         if parse_child is not None:
-            model, attributes = parse_child(parent_attributes, parent_context, (context, model, attributes, stream))
+            model, attributes = parse_child(parent_attributes, parent_context, (context, model, attributes))
         record['model'] = model
         record['attributes'] = attributes
 
