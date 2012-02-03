@@ -213,6 +213,10 @@ class ShapeComponentTest(TestBase):
         return 'textbox.hwp'
 
     @cached_property
+    def control_gso_record(self):
+        return nth(self.bodytext.section(0).records(), 12)
+
+    @cached_property
     def shapecomponent_record(self):
         return nth(self.bodytext.section(0).records(), 19)
 
@@ -244,6 +248,27 @@ class ShapeComponentTest(TestBase):
                                maxwidth=11763,
                                paragraphs=1), child_attributes)
         self.assertEquals('', child_context['stream'].read())
+
+    def test_parse_with_parent(self):
+        from .binmodel import init_record_parsing_context
+        from .binmodel import GShapeObjectControl, ShapeComponent
+
+        parent_record = self.control_gso_record
+        parent_context = init_record_parsing_context(testcontext, parent_record)
+        parent = (parent_context, parent_record)
+
+        # if parent model is GShapeObjectControl
+        parent_record['model'] = GShapeObjectControl
+        record = self.shapecomponent_record
+        context = init_record_parsing_context(testcontext, record)
+        model, attributes = ShapeComponent, dict()
+        model, attributes = model.parse_with_parent(attributes, context, parent)
+
+        self.assertEquals(model, ShapeComponent)
+        self.assertTrue('chid0' in attributes)
+
+        # if parent model is not GShapeObjectControl
+        # TODO
 
 
 class HeaderFooterTest(TestBase):

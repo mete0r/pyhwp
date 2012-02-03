@@ -887,7 +887,8 @@ class Text(object):
 
 class ParaText(RecordModel):
     tagid = HWPTAG_PARA_TEXT
-    def parse_with_parent(cls, context, parent, stream, attributes):
+    def parse_with_parent(cls, attributes, context, parent):
+        stream = context['stream']
         bytes = stream.read()
         attributes['chunks'] = [x for x in cls.parseBytes(bytes)]
         return cls, attributes
@@ -908,7 +909,8 @@ class ParaText(RecordModel):
 
 class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
-    def parse_with_parent(cls, context, (parent_context, parent_record), stream, attributes):
+    def parse_with_parent(cls, attributes, context, (parent_context, parent_record)):
+        stream = context['stream']
         parent_model = parent_record.get('model')
         parent_attributes = parent_record.get('attributes')
 
@@ -946,7 +948,8 @@ class ParaLineSeg(RecordModel):
             yield cls.Flags, 'flags'
         attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, context, (parent_context, parent_record), stream, attributes):
+    def parse_with_parent(cls, attributes, context, (parent_context, parent_record)):
+        stream = context['stream']
         parent_model = parent_record.get('model')
         parent_attributes = parent_record.get('attributes')
 
@@ -1060,7 +1063,8 @@ class ShapeComponent(RecordModel):
                 yield FillGradation, 'gradation'
     attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, context, (parent_context, parent_record), stream, attributes):
+    def parse_with_parent(cls, attributes, context, (parent_context, parent_record)):
+        stream = context['stream']
         parent_model = parent_record.get('model')
         parent_attributes = parent_record.get('attributes')
 
@@ -1636,7 +1640,7 @@ def pass2_child(ancestors_cmas):
 
         parse_with_parent = getattr(model, 'parse_with_parent', None)
         if parse_with_parent is not None:
-            model, attributes = model.parse_with_parent(context, parent, stream, attributes)
+            model, attributes = model.parse_with_parent(attributes, context, parent)
 
         context['logging'].debug('pass2: %s, %s', model, attributes.keys())
         record['model'] = model
