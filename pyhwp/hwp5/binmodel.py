@@ -1559,18 +1559,6 @@ def init_record_parsing_context(base, record):
 
     return dict(base, record=record, stream=StringIO(record['payload']))
 
-def pass1(context, records):
-    for record in records:
-        tag = record['tagname']
-        record_id = (record.get('filename', ''), record.get('streamid', ''),
-                     record['seqno'])
-        context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
-
-        context, record = parse_pass1_record(context, record)
-        context['logging'].debug('pass1: %s, %s', record['model'],
-                                 record['attributes'].keys())
-        yield record['level'], (context, record)
-
 def parse_pass1_record(context, record):
     ''' HWPTAG로 모델 결정 후 기본 파싱 '''
 
@@ -1589,10 +1577,17 @@ def parse_pass1_record(context, record):
     record['attributes'] = attributes
     return context, record
 
-def parse_models_pass1(context, records):
-    level_prefixed_cmas = pass1(context, records)
-    event_prefixed_cmas = prefix_event(level_prefixed_cmas)
-    return event_prefixed_cmas
+def parse_pass1(context, records):
+    for record in records:
+        tag = record['tagname']
+        record_id = (record.get('filename', ''), record.get('streamid', ''),
+                     record['seqno'])
+        context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
+
+        context, record = parse_pass1_record(context, record)
+        context['logging'].debug('pass1: %s, %s', record['model'],
+                                 record['attributes'].keys())
+        yield context, record
 
 class STARTEVENT: pass
 class ENDEVENT: pass
@@ -1651,12 +1646,6 @@ def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
         yield stack, item
         stack.append(item)
 
-def pass2_child(ancestors_cmas):
-    for ancestors, (context, record) in ancestors_cmas:
-        parent = ancestors[-1]
-        parse_pass2_record_with_parent(parent, (context, record))
-        yield len(ancestors)-1, (context, record)
-
 def parse_pass2_record_with_parent(parent, (context, record)):
     model = record['model']
     attributes = record['attributes']
@@ -1681,18 +1670,23 @@ def parse_pass2_record_with_parent(parent, (context, record)):
     record['attributes'] = attributes
     return context, record
 
-def parse_models_pass2(event_prefixed_cmas):
-    ancestors_prefixed_cmas = prefix_ancestors(event_prefixed_cmas, (dict(),
-                                                                     dict()))
-    level_prefixed_cmas = pass2_child(ancestors_prefixed_cmas)
-    event_prefixed_cmas = prefix_event(level_prefixed_cmas)
-    return event_prefixed_cmas
+def parse_pass2(context_records):
+    level_prefixed = ((record['level'], (context, record))
+                      for context, record in context_records)
+    root_item = (dict(), dict())
+    ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
+    for ancestors, (context, record) in ancestors_prefixed:
+        parent = ancestors[-1]
+        parse_pass2_record_with_parent(parent, (context, record))
+        yield context, record
 
 def parse_models(context, records, passes=3):
-    result = parse_models_pass1(context, records)
+    context_records = parse_pass1(context, records)
     if passes >= 2:
-        result = parse_models_pass2(result)
-    for event, (context, record) in result:
+        context_records = parse_pass2(context_records)
+    level_prefixed = ((record['level'], (context, record))
+                      for context, record in context_records)
+    for event, (context, record) in prefix_event(level_prefixed):
         model = record['model']
         attributes = record['attributes']
         stream = context.get('stream')

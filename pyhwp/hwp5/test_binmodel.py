@@ -3,7 +3,7 @@ from unittest import TestCase, makeSuite
 from StringIO import StringIO
 
 from .recordstream import Record, read_records
-from .binmodel import tag_models, parse_models_pass1, parse_models_pass2, prefix_event, prefix_ancestors
+from .binmodel import tag_models, prefix_event, prefix_ancestors
 from .binmodel import BinData, TableControl, ListHeader, TableCaption, TableCell, TableBody
 from .binmodel import STARTEVENT, ENDEVENT
 from . import binmodel
@@ -332,9 +332,10 @@ class TableBodyTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
     stream = StringIO('M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00')
     def testParsePass1(self):
+        from .binmodel import parse_pass1_record
         record = read_records(self.stream, 'bodytext/0').next()
 
-        event, (context, record) = parse_models_pass1(self.ctx, [record]).next()
+        context, record = parse_pass1_record(self.ctx, record)
         model = record['model']
         attributes = record['attributes']
 
@@ -391,10 +392,11 @@ class TableCaptionCellTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
     records_bytes = 'G\x04\xc0\x02 lbt\x10#*(\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00\x04\n\x00\x00\x03\x00\x00\x00\x1b\x01R\x037\x02n\x04\n^\xc0V\x00\x00\x00\x00H\x08`\x01\x02\x00\x00\x00\x00\x00\x00\x00\x03\x00\x00\x008!\x00\x00R\x03\x06\x9e\x00\x00M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00'
     def testParsePass1(self):
+        from .binmodel import parse_pass1
         stream = StringIO(self.records_bytes)
         records = list(read_records(stream, 'bodytext/0'))
 
-        pass1 = list(parse_models_pass1(self.ctx, records))
+        pass1 = list(parse_pass1(self.ctx, records))
         def expected():
             yield TableControl, set([name for type, name in TableControl.attributes(self.ctx)]+['chid'])
             yield ListHeader, set(name for type, name in ListHeader.attributes(self.ctx))
@@ -403,15 +405,15 @@ class TableCaptionCellTest(TestCase):
         expected = list(expected())
         self.assertEquals(expected, [(record['model'],
                                       set(record['attributes'].keys()))
-                                     for ancestors, (context, record) in
-                                     prefix_ancestors(pass1)])
+                                     for context, record in pass1])
         return pass1
 
     def testParsePass2(self):
+        from .binmodel import parse_pass2
         pass1 = self.testParsePass1()
-        pass2 = list(parse_models_pass2(pass1))
+        pass2 = list(parse_pass2(pass1))
 
-        result = list(b for a, b in prefix_ancestors(pass2))
+        result = pass2
         tablecaption = result[1]
         context, record = tablecaption
         model = record['model']
