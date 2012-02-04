@@ -1716,9 +1716,10 @@ def model_to_json(model, *args, **kwargs):
         model['unparsed'] = list(dumpbytes(model['unparsed']))
     return simplejson.dumps(model, *args, **kwargs)
 
-def generate_models_json_array(models):
+def generate_models_json_array(models, *args, **kwargs):
     from .recordstream import generate_json_array
-    tokens = (model_to_json(model) for model in models)
+    tokens = (model_to_json(model, *args, **kwargs)
+              for model in models)
     return generate_json_array(tokens)
 
 def recoder_to_json(context):
