@@ -1627,6 +1627,30 @@ def prefix_ancestors(event_prefixed_items, root_item=None):
         elif event is ENDEVENT:
             parent = stack.pop()
 
+def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
+    ''' prefix items with ancestors
+
+        @param level_prefixed items: iterable of tuple(level, item)
+        @return iterable of tuple(ancestors, item)
+    '''
+    baselevel = None
+    stack = [root_item]
+    for level, item in level_prefixed_items:
+        if baselevel is None:
+            baselevel = level
+            level = 0
+        else:
+            level -= baselevel
+
+        while level + 1 < len(stack):
+            stack.pop()
+        while len(stack) < level + 1:
+            raise Exception('invalid level: %d, %d, %s'%(level, len(stack)-1, item))
+        assert(len(stack) == level + 1)
+
+        yield stack, item
+        stack.append(item)
+
 def pass2_child(ancestors_cmas):
     for ancestors, (context, record) in ancestors_cmas:
         model = record['model']
