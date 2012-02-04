@@ -854,13 +854,14 @@ class ControlChar(object):
         self.param = param
     def decode_bytes(cls, bytes):
         ch = dataio.decode_utf16le_besteffort(bytes[0:2])
+        code = ord(ch)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
             chid = CHID.decode(bytes[0:4])
             param = bytes[4:12]
-            return cls(ch, chid, param)
+            return dict(code=code, chid=chid, param=param)
         else:
-            return cls(ch)
+            return dict(code=code)
     decode_bytes = classmethod(decode_bytes)
 
     def kind(self):
@@ -870,6 +871,11 @@ class ControlChar(object):
     def code(self):
         return ord(self.ch)
     code = property(code)
+
+    def get_name_by_code(cls, code):
+        ch = unichr(code)
+        return cls.names.get(ch, 'CTLCHR%02x'%code)
+    get_name_by_code = classmethod(get_name_by_code)
 
     def name(self):
         return self.names.get(self.ch, 'CTLCHR%02x'%self.code)
@@ -1832,9 +1838,11 @@ def main():
                         xmlgen.startElement('Text', chunk_attr)
                         xmlgen.characters(chunk)
                         xmlgen.endElement('Text')
-                    elif isinstance(chunk, ControlChar):
-                        chunk_attr['name'] = chunk.name
-                        chunk_attr['kind'] = chunk.kind.__name__
+                    elif isinstance(chunk, dict):
+                        code = chunk['code']
+                        ch = unichr(code)
+                        chunk_attr['name'] = ControlChar.get_name_by_code(code)
+                        chunk_attr['kind'] = ControlChar.kinds[ch].__name__
                         xmlgen.startElement('ControlChar', chunk_attr)
                         xmlgen.endElement('ControlChar')
                     else:

@@ -584,6 +584,21 @@ class TestPrefixOps(TestCase):
         except:
             pass
 
+class TestControlChar(TestBase):
+    def test_decode_bytes(self):
+        from .binmodel import ControlChar
+        import logging
+        context = dict(version=self.hwp5file_rec.header.version,
+                       logging=logging)
+        section = self.hwp5file_rec.bodytext.section(0)
+        import itertools
+        paratext_record = nth(section.records(), 1)
+        payload = paratext_record['payload']
+        controlchar = ControlChar.decode_bytes(payload[0:16])
+        self.assertEquals(dict(code=ord(ControlChar.SECTION_COLUMN_DEF),
+                               chid='secd',
+                               param='\x00'*8), controlchar)
+
 class TestModelJson(TestBase):
     def test_model_to_json(self):
         from .binmodel import parse_models

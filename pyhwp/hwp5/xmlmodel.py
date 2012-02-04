@@ -142,7 +142,13 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                             textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
                             yield STARTEVENT, textitem
                             yield ENDEVENT, textitem
-                        elif isinstance(chunk, ControlChar):
+                        elif isinstance(chunk, dict):
+                            ch = chr(chunk['code'])
+                            if 'chid' in chunk:
+                                chunk = ControlChar(ch, chunk['chid'],
+                                                    chunk['param'])
+                            else:
+                                chunk = ControlChar(ch)
                             chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
                             if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
                                 chunk_attributes['char'] = unichr(chunk.code)
