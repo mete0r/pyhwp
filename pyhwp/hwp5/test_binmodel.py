@@ -656,6 +656,19 @@ class TestModelJson(TestBase):
         jsonobject = simplejson.loads(json)
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
 
+    def test_generate_models_json_array(self):
+        from .binmodel import parse_models, generate_models_json_array
+        import logging
+        context = dict(version=self.hwp5file_rec.header.version,
+                      logging=logging)
+        records = self.hwp5file_rec.bodytext.section(0).records()
+        models = parse_models(context, records)
+        gen = generate_models_json_array(models)
+
+        import simplejson
+        json_array = simplejson.loads(''.join(gen))
+        self.assertEquals(128, len(json_array))
+
     def test_recoder(self):
         from .binmodel import recoder_to_json
         import logging
