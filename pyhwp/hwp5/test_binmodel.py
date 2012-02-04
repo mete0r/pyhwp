@@ -256,17 +256,18 @@ class ShapeComponentTest(TestBase):
 
         parent_record = self.control_gso_record
         parent_context = init_record_parsing_context(testcontext, parent_record)
-        parent = (parent_context, parent_record)
 
         # if parent model is GShapeObjectControl
-        parent_record['model'] = GShapeObjectControl
+        parent_model = dict(type=GShapeObjectControl)
+        parent = (parent_context, parent_model)
+
         record = self.shapecomponent_record
         context = init_record_parsing_context(testcontext, record)
-        model, attributes = ShapeComponent, dict()
-        model, attributes = model.parse_with_parent(attributes, context, parent)
+        model_type, model_content = ShapeComponent, dict()
+        model_type, model_content = model_type.parse_with_parent(model_content, context, parent)
 
-        self.assertEquals(model, ShapeComponent)
-        self.assertTrue('chid0' in attributes)
+        self.assertEquals(model_type, ShapeComponent)
+        self.assertTrue('chid0' in model_content)
 
         # if parent model is not GShapeObjectControl
         # TODO
@@ -335,20 +336,20 @@ class TableBodyTest(TestCase):
         from .binmodel import parse_pass1_record
         record = read_records(self.stream, 'bodytext/0').next()
 
-        context, record = parse_pass1_record(self.ctx, record)
-        model = record['model']
-        attributes = record['attributes']
+        context, model = parse_pass1_record(self.ctx, record)
+        model_type = model['type']
+        model_content = model['content']
 
-        self.assertEquals(TableBody, model)
+        self.assertEquals(TableBody, model_type)
         self.assertEquals(dict(left=141, right=141, top=141, bottom=141),
-                          attributes['padding'])
-        self.assertEquals(0x4000006L, attributes['flags'])
-        self.assertEquals(2, attributes['cols'])
-        self.assertEquals(2, attributes['rows'])
-        self.assertEquals(1, attributes['borderfill_id'])
-        self.assertEquals((2, 2), attributes['rowcols'])
-        self.assertEquals(0, attributes['cellspacing'])
-        self.assertEquals([], attributes['validZones'])
+                          model_content['padding'])
+        self.assertEquals(0x4000006L, model_content['flags'])
+        self.assertEquals(2, model_content['cols'])
+        self.assertEquals(2, model_content['rows'])
+        self.assertEquals(1, model_content['borderfill_id'])
+        self.assertEquals((2, 2), model_content['rowcols'])
+        self.assertEquals(0, model_content['cellspacing'])
+        self.assertEquals([], model_content['validZones'])
 
 class Pass2Test(TestCase):
     ctx = TestContext()
@@ -403,9 +404,9 @@ class TableCaptionCellTest(TestCase):
             yield TableBody, set(name for type, name in TableBody.attributes(self.ctx))
             yield ListHeader, set(name for type, name in ListHeader.attributes(self.ctx))
         expected = list(expected())
-        self.assertEquals(expected, [(record['model'],
-                                      set(record['attributes'].keys()))
-                                     for context, record in pass1])
+        self.assertEquals(expected, [(model['type'],
+                                      set(model['content'].keys()))
+                                     for context, model in pass1])
         return pass1
 
     def testParsePass2(self):
@@ -415,45 +416,45 @@ class TableCaptionCellTest(TestCase):
 
         result = pass2
         tablecaption = result[1]
-        context, record = tablecaption
-        model = record['model']
-        attributes = record['attributes']
+        context, model = tablecaption
+        model_type = model['type']
+        model_content = model['content']
         stream = context['stream']
 
-        self.assertEquals(TableCaption, model)
+        self.assertEquals(TableCaption, model_type)
         self.assertEquals(22, stream.tell())
         # ListHeader attributes
-        self.assertEquals(2, attributes['paragraphs'])
-        self.assertEquals(0x0L, attributes['listflags'])
-        self.assertEquals(0, attributes['unknown1'])
-        # TableCaption attributes
-        self.assertEquals(3, attributes['flags'])
-        self.assertEquals(8504L, attributes['width'])
-        self.assertEquals(850, attributes['separation'])
-        self.assertEquals(40454L, attributes['maxsize'])
+        self.assertEquals(2, model_content['paragraphs'])
+        self.assertEquals(0x0L, model_content['listflags'])
+        self.assertEquals(0, model_content['unknown1'])
+        # TableCaption model_content
+        self.assertEquals(3, model_content['flags'])
+        self.assertEquals(8504L, model_content['width'])
+        self.assertEquals(850, model_content['separation'])
+        self.assertEquals(40454L, model_content['maxsize'])
 
         tablecell = result[3]
-        context, record = tablecell
-        model = record['model']
-        attributes = record['attributes']
+        context, model = tablecell
+        model_type = model['type']
+        model_content = model['content']
         stream = context['stream']
-        self.assertEquals(TableCell, model)
+        self.assertEquals(TableCell, model_type)
         self.assertEquals(38, stream.tell())
-        # ListHeader attributes
-        self.assertEquals(1, attributes['paragraphs'])
-        self.assertEquals(0x20L, attributes['listflags'])
-        self.assertEquals(0, attributes['unknown1'])
-        # TableCell attributes
-        self.assertEquals(0, attributes['col'])
-        self.assertEquals(0, attributes['row'])
-        self.assertEquals(1, attributes['colspan'])
-        self.assertEquals(1, attributes['rowspan'])
-        self.assertEquals(0x4f03, attributes['width'])
-        self.assertEquals(0x11a, attributes['height'])
+        # ListHeader model_content
+        self.assertEquals(1, model_content['paragraphs'])
+        self.assertEquals(0x20L, model_content['listflags'])
+        self.assertEquals(0, model_content['unknown1'])
+        # TableCell model_content
+        self.assertEquals(0, model_content['col'])
+        self.assertEquals(0, model_content['row'])
+        self.assertEquals(1, model_content['colspan'])
+        self.assertEquals(1, model_content['rowspan'])
+        self.assertEquals(0x4f03, model_content['width'])
+        self.assertEquals(0x11a, model_content['height'])
         self.assertEquals(dict(left=141, right=141, top=141, bottom=141),
-                          attributes['padding'])
-        self.assertEquals(1, attributes['borderfill_id'],)
-        self.assertEquals(0x4f03, attributes['unknown_width'])
+                          model_content['padding'])
+        self.assertEquals(1, model_content['borderfill_id'],)
+        self.assertEquals(0x4f03, model_content['unknown_width'])
 
 from .binmodel import RecordModel, typed_model_attributes
 from .dataio import INT32, BSTR
