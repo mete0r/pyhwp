@@ -1566,18 +1566,28 @@ def pass1(context, records):
                      record['seqno'])
         context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
 
-        context = init_record_parsing_context(context, record)
-
-        record['model'] = model = tag_models.get(record['tagid'], RecordModel)
-        record['attributes'] = attributes = dict()
-
-        parse_pass1 = getattr(model, 'parse_pass1', None)
-        if parse_pass1 is not None:
-            model, attributes = parse_pass1(context)
-        record['model'] = model
-        record['attributes'] = attributes
-        context['logging'].debug('pass1: %s, %s', model, attributes.keys())
+        context, record = parse_pass1_record(context, record)
+        context['logging'].debug('pass1: %s, %s', record['model'],
+                                 record['attributes'].keys())
         yield record['level'], (context, record)
+
+def parse_pass1_record(context, record):
+    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
+
+    context = init_record_parsing_context(context, record)
+
+    # HWPTAG로 모델 결정
+    model = tag_models.get(record['tagid'], RecordModel)
+    attributes = dict()
+
+    # 1차 파싱
+    parse_pass1 = getattr(model, 'parse_pass1', None)
+    if parse_pass1:
+        model, attributes = parse_pass1(context)
+
+    record['model'] = model
+    record['attributes'] = attributes
+    return context, record
 
 def parse_models_pass1(context, records):
     level_prefixed_cmas = pass1(context, records)
