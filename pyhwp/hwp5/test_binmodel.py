@@ -583,3 +583,31 @@ class TestPrefixOps(TestCase):
             self.fail('assert fails expected')
         except:
             pass
+
+class TestModelJson(TestBase):
+    def test_model_to_json(self):
+        from .binmodel import parse_models
+        from .binmodel import model_to_json
+        import logging
+        context = dict(version=self.hwp5file_rec.header.version,
+                       logging=logging)
+        record = self.hwp5file_rec.docinfo.records().next()
+        model = parse_models(context, [record]).next()
+        json = model_to_json(model, indent=2, sort_keys=True)
+
+        import simplejson
+        jsonobject = simplejson.loads(json)
+        self.assertEquals('DocumentProperties', jsonobject['type'])
+
+    def test_model_to_json_with_unparsed(self):
+        from .binmodel import model_to_json
+        import logging
+
+        record = dict(payload='\x00\x01\x02\x03')
+        model = dict(type=RecordModel, content=[], record=record,
+                     unparsed='\xff\xfe\xfd\xfc')
+        json = model_to_json(model)
+
+        import simplejson
+        jsonobject = simplejson.loads(json)
+        self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])

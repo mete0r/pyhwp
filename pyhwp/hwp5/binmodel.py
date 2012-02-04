@@ -1698,6 +1698,17 @@ def parse_models_intern(context, records, passes=3):
             model['unparsed'] = unparsed
         yield context, model
 
+def model_to_json(model, *args, **kwargs):
+    ''' convert a model to json '''
+    from .dataio import dumpbytes
+    import simplejson # TODO: simplejson is for python2.5+
+    model['type'] = model['type'].__name__
+    record = model['record']
+    record['payload'] = list(dumpbytes(record['payload']))
+    if 'unparsed' in model:
+        model['unparsed'] = list(dumpbytes(model['unparsed']))
+    return simplejson.dumps(model, *args, **kwargs)
+
 def create_context(file=None, **context):
     if file is not None:
         context['version'] = file.fileheader.version
