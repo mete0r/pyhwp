@@ -1561,18 +1561,14 @@ def init_record_parsing_context(base, record):
 
 def pass1(context, records):
     for record in records:
-        tagid = record['tagid']
         tag = record['tagname']
         record_id = (record.get('filename', ''), record.get('streamid', ''),
                      record['seqno'])
-        record_level = record['level']
-
-        context = init_record_parsing_context(context, record)
-        context['hwptag'] = tag
-        context['recordid'] = record_id
         context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
 
-        record['model'] = model = tag_models.get(tagid, RecordModel)
+        context = init_record_parsing_context(context, record)
+
+        record['model'] = model = tag_models.get(record['tagid'], RecordModel)
         record['attributes'] = attributes = dict()
 
         parse_pass1 = getattr(model, 'parse_pass1', None)
@@ -1581,7 +1577,7 @@ def pass1(context, records):
         record['model'] = model
         record['attributes'] = attributes
         context['logging'].debug('pass1: %s, %s', model, attributes.keys())
-        yield record_level, (context, record)
+        yield record['level'], (context, record)
 
 def parse_models_pass1(context, records):
     level_prefixed_cmas = pass1(context, records)
@@ -1746,10 +1742,13 @@ def main():
                     context['logging'].error('can\'t serialize xml attribute %s: %s'%(name, repr(value)))
                     context['logging'].exception(e)
                     raise
-            recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
-            hwptag = context.get('hwptag', '')
-            if options.loglevel <= logging.INFO:
-                xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
+            record = context.get('record')
+            if record:
+                recordid = (record.get('filename', ''), record.get('streamid', ''),
+                            record['seqno'])
+                hwptag = record['tagname']
+                if options.loglevel <= logging.INFO:
+                    xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
             if model is ParaText:
                 if 'chunks' in attributes:
                     chunks = attributes.pop('chunks')
