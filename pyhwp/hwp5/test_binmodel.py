@@ -599,6 +599,68 @@ class TestControlChar(TestBase):
                                chid='secd',
                                param='\x00'*8), controlchar)
 
+    def test_tab(self):
+        from .binmodel import parse_models
+        from .binmodel import ControlChar
+        self.sample_hwp = 'tabdef.hwp'
+        records = self.hwp5file_rec.bodytext.section(0).records()
+        paratexts = parse_models(testcontext,
+                                 (record for record in records
+                                  if record['tagname'] == 'HWPTAG_PARA_TEXT'))
+        paratexts = list(paratexts)
+        def paratext_tabs(paratext):
+            for range, chunk in paratext['content']['chunks']:
+                if isinstance(chunk, dict):
+                    if unichr(chunk['code']) == ControlChar.TAB:
+                        yield chunk
+        self.assertEquals(set(['code', 'param']),
+                          set(paratext_tabs(paratexts[0]).next().keys()))
+
+        def paratext_tab_params(paratext):
+            for tab in paratext_tabs(paratext):
+                yield tab['param']
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(4000, 1)]*3,
+                          list((tab['width'], tab['unknown1'])
+                              for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(2000, 1), (1360, 1), (1360, 1)],
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(2328, 2)]*3,
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(2646, 3), (2292, 3), (2292, 3)],
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(2104, 4)]*3,
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(4000, 1), (3360, 1), (3360, 1)],
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(4000, 1), (3328, 1)],
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+        tabs = list(paratext_tab_params(paratexts.pop(0)))
+        self.assertEquals([(4000, 1), (3672, 1), (33864, 2)],
+                          list((tab['width'], tab['unknown1'])
+                               for tab in tabs))
+
+
 class TestModelJson(TestBase):
     def test_model_to_json(self):
         from .binmodel import parse_models

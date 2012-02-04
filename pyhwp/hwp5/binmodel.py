@@ -857,9 +857,17 @@ class ControlChar(object):
         code = ord(ch)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
-            chid = CHID.decode(bytes[0:4])
-            param = bytes[4:12]
-            return dict(code=code, chid=chid, param=param)
+            if ch == ControlChar.TAB:
+                s = StringIO(bytes)
+                param = dict(width=UINT32.read(s),
+                             unknown0=UINT8.read(s),
+                             unknown1=UINT8.read(s),
+                             unknown2=s.read())
+                return dict(code=code, param=param)
+            else:
+                chid = CHID.decode(bytes[0:4])
+                param = bytes[4:12]
+                return dict(code=code, chid=chid, param=param)
         else:
             return dict(code=code)
     decode_bytes = classmethod(decode_bytes)
