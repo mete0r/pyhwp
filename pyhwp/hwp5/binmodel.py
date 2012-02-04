@@ -1768,8 +1768,6 @@ def main():
     from .recordstream import read_records
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
-    op.add_option('--pass', dest='passes', type='int', default=2, help='parsing pass: 1, 2 [default: 2]')
-    op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
 
     options, args = op.parse_args()
 
@@ -1787,123 +1785,22 @@ def main():
         bytestream = file.pseudostream(streamname)
         version = file.fileheader.version
 
-    records = read_records(bytestream, streamname, filename)
-
-    import types
-    from xml.sax.saxutils import XMLGenerator
-    class XmlFormat(ModelEventHandler):
-        def __init__(self, out):
-            self.xmlgen = XMLGenerator(out, 'utf-8')
-        def startDocument(self):
-            self.xmlgen.startDocument()
-        def startModel(self, model, attributes, **context):
-            xmlgen = self.xmlgen
-            def xmlattrval(v):
-                if isinstance(v, basestring):
-                    return v
-                elif isinstance(v, type):
-                    return v.__name__
-                else:
-                    return str(v)
-            def xmlattr(item):
-                try:
-                    name, (type, value) = item
-                    return name, xmlattrval(value)
-                except Exception, e:
-                    context['logging'].error('can\'t serialize xml attribute %s: %s'%(name, repr(value)))
-                    context['logging'].exception(e)
-                    raise
-            record = context.get('record')
-            if record:
-                recordid = (record.get('filename', ''), record.get('streamid', ''),
-                            record['seqno'])
-                hwptag = record['tagname']
-                if options.loglevel <= logging.INFO:
-                    xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
-            if model is ParaText:
-                if 'chunks' in attributes:
-                    chunks = attributes.pop('chunks')
-                else:
-                    chunks = None
-            else:
-                pass
-            if model is Text:
-                text = attributes.pop('text')
-            else:
-                text = None
-
-            typed_attributes = typed_model_attributes(model, attributes, context)
-            xmlgen.startElement(model.__name__, dict(xmlattr(x) for x in typed_attributes))
-
-            if model is Text and text is not None:
-                xmlgen.characters(text)
-            if model is ParaText and chunks is not None:
-                for (start, end), chunk in chunks:
-                    chunk_attr = dict(start=str(start), end=str(end))
-                    if isinstance(chunk, basestring):
-                        xmlgen.startElement('Text', chunk_attr)
-                        xmlgen.characters(chunk)
-                        xmlgen.endElement('Text')
-                    elif isinstance(chunk, dict):
-                        code = chunk['code']
-                        ch = unichr(code)
-                        chunk_attr['name'] = ControlChar.get_name_by_code(code)
-                        chunk_attr['kind'] = ControlChar.kinds[ch].__name__
-                        xmlgen.startElement('ControlChar', chunk_attr)
-                        xmlgen.endElement('ControlChar')
-                    else:
-                        xmlgen._write('<!-- unknown chunk: (%d, %d), %s -->'%(start, end, chunk))
-            if options.loglevel <= logging.INFO:
-                unparsed = context.get('unparsed', '')
-                if len(unparsed) > 0:
-                    xmlgen._write('<!-- UNPARSED\n')
-                    xmlgen._write(dataio.hexdump(unparsed, True))
-                    xmlgen._write('\n-->')
-        def endModel(self, model):
-            self.xmlgen.endElement(model.__name__)
-        def endDocument(self):
-            self.xmlgen.endDocument()
-        def getlogger():
-            return getlogger(options, loghandler(out, logformat_xml))
-
-    class NulFormat(ModelEventHandler):
-        def __init__(self, out): pass
-        def startDocument(self): pass
-        def endDocument(self): pass
-        def startModel(self, model, attributes, **context): pass
-        def endModel(self, model): pass
-
-    from ._scriptutils import getlogger, loghandler, logformat_xml
-    if options.format == 'xml':
-        logger = getlogger(options, loghandler(out, logformat_xml))
-    else:
-        logger = getlogger(options)
-
-    formats = dict(xml=XmlFormat, nul=NulFormat)
-    oformat = formats[options.format](out)
-
+    from ._scriptutils import getlogger
+    logger = getlogger(options)
     context = create_context(version=version, logging=logger)
-    context_models = parse_models_intern(context, records, options.passes)
-    level_prefixed = ((model['record']['level'], (model['type'],
-                                                  model['content'], context))
-                      for context, model in context_models)
-    event_prefixed = prefix_event(level_prefixed)
-    models = event_prefixed
+    records = read_records(bytestream, streamname, filename)
+    models = parse_models(context, records)
 
     def statistics(models):
         occurrences = dict()
-        for event, (model, attributes, context) in models:
-            if event is STARTEVENT:
-                occurrences.setdefault(model, 0)
-                occurrences[model] += 1
-            yield event, (model, attributes, context)
-        for model, count in occurrences.iteritems():
-            logger.info('%30s: %d', model.__name__, count)
+        for model in models:
+            model_type = model['type']
+            occurrences.setdefault(model_type, 0)
+            occurrences[model_type] += 1
+            yield model
+        for model_type, count in occurrences.iteritems():
+            logger.info('%30s: %d', model_type.__name__, count)
     models = statistics(models)
 
-    class Records(object): pass
-    models = wrap_modelevents((Records, dict(filename=filename, streamid=streamname), dict(context)), models)
-
-    oformat.startDocument()
-    dispatch_model_events(oformat, models)
-    oformat.endDocument()
+    for s in generate_models_json_array(models, indent=2, sort_keys=True):
+        out.write(s)
