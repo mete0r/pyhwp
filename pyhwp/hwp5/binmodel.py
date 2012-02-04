@@ -1708,6 +1708,7 @@ def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
     from .dataio import dumpbytes
     import simplejson # TODO: simplejson is for python2.5+
+    model = dict(model)
     model['type'] = model['type'].__name__
     record = model['record']
     record['payload'] = list(dumpbytes(record['payload']))

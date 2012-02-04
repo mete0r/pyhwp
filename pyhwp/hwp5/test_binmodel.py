@@ -614,6 +614,17 @@ class TestModelJson(TestBase):
         jsonobject = simplejson.loads(json)
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
+    def test_model_to_json_should_not_modify_input(self):
+        from .binmodel import parse_models
+        from .binmodel import model_to_json
+        import logging
+        context = dict(version=self.hwp5file_rec.header.version,
+                       logging=logging)
+        record = self.hwp5file_rec.docinfo.records().next()
+        model = parse_models(context, [record]).next()
+        model_to_json(model, indent=2, sort_keys=True)
+        self.assertFalse(isinstance(model['type'], basestring))
+
     def test_model_to_json_with_controlchar(self):
         from .binmodel import parse_models
         from .binmodel import model_to_json
