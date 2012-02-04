@@ -1680,19 +1680,23 @@ def parse_pass2(context_records):
         parse_pass2_record_with_parent(parent, (context, record))
         yield context, record
 
-def parse_models(context, records, passes=3):
+def parse_models(context, records):
+    for context, model in parse_models_intern(context, records):
+        yield model
+
+def parse_models_intern(context, records, passes=3):
     context_records = parse_pass1(context, records)
     if passes >= 2:
         context_records = parse_pass2(context_records)
-    level_prefixed = ((record['level'], (context, record))
-                      for context, record in context_records)
-    for event, (context, record) in prefix_event(level_prefixed):
-        model = record['model']
-        attributes = record['attributes']
-        stream = context.get('stream')
-        if stream is not None:
-            context['unparsed'] = stream.read()
-        yield event, (model, attributes, context)
+    for context, record in context_records:
+        model = dict(record=record,
+                     type=record['model'],
+                     content=record['attributes'])
+        stream = context['stream']
+        unparsed = stream.read()
+        if unparsed:
+            model['unparsed'] = unparsed
+        yield context, model
 
 def create_context(file=None, **context):
     if file is not None:
@@ -1842,7 +1846,12 @@ def main():
     oformat = formats[options.format](out)
 
     context = create_context(version=version, logging=logger)
-    models = parse_models(context, records, options.passes)
+    context_models = parse_models_intern(context, records, options.passes)
+    level_prefixed = ((model['record']['level'], (model['type'],
+                                                  model['content'], context))
+                      for context, model in context_models)
+    event_prefixed = prefix_event(level_prefixed)
+    models = event_prefixed
 
     def statistics(models):
         occurrences = dict()

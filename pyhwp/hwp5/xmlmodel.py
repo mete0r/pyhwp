@@ -312,6 +312,13 @@ def restructure_tablebody(event_prefixed_mac):
             yield event, item
 
 
+def prefix_binmodels_with_event(context, models):
+    from .binmodel import prefix_event
+    level_prefixed = ((model['record']['level'],
+                       (model['type'], model['content'], context))
+                      for model in models)
+    return prefix_event(level_prefixed)
+
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
 
@@ -330,7 +337,9 @@ def flatxml(hwpfile, logger, oformat):
     hwpdoc = HwpDoc, dict(version=hwpfile.fileheader.version), dict(context)
     docinfo = DocInfo, dict(), dict(context)
     docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
-    docinfo_events = wrap_modelevents(docinfo, parse_models(context, docinfo_records))
+    docinfo_models = parse_models(context, docinfo_records)
+    docinfo_events = prefix_binmodels_with_event(context, docinfo_models)
+    docinfo_events = wrap_modelevents(docinfo, docinfo_events)
 
     docinfo_events = remove_redundant_facenames(docinfo_events)
 
@@ -338,7 +347,8 @@ def flatxml(hwpfile, logger, oformat):
     bodytext_events = []
     for idx in hwpfile.list_bodytext_sections():
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
-        section_events = parse_models(context, section_records)
+        section_models = parse_models(context, section_records)
+        section_events = prefix_binmodels_with_event(context, section_models)
 
         section_events = make_texts_linesegmented_and_charshaped(section_events)
         section_events = make_extended_controls_inline(section_events)
