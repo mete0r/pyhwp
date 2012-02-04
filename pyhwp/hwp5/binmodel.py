@@ -1653,29 +1653,33 @@ def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
 
 def pass2_child(ancestors_cmas):
     for ancestors, (context, record) in ancestors_cmas:
-        model = record['model']
-        attributes = record['attributes']
-        stream = context['stream']
-
         parent = ancestors[-1]
-        parent_context, parent_record = parent
-        parent_model = parent_record.get('model')
-        parent_attributes = parent_record.get('attributes')
-
-        parse_child = getattr(parent_model, 'parse_child', None)
-        if parse_child is not None:
-            model, attributes = parse_child(parent_attributes, parent_context, (context, model, attributes))
-        record['model'] = model
-        record['attributes'] = attributes
-
-        parse_with_parent = getattr(model, 'parse_with_parent', None)
-        if parse_with_parent is not None:
-            model, attributes = model.parse_with_parent(attributes, context, parent)
-
-        context['logging'].debug('pass2: %s, %s', model, attributes.keys())
-        record['model'] = model
-        record['attributes'] = attributes
+        parse_pass2_record_with_parent(parent, (context, record))
         yield len(ancestors)-1, (context, record)
+
+def parse_pass2_record_with_parent(parent, (context, record)):
+    model = record['model']
+    attributes = record['attributes']
+    stream = context['stream']
+
+    parent_context, parent_record = parent
+    parent_model = parent_record.get('model')
+    parent_attributes = parent_record.get('attributes')
+
+    parse_child = getattr(parent_model, 'parse_child', None)
+    if parse_child is not None:
+        model, attributes = parse_child(parent_attributes, parent_context, (context, model, attributes))
+    record['model'] = model
+    record['attributes'] = attributes
+
+    parse_with_parent = getattr(model, 'parse_with_parent', None)
+    if parse_with_parent is not None:
+        model, attributes = model.parse_with_parent(attributes, context, parent)
+
+    context['logging'].debug('pass2: %s, %s', model, attributes.keys())
+    record['model'] = model
+    record['attributes'] = attributes
+    return context, record
 
 def parse_models_pass2(event_prefixed_cmas):
     ancestors_prefixed_cmas = prefix_ancestors(event_prefixed_cmas, (dict(),
