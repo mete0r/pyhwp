@@ -599,6 +599,24 @@ class TestModelJson(TestBase):
         jsonobject = simplejson.loads(json)
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
+    def test_model_to_json_with_controlchar(self):
+        from .binmodel import parse_models
+        from .binmodel import model_to_json
+        import logging
+        context = dict(version=self.hwp5file_rec.header.version,
+                       logging=logging)
+        section = self.hwp5file_rec.bodytext.section(0)
+        import itertools
+        records = list(itertools.islice(section.records(), 0, 2))
+        model = nth(parse_models(context, records), 1)
+        json = model_to_json(model)
+
+        import simplejson
+        jsonobject = simplejson.loads(json)
+        self.assertEquals('ParaText', jsonobject['type'])
+        self.assertEquals([[0, 8], dict(code=2, param='\x00'*8, chid='secd')],
+                         jsonobject['content']['chunks'][0])
+
     def test_model_to_json_with_unparsed(self):
         from .binmodel import model_to_json
         import logging
@@ -611,3 +629,16 @@ class TestModelJson(TestBase):
         import simplejson
         jsonobject = simplejson.loads(json)
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
+
+    def test_recoder(self):
+        from .binmodel import recoder_to_json
+        import logging
+        context = dict(version=self.hwp5file_rec.header.version,
+                      logging=logging)
+        recode = recoder_to_json(context)
+
+        stream = recode(self.hwp5file_rec.docinfo.open())
+
+        import simplejson
+        jsonobject = simplejson.load(stream)
+        self.assertEquals(67, len(jsonobject))

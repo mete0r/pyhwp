@@ -1709,6 +1709,18 @@ def model_to_json(model, *args, **kwargs):
         model['unparsed'] = list(dumpbytes(model['unparsed']))
     return simplejson.dumps(model, *args, **kwargs)
 
+def recoder_to_json(context):
+    def recode(f):
+        from .recordstream import read_records
+        from .recordstream import generate_json_array
+        from .filestructure import GeneratorReader
+        records = read_records(f)
+        models = parse_models(context, records)
+        tokens = (model_to_json(model) for model in models)
+        gen = generate_json_array(tokens)
+        return GeneratorReader(gen)
+    return recode
+
 def create_context(file=None, **context):
     if file is not None:
         context['version'] = file.fileheader.version
