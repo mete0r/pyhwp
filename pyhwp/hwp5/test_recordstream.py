@@ -22,3 +22,28 @@ class TestBase(test_filestructure.TestBase):
         bodytext = self.hwp5file_rec.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
         self.assertEquals(['Section0', 'Section0.rec'], list(bodytext.open()))
+
+class TestJson(TestBase):
+    def test_record_to_json(self):
+        from .recordstream import record_to_json
+        import simplejson
+        record = self.hwp5file_rec.docinfo.records().next()
+        json = record_to_json(record)
+        jsonobject = simplejson.loads(json)
+        self.assertEquals(16, jsonobject['tagid'])
+        self.assertEquals(0, jsonobject['level'])
+        self.assertEquals(26, jsonobject['size'])
+        self.assertEquals(['01 00 01 00 01 00 01 00 01 00 01 00 01 00 00 00',
+                           '00 00 07 00 00 00 05 00 00 00'],
+                          jsonobject['payload'])
+        self.assertEquals(0, jsonobject['seqno'])
+        self.assertEquals('HWPTAG_DOCUMENT_PROPERTIES', jsonobject['tagname'])
+
+    def test_generate_simplejson_dumps(self):
+        from .recordstream import generate_simplejson_dumps
+        import simplejson
+        records = self.hwp5file_rec.docinfo.records()
+        json = ''.join(generate_simplejson_dumps(records))
+
+        jsonobject = simplejson.loads(json)
+        self.assertEquals(67, len(jsonobject))

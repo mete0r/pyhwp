@@ -73,17 +73,35 @@ def link_records(records):
         yield rec
         prev = rec
 
+def record_to_json(record, *args, **kwargs):
+    ''' convert a record to json '''
+    from .dataio import dumpbytes
+    import simplejson # TODO: simplejson is for python2.5+
+    record['payload'] = list(dumpbytes(record['payload']))
+    return simplejson.dumps(record, *args, **kwargs)
+
+def generate_json_array(tokens):
+    ''' generate json array with given tokens '''
+    first = True
+    for token in tokens:
+        if first:
+            yield '[\n'
+            first = False
+        else:
+            yield ',\n'
+        yield token
+    yield '\n]'
+
 def generate_simplejson_dumps(records, *args, **kwargs):
     ''' generate simplejson.dumps()ed strings for each records
 
         records: record iterable
         args, kwargs: options for simplejson.dumps
     '''
-    from .dataio import dumpbytes
-    import simplejson # TODO: simplejson is for python2.5+
-    for rec in records:
-        rec['payload'] = list(dumpbytes(rec['payload']))
-        yield simplejson.dumps(rec, *args, **kwargs) + '\n'
+    tokens = (record_to_json(record, *args, **kwargs)
+              for record in records)
+    return generate_json_array(tokens)
+
 
 def bin2json_stream(f):
     ''' convert binary record stream into json stream '''
