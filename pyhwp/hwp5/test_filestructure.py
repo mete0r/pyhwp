@@ -261,13 +261,13 @@ class TestHwp5DistDocStream(TestBase):
         # stream should have been exausted
         self.assertEquals('', stream.read(1))
 
-    def test_head_payload(self):
-        payload = self.jscriptversion.head_payload()
-        self.assertEquals(256, len(payload))
+    def test_head(self):
+        head = self.jscriptversion.head()
+        self.assertEquals(256, len(head))
 
-    def test_head_payload_stream(self):
-        payload_stream = self.jscriptversion.head_payload_stream()
-        self.assertEquals(256, len(payload_stream.read()))
+    def test_head_stream(self):
+        head_stream = self.jscriptversion.head_stream()
+        self.assertEquals(256, len(head_stream.read()))
 
     def test_tail(self):
         tail = self.jscriptversion.tail()
@@ -297,7 +297,7 @@ class TestHwp5DistDicStorage(TestBase):
     def test_resolve_other_formats_for_version(self):
         other_formats = self.scripts.resolve_other_formats_for('JScriptVersion')
         self.assertTrue(other_formats is not None)
-        self.assertEquals(set(['.head.record', '.head.payload', '.tail']),
+        self.assertEquals(set(['.head.record', '.head', '.tail']),
                           set(other_formats.keys()))
 
 

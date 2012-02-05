@@ -421,12 +421,12 @@ class Hwp5DistDocStream(Hwp5Object):
         json = record_to_json(record)
         return GeneratorReader(iter([json]))
 
-    def head_payload(self):
+    def head(self):
         record = self.head_record()
         return record['payload']
 
-    def head_payload_stream(self):
-        return StringIO(self.head_payload())
+    def head_stream(self):
+        return StringIO(self.head())
 
     def tail(self):
         item = self.open()
@@ -440,7 +440,7 @@ class Hwp5DistDocStream(Hwp5Object):
 
     def other_formats(self):
         return {'.head.record': self.head_record_stream,
-                '.head.payload': self.head_payload_stream,
+                '.head': self.head_stream,
                 '.tail': self.tail_stream}
 
 
