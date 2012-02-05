@@ -483,14 +483,11 @@ class TestControlChar(TestBase):
                                param='\x00'*8), controlchar)
 
     def test_tab(self):
-        from .binmodel import parse_models
-        from .binmodel import ControlChar
+        from .binmodel import ParaText, ControlChar
         self.hwp5file_name = 'tabdef.hwp'
-        records = self.hwp5file_rec.bodytext.section(0).records()
-        paratexts = parse_models(testcontext,
-                                 (record for record in records
-                                  if record['tagname'] == 'HWPTAG_PARA_TEXT'))
-        paratexts = list(paratexts)
+        models = self.hwp5file.bodytext.section(0).models()
+        paratexts = list(model for model in models
+                         if model['type'] is ParaText)
         def paratext_tabs(paratext):
             for range, chunk in paratext['content']['chunks']:
                 if isinstance(chunk, dict):
