@@ -121,6 +121,10 @@ class TestBase(TestCase):
         return FS.OleStorage(self.olefile)
 
     @cached_property
+    def hwp5file_compressed(self):
+        return FS.Hwp5CompressedStreams(self.olestg)
+
+    @cached_property
     def hwp5file_fs(self):
         return FS.Hwp5File(self.olestg)
 
@@ -211,6 +215,35 @@ class TestCompressedStorage(TestBase):
         data = stg['BIN0002.jpg'].read()
         self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
         self.assertEquals(15895, len(data))
+
+    @cached_property
+    def scripts(self):
+        return self.hwp5file_compressed['Scripts']
+
+    def test_scripts_version(self):
+        hwp5file = self.hwp5file_compressed
+        self.assertFalse(hwp5file.header.flags.distributable)
+
+        JScriptVersion = self.scripts['JScriptVersion'].read()
+        self.assertEquals(8, len(JScriptVersion))
+
+    def test_viewtext_scripts(self):
+        self.hwp5file_name = 'viewtext.hwp'
+        hwp5file = self.hwp5file_compressed
+        self.assertTrue(hwp5file.header.flags.distributable)
+
+        JScriptVersion = self.scripts['JScriptVersion']
+
+        from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
+        from .recordstream import read_record, record_to_json
+        distdoc = read_record(JScriptVersion, 0)
+        encrypted = JScriptVersion.read()
+        self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, distdoc['tagid'])
+        self.assertEquals(16, len(encrypted))
+
+        #print record_to_json(distdoc, sort_keys=True, indent=2)
+        #from .dataio import dumpbytes
+        #print 'Encrypted:', '\n'.join(dumpbytes(encrypted))
 
 
 class TestHwp5File(TestBase):

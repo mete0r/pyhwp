@@ -386,10 +386,12 @@ class Hwp5CompressedStreams(StorageWrapper):
         item = self.stg[name]
 
         if self.header.flags.compressed:
-            if name in ('BinData', 'BodyText', 'Scripts'):
+            if name in ('BinData', 'BodyText'):
                 item = CompressedStorage(item)
             elif name == 'DocInfo':
                 item = uncompress(item)
+            elif name == 'Scripts' and not self.header.flags.distributable:
+                item = CompressedStorage(item)
 
         return item
 
