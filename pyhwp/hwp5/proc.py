@@ -4,30 +4,6 @@ from . import filestructure
 from OleFileIO_PL import OleFileIO
 from .filestructure import OleStorage
 
-class SysContext(object):
-    def __init__(self):
-        self.stdin = sys.stdin
-        self.stdout = sys.stdout
-        self.argv = sys.argv
-        sys.argv = list(sys.argv)
-
-    def restore(self):
-        sys.stdin = self.stdin
-        sys.stdout = self.stdout
-        sys.argv = self.argv
-
-    def wrap(cls, f):
-        def wrapper():
-            ctx = cls()
-            try:
-                return f()
-            finally:
-                ctx.restore()
-        return wrapper
-    wrap = classmethod(wrap)
-syswrap = SysContext.wrap
-
-
 class Context(object):
     def __init__(self, sys):
         self.sys = sys
@@ -157,7 +133,7 @@ def main():
         help()
         return
 
-    syswrap(program)()
+    program()
 
 
 def help():
