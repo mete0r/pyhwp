@@ -127,6 +127,10 @@ class TestBase(TestCase):
         return FS.OleStorage(self.olefile)
 
     @cached_property
+    def hwp5file_base(self):
+        return FS.Hwp5FileBase(self.olestg)
+
+    @cached_property
     def hwp5file_compressed(self):
         return FS.Hwp5CompressedStreams(self.olestg)
 
