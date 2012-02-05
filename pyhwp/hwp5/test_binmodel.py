@@ -83,9 +83,17 @@ class TestBase(TestCase):
         return Hwp5File(self.olestg)
 
     @cached_property
+    def hwp5file(self):
+        from .binmodel import Hwp5File
+        return Hwp5File(self.olestg)
+
+    @cached_property
+    def docinfo(self):
+        return self.hwp5file.docinfo
+
+    @cached_property
     def bodytext(self):
-        hwp5file = self.hwp5file_rec
-        return hwp5file.bodytext
+        return self.hwp5file.bodytext
 
 
 class TableTest(TestBase):
