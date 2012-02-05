@@ -131,10 +131,6 @@ class TestBase(TestCase):
         return FS.Hwp5FileBase(self.olestg)
 
     @cached_property
-    def hwp5file_compressed(self):
-        return FS.Hwp5CompressedStreams(self.olestg)
-
-    @cached_property
     def hwp5file_fs(self):
         return FS.Hwp5File(self.olestg)
 
@@ -336,6 +332,10 @@ class TestCompressedStorage(TestBase):
 
 
 class TestHwp5CompressedStreams(TestBase):
+
+    @cached_property
+    def hwp5file_compressed(self):
+        return FS.Hwp5CompressedStreams(self.olestg)
 
     @cached_property
     def docinfo(self):
