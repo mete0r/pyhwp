@@ -464,10 +464,6 @@ class Hwp5DistDoc(ItemsModifyingStorage):
 class Hwp5CompressedStreams(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 
-    @cached_property
-    def header(self):
-        return decode_fileheader(self.stg['FileHeader'])
-
     def resolve_conversion_for(self, name):
 
         flags = self.header.flags

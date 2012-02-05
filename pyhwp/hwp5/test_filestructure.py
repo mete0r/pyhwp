@@ -335,7 +335,7 @@ class TestHwp5CompressedStreams(TestBase):
 
     @cached_property
     def hwp5file_compressed(self):
-        return FS.Hwp5CompressedStreams(self.olestg)
+        return FS.Hwp5CompressedStreams(self.hwp5file_base)
 
     @cached_property
     def docinfo(self):
