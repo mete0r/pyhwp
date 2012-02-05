@@ -51,6 +51,7 @@ class ItemsModifyingStorage(StorageWrapper):
                     for ext, func in other_formats.items():
                         if root + ext == name:
                             return func()
+            raise KeyError(name)
         else:
             # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
             conversion = self.resolve_conversion_for(name)

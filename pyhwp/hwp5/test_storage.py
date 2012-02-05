@@ -21,3 +21,16 @@ class TestStorageWrapper(TestCase):
         self.assertEquals('bin0001.jpg', stg['BinData']['BIN0001.jpg'].read())
 
 
+class TestItemsModifyingStorage(TestCase):
+
+    @property
+    def storage(self):
+        from .storage import ItemsModifyingStorage
+        return ItemsModifyingStorage(dict())
+
+    def test_getitem_should_raise_keyerror_if_item_missing(self):
+        try:
+            self.storage['non-existent']
+            self.fail('KeyError expected')
+        except KeyError:
+            pass
