@@ -465,19 +465,12 @@ class Hwp5CompressedStreams(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     def resolve_conversion_for(self, name):
-
-        flags = self.header.flags
-        compressed = flags.compressed
-        distdoc = flags.distributable
-
         if name in ('BinData', 'BodyText'):
-            if compressed:
-                return CompressedStorage
+            return CompressedStorage
         elif name == 'DocInfo':
-            if compressed:
-                return uncompress
+            return uncompress
         elif name == 'Scripts':
-            if compressed and not distdoc:
+            if not self.header.flags.distributable:
                 return CompressedStorage
 
 
@@ -556,7 +549,10 @@ class Hwp5File(ItemsModifyingStorage):
         if stg.header.flags.distributable:
             stg = Hwp5DistDoc(stg)
 
-        self.stg = Hwp5CompressedStreams(stg)
+        if stg.header.flags.compressed:
+            stg = Hwp5CompressedStreams(stg)
+
+        self.stg = stg
 
     def resolve_other_formats_for(self, name):
         if name == 'PrvText':
