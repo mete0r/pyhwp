@@ -6,6 +6,7 @@ from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph, Te
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
 from .binmodel import Spaces
+from . import binmodel
 
 def give_elements_unique_id(event_prefixed_mac):
     paragraph_id = 0
@@ -382,6 +383,18 @@ def flatxml(hwpfile, logger, oformat):
     oformat.startDocument()
     dispatch_model_events(oformat, hwpdoc_events)
     oformat.endDocument()
+
+
+class ModelEventStream(binmodel.ModelStream):
+
+    @property
+    def eventgen_context(self):
+        return dict(self.model_parsing_context)
+
+    def modelevents(self):
+        context = self.eventgen_context
+        models = self.models()
+        return prefix_binmodels_with_event(context, models)
 
 
 def main():

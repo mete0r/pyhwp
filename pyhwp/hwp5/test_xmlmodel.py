@@ -5,6 +5,21 @@ from .utils import cached_property
 class TestBase(test_binmodel.TestBase):
     pass
 
+
+class TestModelEventStream(TestBase):
+
+    @cached_property
+    def docinfo(self):
+        from .xmlmodel import ModelEventStream
+        return ModelEventStream(self.hwp5file, 'DocInfo',
+                                self.hwp5file.header.version)
+
+    def test_modelevents(self):
+        self.assertEquals(len(list(self.docinfo.models())) * 2,
+                          len(list(self.docinfo.modelevents())))
+        #print len(list(self.docinfo.modelevents()))
+
+
 from .xmlmodel import make_ranged_shapes, split_and_shape
 class TestShapedText(TestCase):
     def test_make_shape_range(self):
