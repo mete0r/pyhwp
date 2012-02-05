@@ -471,14 +471,11 @@ class TestControlType(TestCase):
             assert False, 'Exception expected'
 
 class TestControlChar(TestBase):
+
     def test_decode_bytes(self):
         from .binmodel import ControlChar
         import logging
-        context = dict(version=self.hwp5file_rec.header.version,
-                       logging=logging)
-        section = self.hwp5file_rec.bodytext.section(0)
-        import itertools
-        paratext_record = section.record(1)
+        paratext_record = self.hwp5file.bodytext.section(0).record(1)
         payload = paratext_record['payload']
         controlchar = ControlChar.decode_bytes(payload[0:16])
         self.assertEquals(dict(code=ord(ControlChar.SECTION_COLUMN_DEF),
