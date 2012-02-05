@@ -384,25 +384,28 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
-class Hwp5CompressedStreams(StorageWrapper):
+class Hwp5CompressedStreams(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     @cached_property
     def header(self):
         return decode_fileheader(self.stg['FileHeader'])
 
-    def __getitem__(self, name):
-        item = self.stg[name]
+    def resolve_conversion_for(self, name):
 
-        if self.header.flags.compressed:
-            if name in ('BinData', 'BodyText'):
-                item = CompressedStorage(item)
-            elif name == 'DocInfo':
-                item = uncompress(item)
-            elif name == 'Scripts' and not self.header.flags.distributable:
-                item = CompressedStorage(item)
+        flags = self.header.flags
+        compressed = flags.compressed
+        distdoc = flags.distributable
 
-        return item
+        if name in ('BinData', 'BodyText'):
+            if compressed:
+                return CompressedStorage
+        elif name is 'DocInfo':
+            if compressed:
+                return uncompress
+        elif name == 'Scripts':
+            if compressed and not distdoc:
+                return CompressedStorage
 
 
 class Hwp5Object(object):

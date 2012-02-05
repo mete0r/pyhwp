@@ -233,8 +233,28 @@ class TestCompressedStorage(TestBase):
 class TestHwp5CompressedStreams(TestBase):
 
     @cached_property
+    def docinfo(self):
+        return self.hwp5file_compressed['DocInfo']
+
+    @cached_property
+    def bodytext(self):
+        return self.hwp5file_compressed['BodyText']
+
+    @cached_property
     def scripts(self):
         return self.hwp5file_compressed['Scripts']
+
+    def test_docinfo_uncompressed(self):
+        from .recordstream import read_record
+        from .tagids import HWPTAG_DOCUMENT_PROPERTIES
+        record = read_record(self.docinfo, 0)
+        self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
+
+    def test_bodytext_uncompressed(self):
+        from .recordstream import read_record
+        from .tagids import HWPTAG_PARA_HEADER
+        record = read_record(self.bodytext['Section0'], 0)
+        self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
 
     def test_scripts_version(self):
         hwp5file = self.hwp5file_compressed
