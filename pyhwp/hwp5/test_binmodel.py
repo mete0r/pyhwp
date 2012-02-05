@@ -7,6 +7,7 @@ from .binmodel import tag_models
 from .binmodel import BinData, TableControl, ListHeader, TableCaption, TableCell, TableBody
 from . import binmodel
 from .utils import cached_property
+from . import test_recordstream
 
 def TestContext(**ctx):
     ''' test context '''
@@ -54,44 +55,14 @@ class BinEmbeddedTest(TestCase):
 
 from .recordstream import nth
 
-class TestBase(TestCase):
-    ctx = TestContext()
+class TestBase(test_recordstream.TestBase):
 
     @cached_property
-    def samples_dir(self):
-        return '../../../samples'
-
-    @cached_property
-    def sample_hwp(self):
-        return 'sample-5017.hwp'
-
-    @cached_property
-    def olefile(self):
-        from OleFileIO_PL import OleFileIO
-        return OleFileIO('/'.join([self.samples_dir, self.sample_hwp]))
-
-    @cached_property
-    def olestg(self):
-        from .filestructure import OleStorage
-        return OleStorage(self.olefile)
-
-    @cached_property
-    def hwp5file_rec(self):
-        from .recordstream import Hwp5File
-        return Hwp5File(self.olestg)
-
-    @cached_property
-    def hwp5file(self):
+    def hwp5file_bin(self):
         from .binmodel import Hwp5File
         return Hwp5File(self.olestg)
 
-    @cached_property
-    def docinfo(self):
-        return self.hwp5file.docinfo
-
-    @cached_property
-    def bodytext(self):
-        return self.hwp5file.bodytext
+    hwp5file = hwp5file_bin
 
 
 class TableTest(TestBase):
@@ -214,9 +185,7 @@ class TableTest(TestBase):
 
 class ShapeComponentTest(TestBase):
 
-    @cached_property
-    def sample_hwp(self):
-        return 'textbox.hwp'
+    hwp5file_name = 'textbox.hwp'
 
     @cached_property
     def control_gso_record(self):
@@ -280,9 +249,7 @@ class ShapeComponentTest(TestBase):
 
 class HeaderFooterTest(TestBase):
 
-    @cached_property
-    def sample_hwp(self):
-        return 'headerfooter.hwp'
+    hwp5file_name = 'headerfooter.hwp'
 
     @cached_property
     def header_record(self):
@@ -523,7 +490,7 @@ class TestControlChar(TestBase):
     def test_tab(self):
         from .binmodel import parse_models
         from .binmodel import ControlChar
-        self.sample_hwp = 'tabdef.hwp'
+        self.hwp5file_name = 'tabdef.hwp'
         records = self.hwp5file_rec.bodytext.section(0).records()
         paratexts = parse_models(testcontext,
                                  (record for record in records
