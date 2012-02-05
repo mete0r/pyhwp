@@ -261,6 +261,21 @@ class TestCompressedStorage(TestBase):
 
 class TestHwp5File(TestBase):
 
+    def test_init_should_accept_string_path(self):
+        from .filestructure import Hwp5File
+        hwp5file = Hwp5File(self.hwp5file_path)
+        self.assertTrue(hwp5file['FileHeader'] is not None)
+
+    def test_init_should_accept_olefile(self):
+        from .filestructure import Hwp5File
+        hwp5file = Hwp5File(self.olefile)
+        self.assertTrue(hwp5file['FileHeader'] is not None)
+
+    def test_init_should_accept_olestorage(self):
+        from .filestructure import Hwp5File
+        hwp5file = Hwp5File(self.olestg)
+        self.assertTrue(hwp5file['FileHeader'] is not None)
+
     def test_fileheader(self):
         fileheader = self.hwp5file.header
         self.assertEquals((5,0,1,7), fileheader.version)

@@ -489,6 +489,8 @@ class Hwp5File(ItemsModifyingStorage):
     '''
 
     def __init__(self, stg):
+        if not isinstance(stg, Storage):
+            stg = OleStorage(stg)
         self.stg = Hwp5CompressedStreams(stg)
 
     def resolve_other_formats_for(self, name):
