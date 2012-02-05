@@ -469,13 +469,15 @@ class Hwp5File(ItemsModifyingStorage):
     def __init__(self, stg):
         self.stg = Hwp5CompressedStreams(stg)
 
-    def resolve_modifier(self, name):
-        mapping = dict(PrvText=self.preview_text,
-                       BodyText=self.bodytext,
-                       ViewText=self.viewtext,
-                       DocInfo=self.docinfo)
-        if name in mapping:
-            return mapping[name]
+    def resolve_other_formats_for(self, name):
+        if name == 'PrvText':
+            return self.preview_text.other_formats()
+        if name == 'DocInfo':
+            return self.docinfo.other_formats()
+
+    def resolve_conversion_for(self, name):
+        if name == 'BodyText':
+            return self.bodytext.conversion
 
     docinfo_class = Hwp5Object
     preview_text_class = PreviewText

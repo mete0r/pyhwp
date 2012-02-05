@@ -238,6 +238,15 @@ class TestHwp5File(TestBase):
     def test_if_hwp5file_contains_other_formats(self):
         self.assertTrue('PrvText.utf8' in list(self.hwp5file))
 
+    def test_resolve_conversion_for_bodytext(self):
+        self.assertTrue(self.hwp5file.resolve_conversion_for('BodyText'))
+
+    def test_resolve_other_formats_for_preview_text(self):
+        self.assertTrue(self.hwp5file.resolve_other_formats_for('PrvText') is not None)
+
+    def test_resolve_other_formats_for_docinfo(self):
+        self.assertTrue(self.hwp5file.resolve_other_formats_for('DocInfo') is not None)
+
     def test_docinfo(self):
         hwp5file = self.hwp5file
         self.assertTrue(isinstance(hwp5file.docinfo, FS.Hwp5Object))
