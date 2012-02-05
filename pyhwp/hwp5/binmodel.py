@@ -1686,18 +1686,23 @@ def recoder_to_json(context, *args, **kwargs):
     return recode
 
 from . import recordstream
-class RecordStream(recordstream.RecordStream):
+class ModelStream(recordstream.RecordStream):
 
     def other_formats(self):
-        d = super(RecordStream, self).other_formats()
+        d = super(ModelStream, self).other_formats()
         d['.models'] = self.models_stream
         return d
 
+    def models(self):
+        return parse_models(self.model_parsing_context,
+                            self.records())
+
     def models_stream(self):
-        recode = recoder_to_json(self.model_parsing_context,
-                                 sort_keys=True,
-                                 indent=2)
-        return recode(self.open())
+        from .filestructure import GeneratorReader
+        gen = generate_models_json_array(self.models(),
+                                         sort_keys=True,
+                                         indent=2)
+        return GeneratorReader(gen)
 
     @cached_property
     def model_parsing_context(self):
@@ -1708,12 +1713,12 @@ class RecordStream(recordstream.RecordStream):
 
 class Sections(recordstream.Sections):
 
-    section_class = RecordStream
+    section_class = ModelStream
 
 
 class Hwp5File(recordstream.Hwp5File):
 
-    docinfo_class = RecordStream
+    docinfo_class = ModelStream
     bodytext_class = Sections
 
 def create_context(file=None, **context):

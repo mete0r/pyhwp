@@ -666,3 +666,19 @@ class TestModelJson(TestBase):
         import simplejson
         jsonobject = simplejson.load(stream)
         self.assertEquals(67, len(jsonobject))
+
+
+class TestModelStream(TestBase):
+    @cached_property
+    def docinfo(self):
+        from .binmodel import ModelStream
+        return ModelStream(self.hwp5file, 'DocInfo',
+                           self.hwp5file.header.version)
+
+    def test_models(self):
+        self.assertEquals(67, len(list(self.docinfo.models())))
+
+    def test_models_stream(self):
+        import simplejson
+        f = self.docinfo.models_stream()
+        self.assertEquals(67, len(simplejson.load(f)))
