@@ -229,6 +229,9 @@ class TestCompressedStorage(TestBase):
         self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
         self.assertEquals(15895, len(data))
 
+
+class TestHwp5CompressedStreams(TestBase):
+
     @cached_property
     def scripts(self):
         return self.hwp5file_compressed['Scripts']
