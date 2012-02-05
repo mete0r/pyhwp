@@ -73,19 +73,19 @@ class TableTest(TestBase):
 
     @cached_property
     def tablecontrol_record(self):
-        return nth(self.bodytext.section(0).records(), 30)
+        return self.bodytext.section(0).record(30)
 
     @cached_property
     def tablecaption_record(self):
-        return nth(self.bodytext.section(0).records(), 68)
+        return self.bodytext.section(0).record(68)
 
     @cached_property
     def tablebody_record(self):
-        return nth(self.bodytext.section(0).records(), 31)
+        return self.bodytext.section(0).record(31)
 
     @cached_property
     def tablecell_record(self):
-        return nth(self.bodytext.section(0).records(), 32)
+        return self.bodytext.section(0).record(32)
 
     def testParsePass1(self):
         from .binmodel import Control, TableControl
@@ -189,15 +189,15 @@ class ShapeComponentTest(TestBase):
 
     @cached_property
     def control_gso_record(self):
-        return nth(self.bodytext.section(0).records(), 12)
+        return self.bodytext.section(0).record(12)
 
     @cached_property
     def shapecomponent_record(self):
-        return nth(self.bodytext.section(0).records(), 19)
+        return self.bodytext.section(0).record(19)
 
     @cached_property
     def textbox_paragraph_list_record(self):
-        return nth(self.bodytext.section(0).records(), 20)
+        return self.bodytext.section(0).record(20)
 
     def test_parse_shapecomponent_textbox_paragraph_list(self):
         from .binmodel import init_record_parsing_context
@@ -253,11 +253,11 @@ class HeaderFooterTest(TestBase):
 
     @cached_property
     def header_record(self):
-        return nth(self.bodytext.section(0).records(), 16)
+        return self.bodytext.section(0).record(16)
 
     @cached_property
     def header_paragraph_list_record(self):
-        return nth(self.bodytext.section(0).records(), 17)
+        return self.bodytext.section(0).record(17)
 
     def test_parse_child(self):
         from .binmodel import init_record_parsing_context
@@ -480,7 +480,7 @@ class TestControlChar(TestBase):
                        logging=logging)
         section = self.hwp5file_rec.bodytext.section(0)
         import itertools
-        paratext_record = nth(section.records(), 1)
+        paratext_record = section.record(1)
         payload = paratext_record['payload']
         controlchar = ControlChar.decode_bytes(payload[0:16])
         self.assertEquals(dict(code=ord(ControlChar.SECTION_COLUMN_DEF),
