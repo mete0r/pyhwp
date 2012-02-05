@@ -1690,9 +1690,14 @@ class RecordStream(recordstream.RecordStream):
 
     def other_formats(self):
         d = super(RecordStream, self).other_formats()
-        d['.models'] = recoder_to_json(self.model_parsing_context,
-                                       sort_keys=True, indent=2)
+        d['.models'] = self.models_stream
         return d
+
+    def models_stream(self):
+        recode = recoder_to_json(self.model_parsing_context,
+                                 sort_keys=True,
+                                 indent=2)
+        return recode(self.open())
 
     @cached_property
     def model_parsing_context(self):

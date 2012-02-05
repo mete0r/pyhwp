@@ -414,7 +414,11 @@ class Hwp5Object(object):
 class PreviewText(Hwp5Object):
 
     def other_formats(self):
-        return {'.utf8': recoder('utf-16le', 'utf-8')}
+        return {'.utf8': self.utf8_stream}
+
+    def utf8_stream(self):
+        recode = recoder('utf-16le', 'utf-8')
+        return recode(self.open())
 
 
 class SectionStorage(ItemsModifyingStorage):

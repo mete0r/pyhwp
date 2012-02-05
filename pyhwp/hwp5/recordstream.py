@@ -118,8 +118,11 @@ class RecordStream(filestructure.Hwp5Object):
     def records(self):
         return read_records(self.open(), '', '')
 
+    def records_stream(self):
+        return bin2json_stream(self.open())
+
     def other_formats(self):
-        return {'.rec': bin2json_stream}
+        return {'.rec': self.records_stream}
 
 
 class Sections(filestructure.Sections):
@@ -133,18 +136,21 @@ class CrypticViewTextSection(filestructure.Hwp5Object):
         records = read_records(item, 'ViewText', '')
         return records.next()
 
-    def head(self, item):
+    def head(self):
+        item = self.open()
         record = self.head_record(item)
         size = item.tell()
         assert 4+256 == item.tell()
         item.seek(0)
         return StringIO(item.read(size))
 
-    def head_payload(self, item):
+    def head_payload(self):
+        item = self.open()
         record = self.head_record(item)
         return StringIO(record.payload)
 
-    def tail(self, item):
+    def tail(self):
+        item = self.item()
         record = self.head_record(item)
         assert 4+256 == item.tell()
         return StringIO(item.read())
