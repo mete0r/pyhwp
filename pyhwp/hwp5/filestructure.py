@@ -11,7 +11,7 @@ from .utils import cached_property
 from .dataio import INT32, UINT32, UINT16, Flags, Struct, ARRAY, N_ARRAY
 from . import dataio
 from .storage import Storage, StorageWrapper, iter_storage_leafs, unpack
-from .storage import ItemModifier, ItemsModifyingStorage
+from .storage import ItemsModifyingStorage
 
 class BYTES(type):
     def __new__(mcs, size):
@@ -394,7 +394,7 @@ class Hwp5CompressedStreams(StorageWrapper):
         return item
 
 
-class Hwp5Object(ItemModifier):
+class Hwp5Object(object):
 
     def __init__(self, stg, name, version):
         self.stg = stg
@@ -403,6 +403,12 @@ class Hwp5Object(ItemModifier):
 
     def open(self):
         return self.stg[self.name]
+
+    def conversion(self, item):
+        return item
+
+    def other_formats(self):
+        return dict()
 
 
 class PreviewText(Hwp5Object):

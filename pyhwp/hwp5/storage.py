@@ -21,16 +21,6 @@ class StorageWrapper(Storage):
         return getattr(self.stg, name)
 
 
-class ItemModifier(object):
-    ''' modifier for a Storage item '''
-
-    def conversion(self, item):
-        return item
-
-    def other_formats(self):
-        return dict()
-
-
 class ItemsModifyingStorage(StorageWrapper):
     ''' a Storage class which modifies its base storage items
 
