@@ -112,9 +112,15 @@ class TestBase(TestCase):
     fixtures_dir = '../../../samples'
     hwp5file_name = 'sample-5017.hwp'
 
+    @cached_property
+    def hwp5file_path(self):
+        import os.path
+        return os.path.join(self.fixtures_dir,
+                            self.hwp5file_name)
+
     @property
     def olefile(self):
-        return OleFileIO('/'.join([self.fixtures_dir, self.hwp5file_name]))
+        return OleFileIO(self.hwp5file_path)
 
     @property
     def olestg(self):
