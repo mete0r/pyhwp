@@ -1697,6 +1697,10 @@ class ModelStream(recordstream.RecordStream):
         return parse_models(self.model_parsing_context,
                             self.records())
 
+    def model(self, idx):
+        from .recordstream import nth
+        return nth(self.models(), idx)
+
     def models_stream(self):
         from .filestructure import GeneratorReader
         gen = generate_models_json_array(self.models(),

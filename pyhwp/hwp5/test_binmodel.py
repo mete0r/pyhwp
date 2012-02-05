@@ -643,6 +643,13 @@ class TestModelStream(TestBase):
     def test_models(self):
         self.assertEquals(67, len(list(self.docinfo.models())))
 
+    def test_model(self):
+        model = self.docinfo.model(0)
+        self.assertEquals(0, model['record']['seqno'])
+
+        model = self.docinfo.model(10)
+        self.assertEquals(10, model['record']['seqno'])
+
     def test_models_stream(self):
         import simplejson
         f = self.docinfo.models_stream()
