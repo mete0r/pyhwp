@@ -46,9 +46,9 @@ class ItemsModifyingStorage(StorageWrapper):
     def __iter__(self):
         for name in self.stg:
             yield name
-            modifier = self.resolve_modifier(name)
-            if modifier:
-                for ext in modifier.other_formats():
+            other_formats = self.resolve_other_formats_for(name)
+            if other_formats:
+                for ext in other_formats:
                     yield name + ext
 
     def __getitem__(self, name):
@@ -58,22 +58,34 @@ class ItemsModifyingStorage(StorageWrapper):
             # 기반 스토리지에는 없으므로, ItemModifier들이 제공하는
             # other_formats() 아이템들 중에서 찾아본다.
             for root in self.stg:
-                modifier = self.resolve_modifier(root)
-                if modifier:
-                    for ext, func in modifier.other_formats().items():
+                other_formats = self.resolve_other_formats_for(root)
+                if other_formats:
+                    for ext, func in other_formats.items():
                         if root + ext == name:
                             return func(self.stg[root])
         else:
             # 기반 스토리지에서 찾은 아이템에 대해, ItemModifier가 있으면
             # conversion()한다.
-            modifier = self.resolve_modifier(name)
-            if modifier:
-                return modifier.conversion(item)
+            conversion = self.resolve_conversion_for(name)
+            if conversion:
+                return conversion(item)
             return item
 
     def resolve_modifier(self, name):
         ''' return an ItemModifier for the specified storage item '''
         pass
+
+    def resolve_other_formats_for(self, name):
+        ''' return other formats for the specified storage item '''
+        modifier = self.resolve_modifier(name)
+        if modifier:
+            return modifier.other_formats()
+
+    def resolve_conversion_for(self, name):
+        ''' return a conversion function for the specified storage item '''
+        modifier = self.resolve_modifier(name)
+        if modifier:
+            return modifier.conversion
 
 
 def iter_storage_leafs(stg, basepath=''):
