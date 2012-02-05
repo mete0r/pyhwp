@@ -284,6 +284,26 @@ class TestHwp5DistDicFolderStorage(TestBase):
                           set(other_formats.keys()))
 
 
+class TestHwp5DistDoc(TestBase):
+
+    hwp5file_name = 'viewtext.hwp'
+
+    @cached_property
+    def hwp5distdoc(self):
+        from .filestructure import Hwp5DistDoc
+        return Hwp5DistDoc(self.olestg)
+
+    def test_conversion_for(self):
+        from .filestructure import Hwp5DistDocFolderStorage
+        conversion = self.hwp5distdoc.resolve_conversion_for('Scripts')
+        self.assertTrue(conversion is Hwp5DistDocFolderStorage)
+
+    def test_getitem(self):
+        from .filestructure import Hwp5DistDocFolderStorage
+        scripts = self.hwp5distdoc['Scripts']
+        self.assertTrue(isinstance(scripts, Hwp5DistDocFolderStorage))
+
+
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
         stg = FS.CompressedStorage(self.olestg['BinData'])

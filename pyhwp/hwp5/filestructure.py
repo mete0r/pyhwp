@@ -447,6 +447,13 @@ class Hwp5DistDocFolderStorage(ItemsModifyingStorage):
         return item.other_formats()
 
 
+class Hwp5DistDoc(ItemsModifyingStorage):
+
+    def resolve_conversion_for(self, name):
+        if name == 'Scripts':
+            return Hwp5DistDocFolderStorage
+
+
 class Hwp5CompressedStreams(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 
