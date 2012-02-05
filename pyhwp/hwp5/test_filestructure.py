@@ -331,11 +331,11 @@ class TestCompressedStorage(TestBase):
         self.assertEquals(15895, len(data))
 
 
-class TestHwp5CompressedStreams(TestBase):
+class TestHwp5Compression(TestBase):
 
     @cached_property
     def hwp5file_compressed(self):
-        return FS.Hwp5CompressedStreams(self.hwp5file_base)
+        return FS.Hwp5Compression(self.hwp5file_base)
 
     @cached_property
     def docinfo(self):

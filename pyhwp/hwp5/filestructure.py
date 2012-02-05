@@ -461,7 +461,7 @@ class Hwp5DistDoc(ItemsModifyingStorage):
             return Hwp5DistDocFolderStorage
 
 
-class Hwp5CompressedStreams(ItemsModifyingStorage):
+class Hwp5Compression(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     def resolve_conversion_for(self, name):
@@ -550,7 +550,7 @@ class Hwp5File(ItemsModifyingStorage):
             stg = Hwp5DistDoc(stg)
 
         if stg.header.flags.compressed:
-            stg = Hwp5CompressedStreams(stg)
+            stg = Hwp5Compression(stg)
 
         self.stg = stg
 
