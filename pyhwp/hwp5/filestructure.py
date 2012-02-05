@@ -477,7 +477,7 @@ class Hwp5CompressedStreams(ItemsModifyingStorage):
         if name in ('BinData', 'BodyText'):
             if compressed:
                 return CompressedStorage
-        elif name is 'DocInfo':
+        elif name == 'DocInfo':
             if compressed:
                 return uncompress
         elif name == 'Scripts':
