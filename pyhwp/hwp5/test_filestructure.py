@@ -103,8 +103,8 @@ class TestModuleFunctions(TestCase):
         self.assertEquals(sorted(['\x05HwpSummaryInformation', 'DocInfo', 'FileHeader', 'PrvImage', 'PrvText']),
                           sorted(result[0][2]))
 
-        for dirpath, dirs, files in walk(hwpfile):
-            print dirpath, dirs, files
+        #for dirpath, dirs, files in walk(hwpfile):
+        #    print dirpath, dirs, files
 
 
 class TestBase(TestCase):
@@ -396,7 +396,7 @@ class TestUncompress(TestCase):
         gen = uncompress_gen(StringIO(self.compressed_data[2:]))
         self.assertEquals(self.original_data, ''.join(gen))
 
-        print '-----'
+        #print '-----'
 
         from .filestructure import uncompress
 
