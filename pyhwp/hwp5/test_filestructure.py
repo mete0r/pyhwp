@@ -235,16 +235,16 @@ class TestHwp5FileBase(TestBase):
         self.assertTrue(isinstance(header, FileHeader))
 
 
-class TestHwp5DistDocFolderItem(TestBase):
+class TestHwp5DistDocStream(TestBase):
 
     hwp5file_name = 'viewtext.hwp'
 
     @cached_property
     def jscriptversion(self):
-        from .filestructure import Hwp5DistDocFolderItem
-        return Hwp5DistDocFolderItem(self.olestg['Scripts'],
-                                     'JScriptVersion',
-                                     self.hwp5file.header.version)
+        from .filestructure import Hwp5DistDocStream
+        return Hwp5DistDocStream(self.olestg['Scripts'],
+                                 'JScriptVersion',
+                                 self.hwp5file.header.version)
 
     def test_head_record(self):
         from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
@@ -278,14 +278,14 @@ class TestHwp5DistDocFolderItem(TestBase):
         self.assertEquals(16, len(tail_stream.read()))
 
 
-class TestHwp5DistDicFolderStorage(TestBase):
+class TestHwp5DistDicStorage(TestBase):
 
     hwp5file_name = 'viewtext.hwp'
 
     @cached_property
     def scripts(self):
-        from .filestructure import Hwp5DistDocFolderStorage
-        return Hwp5DistDocFolderStorage(self.olestg['Scripts'])
+        from .filestructure import Hwp5DistDocStorage
+        return Hwp5DistDocStorage(self.olestg['Scripts'])
 
     def test_resolve_baseitemobject(self):
         version = self.scripts.resolve_baseitemobject('JScriptVersion')
@@ -311,16 +311,16 @@ class TestHwp5DistDoc(TestBase):
         return Hwp5DistDoc(self.olestg)
 
     def test_conversion_for(self):
-        from .filestructure import Hwp5DistDocFolderStorage
+        from .filestructure import Hwp5DistDocStorage
         conversion = self.hwp5distdoc.resolve_conversion_for('Scripts')
-        self.assertTrue(conversion is Hwp5DistDocFolderStorage)
+        self.assertTrue(conversion is Hwp5DistDocStorage)
 
     def test_getitem(self):
-        from .filestructure import Hwp5DistDocFolderStorage
+        from .filestructure import Hwp5DistDocStorage
         self.assertTrue(isinstance(self.hwp5distdoc['Scripts'],
-                                   Hwp5DistDocFolderStorage))
+                                   Hwp5DistDocStorage))
         self.assertTrue(isinstance(self.hwp5distdoc['ViewText'],
-                                   Hwp5DistDocFolderStorage))
+                                   Hwp5DistDocStorage))
 
 
 class TestCompressedStorage(TestBase):

@@ -408,7 +408,7 @@ class Hwp5FileBase(StorageWrapper):
         return decode_fileheader(self.stg['FileHeader'])
 
 
-class Hwp5DistDocFolderItem(Hwp5Object):
+class Hwp5DistDocStream(Hwp5Object):
 
     def head_record(self):
         item = self.open()
@@ -444,10 +444,10 @@ class Hwp5DistDocFolderItem(Hwp5Object):
                 '.tail': self.tail_stream}
 
 
-class Hwp5DistDocFolderStorage(ItemsModifyingStorage):
+class Hwp5DistDocStorage(ItemsModifyingStorage):
 
     def resolve_baseitemobject(self, name):
-        return Hwp5DistDocFolderItem(self.stg, name, None)
+        return Hwp5DistDocStream(self.stg, name, None)
 
     def resolve_other_formats_for(self, name):
         item = self.resolve_baseitemobject(name)
@@ -458,7 +458,7 @@ class Hwp5DistDoc(ItemsModifyingStorage):
 
     def resolve_conversion_for(self, name):
         if name in ('Scripts', 'ViewText'):
-            return Hwp5DistDocFolderStorage
+            return Hwp5DistDocStorage
 
 
 class Hwp5Compression(ItemsModifyingStorage):
