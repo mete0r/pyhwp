@@ -1,4 +1,51 @@
 from unittest import TestCase
+from . import test_binmodel
+from .utils import cached_property
+
+class TestBase(test_binmodel.TestBase):
+
+    @cached_property
+    def hwp5file_xml(self):
+        from .xmlmodel import Hwp5File
+        return Hwp5File(self.olestg)
+
+    hwp5file = hwp5file_xml
+
+
+class TestModelEventStream(TestBase):
+
+    @cached_property
+    def docinfo(self):
+        from .xmlmodel import ModelEventStream
+        return ModelEventStream(self.hwp5file, 'DocInfo',
+                                self.hwp5file.header.version)
+
+    def test_modelevents(self):
+        self.assertEquals(len(list(self.docinfo.models())) * 2,
+                          len(list(self.docinfo.modelevents())))
+        #print len(list(self.docinfo.modelevents()))
+
+
+class TestDocInfo(TestBase):
+
+    @cached_property
+    def docinfo(self):
+        from .xmlmodel import DocInfo
+        return DocInfo(self.hwp5file, 'DocInfo',
+                       self.hwp5file.header.version)
+
+    def test_events(self):
+        events = list(self.docinfo.events())
+        self.assertEquals(112, len(events))
+        #print len(events)
+
+
+class TestHwp5File(TestBase):
+
+    def test_docinfo_class(self):
+        from .xmlmodel import DocInfo
+        self.assertTrue(isinstance(self.hwp5file.docinfo, DocInfo))
+
 
 from .xmlmodel import make_ranged_shapes, split_and_shape
 class TestShapedText(TestCase):
@@ -45,30 +92,3 @@ class TestLineSeg(TestCase):
         lines = line_segmented(iter(chunks), make_ranged_shapes(linesegs))
         lines = list(lines)
         self.assertEquals([ ('A', [((0, 3), None, 'aaa'), ((3,4), None, 'b')]), ('B', [((4,6),None,'bb')]), ('C', [((6,9),None,'ccc'), ((9,10),None,'d')]), ('D', [((10,12),None,'dd')]) ], lines)
-
-class TestTreeEvents(TestCase):
-    def test_tree_events(self):
-        from .binmodel import STARTEVENT, ENDEVENT
-        from .xmlmodel import build_subtree, tree_events
-        event_prefixed_items = [ (STARTEVENT, 'a'), (ENDEVENT, 'a') ]
-        rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals('a', rootitem)
-        self.assertEquals(0, len(childs))
-
-        event_prefixed_items = [ (STARTEVENT, 'a'), (STARTEVENT, 'b'), (ENDEVENT, 'b'), (ENDEVENT, 'a') ]
-        self.assertEquals( ('a', [('b', [])]), build_subtree(iter(event_prefixed_items[1:])))
-
-        event_prefixed_items = [
-            (STARTEVENT, 'a'),
-                (STARTEVENT, 'b'),
-                    (STARTEVENT, 'c'), (ENDEVENT, 'c'),
-                    (STARTEVENT, 'd'), (ENDEVENT, 'd'),
-                (ENDEVENT, 'b'),
-            (ENDEVENT, 'a')]
-
-        result = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals( ('a', [('b', [('c', []), ('d', [])])]), result)
-
-        back = list(tree_events(*result))
-        self.assertEquals(event_prefixed_items, back)
-

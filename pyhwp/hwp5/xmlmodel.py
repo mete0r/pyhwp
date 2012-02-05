@@ -1,9 +1,12 @@
 from itertools import chain
-from .binmodel import STARTEVENT, ENDEVENT
+from .treeop import STARTEVENT, ENDEVENT
+from .treeop import build_subtree
+from .treeop import tree_events, tree_events_multi
 from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph, Text
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
 from .binmodel import Spaces
+from . import binmodel
 
 def give_elements_unique_id(event_prefixed_mac):
     paragraph_id = 0
@@ -142,7 +145,13 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                             textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
                             yield STARTEVENT, textitem
                             yield ENDEVENT, textitem
-                        elif isinstance(chunk, ControlChar):
+                        elif isinstance(chunk, dict):
+                            ch = chr(chunk['code'])
+                            if 'chid' in chunk:
+                                chunk = ControlChar(ch, chunk['chid'],
+                                                    chunk['param'])
+                            else:
+                                chunk = ControlChar(ch)
                             chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
                             if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
                                 chunk_attributes['char'] = unichr(chunk.code)
@@ -173,7 +182,7 @@ def wrap_section(sect_id, event_prefixed_mac):
                 sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
                 attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
-                for k in tree_events_childs(sectiondef_childs):
+                for k in tree_events_multi(sectiondef_childs):
                     yield k
                 for evented_item in starting_buffer:
                     yield evented_item
@@ -181,25 +190,6 @@ def wrap_section(sect_id, event_prefixed_mac):
             else:
                 starting_buffer.append((event, item))
     yield ENDEVENT, sectiondef
-
-def build_subtree(event_prefixed_items_iterator):
-    childs = []
-    for event, item in event_prefixed_items_iterator:
-        if event == STARTEVENT:
-            childs.append(build_subtree(event_prefixed_items_iterator))
-        elif event == ENDEVENT:
-            return item, childs
-
-def tree_events(rootitem, childs):
-    yield STARTEVENT, rootitem
-    for k in tree_events_childs(childs):
-        yield k
-    yield ENDEVENT, rootitem
-
-def tree_events_childs(childs):
-    for child in childs:
-        for k in tree_events(*child):
-            yield k
 
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''
@@ -312,6 +302,36 @@ def restructure_tablebody(event_prefixed_mac):
             yield event, item
 
 
+def prefix_binmodels_with_event(context, models):
+    from .treeop import prefix_event
+    level_prefixed = ((model['record']['level'],
+                       (model['type'], model['content'], context))
+                      for model in models)
+    return prefix_event(level_prefixed)
+
+def wrap_modelevents(wrapper_model, modelevents):
+    from .treeop import STARTEVENT, ENDEVENT
+    yield STARTEVENT, wrapper_model
+    for mev in modelevents:
+        yield mev
+    yield ENDEVENT, wrapper_model
+
+
+class ModelEventHandler(object):
+    def startModel(self, model, attributes, **kwargs):
+        raise NotImplementedError
+    def endModel(self, model):
+        raise NotImplementedError
+
+
+def dispatch_model_events(handler, events):
+    from .treeop import STARTEVENT, ENDEVENT
+    for event, (model, attributes, context) in events:
+        if event == STARTEVENT:
+            handler.startModel(model, attributes, **context)
+        elif event == ENDEVENT:
+            handler.endModel(model)
+
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
 
@@ -319,9 +339,8 @@ def flatxml(hwpfile, logger, oformat):
     oformat - output formatter
     '''
     from .recordstream import read_records
-    from .binmodel import parse_models, wrap_modelevents
+    from .binmodel import parse_models
     from .binmodel import create_context
-    from .binmodel import dispatch_model_events
     context = create_context(hwpfile, logging=logger)
 
     class HwpDoc(object): pass
@@ -330,7 +349,9 @@ def flatxml(hwpfile, logger, oformat):
     hwpdoc = HwpDoc, dict(version=hwpfile.fileheader.version), dict(context)
     docinfo = DocInfo, dict(), dict(context)
     docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
-    docinfo_events = wrap_modelevents(docinfo, parse_models(context, docinfo_records))
+    docinfo_models = parse_models(context, docinfo_records)
+    docinfo_events = prefix_binmodels_with_event(context, docinfo_models)
+    docinfo_events = wrap_modelevents(docinfo, docinfo_events)
 
     docinfo_events = remove_redundant_facenames(docinfo_events)
 
@@ -338,7 +359,8 @@ def flatxml(hwpfile, logger, oformat):
     bodytext_events = []
     for idx in hwpfile.list_bodytext_sections():
         section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
-        section_events = parse_models(context, section_records)
+        section_models = parse_models(context, section_records)
+        section_events = prefix_binmodels_with_event(context, section_models)
 
         section_events = make_texts_linesegmented_and_charshaped(section_events)
         section_events = make_extended_controls_inline(section_events)
@@ -363,12 +385,37 @@ def flatxml(hwpfile, logger, oformat):
     oformat.endDocument()
 
 
+class ModelEventStream(binmodel.ModelStream):
+
+    @property
+    def eventgen_context(self):
+        return dict(self.model_parsing_context)
+
+    def modelevents(self):
+        context = self.eventgen_context
+        models = self.models()
+        return prefix_binmodels_with_event(context, models)
+
+
+class DocInfo(ModelEventStream):
+
+    def events(self):
+        docinfo = DocInfo, dict(), self.eventgen_context
+        events = self.modelevents()
+        events = wrap_modelevents(docinfo, events)
+        return remove_redundant_facenames(events)
+
+
+class Hwp5File(binmodel.Hwp5File):
+
+    docinfo_class = DocInfo
+
+
 def main():
     import sys
     import logging
     import itertools
     from .filestructure import open
-    from .binmodel import ModelEventHandler
 
     from ._scriptutils import OptionParser, args_pop, open_or_exit
     op = OptionParser(usage='usage: %prog [options] filename')

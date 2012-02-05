@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+try:
+    from cStringIO import StringIO
+except:
+    from StringIO import StringIO
+
 from .dataio import readn, read_struct_attributes, match_attribute_types,\
         StructType, Struct, Flags, Enum, BYTE, WORD, UINT32, UINT16, INT32, INT16, UINT8, INT8,\
         DOUBLE, ARRAY, N_ARRAY, SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR
@@ -17,8 +22,8 @@ from .tagids import tagnames, HWPTAG_BEGIN, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_I
 
 from . import dataio
 
-def parse_model_attributes(model, attributes, context, stream):
-    return model, read_struct_attributes(model, attributes, context, stream)
+def parse_model_attributes(model, attributes, context):
+    return model, read_struct_attributes(model, attributes, context, context['stream'])
 
 def typed_model_attributes(model, attributes, context):
     import inspect
@@ -55,7 +60,10 @@ class BasicRecordModel(RecordModel):
     def attributes(context):
         if False: yield
     attributes = staticmethod(attributes)
-    parse_pass1 = classmethod(parse_model_attributes)
+    def parse_pass1(model, context):
+        attributes = dict()
+        return parse_model_attributes(model, attributes, context)
+    parse_pass1 = classmethod(parse_pass1)
 
 
 class AttributeDeterminedRecordModel(BasicRecordModel):
@@ -64,11 +72,12 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
         raise Exception()
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
 
-    def parse_pass1(model, attributes, context, stream):
-        model, attributes = parse_model_attributes(model, attributes, context, stream)
+    def parse_pass1(model, context):
+        attributes = dict()
+        model, attributes = parse_model_attributes(model, attributes, context)
         altered_model = model.concrete_type_by_attribute(attributes[model.key_attribute])
         if altered_model is not None:
-            return parse_model_attributes(altered_model, attributes, context, stream)
+            return parse_model_attributes(altered_model, attributes, context)
         return model, attributes
     parse_pass1 = classmethod(parse_pass1)
 
@@ -581,14 +590,14 @@ class TableControl(CommonControl):
     borderFill = property(getBorderFill)
 
     def parse_child(cls, attributes, context, child):
-        child_context, child_model, child_attributes, child_stream = child
+        child_context, child_model, child_attributes = child
         if child_model is TableBody:
             context['table_body'] = True
         elif child_model is ListHeader:
             if context.get('table_body', False):
-                return parse_model_attributes(TableCell, child_attributes, child_context, child_stream)
+                return parse_model_attributes(TableCell, child_attributes, child_context)
             else:
-                return parse_model_attributes(TableCaption, child_attributes, child_context, child_stream)
+                return parse_model_attributes(TableCaption, child_attributes, child_context)
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
 
@@ -845,13 +854,22 @@ class ControlChar(object):
         self.param = param
     def decode_bytes(cls, bytes):
         ch = dataio.decode_utf16le_besteffort(bytes[0:2])
+        code = ord(ch)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
-            chid = CHID.decode(bytes[0:4])
-            param = bytes[4:12]
-            return cls(ch, chid, param)
+            if ch == ControlChar.TAB:
+                s = StringIO(bytes)
+                param = dict(width=UINT32.read(s),
+                             unknown0=UINT8.read(s),
+                             unknown1=UINT8.read(s),
+                             unknown2=s.read())
+                return dict(code=code, param=param)
+            else:
+                chid = CHID.decode(bytes[0:4])
+                param = bytes[4:12]
+                return dict(code=code, chid=chid, param=param)
         else:
-            return cls(ch)
+            return dict(code=code)
     decode_bytes = classmethod(decode_bytes)
 
     def kind(self):
@@ -861,6 +879,11 @@ class ControlChar(object):
     def code(self):
         return ord(self.ch)
     code = property(code)
+
+    def get_name_by_code(cls, code):
+        ch = unichr(code)
+        return cls.names.get(ch, 'CTLCHR%02x'%code)
+    get_name_by_code = classmethod(get_name_by_code)
 
     def name(self):
         return self.names.get(self.ch, 'CTLCHR%02x'%self.code)
@@ -878,7 +901,8 @@ class Text(object):
 
 class ParaText(RecordModel):
     tagid = HWPTAG_PARA_TEXT
-    def parse_with_parent(cls, context, parent, stream, attributes):
+    def parse_with_parent(cls, attributes, context, parent):
+        stream = context['stream']
         bytes = stream.read()
         attributes['chunks'] = [x for x in cls.parseBytes(bytes)]
         return cls, attributes
@@ -899,8 +923,12 @@ class ParaText(RecordModel):
 
 class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
-    def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
-        nCharShapes = parent_attributes['charshapes']
+    def parse_with_parent(cls, attributes, context, (parent_context,
+                                                     parent_model)):
+        stream = context['stream']
+        parent_content = parent_model['content']
+
+        nCharShapes = parent_content['charshapes']
         #attributes['charshapes'] = ARRAY(ARRAY(UINT32, 2), nCharShapes).read(stream)
         attributes = cls.decode(stream.read(), context)
         return cls, attributes
@@ -934,8 +962,12 @@ class ParaLineSeg(RecordModel):
             yield cls.Flags, 'flags'
         attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
-        nLineSegs = parent_attributes['linesegs']
+    def parse_with_parent(cls, attributes, context, (parent_context,
+                                                     parent_model)):
+        stream = context['stream']
+        parent_content = parent_model['content']
+
+        nLineSegs = parent_content['linesegs']
         #attributes['linesegs'] = ARRAY(cls.LineSeg, nLineSegs).read(stream)
         attributes['linesegs'] = cls.decode(attributes, context, stream.read())
         return cls, attributes
@@ -965,7 +997,7 @@ class ParaRangeTag(BasicRecordModel):
 
 class GShapeObjectControl(CommonControl):
     chid = CHID.GSO
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         # TODO: ListHeader to Caption
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1045,15 +1077,18 @@ class ShapeComponent(RecordModel):
                 yield FillGradation, 'gradation'
     attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, context, (parent_context, parent_model, parent_attributes, parent_stream), stream, attributes):
-        if parent_model is GShapeObjectControl:
+    def parse_with_parent(cls, attributes, context, (parent_context,
+                                                     parent_model)):
+        stream = context['stream']
+
+        if parent_model['type'] is GShapeObjectControl:
             attributes['chid0'] = CHID.read(stream) # GSO-child ShapeComponent specific: it may be a GSO model's attribute, e.g. 'child_chid'
-        return parse_model_attributes(cls, attributes, context, stream)
+        return parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         if child_model is ListHeader:
-            return parse_model_attributes(TextboxParagraphList, child_attributes, child_context, child_stream)
+            return parse_model_attributes(TextboxParagraphList, child_attributes, child_context)
         else:
             return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1267,9 +1302,9 @@ class HeaderFooter(Control):
             yield BYTE, 'numberrefsbitmap'
         attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         if child_model is ListHeader:
-            return parse_model_attributes(cls.ParagraphList, child_attributes, child_context, child_stream)
+            return parse_model_attributes(cls.ParagraphList, child_attributes, child_context)
         else:
             return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1402,9 +1437,9 @@ class BookmarkControl(Control):
         if False: yield
     attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes, child_stream)):
+    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
         if child_model is ControlData:
-            return parse_model_attributes(BookmarkControlData, child_attributes, child_context, child_stream)
+            return parse_model_attributes(BookmarkControlData, child_attributes, child_context)
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
 
@@ -1522,88 +1557,163 @@ def _check_tag_models():
         assert tagid in tag_models, 'RecordModel for %s is missing!'%name
 _check_tag_models()
 
-def pass1(context, records):
+def init_record_parsing_context(base, record):
+    ''' Initialize a context to parse the given record
+
+        the initializations includes followings:
+        - context = dict(base)
+        - context['record'] = record
+        - context['stream'] = record payload stream
+
+        `base': the base context, which will be shallow-copied into the new one
+        `record': to be parsed
+        returns new context
+    '''
+
+    return dict(base, record=record, stream=StringIO(record['payload']))
+
+def parse_pass1_record(context, record):
+    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
+
+    context = init_record_parsing_context(context, record)
+
+    # HWPTAG로 모델 결정
+    model_type = tag_models.get(record['tagid'], RecordModel)
+    model_content = dict()
+
+    # 1차 파싱
+    parse_pass1 = getattr(model_type, 'parse_pass1', None)
+    if parse_pass1:
+        model_type, model_content = parse_pass1(context)
+
+    model = dict(record=record,
+                 type=model_type,
+                 content=model_content)
+    return context, model
+
+def parse_pass1(context, records):
     for record in records:
-        context = dict(context)
-        context['hwptag'] = record.tag
-        context['recordid'] = record.id
-        context['logging'].debug('Record %s at %s:%s:%d', record.tag, *record.id)
-        stream = record.bytestream()
-        model = tag_models.get(record.tagid, RecordModel)
-        attributes = dict()
-        parse_pass1 = getattr(model, 'parse_pass1', None)
-        if parse_pass1 is not None:
-            model, attributes = parse_pass1(attributes, context, stream)
-        context['logging'].debug('pass1: %s, %s', model, attributes.keys())
-        yield record.level, (context, model, attributes, stream)
+        tag = record['tagname']
+        record_id = (record.get('filename', ''), record.get('streamid', ''),
+                     record['seqno'])
+        context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
 
-def parse_models_pass1(context, records):
-    level_prefixed_cmas = pass1(context, records)
-    event_prefixed_cmas = prefix_event(level_prefixed_cmas)
-    return event_prefixed_cmas
+        context, model = parse_pass1_record(context, record)
+        context['logging'].debug('pass1: %s, %s', model['type'],
+                                 model['content'].keys())
+        yield context, model
 
-class STARTEVENT: pass
-class ENDEVENT: pass
-def prefix_event(level_prefixed_items, root_item=None):
-    baselevel = None
-    stack = [root_item]
-    for level, item in level_prefixed_items:
-        if baselevel is None:
-            baselevel = level
-            level = 0
-        else:
-            level -= baselevel
+def parse_pass2_record_with_parent(parent, (context, model)):
+    model_type = model['type']
+    model_content = model['content']
 
-        while level + 1 < len(stack):
-            yield ENDEVENT, stack.pop()
-        while len(stack) < level + 1:
-            raise Exception('invalid level: %d, %d, %s'%(level, len(stack)-1, item))
-        assert(len(stack) == level + 1)
+    stream = context['stream']
 
-        stack.append(item)
-        yield STARTEVENT, item
+    parent_context, parent_model = parent
+    parent_type = parent_model.get('type')
+    parent_content = parent_model.get('content')
 
-    while 1 < len(stack):
-        yield ENDEVENT, stack.pop()
+    parse_child = getattr(parent_type, 'parse_child', None)
+    if parse_child:
+        model_type, model_content = parse_child(parent_content, parent_context,
+                                                (context, model_type,
+                                                 model_content))
 
-def prefix_ancestors(event_prefixed_items, root_item=None):
-    stack = [root_item]
-    for event, item in event_prefixed_items:
-        if event is STARTEVENT:
-            yield stack, item
-            stack.append(item)
-        elif event is ENDEVENT:
-            parent = stack.pop()
+    parse_with_parent = getattr(model_type, 'parse_with_parent', None)
+    if parse_with_parent:
+        model_type, model_content = parse_with_parent(model_content, context,
+                                                      (parent_context,
+                                                       parent_model))
 
-def pass2_child(ancestors_cmas):
-    for ancestors, (context, model, attributes, stream) in ancestors_cmas:
+    context['logging'].debug('pass2: %s, %s', model_type, model_content)
+
+    model['type'] = model_type
+    model['content'] = model_content
+    return context, model
+
+def parse_pass2(context_models):
+    from .treeop import prefix_ancestors_from_level
+    level_prefixed = ((model['record']['level'], (context, model))
+                      for context, model in context_models)
+    root_item = (dict(), dict())
+    ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
+    for ancestors, (context, model) in ancestors_prefixed:
         parent = ancestors[-1]
-        parent_context, parent_model, parent_attributes, parent_stream = parent
-        parse_child = getattr(parent_model, 'parse_child', None)
-        if parse_child is not None:
-            model, attributes = parse_child(parent_attributes, parent_context, (context, model, attributes, stream))
+        yield parse_pass2_record_with_parent(parent, (context, model))
 
-        parse_with_parent = getattr(model, 'parse_with_parent', None)
-        if parse_with_parent is not None:
-            model, attributes = model.parse_with_parent(context, parent, stream, attributes)
+def parse_models(context, records):
+    for context, model in parse_models_intern(context, records):
+        yield model
 
-        context['logging'].debug('pass2: %s, %s', model, attributes.keys())
-        yield len(ancestors)-1, (context, model, attributes, stream)
-
-def parse_models_pass2(event_prefixed_cmas):
-    ancestors_prefixed_cmas = prefix_ancestors(event_prefixed_cmas, (None, None, None, None))
-    level_prefixed_cmas = pass2_child(ancestors_prefixed_cmas)
-    event_prefixed_cmas = prefix_event(level_prefixed_cmas)
-    return event_prefixed_cmas
-
-def parse_models(context, records, passes=3):
-    result = parse_models_pass1(context, records)
+def parse_models_intern(context, records, passes=3):
+    context_models = parse_pass1(context, records)
     if passes >= 2:
-        result = parse_models_pass2(result)
-    for event, (context, model, attributes, stream) in result:
-        if stream is not None:
-            context['unparsed'] = stream.read()
-        yield event, (model, attributes, context)
+        context_models = parse_pass2(context_models)
+    for context, model in context_models:
+        stream = context['stream']
+        unparsed = stream.read()
+        if unparsed:
+            model['unparsed'] = unparsed
+        yield context, model
+
+def model_to_json(model, *args, **kwargs):
+    ''' convert a model to json '''
+    from .dataio import dumpbytes
+    import simplejson # TODO: simplejson is for python2.5+
+    model = dict(model)
+    model['type'] = model['type'].__name__
+    record = model['record']
+    record['payload'] = list(dumpbytes(record['payload']))
+    if 'unparsed' in model:
+        model['unparsed'] = list(dumpbytes(model['unparsed']))
+    return simplejson.dumps(model, *args, **kwargs)
+
+def generate_models_json_array(models, *args, **kwargs):
+    from .recordstream import generate_json_array
+    tokens = (model_to_json(model, *args, **kwargs)
+              for model in models)
+    return generate_json_array(tokens)
+
+
+from . import recordstream
+class ModelStream(recordstream.RecordStream):
+
+    def other_formats(self):
+        d = super(ModelStream, self).other_formats()
+        d['.models'] = self.models_stream
+        return d
+
+    def models(self):
+        return parse_models(self.model_parsing_context,
+                            self.records())
+
+    def model(self, idx):
+        from .recordstream import nth
+        return nth(self.models(), idx)
+
+    def models_stream(self):
+        from .filestructure import GeneratorReader
+        gen = generate_models_json_array(self.models(),
+                                         sort_keys=True,
+                                         indent=2)
+        return GeneratorReader(gen)
+
+    @cached_property
+    def model_parsing_context(self):
+        import logging
+        return dict(version=self.version,
+                    logging=logging)
+
+
+class Sections(recordstream.Sections):
+
+    section_class = ModelStream
+
+
+class Hwp5File(recordstream.Hwp5File):
+
+    docinfo_class = ModelStream
+    bodytext_class = Sections
 
 def create_context(file=None, **context):
     if file is not None:
@@ -1611,25 +1721,6 @@ def create_context(file=None, **context):
     assert 'version' in context
     assert 'logging' in context
     return context
-
-class ModelEventHandler(object):
-    def startModel(self, model, attributes, **kwargs):
-        raise NotImplementedError
-    def endModel(self, model):
-        raise NotImplementedError
-
-def wrap_modelevents(wrapper_model, modelevents):
-    yield STARTEVENT, wrapper_model
-    for mev in modelevents:
-        yield mev
-    yield ENDEVENT, wrapper_model
-
-def dispatch_model_events(handler, events):
-    for event, (model, attributes, context) in events:
-        if event == STARTEVENT:
-            handler.startModel(model, attributes, **context)
-        elif event == ENDEVENT:
-            handler.endModel(model)
 
 def main():
     import sys
@@ -1640,8 +1731,6 @@ def main():
     from .recordstream import read_records
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
-    op.add_option('--pass', dest='passes', type='int', default=2, help='parsing pass: 1, 2 [default: 2]')
-    op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
 
     options, args = op.parse_args()
 
@@ -1659,113 +1748,22 @@ def main():
         bytestream = file.pseudostream(streamname)
         version = file.fileheader.version
 
-    records = read_records(bytestream, streamname, filename)
-
-    import types
-    from xml.sax.saxutils import XMLGenerator
-    class XmlFormat(ModelEventHandler):
-        def __init__(self, out):
-            self.xmlgen = XMLGenerator(out, 'utf-8')
-        def startDocument(self):
-            self.xmlgen.startDocument()
-        def startModel(self, model, attributes, **context):
-            xmlgen = self.xmlgen
-            def xmlattrval(v):
-                if isinstance(v, basestring):
-                    return v
-                elif isinstance(v, type):
-                    return v.__name__
-                else:
-                    return str(v)
-            def xmlattr(item):
-                try:
-                    name, (type, value) = item
-                    return name, xmlattrval(value)
-                except Exception, e:
-                    context['logging'].error('can\'t serialize xml attribute %s: %s'%(name, repr(value)))
-                    context['logging'].exception(e)
-                    raise
-            recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
-            hwptag = context.get('hwptag', '')
-            if options.loglevel <= logging.INFO:
-                xmlgen._write('<!-- rec:%d %s -->'%(recordid[2], hwptag))
-            if model is ParaText:
-                if 'chunks' in attributes:
-                    chunks = attributes.pop('chunks')
-                else:
-                    chunks = None
-            else:
-                pass
-            if model is Text:
-                text = attributes.pop('text')
-            else:
-                text = None
-
-            typed_attributes = typed_model_attributes(model, attributes, context)
-            xmlgen.startElement(model.__name__, dict(xmlattr(x) for x in typed_attributes))
-
-            if model is Text and text is not None:
-                xmlgen.characters(text)
-            if model is ParaText and chunks is not None:
-                for (start, end), chunk in chunks:
-                    chunk_attr = dict(start=str(start), end=str(end))
-                    if isinstance(chunk, basestring):
-                        xmlgen.startElement('Text', chunk_attr)
-                        xmlgen.characters(chunk)
-                        xmlgen.endElement('Text')
-                    elif isinstance(chunk, ControlChar):
-                        chunk_attr['name'] = chunk.name
-                        chunk_attr['kind'] = chunk.kind.__name__
-                        xmlgen.startElement('ControlChar', chunk_attr)
-                        xmlgen.endElement('ControlChar')
-                    else:
-                        xmlgen._write('<!-- unknown chunk: (%d, %d), %s -->'%(start, end, chunk))
-            if options.loglevel <= logging.INFO:
-                unparsed = context.get('unparsed', '')
-                if len(unparsed) > 0:
-                    xmlgen._write('<!-- UNPARSED\n')
-                    xmlgen._write(dataio.hexdump(unparsed, True))
-                    xmlgen._write('\n-->')
-        def endModel(self, model):
-            self.xmlgen.endElement(model.__name__)
-        def endDocument(self):
-            self.xmlgen.endDocument()
-        def getlogger():
-            return getlogger(options, loghandler(out, logformat_xml))
-
-    class NulFormat(ModelEventHandler):
-        def __init__(self, out): pass
-        def startDocument(self): pass
-        def endDocument(self): pass
-        def startModel(self, model, attributes, **context): pass
-        def endModel(self, model): pass
-
-    from ._scriptutils import getlogger, loghandler, logformat_xml
-    if options.format == 'xml':
-        logger = getlogger(options, loghandler(out, logformat_xml))
-    else:
-        logger = getlogger(options)
-
-    formats = dict(xml=XmlFormat, nul=NulFormat)
-    oformat = formats[options.format](out)
-
+    from ._scriptutils import getlogger
+    logger = getlogger(options)
     context = create_context(version=version, logging=logger)
-    models = parse_models(context, records, options.passes)
+    records = read_records(bytestream, streamname, filename)
+    models = parse_models(context, records)
 
     def statistics(models):
         occurrences = dict()
-        for event, (model, attributes, context) in models:
-            if event is STARTEVENT:
-                occurrences.setdefault(model, 0)
-                occurrences[model] += 1
-            yield event, (model, attributes, context)
-        for model, count in occurrences.iteritems():
-            logger.info('%30s: %d', model.__name__, count)
+        for model in models:
+            model_type = model['type']
+            occurrences.setdefault(model_type, 0)
+            occurrences[model_type] += 1
+            yield model
+        for model_type, count in occurrences.iteritems():
+            logger.info('%30s: %d', model_type.__name__, count)
     models = statistics(models)
 
-    class Records(object): pass
-    models = wrap_modelevents((Records, dict(filename=filename, streamid=streamname), dict(context)), models)
-
-    oformat.startDocument()
-    dispatch_model_events(oformat, models)
-    oformat.endDocument()
+    for s in generate_models_json_array(models, indent=2, sort_keys=True):
+        out.write(s)
