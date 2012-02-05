@@ -50,15 +50,26 @@ def encode_record_header(rec):
         hdr = (0xfff << 20) | (level << 10) | tagid
         return struct.pack('<II', hdr, size)
 
+def read_record(f, seqno):
+    header = decode_record_header(f)
+    if header is None:
+        return
+    tagid, level, size = header
+    payload = dataio.readn(f, size)
+    return Record(tagid, level, payload, size, seqno)
+
 def read_records(f, streamid='', filename=''):
     seqno = 0
     while True:
-        rechdr = decode_record_header(f)
-        if rechdr is None:
+        record = read_record(f, seqno)
+        if record:
+            if streamid:
+                record['streamid'] = streamid
+            if filename:
+                record['filename'] = filename
+            yield record
+        else:
             return
-        tagid, level, size = rechdr
-        payload = dataio.readn(f, size)
-        yield Record(tagid, level, payload, size, seqno, streamid, filename)
         seqno += 1
 
 def link_records(records):

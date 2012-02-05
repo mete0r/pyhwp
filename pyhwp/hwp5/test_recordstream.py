@@ -13,6 +13,17 @@ class TestBase(test_filestructure.TestBase):
     hwp5file = hwp5file_rec
 
 
+class TestRecord(TestBase):
+
+    def test_read_record(self):
+        from .recordstream import read_record
+        from .tagids import HWPTAG_DOCUMENT_PROPERTIES
+        docinfo_stream = self.hwp5file['DocInfo']
+
+        record = read_record(docinfo_stream, 0)
+        self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
+
+
 class TestRecordStream(TestBase):
 
     @cached_property
