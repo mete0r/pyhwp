@@ -1741,6 +1741,31 @@ def recoder_to_json(context):
         return GeneratorReader(gen)
     return recode
 
+from . import recordstream
+class RecordStream(recordstream.RecordStream):
+
+    def other_formats(self):
+        d = super(RecordStream, self).other_formats()
+        d['.models'] = recoder_to_json(self.model_parsing_context)
+        return d
+
+    @cached_property
+    def model_parsing_context(self):
+        import logging
+        return dict(version=self.version,
+                    logging=logging)
+
+
+class Sections(recordstream.Sections):
+
+    section_class = RecordStream
+
+
+class Hwp5File(recordstream.Hwp5File):
+
+    docinfo_class = RecordStream
+    bodytext_class = Sections
+
 def create_context(file=None, **context):
     if file is not None:
         context['version'] = file.fileheader.version

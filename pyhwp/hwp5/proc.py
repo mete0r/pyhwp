@@ -96,12 +96,19 @@ class ProcContext(Context):
         return recordstream.Hwp5File(self.olestorage)
 
     @property
+    def hwp5file_bin(self):
+        from . import binmodel
+        return binmodel.Hwp5File(self.olestorage)
+
+    @property
     def operand_storage(self):
         layer = self.options.get('layer', 'hwp5')
         if layer == 'ole':
             return self.olestorage
         elif layer == 'rec':
             return self.hwp5file_rec
+        elif layer == 'bin':
+            return self.hwp5file_bin
         return self.hwp5file
 
     @property
