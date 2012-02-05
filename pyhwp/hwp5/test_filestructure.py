@@ -258,6 +258,9 @@ class TestHwp5DistDocFolderItem(TestBase):
         record = simplejson.load(stream)
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
 
+        # stream should have been exausted
+        self.assertEquals('', stream.read(1))
+
     def test_head_payload(self):
         payload = self.jscriptversion.head_payload()
         self.assertEquals(256, len(payload))

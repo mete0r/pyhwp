@@ -419,7 +419,7 @@ class Hwp5DistDocFolderItem(Hwp5Object):
         from .recordstream import record_to_json
         record = self.head_record()
         json = record_to_json(record)
-        return GeneratorReader([json])
+        return GeneratorReader(iter([json]))
 
     def head_payload(self):
         record = self.head_record()
