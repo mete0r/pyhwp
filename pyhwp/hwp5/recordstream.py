@@ -111,6 +111,11 @@ def bin2json_stream(f):
     return GeneratorReader(gen)
 
 
+def nth(iterable, n, default=None):
+    from itertools import islice
+    return next(islice(iterable, n, None), default)
+
+
 from .storage import StorageWrapper
 
 class RecordStream(filestructure.Hwp5Object):

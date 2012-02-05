@@ -52,9 +52,7 @@ class BinEmbeddedTest(TestCase):
         self.assertEquals('jpg', attributes['ext'])
 
 
-def nth(iterable, n, default=None):
-    from itertools import islice
-    return next(islice(iterable, n, None), default)
+from .recordstream import nth
 
 class TestBase(TestCase):
     ctx = TestContext()
