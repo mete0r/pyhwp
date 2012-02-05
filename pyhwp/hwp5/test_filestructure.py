@@ -287,8 +287,9 @@ class TestHwp5DistDicFolderStorage(TestBase):
         from .filestructure import Hwp5DistDocFolderStorage
         return Hwp5DistDocFolderStorage(self.olestg['Scripts'])
 
-    def test_resolve_itemobject(self):
-        version = self.scripts.resolve_itemobject('JScriptVersion')
+    def test_resolve_baseitemobject(self):
+        version = self.scripts.resolve_baseitemobject('JScriptVersion')
+        self.assertTrue(version.stg is self.scripts.stg)
         self.assertTrue(version is not None)
         self.assertEquals(4+256+16, len(version.open().read()))
         self.assertTrue(version.other_formats() is not None)

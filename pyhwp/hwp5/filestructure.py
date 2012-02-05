@@ -446,11 +446,11 @@ class Hwp5DistDocFolderItem(Hwp5Object):
 
 class Hwp5DistDocFolderStorage(ItemsModifyingStorage):
 
-    def resolve_itemobject(self, name):
-        return Hwp5DistDocFolderItem(self, name, None)
+    def resolve_baseitemobject(self, name):
+        return Hwp5DistDocFolderItem(self.stg, name, None)
 
     def resolve_other_formats_for(self, name):
-        item = self.resolve_itemobject(name)
+        item = self.resolve_baseitemobject(name)
         return item.other_formats()
 
 
