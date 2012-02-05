@@ -53,8 +53,6 @@ class BinEmbeddedTest(TestCase):
         self.assertEquals('jpg', attributes['ext'])
 
 
-from .recordstream import nth
-
 class TestBase(test_recordstream.TestBase):
 
     @cached_property
@@ -551,40 +549,23 @@ class TestControlChar(TestBase):
 
 class TestModelJson(TestBase):
     def test_model_to_json(self):
-        from .binmodel import parse_models
         from .binmodel import model_to_json
-        import logging
-        context = dict(version=self.hwp5file_rec.header.version,
-                       logging=logging)
-        record = self.hwp5file_rec.docinfo.records().next()
-        model = parse_models(context, [record]).next()
-        json = model_to_json(model, indent=2, sort_keys=True)
+        model = self.hwp5file.docinfo.model(0)
+        json = model_to_json(model)
 
         import simplejson
         jsonobject = simplejson.loads(json)
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
     def test_model_to_json_should_not_modify_input(self):
-        from .binmodel import parse_models
         from .binmodel import model_to_json
-        import logging
-        context = dict(version=self.hwp5file_rec.header.version,
-                       logging=logging)
-        record = self.hwp5file_rec.docinfo.records().next()
-        model = parse_models(context, [record]).next()
+        model = self.hwp5file.docinfo.model(0)
         model_to_json(model, indent=2, sort_keys=True)
         self.assertFalse(isinstance(model['type'], basestring))
 
     def test_model_to_json_with_controlchar(self):
-        from .binmodel import parse_models
         from .binmodel import model_to_json
-        import logging
-        context = dict(version=self.hwp5file_rec.header.version,
-                       logging=logging)
-        section = self.hwp5file_rec.bodytext.section(0)
-        import itertools
-        records = list(itertools.islice(section.records(), 0, 2))
-        model = nth(parse_models(context, records), 1)
+        model = self.hwp5file.bodytext.section(0).model(1)
         json = model_to_json(model)
 
         import simplejson
@@ -607,12 +588,8 @@ class TestModelJson(TestBase):
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
 
     def test_generate_models_json_array(self):
-        from .binmodel import parse_models, generate_models_json_array
-        import logging
-        context = dict(version=self.hwp5file_rec.header.version,
-                      logging=logging)
-        records = self.hwp5file_rec.bodytext.section(0).records()
-        models = parse_models(context, records)
+        from .binmodel import generate_models_json_array
+        models = self.hwp5file.bodytext.section(0).models()
         gen = generate_models_json_array(models)
 
         import simplejson
