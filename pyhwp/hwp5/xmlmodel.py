@@ -308,6 +308,29 @@ def prefix_binmodels_with_event(context, models):
                       for model in models)
     return prefix_event(level_prefixed)
 
+def wrap_modelevents(wrapper_model, modelevents):
+    from .treeop import STARTEVENT, ENDEVENT
+    yield STARTEVENT, wrapper_model
+    for mev in modelevents:
+        yield mev
+    yield ENDEVENT, wrapper_model
+
+
+class ModelEventHandler(object):
+    def startModel(self, model, attributes, **kwargs):
+        raise NotImplementedError
+    def endModel(self, model):
+        raise NotImplementedError
+
+
+def dispatch_model_events(handler, events):
+    from .treeop import STARTEVENT, ENDEVENT
+    for event, (model, attributes, context) in events:
+        if event == STARTEVENT:
+            handler.startModel(model, attributes, **context)
+        elif event == ENDEVENT:
+            handler.endModel(model)
+
 def flatxml(hwpfile, logger, oformat):
     ''' convert hwpfile into a flat xml
 
@@ -315,9 +338,8 @@ def flatxml(hwpfile, logger, oformat):
     oformat - output formatter
     '''
     from .recordstream import read_records
-    from .binmodel import parse_models, wrap_modelevents
+    from .binmodel import parse_models
     from .binmodel import create_context
-    from .binmodel import dispatch_model_events
     context = create_context(hwpfile, logging=logger)
 
     class HwpDoc(object): pass
@@ -367,7 +389,6 @@ def main():
     import logging
     import itertools
     from .filestructure import open
-    from .binmodel import ModelEventHandler
 
     from ._scriptutils import OptionParser, args_pop, open_or_exit
     op = OptionParser(usage='usage: %prog [options] filename')

@@ -1722,27 +1722,6 @@ def create_context(file=None, **context):
     assert 'logging' in context
     return context
 
-class ModelEventHandler(object):
-    def startModel(self, model, attributes, **kwargs):
-        raise NotImplementedError
-    def endModel(self, model):
-        raise NotImplementedError
-
-def wrap_modelevents(wrapper_model, modelevents):
-    from .treeop import STARTEVENT, ENDEVENT
-    yield STARTEVENT, wrapper_model
-    for mev in modelevents:
-        yield mev
-    yield ENDEVENT, wrapper_model
-
-def dispatch_model_events(handler, events):
-    from .treeop import STARTEVENT, ENDEVENT
-    for event, (model, attributes, context) in events:
-        if event == STARTEVENT:
-            handler.startModel(model, attributes, **context)
-        elif event == ENDEVENT:
-            handler.endModel(model)
-
 def main():
     import sys
     import logging

@@ -5,7 +5,7 @@ from .dataio import typed_struct_attributes, Struct, ArrayType, FlagsType, EnumT
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT
 from .dataio import hexdump
 from .binmodel import typed_model_attributes, COLORREF, BinStorageId, Spaces, Text
-from .binmodel import ModelEventHandler
+from .xmlmodel import ModelEventHandler
 
 def xmlattrval(value):
     if isinstance(value, basestring):
