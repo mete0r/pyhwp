@@ -397,6 +397,15 @@ class ModelEventStream(binmodel.ModelStream):
         return prefix_binmodels_with_event(context, models)
 
 
+class DocInfo(ModelEventStream):
+
+    def events(self):
+        docinfo = DocInfo, dict(), self.eventgen_context
+        events = self.modelevents()
+        events = wrap_modelevents(docinfo, events)
+        return remove_redundant_facenames(events)
+
+
 def main():
     import sys
     import logging

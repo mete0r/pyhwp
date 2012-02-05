@@ -20,6 +20,20 @@ class TestModelEventStream(TestBase):
         #print len(list(self.docinfo.modelevents()))
 
 
+class TestDocInfo(TestBase):
+
+    @cached_property
+    def docinfo(self):
+        from .xmlmodel import DocInfo
+        return DocInfo(self.hwp5file, 'DocInfo',
+                       self.hwp5file.header.version)
+
+    def test_events(self):
+        events = list(self.docinfo.events())
+        self.assertEquals(112, len(events))
+        #print len(events)
+
+
 from .xmlmodel import make_ranged_shapes, split_and_shape
 class TestShapedText(TestCase):
     def test_make_shape_range(self):
