@@ -418,9 +418,10 @@ class SectionStorage(ItemsModifyingStorage):
         self.version = version
         self.section_class = section_class
 
-    def resolve_modifier(self, name):
+    def resolve_other_formats_for(self, name):
         if name.startswith('Section'):
-            return self.section_class(self.stg, name, self.version)
+            section = self.section_class(self.stg, name, self.version)
+            return section.other_formats()
 
 
 class Sections(Hwp5Object):

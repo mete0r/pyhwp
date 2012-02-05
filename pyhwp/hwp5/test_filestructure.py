@@ -266,6 +266,20 @@ class TestHwp5File(TestBase):
         self.assertEquals(['Section0'], list(bodytext))
 
 
+class TestSectionStorage(TestCase):
+
+    @property
+    def section_storage(self):
+        from .filestructure import SectionStorage, Hwp5Object
+        return SectionStorage(None, None, Hwp5Object)
+
+    def test_resolve_other_formats_for_section(self):
+        self.assertTrue(self.section_storage.resolve_other_formats_for('Section0') is not None)
+
+    def test_resolve_other_formats_for_nonsection(self):
+        self.assertTrue(self.section_storage.resolve_other_formats_for('NoneSection') is None)
+
+
 class TestGeneratorReader(object):
     def test_generator_reader(self):
         def data(self):
