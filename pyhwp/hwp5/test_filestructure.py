@@ -3,6 +3,7 @@ from unittest import TestCase
 from hwp5 import filestructure as FS
 from OleFileIO_PL import OleFileIO
 import OleFileIO_PL
+from .utils import cached_property
 
 sample_filename = '../../../samples/sample-5017.hwp'
 nonole_filename = '../../../README.markdown'
@@ -108,13 +109,34 @@ class TestModuleFunctions(TestCase):
 
 class TestBase(TestCase):
 
+    fixtures_dir = '../../../samples'
+    hwp5file_name = 'sample-5017.hwp'
+
     @property
     def olefile(self):
-        return OleFileIO(sample_filename)
+        return OleFileIO('/'.join([self.fixtures_dir, self.hwp5file_name]))
 
     @property
     def olestg(self):
         return FS.OleStorage(self.olefile)
+
+    @cached_property
+    def hwp5file_fs(self):
+        return FS.Hwp5File(self.olestg)
+
+    hwp5file = hwp5file_fs
+
+    @cached_property
+    def docinfo(self):
+        return self.hwp5file.docinfo
+
+    @cached_property
+    def bodytext(self):
+        return self.hwp5file.bodytext
+
+    @cached_property
+    def viewtext(self):
+        return self.hwp5file.viewtext
 
 
 class TestOleStorage(TestBase):
@@ -192,10 +214,6 @@ class TestCompressedStorage(TestBase):
 
 
 class TestHwp5File(TestBase):
-
-    @property
-    def hwp5file(self):
-        return FS.Hwp5File(self.olestg)
 
     def test_fileheader(self):
         fileheader = self.hwp5file.header
