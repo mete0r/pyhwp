@@ -401,6 +401,13 @@ class Hwp5Object(object):
         return dict()
 
 
+class Hwp5FileBase(StorageWrapper):
+
+    @cached_property
+    def header(self):
+        return decode_fileheader(self.stg['FileHeader'])
+
+
 class Hwp5DistDocFolderItem(Hwp5Object):
 
     def head_record(self):

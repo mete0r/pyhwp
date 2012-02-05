@@ -222,6 +222,19 @@ class TestOleStorage(TestBase):
         self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
 
 
+class TestHwp5FileBase(TestBase):
+
+    @cached_property
+    def hwp5file_base(self):
+        from .filestructure import Hwp5FileBase
+        return Hwp5FileBase(self.olestg)
+
+    def test_header(self):
+        from .filestructure import FileHeader
+        header = self.hwp5file_base.header
+        self.assertTrue(isinstance(header, FileHeader))
+
+
 class TestHwp5DistDocFolderItem(TestBase):
 
     hwp5file_name = 'viewtext.hwp'
