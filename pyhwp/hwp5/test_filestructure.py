@@ -145,6 +145,13 @@ class TestBase(TestCase):
 
 class TestOleStorage(TestBase):
 
+    def test_init_should_receive_string_olefile(self):
+        from .filestructure import OleStorage
+        import os.path
+        olestg = OleStorage(os.path.join(self.fixtures_dir,
+                                         self.hwp5file_name))
+        self.assertTrue(olestg['FileHeader'] is not None)
+
     def test_iter(self):
         olestg = self.olestg
         gen = iter(olestg)

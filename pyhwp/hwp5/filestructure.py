@@ -262,6 +262,15 @@ def olefile_listdir(olefile, path):
 class OleStorage(Storage):
 
     def __init__(self, olefile, path=''):
+        ''' create a OleStorage instance
+
+            @param olefile : a OleFileIO instance
+                             or path to the file in the file system
+            @param path : a base path in the storage
+        '''
+        if not hasattr(olefile, 'openstream'):
+            from OleFileIO_PL import OleFileIO
+            olefile = OleFileIO(olefile)
         self.olefile = olefile
         self.path = path # path DOES NOT end with '/'
 
