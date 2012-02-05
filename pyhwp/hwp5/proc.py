@@ -87,7 +87,7 @@ class ProcContext(Context):
         return OleStorage(self.olefile)
 
     @property
-    def hwp5file(self):
+    def hwp5file_fs(self):
         return filestructure.Hwp5File(self.olestorage)
 
     @property
@@ -101,14 +101,25 @@ class ProcContext(Context):
         return binmodel.Hwp5File(self.olestorage)
 
     @property
+    def hwp5file_xml(self):
+        from . import xmlmodel
+        return xmlmodel.Hwp5File(self.olestorage)
+
+    hwp5file = hwp5file_xml
+
+    @property
     def operand_storage(self):
-        layer = self.options.get('layer', 'hwp5')
+        layer = self.options.get('layer')
         if layer == 'ole':
             return self.olestorage
+        elif layer == 'fs':
+            return self.hwp5file_fs
         elif layer == 'rec':
             return self.hwp5file_rec
         elif layer == 'bin':
             return self.hwp5file_bin
+        elif layer == 'xml':
+            return self.hwp5file_xml
         return self.hwp5file
 
     @property
