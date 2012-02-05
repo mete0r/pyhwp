@@ -1730,14 +1730,14 @@ def generate_models_json_array(models, *args, **kwargs):
               for model in models)
     return generate_json_array(tokens)
 
-def recoder_to_json(context):
+def recoder_to_json(context, *args, **kwargs):
     def recode(f):
         from .recordstream import read_records
         from .recordstream import generate_json_array
         from .filestructure import GeneratorReader
         records = read_records(f)
         models = parse_models(context, records)
-        gen = generate_models_json_array(models)
+        gen = generate_models_json_array(models, *args, **kwargs)
         return GeneratorReader(gen)
     return recode
 
@@ -1746,7 +1746,8 @@ class RecordStream(recordstream.RecordStream):
 
     def other_formats(self):
         d = super(RecordStream, self).other_formats()
-        d['.models'] = recoder_to_json(self.model_parsing_context)
+        d['.models'] = recoder_to_json(self.model_parsing_context,
+                                       sort_keys=True, indent=2)
         return d
 
     @cached_property
