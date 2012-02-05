@@ -1,4 +1,9 @@
 from unittest import TestCase
+from . import test_binmodel
+from .utils import cached_property
+
+class TestBase(test_binmodel.TestBase):
+    pass
 
 from .xmlmodel import make_ranged_shapes, split_and_shape
 class TestShapedText(TestCase):
