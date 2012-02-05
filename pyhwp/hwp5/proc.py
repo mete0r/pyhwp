@@ -108,7 +108,7 @@ class ProcContext(Context):
     hwp5file = hwp5file_xml
 
     @property
-    def operand_storage(self):
+    def storage(self):
         layer = self.options.get('layer')
         if layer == 'ole':
             return self.olestorage
@@ -123,9 +123,9 @@ class ProcContext(Context):
         return self.hwp5file
 
     @property
-    def operand_stream(self):
+    def stream(self):
         from .storage import open_storage_item
-        return open_storage_item(self.operand_storage, self.args[1])
+        return open_storage_item(self.storage, self.args[1])
 
     @property
     def outdir_or_operand_root(self):
@@ -181,7 +181,7 @@ def unpack():
     import os, os.path
     if not os.path.exists(outdir):
         os.mkdir(outdir)
-    filestructure.unpack(context.operand_storage, outdir)
+    filestructure.unpack(context.storage, outdir)
 
 
 def ls():
@@ -197,11 +197,11 @@ def ls():
             if hasattr(item, 'read'):
                 print path
 
-    printstorage(context.operand_storage)
+    printstorage(context.storage)
 
 
 def cat():
-    f = context.operand_stream
+    f = context.stream
     try:
         if hasattr(f, 'read'):
             while True:
