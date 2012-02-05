@@ -554,6 +554,12 @@ class Hwp5File(ItemsModifyingStorage):
     def __init__(self, stg):
         if not isinstance(stg, Storage):
             stg = OleStorage(stg)
+
+        stg = Hwp5FileBase(stg)
+
+        if stg.header.flags.distributable:
+            stg = Hwp5DistDoc(stg)
+
         self.stg = Hwp5CompressedStreams(stg)
 
     def resolve_other_formats_for(self, name):

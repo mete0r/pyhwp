@@ -416,6 +416,10 @@ class TestHwp5File(TestBase):
         expected = '한글 2005 예제 파일입니다.'
         self.assertEquals(expected, prvtext.read()[0:len(expected)])
 
+    def test_distdoc_layer_inserted(self):
+        self.hwp5file_name = 'viewtext.hwp'
+        self.assertTrue('Section0.tail' in self.viewtext.open())
+
     def test_unpack(self):
         outpath = 'test_unpack'
         import os, os.path, shutil
