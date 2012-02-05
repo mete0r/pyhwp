@@ -150,49 +150,12 @@ class Sections(filestructure.Sections):
     section_class = RecordStream
 
 
-class CrypticViewTextSection(filestructure.Hwp5Object):
-
-    def head_record(self, item):
-        records = read_records(item, 'ViewText', '')
-        return records.next()
-
-    def head(self):
-        item = self.open()
-        record = self.head_record(item)
-        size = item.tell()
-        assert 4+256 == item.tell()
-        item.seek(0)
-        return StringIO(item.read(size))
-
-    def head_payload(self):
-        item = self.open()
-        record = self.head_record(item)
-        return StringIO(record.payload)
-
-    def tail(self):
-        item = self.item()
-        record = self.head_record(item)
-        assert 4+256 == item.tell()
-        return StringIO(item.read())
-
-    def other_formats(self):
-        return {'.head': self.head,
-                '.head.payload': self.head_payload,
-                '.tail': self.tail}
-
-
-class CrypticViewText(Sections):
-
-    section_class = CrypticViewTextSection
-
-
 class Hwp5File(filestructure.Hwp5File):
     ''' Hwp5File for 'rec' layer
     '''
 
     docinfo_class = RecordStream
     bodytext_class = Sections
-    viewtext_class = CrypticViewText
 
 
 def main():
