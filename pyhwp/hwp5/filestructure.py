@@ -384,6 +384,59 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
+class Hwp5Object(object):
+
+    def __init__(self, stg, name, version):
+        self.stg = stg
+        self.name = name
+        self.version = version
+
+    def open(self):
+        return self.stg[self.name]
+
+    def conversion(self, item):
+        return item
+
+    def other_formats(self):
+        return dict()
+
+
+class Hwp5DistDocFolderItem(Hwp5Object):
+
+    def head_record(self):
+        item = self.open()
+        from .recordstream import read_record
+        return read_record(item, 0)
+
+    def head_record_stream(self):
+        from .recordstream import record_to_json
+        record = self.head_record()
+        json = record_to_json(record)
+        return GeneratorReader([json])
+
+    def head_payload(self):
+        record = self.head_record()
+        return record['payload']
+
+    def head_payload_stream(self):
+        return StringIO(self.head_payload())
+
+    def tail(self):
+        item = self.open()
+        from .recordstream import read_record
+        read_record(item, 0)
+        assert 4+256 == item.tell()
+        return item.read()
+
+    def tail_stream(self):
+        return StringIO(self.tail())
+
+    def other_formats(self):
+        return {'.head.record': self.head_record_stream,
+                '.head.payload': self.head_payload_stream,
+                '.tail': self.tail_stream}
+
+
 class Hwp5CompressedStreams(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 
@@ -406,23 +459,6 @@ class Hwp5CompressedStreams(ItemsModifyingStorage):
         elif name == 'Scripts':
             if compressed and not distdoc:
                 return CompressedStorage
-
-
-class Hwp5Object(object):
-
-    def __init__(self, stg, name, version):
-        self.stg = stg
-        self.name = name
-        self.version = version
-
-    def open(self):
-        return self.stg[self.name]
-
-    def conversion(self, item):
-        return item
-
-    def other_formats(self):
-        return dict()
 
 
 class PreviewText(Hwp5Object):

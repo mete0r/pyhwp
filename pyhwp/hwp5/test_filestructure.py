@@ -222,6 +222,46 @@ class TestOleStorage(TestBase):
         self.assertTrue(os.path.exists('5017/Scripts/JScriptVersion'))
 
 
+class TestHwp5DistDocFolderItem(TestBase):
+
+    hwp5file_name = 'viewtext.hwp'
+
+    @cached_property
+    def jscriptversion(self):
+        from .filestructure import Hwp5DistDocFolderItem
+        return Hwp5DistDocFolderItem(self.olestg['Scripts'],
+                                     'JScriptVersion',
+                                     self.hwp5file.header.version)
+
+    def test_head_record(self):
+        from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
+        record = self.jscriptversion.head_record()
+        self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
+
+    def test_head_record_stream(self):
+        from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
+        import simplejson
+        stream = self.jscriptversion.head_record_stream()
+        record = simplejson.load(stream)
+        self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
+
+    def test_head_payload(self):
+        payload = self.jscriptversion.head_payload()
+        self.assertEquals(256, len(payload))
+
+    def test_head_payload_stream(self):
+        payload_stream = self.jscriptversion.head_payload_stream()
+        self.assertEquals(256, len(payload_stream.read()))
+
+    def test_tail(self):
+        tail = self.jscriptversion.tail()
+        self.assertEquals(16, len(tail))
+
+    def test_tail_stream(self):
+        tail_stream = self.jscriptversion.tail_stream()
+        self.assertEquals(16, len(tail_stream.read()))
+
+
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
         stg = FS.CompressedStorage(self.olestg['BinData'])
