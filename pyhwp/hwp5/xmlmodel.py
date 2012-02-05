@@ -1,5 +1,7 @@
 from itertools import chain
 from .treeop import STARTEVENT, ENDEVENT
+from .treeop import build_subtree
+from .treeop import tree_events, tree_events_multi
 from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph, Text
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
@@ -179,7 +181,7 @@ def wrap_section(sect_id, event_prefixed_mac):
                 sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
                 attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
-                for k in tree_events_childs(sectiondef_childs):
+                for k in tree_events_multi(sectiondef_childs):
                     yield k
                 for evented_item in starting_buffer:
                     yield evented_item
@@ -187,25 +189,6 @@ def wrap_section(sect_id, event_prefixed_mac):
             else:
                 starting_buffer.append((event, item))
     yield ENDEVENT, sectiondef
-
-def build_subtree(event_prefixed_items_iterator):
-    childs = []
-    for event, item in event_prefixed_items_iterator:
-        if event == STARTEVENT:
-            childs.append(build_subtree(event_prefixed_items_iterator))
-        elif event == ENDEVENT:
-            return item, childs
-
-def tree_events(rootitem, childs):
-    yield STARTEVENT, rootitem
-    for k in tree_events_childs(childs):
-        yield k
-    yield ENDEVENT, rootitem
-
-def tree_events_childs(childs):
-    for child in childs:
-        for k in tree_events(*child):
-            yield k
 
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''

@@ -62,3 +62,50 @@ def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
         yield stack, item
         stack.append(item)
 
+def build_subtree(event_prefixed_items):
+    ''' build a tree from (event, item) stream
+
+
+        Example Scenario
+        ----------------
+
+        ...
+        (STARTEVENT, rootitem)          # should be consumed by the caller
+        --- call build_subtree() ---
+        (STARTEVENT, child1)            # consumed by build_subtree()
+        (STARTEVENT, grandchild)        # (same)
+        (ENDEVENT, grandchild)          # (same)
+        (ENDEVENT, child1)              # (same)
+        (STARTEVENT, child2)            # (same)
+        (ENDEVENT, child2)              # (same)
+        (ENDEVENT, rootitem)            # same, buildsubtree() returns
+        --- build_subtree() returns ---
+        (STARTEVENT, another_root)
+        ...
+
+        result will be (rootitem, [(child1, [(grandchild, [])]),
+                                   (child2, [])])
+
+    '''
+    childs = []
+    for event, item in event_prefixed_items:
+        if event == STARTEVENT:
+            childs.append(build_subtree(event_prefixed_items))
+        elif event == ENDEVENT:
+            return item, childs
+
+def tree_events(rootitem, childs):
+    ''' generate tuples of (event, item) from a tree
+    '''
+    yield STARTEVENT, rootitem
+    for k in tree_events_multi(childs):
+        yield k
+    yield ENDEVENT, rootitem
+
+def tree_events_multi(trees):
+    ''' generate tuples of (event, item) from trees
+    '''
+    for rootitem, childs in trees:
+        for k in tree_events(rootitem, childs):
+            yield k
+
