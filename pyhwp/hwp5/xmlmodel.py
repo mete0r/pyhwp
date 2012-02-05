@@ -406,6 +406,11 @@ class DocInfo(ModelEventStream):
         return remove_redundant_facenames(events)
 
 
+class Hwp5File(binmodel.Hwp5File):
+
+    docinfo_class = DocInfo
+
+
 def main():
     import sys
     import logging

@@ -3,7 +3,13 @@ from . import test_binmodel
 from .utils import cached_property
 
 class TestBase(test_binmodel.TestBase):
-    pass
+
+    @cached_property
+    def hwp5file_xml(self):
+        from .xmlmodel import Hwp5File
+        return Hwp5File(self.olestg)
+
+    hwp5file = hwp5file_xml
 
 
 class TestModelEventStream(TestBase):
@@ -32,6 +38,13 @@ class TestDocInfo(TestBase):
         events = list(self.docinfo.events())
         self.assertEquals(112, len(events))
         #print len(events)
+
+
+class TestHwp5File(TestBase):
+
+    def test_docinfo_class(self):
+        from .xmlmodel import DocInfo
+        self.assertTrue(isinstance(self.hwp5file.docinfo, DocInfo))
 
 
 from .xmlmodel import make_ranged_shapes, split_and_shape
