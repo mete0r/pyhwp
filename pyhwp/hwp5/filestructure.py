@@ -437,6 +437,16 @@ class Hwp5DistDocFolderItem(Hwp5Object):
                 '.tail': self.tail_stream}
 
 
+class Hwp5DistDocFolderStorage(ItemsModifyingStorage):
+
+    def resolve_itemobject(self, name):
+        return Hwp5DistDocFolderItem(self, name, None)
+
+    def resolve_other_formats_for(self, name):
+        item = self.resolve_itemobject(name)
+        return item.other_formats()
+
+
 class Hwp5CompressedStreams(ItemsModifyingStorage):
     ''' handle compressed streams in HWPv5 files '''
 

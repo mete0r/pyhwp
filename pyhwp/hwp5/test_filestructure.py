@@ -262,6 +262,28 @@ class TestHwp5DistDocFolderItem(TestBase):
         self.assertEquals(16, len(tail_stream.read()))
 
 
+class TestHwp5DistDicFolderStorage(TestBase):
+
+    hwp5file_name = 'viewtext.hwp'
+
+    @cached_property
+    def scripts(self):
+        from .filestructure import Hwp5DistDocFolderStorage
+        return Hwp5DistDocFolderStorage(self.olestg['Scripts'])
+
+    def test_resolve_itemobject(self):
+        version = self.scripts.resolve_itemobject('JScriptVersion')
+        self.assertTrue(version is not None)
+        self.assertEquals(4+256+16, len(version.open().read()))
+        self.assertTrue(version.other_formats() is not None)
+
+    def test_resolve_other_formats_for_version(self):
+        other_formats = self.scripts.resolve_other_formats_for('JScriptVersion')
+        self.assertTrue(other_formats is not None)
+        self.assertEquals(set(['.head.record', '.head.payload', '.tail']),
+                          set(other_formats.keys()))
+
+
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
         stg = FS.CompressedStorage(self.olestg['BinData'])
