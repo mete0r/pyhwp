@@ -46,7 +46,7 @@ class TestRecordStream(TestBase):
 class TestHwp5File(TestBase):
 
     def test_if_hwp5file_contains_other_formats(self):
-        self.assertTrue('DocInfo.rec' in list(self.hwp5file))
+        self.assertTrue('DocInfo.records' in list(self.hwp5file))
 
     def test_docinfo(self):
         docinfo = self.hwp5file.docinfo
@@ -57,7 +57,7 @@ class TestHwp5File(TestBase):
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
-        self.assertEquals(['Section0', 'Section0.rec'], list(bodytext.open()))
+        self.assertEquals(['Section0', 'Section0.records'], list(bodytext.open()))
 
 
 class TestJson(TestBase):

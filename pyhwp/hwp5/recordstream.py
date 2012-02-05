@@ -142,7 +142,7 @@ class RecordStream(filestructure.Hwp5Object):
         return bin2json_stream(self.open())
 
     def other_formats(self):
-        return {'.rec': self.records_stream}
+        return {'.records': self.records_stream}
 
 
 class Sections(filestructure.Sections):
