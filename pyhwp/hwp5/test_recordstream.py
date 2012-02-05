@@ -2,6 +2,7 @@
 
 from . import test_filestructure
 from . import recordstream as RS
+from .utils import cached_property
 
 class TestBase(test_filestructure.TestBase):
 
@@ -10,6 +11,18 @@ class TestBase(test_filestructure.TestBase):
         return RS.Hwp5File(self.olestg)
 
     hwp5file = hwp5file_rec
+
+
+class TestRecordStream(TestBase):
+
+    @cached_property
+    def docinfo(self):
+        from .recordstream import RecordStream
+        return RecordStream(self.hwp5file, 'DocInfo',
+                            self.hwp5file.header.version)
+
+    def test_records(self):
+        self.assertEquals(67, len(list(self.docinfo.records())))
 
 
 class TestHwp5File(TestBase):
