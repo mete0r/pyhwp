@@ -9,25 +9,31 @@ class TestBase(test_filestructure.TestBase):
     def hwp5file_rec(self):
         return RS.Hwp5File(self.olestg)
 
+    hwp5file = hwp5file_rec
+
+
+class TestHwp5File(TestBase):
+
     def test_if_hwp5file_contains_other_formats(self):
-        self.assertTrue('DocInfo.rec' in list(self.hwp5file_rec))
+        self.assertTrue('DocInfo.rec' in list(self.hwp5file))
 
     def test_docinfo(self):
-        docinfo = self.hwp5file_rec.docinfo
+        docinfo = self.hwp5file.docinfo
         self.assertTrue(isinstance(docinfo, RS.RecordStream))
         records = list(docinfo.records())
         self.assertEquals(67, len(records))
 
     def test_bodytext(self):
-        bodytext = self.hwp5file_rec.bodytext
+        bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
         self.assertEquals(['Section0', 'Section0.rec'], list(bodytext.open()))
+
 
 class TestJson(TestBase):
     def test_record_to_json(self):
         from .recordstream import record_to_json
         import simplejson
-        record = self.hwp5file_rec.docinfo.records().next()
+        record = self.hwp5file.docinfo.records().next()
         json = record_to_json(record)
         jsonobject = simplejson.loads(json)
         self.assertEquals(16, jsonobject['tagid'])
@@ -42,7 +48,7 @@ class TestJson(TestBase):
     def test_generate_simplejson_dumps(self):
         from .recordstream import generate_simplejson_dumps
         import simplejson
-        records = self.hwp5file_rec.docinfo.records()
+        records = self.hwp5file.docinfo.records()
         json = ''.join(generate_simplejson_dumps(records))
 
         jsonobject = simplejson.loads(json)
