@@ -48,7 +48,7 @@ class TestLineSeg(TestCase):
 
 class TestTreeEvents(TestCase):
     def test_tree_events(self):
-        from .binmodel import STARTEVENT, ENDEVENT
+        from .treeop import STARTEVENT, ENDEVENT
         from .xmlmodel import build_subtree, tree_events
         event_prefixed_items = [ (STARTEVENT, 'a'), (ENDEVENT, 'a') ]
         rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))

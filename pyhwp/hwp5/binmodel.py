@@ -1603,63 +1603,6 @@ def parse_pass1(context, records):
                                  model['content'].keys())
         yield context, model
 
-class STARTEVENT: pass
-class ENDEVENT: pass
-def prefix_event(level_prefixed_items, root_item=None):
-    baselevel = None
-    stack = [root_item]
-    for level, item in level_prefixed_items:
-        if baselevel is None:
-            baselevel = level
-            level = 0
-        else:
-            level -= baselevel
-
-        while level + 1 < len(stack):
-            yield ENDEVENT, stack.pop()
-        while len(stack) < level + 1:
-            raise Exception('invalid level: %d, %d, %s'%(level, len(stack)-1, item))
-        assert(len(stack) == level + 1)
-
-        stack.append(item)
-        yield STARTEVENT, item
-
-    while 1 < len(stack):
-        yield ENDEVENT, stack.pop()
-
-def prefix_ancestors(event_prefixed_items, root_item=None):
-    stack = [root_item]
-    for event, item in event_prefixed_items:
-        if event is STARTEVENT:
-            yield stack, item
-            stack.append(item)
-        elif event is ENDEVENT:
-            parent = stack.pop()
-
-def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
-    ''' prefix items with ancestors
-
-        @param level_prefixed items: iterable of tuple(level, item)
-        @return iterable of tuple(ancestors, item)
-    '''
-    baselevel = None
-    stack = [root_item]
-    for level, item in level_prefixed_items:
-        if baselevel is None:
-            baselevel = level
-            level = 0
-        else:
-            level -= baselevel
-
-        while level + 1 < len(stack):
-            stack.pop()
-        while len(stack) < level + 1:
-            raise Exception('invalid level: %d, %d, %s'%(level, len(stack)-1, item))
-        assert(len(stack) == level + 1)
-
-        yield stack, item
-        stack.append(item)
-
 def parse_pass2_record_with_parent(parent, (context, model)):
     model_type = model['type']
     model_content = model['content']
@@ -1689,6 +1632,7 @@ def parse_pass2_record_with_parent(parent, (context, model)):
     return context, model
 
 def parse_pass2(context_models):
+    from .treeop import prefix_ancestors_from_level
     level_prefixed = ((model['record']['level'], (context, model))
                       for context, model in context_models)
     root_item = (dict(), dict())
@@ -1781,12 +1725,14 @@ class ModelEventHandler(object):
         raise NotImplementedError
 
 def wrap_modelevents(wrapper_model, modelevents):
+    from .treeop import STARTEVENT, ENDEVENT
     yield STARTEVENT, wrapper_model
     for mev in modelevents:
         yield mev
     yield ENDEVENT, wrapper_model
 
 def dispatch_model_events(handler, events):
+    from .treeop import STARTEVENT, ENDEVENT
     for event, (model, attributes, context) in events:
         if event == STARTEVENT:
             handler.startModel(model, attributes, **context)

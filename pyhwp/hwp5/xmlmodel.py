@@ -1,5 +1,5 @@
 from itertools import chain
-from .binmodel import STARTEVENT, ENDEVENT
+from .treeop import STARTEVENT, ENDEVENT
 from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph, Text
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
@@ -319,7 +319,7 @@ def restructure_tablebody(event_prefixed_mac):
 
 
 def prefix_binmodels_with_event(context, models):
-    from .binmodel import prefix_event
+    from .treeop import prefix_event
     level_prefixed = ((model['record']['level'],
                        (model['type'], model['content'], context))
                       for model in models)
