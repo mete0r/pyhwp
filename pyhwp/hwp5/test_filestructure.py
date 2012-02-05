@@ -317,8 +317,10 @@ class TestHwp5DistDoc(TestBase):
 
     def test_getitem(self):
         from .filestructure import Hwp5DistDocFolderStorage
-        scripts = self.hwp5distdoc['Scripts']
-        self.assertTrue(isinstance(scripts, Hwp5DistDocFolderStorage))
+        self.assertTrue(isinstance(self.hwp5distdoc['Scripts'],
+                                   Hwp5DistDocFolderStorage))
+        self.assertTrue(isinstance(self.hwp5distdoc['ViewText'],
+                                   Hwp5DistDocFolderStorage))
 
 
 class TestCompressedStorage(TestBase):

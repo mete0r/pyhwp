@@ -457,7 +457,7 @@ class Hwp5DistDocFolderStorage(ItemsModifyingStorage):
 class Hwp5DistDoc(ItemsModifyingStorage):
 
     def resolve_conversion_for(self, name):
-        if name == 'Scripts':
+        if name in ('Scripts', 'ViewText'):
             return Hwp5DistDocFolderStorage
 
 
