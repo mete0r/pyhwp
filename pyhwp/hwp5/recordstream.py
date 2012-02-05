@@ -123,6 +123,10 @@ class RecordStream(filestructure.Hwp5Object):
     def records(self):
         return read_records(self.open(), '', '')
 
+    def record(self, idx):
+        ''' get the record at `idx' '''
+        return nth(self.records(), idx)
+
     def records_stream(self):
         return bin2json_stream(self.open())
 

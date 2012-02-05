@@ -24,6 +24,13 @@ class TestRecordStream(TestBase):
     def test_records(self):
         self.assertEquals(67, len(list(self.docinfo.records())))
 
+    def test_record(self):
+        record = self.docinfo.record(0)
+        self.assertEquals(0, record['seqno'])
+
+        record = self.docinfo.record(10)
+        self.assertEquals(10, record['seqno'])
+
 
 class TestHwp5File(TestBase):
 
