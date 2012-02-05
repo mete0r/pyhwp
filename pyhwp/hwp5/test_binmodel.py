@@ -590,19 +590,6 @@ class TestModelJson(TestBase):
         json_array = simplejson.loads(''.join(gen))
         self.assertEquals(128, len(json_array))
 
-    def test_recoder(self):
-        from .binmodel import recoder_to_json
-        import logging
-        context = dict(version=self.hwp5file_rec.header.version,
-                      logging=logging)
-        recode = recoder_to_json(context)
-
-        stream = recode(self.hwp5file_rec.docinfo.open())
-
-        import simplejson
-        jsonobject = simplejson.load(stream)
-        self.assertEquals(67, len(jsonobject))
-
 
 class TestModelStream(TestBase):
     @cached_property

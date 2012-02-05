@@ -1674,16 +1674,6 @@ def generate_models_json_array(models, *args, **kwargs):
               for model in models)
     return generate_json_array(tokens)
 
-def recoder_to_json(context, *args, **kwargs):
-    def recode(f):
-        from .recordstream import read_records
-        from .recordstream import generate_json_array
-        from .filestructure import GeneratorReader
-        records = read_records(f)
-        models = parse_models(context, records)
-        gen = generate_models_json_array(models, *args, **kwargs)
-        return GeneratorReader(gen)
-    return recode
 
 from . import recordstream
 class ModelStream(recordstream.RecordStream):
