@@ -4,7 +4,7 @@ from .utils import cached_property
 
 def example(filename):
     from .filestructure import open
-    return open('../../../samples/'+filename)
+    return open('fixtures/'+filename)
 
 def example_to_xml(filename):
     from .hwp5odt import generate_hwp5xml

@@ -32,6 +32,8 @@ setup(
                 ]
             },
 
+        test_suite='hwp5.tests.test_suite',
+
         classifiers=[
             'Development Status :: 2 - Pre-Alpha',
             'Intended Audience :: Developers',
