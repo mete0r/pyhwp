@@ -54,6 +54,44 @@ class TestRecordStream(TestBase):
         record = self.docinfo.record(10)
         self.assertEquals(10, record['seqno'])
 
+    def test_records_treegrouped(self):
+        groups = self.docinfo.records_treegrouped()
+        document_properties_treerecords = groups.next()
+        self.assertEquals(1, len(document_properties_treerecords))
+        idmappings_treerecords = groups.next()
+        self.assertEquals(66, len(idmappings_treerecords))
+
+        from hwp5.tagids import HWPTAG_PARA_HEADER
+        section = self.bodytext.section(0)
+        for group_idx, records in enumerate(section.records_treegrouped()):
+            #print group_idx, records[0]['seqno'], len(records)
+            self.assertEquals(HWPTAG_PARA_HEADER, records[0]['tagid'])
+
+    def test_records_treegrouped_as_iterable(self):
+        groups = self.docinfo.records_treegrouped(group_as_list=False)
+        group = groups.next()
+        self.assertFalse(isinstance(group, list))
+
+    def test_records_treegroped_as_list(self):
+        groups = self.docinfo.records_treegrouped()
+        group = groups.next()
+        self.assertTrue(isinstance(group, list))
+
+    def test_records_treegroup(self):
+        from hwp5.tagids import HWPTAG_ID_MAPPINGS
+        records = self.docinfo.records_treegroup(1)
+        self.assertEquals(66, len(records))
+        self.assertEquals(HWPTAG_ID_MAPPINGS, records[0]['tagid'])
+
+        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
+        records = self.docinfo.records_treegroup(0)
+        self.assertEquals(1, len(records))
+        self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, records[0]['tagid'])
+
+        records = self.bodytext.section(0).records_treegroup(5)
+        self.assertEquals(26, records[0]['seqno'])
+        self.assertEquals(37, len(records))
+
 
 class TestHwp5File(TestBase):
 

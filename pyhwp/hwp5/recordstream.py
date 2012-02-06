@@ -122,6 +122,37 @@ class RecordStream(filestructure.VersionSensitiveItem):
         records = self.records(**kwargs)
         return JsonObjects(records, record_to_json)
 
+    def records_treegrouped(self, group_as_list=True):
+        ''' group records by top-level trees and return iterable of the groups
+        '''
+        context = dict()
+        records = self.records()
+
+        try:
+            context['top'] = records.next()
+        except StopIteration:
+            return
+
+        def records_in_a_tree():
+            yield context.pop('top')
+
+            for record in records:
+                if record['level'] == 0:
+                    context['top'] = record
+                    return
+                yield record
+
+        while 'top' in context:
+            group = records_in_a_tree()
+            if group_as_list:
+                group = list(group)
+            yield group
+
+    def records_treegroup(self, n):
+        ''' returns list of records in `n'th top-level tree '''
+        groups = self.records_treegrouped()
+        return nth(groups, n)
+
     def other_formats(self):
         return {'.records': self.records_json().open}
 
