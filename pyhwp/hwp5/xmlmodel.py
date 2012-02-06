@@ -120,7 +120,6 @@ def line_segmented(chunks, ranged_linesegs):
 def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
     ''' lineseg/charshaped text chunks '''
     from .binmodel import ParaText, ParaLineSeg, ParaCharShape
-    from .binmodel import ControlChar
     stack = [] # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
         model, attributes, context = item
@@ -142,24 +141,8 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 lined_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
                 for lineseg, line in lined_chunks:
                     yield STARTEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
-                    for (startpos, endpos), (shape, none), chunk in line:
-                        if isinstance(chunk, basestring):
-                            textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
-                            yield STARTEVENT, textitem
-                            yield ENDEVENT, textitem
-                        elif isinstance(chunk, dict):
-                            ch = chr(chunk['code'])
-                            if 'chid' in chunk:
-                                chunk = ControlChar(ch, chunk['chid'],
-                                                    chunk['param'])
-                            else:
-                                chunk = ControlChar(ch)
-                            chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
-                            if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
-                                chunk_attributes['char'] = unichr(chunk.code)
-                            ctrlch = (ControlChar, chunk_attributes, paratext_context)
-                            yield STARTEVENT, ctrlch
-                            yield ENDEVENT, ctrlch
+                    for x in range_shaped_textchunk_events(paratext_context, line):
+                        yield x
                     yield ENDEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
                 yield ENDEVENT, (model, attributes, context)
                 stack.pop()
@@ -169,6 +152,28 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 stack[-1][model] = model, attributes, context
         else:
             yield event, (model, attributes, context)
+
+def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
+    from .binmodel import ControlChar
+    for (startpos, endpos), (shape, none), chunk in range_shaped_textchunks:
+        if isinstance(chunk, basestring):
+            textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
+            yield STARTEVENT, textitem
+            yield ENDEVENT, textitem
+        elif isinstance(chunk, dict):
+            ch = chr(chunk['code'])
+            if 'chid' in chunk:
+                chunk = ControlChar(ch, chunk['chid'],
+                                    chunk['param'])
+            else:
+                chunk = ControlChar(ch)
+            chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
+            if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
+                chunk_attributes['char'] = unichr(chunk.code)
+            ctrlch = (ControlChar, chunk_attributes, paratext_context)
+            yield STARTEVENT, ctrlch
+            yield ENDEVENT, ctrlch
+
 
 def wrap_section(sect_id, event_prefixed_mac):
     ''' wrap a section with SectionDef '''
