@@ -120,6 +120,7 @@ def line_segmented(chunks, ranged_linesegs):
 def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
     ''' lineseg/charshaped text chunks '''
     from .binmodel import ParaText, ParaLineSeg, ParaCharShape
+
     stack = [] # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
         model, attributes, context = item
@@ -133,17 +134,11 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 paralineseg = stack[-1].get(ParaLineSeg)
                 if paratext is None:
                     paratext = ParaText, dict(chunks=[((0,0),'')]), dict(context)
-                paratext_model, paratext_attributes, paratext_context = paratext
-                chunks = ((range, None, chunk) for range, chunk in paratext_attributes['chunks'])
-                charshapes = paracharshape[1]['charshapes']
-                shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
-                linesegs = ((lineseg['chpos'], lineseg) for lineseg in paralineseg[1]['linesegs'])
-                lined_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
-                for lineseg, line in lined_chunks:
-                    yield STARTEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
-                    for x in range_shaped_textchunk_events(paratext_context, line):
-                        yield x
-                    yield ENDEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
+                for x in merge_paragraph_text_charshape_lineseg(paratext,
+                                                                paracharshape,
+                                                                paralineseg):
+                    yield x
+
                 yield ENDEVENT, (model, attributes, context)
                 stack.pop()
         #elif model in (ParaText, ParaCharShape):
@@ -152,6 +147,29 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 stack[-1][model] = model, attributes, context
         else:
             yield event, (model, attributes, context)
+
+def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
+                                           paralineseg):
+    from .binmodel import ParaText, ParaLineSeg
+    LineSeg = ParaLineSeg.LineSeg
+
+    paratext_model, paratext_attributes, paratext_context = paratext
+
+    chunks = ((range, None, chunk) for range, chunk in paratext_attributes['chunks'])
+    charshapes = paracharshape[1]['charshapes']
+    shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
+
+    paralineseg_content = paralineseg[1]
+    paralineseg_context = paralineseg[2]
+    linesegs = ((lineseg['chpos'], lineseg)
+                for lineseg in paralineseg_content['linesegs'])
+    lined_shaped_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
+    for lineseg_content, shaped_chunks in lined_shaped_chunks:
+        lineseg = (LineSeg, lineseg_content, paralineseg_context)
+        chunk_events = range_shaped_textchunk_events(paratext_context,
+                                                     shaped_chunks)
+        for x in wrap_modelevents(lineseg, chunk_events):
+            yield x
 
 def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
     from .binmodel import ControlChar
