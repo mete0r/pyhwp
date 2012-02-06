@@ -1995,6 +1995,19 @@ class ModelStream(recordstream.RecordStream):
             pass
         return parse_models(kwargs, self.records(**kwargs))
 
+    def models_treegrouped(self, **kwargs):
+        ''' iterable of iterable of the models, grouped by the top-level tree
+        '''
+        kwargs.setdefault('version', self.version)
+        for records in self.records_treegrouped():
+            yield parse_models(kwargs, records)
+
+    def models_treegroup(self, n, **kwargs):
+        ''' return iterable of the models in the `n'th top-level tree '''
+        kwargs.setdefault('version', self.version)
+        records = self.records_treegroup(n)
+        return parse_models(kwargs, iter(records))
+
     def model(self, idx):
         from .recordstream import nth
         return nth(self.models(), idx)
