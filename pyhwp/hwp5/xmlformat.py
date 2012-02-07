@@ -4,7 +4,7 @@ from .filestructure import VERSION
 from .dataio import typed_struct_attributes, Struct, ArrayType, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT
 from .dataio import hexdump
-from .binmodel import typed_model_attributes, COLORREF, BinStorageId, Spaces, Text
+from .binmodel import typed_model_attributes, COLORREF, BinStorageId, Margin, Text
 from .xmlmodel import ModelEventHandler
 
 def xmlattrval(value):
@@ -22,7 +22,7 @@ def expanded_xmlattribute((name, (t, value))):
         yield name, hex(int(value))
         for k, v in t.dictvalue(t(value)).iteritems():
             yield k, xmlattrval(v)
-    elif t is Spaces:
+    elif t is Margin:
         for pos in ('left', 'right', 'top', 'bottom'):
             yield '-'.join([name, pos]), xmlattrval(value.get(pos))
     elif t is COLORREF:
@@ -64,7 +64,7 @@ def separate_plainvalues(logging, typed_attributes):
         name, item = named_item
         t, value = item
         try:
-            if t is Spaces:
+            if t is Margin:
                 p[name] = item
             elif isinstance(value, dict):
                 if not issubclass(t, Struct):

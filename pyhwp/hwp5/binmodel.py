@@ -527,7 +527,7 @@ class Control(AttributeDeterminedRecordModel):
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
 
 
-class Spaces(Struct):
+class Margin(Struct):
     def attributes(context):
         yield HWPUNIT16, 'left'
         yield HWPUNIT16, 'right'
@@ -575,7 +575,7 @@ class CommonControl(Control):
         yield HWPUNIT, 'height',
         yield INT16, 'z_order',
         yield INT16, 'unknown1',
-        yield Spaces, 'margin',
+        yield Margin, 'margin',
         yield UINT32, 'instance_id',
         if context['version'] > (5, 0, 0, 4):
             yield INT16, 'unknown2',
@@ -700,7 +700,7 @@ class PageBorderFill(BasicRecordModel):
         )
     def attributes(cls, context):
         yield cls.Flags, 'flags'
-        yield Spaces, 'margin'
+        yield Margin, 'margin'
         yield UINT16, 'borderfill_id'
     attributes = classmethod(attributes)
 
@@ -727,7 +727,7 @@ class TableCell(ListHeader):
         yield UINT16, 'rowspan',
         yield HWPUNIT, 'width',
         yield HWPUNIT, 'height',
-        yield Spaces, 'padding',
+        yield Margin, 'padding',
         yield UINT16, 'borderfill_id',
         yield HWPUNIT, 'unknown_width',
     attributes = staticmethod(attributes)
@@ -750,7 +750,7 @@ class TableBody(BasicRecordModel):
         nRows = yield UINT16, 'rows'
         yield UINT16, 'cols'
         yield HWPUNIT16, 'cellspacing'
-        yield Spaces, 'padding'
+        yield Margin, 'padding'
         yield ARRAY(UINT16, nRows), 'rowcols'
         yield UINT16, 'borderfill_id'
         if context['version'] > (5, 0, 0, 6):
@@ -1096,7 +1096,7 @@ class ShapeComponent(RecordModel):
 
 class TextboxParagraphList(ListHeader):
     def attributes(context):
-        yield Spaces, 'padding'
+        yield Margin, 'padding'
         yield HWPUNIT, 'maxwidth'
     attributes = staticmethod(attributes)
 
@@ -1235,7 +1235,7 @@ class ShapePicture(BasicRecordModel):
         yield BorderLine, 'border'
         yield ImageRect, 'rect',
         yield ImageClip, 'clip',
-        yield Spaces, 'padding',
+        yield Margin, 'padding',
         yield PictureInfo, 'picture',
         # DIFFSPEC
             # BYTE, 'transparency',

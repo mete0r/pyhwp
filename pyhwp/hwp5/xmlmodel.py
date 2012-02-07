@@ -5,7 +5,6 @@ from .treeop import tree_events, tree_events_multi
 from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph, Text
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
-from .binmodel import Spaces
 from . import binmodel
 
 def give_elements_unique_id(event_prefixed_mac):
