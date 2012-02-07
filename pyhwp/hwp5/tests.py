@@ -13,4 +13,14 @@ def test_suite():
     tests = [test_storage, test_filestructure, test_binmodel, test_dataio, test_xmlmodel, test_xmlformat, test_odtxsl]
     tests.append(test_recordstream)
     tests.append(test_treeop)
+
+    # localtest: a unittest module which resides at the local test site only;
+    # should not be checked in the source code repository
+    try:
+        import localtest
+    except ImportError:
+        pass
+    else:
+        tests[0:0] = [localtest]
+
     return TS((TL.loadTestsFromModule(m) for m in tests))
