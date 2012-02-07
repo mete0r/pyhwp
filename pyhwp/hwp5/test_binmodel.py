@@ -11,11 +11,6 @@ from . import test_recordstream
 
 def TestContext(**ctx):
     ''' test context '''
-    if not 'logging' in ctx:
-        import logging
-        logger = logging.getLogger('null')
-        logger.addHandler(logging.Handler())
-        ctx['logging'] = logger
     if not 'version' in ctx:
         ctx['version'] = (5, 0, 0, 0)
     return ctx
@@ -474,7 +469,6 @@ class TestControlChar(TestBase):
 
     def test_decode_bytes(self):
         from .binmodel import ControlChar
-        import logging
         paratext_record = self.hwp5file.bodytext.section(0).record(1)
         payload = paratext_record['payload']
         controlchar = ControlChar.decode_bytes(payload[0:16])
@@ -570,7 +564,6 @@ class TestModelJson(TestBase):
 
     def test_model_to_json_with_unparsed(self):
         from .binmodel import model_to_json
-        import logging
 
         record = dict(payload='\x00\x01\x02\x03')
         model = dict(type=RecordModel, content=[], record=record,

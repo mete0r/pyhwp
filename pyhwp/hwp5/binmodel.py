@@ -4,6 +4,9 @@ try:
 except:
     from StringIO import StringIO
 
+import logging
+logger = logging.getLogger(__name__)
+
 from .dataio import readn, read_struct_attributes, match_attribute_types,\
         StructType, Struct, Flags, Enum, BYTE, WORD, UINT32, UINT16, INT32, INT16, UINT8, INT8,\
         DOUBLE, ARRAY, N_ARRAY, SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR
@@ -1622,11 +1625,10 @@ def parse_pass1(context, records):
         tag = record['tagname']
         record_id = (record.get('filename', ''), record.get('streamid', ''),
                      record['seqno'])
-        context['logging'].debug('Record %s at %s:%s:%d', tag, *record_id)
+        logger.debug('Record %s at %s:%s:%d', tag, *record_id)
 
         context, model = parse_pass1_record(context, record)
-        context['logging'].debug('pass1: %s, %s', model['type'],
-                                 model['content'].keys())
+        logger.debug('pass1: %s, %s', model['type'], model['content'].keys())
         yield context, model
 
 def parse_pass2_record_with_parent(parent, (context, model)):
@@ -1651,7 +1653,7 @@ def parse_pass2_record_with_parent(parent, (context, model)):
                                                       (parent_context,
                                                        parent_model))
 
-    context['logging'].debug('pass2: %s, %s', model_type, model_content)
+    logger.debug('pass2: %s, %s', model_type, model_content)
 
     model['type'] = model_type
     model['content'] = model_content
@@ -1726,9 +1728,7 @@ class ModelStream(recordstream.RecordStream):
 
     @cached_property
     def model_parsing_context(self):
-        import logging
-        return dict(version=self.version,
-                    logging=logging)
+        return dict(version=self.version)
 
 
 class Sections(recordstream.Sections):
@@ -1745,12 +1745,10 @@ def create_context(file=None, **context):
     if file is not None:
         context['version'] = file.fileheader.version
     assert 'version' in context
-    assert 'logging' in context
     return context
 
 def main():
     import sys
-    import logging
     import itertools
     from ._scriptutils import OptionParser, args_pop, args_pop_range, open_or_exit
     from .filestructure import open
@@ -1775,8 +1773,7 @@ def main():
         version = file.fileheader.version
 
     from ._scriptutils import getlogger
-    logger = getlogger(options)
-    context = create_context(version=version, logging=logger)
+    context = create_context(version=version)
     records = read_records(bytestream, streamname, filename)
     models = parse_models(context, records)
 

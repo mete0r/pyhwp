@@ -340,7 +340,7 @@ def flatxml(hwpfile, logger, oformat):
     from .recordstream import read_records
     from .binmodel import parse_models
     from .binmodel import create_context
-    context = create_context(hwpfile, logging=logger)
+    context = create_context(hwpfile)
 
     class HwpDoc(object): pass
     class DocInfo(object): pass
@@ -412,7 +412,6 @@ class Hwp5File(binmodel.Hwp5File):
 
 def main():
     import sys
-    import logging
     import itertools
     from .filestructure import open
 
@@ -439,10 +438,6 @@ def main():
     oformat = formats[options.format](out)
 
     from ._scriptutils import getlogger, loghandler, logformat_xml
-    if options.format == 'xml':
-        logger = getlogger(options, loghandler(out, logformat_xml))
-    else:
-        logger = getlogger(options)
     flatxml(hwpfile, logger, oformat)
     
 

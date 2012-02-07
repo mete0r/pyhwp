@@ -7,6 +7,9 @@ from .dataio import hexdump
 from .binmodel import typed_model_attributes, COLORREF, BinStorageId, Margin, Text
 from .xmlmodel import ModelEventHandler
 
+import logging
+logger = logging.getLogger(__name__)
+
 def xmlattrval(value):
     if isinstance(value, basestring):
         return value
@@ -57,7 +60,7 @@ def xmlattributes_for_plainvalues(context, plainvalues):
     ntvs = chain(*(expanded_xmlattribute(ntv) for ntv in ntvs))
     return dict(xmlattr_uniqnames(xmlattr_dashednames(ntvs)))
 
-def separate_plainvalues(logging, typed_attributes):
+def separate_plainvalues(typed_attributes):
     d = []
     p = dict()
     for named_item in typed_attributes:
@@ -68,16 +71,16 @@ def separate_plainvalues(logging, typed_attributes):
                 p[name] = item
             elif isinstance(value, dict):
                 if not issubclass(t, Struct):
-                    logging.warning('%s is not a Struct', name)
+                    logger.warning('%s is not a Struct', name)
                 d.append( named_item )
             elif isinstance(t, ArrayType) and issubclass(t.itemtype, Struct):
                 d.append( named_item )
             else:
                 p[name] = item
         except Exception, e:
-            logging.error('%s', (name, t, value))
-            logging.error('%s', t.__dict__)
-            logging.exception(e)
+            logger.error('%s', (name, t, value))
+            logger.error('%s', t.__dict__)
+            logger.exception(e)
             raise e
     return d, p
 
@@ -89,8 +92,7 @@ def startelement(context, xmlgen, (model, attributes)):
     else:
         typed_attributes = typed_model_attributes(model, attributes, context)
 
-    import logging
-    typed_attributes, plainvalues = separate_plainvalues(context['logging'], typed_attributes)
+    typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
     yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)
     for _name, (_type, _value) in typed_attributes:
         if isinstance(_value, dict):
@@ -115,11 +117,11 @@ class XmlFormat(ModelEventHandler):
     def startDocument(self):
         self.xmlgen.startDocument()
     def startModel(self, model, attributes, **context):
-        context['logging'].debug('xmlmodel.XmlFormat: model: %s, %s', model.__name__, attributes)
-        context['logging'].debug('xmlmodel.XmlFormat: context: %s', context)
+        logger.debug('xmlmodel.XmlFormat: model: %s, %s', model.__name__, attributes)
+        logger.debug('xmlmodel.XmlFormat: context: %s', context)
         recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
         hwptag = context.get('hwptag', '')
-        context['logging'].info('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
+        logger.info('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
         if model is Text:
             text = attributes.pop('text')
         else:
@@ -132,7 +134,7 @@ class XmlFormat(ModelEventHandler):
 
         unparsed = context.get('unparsed', '')
         if len(unparsed) > 0:
-            context['logging'].debug('UNPARSED: %s', hexdump(unparsed, True))
+            logger.debug('UNPARSED: %s', hexdump(unparsed, True))
     def endModel(self, model):
         self.xmlgen.endElement(model.__name__)
     def endDocument(self):
