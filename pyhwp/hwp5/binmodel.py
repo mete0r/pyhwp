@@ -1202,14 +1202,40 @@ class BorderLine(Struct):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
+
+# HWPML에서의 이름 사용
+class ImageRect(Struct):
+    ''' 이미지 좌표 정보 '''
+
+    def attributes(context):
+        yield Coord, 'p0'
+        yield Coord, 'p1'
+        yield Coord, 'p2'
+        yield Coord, 'p3'
+    attributes=staticmethod(attributes)
+
+
+# HWPML에서의 이름 사용
+class ImageClip(Struct):
+    ''' 이미지 자르기 정보 '''
+
+    def attributes(context):
+        yield SHWPUNIT, 'left',
+        yield SHWPUNIT, 'top',
+        yield SHWPUNIT, 'right',
+        yield SHWPUNIT, 'bottom',
+    attributes=staticmethod(attributes)
+
+
 class ShapePicture(BasicRecordModel):
     ''' 4.2.9.4. 그림 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_PICTURE
+
     def attributes(context):
         yield BorderLine, 'border'
-        yield ARRAY(ARRAY(INT32,2), 4), 'rect',
-        yield ARRAY(INT32, 4), 'crop',
-        yield ARRAY(UINT16, 4), 'padding',
+        yield ImageRect, 'rect',
+        yield ImageClip, 'clip',
+        yield Spaces, 'padding',
         yield PictureInfo, 'picture',
         # DIFFSPEC
             # BYTE, 'transparency',
