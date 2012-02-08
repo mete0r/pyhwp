@@ -1099,31 +1099,8 @@ class GShapeObjectControl(CommonControl):
 
 class Matrix(tuple):
     def read(f, context):
-        return ARRAY(ARRAY(DOUBLE, 3), 2).read(f, context) + ((0.0, 0.0, 1.0),)
+        return ARRAY(DOUBLE, 6).read(f, context)
     read = staticmethod(read)
-
-    def applyTo(self, (x, y)):
-        ret = []
-        for row in self:
-            ret.append(row[0] * x + row[1] * y + row[2] * 1)
-        return (ret[0], ret[1])
-
-    def scale(self, (w, h)):
-        ret = []
-        for row in self:
-            ret.append(row[0] * w + row[1] * h + row[2] * 0)
-        return (ret[0], ret[1])
-
-    def product(self, mat):
-        ret = []
-        rs = [0, 1, 2]
-        cs = [0, 1, 2]
-        for r in rs:
-            row = []
-            for c in cs:
-                row.append( self[r][c] * mat[c][r])
-            ret.append(row)
-        return Matrix(ret)
 
 
 class ScaleRotationMatrix(Struct):
