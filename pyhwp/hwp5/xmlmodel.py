@@ -7,6 +7,9 @@ from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
 from . import binmodel
 
+import logging
+logger = logging.getLogger(__name__)
+
 def give_elements_unique_id(event_prefixed_mac):
     paragraph_id = 0
     table_id = 0
