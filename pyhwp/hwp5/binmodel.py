@@ -212,9 +212,7 @@ class Border(Struct):
 
 
 class Fill(Struct):
-    def attributes(context):
-        raise Exception('Not implemented')
-    attributes = staticmethod(attributes)
+    pass
 
 
 class FillNone(Fill):
