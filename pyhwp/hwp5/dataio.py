@@ -338,6 +338,31 @@ class StructType(type):
 class Struct(object):
     __metaclass__ = StructType
 
+def struct_member_types_intern(cls, values, context):
+    ''' StructType의 멤버 타입들을 반환.
+    '''
+    attributes = cls.attributes(context)
+    try:
+        typ, name = attributes.next()
+        while True:
+            yield name, typ
+            value = values[name]
+            typ, name = attributes.send(value)
+    except StopIteration:
+        pass
+
+def struct_member_types(struct_type, member_values, context):
+    ''' StructType의 멤버 타입들을 반환. (상속 포함)
+    '''
+    import inspect
+    mro = list(inspect.getmro(struct_type))
+    mro.reverse()
+    for cls in mro:
+        if hasattr(cls, 'attributes'):
+            for x in struct_member_types_intern(cls, member_values,
+                                                context):
+                yield x # (name, type)
+
 def dumpbytes(data, crust=False):
     offsbase = 0
     if crust:

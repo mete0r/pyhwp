@@ -53,6 +53,98 @@ class TestStructType(TestCase):
         self.assertEquals('bar', Foo.bar.__name__)
         self.assertEquals('baz', Foo.baz.__name__)
 
+
+class TestStructMemberTypes(TestCase):
+
+    def test_struct_member_types_intern(self):
+        from hwp5.dataio import StructType
+        from hwp5.dataio import struct_member_types_intern
+        from hwp5.dataio import UINT8, UINT16, UINT32
+
+        class A(object):
+            __metaclass__ = StructType
+            @classmethod
+            def attributes(cls, context):
+                yield UINT8, 'uint8'
+                yield UINT16, 'uint16'
+                yield UINT32, 'uint32'
+
+        a = dict(uint8=8, uint16=16, uint32=32)
+        context = dict()
+        result = list(struct_member_types_intern(A, a, context))
+        self.assertEquals([('uint8', UINT8),
+                           ('uint16', UINT16),
+                           ('uint32', UINT32)], result)
+
+    def test_struct_member_types_intern_send_value(self):
+        from hwp5.dataio import StructType
+        from hwp5.dataio import struct_member_types_intern
+        from hwp5.dataio import UINT8, UINT16, UINT32
+
+        class A(object):
+            __metaclass__ = StructType
+            @classmethod
+            def attributes(cls, context):
+                yield UINT8, 'uint8'
+                yield UINT16, 'uint16'
+                value = yield UINT32, 'uint32'
+                if value == 32:
+                    yield UINT32, 'extra'
+
+        a = dict(uint8=8, uint16=16, uint32=32, extra=666)
+        context = dict()
+        result = list(struct_member_types_intern(A, a, context))
+        self.assertEquals([('uint8', UINT8),
+                           ('uint16', UINT16),
+                           ('uint32', UINT32),
+                           ('extra', UINT32)], result)
+
+    def test_struct_member_types_without_attributes(self):
+        from hwp5.dataio import StructType
+        from hwp5.dataio import struct_member_types
+        from hwp5.dataio import UINT8, UINT16, UINT32
+
+        class A(object):
+            __metaclass__ = StructType
+
+        a = dict()
+        context = dict()
+        result = list(struct_member_types(A, a, context))
+        self.assertEquals([], result)
+
+    def test_struct_member_types_inheritance(self):
+        from hwp5.dataio import StructType
+        from hwp5.dataio import struct_member_types
+        from hwp5.dataio import UINT8, UINT16, UINT32
+        from hwp5.dataio import INT8, INT16, INT32
+
+        class A(object):
+            __metaclass__ = StructType
+            @classmethod
+            def attributes(cls, context):
+                yield UINT8, 'uint8'
+                yield UINT16, 'uint16'
+                yield UINT32, 'uint32'
+
+        class B(A):
+            @classmethod
+            def attributes(cls, context):
+                yield INT8, 'int8'
+                yield INT16, 'int16'
+                yield INT32, 'int32'
+
+        b = dict(uint8=8, uint16=16, uint32=32,
+                 int8=-1, int16=-16, int32=-32)
+        context = dict()
+        result = list(struct_member_types(B, b, context))
+        self.assertEquals([('uint8', UINT8),
+                           ('uint16', UINT16),
+                           ('uint32', UINT32),
+                           ('int8', INT8),
+                           ('int16', INT16),
+                           ('int32', INT32)], result)
+
+
 class TestEnumType(TestCase):
     def test_enum(self):
         from .dataio import EnumType
