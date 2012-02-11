@@ -14,6 +14,9 @@ def test_suite():
     tests.append(test_recordstream)
     tests.append(test_treeop)
 
+    import test_externprogs
+    tests[0:0] = [test_externprogs]
+
     # localtest: a unittest module which resides at the local test site only;
     # should not be checked in the source code repository
     try:
