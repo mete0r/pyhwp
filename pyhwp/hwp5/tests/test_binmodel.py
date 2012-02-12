@@ -852,16 +852,6 @@ class TestModelStream(TestBase):
             self.assertEquals(0, leader['level'])
             #print idx, leader['record']['seqno'], len(paragraph_models)
 
-    def test_models_treegroup(self):
-        from hwp5.binmodel import Paragraph
-        section = self.bodytext.section(0)
-        models = list(section.models_treegroup(10))
-        leader = models[0]
-        self.assertEquals(Paragraph, leader['type'])
-        self.assertEquals(0, leader['level'])
-        self.assertEquals(106, leader['seqno'])
-        self.assertEquals(7, len(models))
-
     def test_model(self):
         model = self.docinfo.model(0)
         self.assertEquals(0, model['seqno'])
