@@ -338,13 +338,15 @@ class TestODTXSL(TestCase):
         #assert u'바탕' == xpath1(charshape, '@style:font-name-complex') # TODO
 
         charshape = odt.automatic_style_text_properties(FONTFACE, 1, 3)
-        print xpath1(charshape, '@style:font-name')
+        # TODO
+        #print xpath1(charshape, '@style:font-name')
         #assert u'Courier New' == xpath1(charshape, '@style:font-name')
         #assert u'바탕' == xpath1(charshape, '@style:font-name-asian')
         #assert u'바탕' == xpath1(charshape, '@style:font-name-complex') # TODO
 
         charshape = odt.automatic_style_text_properties(FONTFACE, 1, 4)
-        print xpath1(charshape, '@style:font-name-complex')
+        # TODO
+        #print xpath1(charshape, '@style:font-name-complex')
         #assert u'바탕' == xpath1(charshape, '@style:font-name')
         #assert u'바탕' == xpath1(charshape, '@style:font-name-asian')
         #assert u'Lucida Sans Unicode' == xpath1(charshape, '@style:font-name-complex')
