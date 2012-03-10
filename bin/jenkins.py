@@ -29,7 +29,7 @@ def buildout():
 
 def test():
     print 'running bin/test'
-    system('bin/test')
+    system('bin/test-coverage')
 
 def pylint():
     print 'running pylint'

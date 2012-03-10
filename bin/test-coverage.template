@@ -1,0 +1,17 @@
+#!/bin/sh
+# Remove old results
+${buildout:directory}/bin/coverage erase
+
+# Collect test coverage results for all packages
+# Runs a code coverage analysis on top of the "bin/test" script for
+# all packages. The data will be collected in a ".coverage" output file
+# in the buildout directory.
+
+${buildout:directory}/bin/coverage run -p --source=hwp5 ${buildout:directory}/bin/test
+
+# Combine all package analysis
+${buildout:directory}/bin/coverage combine
+# Generates a "coverage.xml" file that Jenkins can read and process from the
+# ".coverage" file that the coverage report created.
+${buildout:directory}/bin/coverage xml -i -o ${buildout:directory}/coverage.xml
+
