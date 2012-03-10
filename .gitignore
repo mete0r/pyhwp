@@ -1,0 +1,14 @@
+bin
+eggs
+parts
+develop-eggs
+.installed.cfg
+*.pyc
+pylint.out
+pyhwp/build
+pyhwp/dist
+pyhwp/pyhwp.egg-info
+pyhwp/localtest.py
+oxt/pyhwp.egg.record
+oxt/pyhwp.oxt
+oxt/pythonpath
