@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>package hwp5 &mdash; pyhwp 0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyhwp 0.0 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to pyhwp’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyhwp’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pyhwp 0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="package-hwp5">
+<h1>package hwp5<a class="headerlink" href="#package-hwp5" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-hwp5.filestructure">
+<span id="module-hwp5-filestructure"></span><h2>module <a class="reference internal" href="#module-hwp5.filestructure" title="hwp5.filestructure"><tt class="xref py py-mod docutils literal"><span class="pre">hwp5.filestructure</span></tt></a><a class="headerlink" href="#module-hwp5.filestructure" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hwp5.filestructure.CompressedStorage">
+<em class="property">class </em><tt class="descclassname">hwp5.filestructure.</tt><tt class="descname">CompressedStorage</tt><big>(</big><em>stg</em><big>)</big><a class="headerlink" href="#hwp5.filestructure.CompressedStorage" title="Permalink to this definition">¶</a></dt>
+<dd><p>uncompress streams in the underlying storage</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.filestructure.GeneratorReader">
+<em class="property">class </em><tt class="descclassname">hwp5.filestructure.</tt><tt class="descname">GeneratorReader</tt><big>(</big><em>gen</em><big>)</big><a class="headerlink" href="#hwp5.filestructure.GeneratorReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert a string generator into file-like reader</p>
+<dl class="docutils">
+<dt>def gen():</dt>
+<dd>yield &#8216;hello&#8217;
+yield &#8216;world&#8217;</dd>
+</dl>
+<p>f = GeneratorReader(gen())
+assert &#8216;hell&#8217; == f.read(4)
+assert &#8216;oworld&#8217; == f.read()</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.filestructure.Hwp5Compression">
+<em class="property">class </em><tt class="descclassname">hwp5.filestructure.</tt><tt class="descname">Hwp5Compression</tt><big>(</big><em>stg</em><big>)</big><a class="headerlink" href="#hwp5.filestructure.Hwp5Compression" title="Permalink to this definition">¶</a></dt>
+<dd><p>handle compressed streams in HWPv5 files</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.filestructure.Hwp5File">
+<em class="property">class </em><tt class="descclassname">hwp5.filestructure.</tt><tt class="descname">Hwp5File</tt><big>(</big><em>stg</em><big>)</big><a class="headerlink" href="#hwp5.filestructure.Hwp5File" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents HWPv5 File</p>
+<p>Hwp5File(stg)</p>
+<p>stg: an instance of Storage</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.filestructure.uncompress">
+<tt class="descclassname">hwp5.filestructure.</tt><tt class="descname">uncompress</tt><big>(</big><em>stream</em><big>)</big><a class="headerlink" href="#hwp5.filestructure.uncompress" title="Permalink to this definition">¶</a></dt>
+<dd><p>uncompress inputstream</p>
+<p>stream: a file-like readable
+returns a file-like readable</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-hwp5.recordstream">
+<span id="module-hwp5-recordstream"></span><h2>module <a class="reference internal" href="#module-hwp5.recordstream" title="hwp5.recordstream"><tt class="xref py py-mod docutils literal"><span class="pre">hwp5.recordstream</span></tt></a><a class="headerlink" href="#module-hwp5.recordstream" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hwp5.recordstream.Hwp5File">
+<em class="property">class </em><tt class="descclassname">hwp5.recordstream.</tt><tt class="descname">Hwp5File</tt><big>(</big><em>stg</em><big>)</big><a class="headerlink" href="#hwp5.recordstream.Hwp5File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hwp5File for &#8216;rec&#8217; layer</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.recordstream.bin2json_stream">
+<tt class="descclassname">hwp5.recordstream.</tt><tt class="descname">bin2json_stream</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#hwp5.recordstream.bin2json_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert binary record stream into json stream</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.recordstream.generate_json_array">
+<tt class="descclassname">hwp5.recordstream.</tt><tt class="descname">generate_json_array</tt><big>(</big><em>tokens</em><big>)</big><a class="headerlink" href="#hwp5.recordstream.generate_json_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate json array with given tokens</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.recordstream.generate_simplejson_dumps">
+<tt class="descclassname">hwp5.recordstream.</tt><tt class="descname">generate_simplejson_dumps</tt><big>(</big><em>records</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#hwp5.recordstream.generate_simplejson_dumps" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate simplejson.dumps()ed strings for each records</p>
+<p>records: record iterable
+args, kwargs: options for simplejson.dumps</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.recordstream.record_to_json">
+<tt class="descclassname">hwp5.recordstream.</tt><tt class="descname">record_to_json</tt><big>(</big><em>record</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#hwp5.recordstream.record_to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert a record to json</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-hwp5.binmodel">
+<span id="module-hwp5-binmodel"></span><h2>module <a class="reference internal" href="#module-hwp5.binmodel" title="hwp5.binmodel"><tt class="xref py py-mod docutils literal"><span class="pre">hwp5.binmodel</span></tt></a><a class="headerlink" href="#module-hwp5.binmodel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hwp5.binmodel.AutoNumbering">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">AutoNumbering</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.AutoNumbering" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.5. 자동 번호</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.BookmarkControl">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">BookmarkControl</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.BookmarkControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.11. 책갈피</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.BorderLine">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">BorderLine</tt><a class="headerlink" href="#hwp5.binmodel.BorderLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>표 81. 테두리 선 정보</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.ColumnsDef">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">ColumnsDef</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.ColumnsDef" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.2. 단 정의</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.Dutmal">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">Dutmal</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.Dutmal" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.13. 덧말</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.EndNote">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">EndNote</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.EndNote" title="Permalink to this definition">¶</a></dt>
+<dd><p>미주</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.Field">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">Field</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.Field" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.15 필드 시작</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.FillColorPattern">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">FillColorPattern</tt><a class="headerlink" href="#hwp5.binmodel.FillColorPattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>표 23 채우기 정보</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.FootNote">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">FootNote</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.FootNote" title="Permalink to this definition">¶</a></dt>
+<dd><p>각주</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.Footer">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">Footer</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.Footer" title="Permalink to this definition">¶</a></dt>
+<dd><p>꼬리말</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.Header">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">Header</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.Header" title="Permalink to this definition">¶</a></dt>
+<dd><p>머리말</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.HeaderFooter">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">HeaderFooter</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.HeaderFooter" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.3. 머리말/꼬리말</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.HiddenComment">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">HiddenComment</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.HiddenComment" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.14 숨은 설명</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.ImageClip">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">ImageClip</tt><a class="headerlink" href="#hwp5.binmodel.ImageClip" title="Permalink to this definition">¶</a></dt>
+<dd><p>이미지 자르기 정보</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.ImageRect">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">ImageRect</tt><a class="headerlink" href="#hwp5.binmodel.ImageRect" title="Permalink to this definition">¶</a></dt>
+<dd><p>이미지 좌표 정보</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.IndexMarker">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">IndexMarker</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.IndexMarker" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.10. 찾아보기 표식</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.NewNumbering">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">NewNumbering</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.NewNumbering" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.6. 새 번호 지정</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.Note">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">Note</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.Note" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.4 미주/각주</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.PageHide">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">PageHide</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.PageHide" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.7 감추기</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.PageNumberPosition">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">PageNumberPosition</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.PageNumberPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.9. 쪽 번호 위치</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.PageOddEven">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">PageOddEven</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.PageOddEven" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.8 홀/짝수 조정</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.ParaShape">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">ParaShape</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.ParaShape" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.1.10. 문단 모양</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.SectionDef">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">SectionDef</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.SectionDef" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.1. 구역 정의</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.ShapeComponent">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">ShapeComponent</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.ShapeComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.9.2 그리기 개체</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.ShapePicture">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">ShapePicture</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.ShapePicture" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.9.4. 그림 개체</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hwp5.binmodel.TCPSControl">
+<em class="property">class </em><tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">TCPSControl</tt><big>(</big><em>context</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.TCPSControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.2.10.12. 글자 겹침</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.binmodel.init_record_parsing_context">
+<tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">init_record_parsing_context</tt><big>(</big><em>base</em>, <em>record</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.init_record_parsing_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a context to parse the given record</p>
+<p>the initializations includes followings:
+- context = dict(base)
+- context[&#8216;record&#8217;] = record
+- context[&#8216;stream&#8217;] = record payload stream</p>
+<p><a href="#id1"><span class="problematic" id="id2">`</span></a>base&#8217;: the base context, which will be shallow-copied into the new one
+<a href="#id3"><span class="problematic" id="id4">`</span></a>record&#8217;: to be parsed
+returns new context</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.binmodel.model_to_json">
+<tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">model_to_json</tt><big>(</big><em>model</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.model_to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert a model to json</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hwp5.binmodel.parse_pass1_record">
+<tt class="descclassname">hwp5.binmodel.</tt><tt class="descname">parse_pass1_record</tt><big>(</big><em>context</em>, <em>record</em><big>)</big><a class="headerlink" href="#hwp5.binmodel.parse_pass1_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>HWPTAG로 모델 결정 후 기본 파싱</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">package hwp5</a><ul>
+<li><a class="reference internal" href="#module-hwp5.filestructure">module <tt class="docutils literal"><span class="pre">hwp5.filestructure</span></tt></a></li>
+<li><a class="reference internal" href="#module-hwp5.recordstream">module <tt class="docutils literal"><span class="pre">hwp5.recordstream</span></tt></a></li>
+<li><a class="reference internal" href="#module-hwp5.binmodel">module <tt class="docutils literal"><span class="pre">hwp5.binmodel</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to pyhwp&#8217;s documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/hwp5.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyhwp’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">pyhwp 0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, mete0r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
