@@ -17,6 +17,7 @@ setup(
         package_data = dict(hwp5=['xsl/*.xsl']),
 
         install_requires=['OleFileIO_PL >=0.20'],
+        extras_require=dict(test=['simplejson', 'lxml']),
 
         entry_points = {
             'console_scripts': [
