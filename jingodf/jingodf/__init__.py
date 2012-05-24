@@ -29,11 +29,61 @@ class Jing(object):
         p.wait()
         yield p.returncode
 
-    def validate(self, options, rngfile, xmlfile):
-        args = options + [rngfile, xmlfile]
-        return self(*args)
+    def validate(self, rngfile, xmlfile):
+        return self('-i', rngfile, xmlfile)
 
-class JingODF(Jing):
+
+class XmlLint(object):
+    def __init__(self, executable='xmllint'):
+        ''' External xmllint executable
+
+        :param executable: path to xmllint executable. Default: xmllint
+        '''
+        self.executable = executable
+
+    def __call__(self, *args, **kwargs):
+        args = list(args)
+
+        import subprocess
+        if isinstance(self.executable, basestring):
+            args[0:0] = [self.executable]
+        else:
+            args[0:0] = self.executable
+
+        p = subprocess.Popen(args, stderr=subprocess.PIPE, **kwargs)
+        import re
+        regex = re.compile('(.*)Relax-NG validity error : (.*)')
+        for line in p.stderr:
+            if line.endswith(' validates\n'):
+                continue
+            elif line.endswith(' fails to validate\n'):
+                continue
+            line = line.strip()
+            m = regex.match(line)
+            if m:
+                location = m.group(1)
+                msg = m.group(2)
+                if location:
+                    filename, line_no, element, _ = line.split(':', 3)
+                    element = element.strip()
+                level = 'error'
+                msg = msg.strip()
+                yield dict(filename=filename,
+                           line=line_no, column=element,
+                           level=level, msg=msg)
+            else:
+                print '*', line
+        p.wait()
+        yield p.returncode
+
+    def validate(self, rngfile, xmlfile):
+        return self('--noout', '--relaxng', rngfile, xmlfile)
+
+
+class ODFValidator(object):
+    def __init__(self, engine):
+        self.engine = engine
+
     def validate_manifest_xml(self, version, xmlfile):
         rng_files = {
             '1.0': 'OpenDocument-manifest-schema-v1.0-os.rng',
@@ -45,7 +95,7 @@ class JingODF(Jing):
         rng_filename = rng_files[version]
         rng_file = pkg_resources.resource_filename('jingodf',
                                                    'schema/'+rng_filename)
-        return self.validate(['-i'], rng_file, xmlfile)
+        return self.engine.validate(rng_file, xmlfile)
 
     def validate_opendocument_xml(self, version, xmlfile):
         rng_files = {
@@ -57,7 +107,7 @@ class JingODF(Jing):
         rng_filename = rng_files[version]
         rng_file = pkg_resources.resource_filename('jingodf',
                                                    'schema/'+rng_filename)
-        return self.validate(['-i'], rng_file, xmlfile)
+        return self.engine.validate(rng_file, xmlfile)
 
     def validate_odf(self, version, odffile):
 
@@ -102,9 +152,11 @@ class JingODF(Jing):
             zipfile.close()
 
 def main():
-    jingodf = JingODF()
+    engine = Jing()
+    #engine = XmlLint()
+    odf_validator = ODFValidator(engine)
     import sys
-    results = jingodf.validate_odf('1.2', sys.argv[1])
+    results = odf_validator.validate_odf('1.2', sys.argv[1])
 
     def print_result(result):
         if isinstance(result, dict):
