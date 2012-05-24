@@ -87,7 +87,7 @@
               <xsl:attribute name="style:family">paragraph</xsl:attribute>
               <xsl:attribute name="style:class">text</xsl:attribute>
               <xsl:attribute name="style:name">Paragraph-<xsl:value-of select="@paragraph-id + 1" /></xsl:attribute>
-              <xsl:attribute name="style:parent-style-name"><xsl:value-of select="$style/@local-name" /></xsl:attribute>
+              <xsl:attribute name="style:parent-style-name"><xsl:value-of select="translate($style/@local-name, ' ', '_')" /></xsl:attribute>
               <xsl:if test="@new-section = '1'">
                 <xsl:attribute name="style:master-page-name">MasterPage-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
               </xsl:if>
