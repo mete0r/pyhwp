@@ -14,3 +14,4 @@ oxt/pyhwp.oxt
 oxt/pythonpath
 .coverage*
 coverage.xml
+*.egg-info
