@@ -151,12 +151,19 @@ class ODFValidator(object):
         finally:
             zipfile.close()
 
-def main():
-    engine = Jing()
-    #engine = XmlLint()
+from opster import command
+
+@command()
+def validate(odf_file,
+             odf_version=('', '1.2', 'OpenDocument specification version'),
+             engine=('', 'jing', 'Relax-NG Validator engine')):
+    ''' Validate an ODF file against the OpenDocument Relax-NG Schema. '''
+
+    engines = dict(jing=Jing, xmllint=XmlLint)
+    engine_class = engines.get(engine, Jing)
+    engine = engine_class()
     odf_validator = ODFValidator(engine)
-    import sys
-    results = odf_validator.validate_odf('1.2', sys.argv[1])
+    results = odf_validator.validate_odf(odf_version, odf_file)
 
     def print_result(result):
         if isinstance(result, dict):
@@ -164,3 +171,6 @@ def main():
 
     for result in results:
         print_result(result)
+
+def main():
+    validate.command()
