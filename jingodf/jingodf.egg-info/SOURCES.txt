@@ -1,7 +1,0 @@
-setup.py
-jingodf/__init__.py
-jingodf.egg-info/PKG-INFO
-jingodf.egg-info/SOURCES.txt
-jingodf.egg-info/dependency_links.txt
-jingodf.egg-info/entry_points.txt
-jingodf.egg-info/top_level.txt
