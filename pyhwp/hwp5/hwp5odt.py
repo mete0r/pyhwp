@@ -116,7 +116,7 @@ def manifest_xml(f, files):
         startElement('file-entry', attrs)
         endElement('file-entry')
 
-    startElement( 'manifest', dict() )
+    startElement( 'manifest', dict(version='1.2') )
     file_entry('/', 'application/vnd.oasis.opendocument.text', version='1.2')
     for e in files:
         e = dict(e)
