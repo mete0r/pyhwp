@@ -370,6 +370,7 @@
     <xsl:element name="draw:image">
         <xsl:choose>
             <xsl:when test="$bindata/@storage = 'embedding'">
+		<xsl:attribute name="xlink:type">simple</xsl:attribute>
                 <xsl:attribute name="xlink:href"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/@storage-id"/>.<xsl:value-of select="$bindata/@ext"/></xsl:attribute>
             </xsl:when>
         </xsl:choose>
