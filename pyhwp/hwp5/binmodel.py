@@ -930,7 +930,7 @@ class ControlChar(object):
                     continue
                 char = unichr(ord(data[i]))
                 size = cls.kinds[char].size
-                return i, i+size*2
+                return i, i + (size * 2)
         data_len = len(data)
         return data_len, data_len
     find = classmethod(find)
@@ -962,7 +962,7 @@ class ControlChar(object):
 
     def get_name_by_code(cls, code):
         ch = unichr(code)
-        return cls.names.get(ch, 'CTLCHR%02x'%code)
+        return cls.names.get(ch, 'CTLCHR%02x' % code)
     get_name_by_code = classmethod(get_name_by_code)
 
 ControlChar._populate()
@@ -988,9 +988,11 @@ class ParaText(RecordModel):
         while idx < size:
             ctrlpos, ctrlpos_end = ControlChar.find(bytes, idx)
             if idx < ctrlpos:
-                yield (idx/2, ctrlpos/2), bytes[idx:ctrlpos].decode('utf-16le', 'replace')
+                text = bytes[idx:ctrlpos].decode('utf-16le', 'replace')
+                yield (idx / 2, ctrlpos / 2), text
             if ctrlpos < ctrlpos_end:
-                yield (ctrlpos/2, ctrlpos_end/2), ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
+                cch = ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
+                yield (ctrlpos / 2, ctrlpos_end / 2), cch
             idx = ctrlpos_end
     parseBytes = staticmethod(parseBytes)
 
@@ -1142,7 +1144,9 @@ class ShapeComponent(RecordModel):
         stream = context['stream']
 
         if parent_model['type'] is GShapeObjectControl:
-            attributes['chid0'] = CHID.read(stream) # GSO-child ShapeComponent specific: it may be a GSO model's attribute, e.g. 'child_chid'
+            # GSO-child ShapeComponent specific:
+            # it may be a GSO model's attribute, e.g. 'child_chid'
+            attributes['chid0'] = CHID.read(stream)
         return parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
