@@ -1,0 +1,3 @@
+#!/bin/sh
+cd ${buildout:directory}/pyhwp
+python setup.py sdist upload --sign
