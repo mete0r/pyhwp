@@ -1,34 +1,45 @@
 # -*- coding: utf-8 -*-
 import os.path
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+import codecs
 import zlib
 from OleFileIO_PL import OleFileIO, isOleFile
-
 from .utils import cached_property
-from .dataio import INT32, UINT32, UINT16, Flags, Struct, ARRAY, N_ARRAY
-from . import dataio
-from .storage import Storage, StorageWrapper, iter_storage_leafs, unpack
+from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
+from .storage import Storage, StorageWrapper, unpack
 from .storage import ItemsModifyingStorage
+
+
+def importStringIO():
+    try:
+        from cStringIO import StringIO
+        return StringIO
+    except ImportError:
+        from StringIO import StringIO
+        return StringIO
+StringIO = importStringIO()
+
 
 class BYTES(type):
     def __new__(mcs, size):
-        return type.__new__(mcs, 'BYTES%d'%size, (str,), dict(size=size))
+        return type.__new__(mcs, 'BYTES%d' % size, (str,), dict(size=size))
+
     def __init__(self, size):
         return type.__init__(self, None, None, None)
+
     def read(self, f, context=None):
         if self.size < 0:
             return f.read()
         else:
             return f.read(self.size)
 
+
 class VERSION(tuple):
     def read(cls, f, context=None):
         version = f.read(4)
-        return (ord(version[3]), ord(version[2]), ord(version[1]), ord(version[0]))
+        return (ord(version[3]), ord(version[2]),
+                ord(version[1]), ord(version[0]))
     read = classmethod(read)
+
 
 class FileHeader(Struct):
     Flags = Flags(UINT32,
@@ -45,6 +56,7 @@ class FileHeader(Struct):
         10, 'cert_drm',
         11, 'ccl',
         )
+
     def attributes(cls, context):
         yield BYTES(32), 'signature'
         yield VERSION, 'version'
@@ -52,13 +64,14 @@ class FileHeader(Struct):
         yield BYTES(216), 'reserved'
     attributes = classmethod(attributes)
 
+
 class TextField(unicode):
     def read(cls, f, context=None):
         unk0 = UINT32.read(f, None) # 1f
         assert unk0 == 0x1f
         size = UINT32.read(f, None)
         if size > 0:
-            data = f.read(2*(size))
+            data = f.read(2 * size)
         else:
             data = ''
         if size & 1:
@@ -66,12 +79,13 @@ class TextField(unicode):
         return data.decode('utf-16le', 'replace')
     read = classmethod(read)
 
+
 class SummaryInfo(Struct):
     def attributes(cls, context):
         if context['version'] < (5, 0, 1, 0):
-            yield ARRAY(UINT32, 0230/4), '_unk0'
+            yield ARRAY(UINT32, 0230 / 4), '_unk0'
         else:
-            yield ARRAY(UINT32, 0250/4), '_unk0'
+            yield ARRAY(UINT32, 0250 / 4), '_unk0'
         yield TextField, 'title'
         yield TextField, 'subject'
         yield TextField, 'author'
@@ -93,6 +107,7 @@ def recode(backend_stream, backend_encoding, frontend_encoding, errors='strict')
     wr = codecs.getwriter(backend_encoding)
     return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
 
+
 def recoder(backend_encoding, frontend_encoding, errors='strict'):
     def recode(backend_stream):
         import codecs
@@ -110,21 +125,27 @@ def is_hwp5file(filename):
     olefile = OleFileIO(filename)
     return olefile.exists('FileHeader')
 
+
 def open_fileheader(olefile):
     return olefile.openstream('FileHeader')
+
 
 def decode_fileheader(f):
     attributes = FileHeader.read(f)
     fileheader = FileHeader()
-    fileheader.__dict__.update((name, type(attributes.get(name))) for type, name in FileHeader.attributes(dict()))
+    fileheader.__dict__.update((name, type(attributes.get(name)))
+                               for type, name in FileHeader.attributes(dict()))
     return fileheader
+
 
 def get_fileheader(olefile):
     f = open_fileheader(olefile)
     return decode_fileheader(f)
 
+
 def open_summaryinfo(olefile):
     return olefile.openstream('\005HwpSummaryInformation')
+
 
 def open_previewtext(olefile, charset=None):
     f = olefile.openstream('PrvText')
@@ -132,8 +153,10 @@ def open_previewtext(olefile, charset=None):
         f = recode(f, 'utf-16le', charset)
     return f
 
+
 def open_previewimage(olefile):
     return olefile.openstream('PrvImage')
+
 
 def open_docinfo(olefile, compressed=True):
     f = olefile.openstream('DocInfo')
@@ -141,62 +164,71 @@ def open_docinfo(olefile, compressed=True):
         f = StringIO(zlib.decompress(f.read(), -15)) # without gzip header
     return f
 
+
 def open_bodytext(olefile, idx, compressed=True):
     try:
-        f = olefile.openstream('BodyText/Section'+str(idx))
+        f = olefile.openstream('BodyText/Section' + str(idx))
     except IOError:
         raise IndexError(idx)
     if compressed:
         f = StringIO(zlib.decompress(f.read(), -15))
     return f
 
+
 def open_viewtext(olefile, idx):
     try:
-        f = olefile.openstream('ViewText/Section'+str(idx))
+        f = olefile.openstream('ViewText/Section' + str(idx))
     except IOError:
         raise IndexError(idx)
     return f
 
+
 def open_viewtext_head(olefile, idx):
     f = open_viewtext(olefile, idx)
-    head = f.read(4+256)
+    head = f.read(4 + 256)
     return StringIO(head)
+
 
 def open_viewtext_tail(olefile, idx):
     f = open_viewtext(olefile, idx)
-    f.seek(4+256)
+    f.seek(4 + 256)
     return f
+
 
 def open_bindata(olefile, name, compressed=True):
     try:
-        f = olefile.openstream('BinData/%s'%name)
+        f = olefile.openstream('BinData/%s' % name)
     except IOError:
         raise KeyError(name)
     if compressed:
         f = StringIO(zlib.decompress(f.read(), -15))
     return f
 
+
 def open_script(olefile, name, compressed=True):
     try:
-        f = olefile.openstream('Scripts/%s'%name)
+        f = olefile.openstream('Scripts/%s' % name)
     except IOError:
         raise KeyError(name)
     if compressed:
         return StringIO(zlib.decompress(f.read(), -15))
     return f
 
+
 def list_streams(olefile):
     for e in olefile.listdir():
         yield os.path.join(*e)
+
 
 def list_sections(olefile):
     prefix = 'BodyText/Section'
     l = []
     for name in list_streams(olefile):
         if name.startswith(prefix):
-            l.append( int(name[len(prefix):]) )
+            l.append(int(name[len(prefix):]))
     l.sort()
     return l
+
 
 def list_bindata(olefile):
     for name in list_streams(olefile):
@@ -204,15 +236,18 @@ def list_bindata(olefile):
         if name.startswith(prefix):
             yield name[len(prefix):]
 
+
 class BadFormatError(Exception):
     def __str__(self):
-        return '%s: \'%s\''%(self.args)
+        return '%s: \'%s\'' % (self.args)
+
 
 def open(filename):
     if not is_hwp5file(filename):
         raise BadFormatError('Not an hwp5 file', filename)
     olefile = OleFileIO(filename)
     return File(olefile)
+
 
 def walk(hwpfile, dirpath=''):
     if dirpath == '' or dirpath == '/':
@@ -223,14 +258,14 @@ def walk(hwpfile, dirpath=''):
     files = []
     dirs = []
     for name in names:
-        path = base+name
+        path = base + name
         if hwpfile.is_storage(path):
             dirs.append(name)
         else:
             files.append(name)
     yield dirpath, dirs, files
     for name in dirs:
-        path = base+name
+        path = base + name
         for x in walk(hwpfile, path):
             yield x
 
@@ -250,14 +285,15 @@ def olefile_listdir(olefile, path):
         return
 
     if not olefile.exists(path):
-        raise IOError('%s not exists'%path)
+        raise IOError('%s not exists' % path)
     if olefile.get_type(path) != 1:
-        raise IOError('%s not a storage'%path)
+        raise IOError('%s not a storage' % path)
     path_segments = path.split('/')
     for stream in olefile.listdir():
         if len(stream) == len(path_segments) + 1:
             if stream[:-1] == path_segments:
                 yield stream[-1]
+
 
 class OleStorage(Storage):
 
@@ -283,14 +319,14 @@ class OleStorage(Storage):
         else:
             path = self.path + '/' + name
         if not self.olefile.exists(path):
-            raise KeyError('%s not found'%path)
+            raise KeyError('%s not found' % path)
         t = self.olefile.get_type(path)
         if t == 1: # Storage
             return OleStorage(self.olefile, path)
         elif t == 2: # Stream
             return self.olefile.openstream(path)
         else:
-            raise KeyError('%s is invalid'%path)
+            raise KeyError('%s is invalid' % path)
 
 
 class GeneratorReader(object):
@@ -329,8 +365,6 @@ class GeneratorReader(object):
         self.gen = self.buffer = None
 
 
-import codecs
-import zlib
 class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
     def __init__(self, errors='strict', wbits=15):
         assert errors == 'strict'
@@ -357,6 +391,7 @@ def uncompress_gen(source, bufsize=4096):
             exausted = True
         yield dec.decode(input, exausted)
 
+
 def uncompress(source, bufsize=4096):
     ''' uncompress inputstream
 
@@ -364,6 +399,7 @@ def uncompress(source, bufsize=4096):
         returns a file-like readable
     '''
     return GeneratorReader(uncompress_gen(source, bufsize))
+
 
 def uncompress(stream):
     ''' uncompress inputstream
@@ -432,7 +468,7 @@ class Hwp5DistDocStream(Hwp5Object):
         item = self.open()
         from .recordstream import read_record
         read_record(item, 0)
-        assert 4+256 == item.tell()
+        assert 4 + 256 == item.tell()
         return item.read()
 
     def tail_stream(self):
@@ -508,11 +544,11 @@ class Sections(Hwp5Object):
 
     def section(self, idx):
         stg = self.open()
-        return self.section_class(stg, 'Section%d'%idx, self.version)
+        return self.section_class(stg, 'Section%d' % idx, self.version)
 
     def section_indexes(self):
         def gen():
-            stg  = self.open()
+            stg = self.open()
             for name in stg:
                 if name.startswith('Section'):
                     idx = name[len('Section'):]
@@ -640,6 +676,7 @@ class File(object):
 
     def _summaryinfo(self):
         return open_summaryinfo(self.olefile)
+
     def summaryinfo(self):
         f = open_summaryinfo(self.olefile)
         context = dict(version=self.fileheader.version)
@@ -682,6 +719,7 @@ class File(object):
         if pseudostream:
             return pseudostream(*args)
 
+
 def unole():
     import sys
     from OleFileIO_PL import OleFileIO
@@ -696,6 +734,7 @@ def unole():
         os.mkdir(base)
     unpack(olestg, base)
 
+
 def main():
     from ._scriptutils import OptionParser, args_pop, open_or_exit
     op = OptionParser(usage='usage: %prog [options] filename <stream>')
@@ -707,11 +746,11 @@ def main():
     if len(args) == 0:
         print 'FileHeader'
         print '----------'
-        print 'signature:%s'%file.fileheader.signature
-        print '  version: %d.%d.%d.%d'%file.fileheader.version
-        print '    flags: 0x%x'%file.fileheader.flags
-        for k, v in FileHeader.Flags.dictvalue(file.fileheader.flags).iteritems():
-            print '%20s: %d'%(k, v)
+        print 'signature:%s' % file.fileheader.signature
+        print '  version: %d.%d.%d.%d' % file.fileheader.version
+        print '    flags: 0x%x' % file.fileheader.flags
+        for k, v in FileHeader.Flags.dictvalue(file.fileheader.flags).items():
+            print '%20s: %d' % (k, v)
         print ''
         print 'Pseudo streams'
         print '--------------'
@@ -737,7 +776,7 @@ def main():
         for k, v in file.summaryinfo.iteritems():
             if isinstance(v, unicode):
                 v = v.encode('utf-8')
-            print '%20s: %s'%(k, v)
+            print '%20s: %s' % (k, v)
         return 0
 
     streamname = args_pop(args, '<stream>')
@@ -748,7 +787,7 @@ def main():
                 print name
         elif streamname == 'bodytext':
             for idx in file.list_bodytext_sections():
-                print 'bodytext/%d'%idx
+                print 'bodytext/%d' % idx
         return 0
     stream = file.pseudostream(streamname)
     if not stream:

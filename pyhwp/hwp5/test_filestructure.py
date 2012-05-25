@@ -193,7 +193,7 @@ class TestOleStorage(TestBase):
 
 
     def test_iter_storage_leafs(self):
-        from hwp5.filestructure import iter_storage_leafs
+        from hwp5.storage import iter_storage_leafs
         result = iter_storage_leafs(self.olestg)
         expected = ['\x05HwpSummaryInformation', 'BinData/BIN0002.jpg', 'BinData/BIN0002.png', 'BinData/BIN0003.png',
                     'BodyText/Section0', 'DocInfo', 'DocOptions/_LinkDoc', 'FileHeader', 'PrvImage', 'PrvText',
