@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
 
 import logging
 logger = logging.getLogger(__name__)
@@ -36,6 +32,16 @@ from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_FORBIDDEN_CHAR)
 
 from . import dataio
+
+
+def getStringIO():
+    try:
+        from cStringIO import StringIO
+        return StringIO
+    except:
+        from StringIO import StringIO
+        return StringIO
+StringIO = getStringIO()
 
 
 def parse_model_attributes(model, attributes, context):
