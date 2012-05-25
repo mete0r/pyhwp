@@ -937,8 +937,8 @@ class ControlChar(object):
         self.param = param
 
     def decode_bytes(cls, bytes):
-        ch = dataio.decode_utf16le_besteffort(bytes[0:2])
-        code = ord(ch)
+        code = UINT16.decode(bytes[0:2])
+        ch = unichr(code)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
             if ch == ControlChar.TAB:
