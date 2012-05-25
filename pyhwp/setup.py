@@ -16,7 +16,7 @@ def read(filename):
 from setuptools import setup
 setup(
         name='pyhwp',
-        version=read('VERSION').strip(),
+        version='0.1a7',
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
         long_description=read('README'),
