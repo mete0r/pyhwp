@@ -4,12 +4,22 @@ if version < '2.2.3':
     DistMeta.classifiers = None
     DistMeta.download_url = None
 
+def read(filename):
+    import os.path
+    filename = os.path.join(os.path.dirname(__file__), filename)
+    f = file(filename, 'r')
+    try:
+        return f.read()
+    finally:
+        f.close()
+
 from setuptools import setup
 setup(
         name='pyhwp',
-        version='0.1a4',
+        version=read('VERSION'),
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
+        long_description=read('README'),
         author = 'mete0r',
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
@@ -36,7 +46,7 @@ setup(
         test_suite='hwp5.tests.test_suite',
 
         classifiers=[
-            'Development Status :: 2 - Pre-Alpha',
+            'Development Status :: 3 - Alpha',
             'Intended Audience :: Developers',
             'License :: OSI Approved :: GNU Affero General Public License v3',
             'Operating System :: OS Independent',
