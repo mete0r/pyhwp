@@ -82,10 +82,6 @@ class RecordModelType(StructType):
 class RecordModel(object):
     __metaclass__ = RecordModelType
 
-    def __init__(self, context, attributes):
-        self.__dict__.update(attributes)
-        self.context = context
-
 
 class BasicRecordModel(RecordModel):
     def attributes(context):
