@@ -161,15 +161,13 @@ def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
             yield STARTEVENT, textitem
             yield ENDEVENT, textitem
         elif isinstance(chunk, dict):
-            ch = chr(chunk['code'])
-            if 'chid' in chunk:
-                chunk = ControlChar(ch, chunk['chid'],
-                                    chunk['param'])
-            else:
-                chunk = ControlChar(ch)
-            chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
-            if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
-                chunk_attributes['char'] = unichr(chunk.code)
+            code = chunk['code']
+            uch = unichr(code)
+            name = ControlChar.get_name_by_code(code)
+            kind = ControlChar.kinds[uch]
+            chunk_attributes = dict(name=name, code=code, kind=kind, charshape_id=shape)
+            if code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
+                chunk_attributes['char'] = uch
             ctrlch = (ControlChar, chunk_attributes, paratext_context)
             yield STARTEVENT, ctrlch
             yield ENDEVENT, ctrlch

@@ -929,13 +929,6 @@ class ControlChar(object):
         return data_len, data_len
     find = classmethod(find)
 
-    __slots__ = ['ch', 'chid', 'param']
-
-    def __init__(self, ch, chid=None, param=None):
-        self.ch = ch
-        self.chid = chid
-        self.param = param
-
     def decode_bytes(cls, bytes):
         code = UINT16.decode(bytes[0:2])
         ch = unichr(code)
@@ -956,29 +949,16 @@ class ControlChar(object):
             return dict(code=code)
     decode_bytes = classmethod(decode_bytes)
 
-    def kind(self):
-        return self.kinds[self.ch]
-    kind = property(kind)
-
-    def code(self):
-        return ord(self.ch)
-    code = property(code)
+    def get_kind_by_code(cls, code):
+        ch = unichr(code)
+        return cls.kinds[ch]
+    get_kind_by_code = classmethod(get_kind_by_code)
 
     def get_name_by_code(cls, code):
         ch = unichr(code)
         return cls.names.get(ch, 'CTLCHR%02x'%code)
     get_name_by_code = classmethod(get_name_by_code)
 
-    def name(self):
-        return self.names.get(self.ch, 'CTLCHR%02x'%self.code)
-    name = property(name)
-
-    def __len__(self):
-        return self.kind.size
-
-    def __repr__(self):
-        fmt = 'ControlChar(%s, %s, %s)'
-        return fmt % (self.name, repr(self.chid), repr(self.param))
 ControlChar._populate()
 
 
