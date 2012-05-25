@@ -33,7 +33,7 @@ def test():
 
 def pylint():
     print 'running pylint'
-    system('bin/pylint -f parseable hwp5 | tee pylint.out')
+    system('bin/pylint --rcfile=etc/pylint.rc -f parseable hwp5 | tee pylint.out')
 
 def pep8():
     print 'running pep8'
