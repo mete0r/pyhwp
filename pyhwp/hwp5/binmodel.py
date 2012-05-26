@@ -1061,7 +1061,11 @@ class ParaLineSeg(RecordModel):
         unitcount = len(payload) / unitsize
         values = struct.unpack('<'+unitfmt*unitcount, payload)
         names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below', 'x', 'width', 'a8', 'flags']
-        return list(dict(izip(names, tuple(values[i*10:i*10+10]))) for i in range(0, unitcount))
+        x = list(dict(izip(names, tuple(values[i*10:i*10+10])))
+                 for i in range(0, unitcount))
+        for d in x:
+            d['flags'] = cls.LineSeg.Flags(d['flags'])
+        return x
     decode = classmethod(decode)
 
 
