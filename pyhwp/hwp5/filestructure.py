@@ -392,7 +392,7 @@ def uncompress_gen(source, bufsize=4096):
         yield dec.decode(input, exausted)
 
 
-def uncompress(source, bufsize=4096):
+def uncompress_experimental(source, bufsize=4096):
     ''' uncompress inputstream
 
         stream: a file-like readable
