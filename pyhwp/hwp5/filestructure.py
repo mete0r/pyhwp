@@ -67,7 +67,7 @@ class FileHeader(Struct):
 
 class TextField(unicode):
     def read(cls, f, context=None):
-        unk0 = UINT32.read(f, None) # 1f
+        unk0 = UINT32.read(f, None)  # 1f
         assert unk0 == 0x1f
         size = UINT32.read(f, None)
         if size > 0:
@@ -161,7 +161,7 @@ def open_previewimage(olefile):
 def open_docinfo(olefile, compressed=True):
     f = olefile.openstream('DocInfo')
     if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15)) # without gzip header
+        f = StringIO(zlib.decompress(f.read(), -15))  # without gzip header
     return f
 
 
@@ -308,7 +308,7 @@ class OleStorage(Storage):
             from OleFileIO_PL import OleFileIO
             olefile = OleFileIO(olefile)
         self.olefile = olefile
-        self.path = path # path DOES NOT end with '/'
+        self.path = path  # path DOES NOT end with '/'
 
     def __iter__(self):
         return olefile_listdir(self.olefile, self.path)
@@ -321,9 +321,9 @@ class OleStorage(Storage):
         if not self.olefile.exists(path):
             raise KeyError('%s not found' % path)
         t = self.olefile.get_type(path)
-        if t == 1: # Storage
+        if t == 1:  # Storage
             return OleStorage(self.olefile, path)
-        elif t == 2: # Stream
+        elif t == 2:  # Stream
             return self.olefile.openstream(path)
         else:
             raise KeyError('%s is invalid' % path)
@@ -407,7 +407,7 @@ def uncompress(stream):
         stream: a file-like readable
         returns a file-like readable
     '''
-    return StringIO(zlib.decompress(stream.read(), -15)) # without gzip header
+    return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
 
 
 class CompressedStorage(StorageWrapper):
@@ -656,10 +656,10 @@ class File(object):
                     yield stream[-1]
 
     def is_storage(self, path):
-        return self.olefile.get_type(path) == 1 # OleFileIO_PL.STGTY_STORAGE
+        return self.olefile.get_type(path) == 1  # OleFileIO_PL.STGTY_STORAGE
 
     def is_stream(self, path):
-        return self.olefile.get_type(path) == 2# OleFileIO_PL.STGTY_STREAM
+        return self.olefile.get_type(path) == 2  # OleFileIO_PL.STGTY_STREAM
 
     def list_streams(self):
         return list_streams(self.olefile)

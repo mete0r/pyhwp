@@ -152,7 +152,7 @@ class IdMappings(BasicRecordModel):
         yield UINT16, 'styles',
         yield UINT16, 'memoshapes',
         if context['version'] >= (5, 0, 1, 7):
-            yield ARRAY(UINT32, 8), 'unknown' # SPEC
+            yield ARRAY(UINT32, 8), 'unknown'  # SPEC
     attributes = staticmethod(attributes)
 
 
@@ -264,7 +264,7 @@ class Fill(Struct):
 
 class FillNone(Fill):
     def attributes(context):
-        yield UINT32, 'size', # SPEC is confusing
+        yield UINT32, 'size',  # SPEC is confusing
     attributes = staticmethod(attributes)
 
 
@@ -392,7 +392,7 @@ class Numbering(BasicRecordModel):
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'width_correction'
         yield HWPUNIT16, 'distance_to_body'
-        yield UINT32, 'charshape_id' # SPEC ?????
+        yield UINT32, 'charshape_id'  # SPEC ?????
     attributes = classmethod(attributes)
 
 
@@ -416,18 +416,18 @@ class ParaShape(BasicRecordModel):
             5, 6, LineBreakAlphabet, 'linebreak_alphabet',
             7, LineBreakHangul, 'linebreak_hangul',
             8, 'use_paper_grid',
-            9, 15, 'minimum_space', # 공백 최소값
-            16, 'protect_single_line', # 외톨이줄 보호
-            17, 'with_next_paragraph', # 다음 문단과 함께
-            18, 'protect', # 문단 보호
-            19, 'start_new_page', # 문단 앞에서 항상 쪽 나눔
+            9, 15, 'minimum_space',  # 공백 최소값
+            16, 'protect_single_line',  # 외톨이줄 보호
+            17, 'with_next_paragraph',  # 다음 문단과 함께
+            18, 'protect',  # 문단 보호
+            19, 'start_new_page',  # 문단 앞에서 항상 쪽 나눔
             20, 21, VAlign, 'valign',
-            22, 'lineheight_along_fontsize', # 글꼴에 어울리는 줄 높이
-            23, 24, HeadShape, 'head_shape', # 문단 머리 모양
-            25, 27, 'level', # 문단 수준
-            28, 'linked_border', # 문단 테두리 연결 여부
-            29, 'ignore_margin', # 문단 여백 무시
-            30, 'tail_shape', # 문단 꼬리 모양
+            22, 'lineheight_along_fontsize',  # 글꼴에 어울리는 줄 높이
+            23, 24, HeadShape, 'head_shape',  # 문단 머리 모양
+            25, 27, 'level',  # 문단 수준
+            28, 'linked_border',  # 문단 테두리 연결 여부
+            29, 'ignore_margin',  # 문단 여백 무시
+            30, 'tail_shape',  # 문단 꼬리 모양
             )
     Flags2 = dataio.Flags(UINT32,
             0, 1, 'in_single_line',
@@ -445,7 +445,7 @@ class ParaShape(BasicRecordModel):
         yield INT32,  'doubled_margin_right',  # 1/7200 * 2
         yield SHWPUNIT,  'indent',
         yield INT32,  'doubled_margin_top',    # 1/7200 * 2
-        yield INT32,  'doubled_margin_bottom', # 1/7200 * 2
+        yield INT32,  'doubled_margin_bottom',  # 1/7200 * 2
         yield SHWPUNIT,  'linespacing',
         yield UINT16, 'tabdef_id',
         yield UINT16, 'numbering_bullet_id',
@@ -763,7 +763,7 @@ class FootnoteShape(BasicRecordModel):
         yield HWPUNIT16, 'notes_spacing'
         yield Border, 'splitter_border'
         if context['version'] >= (5, 0, 0, 6):
-            yield UINT16, 'unknown1' # TODO
+            yield UINT16, 'unknown1'  # TODO
     attributes = classmethod(attributes)
 
 
@@ -795,7 +795,7 @@ class TableCaption(ListHeader):
     def attributes(cls, context):
         yield cls.Flags, 'flags',
         yield HWPUNIT, 'width',
-        yield HWPUNIT16, 'separation', # 캡션과 틀 사이 간격
+        yield HWPUNIT16, 'separation',  # 캡션과 틀 사이 간격
         yield HWPUNIT, 'maxsize',
     attributes = classmethod(attributes)
 
@@ -832,7 +832,7 @@ class TableBody(BasicRecordModel):
         yield ARRAY(UINT16, nRows), 'rowcols'
         yield UINT16, 'borderfill_id'
         if context['version'] > (5, 0, 0, 6):
-            yield N_ARRAY(UINT16, cls.ZoneInfo), 'validZones' # above 5006
+            yield N_ARRAY(UINT16, cls.ZoneInfo), 'validZones'  # above 5006
     attributes = classmethod(attributes)
 
 
@@ -1195,7 +1195,7 @@ class ShapeRectangle(BasicRecordModel):
 
 class ShapeEllipse(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ELLIPSE
-    Flags = Flags(UINT32) # TODO
+    Flags = Flags(UINT32)  # TODO
 
     def attributes(cls, context):
         yield cls.Flags, 'flags'
@@ -1256,7 +1256,7 @@ class PictureInfo(Struct):
 class BorderLine(Struct):
     ''' 표 81. 테두리 선 정보 '''
 
-    StrokeType = Enum('none', 'solid', 'dashed', 'dotted') # TODO: more types
+    StrokeType = Enum('none', 'solid', 'dashed', 'dotted')  # TODO: more types
     LineEnd = Enum('round', 'flat')
     ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect',
                       'diamondfilled', 'disc', 'rectfilled')
@@ -1431,7 +1431,7 @@ class Note(Control):
     ''' 4.2.10.4 미주/각주 '''
     def attributes(context):
         if context['version'] >= (5, 0, 0, 6):
-            yield UINT32, 'number' # SPEC
+            yield UINT32, 'number'  # SPEC
     attributes = staticmethod(attributes)
 
 
@@ -1807,7 +1807,7 @@ def parse_models_intern(context, records, passes=3):
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
     from .dataio import dumpbytes
-    import simplejson # TODO: simplejson is for python2.5+
+    import simplejson  # TODO: simplejson is for python2.5+
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model['record']
