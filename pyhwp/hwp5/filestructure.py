@@ -7,15 +7,9 @@ from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
 from .storage import Storage, StorageWrapper, unpack
 from .storage import ItemsModifyingStorage
+from .importhelper import importStringIO
 
 
-def importStringIO():
-    try:
-        from cStringIO import StringIO
-        return StringIO
-    except ImportError:
-        from StringIO import StringIO
-        return StringIO
 StringIO = importStringIO()
 
 

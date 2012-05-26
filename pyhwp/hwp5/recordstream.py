@@ -1,13 +1,10 @@
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
-
 from .tagids import HWPTAG_BEGIN, tagnames
 from .dataio import UINT32, Eof
 from . import dataio
 from .utils import cached_property
 from . import filestructure
+from .importhelper import importStringIO
+StringIO = importStringIO()
 
 def tagname(tagid):
     return tagnames.get(tagid, 'HWPTAG%d'%(tagid - HWPTAG_BEGIN))

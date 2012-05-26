@@ -21,10 +21,8 @@
 #
 import struct
 import logging
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from .importhelper import importStringIO
+StringIO = importStringIO()
 
 class Eof(Exception):
     def __init__(self, *args):

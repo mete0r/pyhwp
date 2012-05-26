@@ -30,18 +30,11 @@ from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_SHAPE_COMPONENT_CONTAINER, HWPTAG_CTRL_DATA,
                      HWPTAG_CTRL_EQEDIT, HWPTAG_SHAPE_COMPONENT_TEXTART,
                      HWPTAG_FORBIDDEN_CHAR)
-
+from .importhelper import importStringIO
 from . import dataio
 
 
-def getStringIO():
-    try:
-        from cStringIO import StringIO
-        return StringIO
-    except:
-        from StringIO import StringIO
-        return StringIO
-StringIO = getStringIO()
+StringIO = importStringIO()
 
 
 def parse_model_attributes(model, attributes, context):
