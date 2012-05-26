@@ -1,13 +1,15 @@
+# -*- coding: utf-8 -*-
 from .tagids import HWPTAG_BEGIN, tagnames
 from .dataio import UINT32, Eof
 from . import dataio
-from .utils import cached_property
 from . import filestructure
 from .importhelper import importStringIO
 StringIO = importStringIO()
 
+
 def tagname(tagid):
-    return tagnames.get(tagid, 'HWPTAG%d'%(tagid - HWPTAG_BEGIN))
+    return tagnames.get(tagid, 'HWPTAG%d' % (tagid - HWPTAG_BEGIN))
+
 
 def Record(tagid, level, payload, size=None, seqno=None, streamid=None, filename=None):
     if size is None:
@@ -22,6 +24,7 @@ def Record(tagid, level, payload, size=None, seqno=None, streamid=None, filename
         d['filename'] = filename
     return d
 
+
 def decode_record_header(f):
     try:
         # TagID, Level, Size
@@ -35,6 +38,7 @@ def decode_record_header(f):
     except Eof:
         return None
 
+
 def encode_record_header(rec):
     import struct
     size = len(rec['payload'])
@@ -47,6 +51,7 @@ def encode_record_header(rec):
         hdr = (0xfff << 20) | (level << 10) | tagid
         return struct.pack('<II', hdr, size)
 
+
 def read_record(f, seqno):
     header = decode_record_header(f)
     if header is None:
@@ -54,6 +59,7 @@ def read_record(f, seqno):
     tagid, level, size = header
     payload = dataio.readn(f, size)
     return Record(tagid, level, payload, size, seqno)
+
 
 def read_records(f, streamid='', filename=''):
     seqno = 0
@@ -69,6 +75,7 @@ def read_records(f, streamid='', filename=''):
             return
         seqno += 1
 
+
 def link_records(records):
     prev = None
     for rec in records:
@@ -81,12 +88,14 @@ def link_records(records):
         yield rec
         prev = rec
 
+
 def record_to_json(record, *args, **kwargs):
     ''' convert a record to json '''
     from .dataio import dumpbytes
-    import simplejson # TODO: simplejson is for python2.5+
+    import simplejson  # TODO: simplejson is for python2.5+
     record['payload'] = list(dumpbytes(record['payload']))
     return simplejson.dumps(record, *args, **kwargs)
+
 
 def generate_json_array(tokens):
     ''' generate json array with given tokens '''
@@ -99,6 +108,7 @@ def generate_json_array(tokens):
             yield ',\n'
         yield token
     yield '\n]'
+
 
 def generate_simplejson_dumps(records, *args, **kwargs):
     ''' generate simplejson.dumps()ed strings for each records
@@ -123,8 +133,6 @@ def nth(iterable, n, default=None):
     from itertools import islice
     return next(islice(iterable, n, None), default)
 
-
-from .storage import StorageWrapper
 
 class RecordStream(filestructure.Hwp5Object):
 
@@ -158,7 +166,8 @@ class Hwp5File(filestructure.Hwp5File):
 def main():
     import sys
     from .filestructure import open
-    from ._scriptutils import OptionParser, args_pop, args_pop_range, getlogger, open_or_exit
+    from ._scriptutils import (OptionParser, args_pop, args_pop_range,
+                               getlogger, open_or_exit)
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
     op.add_option('-f', '--format', dest='format', default='hex',
@@ -198,7 +207,6 @@ def main():
 
     records = link_records(records)
 
-
     def count_tagids(records):
         occurrences = dict()
         for rec in records:
@@ -213,23 +221,28 @@ def main():
     class RecordFormatter(object):
         def __init__(self, out):
             self.out = out
+
         def write(self, rec):
             raise NotImplementedError
+
     class RawFormat(RecordFormatter):
         def write(self, rec):
             bytes = encode_record_header(rec) + rec['payload']
-            self.out.write( bytes )
+            self.out.write(bytes)
+
     class HexFormat(RecordFormatter):
         def __init__(self, out):
             out = dataio.IndentedOutput(out, 0)
             super(HexFormat, self).__init__(out)
             self.p = dataio.Printer(out)
+
         def write(self, rec):
             self.out.level = rec['level']
-            self.p.prints( (rec['seqno'], rec['tagid'], rec['tagname'],
-                            rec['size']) )
-            self.p.prints( dataio.hexdump(rec['payload'], True) )
-            self.out.write( '-' * 80 + '\n' )
+            self.p.prints((rec['seqno'], rec['tagid'], rec['tagname'],
+                           rec['size']))
+            self.p.prints(dataio.hexdump(rec['payload'], True))
+            self.out.write('-' * 80 + '\n')
+
     class NulFormat(RecordFormatter):
         def write(self, rec):
             pass
