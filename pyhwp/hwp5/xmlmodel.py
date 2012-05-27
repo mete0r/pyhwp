@@ -355,7 +355,7 @@ def dispatch_model_events(handler, events):
         elif event == ENDEVENT:
             handler.endModel(model)
 
-def flatxml(hwpfile, logger, oformat):
+def flatxml(hwpfile, oformat):
     ''' convert hwpfile into a flat xml
 
     hwpfile - hwp file
@@ -461,8 +461,7 @@ def main():
     formats = dict(xml=XmlFormat, nul=NulFormat)
     oformat = formats[options.format](out)
 
-    from ._scriptutils import getlogger, loghandler, logformat_xml
-    flatxml(hwpfile, logger, oformat)
+    flatxml(hwpfile, oformat)
     
 
 if __name__ == '__main__':

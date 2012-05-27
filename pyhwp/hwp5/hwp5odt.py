@@ -135,10 +135,9 @@ def mimetype(f):
     f.write('application/vnd.oasis.opendocument.text')
 
 def generate_hwp5xml(f, hwpfile):
-    import logging
     from .xmlmodel import flatxml
     from .xmlformat import XmlFormat
-    flatxml(hwpfile, logging, XmlFormat(f))
+    flatxml(hwpfile, XmlFormat(f))
 
 def xslt_odt_content(f, hwpxmlfilename):
     import pkg_resources
