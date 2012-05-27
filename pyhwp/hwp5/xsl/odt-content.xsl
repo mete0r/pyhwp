@@ -376,20 +376,63 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="GShapeObjectControl/ShapeComponent" mode="style-relpos">
+    <!--
+    최상위 GSO의 vrelto/hrelto 등에 따라 {horizontal,vertical}-{rel,pos}를 결정
+
+    TODO: ShapeComponent의 text:anchor-type에 따라 가능한 값의 범위들이 달라짐
+    -->
+
+    <xsl:attribute name="style:vertical-rel">
+      <xsl:choose>
+	<xsl:when test="../@vrelto = 'page'">
+	  <xsl:text>page-content</xsl:text>
+	</xsl:when>
+	<xsl:when test="../@vrelto = 'paper'">
+	  <xsl:text>page</xsl:text>
+	</xsl:when>
+	<!-- TODO -->
+      </xsl:choose>
+    </xsl:attribute>
+
+    <xsl:attribute name="style:horizontal-rel">
+      <xsl:choose>
+	<xsl:when test="../@hrelto = 'page'">
+	  <xsl:text>page-content</xsl:text>
+	</xsl:when>
+	<xsl:when test="../@hrelto = 'paper'">
+	  <xsl:text>page</xsl:text>
+	</xsl:when>
+	<!-- TODO -->
+      </xsl:choose>
+    </xsl:attribute>
+
+    <xsl:attribute name="style:horizontal-pos">
+      <xsl:choose>
+	<xsl:when test="../@halign = 'left'">
+	  <xsl:text>from-left</xsl:text>
+	</xsl:when>
+	<!-- TODO -->
+      </xsl:choose>
+    </xsl:attribute>
+
+    <xsl:attribute name="style:vertical-pos">
+      <xsl:choose>
+	<xsl:when test="../@halign = 'left'">
+	  <xsl:text>from-top</xsl:text>
+	</xsl:when>
+	<!-- TODO -->
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:template>
+
   <xsl:template match="ShapeComponent/ShapeRectangle" mode="style">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">graphic</xsl:attribute>
       <xsl:element name="style:graphic-properties">
 
-	<!--
-	TODO: 이 ShapeComponent를 포함하는 최상위 GSO의
-	vrelto/hrelto 등에 따라  판단해야 함.
-	 -->
-	<xsl:attribute name="style:horizontal-rel">page-content</xsl:attribute>
-	<xsl:attribute name="style:horizontal-pos">from-left</xsl:attribute>
-	<xsl:attribute name="style:vertical-rel">page-content</xsl:attribute>
-	<xsl:attribute name="style:vertical-pos">from-top</xsl:attribute>
+	<xsl:apply-templates select=".." mode="style-relpos"/>
 
         <xsl:choose>
           <xsl:when test="../@fill-colorpattern = 1">
