@@ -518,25 +518,33 @@ class TestODTXSL(TestCase):
         assert 'solid' == xpath1(props, '@draw:fill')
         assert '#66ccff' ==  xpath1(props, '@draw:fill-color')
         assert 'none' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#000000' == xpath1(props, '@svg:stroke-color')
 
         # TODO: gradation fill
         props = odt.automatic_style_shaperect_graphic_properties(2)
         assert 'none' == xpath1(props, '@draw:fill')
         assert None is xpath1(props, '@draw:fill-color')
-        assert 'solid' == xpath1(props, '@draw:stroke')
+        assert 'dash' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#000000' == xpath1(props, '@svg:stroke-color')
 
         # fill none
         # stroke solid
         props = odt.automatic_style_shaperect_graphic_properties(3)
         assert 'none' == xpath1(props, '@draw:fill')
         assert None is xpath1(props, '@draw:fill-color')
-        assert 'solid' == xpath1(props, '@draw:stroke')
+        assert 'dash' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#000000' == xpath1(props, '@svg:stroke-color')
 
         # TODO: hatched fill
         props = odt.automatic_style_shaperect_graphic_properties(4)
         assert 'solid' == xpath1(props, '@draw:fill')
         assert '#ffffff' == xpath1(props, '@draw:fill-color')
         assert 'solid' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#ff0033' == xpath1(props, '@svg:stroke-color')
 
     def test_shapeline(self):
         ''' 그리기 객체 ShapeLine '''
