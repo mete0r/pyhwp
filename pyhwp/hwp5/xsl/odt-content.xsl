@@ -381,6 +381,16 @@
       <xsl:attribute name="style:name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">graphic</xsl:attribute>
       <xsl:element name="style:graphic-properties">
+
+	<!--
+	TODO: 이 ShapeComponent를 포함하는 최상위 GSO의
+	vrelto/hrelto 등에 따라  판단해야 함.
+	 -->
+	<xsl:attribute name="style:horizontal-rel">page-content</xsl:attribute>
+	<xsl:attribute name="style:horizontal-pos">from-left</xsl:attribute>
+	<xsl:attribute name="style:vertical-rel">page-content</xsl:attribute>
+	<xsl:attribute name="style:vertical-pos">from-top</xsl:attribute>
+
         <xsl:choose>
           <xsl:when test="../@fill-colorpattern = 1">
             <!--
@@ -427,6 +437,18 @@
   </xsl:template>
 
   <xsl:template match="ShapeComponent/ShapeRectangle" mode="in-gso">
+
+    <!-- 타겟 좌표계에서 이 ShapeComponent의 좌표
+
+    여기(mode="in-gso"에서는 이 ShapeComponent가 GSO 바로 아래에 있으므로
+    타겟 좌표계에서 GSO의 좌표가 곧 타겟 좌표계에서 ShapeComponent의 좌표임.
+
+    만약 ShapeComponent가 GSO 바로 아래 있지 않고 ShapeComponent container 밑에
+    있다던가 하면 좀 더 정교한 방법이 사용되어야 할 것
+    -->
+    <xsl:variable name="shapecomponent-x" select="../../@x"/>
+    <xsl:variable name="shapecomponent-y" select="../../@y"/>
+
     <xsl:variable name="width" select="Array/Coord[2]/@x - Array/Coord[1]/@x"/>
     <xsl:variable name="height" select="Array/Coord[3]/@y - Array/Coord[2]/@y"/>
     <xsl:element name="draw:rect">
@@ -434,6 +456,53 @@
       <xsl:apply-templates select=".." mode="draw-object-properties"/>
       <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+
+      <!-- TODO: 여러 개의 ScaleRotationMatrix가 존재할 때 -->
+      <xsl:variable name="scalerot" select="../Array[@name='scalerotations']/ScaleRotationMatrix[1]"/>
+      <xsl:variable name="scaler" select="$scalerot/Matrix[@attribute-name='scaler']"/>
+      <xsl:variable name="rotator" select="$scalerot/Matrix[@attribute-name='rotator']"/>
+      <xsl:variable name="translator" select="../Matrix[@attribute-name='translation']"/>
+      <xsl:variable name="rotation_center" select="../Coord[@attribute-name='rotation_center']"/>
+      <xsl:attribute name="draw:transform">
+
+	<!-- 타겟 좌표계에서 ShapeComponent-local 좌표계로 변환 -->
+	<xsl:text> translate (</xsl:text>
+	<xsl:value-of select="-round($shapecomponent-x div 7200 * 25.4 * 100) div 100"/><xsl:text>mm </xsl:text>
+	<xsl:value-of select="-round($shapecomponent-y div 7200 * 25.4 * 100) div 100"/><xsl:text>mm)</xsl:text>
+
+	<!-- ShapeComponent-local 좌표계 변환: Scaler -->
+	<xsl:text> matrix (</xsl:text>
+	<xsl:value-of select="$scaler/@a"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$scaler/@b"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$scaler/@c"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$scaler/@d"/><xsl:text> </xsl:text>
+	<xsl:value-of select="round($scaler/@e div 7200 * 25.4 * 100) div 100"/><xsl:text>mm </xsl:text>
+	<xsl:value-of select="round($scaler/@f div 7200 * 25.4 * 100) div 100"/><xsl:text>mm)</xsl:text>
+
+	<!-- ShapeComponent-local 좌표계 변환: Rotator -->
+	<xsl:text> matrix (</xsl:text>
+	<xsl:value-of select="$rotator/@a"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$rotator/@b"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$rotator/@c"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$rotator/@d"/><xsl:text> </xsl:text>
+	<xsl:value-of select="round($rotator/@e div 7200 * 25.4 * 100) div 100"/><xsl:text>mm </xsl:text>
+	<xsl:value-of select="round($rotator/@f div 7200 * 25.4 * 100) div 100"/><xsl:text>mm)</xsl:text>
+
+	<!-- ShapeComponent-local 좌표계 변환: Translator -->
+	<xsl:text> matrix (</xsl:text>
+	<xsl:value-of select="$translator/@a"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$translator/@b"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$translator/@c"/><xsl:text> </xsl:text>
+	<xsl:value-of select="$translator/@d"/><xsl:text> </xsl:text>
+	<xsl:value-of select="round($translator/@e div 7200 * 25.4 * 100) div 100"/><xsl:text>mm </xsl:text>
+	<xsl:value-of select="round($translator/@f div 7200 * 25.4 * 100) div 100"/><xsl:text>mm)</xsl:text>
+
+	<!-- ShapeComponent-local 좌표계에서 다시 타겟 좌표계로 변환 -->
+	<xsl:text> translate (</xsl:text>
+	<xsl:value-of select="round($shapecomponent-x div 7200 * 25.4 * 100) div 100"/><xsl:text>mm </xsl:text>
+	<xsl:value-of select="round($shapecomponent-y div 7200 * 25.4 * 100) div 100"/><xsl:text>mm)</xsl:text>
+
+      </xsl:attribute>
       <xsl:for-each select="../TextboxParagraphList">
         <xsl:apply-templates />
       </xsl:for-each>
@@ -456,8 +525,8 @@
 
   <xsl:template match="GShapeObjectControl/ShapeComponent" mode="draw-object-properties">
     <xsl:variable name="gso" select=".."/>
-    <xsl:variable name="x" select="$gso/@x + @x-in-group"/>
-    <xsl:variable name="y" select="$gso/@y + @y-in-group"/>
+    <xsl:variable name="x" select="$gso/@x"/>
+    <xsl:variable name="y" select="$gso/@y"/>
 
     <!-- TODO -->
     <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
