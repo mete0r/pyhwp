@@ -1079,10 +1079,21 @@ class GShapeObjectControl(CommonControl):
     parse_child = classmethod(parse_child)
 
 
-class Matrix(tuple):
-    def read(f, context):
-        return ARRAY(DOUBLE, 6).read(f, context)
-    read = staticmethod(read)
+class Matrix(Struct):
+    ''' 2D Transform Matrix
+
+    [a c e][x]
+    [b d f][y]
+    [0 0 1][1]
+    '''
+    def attributes(context):
+        yield DOUBLE, 'a'
+        yield DOUBLE, 'c'
+        yield DOUBLE, 'e'
+        yield DOUBLE, 'b'
+        yield DOUBLE, 'd'
+        yield DOUBLE, 'f'
+    attributes = staticmethod(attributes)
 
 
 class ScaleRotationMatrix(Struct):
