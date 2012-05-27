@@ -21,7 +21,8 @@ def test_suite():
     # should not be checked in the source code repository
     try:
         import localtest
-    except ImportError:
+    except ImportError, e:
+        print 'localtest import failed: ', e
         pass
     else:
         tests[0:0] = [localtest]
