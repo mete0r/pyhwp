@@ -217,11 +217,7 @@
             </xsl:element>
           </xsl:element>
         </xsl:for-each>
-        <xsl:for-each select="HwpDoc/BodyText/SectionDef//ShapeComponent">
-          <xsl:apply-templates select="ShapePicture" mode="style"/>
-          <xsl:apply-templates select="ShapeRectangle" mode="style"/>
-          <xsl:apply-templates select="ShapeLine" mode="style"/>
-        </xsl:for-each>
+	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
       </office:automatic-styles>
       <office:body>
         <office:text>
@@ -471,27 +467,11 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapePicture" mode="style">
+  <xsl:template match="ShapeComponent" mode="style">
     <xsl:element name="style:style">
-      <xsl:attribute name="style:name">ShapePict-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="style:name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:apply-templates mode="style-graphic-properties" select="../.." />
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeRectangle" mode="style">
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
-      <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:apply-templates mode="style-graphic-properties" select="../.." />
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeLine" mode="style">
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:name">ShapeLine-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
-      <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:apply-templates mode="style-graphic-properties" select="../.." />
+      <xsl:apply-templates mode="style-graphic-properties" select=".." />
     </xsl:element>
   </xsl:template>
 
@@ -554,7 +534,7 @@
     <!-- 9.3 Frames -->
     <xsl:element name="draw:frame">
         <!-- common-draw-style-name-attlist -->
-	<xsl:attribute name="draw:style-name">ShapePict-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+	<xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
         <!-- common-draw-position-attlist -->
 	<xsl:if test="$gso/@inline = 0">
 	  <xsl:attribute name="svg:x"><xsl:value-of select="$gso/@x div 100"/>pt</xsl:attribute>
@@ -620,7 +600,7 @@
     <xsl:variable name="width" select="Array/Coord[2]/@x - Array/Coord[1]/@x"/>
     <xsl:variable name="height" select="Array/Coord[3]/@y - Array/Coord[2]/@y"/>
     <xsl:element name="draw:rect">
-      <xsl:attribute name="draw:style-name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
       <!-- TODO -->
       <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
       <xsl:attribute name="svg:x"><xsl:value-of select="round($shapecomponent-x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
@@ -655,7 +635,7 @@
       <xsl:attribute name="svg:y2"><xsl:value-of select="round($y2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <!-- TODO -->
       <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
-      <xsl:attribute name="draw:style-name">ShapeLine-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
     </xsl:element>
   </xsl:template>
 

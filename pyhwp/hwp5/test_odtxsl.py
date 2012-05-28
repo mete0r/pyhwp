@@ -126,7 +126,7 @@ class example_to_odt(object):
             return xpath1(style, 'style:paragraph-properties')
 
     def automatic_style_shaperect(self, shape_id):
-        style = self.automatic_style('ShapeRect-%d'%shape_id)
+        style = self.automatic_style('Shape-%d'%shape_id)
         if style is not None:
             assert 'graphic' == xpath1(style, '@style:family')
         return style
@@ -504,7 +504,7 @@ class TestODTXSL(TestCase):
 
         rect = xpath1(odt.content, '//draw:rect[2]')
         assert rect is not None
-        assert 'ShapeRect-2' == xpath1(rect, '@draw:style-name')
+        assert 'Shape-2' == xpath1(rect, '@draw:style-name')
         assert '39.69mm' == xpath1(rect, '@svg:x')
         assert '73.55mm' == xpath1(rect, '@svg:y')
         assert '71.26mm' == xpath1(rect, '@svg:width')
@@ -566,7 +566,7 @@ class TestODTXSL(TestCase):
         frame1, frame2 = xpath(odt.content, '//draw:frame')
 
         assert frame1 is not None
-        assert 'ShapePict-1' == xpath1(frame1, '@draw:style-name')
+        assert 'Shape-1' == xpath1(frame1, '@draw:style-name')
         assert 'paragraph' == xpath1(frame1, '@text:anchor-type')
         assert '111.73pt' == xpath1(frame1, '@svg:x')
         assert '4.9pt' == xpath1(frame1, '@svg:y')
@@ -576,7 +576,7 @@ class TestODTXSL(TestCase):
         assert 'bindata/BIN0002.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
 
         assert frame2 is not None
-        assert 'ShapePict-2' == xpath1(frame2, '@draw:style-name')
+        assert 'Shape-2' == xpath1(frame2, '@draw:style-name')
         # inline: as-char and no svg:x,y
         assert 'as-char' == xpath1(frame2, '@text:anchor-type')
         assert None is xpath1(frame2, '@svg:x')
