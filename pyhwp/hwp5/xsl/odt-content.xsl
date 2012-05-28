@@ -317,12 +317,9 @@
       <xsl:when test="ShapeComponent/@chid = '$pic'">
         <xsl:apply-templates select="." mode="draw-frame"/>
       </xsl:when>
-      <xsl:when test="ShapeComponent/@chid = '$rec'">
-        <xsl:apply-templates select="ShapeComponent/ShapeRectangle" mode="in-gso"/>
-      </xsl:when>
-      <xsl:when test="ShapeComponent/@chid = '$lin'">
-        <xsl:apply-templates select="ShapeComponent/ShapeLine" mode="in-gso"/>
-      </xsl:when>
+      <xsl:otherwise>
+	<xsl:apply-templates />
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
@@ -533,7 +530,7 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="ShapeComponent/ShapeRectangle" mode="in-gso">
+  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeRectangle">
 
     <!-- 타겟 좌표계에서 이 ShapeComponent의 좌표
 
@@ -566,7 +563,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ShapeComponent/ShapeLine" mode="in-gso">
+  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeLine">
     <xsl:variable name="gso" select="../.."/>
     <xsl:variable name="x1" select="$gso/@x"/>
     <xsl:variable name="y1" select="$gso/@y"/>
