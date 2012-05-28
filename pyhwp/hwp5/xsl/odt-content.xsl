@@ -165,58 +165,6 @@
             </xsl:element>
           </xsl:element>
         </xsl:for-each>
-        <xsl:for-each select="HwpDoc/BodyText/SectionDef//GShapeObjectControl">
-          <xsl:element name="style:style">
-            <xsl:attribute name="style:name">DrawFrame-<xsl:value-of select="@gshape-id + 1"/></xsl:attribute>
-            <xsl:attribute name="style:family">graphic</xsl:attribute>
-            <!-- 15.27 Frame Formatting Properties -->
-            <xsl:element name="style:graphic-properties">
-              <!-- 15.27.4 Left and Right Margins -->
-              <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-              <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-              <!-- 15.27.5 Top and Bottom Margins -->
-              <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-              <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-              <xsl:choose>
-                <xsl:when test="@inline = 0">
-                  <!-- 15.27.21 Wrapping -->
-                  <xsl:choose>
-                    <xsl:when test="@flow = 'float'">
-                      <xsl:choose>
-                        <xsl:when test="@text-side = 'both'">
-                          <xsl:attribute name="style:wrap">parallel</xsl:attribute>
-                        </xsl:when>
-                        <xsl:when test="@text-side = 'left'">
-                          <xsl:attribute name="style:wrap">left</xsl:attribute>
-                        </xsl:when>
-                        <xsl:when test="@text-side = 'right'">
-                          <xsl:attribute name="style:wrap">right</xsl:attribute>
-                        </xsl:when>
-                        <xsl:when test="@text-side = 'larger'">
-                          <xsl:attribute name="style:wrap">biggest</xsl:attribute>
-                        </xsl:when>
-                      </xsl:choose>
-                    </xsl:when>
-                    <xsl:when test="@flow = 'block'">
-                      <xsl:attribute name="style:wrap">none</xsl:attribute>
-                    </xsl:when>
-                    <xsl:when test="@flow = 'back'">
-                      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
-                    </xsl:when>
-                    <xsl:when test="@flow = 'front'">
-                      <!-- 해당하는 것이 없음 : 가장 비슷한 run-through를 채택 -->
-                      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
-                    </xsl:when>
-                  </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise> <!-- when @inline = 1 -->
-                  <xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
-                  <xsl:attribute name="style:vertical-pos">top</xsl:attribute>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:element>
-          </xsl:element>
-        </xsl:for-each>
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
       </office:automatic-styles>
       <office:body>
