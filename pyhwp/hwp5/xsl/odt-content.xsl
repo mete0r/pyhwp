@@ -442,9 +442,31 @@
             <xsl:attribute name="draw:fill">none</xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
-	<xsl:call-template name="borderline-to-stroke">
-	  <xsl:with-param name="borderline" select="BorderLine" />
-	</xsl:call-template>
+	<xsl:for-each select="BorderLine">
+	  <xsl:choose>
+	    <xsl:when test="@stroke = 'none'">
+	      <xsl:attribute name="draw:stroke">none</xsl:attribute>
+	    </xsl:when>
+	    <xsl:when test="@stroke = 'solid'">
+	      <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+	    </xsl:when>
+	    <xsl:when test="@stroke = 'dashed'">
+	      <xsl:attribute name="draw:stroke">dash</xsl:attribute>
+	    </xsl:when>
+	    <xsl:when test="@stroke = 'dotted'">
+	      <xsl:attribute name="draw:stroke">dash</xsl:attribute>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	  <xsl:attribute name="svg:stroke-color">
+	    <xsl:value-of select="@color"/>
+	  </xsl:attribute>
+	  <xsl:attribute name="svg:stroke-width">
+	    <xsl:value-of select="round(@width div 7200 * 25.4 * 100) div 100"/><xsl:text>mm</xsl:text>
+	  </xsl:attribute>
+	</xsl:for-each>
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
