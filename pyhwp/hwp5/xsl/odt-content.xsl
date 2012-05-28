@@ -574,7 +574,10 @@
     <xsl:variable name="height" select="Array/Coord[3]/@y - Array/Coord[2]/@y"/>
     <xsl:element name="draw:rect">
       <xsl:attribute name="draw:style-name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
-      <xsl:apply-templates select=".." mode="draw-object-properties"/>
+      <!-- TODO -->
+      <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      <xsl:attribute name="svg:x"><xsl:value-of select="round($shapecomponent-x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:y"><xsl:value-of select="round($shapecomponent-y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
 
@@ -607,18 +610,6 @@
       <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
       <xsl:attribute name="draw:style-name">ShapeLine-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="GShapeObjectControl/ShapeComponent" mode="draw-object-properties">
-    <xsl:variable name="gso" select=".."/>
-    <xsl:variable name="x" select="$gso/@x"/>
-    <xsl:variable name="y" select="$gso/@y"/>
-
-    <!-- TODO -->
-    <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
-
-    <xsl:attribute name="svg:x"><xsl:value-of select="round($x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-    <xsl:attribute name="svg:y"><xsl:value-of select="round($y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
   </xsl:template>
 
 </xsl:stylesheet>
