@@ -257,10 +257,6 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl">
-    <xsl:apply-templates />
-  </xsl:template>
-
   <xsl:template match="GShapeObjectControl" mode="style-graphic-properties">
     <!-- 15.27 Frame Formatting Properties -->
     <xsl:element name="style:graphic-properties">
@@ -476,104 +472,128 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapePicture">
-    <xsl:variable name="gso" select="../.." />
+  <xsl:template match="GShapeObjectControl">
+    <xsl:apply-templates select="ShapeComponent">
+      <xsl:with-param name="x" select="@x" />
+      <xsl:with-param name="y" select="@y" />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="ShapeComponent[@chid='$con']">
+    <xsl:param name="x" />
+    <xsl:param name="y" />
+    <xsl:element name="draw:g">
+      <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
+      <xsl:apply-templates select="ShapeComponent">
+	<xsl:with-param name="x" select="$x" />
+	<xsl:with-param name="y" select="$y" />
+      </xsl:apply-templates>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ShapeComponent[@chid='$pic']">
+    <xsl:param name="x" />
+    <xsl:param name="y" />
 
     <!-- 9.3 Frames -->
     <xsl:element name="draw:frame">
-        <!-- common-draw-style-name-attlist -->
-	<xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
-        <!-- common-draw-position-attlist -->
-	<xsl:if test="$gso/@inline = 0">
-	  <xsl:attribute name="svg:x"><xsl:value-of select="$gso/@x div 100"/>pt</xsl:attribute>
-	  <xsl:attribute name="svg:y"><xsl:value-of select="$gso/@y div 100"/>pt</xsl:attribute>
-        </xsl:if>
-        <!-- common-text-anchor-attlist -->
-        <xsl:choose>
-	  <xsl:when test="$gso/@inline = 1">
-            <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-        <!-- common-draw-z-index-attlist -->
-	<xsl:attribute name="draw:z-index"><xsl:value-of select="$gso/@z-order"/></xsl:attribute>
-        <!-- 15.27.1 Frame Widths -->
-        <xsl:choose>
-	  <xsl:when test="$gso/@width-relto = 'absolute'">
-	    <xsl:attribute name="svg:width"><xsl:value-of select="round($gso/@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-          </xsl:when>
-        </xsl:choose>
-        <!-- 15.27.2 Frame Heights -->
-        <xsl:choose>
-	  <xsl:when test="$gso/@height-relto = 'absolute'">
-	    <xsl:attribute name="svg:height"><xsl:value-of select="round($gso/@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-          </xsl:when>
-        </xsl:choose>
+      <!-- common-draw-style-name-attlist -->
+      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
+      <xsl:apply-templates mode="draw-image-frame-attributes" select=".." />
 
-	<xsl:call-template name="shapecomponent-transform">
-	  <xsl:with-param name="shapecomponent" select=".." />
-	  <xsl:with-param name="x" select="$gso/@x" />
-	  <xsl:with-param name="y" select="$gso/@y" />
-	</xsl:call-template>
+      <xsl:call-template name="shapecomponent-transform">
+	<xsl:with-param name="shapecomponent" select="." />
+	<xsl:with-param name="x" select="$x" />
+	<xsl:with-param name="y" select="$y" />
+      </xsl:call-template>
 
+      <xsl:for-each select="ShapePicture">
 	<xsl:variable name="binpath" select="'bindata/'"/>
 	<xsl:variable name="bindataid" select="PictureInfo/@bindata-id"/>
 	<xsl:variable name="bindata" select="/HwpDoc/DocInfo/IdMappings/BinData[number($bindataid)]"/>
 	<xsl:element name="draw:image">
-	    <xsl:choose>
-		<xsl:when test="$bindata/@storage = 'embedding'">
-		    <xsl:attribute name="xlink:type">simple</xsl:attribute>
-		    <xsl:attribute name="xlink:href"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/@storage-id"/>.<xsl:value-of select="$bindata/@ext"/></xsl:attribute>
-		</xsl:when>
-	    </xsl:choose>
+	  <xsl:choose>
+	    <xsl:when test="$bindata/@storage = 'embedding'">
+	      <xsl:attribute name="xlink:type">simple</xsl:attribute>
+	      <xsl:attribute name="xlink:href"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/@storage-id"/>.<xsl:value-of select="$bindata/@ext"/></xsl:attribute>
+	    </xsl:when>
+	  </xsl:choose>
 	</xsl:element>
+      </xsl:for-each>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeRectangle">
+  <xsl:template mode="draw-image-frame-attributes" match="ShapeComponent[@chid='$con']">
+    <xsl:attribute name="svg:width"><xsl:value-of select="round(ShapeComponent/@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:attribute name="svg:height"><xsl:value-of select="round(ShapeComponent/@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+  </xsl:template>
 
-    <!-- 타겟 좌표계에서 이 ShapeComponent의 좌표
+  <xsl:template mode="draw-image-frame-attributes" match="GShapeObjectControl">
+    <!-- common-draw-position-attlist -->
+    <xsl:if test="@inline = 0">
+      <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
+      <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
+    </xsl:if>
+    <!-- common-text-anchor-attlist -->
+    <xsl:choose>
+      <xsl:when test="@inline = 1">
+	<xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+    <!-- common-draw-z-index-attlist -->
+    <xsl:attribute name="draw:z-index"><xsl:value-of select="@z-order"/></xsl:attribute>
+    <!-- 15.27.1 Frame Widths -->
+    <xsl:choose>
+      <xsl:when test="@width-relto = 'absolute'">
+	<xsl:attribute name="svg:width"><xsl:value-of select="round(@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
+    <!-- 15.27.2 Frame Heights -->
+    <xsl:choose>
+      <xsl:when test="@height-relto = 'absolute'">
+	<xsl:attribute name="svg:height"><xsl:value-of select="round(@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
 
-    여기(mode="in-gso"에서는 이 ShapeComponent가 GSO 바로 아래에 있으므로
-    타겟 좌표계에서 GSO의 좌표가 곧 타겟 좌표계에서 ShapeComponent의 좌표임.
+  <xsl:template match="ShapeComponent[@chid='$rec']">
+    <xsl:param name="x" />
+    <xsl:param name="y" />
 
-    만약 ShapeComponent가 GSO 바로 아래 있지 않고 ShapeComponent container 밑에
-    있다던가 하면 좀 더 정교한 방법이 사용되어야 할 것
-    -->
-    <xsl:variable name="shapecomponent-x" select="../../@x"/>
-    <xsl:variable name="shapecomponent-y" select="../../@y"/>
-
-    <xsl:variable name="width" select="Array/Coord[2]/@x - Array/Coord[1]/@x"/>
-    <xsl:variable name="height" select="Array/Coord[3]/@y - Array/Coord[2]/@y"/>
     <xsl:element name="draw:rect">
-      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
       <!-- TODO -->
       <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
-      <xsl:attribute name="svg:x"><xsl:value-of select="round($shapecomponent-x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <xsl:attribute name="svg:y"><xsl:value-of select="round($shapecomponent-y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:x"><xsl:value-of select="round($x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="svg:y"><xsl:value-of select="round($y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:variable name="width" select="ShapeRectangle/Array/Coord[2]/@x - ShapeRectangle/Array/Coord[1]/@x"/>
+      <xsl:variable name="height" select="ShapeRectangle/Array/Coord[3]/@y - ShapeRectangle/Array/Coord[2]/@y"/>
       <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
 
       <xsl:call-template name="shapecomponent-transform">
-	<xsl:with-param name="shapecomponent" select=".." />
-	<xsl:with-param name="x" select="$shapecomponent-x" />
-	<xsl:with-param name="y" select="$shapecomponent-y" />
+	<xsl:with-param name="shapecomponent" select="." />
+	<xsl:with-param name="x" select="$x" />
+	<xsl:with-param name="y" select="$y" />
       </xsl:call-template>
 
-      <xsl:for-each select="../TextboxParagraphList">
+      <xsl:for-each select="TextboxParagraphList">
         <xsl:apply-templates />
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeLine">
-    <xsl:variable name="gso" select="../.."/>
-    <xsl:variable name="x1" select="$gso/@x"/>
-    <xsl:variable name="y1" select="$gso/@y"/>
-    <xsl:variable name="cx" select="../Coord[@attribute-name='rotation_center']/@x"/>
-    <xsl:variable name="cy" select="../Coord[@attribute-name='rotation_center']/@y"/>
+  <xsl:template match="ShapeComponent[@chid='$lin']">
+    <xsl:param name="x" />
+    <xsl:param name="y" />
+    <xsl:variable name="x1" select="$x"/>
+    <xsl:variable name="y1" select="$y"/>
+    <xsl:variable name="cx" select="Coord[@attribute-name='rotation_center']/@x"/>
+    <xsl:variable name="cy" select="Coord[@attribute-name='rotation_center']/@y"/>
     <xsl:variable name="x2" select="$x1 + 2 * $cx"/>
     <xsl:variable name="y2" select="$y1 + 2 * $cy"/>
     <xsl:element name="draw:line">
@@ -583,7 +603,7 @@
       <xsl:attribute name="svg:y2"><xsl:value-of select="round($y2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <!-- TODO -->
       <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
-      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
     </xsl:element>
   </xsl:template>
 
