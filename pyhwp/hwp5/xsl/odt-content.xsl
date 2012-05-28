@@ -219,6 +219,7 @@
         </xsl:for-each>
         <xsl:for-each select="HwpDoc/BodyText/SectionDef//ShapeComponent">
           <xsl:apply-templates select="ShapeRectangle" mode="style"/>
+          <xsl:apply-templates select="ShapeLine" mode="style"/>
         </xsl:for-each>
       </office:automatic-styles>
       <office:body>
@@ -466,6 +467,19 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="ShapeComponent/ShapeLine" mode="style">
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">ShapeLine-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="style:family">graphic</xsl:attribute>
+      <xsl:element name="style:graphic-properties">
+	<xsl:apply-templates select=".." mode="style-relpos"/>
+	<xsl:call-template name="borderline-to-stroke">
+	  <xsl:with-param name="borderline" select="../BorderLine" />
+	</xsl:call-template>
+      </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
   <!-- ShapeComponent의 transform matrix들로 draw:transform 속성 생성 -->
   <xsl:template name="shapecomponent-transform">
     <xsl:param name="shapecomponent" />
@@ -554,15 +568,20 @@
 
   <xsl:template match="ShapeComponent/ShapeLine" mode="in-gso">
     <xsl:variable name="gso" select="../.."/>
-    <xsl:variable name="x1" select="$gso/@x + Array/Coord[1]/@x"/>
-    <xsl:variable name="y1" select="$gso/@y + Array/Coord[1]/@y"/>
-    <xsl:variable name="x2" select="$gso/@x + Array/Coord[2]/@x"/>
-    <xsl:variable name="y2" select="$gso/@y + Array/Coord[2]/@y"/>
+    <xsl:variable name="x1" select="$gso/@x"/>
+    <xsl:variable name="y1" select="$gso/@y"/>
+    <xsl:variable name="cx" select="../Coord[@attribute-name='rotation_center']/@x"/>
+    <xsl:variable name="cy" select="../Coord[@attribute-name='rotation_center']/@y"/>
+    <xsl:variable name="x2" select="$x1 + 2 * $cx"/>
+    <xsl:variable name="y2" select="$y1 + 2 * $cy"/>
     <xsl:element name="draw:line">
       <xsl:attribute name="svg:x1"><xsl:value-of select="round($x1 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y1"><xsl:value-of select="round($y1 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:x2"><xsl:value-of select="round($x2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y2"><xsl:value-of select="round($y2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <!-- TODO -->
+      <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      <xsl:attribute name="draw:style-name">ShapeLine-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
     </xsl:element>
   </xsl:template>
 
