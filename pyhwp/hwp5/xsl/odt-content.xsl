@@ -317,74 +317,6 @@
     <xsl:apply-templates />
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl/ShapeComponent" mode="style-relpos">
-    <!--
-    최상위 GSO의 vrelto/hrelto 등에 따라 {horizontal,vertical}-{rel,pos}를 결정
-
-    TODO: ShapeComponent의 text:anchor-type에 따라 가능한 값의 범위들이 달라짐
-    -->
-    <xsl:call-template name="gso-style-relpos">
-      <xsl:with-param name="gso" select=".."/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="gso-style-relpos">
-    <xsl:param name="gso" />
-
-    <xsl:attribute name="style:vertical-rel">
-      <xsl:choose>
-	<xsl:when test="$gso/@vrelto = 'page'">
-	  <xsl:text>page-content</xsl:text>
-	</xsl:when>
-	<xsl:when test="$gso/@vrelto = 'paper'">
-	  <xsl:text>page</xsl:text>
-	</xsl:when>
-	<xsl:when test="$gso/@vrelto = 'paragraph'">
-	  <xsl:text>paragraph</xsl:text>
-	</xsl:when>
-	<xsl:otherwise>
-	  <xsl:text>paragraph</xsl:text>
-	</xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
-
-    <xsl:attribute name="style:horizontal-rel">
-      <xsl:choose>
-	<xsl:when test="$gso/@hrelto = 'page'">
-	  <xsl:text>page-content</xsl:text>
-	</xsl:when>
-	<xsl:when test="$gso/@hrelto = 'paper'">
-	  <xsl:text>page</xsl:text>
-	</xsl:when>
-	<xsl:when test="$gso/@hrelto = 'column'">
-	  <!-- TODO -->
-	  <xsl:text>page-content</xsl:text>
-	</xsl:when>
-	<xsl:otherwise>
-	  <xsl:text>paragraph</xsl:text>
-	</xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
-
-    <xsl:attribute name="style:horizontal-pos">
-      <xsl:choose>
-	<xsl:when test="$gso/@halign = 'left'">
-	  <xsl:text>from-left</xsl:text>
-	</xsl:when>
-	<!-- TODO -->
-      </xsl:choose>
-    </xsl:attribute>
-
-    <xsl:attribute name="style:vertical-pos">
-      <xsl:choose>
-	<xsl:when test="$gso/@halign = 'left'">
-	  <xsl:text>from-top</xsl:text>
-	</xsl:when>
-	<!-- TODO -->
-      </xsl:choose>
-    </xsl:attribute>
-  </xsl:template>
-
   <xsl:template match="GShapeObjectControl" mode="style-graphic-properties">
     <!-- 15.27 Frame Formatting Properties -->
     <xsl:element name="style:graphic-properties">
@@ -425,9 +357,59 @@
 	      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
 	    </xsl:when>
 	  </xsl:choose>
-	  <xsl:call-template name="gso-style-relpos">
-	    <xsl:with-param name="gso" select="." />
-	  </xsl:call-template>
+
+	  <xsl:attribute name="style:vertical-rel">
+	    <xsl:choose>
+	      <xsl:when test="@vrelto = 'page'">
+		<xsl:text>page-content</xsl:text>
+	      </xsl:when>
+	      <xsl:when test="@vrelto = 'paper'">
+		<xsl:text>page</xsl:text>
+	      </xsl:when>
+	      <xsl:when test="@vrelto = 'paragraph'">
+		<xsl:text>paragraph</xsl:text>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<xsl:text>paragraph</xsl:text>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:attribute>
+
+	  <xsl:attribute name="style:horizontal-rel">
+	    <xsl:choose>
+	      <xsl:when test="@hrelto = 'page'">
+		<xsl:text>page-content</xsl:text>
+	      </xsl:when>
+	      <xsl:when test="@hrelto = 'paper'">
+		<xsl:text>page</xsl:text>
+	      </xsl:when>
+	      <xsl:when test="@hrelto = 'column'">
+		<!-- TODO -->
+		<xsl:text>page-content</xsl:text>
+	      </xsl:when>
+	      <xsl:otherwise>
+		<xsl:text>paragraph</xsl:text>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:attribute>
+
+	  <xsl:attribute name="style:horizontal-pos">
+	    <xsl:choose>
+	      <xsl:when test="@halign = 'left'">
+		<xsl:text>from-left</xsl:text>
+	      </xsl:when>
+	      <!-- TODO -->
+	    </xsl:choose>
+	  </xsl:attribute>
+
+	  <xsl:attribute name="style:vertical-pos">
+	    <xsl:choose>
+	      <xsl:when test="@halign = 'left'">
+		<xsl:text>from-top</xsl:text>
+	      </xsl:when>
+	      <!-- TODO -->
+	    </xsl:choose>
+	  </xsl:attribute>
 	</xsl:when>
 	<xsl:otherwise> <!-- when @inline = 1 -->
 	  <xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
