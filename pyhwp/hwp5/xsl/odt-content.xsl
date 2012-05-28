@@ -315,7 +315,7 @@
   <xsl:template match="GShapeObjectControl">
     <xsl:choose>
       <xsl:when test="ShapeComponent/@chid = '$pic'">
-        <xsl:apply-templates select="." mode="draw-frame"/>
+	<xsl:call-template name="gso-draw-frame" />
       </xsl:when>
       <xsl:otherwise>
 	<xsl:apply-templates />
@@ -323,7 +323,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl" mode="draw-frame">
+  <xsl:template name="gso-draw-frame">
     <!-- 9.3 Frames -->
     <xsl:element name="draw:frame">
         <!-- common-draw-style-name-attlist -->
