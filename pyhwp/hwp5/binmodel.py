@@ -1142,6 +1142,8 @@ class ShapeComponent(RecordModel):
                 yield FillColorPattern, 'colorpattern'
             if fill_flags.fill_gradation:
                 yield FillGradation, 'gradation'
+        elif chid == CHID.LINE:
+            yield BorderLine, 'line'
     attributes = classmethod(attributes)
 
     def parse_with_parent(cls, attributes, context, (parent_context,
