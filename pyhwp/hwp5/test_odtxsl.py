@@ -566,7 +566,7 @@ class TestODTXSL(TestCase):
         frame1, frame2 = xpath(odt.content, '//draw:frame')
 
         assert frame1 is not None
-        assert 'DrawFrame-1' == xpath1(frame1, '@draw:style-name')
+        assert 'ShapePict-1' == xpath1(frame1, '@draw:style-name')
         assert 'paragraph' == xpath1(frame1, '@text:anchor-type')
         assert '111.73pt' == xpath1(frame1, '@svg:x')
         assert '4.9pt' == xpath1(frame1, '@svg:y')
@@ -576,7 +576,7 @@ class TestODTXSL(TestCase):
         assert 'bindata/BIN0002.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
 
         assert frame2 is not None
-        assert 'DrawFrame-2' == xpath1(frame2, '@draw:style-name')
+        assert 'ShapePict-2' == xpath1(frame2, '@draw:style-name')
         # inline: as-char and no svg:x,y
         assert 'as-char' == xpath1(frame2, '@text:anchor-type')
         assert None is xpath1(frame2, '@svg:x')

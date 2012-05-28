@@ -385,42 +385,74 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapePicture" mode="style">
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:name">ShapePict-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
-      <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:element name="style:graphic-properties">
-	<xsl:apply-templates select=".." mode="style-relpos"/>
-      </xsl:element>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeRectangle" mode="style">
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
-      <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:element name="style:graphic-properties">
-
-	<xsl:apply-templates select=".." mode="style-relpos"/>
-
+  <xsl:template match="GShapeObjectControl" mode="style-graphic-properties">
+    <!-- 15.27 Frame Formatting Properties -->
+    <xsl:element name="style:graphic-properties">
+      <!-- 15.27.4 Left and Right Margins -->
+      <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <!-- 15.27.5 Top and Bottom Margins -->
+      <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:choose>
+	<xsl:when test="@inline = 0">
+	  <!-- 15.27.21 Wrapping -->
+	  <xsl:choose>
+	    <xsl:when test="@flow = 'float'">
+	      <xsl:choose>
+		<xsl:when test="@text-side = 'both'">
+		  <xsl:attribute name="style:wrap">parallel</xsl:attribute>
+		</xsl:when>
+		<xsl:when test="@text-side = 'left'">
+		  <xsl:attribute name="style:wrap">left</xsl:attribute>
+		</xsl:when>
+		<xsl:when test="@text-side = 'right'">
+		  <xsl:attribute name="style:wrap">right</xsl:attribute>
+		</xsl:when>
+		<xsl:when test="@text-side = 'larger'">
+		  <xsl:attribute name="style:wrap">biggest</xsl:attribute>
+		</xsl:when>
+	      </xsl:choose>
+	    </xsl:when>
+	    <xsl:when test="@flow = 'block'">
+	      <xsl:attribute name="style:wrap">none</xsl:attribute>
+	    </xsl:when>
+	    <xsl:when test="@flow = 'back'">
+	      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
+	    </xsl:when>
+	    <xsl:when test="@flow = 'front'">
+	      <!-- 해당하는 것이 없음 : 가장 비슷한 run-through를 채택 -->
+	      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
+	    </xsl:when>
+	  </xsl:choose>
+	  <xsl:call-template name="gso-style-relpos">
+	    <xsl:with-param name="gso" select="." />
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:otherwise> <!-- when @inline = 1 -->
+	  <xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
+	  <xsl:attribute name="style:vertical-pos">top</xsl:attribute>
+	</xsl:otherwise>
+      </xsl:choose>
+      <xsl:for-each select="ShapeComponent">
         <xsl:choose>
-          <xsl:when test="../@fill-colorpattern = 1">
+          <xsl:when test="@fill-colorpattern = 1">
             <!--
             <xsl:choose>
-              <xsl:when test="../FillColorPattern/@pattern-type = 'horizontal'"/>
-              <xsl:when test="../FillColorPattern/@pattern-type = 'vertical'"/>
-              <xsl:when test="../FillColorPattern/@pattern-type = 'backslash'"/>
-              <xsl:when test="../FillColorPattern/@pattern-type = 'slash'"/>
-              <xsl:when test="../FillColorPattern/@pattern-type = 'grid'"/>
-              <xsl:when test="../FillColorPattern/@pattern-type = 'cross'"/>
+              <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
+              <xsl:when test="FillColorPattern/@pattern-type = 'vertical'"/>
+              <xsl:when test="FillColorPattern/@pattern-type = 'backslash'"/>
+              <xsl:when test="FillColorPattern/@pattern-type = 'slash'"/>
+              <xsl:when test="FillColorPattern/@pattern-type = 'grid'"/>
+              <xsl:when test="FillColorPattern/@pattern-type = 'cross'"/>
               <xsl:otherwise/>
             </xsl:choose>
             -->
             <xsl:attribute name="draw:fill">solid</xsl:attribute>
-            <xsl:attribute name="draw:fill-color"><xsl:value-of select="../FillColorPattern/@background-color"/></xsl:attribute>
+            <xsl:attribute name="draw:fill-color"><xsl:value-of select="FillColorPattern/@background-color"/></xsl:attribute>
           </xsl:when>
           <!--
-          <xsl:when test="../@fill-gradation = 1">
+          <xsl:when test="@fill-gradation = 1">
             <xsl:attribute name="draw:fill">gradient</xsl:attribute>
           </xsl:when>
           -->
@@ -429,9 +461,25 @@
           </xsl:otherwise>
         </xsl:choose>
 	<xsl:call-template name="borderline-to-stroke">
-	  <xsl:with-param name="borderline" select="../BorderLine" />
+	  <xsl:with-param name="borderline" select="BorderLine" />
 	</xsl:call-template>
-      </xsl:element>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapePicture" mode="style">
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">ShapePict-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="style:family">graphic</xsl:attribute>
+      <xsl:apply-templates mode="style-graphic-properties" select="../.." />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="GShapeObjectControl/ShapeComponent/ShapeRectangle" mode="style">
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">ShapeRect-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
+      <xsl:attribute name="style:family">graphic</xsl:attribute>
+      <xsl:apply-templates mode="style-graphic-properties" select="../.." />
     </xsl:element>
   </xsl:template>
 
@@ -439,12 +487,7 @@
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">ShapeLine-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:element name="style:graphic-properties">
-	<xsl:apply-templates select=".." mode="style-relpos"/>
-	<xsl:call-template name="borderline-to-stroke">
-	  <xsl:with-param name="borderline" select="../BorderLine" />
-	</xsl:call-template>
-      </xsl:element>
+      <xsl:apply-templates mode="style-graphic-properties" select="../.." />
     </xsl:element>
   </xsl:template>
 
@@ -507,7 +550,7 @@
     <!-- 9.3 Frames -->
     <xsl:element name="draw:frame">
         <!-- common-draw-style-name-attlist -->
-	<xsl:attribute name="draw:style-name">DrawFrame-<xsl:value-of select="$gso/@gshape-id + 1"/></xsl:attribute>
+	<xsl:attribute name="draw:style-name">ShapePict-<xsl:value-of select="../@shape-id + 1"/></xsl:attribute>
         <!-- common-draw-position-attlist -->
 	<xsl:if test="$gso/@inline = 0">
 	  <xsl:attribute name="svg:x"><xsl:value-of select="$gso/@x div 100"/>pt</xsl:attribute>
