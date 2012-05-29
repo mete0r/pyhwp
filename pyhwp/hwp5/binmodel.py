@@ -321,9 +321,10 @@ class FillGradation(Fill):
 
 class BorderFill(BasicRecordModel):
     tagid = HWPTAG_BORDER_FILL
-    FILL_NONE = 0
-    FILL_COLOR_PATTERN = 1
-    FILL_GRADATION = 4
+
+    Fill = Enum(NONE=0, COLORPATTERN=1, GRADATION=4)
+    FillFlags = Flags(UINT32,
+                      0, 7, Fill, 'fill_type')
 
     def attributes(cls, context):
         yield UINT16, 'attr'
@@ -332,12 +333,12 @@ class BorderFill(BasicRecordModel):
         yield Border, 'top',
         yield Border, 'bottom',
         yield Border, 'diagonal'
-        fill_type = yield UINT32, 'fill_type'
-        if fill_type == cls.FILL_NONE:
+        fill_type = yield cls.FillFlags, 'fillflags'
+        if fill_type == cls.Fill.NONE:
             pass
-        elif fill_type == cls.FILL_COLOR_PATTERN:
+        elif fill_type == cls.Fill.COLORPATTERN:
             yield FillColorPattern, 'fill'
-        elif fill_type == cls.FILL_GRADATION:
+        elif fill_type == cls.Fill.GRADATION:
             yield FillGradation, 'fill'
     attributes = classmethod(attributes)
 
