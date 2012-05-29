@@ -333,19 +333,68 @@
 
 	<xsl:attribute name="style:horizontal-pos">
 	  <xsl:choose>
+
 	    <xsl:when test="@halign = 'left'">
 	      <xsl:text>from-left</xsl:text>
 	    </xsl:when>
-	    <!-- TODO -->
+
+	    <xsl:when test="@halign = 'inside'">
+	      <xsl:text>from-inside</xsl:text>
+	    </xsl:when>
+
+	    <xsl:when test="@halign = 'center' and @x = 0">
+	      <xsl:text>center</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@halign = 'center'">
+	      <!-- TODO -->
+	      <xsl:text>from-left</xsl:text>
+	    </xsl:when>
+
+	    <xsl:when test="@halign = 'outside' and @x = 0">
+	      <xsl:text>outside</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@halign = 'outside'">
+	      <!-- TODO -->
+	      <xsl:text>outside</xsl:text>
+	    </xsl:when>
+
+	    <xsl:when test="@halign = 'right' and @x = 0">
+	      <xsl:text>right</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@halign = 'right'">
+	      <!-- TODO -->
+	      <xsl:text>right</xsl:text>
+	    </xsl:when>
+
 	  </xsl:choose>
 	</xsl:attribute>
 
 	<xsl:attribute name="style:vertical-pos">
 	  <xsl:choose>
-	    <xsl:when test="@halign = 'left'">
+	    <xsl:when test="@valign = 'top'">
 	      <xsl:text>from-top</xsl:text>
 	    </xsl:when>
+
+	    <xsl:when test="@valign = 'middle' and @y = 0">
+	      <xsl:text>middle</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@valign = 'middle'">
+	      <!-- TODO -->
+	      <xsl:text>middle</xsl:text>
+	    </xsl:when>
+
+	    <xsl:when test="@valign = 'bottom' and @y = 0">
+	      <xsl:text>bottom</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@valign = 'bottom'">
+	      <!-- TODO -->
+	      <xsl:text>bottom</xsl:text>
+	    </xsl:when>
+
 	    <!-- TODO -->
+	    <xsl:otherwise>
+	      <xsl:text>top</xsl:text>
+	    </xsl:otherwise>
 	  </xsl:choose>
 	</xsl:attribute>
       </xsl:when>

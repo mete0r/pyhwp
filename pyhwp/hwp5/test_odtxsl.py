@@ -585,3 +585,101 @@ class TestODTXSL(TestCase):
         assert '4.23mm' == xpath1(frame2, '@svg:width')
         assert '4.23mm' == xpath1(frame2, '@svg:height')
         assert 'bindata/BIN0003.png' == xpath1(frame2, 'draw:image/@xlink:href')
+
+    def test_aligns(self):
+        ''' 그림 객체 ShapePicture '''
+        odt = example_to_odt('aligns.hwp')
+        rect = xpath(odt.content, '//draw:rect')
+
+        # NOTE: svg:x/svg:y와 연계해서 위치를 지정할 수 있는 건
+        # from-left, from-top 뿐이므로, 다른 방향으로부터 지정된
+        # 값들은 기준 공간과 객체의 너비/높이를 사용하여
+        # from-left와 ftom-top의 값으로 변환되어야 함
+        # 이때 기준 공간은 horizontal/vertical-rel 값으로
+        # 정해짐. 이 테스트에서는 page-content로 고정되어 있으므로,
+        # 기준 공간은 종이의 여백을 제외한 텍스트 영역이 됨.
+
+        # NOTE: horizontal/vertical-pos를 center/right/middle/bottom
+        # 등으로 지정할 수 있는 특수한 경우들에 대한 처리가 되는지 확인한다
+        # 가령 halign=center, x=0 이라면 horizontal-pos를 center로
+        # 지정할 수 있다
+
+        # halign: left 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(1)
+        self.assertEquals('from-left', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[0], '@svg:x'))
+
+        # halign: left 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(2)
+        self.assertEquals('from-left', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('10mm', xpath1(rect[1], '@svg:x'))
+
+        # halign: center 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(3)
+        self.assertEquals('center', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[2], '@svg:x'))
+
+        # halign: center -10mm
+        props = odt.automatic_style_shaperect_graphic_properties(4)
+        #self.assertEquals('center', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[3], '@svg:x'))
+
+        # halign: right 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(5)
+        self.assertEquals('right', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[4], '@svg:x'))
+
+        # halign: right 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(6)
+        #self.assertEquals('right', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[5], '@svg:x'))
+
+        # halign: inside 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(7)
+        self.assertEquals('from-inside', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[6], '@svg:x'))
+
+        # halign: inside 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(8)
+        #self.assertEquals('from-inside', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[7], '@svg:x'))
+
+        # halign: outside 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(9)
+        self.assertEquals('outside', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[8], '@svg:x'))
+
+        # halign: outside 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(10)
+        #self.assertEquals('outside', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[9], '@svg:x'))
+
+        # valign: top 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(11)
+        self.assertEquals('from-top', xpath1(props, '@style:vertical-pos'))
+        self.assertEquals('0mm', xpath1(rect[10], '@svg:y'))
+
+        # valign: top 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(12)
+        self.assertEquals('from-top', xpath1(props, '@style:vertical-pos'))
+        self.assertEquals('10mm', xpath1(rect[11], '@svg:y'))
+
+        # valign: center 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(13)
+        self.assertEquals('middle', xpath1(props, '@style:vertical-pos'))
+        #self.assertEquals('0mm', xpath1(rect[12], '@svg:y'))
+
+        # valign: center 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(14)
+        #self.assertEquals('middle', xpath1(props, '@style:vertical-pos'))
+        #self.assertEquals('10mm', xpath1(rect[13], '@svg:y'))
+
+        # valign: bottom 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(15)
+        self.assertEquals('bottom', xpath1(props, '@style:vertical-pos'))
+        self.assertEquals('0mm', xpath1(rect[14], '@svg:y'))
+
+        # valign: bottom 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(16)
+        #self.assertEquals('bottom', xpath1(props, '@style:vertical-pos'))
+        #self.assertEquals('10mm', xpath1(rect[15], '@svg:y'))
