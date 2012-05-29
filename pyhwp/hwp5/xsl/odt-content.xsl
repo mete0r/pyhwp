@@ -482,7 +482,7 @@
     <xsl:param name="x" />
     <xsl:param name="y" />
     <xsl:element name="draw:g">
-      <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
       <xsl:apply-templates select="ShapeComponent">
 	<xsl:with-param name="x" select="$x" />
@@ -527,12 +527,7 @@
     <xsl:attribute name="svg:height"><xsl:value-of select="round(ShapeComponent/@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
   </xsl:template>
 
-  <xsl:template mode="draw-image-frame-attributes" match="GShapeObjectControl">
-    <!-- common-draw-position-attlist -->
-    <xsl:if test="@inline = 0">
-      <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
-      <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
-    </xsl:if>
+  <xsl:template mode="text-anchor-type" match="GShapeObjectControl">
     <!-- common-text-anchor-attlist -->
     <xsl:choose>
       <xsl:when test="@inline = 1">
@@ -542,6 +537,18 @@
 	<xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="text-anchor-type" match="ShapeComponent[@chid='$con']">
+  </xsl:template>
+
+  <xsl:template mode="draw-image-frame-attributes" match="GShapeObjectControl">
+    <!-- common-draw-position-attlist -->
+    <xsl:if test="@inline = 0">
+      <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
+      <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates mode="text-anchor-type" select="." />
     <!-- common-draw-z-index-attlist -->
     <xsl:attribute name="draw:z-index"><xsl:value-of select="@z-order"/></xsl:attribute>
     <!-- 15.27.1 Frame Widths -->
@@ -564,8 +571,7 @@
 
     <xsl:element name="draw:rect">
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
-      <!-- TODO -->
-      <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="svg:x"><xsl:value-of select="round($x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y"><xsl:value-of select="round($y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:variable name="width" select="ShapeRectangle/Array/Coord[2]/@x - ShapeRectangle/Array/Coord[1]/@x"/>
@@ -598,8 +604,7 @@
       <xsl:attribute name="svg:y1"><xsl:value-of select="round($y1 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:x2"><xsl:value-of select="round($x2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y2"><xsl:value-of select="round($y2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <!-- TODO -->
-      <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
     </xsl:element>
   </xsl:template>
