@@ -258,164 +258,173 @@
   </xsl:template>
 
   <xsl:template match="GShapeObjectControl" mode="style-graphic-properties">
-    <!-- 15.27 Frame Formatting Properties -->
-    <xsl:element name="style:graphic-properties">
-      <!-- 15.27.4 Left and Right Margins -->
-      <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <!-- 15.27.5 Top and Bottom Margins -->
-      <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <xsl:choose>
-	<xsl:when test="@inline = 0">
-	  <!-- 15.27.21 Wrapping -->
+    <!-- 15.27.4 Left and Right Margins -->
+    <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+    <!-- 15.27.5 Top and Bottom Margins -->
+    <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:choose>
+      <xsl:when test="@inline = 0">
+	<!-- 15.27.21 Wrapping -->
+	<xsl:choose>
+	  <xsl:when test="@flow = 'float'">
+	    <xsl:choose>
+	      <xsl:when test="@text-side = 'both'">
+		<xsl:attribute name="style:wrap">parallel</xsl:attribute>
+	      </xsl:when>
+	      <xsl:when test="@text-side = 'left'">
+		<xsl:attribute name="style:wrap">left</xsl:attribute>
+	      </xsl:when>
+	      <xsl:when test="@text-side = 'right'">
+		<xsl:attribute name="style:wrap">right</xsl:attribute>
+	      </xsl:when>
+	      <xsl:when test="@text-side = 'larger'">
+		<xsl:attribute name="style:wrap">biggest</xsl:attribute>
+	      </xsl:when>
+	    </xsl:choose>
+	  </xsl:when>
+	  <xsl:when test="@flow = 'block'">
+	    <xsl:attribute name="style:wrap">none</xsl:attribute>
+	  </xsl:when>
+	  <xsl:when test="@flow = 'back'">
+	    <xsl:attribute name="style:wrap">run-through</xsl:attribute>
+	  </xsl:when>
+	  <xsl:when test="@flow = 'front'">
+	    <!-- 해당하는 것이 없음 : 가장 비슷한 run-through를 채택 -->
+	    <xsl:attribute name="style:wrap">run-through</xsl:attribute>
+	  </xsl:when>
+	</xsl:choose>
+
+	<xsl:attribute name="style:vertical-rel">
 	  <xsl:choose>
-	    <xsl:when test="@flow = 'float'">
-	      <xsl:choose>
-		<xsl:when test="@text-side = 'both'">
-		  <xsl:attribute name="style:wrap">parallel</xsl:attribute>
-		</xsl:when>
-		<xsl:when test="@text-side = 'left'">
-		  <xsl:attribute name="style:wrap">left</xsl:attribute>
-		</xsl:when>
-		<xsl:when test="@text-side = 'right'">
-		  <xsl:attribute name="style:wrap">right</xsl:attribute>
-		</xsl:when>
-		<xsl:when test="@text-side = 'larger'">
-		  <xsl:attribute name="style:wrap">biggest</xsl:attribute>
-		</xsl:when>
-	      </xsl:choose>
+	    <xsl:when test="@vrelto = 'page'">
+	      <xsl:text>page-content</xsl:text>
 	    </xsl:when>
-	    <xsl:when test="@flow = 'block'">
-	      <xsl:attribute name="style:wrap">none</xsl:attribute>
+	    <xsl:when test="@vrelto = 'paper'">
+	      <xsl:text>page</xsl:text>
 	    </xsl:when>
-	    <xsl:when test="@flow = 'back'">
-	      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
-	    </xsl:when>
-	    <xsl:when test="@flow = 'front'">
-	      <!-- 해당하는 것이 없음 : 가장 비슷한 run-through를 채택 -->
-	      <xsl:attribute name="style:wrap">run-through</xsl:attribute>
-	    </xsl:when>
-	  </xsl:choose>
-
-	  <xsl:attribute name="style:vertical-rel">
-	    <xsl:choose>
-	      <xsl:when test="@vrelto = 'page'">
-		<xsl:text>page-content</xsl:text>
-	      </xsl:when>
-	      <xsl:when test="@vrelto = 'paper'">
-		<xsl:text>page</xsl:text>
-	      </xsl:when>
-	      <xsl:when test="@vrelto = 'paragraph'">
-		<xsl:text>paragraph</xsl:text>
-	      </xsl:when>
-	      <xsl:otherwise>
-		<xsl:text>paragraph</xsl:text>
-	      </xsl:otherwise>
-	    </xsl:choose>
-	  </xsl:attribute>
-
-	  <xsl:attribute name="style:horizontal-rel">
-	    <xsl:choose>
-	      <xsl:when test="@hrelto = 'page'">
-		<xsl:text>page-content</xsl:text>
-	      </xsl:when>
-	      <xsl:when test="@hrelto = 'paper'">
-		<xsl:text>page</xsl:text>
-	      </xsl:when>
-	      <xsl:when test="@hrelto = 'column'">
-		<!-- TODO -->
-		<xsl:text>page-content</xsl:text>
-	      </xsl:when>
-	      <xsl:otherwise>
-		<xsl:text>paragraph</xsl:text>
-	      </xsl:otherwise>
-	    </xsl:choose>
-	  </xsl:attribute>
-
-	  <xsl:attribute name="style:horizontal-pos">
-	    <xsl:choose>
-	      <xsl:when test="@halign = 'left'">
-		<xsl:text>from-left</xsl:text>
-	      </xsl:when>
-	      <!-- TODO -->
-	    </xsl:choose>
-	  </xsl:attribute>
-
-	  <xsl:attribute name="style:vertical-pos">
-	    <xsl:choose>
-	      <xsl:when test="@halign = 'left'">
-		<xsl:text>from-top</xsl:text>
-	      </xsl:when>
-	      <!-- TODO -->
-	    </xsl:choose>
-	  </xsl:attribute>
-	</xsl:when>
-	<xsl:otherwise> <!-- when @inline = 1 -->
-	  <xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
-	  <xsl:attribute name="style:vertical-pos">top</xsl:attribute>
-	</xsl:otherwise>
-      </xsl:choose>
-      <xsl:for-each select="ShapeComponent">
-        <xsl:choose>
-          <xsl:when test="@fill-colorpattern = 1">
-            <!--
-            <xsl:choose>
-              <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
-              <xsl:when test="FillColorPattern/@pattern-type = 'vertical'"/>
-              <xsl:when test="FillColorPattern/@pattern-type = 'backslash'"/>
-              <xsl:when test="FillColorPattern/@pattern-type = 'slash'"/>
-              <xsl:when test="FillColorPattern/@pattern-type = 'grid'"/>
-              <xsl:when test="FillColorPattern/@pattern-type = 'cross'"/>
-              <xsl:otherwise/>
-            </xsl:choose>
-            -->
-            <xsl:attribute name="draw:fill">solid</xsl:attribute>
-            <xsl:attribute name="draw:fill-color"><xsl:value-of select="FillColorPattern/@background-color"/></xsl:attribute>
-          </xsl:when>
-          <!--
-          <xsl:when test="@fill-gradation = 1">
-            <xsl:attribute name="draw:fill">gradient</xsl:attribute>
-          </xsl:when>
-          -->
-          <xsl:otherwise>
-            <xsl:attribute name="draw:fill">none</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-	<xsl:for-each select="BorderLine">
-	  <xsl:choose>
-	    <xsl:when test="@stroke = 'none'">
-	      <xsl:attribute name="draw:stroke">none</xsl:attribute>
-	    </xsl:when>
-	    <xsl:when test="@stroke = 'solid'">
-	      <xsl:attribute name="draw:stroke">solid</xsl:attribute>
-	    </xsl:when>
-	    <xsl:when test="@stroke = 'dashed'">
-	      <xsl:attribute name="draw:stroke">dash</xsl:attribute>
-	    </xsl:when>
-	    <xsl:when test="@stroke = 'dotted'">
-	      <xsl:attribute name="draw:stroke">dash</xsl:attribute>
+	    <xsl:when test="@vrelto = 'paragraph'">
+	      <xsl:text>paragraph</xsl:text>
 	    </xsl:when>
 	    <xsl:otherwise>
-	      <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+	      <xsl:text>paragraph</xsl:text>
 	    </xsl:otherwise>
 	  </xsl:choose>
-	  <xsl:attribute name="svg:stroke-color">
-	    <xsl:value-of select="@color"/>
-	  </xsl:attribute>
-	  <xsl:attribute name="svg:stroke-width">
-	    <xsl:value-of select="round(@width div 7200 * 25.4 * 100) div 100"/><xsl:text>mm</xsl:text>
-	  </xsl:attribute>
-	</xsl:for-each>
-      </xsl:for-each>
-    </xsl:element>
+	</xsl:attribute>
+
+	<xsl:attribute name="style:horizontal-rel">
+	  <xsl:choose>
+	    <xsl:when test="@hrelto = 'page'">
+	      <xsl:text>page-content</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@hrelto = 'paper'">
+	      <xsl:text>page</xsl:text>
+	    </xsl:when>
+	    <xsl:when test="@hrelto = 'column'">
+	      <!-- TODO -->
+	      <xsl:text>page-content</xsl:text>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:text>paragraph</xsl:text>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:attribute>
+
+	<xsl:attribute name="style:horizontal-pos">
+	  <xsl:choose>
+	    <xsl:when test="@halign = 'left'">
+	      <xsl:text>from-left</xsl:text>
+	    </xsl:when>
+	    <!-- TODO -->
+	  </xsl:choose>
+	</xsl:attribute>
+
+	<xsl:attribute name="style:vertical-pos">
+	  <xsl:choose>
+	    <xsl:when test="@halign = 'left'">
+	      <xsl:text>from-top</xsl:text>
+	    </xsl:when>
+	    <!-- TODO -->
+	  </xsl:choose>
+	</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise> <!-- when @inline = 1 -->
+	<xsl:attribute name="style:vertical-rel">baseline</xsl:attribute>
+	<xsl:attribute name="style:vertical-pos">top</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="style-graphic-properties" match="ShapeComponent[@chid='$con']">
+  </xsl:template>
+
+  <xsl:template mode="draw-fill" match="ShapeComponent">
+    <xsl:choose>
+      <xsl:when test="@fill-colorpattern = 1">
+	<!--
+	<xsl:choose>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'vertical'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'backslash'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'slash'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'grid'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'cross'"/>
+	  <xsl:otherwise/>
+	</xsl:choose>
+	-->
+	<xsl:attribute name="draw:fill">solid</xsl:attribute>
+	<xsl:attribute name="draw:fill-color"><xsl:value-of select="FillColorPattern/@background-color"/></xsl:attribute>
+      </xsl:when>
+      <!--
+      <xsl:when test="@fill-gradation = 1">
+	<xsl:attribute name="draw:fill">gradient</xsl:attribute>
+      </xsl:when>
+      -->
+      <xsl:otherwise>
+	<xsl:attribute name="draw:fill">none</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="draw-stroke" match="ShapeComponent">
+    <xsl:for-each select="BorderLine">
+      <xsl:choose>
+	<xsl:when test="@stroke = 'none'">
+	  <xsl:attribute name="draw:stroke">none</xsl:attribute>
+	</xsl:when>
+	<xsl:when test="@stroke = 'solid'">
+	  <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+	</xsl:when>
+	<xsl:when test="@stroke = 'dashed'">
+	  <xsl:attribute name="draw:stroke">dash</xsl:attribute>
+	</xsl:when>
+	<xsl:when test="@stroke = 'dotted'">
+	  <xsl:attribute name="draw:stroke">dash</xsl:attribute>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:attribute name="draw:stroke">solid</xsl:attribute>
+	</xsl:otherwise>
+      </xsl:choose>
+      <xsl:attribute name="svg:stroke-color">
+	<xsl:value-of select="@color"/>
+      </xsl:attribute>
+      <xsl:attribute name="svg:stroke-width">
+	<xsl:value-of select="round(@width div 7200 * 25.4 * 100) div 100"/><xsl:text>mm</xsl:text>
+      </xsl:attribute>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="ShapeComponent" mode="style">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">graphic</xsl:attribute>
-      <xsl:apply-templates mode="style-graphic-properties" select=".." />
+      <!-- 15.27 Frame Formatting Properties -->
+      <xsl:element name="style:graphic-properties">
+	<xsl:apply-templates mode="style-graphic-properties" select=".." />
+	<xsl:apply-templates mode="draw-fill" select="." />
+	<xsl:apply-templates mode="draw-stroke" select="." />
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 
