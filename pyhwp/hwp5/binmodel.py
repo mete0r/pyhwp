@@ -599,7 +599,7 @@ class CommonControl(Control):
     TextSide = Enum(BOTH=0, LEFT=1, RIGHT=2, LARGER=3)
     VRelTo = Enum(PAPER=0, PAGE=1, PARAGRAPH=2)
     HRelTo = Enum(PAPER=0, PAGE=1, COLUMN=2, PARAGRAPH=3)
-    VAlign = Enum(TOP=0, CENTER=1, BOTTOM=2, INSIDE=3, OUTSIDE=4)
+    VAlign = Enum(TOP=0, MIDDLE=1, BOTTOM=2)
     HAlign = Enum(LEFT=0, CENTER=1, RIGHT=2, INSIDE=3, OUTSIDE=4)
     WidthRelTo = Enum(PAPER=0, PAGE=1, COLUMN=2, PARAGRAPH=3, ABSOLUTE=4)
     HeightRelTo = Enum(PAPER=0, PAGE=1, ABSOLUTE=2)
