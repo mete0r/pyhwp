@@ -123,6 +123,7 @@
           </xsl:for-each>
         </xsl:for-each>
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//TableControl" />
+	<xsl:apply-templates mode="tablecell-style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
       </office:automatic-styles>
       <office:body>
@@ -196,15 +197,19 @@
   <xsl:template match="ControlChar"></xsl:template>
 
   <xsl:template match="TableControl">
+    <xsl:variable name="table-id" select="@table-id + 1" />
     <xsl:element name="table:table">
-      <xsl:attribute name="table:style-name">Table-<xsl:value-of select="@table-id + 1"/></xsl:attribute>
+      <xsl:attribute name="table:style-name">Table-<xsl:value-of select="$table-id"/></xsl:attribute>
       <table:table-column>
         <xsl:attribute name="table:number-columns-repeated"><xsl:value-of select="TableBody/@cols"/></xsl:attribute>
       </table:table-column>
       <xsl:for-each select="TableBody/TableRow">
+	<xsl:variable name="rownum" select="position()" />
         <table:table-row>
           <xsl:for-each select="TableCell">
+	    <xsl:variable name="colnum" select="position()" />
             <table:table-cell>
+	      <xsl:attribute name="table:style-name">Table-<xsl:value-of select="$table-id"/>-<xsl:value-of select="$rownum" />-<xsl:value-of select="$colnum" /></xsl:attribute>
               <xsl:attribute name="table:number-columns-spanned"><xsl:value-of select="@colspan"/></xsl:attribute>
               <xsl:attribute name="table:number-rows-spanned"><xsl:value-of select="@rowspan"/></xsl:attribute>
               <xsl:apply-templates />
@@ -213,6 +218,100 @@
         </table:table-row>
       </xsl:for-each>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="tablecell-style" match="TableControl">
+    <xsl:variable name="table-id" select="@table-id + 1" />
+    <xsl:for-each select="TableBody/TableRow">
+      <xsl:variable name="rowidx" select="position()" />
+      <xsl:for-each select="TableCell">
+	<xsl:variable name="colidx" select="position()" />
+	<xsl:element name="style:style">
+	  <xsl:attribute name="style:name">Table-<xsl:value-of select="$table-id"/>-<xsl:value-of select="$rowidx" />-<xsl:value-of select="$colidx" /></xsl:attribute>
+	  <xsl:attribute name="style:family">table-cell</xsl:attribute>
+	  <xsl:element name="style:table-cell-properties">
+	    <xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	    <xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	    <xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	    <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	    <xsl:variable name="bfid" select="@borderfill-id" />
+	    <xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
+	      <xsl:apply-templates mode="fo-border" select="." />
+	      <xsl:apply-templates mode="fo-background" select="." />
+	    </xsl:for-each>
+	  </xsl:element>
+	</xsl:element>
+      </xsl:for-each>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template mode="fo-border" match="BorderFill">
+    <xsl:for-each select="Border[@attribute-name='left']">
+      <xsl:attribute name="fo:border-left">
+	<xsl:value-of select="@width" />
+	<xsl:text> </xsl:text>
+	<xsl:apply-templates mode="fo-border-style-value" select="." />
+	<xsl:text> </xsl:text>
+	<xsl:value-of select="@color" />
+      </xsl:attribute>
+    </xsl:for-each>
+    <xsl:for-each select="Border[@attribute-name='right']">
+      <xsl:attribute name="fo:border-right">
+	<xsl:value-of select="@width" />
+	<xsl:text> </xsl:text>
+	<xsl:apply-templates mode="fo-border-style-value" select="." />
+	<xsl:text> </xsl:text>
+	<xsl:value-of select="@color" />
+      </xsl:attribute>
+    </xsl:for-each>
+    <xsl:for-each select="Border[@attribute-name='top']">
+      <xsl:attribute name="fo:border-top">
+	<xsl:value-of select="@width" />
+	<xsl:text> </xsl:text>
+	<xsl:apply-templates mode="fo-border-style-value" select="." />
+	<xsl:text> </xsl:text>
+	<xsl:value-of select="@color" />
+      </xsl:attribute>
+    </xsl:for-each>
+    <xsl:for-each select="Border[@attribute-name='bottom']">
+      <xsl:attribute name="fo:border-bottom">
+	<xsl:value-of select="@width" />
+	<xsl:text> </xsl:text>
+	<xsl:apply-templates mode="fo-border-style-value" select="." />
+	<xsl:text> </xsl:text>
+	<xsl:value-of select="@color" />
+      </xsl:attribute>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template mode="fo-border-style-value" match="Border">
+    <xsl:value-of select="@stroke-type" />
+  </xsl:template>
+
+  <xsl:template mode="fo-background" match="BorderFill">
+    <xsl:choose>
+      <xsl:when test="@fill-type = 'colorpattern'">
+	<!--
+	<xsl:choose>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'vertical'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'backslash'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'slash'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'grid'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'cross'"/>
+	  <xsl:otherwise/>
+	</xsl:choose>
+	-->
+	<xsl:for-each select="FillColorPattern">
+	  <xsl:attribute name="fo:background-color"><xsl:value-of select="@background-color"/></xsl:attribute>
+	</xsl:for-each>
+      </xsl:when>
+      <!--
+      <xsl:when test="@fill-type = 'gradation'">
+	<xsl:attribute name="draw:fill">gradient</xsl:attribute>
+      </xsl:when>
+      -->
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="style" match="TableControl">
