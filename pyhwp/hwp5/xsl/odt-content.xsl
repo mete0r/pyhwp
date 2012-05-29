@@ -122,49 +122,7 @@
             </xsl:for-each>
           </xsl:for-each>
         </xsl:for-each>
-        <xsl:for-each select="HwpDoc/BodyText/SectionDef//TableControl">
-          <xsl:element name="style:style">
-            <xsl:attribute name="style:name">Table-<xsl:value-of select="@table-id + 1"/></xsl:attribute>
-            <xsl:attribute name="style:family">table</xsl:attribute>
-            <!-- 15.8 Table Formatting Properties -->
-            <xsl:element name="style:table-properties">
-              <xsl:choose>
-                <xsl:when test="@width-relto = 'absolute'">
-                  <!-- 15.8.1 Table Width -->
-                  <xsl:attribute name="style:width"><xsl:value-of select="round(@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-                  <!-- 15.8.2 Table Alignment -->
-                  <xsl:attribute name="table:align">margins</xsl:attribute>
-                  <!-- 15.8.3 Table Left and Right Margin -->
-                  <!-- 15.5.17 Left and Right Margin -->
-                  <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-                  <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-                </xsl:when>
-                <!--
-                <xsl:when test="@width-relto = 'paper'"> </xsl:when>
-                <xsl:when test="@width-relto = 'page'"> </xsl:when>
-                <xsl:when test="@width-relto = 'column'"> </xsl:when>
-                <xsl:when test="@width-relto = 'paragraph'"> </xsl:when>
-                -->
-              </xsl:choose>
-
-              <!-- 15.8.4 Table Top and Bottom Margin -->
-              <!-- 15.5.20 Top and Bottom Margin -->
-              <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-              <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-
-              <!-- 15.8.12 Border Model Property -->
-              <xsl:choose>
-                <xsl:when test="TableBody/@cellspacing = 0">
-                  <xsl:attribute name="table:border-model">collapsing</xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:attribute name="table:border-model">separating</xsl:attribute>
-                </xsl:otherwise>
-              </xsl:choose>
-
-            </xsl:element>
-          </xsl:element>
-        </xsl:for-each>
+	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
       </office:automatic-styles>
       <office:body>
@@ -254,6 +212,50 @@
           </xsl:for-each>
         </table:table-row>
       </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="style" match="TableControl">
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">Table-<xsl:value-of select="@table-id + 1"/></xsl:attribute>
+      <xsl:attribute name="style:family">table</xsl:attribute>
+      <!-- 15.8 Table Formatting Properties -->
+      <xsl:element name="style:table-properties">
+	<xsl:choose>
+	  <xsl:when test="@width-relto = 'absolute'">
+	    <!-- 15.8.1 Table Width -->
+	    <xsl:attribute name="style:width"><xsl:value-of select="round(@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+	    <!-- 15.8.2 Table Alignment -->
+	    <xsl:attribute name="table:align">margins</xsl:attribute>
+	    <!-- 15.8.3 Table Left and Right Margin -->
+	    <!-- 15.5.17 Left and Right Margin -->
+	    <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(@margin-left div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+	    <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(@margin-right div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+	  </xsl:when>
+	  <!--
+	  <xsl:when test="@width-relto = 'paper'"> </xsl:when>
+	  <xsl:when test="@width-relto = 'page'"> </xsl:when>
+	  <xsl:when test="@width-relto = 'column'"> </xsl:when>
+	  <xsl:when test="@width-relto = 'paragraph'"> </xsl:when>
+	  -->
+	</xsl:choose>
+
+	<!-- 15.8.4 Table Top and Bottom Margin -->
+	<!-- 15.5.20 Top and Bottom Margin -->
+	<xsl:attribute name="fo:margin-top"><xsl:value-of select="round(@margin-top div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+	<xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(@margin-bottom div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+
+	<!-- 15.8.12 Border Model Property -->
+	<xsl:choose>
+	  <xsl:when test="TableBody/@cellspacing = 0">
+	    <xsl:attribute name="table:border-model">collapsing</xsl:attribute>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <xsl:attribute name="table:border-model">separating</xsl:attribute>
+	  </xsl:otherwise>
+	</xsl:choose>
+
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 
