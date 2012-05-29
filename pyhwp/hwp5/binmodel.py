@@ -244,11 +244,42 @@ class COLORREF(int):
 
 
 class Border(Struct):
-    def attributes(context):
-        yield UINT8, 'style',
-        yield UINT8, 'width',
+
+    # 표 20 테두리선 종류
+    StrokeEnum = Enum('none', 'solid', 'dashed', 'dotted', 'dash-dot', 'dash-dot-dot',
+                      'long-dash', 'large-dot',
+                      'double', 'double-2', 'double-3', 'triple',
+                      'wave', 'double-wave',
+                      'inset', 'outset', 'groove', 'ridge')
+    StrokeType = Flags(UINT8,
+                       0, 4, StrokeEnum, 'stroke_type')
+
+    # 표 21 테두리선 굵기
+    widths = {'0.1mm': 0,
+              '0.12mm': 1,
+              '0.15mm': 2,
+              '0.2mm': 3,
+              '0.25mm': 4,
+              '0.3mm': 5,
+              '0.4mm': 6,
+              '0.5mm': 7,
+              '0.6mm': 8,
+              '0.7mm': 9,
+              '1.0mm': 10,
+              '1.5mm': 11,
+              '2.0mm': 12,
+              '3.0mm': 13,
+              '4.0mm': 14,
+              '5.0mm': 15}
+    WidthEnum = Enum(**widths)
+    Width = Flags(UINT8,
+                  0, 4, WidthEnum, 'width')
+
+    def attributes(cls, context):
+        yield cls.StrokeType, 'stroke_flags',
+        yield cls.Width, 'width_flags',
         yield COLORREF, 'color',
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class Fill(Struct):
