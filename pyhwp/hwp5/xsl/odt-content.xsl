@@ -548,7 +548,9 @@
     <xsl:element name="draw:frame">
       <!-- common-draw-style-name-attlist -->
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
-      <xsl:apply-templates mode="draw-image-frame-attributes" select=".." />
+      <xsl:apply-templates mode="draw-image-frame-attributes" select="..">
+	<xsl:with-param name="shapecomponent-pict" select="." />
+      </xsl:apply-templates>
 
       <xsl:apply-templates mode="draw-transform" select=".">
 	<xsl:with-param name="x" select="$x" />
@@ -572,8 +574,9 @@
   </xsl:template>
 
   <xsl:template mode="draw-image-frame-attributes" match="ShapeComponent[@chid='$con']">
-    <xsl:attribute name="svg:width"><xsl:value-of select="round(ShapeComponent/@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
-    <xsl:attribute name="svg:height"><xsl:value-of select="round(ShapeComponent/@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:param name="shapecomponent-pict" />
+    <xsl:attribute name="svg:width"><xsl:value-of select="round($shapecomponent-pict/@initial-width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+    <xsl:attribute name="svg:height"><xsl:value-of select="round($shapecomponent-pict/@initial-height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
   </xsl:template>
 
   <xsl:template mode="text-anchor-type" match="GShapeObjectControl">
@@ -592,6 +595,7 @@
   </xsl:template>
 
   <xsl:template mode="draw-image-frame-attributes" match="GShapeObjectControl">
+    <xsl:param name="shapecomponent-pict" />
     <!-- common-draw-position-attlist -->
     <xsl:if test="@inline = 0">
       <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
@@ -603,13 +607,13 @@
     <!-- 15.27.1 Frame Widths -->
     <xsl:choose>
       <xsl:when test="@width-relto = 'absolute'">
-	<xsl:attribute name="svg:width"><xsl:value-of select="round(@width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+	<xsl:attribute name="svg:width"><xsl:value-of select="round(ShapeComponent/@initial-width div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
       </xsl:when>
     </xsl:choose>
     <!-- 15.27.2 Frame Heights -->
     <xsl:choose>
       <xsl:when test="@height-relto = 'absolute'">
-	<xsl:attribute name="svg:height"><xsl:value-of select="round(@height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
+	<xsl:attribute name="svg:height"><xsl:value-of select="round(ShapeComponent/@initial-height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
       </xsl:when>
     </xsl:choose>
   </xsl:template>

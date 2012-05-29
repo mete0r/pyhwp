@@ -582,9 +582,54 @@ class TestODTXSL(TestCase):
         assert None is xpath1(frame2, '@svg:x')
         assert None is xpath1(frame2, '@svg:y')
         assert '4' == xpath1(frame2, '@draw:z-index')
-        assert '4.23mm' == xpath1(frame2, '@svg:width')
-        assert '4.23mm' == xpath1(frame2, '@svg:height')
+        assert '5.69mm' == xpath1(frame2, '@svg:width')
+        assert '5.69mm' == xpath1(frame2, '@svg:height')
         assert 'bindata/BIN0003.png' == xpath1(frame2, 'draw:image/@xlink:href')
+
+    def test_shapepict_scaled(self):
+        ''' 그림 객체 ShapePicture (scaled) '''
+        odt = example_to_odt('shapepict-scaled.hwp')
+
+        assert 2 == len(xpath(odt.content, '//draw:frame'))
+
+        frame1, frame2 = xpath(odt.content, '//draw:frame')
+
+        assert frame1 is not None
+        assert 'Shape-1' == xpath1(frame1, '@draw:style-name')
+        assert 'paragraph' == xpath1(frame1, '@text:anchor-type')
+        assert '0pt' == xpath1(frame1, '@svg:x')
+        assert '0pt' == xpath1(frame1, '@svg:y')
+        assert '0' == xpath1(frame1, '@draw:z-index')
+        assert '20.07mm' == xpath1(frame1, '@svg:width')
+        assert '12.04mm' == xpath1(frame1, '@svg:height')
+        assert 'bindata/BIN0002.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
+
+        assert frame2 is not None
+        assert 'Shape-2' == xpath1(frame2, '@draw:style-name')
+        assert '0pt' == xpath1(frame2, '@svg:x')
+        assert '0pt' == xpath1(frame2, '@svg:y')
+        assert '1' == xpath1(frame2, '@draw:z-index')
+        assert '20.07mm' == xpath1(frame2, '@svg:width')
+        assert '12.04mm' == xpath1(frame2, '@svg:height')
+        assert 'bindata/BIN0002.jpg' == xpath1(frame2, 'draw:image/@xlink:href')
+
+    def test_shapepict_scaled_in_group(self):
+        ''' 그림 객체 ShapePicture (scaled, grouped) '''
+        odt = example_to_odt('shapecontainer-2.hwp')
+
+        assert 1 == len(xpath(odt.content, '//draw:frame'))
+
+        frame1 = xpath1(odt.content, '//draw:frame')
+
+        assert frame1 is not None
+        assert 'Shape-3' == xpath1(frame1, '@draw:style-name')
+        assert None is xpath1(frame1, '@text:anchor-type')
+        assert None is xpath1(frame1, '@svg:x')
+        assert None is xpath1(frame1, '@svg:y')
+        assert None is xpath1(frame1, '@draw:z-index')  # TODO
+        assert '161.92mm' == xpath1(frame1, '@svg:width')
+        assert '22.23mm' == xpath1(frame1, '@svg:height')
+        assert 'bindata/BIN0001.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
 
     def test_aligns(self):
         ''' 그림 객체 ShapePicture '''
