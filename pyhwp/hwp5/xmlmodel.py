@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from itertools import chain
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
@@ -159,8 +160,17 @@ def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
     charshapes = paracharshape[1]['charshapes']
     shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
 
-    paralineseg_content = paralineseg[1]
-    paralineseg_context = paralineseg[2]
+    if paralineseg:
+        paralineseg_content = paralineseg[1]
+        paralineseg_context = paralineseg[2]
+    else:
+        # 배포용 문서의 더미 BodyText 에는 LineSeg 정보가 없음
+        # (see https://github.com/mete0r/pyhwp/issues/33)
+        # 더미 LineSeg를 만들어 준다
+        lineseg = dict(chpos=0, y=0, height=0, height2=0, height85=0,
+                       space_below=0, x=0, width=0, a8=0, flags=0)
+        paralineseg_content = dict(linesegs=[lineseg])
+        paralineseg_context = dict()
     linesegs = ((lineseg['chpos'], lineseg)
                 for lineseg in paralineseg_content['linesegs'])
     lined_shaped_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))

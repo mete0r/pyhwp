@@ -92,3 +92,32 @@ class TestLineSeg(TestCase):
         lines = line_segmented(iter(chunks), make_ranged_shapes(linesegs))
         lines = list(lines)
         self.assertEquals([ ('A', [((0, 3), None, 'aaa'), ((3,4), None, 'b')]), ('B', [((4,6),None,'bb')]), ('C', [((6,9),None,'ccc'), ((9,10),None,'d')]), ('D', [((10,12),None,'dd')]) ], lines)
+
+
+class TestDistributionBodyText(TestBase):
+
+    hwp5file_name = 'viewtext.hwp'
+
+    def test_issue33_missing_paralineseg(self):
+        from hwp5.tagids import HWPTAG_PARA_LINE_SEG
+        from hwp5.binmodel import ParaLineSeg
+        section0 = self.hwp5file_bin.bodytext.section(0)
+        tagids = set(model['record']['tagid'] for model in section0.models())
+        types = set(model['type'] for model in section0.models())
+        self.assertTrue(HWPTAG_PARA_LINE_SEG not in tagids)
+        self.assertTrue(ParaLineSeg not in types)
+
+        from hwp5.binmodel import ParaText, ParaCharShape
+        paratext = self.hwp5file_bin.bodytext.section(0).model(1)
+        self.assertEquals(ParaText, paratext['type'])
+
+        paracharshape = self.bodytext.section(0).model(2)
+        self.assertEquals(ParaCharShape, paracharshape['type'])
+
+        from hwp5.xmlmodel import merge_paragraph_text_charshape_lineseg as m
+        evs = m((paratext['type'], paratext['content'], dict()),
+                (paracharshape['type'], paracharshape['content'], dict()),
+                None)
+
+        # we can merge events without a problem
+        list(evs)
