@@ -153,14 +153,15 @@ def xslt_odt_styles(f, hwpxmlfilename):
     p = subprocess.Popen(['xsltproc', styles_xsl, hwpxmlfilename], stdout=f)
     p.wait()
 
-import pkg_resources
 class XSLs(object):
     @property
     def content(self):
+        import pkg_resources
         return pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
 
     @property
     def styles(self):
+        import pkg_resources
         return pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
 
 xsl = XSLs()
