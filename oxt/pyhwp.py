@@ -229,7 +229,7 @@ class Fac(object):
             # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
             # we use default xsltproc which uses external `xsltproc' program
             #xsltproc = self.xsltproc_with_LibXSLTTransformer
-            from hwp5.hwp5odt import xsltproc
+            from hwp5.tools import xsltproc
 
             hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
             hwp5file_convert_to_odtpkg(hwp5file, odtpkg)

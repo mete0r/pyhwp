@@ -83,6 +83,7 @@ def make(hwpfilename):
     from ._scriptutils import open_or_exit
     hwpfile = open_or_exit(open, hwpfilename)
 
+    from hwp5.tools import xsltproc
     hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
 
     try:
@@ -165,64 +166,3 @@ class XSLs(object):
         return pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
 
 xsl = XSLs()
-
-def xsltproc(xsl_filepath):
-    ''' create a XSLT function with specified XSL stylesheet file.
-
-        xsl_filepath: a XSL Stylesheet path in filesystem
-
-        returns a transform function
-    '''
-
-    def autoclose(p):
-        ''' start a detached thread which waits the given subprocess terminates. '''
-        import threading
-        t = threading.Thread(target=p.wait)
-        t.daemon = True
-        t.start()
-
-    def transform(infile=None, outfile=None):
-        ''' transform file streams with XSL stylesheet at `%s'
-
-            `xsltproc' executable should be in PATH directories.
-
-            transform(infile, outfile)
-                : transform infile stream into outfile stream
-
-            transform(infile):
-                : returns transformed stream (readable sink)
-
-            transform(outfile=outfile)
-                : returns stream to be transformed (writable source)
-
-            transform():
-                : returns a tuple of (writable source, readable sink) of transformation
-        '''
-        import subprocess
-        import logging
-        logging.debug('xsltproc process starting')
-
-        stdin = infile or subprocess.PIPE
-        stdout = outfile or subprocess.PIPE
-
-        p = subprocess.Popen(['xsltproc', xsl_filepath, '-'], stdin=stdin, stdout=stdout)
-
-        logging.debug('xsltproc process started')
-
-        if infile is None and outfile is None:
-            autoclose(p)
-            return p.stdin, p.stdout # transform source, sink
-        elif outfile is None:
-            autoclose(p)
-            return p.stdout # transformed stream
-        elif infile is None:
-            autoclose(p)
-            return p.stdin # stream to be transformed
-        else:
-            p.wait()
-
-        logging.debug('xsltproc process end')
-    transform.__doc__ = transform.__doc__%xsl_filepath
-    return transform
-
-hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
