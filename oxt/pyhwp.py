@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import os
 import os.path
@@ -336,6 +337,13 @@ def unofy_value(value):
         value = tuple(value)
     return value
 
+def xenumeration_generator(xenum):
+    while xenum.hasMoreElements():
+        yield xenum.nextElement()
+
+def xenumeration_list(xenum):
+    return list(xenumeration_generator(xenum))
+
 def dict_to_propseq(d):
     from com.sun.star.beans import PropertyValue
     DIRECT_VALUE = uno.Enum('com.sun.star.beans.PropertyState', 'DIRECT_VALUE')
@@ -460,3 +468,121 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
     def cancel(self):
         logging.debug('Importer cancel')
 
+
+@implementation('pyhwp.TestJob', 'com.sun.star.task.XJobExecutor')
+class TestJob(unohelper.Base, XJobExecutor):
+    def __init__(self, ctx):
+        self.ctx = ctx
+
+    def trigger(self, args):
+        logging.debug('testjob %s', args)
+
+        wd = args
+
+        import os
+        original_wd = os.getcwd()
+        try:
+            os.chdir(wd)
+
+            from unittest import TextTestRunner
+            testrunner = TextTestRunner()
+
+            from unittest import TestSuite
+            testrunner.run(TestSuite(self.tests()))
+        finally:
+            os.chdir(original_wd)
+
+    def tests(self):
+        from unittest import defaultTestLoader
+        yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
+        yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
+        from hwp5.tests import test_suite
+        yield test_suite()
+
+
+from unittest import TestCase
+class DetectorTest(TestCase):
+
+    def test_detect(self):
+        context = uno.getComponentContext()
+
+        f = file('fixtures/sample-5017.hwp', 'r')
+        stream = InputStreamFromFileLike(f)
+        mediadesc = dict_to_propseq(dict(InputStream=stream))
+
+        svm = context.ServiceManager
+        detector = svm.createInstanceWithContext('pyhwp.Detector', context)
+        typename, mediadesc2 = detector.detect(mediadesc)
+        self.assertEquals('writer_pyhwp_HWPv5', typename)
+
+class ImporterTest(TestCase):
+
+    def test_filter(self):
+        context = uno.getComponentContext()
+        f = file('fixtures/sample-5017.hwp', 'r')
+        stream = InputStreamFromFileLike(f)
+        mediadesc = dict_to_propseq(dict(InputStream=stream))
+
+        svm = context.ServiceManager
+        importer = svm.createInstanceWithContext('pyhwp.Importer', context)
+        desktop = svm.createInstanceWithContext('com.sun.star.frame.Desktop',
+                                                context)
+        doc = desktop.loadComponentFromURL('private:factory/swriter', '_blank',
+                                           0, ())
+
+        importer.setTargetDocument(doc)
+        importer.filter(mediadesc)
+
+        text = doc.getText()
+
+        paragraphs = text.createEnumeration()
+        paragraphs = xenumeration_list(paragraphs)
+        for paragraph_ix, paragraph in enumerate(paragraphs):
+            logging.info('Paragraph %s', paragraph_ix)
+            logging.debug('%s', paragraph)
+
+            services = paragraph.SupportedServiceNames
+            if 'com.sun.star.text.Paragraph' in services:
+                portions = xenumeration_list(paragraph.createEnumeration())
+                for portion_ix, portion in enumerate(portions):
+                    logging.info('Portion %s: %s', portion_ix,
+                                 portion.TextPortionType)
+                    if portion.TextPortionType == 'Text':
+                        logging.info('- %s', portion.getString())
+                    elif portion.TextPortionType == 'Frame':
+                        logging.debug('%s', portion)
+                        textcontent_name = 'com.sun.star.text.TextContent'
+                        en = portion.createContentEnumeration(textcontent_name)
+                        contents = xenumeration_list(en)
+                        for content in contents:
+                            logging.debug('content: %s', content)
+                            content_services = content.SupportedServiceNames
+                            if ('com.sun.star.drawing.GraphicObjectShape' in
+                                content_services):
+                                logging.info('graphic url: %s',
+                                             content.GraphicURL)
+                                logging.info('graphic stream url: %s',
+                                             content.GraphicStreamURL)
+            if 'com.sun.star.text.TextTable' in services:
+                pass
+            else:
+                pass
+
+        paragraph_portions = paragraphs[0].createEnumeration()
+        paragraph_portions = xenumeration_list(paragraph_portions)
+        self.assertEquals(u'한글 ', paragraph_portions[0].getString())
+
+        paragraph_portions = paragraphs[16].createEnumeration()
+        paragraph_portions = xenumeration_list(paragraph_portions)
+        contents = paragraph_portions[1].createContentEnumeration('com.sun.star.text.TextContent')
+        contents = xenumeration_list(contents)
+        self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
+                          contents[0].GraphicStreamURL)
+
+        graphics = doc.getGraphicObjects()
+        graphics = xenumeration_list(graphics.createEnumeration())
+        logging.debug('graphic: %s', graphics)
+
+        frames = doc.getTextFrames()
+        frames = xenumeration_list(frames.createEnumeration())
+        logging.debug('frames: %s', frames)

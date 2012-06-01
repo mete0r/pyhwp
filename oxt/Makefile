@@ -11,7 +11,7 @@ validate: $(OXTPKG)
 	$(UNOPKG) validate -v $(OXTPKG)
 
 install: $(OXTPKG)
-	$(UNOPKG) add -v $(OXTPKG)
+	$(UNOPKG) add -v -s $(OXTPKG)
 
 uninstall:
 	$(UNOPKG) remove -f $(OXTPKG)
