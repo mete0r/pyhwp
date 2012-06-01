@@ -324,7 +324,6 @@ class OleFileIO_from_OLESimpleStorage(object):
             yield x
 
     def openstream(self, path):
-        from com.sun.star.container import NoSuchElementException
         path_segments = path.split('/')
         stream = container_find_element(self.storage, path_segments)
         if stream is not None:
@@ -359,7 +358,7 @@ class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
 
     def skipBytes(self, nBytesToSkip):
         #logging.debug('InputStream.skipBytes(%d)', nBytesToSkip)
-        data = self.f.read(nBytesToSkip)
+        self.f.read(nBytesToSkip)
 
     def available(self):
         #logging.debug('InputStream.available()')
