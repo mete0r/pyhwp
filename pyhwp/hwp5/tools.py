@@ -89,8 +89,31 @@ class RelaxNGValidationFailed(Exception):
 
 
 def relaxng(rng_filepath):
-    from hwp5.externprogs import xmllint
-    transform = xmllint('--noout', '--relaxng', rng_filepath)
+    ''' RelaxNG validator
+
+    :param rng_filepath: RelaxNG schema filepath
+    :return: `validate(f)`
+
+    `validate(f)`: validate XML stream against the given RelaxNG schema
+
+    :param f: open file to an XML file
+    :return: True if the XML is valid;
+             False if `xmllint' program is not found
+    :raises RelaxNGValidationFailed: if the XML is not valid
+
+    >>> validate = relaxng(rng_filepath)
+    >>> f = file('sample.xml', 'r')
+    >>> validate(f)
+    '''
+    from hwp5.externprogs import xmllint, ProgramNotFound
+
+    kwargs = dict()
+    import os
+    xmllint_path = os.environ.get('PYHWP_XMLLINT')
+    if xmllint_path:
+        kwargs['xmllint_path'] = xmllint_path
+
+    transform = xmllint('--noout', '--relaxng', rng_filepath, **kwargs)
     def validate(xml_file):
         from tempfile import TemporaryFile
         tmpf = TemporaryFile()
@@ -98,6 +121,9 @@ def relaxng(rng_filepath):
             retcode = transform(xml_file, tmpf)
             if retcode != 0:
                 raise RelaxNGValidationFailed(tmpf.read())
+            return True
+        except ProgramNotFound:
+            return False
         finally:
             tmpf.close()
     return validate
