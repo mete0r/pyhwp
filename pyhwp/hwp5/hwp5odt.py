@@ -46,8 +46,8 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
 def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
     def convert(hwpfile, odtpkg):
         import pkg_resources
-        schema = pkg_resources.resource_filename('hwp5',
-                                                 'odf-relaxng/OpenDocument-v1.2-os-schema.rng')
+        schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+        schema = pkg_resources.resource_filename('hwp5', schema)
         if relaxng is not None:
             relaxng_validate = relaxng(schema)
         else:
