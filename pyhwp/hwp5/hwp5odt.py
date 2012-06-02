@@ -43,8 +43,16 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
     for additional in additional_files:
         odtpkg.insert_stream(*additional)
 
-def hwp5file_to_odtpkg_converter(xsltproc):
+def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
     def convert(hwpfile, odtpkg):
+        import pkg_resources
+        schema = pkg_resources.resource_filename('hwp5',
+                                                 'odf-relaxng/OpenDocument-v1.2-os-schema.rng')
+        if relaxng is not None:
+            relaxng_validate = relaxng(schema)
+        else:
+            relaxng_validate = None
+
         import tempfile
         hwpxmlfile = tempfile.TemporaryFile()
         try:
@@ -57,11 +65,17 @@ def hwp5file_to_odtpkg_converter(xsltproc):
             hwpxmlfile.seek(0)
             xslt_styles(hwpxmlfile, styles)
             styles.seek(0)
+            if relaxng_validate:
+                relaxng_validate(styles)
+                styles.seek(0)
 
             content = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
             xslt_content(hwpxmlfile, content)
             content.seek(0)
+            if relaxng_validate:
+                relaxng_validate(content)
+                content.seek(0)
 
             def additional_files():
                 for bindata_name in hwpfile.list_bindata():
@@ -83,8 +97,8 @@ def make(hwpfilename):
     from ._scriptutils import open_or_exit
     hwpfile = open_or_exit(open, hwpfilename)
 
-    from hwp5.tools import xsltproc
-    hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
+    from hwp5.tools import xsltproc, relaxng
+    hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc, relaxng)
 
     try:
         odtpkg = ODTPackage(root+'.odt')

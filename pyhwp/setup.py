@@ -24,7 +24,7 @@ setup(
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
         packages = ['hwp5'],
-        package_data = dict(hwp5=['xsl/*.xsl']),
+        package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
         install_requires=['OleFileIO_PL >=0.20'],
         extras_require=dict(test=['simplejson', 'lxml']),

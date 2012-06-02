@@ -82,3 +82,22 @@ def xsltproc(xsl_filepath):
         logger.debug('xsltproc process end')
     transform.__doc__ = transform.__doc__ % xsl_filepath
     return transform
+
+
+class RelaxNGValidationFailed(Exception):
+    pass
+
+
+def relaxng(rng_filepath):
+    from hwp5.externprogs import xmllint
+    transform = xmllint('--noout', '--relaxng', rng_filepath)
+    def validate(xml_file):
+        from tempfile import TemporaryFile
+        tmpf = TemporaryFile()
+        try:
+            retcode = transform(xml_file, tmpf)
+            if retcode != 0:
+                raise RelaxNGValidationFailed(tmpf.read())
+        finally:
+            tmpf.close()
+    return validate
