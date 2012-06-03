@@ -8,6 +8,10 @@ from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
 from .storage import Storage, StorageWrapper, unpack
 from .storage import ItemsModifyingStorage
 from .importhelper import importStringIO
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 StringIO = importStringIO()
