@@ -15,3 +15,8 @@ module :mod:`hwp5.binmodel`
 ===========================
 .. automodule:: hwp5.binmodel
    :members:
+
+module :mod:`hwp5.tools`
+===========================
+.. automodule:: hwp5.tools
+   :members:
