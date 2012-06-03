@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from itertools import chain
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
 from .treeop import tree_events, tree_events_multi
@@ -364,58 +363,6 @@ def dispatch_model_events(handler, events):
             handler.startModel(model, attributes, **context)
         elif event == ENDEVENT:
             handler.endModel(model)
-
-def flatxml(hwpfile, oformat):
-    ''' convert hwpfile into a flat xml
-
-    hwpfile - hwp file
-    oformat - output formatter
-    '''
-    from .recordstream import read_records
-    from .binmodel import parse_models
-    from .binmodel import create_context
-    context = create_context(hwpfile)
-
-    class HwpDoc(object): pass
-    class DocInfo(object): pass
-    class BodyText(object): pass
-    hwpdoc = HwpDoc, dict(version=hwpfile.fileheader.version), dict(context)
-    docinfo = DocInfo, dict(), dict(context)
-    docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
-    docinfo_models = parse_models(context, docinfo_records)
-    docinfo_events = prefix_binmodels_with_event(context, docinfo_models)
-    docinfo_events = wrap_modelevents(docinfo, docinfo_events)
-
-    docinfo_events = remove_redundant_facenames(docinfo_events)
-
-    bodytext = BodyText, dict(), dict(context)
-    bodytext_events = []
-    for idx in hwpfile.list_bodytext_sections():
-        section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
-        section_models = parse_models(context, section_records)
-        section_events = prefix_binmodels_with_event(context, section_models)
-
-        section_events = make_texts_linesegmented_and_charshaped(section_events)
-        section_events = make_extended_controls_inline(section_events)
-        section_events = match_field_start_end(section_events)
-        section_events = make_paragraphs_children_of_listheader(section_events)
-        section_events = make_paragraphs_children_of_listheader(section_events, TableBody, TableCell)
-        section_events = restructure_tablebody(section_events)
-
-        section_events = wrap_section(idx, section_events)
-        bodytext_events.append(section_events)
-    bodytext_events = chain(*bodytext_events)
-    bodytext_events = wrap_modelevents(bodytext, bodytext_events)
-
-    hwpdoc_events = chain(docinfo_events, bodytext_events)
-    hwpdoc_events = wrap_modelevents(hwpdoc, hwpdoc_events)
-
-    # for easy references in styles
-    hwpdoc_events = give_elements_unique_id(hwpdoc_events)
-
-    oformat.startDocument()
-    dispatch_model_events(oformat, hwpdoc_events)
-    oformat.endDocument()
 
 
 class ModelEventStream(binmodel.ModelStream):
