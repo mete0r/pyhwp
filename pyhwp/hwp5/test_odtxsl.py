@@ -3,8 +3,8 @@ from unittest import TestCase
 from .utils import cached_property
 
 def example(filename):
-    from .filestructure import open
-    return open('fixtures/'+filename)
+    from .xmlmodel import Hwp5File
+    return Hwp5File('fixtures/'+filename)
 
 def example_to_xml(filename):
     from .hwp5odt import generate_hwp5xml
@@ -736,3 +736,30 @@ class TestODTXSL(TestCase):
         props = odt.automatic_style_shaperect_graphic_properties(16)
         #self.assertEquals('bottom', xpath1(props, '@style:vertical-pos'))
         #self.assertEquals('10mm', xpath1(rect[15], '@svg:y'))
+
+
+class TestConverter(TestCase):
+
+    def test_convert_bindata(self):
+        hwp5file = example('sample-5017.hwp')
+        try:
+            f = hwp5file['BinData']['BIN0002.jpg']
+            try:
+                data1 = f.read()
+            finally:
+                f.close()
+
+            from hwp5.hwp5odt import convert, ODTPackage
+            odtpkg = ODTPackage('sample-5017.odt')
+            try:
+                convert(hwp5file, odtpkg)
+            finally:
+                odtpkg.close()
+        finally:
+            hwp5file.close()
+
+        from zipfile import ZipFile
+        zf = ZipFile('sample-5017.odt')
+        data2 = zf.read('bindata/BIN0002.jpg')
+
+        self.assertEquals(data1, data2)

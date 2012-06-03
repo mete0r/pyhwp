@@ -113,8 +113,8 @@ class Fac(object):
     def HwpFileFromInputStream(self, inputstream):
         olestorage = self.OLESimpleStorage(inputstream)
         olefile = OleFileIO_from_OLESimpleStorage(olestorage)
-        from hwp5.filestructure import File
-        return File(olefile)
+        from hwp5.xmlmodel import Hwp5File
+        return Hwp5File(olefile)
 
     def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
         from com.sun.star.beans import NamedValue

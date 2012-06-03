@@ -83,9 +83,11 @@ class Converter(object):
                 content.seek(0)
 
             def additional_files():
-                for bindata_name in hwpfile.list_bindata():
-                    bindata = hwpfile.bindata(bindata_name)
-                    yield bindata, 'bindata/'+bindata_name, 'application/octet-stream'
+                if 'BinData' in hwpfile:
+                    bindata = hwpfile['BinData']
+                    for name in bindata:
+                        f = bindata[name]
+                        yield f, 'bindata/'+name, 'application/octet-stream'
 
             make_odtpkg(odtpkg, styles, content, additional_files())
 
@@ -99,9 +101,8 @@ def make(hwpfilename):
     if root.lower().endswith('.hwp'):
         root = root[0:-4]
 
-    from .filestructure import open
-    from ._scriptutils import open_or_exit
-    hwpfile = open_or_exit(open, hwpfilename)
+    from .xmlmodel import Hwp5File
+    hwpfile = Hwp5File(hwpfilename)
 
     try:
         odtpkg = ODTPackage(root+'.odt')
@@ -153,6 +154,5 @@ def mimetype(f):
     f.write('application/vnd.oasis.opendocument.text')
 
 def generate_hwp5xml(f, hwpfile):
-    from .xmlmodel import flatxml
     from .xmlformat import XmlFormat
-    flatxml(hwpfile, XmlFormat(f))
+    hwpfile.flatxml(XmlFormat(f))
