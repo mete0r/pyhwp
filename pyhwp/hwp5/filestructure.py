@@ -589,6 +589,8 @@ class Hwp5File(ItemsModifyingStorage):
             return self.preview_text.other_formats()
         if name == 'DocInfo':
             return self.docinfo.other_formats()
+        if name == 'BodyText':
+            return self.bodytext.other_formats()
 
     def resolve_conversion_for(self, name):
         if name == 'BodyText':

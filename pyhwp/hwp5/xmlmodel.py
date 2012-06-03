@@ -430,6 +430,29 @@ class ModelEventStream(binmodel.ModelStream):
         return prefix_binmodels_with_event(context, models)
 
 
+def events_stream(self):
+    import os
+    r, w = os.pipe()
+    r = os.fdopen(r, 'r')
+    w = os.fdopen(w, 'w')
+
+    def gen():
+        from hwp5.xmlformat import XmlFormat
+        try:
+            oformat = XmlFormat(w)
+            oformat.startDocument()
+            dispatch_model_events(oformat, self.events())
+            oformat.endDocument()
+        finally:
+            w.close()
+
+    import threading
+    t = threading.Thread(target=gen)
+    t.daemon = True
+    t.start()
+    return r
+
+
 class DocInfo(ModelEventStream):
 
     def events(self):
@@ -438,10 +461,84 @@ class DocInfo(ModelEventStream):
         events = wrap_modelevents(docinfo, events)
         return remove_redundant_facenames(events)
 
+    events_stream = events_stream
+
+    def other_formats(self):
+        d = super(DocInfo, self).other_formats()
+        d['.xml'] = self.events_stream
+        return d
+
+
+class Section(ModelEventStream):
+
+    def events(self):
+        events = self.modelevents()
+
+        events = make_texts_linesegmented_and_charshaped(events)
+        events = make_extended_controls_inline(events)
+        events = match_field_start_end(events)
+        events = make_paragraphs_children_of_listheader(events)
+        events = make_paragraphs_children_of_listheader(events, TableBody, TableCell)
+        events = restructure_tablebody(events)
+
+        return events
+
+    events_stream = events_stream
+
+    def other_formats(self):
+        d = super(Section, self).other_formats()
+        d['.xml'] = self.events_stream
+        return d
+
+
+class Sections(binmodel.Sections):
+
+    section_class = Section
+
+    def events(self):
+        bodytext_events = []
+        for idx in self.section_indexes():
+            section = self.section(idx)
+            events = wrap_section(idx, section.events())
+            bodytext_events.append(events)
+
+        class BodyText(object): pass
+        from itertools import chain
+        bodytext_events = chain(*bodytext_events)
+        bodytext = BodyText, dict(), dict()
+        return wrap_modelevents(bodytext, bodytext_events)
+
+    events_stream = events_stream
+
+    def other_formats(self):
+        d = super(Sections, self).other_formats()
+        d['.xml'] = self.events_stream
+        return d
+
+
 
 class Hwp5File(binmodel.Hwp5File):
 
     docinfo_class = DocInfo
+    bodytext_class = Sections
+
+    def events(self):
+        from itertools import chain
+        events = chain(self.docinfo.events(), self.bodytext.events())
+
+        class HwpDoc(object): pass
+        hwpdoc = HwpDoc, dict(version=self.header.version), dict()
+        events = wrap_modelevents(hwpdoc, events)
+
+        # for easy references in styles
+        events = give_elements_unique_id(events)
+
+        return events
+
+    def flatxml(self, oformat):
+        oformat.startDocument()
+        dispatch_model_events(oformat, self.events())
+        oformat.endDocument()
 
 
 def main():

@@ -46,6 +46,22 @@ class TestHwp5File(TestBase):
         from .xmlmodel import DocInfo
         self.assertTrue(isinstance(self.hwp5file.docinfo, DocInfo))
 
+    def test_events(self):
+        list(self.hwp5file.events())
+
+    def test_flatxml(self):
+        from .externprogs import xmllint
+        xmllint = xmllint('--format')
+
+        import sys
+        out = xmllint(outfile=sys.stdout)
+        try:
+            from .xmlformat import XmlFormat
+            oformat = XmlFormat(out)
+            self.hwp5file.flatxml(oformat)
+        finally:
+            out.close()
+
 
 from .xmlmodel import make_ranged_shapes, split_and_shape
 class TestShapedText(TestCase):
