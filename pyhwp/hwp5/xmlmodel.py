@@ -542,19 +542,15 @@ class Hwp5File(binmodel.Hwp5File):
 
 
 def main():
-    import sys
-    import itertools
-    from .filestructure import open
-
-    from ._scriptutils import OptionParser, args_pop, open_or_exit
+    from ._scriptutils import OptionParser, args_pop
     op = OptionParser(usage='usage: %prog [options] filename')
     op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
 
     options, args = op.parse_args()
 
     filename = args_pop(args, 'filename')
-    hwpfile = open_or_exit(open, filename)
 
+    hwp5file = Hwp5File(filename)
     out = options.outfile
 
     class NulFormat(ModelEventHandler):
@@ -567,8 +563,7 @@ def main():
 
     formats = dict(xml=XmlFormat, nul=NulFormat)
     oformat = formats[options.format](out)
-
-    flatxml(hwpfile, oformat)
+    hwp5file.flatxml(oformat)
     
 
 if __name__ == '__main__':
