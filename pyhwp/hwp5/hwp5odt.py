@@ -1,4 +1,5 @@
 import os, os.path
+from hwp5 import tools
 
 def main():
     import sys
@@ -44,22 +45,24 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
         odtpkg.insert_stream(*additional)
 
 def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
-    def convert(hwpfile, odtpkg):
-        import pkg_resources
-        schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        schema = pkg_resources.resource_filename('hwp5', schema)
-        if relaxng is not None:
-            relaxng_validate = relaxng(schema)
-        else:
-            relaxng_validate = None
+    import pkg_resources
+    xsl_styles = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
+    xsl_content = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
+    schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+    schema = pkg_resources.resource_filename('hwp5', schema)
 
+    xslt_styles = xsltproc(xsl_styles)
+    xslt_content = xsltproc(xsl_content)
+    if relaxng is not None:
+        relaxng_validate = relaxng(schema)
+    else:
+        relaxng_validate = None
+
+    def convert(hwpfile, odtpkg):
         import tempfile
         hwpxmlfile = tempfile.TemporaryFile()
         try:
             generate_hwp5xml(hwpxmlfile, hwpfile)
-
-            xslt_styles = xsltproc(xsl.styles)
-            xslt_content = xsltproc(xsl.content)
 
             styles = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
@@ -86,7 +89,13 @@ def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
 
         finally:
             hwpxmlfile.close()
+    convert.xslt_styles = xslt_styles
+    convert.xslt_content = xslt_content
+    convert.relaxng_validate = relaxng_validate
     return convert
+
+hwp5file_to_odtpkg = hwp5file_to_odtpkg_converter(tools.xsltproc,
+                                                  tools.relaxng)
 
 def make(hwpfilename):
     root = os.path.basename(hwpfilename)
@@ -97,13 +106,10 @@ def make(hwpfilename):
     from ._scriptutils import open_or_exit
     hwpfile = open_or_exit(open, hwpfilename)
 
-    from hwp5.tools import xsltproc, relaxng
-    hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc, relaxng)
-
     try:
         odtpkg = ODTPackage(root+'.odt')
         try:
-            hwp5file_convert_to_odtpkg(hwpfile, odtpkg)
+            hwp5file_to_odtpkg(hwpfile, odtpkg)
         finally:
             odtpkg.close()
     finally:
@@ -153,30 +159,3 @@ def generate_hwp5xml(f, hwpfile):
     from .xmlmodel import flatxml
     from .xmlformat import XmlFormat
     flatxml(hwpfile, XmlFormat(f))
-
-def xslt_odt_content(f, hwpxmlfilename):
-    import pkg_resources
-    content_xsl = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
-    import subprocess
-    p = subprocess.Popen(['xsltproc', content_xsl, hwpxmlfilename], stdout=f)
-    p.wait()
-
-def xslt_odt_styles(f, hwpxmlfilename):
-    import pkg_resources
-    styles_xsl = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
-    import subprocess
-    p = subprocess.Popen(['xsltproc', styles_xsl, hwpxmlfilename], stdout=f)
-    p.wait()
-
-class XSLs(object):
-    @property
-    def content(self):
-        import pkg_resources
-        return pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
-
-    @property
-    def styles(self):
-        import pkg_resources
-        return pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
-
-xsl = XSLs()
