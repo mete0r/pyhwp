@@ -44,21 +44,23 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
     for additional in additional_files:
         odtpkg.insert_stream(*additional)
 
-def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
-    import pkg_resources
-    xsl_styles = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
-    xsl_content = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
-    schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-    schema = pkg_resources.resource_filename('hwp5', schema)
+class Converter(object):
+    def __init__(self, xsltproc, relaxng=None):
+        import pkg_resources
+        xsl_styles = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
+        xsl_content = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
+        schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+        schema = pkg_resources.resource_filename('hwp5', schema)
 
-    xslt_styles = xsltproc(xsl_styles)
-    xslt_content = xsltproc(xsl_content)
-    if relaxng is not None:
-        relaxng_validate = relaxng(schema)
-    else:
-        relaxng_validate = None
+        self.xslt_styles = xsltproc(xsl_styles)
+        self.xslt_content = xsltproc(xsl_content)
 
-    def convert(hwpfile, odtpkg):
+        if relaxng is not None:
+            self.relaxng_validate = relaxng(schema)
+        else:
+            self.relaxng_validate = None
+
+    def __call__(self, hwpfile, odtpkg):
         import tempfile
         hwpxmlfile = tempfile.TemporaryFile()
         try:
@@ -66,18 +68,18 @@ def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
 
             styles = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
-            xslt_styles(hwpxmlfile, styles)
+            self.xslt_styles(hwpxmlfile, styles)
             styles.seek(0)
-            if relaxng_validate:
-                relaxng_validate(styles)
+            if self.relaxng_validate:
+                self.relaxng_validate(styles)
                 styles.seek(0)
 
             content = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
-            xslt_content(hwpxmlfile, content)
+            self.xslt_content(hwpxmlfile, content)
             content.seek(0)
-            if relaxng_validate:
-                relaxng_validate(content)
+            if self.relaxng_validate:
+                self.relaxng_validate(content)
                 content.seek(0)
 
             def additional_files():
@@ -89,13 +91,8 @@ def hwp5file_to_odtpkg_converter(xsltproc, relaxng=None):
 
         finally:
             hwpxmlfile.close()
-    convert.xslt_styles = xslt_styles
-    convert.xslt_content = xslt_content
-    convert.relaxng_validate = relaxng_validate
-    return convert
 
-hwp5file_to_odtpkg = hwp5file_to_odtpkg_converter(tools.xsltproc,
-                                                  tools.relaxng)
+convert = Converter(tools.xsltproc, tools.relaxng)
 
 def make(hwpfilename):
     root = os.path.basename(hwpfilename)
@@ -109,7 +106,7 @@ def make(hwpfilename):
     try:
         odtpkg = ODTPackage(root+'.odt')
         try:
-            hwp5file_to_odtpkg(hwpfile, odtpkg)
+            convert(hwpfile, odtpkg)
         finally:
             odtpkg.close()
     finally:

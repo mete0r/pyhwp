@@ -23,7 +23,7 @@ class example_to_odt(object):
         self.xmlfilename = example_to_xml(filename)
 
     def open_content(self):
-        from .hwp5odt import hwp5file_to_odtpkg
+        from .hwp5odt import convert
         import os
         r, w = os.pipe()
         r = os.fdopen(r, 'r')
@@ -31,7 +31,7 @@ class example_to_odt(object):
         try:
             xmlfile = file(self.xmlfilename, 'r')
             try:
-                hwp5file_to_odtpkg.xslt_content(xmlfile, w)
+                convert.xslt_content(xmlfile, w)
             finally:
                 xmlfile.close()
             return r
@@ -51,7 +51,7 @@ class example_to_odt(object):
     content = cached_property(content)
 
     def open_styles(self):
-        from .hwp5odt import hwp5file_to_odtpkg
+        from .hwp5odt import convert
         import os
         r, w = os.pipe()
         r = os.fdopen(r, 'r')
@@ -59,7 +59,7 @@ class example_to_odt(object):
         try:
             xmlfile = file(self.xmlfilename, 'r')
             try:
-                hwp5file_to_odtpkg.xslt_styles(xmlfile, w)
+                convert.xslt_styles(xmlfile, w)
             finally:
                 xmlfile.close()
             return r

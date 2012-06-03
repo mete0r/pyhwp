@@ -224,15 +224,16 @@ class Fac(object):
         from hwp5.hwp5odt import ODTPackage
         odtpkg = ODTPackage(zf)
         try:
-            from hwp5.hwp5odt import hwp5file_to_odtpkg_converter
+            from hwp5.hwp5odt import Converter
 
             # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
             # we use default xsltproc which uses external `xsltproc' program
             #xsltproc = self.xsltproc_with_LibXSLTTransformer
             from hwp5.tools import xsltproc
 
-            hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
-            hwp5file_convert_to_odtpkg(hwp5file, odtpkg)
+            # convert without RelaxNG validation
+            convert = Converter(xsltproc)
+            convert(hwp5file, odtpkg)
         finally:
             odtpkg.close()
 
