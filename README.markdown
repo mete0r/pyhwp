@@ -38,8 +38,8 @@ HWP 5.0 파일(.hwp)을 분석하는 파이썬 프로그램입니다. HWP 5.0 �
 요구사양
 --------
 
- - python 2.5.4 이상
- - xsltproc (hwp5odt, hwp5html, hwp5odt)
+ - python 2.5 이상 (2.5, 2.6에서 테스트 됨)
+ - xsltproc (hwp5odt, hwp5html)
 
 설치방법
 --------
