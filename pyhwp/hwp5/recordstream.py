@@ -137,7 +137,7 @@ def nth(iterable, n, default=None):
         return default
 
 
-class RecordStream(filestructure.Hwp5Object):
+class RecordStream(filestructure.VersionSensitiveItem):
 
     def records(self):
         return read_records(self.open(), '', '')

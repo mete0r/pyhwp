@@ -427,7 +427,7 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
-class Hwp5Object(StorageItem):
+class VersionSensitiveItem(StorageItem):
 
     def __init__(self, item, version):
         self.item = item
@@ -450,7 +450,7 @@ class Hwp5FileBase(StorageWrapper):
         return decode_fileheader(self.stg['FileHeader'].open())
 
 
-class Hwp5DistDocStream(Hwp5Object):
+class Hwp5DistDocStream(VersionSensitiveItem):
 
     def head_record(self):
         item = self.open()
@@ -531,7 +531,7 @@ class PreviewText(StorageItem):
 
 class Sections(ItemsModifyingStorage):
 
-    section_class = Hwp5Object
+    section_class = VersionSensitiveItem
 
     def __init__(self, stg, version):
         self.stg = stg
@@ -598,7 +598,7 @@ class HwpFileHeader(StorageItem):
         return {'.txt': self.to_text}
 
 
-class HwpSummaryInfo(Hwp5Object):
+class HwpSummaryInfo(VersionSensitiveItem):
 
     def other_formats(self):
         return {'.txt': self.to_text}
@@ -676,7 +676,7 @@ class Hwp5File(ItemsModifyingStorage):
             return f(item, self.header.version)
         return wrapped
 
-    docinfo_class = Hwp5Object
+    docinfo_class = VersionSensitiveItem
     bodytext_class = Sections
 
     @cached_property

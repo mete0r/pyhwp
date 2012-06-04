@@ -444,7 +444,7 @@ class TestHwp5File(TestBase):
 
     def test_docinfo(self):
         hwp5file = self.hwp5file
-        self.assertTrue(isinstance(hwp5file.docinfo, FS.Hwp5Object))
+        self.assertTrue(isinstance(hwp5file.docinfo, FS.VersionSensitiveItem))
         docinfo = hwp5file.docinfo.open()
         try:
             data = docinfo.read()
