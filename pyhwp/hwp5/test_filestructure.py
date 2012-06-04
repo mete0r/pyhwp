@@ -97,6 +97,44 @@ class TestModuleFunctions(TestBase):
 
 class TestOleStorage(TestBase):
 
+    def test_getitem0(self):
+        olestg = self.olestg
+        self.assertEquals(None, olestg.name)
+        self.assertEquals(None, olestg.parent)
+        self.assertTrue(olestg.is_storage())
+        self.assertEquals('', olestg.path)
+
+        docinfo = olestg['DocInfo']
+        self.assertEquals('DocInfo', docinfo.name)
+        self.assertTrue(docinfo.is_stream())
+        self.assertTrue(docinfo.parent is olestg)
+        self.assertEquals('DocInfo', docinfo.path)
+
+        bodytext = olestg['BodyText']
+        self.assertEquals('BodyText', bodytext.name)
+        self.assertTrue(bodytext.parent is olestg)
+        self.assertTrue(bodytext.is_storage())
+        self.assertEquals('BodyText', bodytext.path)
+
+        section = bodytext['Section0']
+        self.assertEquals('Section0', section.name)
+        self.assertTrue(section.is_stream())
+        self.assertTrue(section.parent is bodytext)
+        self.assertEquals('BodyText/Section0', section.path)
+
+        f = section.open()
+        try:
+            data = f.read()
+            self.assertEquals(1529, len(data))
+        finally:
+            f.close()
+
+        try:
+            bodytext['nonexists']
+            self.fail('KeyError expected')
+        except KeyError:
+            pass
+
     def test_init_should_receive_string_olefile(self):
         from .filestructure import OleStorage
         import os.path

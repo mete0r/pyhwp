@@ -265,9 +265,32 @@ def olefile_listdir(olefile, path):
                 yield stream[-1]
 
 
-class OleStorage(Storage):
+from .storage import StorageItem
+class OleStorageItem(StorageItem):
 
-    def __init__(self, olefile, path=''):
+    def __init__(self, olefile, path, parent=None):
+        self.olefile = olefile
+        self.path = path  # path DOES NOT end with '/'
+        self.parent = parent
+
+    def get_name(self):
+        if self.path == '':
+            return None
+        segments = self.path.split('/')
+        return segments[-1]
+
+    name = cached_property(get_name)
+
+
+class OleStream(OleStorageItem):
+
+    def open(self):
+        return self.olefile.openstream(self.path)
+
+
+class OleStorage(OleStorageItem, Storage):
+
+    def __init__(self, olefile, path='', parent=None):
         ''' create a OleStorage instance
 
             @param olefile : a OleFileIO instance
@@ -277,8 +300,7 @@ class OleStorage(Storage):
         if not hasattr(olefile, 'openstream'):
             from OleFileIO_PL import OleFileIO
             olefile = OleFileIO(olefile)
-        self.olefile = olefile
-        self.path = path  # path DOES NOT end with '/'
+        OleStorageItem.__init__(self, olefile, path, parent)
 
     def __iter__(self):
         return olefile_listdir(self.olefile, self.path)
@@ -292,15 +314,11 @@ class OleStorage(Storage):
             raise KeyError('%s not found' % path)
         t = self.olefile.get_type(path)
         if t == 1:  # Storage
-            return OleStorage(self.olefile, path)
+            return OleStorage(self.olefile, path, self)
         elif t == 2:  # Stream
-            return self.olefile.openstream(path)
+            return OleStream(self.olefile, path, self)
         else:
             raise KeyError('%s is invalid' % path)
-
-    def close(self):
-        if hasattr(self.olefile, 'close'):
-            self.olefile.close()
 
 
 class GeneratorReader(object):

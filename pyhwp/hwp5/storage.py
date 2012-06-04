@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-
 
-class Storage(object):
+class StorageItem(object):
+
+    name = None
+    parent = None
+
+    def is_storage(self):
+        return isinstance(self, Storage)
+
+    def is_stream(self):
+        return hasattr(self, 'open')
+
+
+class Storage(StorageItem):
     def __iter__(self):
         ''' generates item names '''
         raise NotImplementedError()
