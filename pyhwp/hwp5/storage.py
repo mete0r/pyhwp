@@ -2,8 +2,6 @@
 
 class StorageItem(object):
 
-    name = None
-
     def is_storage(self):
         return isinstance(self, Storage)
 

@@ -416,11 +416,6 @@ class CompressedStream(StorageItem):
     def open(self):
         return uncompress(self.item.open())
 
-    def get_name(self):
-        return self.item.name
-
-    name = property(get_name)
-
 
 class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
@@ -437,11 +432,6 @@ class Hwp5Object(StorageItem):
     def __init__(self, item, version):
         self.item = item
         self.version = version
-
-    def get_name(self):
-        return self.item.name
-
-    name = property(get_name)
 
     def open(self):
         return self.item.open()
