@@ -743,7 +743,7 @@ class TestConverter(TestCase):
     def test_convert_bindata(self):
         hwp5file = example('sample-5017.hwp')
         try:
-            f = hwp5file['BinData']['BIN0002.jpg']
+            f = hwp5file['BinData']['BIN0002.jpg'].open()
             try:
                 data1 = f.read()
             finally:
