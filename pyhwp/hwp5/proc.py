@@ -171,7 +171,7 @@ def ls():
             if isinstance(item, Storage):
                 printstorage(item, path+'/')
             if hasattr(item, 'read'):
-                print path
+                print path.encode('string_escape')
 
     printstorage(context.storage)
 
