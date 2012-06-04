@@ -570,6 +570,58 @@ class Sections(Hwp5Object):
                     for idx in self.section_indexes())
 
 
+class HwpFileHeader(Hwp5Object):
+
+    def to_dict(self):
+        f = self.open()
+        try:
+            return FileHeader.read(f)
+        finally:
+            f.close()
+
+    value = cached_property(to_dict)
+
+    def to_text(self):
+        d = FileHeader.Flags.dictvalue(self.value['flags'])
+        d['signature'] = self.value['signature']
+        d['version'] = '%d.%d.%d.%d' % self.value['version']
+        out = StringIO()
+        for k, v in sorted(d.items()):
+            print >> out, '%s: %s' % (k, v)
+        out.seek(0)
+        return out
+
+    def other_formats(self):
+        return {'.txt': self.to_text}
+
+
+class HwpSummaryInfo(Hwp5Object):
+
+    def other_formats(self):
+        return {'.txt': self.to_text}
+
+    def to_dict(self):
+        f = self.open()
+        try:
+            context = dict(version=self.version)
+            summaryinfo = SummaryInfo.read(f, context)
+            return summaryinfo
+        finally:
+            f.close()
+
+    value = cached_property(to_dict)
+
+    def to_text(self):
+        out = StringIO()
+        for k, v in sorted(self.value.iteritems()):
+            if isinstance(v, unicode):
+                v = v.encode('utf-8')
+            print >> out, '%20s: %s' % (k, v)
+
+        out.seek(0)
+        return out
+
+
 class Hwp5File(ItemsModifyingStorage):
     ''' represents HWPv5 File
 
@@ -593,12 +645,16 @@ class Hwp5File(ItemsModifyingStorage):
         self.stg = stg
 
     def resolve_other_formats_for(self, name):
+        if name == 'FileHeader':
+            return self.fileheader.other_formats()
         if name == 'PrvText':
             return self.preview_text.other_formats()
         if name == 'DocInfo':
             return self.docinfo.other_formats()
         if name == 'BodyText':
             return self.bodytext.other_formats()
+        if name == '\005HwpSummaryInformation':
+            return self.summaryinfo.other_formats()
 
     def resolve_conversion_for(self, name):
         if name == 'BodyText':
@@ -608,6 +664,15 @@ class Hwp5File(ItemsModifyingStorage):
     preview_text_class = PreviewText
     bodytext_class = Sections
     viewtext_class = Hwp5Object
+
+    @cached_property
+    def fileheader(self):
+        return HwpFileHeader(self, 'FileHeader', self.header.version)
+
+    @cached_property
+    def summaryinfo(self):
+        return HwpSummaryInfo(self, '\005HwpSummaryInformation',
+                              self.header.version)
 
     @cached_property
     def docinfo(self):
