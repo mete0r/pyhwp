@@ -320,6 +320,11 @@ class OleStorage(OleStorageItem, Storage):
         else:
             raise KeyError('%s is invalid' % path)
 
+    def close(self):
+        # if this is root, close underlying olefile
+        if self.path == '':
+            self.olefile.close()
+
 
 class GeneratorReader(object):
     ''' convert a string generator into file-like reader
