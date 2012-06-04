@@ -1,0 +1,2 @@
+include hwp5/xsl/*.xsl
+include hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
