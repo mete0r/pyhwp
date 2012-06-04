@@ -431,15 +431,24 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
-class Hwp5Object(object):
+class Hwp5Object(StorageItem):
 
-    def __init__(self, stg, name, version):
-        self.stg = stg
-        self.name = name
+    def __init__(self, item, version):
+        self.item = item
         self.version = version
 
+    def get_name(self):
+        return self.item.name
+
+    name = property(get_name)
+
+    def get_parent(self):
+        return self.item.parent
+
+    parent = property(get_parent)
+
     def open(self):
-        return self.stg[self.name]
+        return self.item.open()
 
     def conversion(self, item):
         return item
@@ -494,7 +503,7 @@ class Hwp5DistDocStream(Hwp5Object):
 class Hwp5DistDocStorage(ItemsModifyingStorage):
 
     def resolve_baseitemobject(self, name):
-        return Hwp5DistDocStream(self.stg, name, None)
+        return Hwp5DistDocStream(self[name], None)
 
     def resolve_other_formats_for(self, name):
         item = self.resolve_baseitemobject(name)
@@ -531,27 +540,21 @@ class PreviewText(Hwp5Object):
         return recode(self.open())
 
 
-class SectionStorage(ItemsModifyingStorage):
+class Sections(ItemsModifyingStorage):
 
-    def __init__(self, stg, version, section_class):
+    section_class = Hwp5Object
+
+    def __init__(self, stg, version):
         self.stg = stg
         self.version = version
-        self.section_class = section_class
 
     def resolve_other_formats_for(self, name):
         if name.startswith('Section'):
-            section = self.section_class(self.stg, name, self.version)
+            section = self.section_class(self[name], self.version)
             return section.other_formats()
 
-
-class Sections(Hwp5Object):
-
-    section_class = Hwp5Object
-    storage_class = SectionStorage
-
-    def conversion(self, item):
-        assert isinstance(item, Storage)
-        return self.storage_class(item, self.version, self.section_class)
+    def other_formats(self):
+        return dict()
 
     def section(self, idx):
         stg = self.open()
@@ -654,25 +657,33 @@ class Hwp5File(ItemsModifyingStorage):
         self.stg = stg
 
     def resolve_other_formats_for(self, name):
-        if name == 'FileHeader':
-            return self.fileheader.other_formats()
+        #if name == 'FileHeader':
+        #    return self.fileheader.other_formats()
         if name == 'PrvText':
             return self.preview_text.other_formats()
         if name == 'DocInfo':
             return self.docinfo.other_formats()
         if name == 'BodyText':
             return self.bodytext.other_formats()
-        if name == '\005HwpSummaryInformation':
-            return self.summaryinfo.other_formats()
+        #if name == '\005HwpSummaryInformation':
+        #    return self.summaryinfo.other_formats()
 
     def resolve_conversion_for(self, name):
+        if name == 'DocInfo':
+            return self.with_version(self.docinfo_class)
         if name == 'BodyText':
-            return self.bodytext.conversion
+            return self.with_version(self.bodytext_class)
+        if name == 'PrvText':
+            return self.with_version(self.preview_text_class)
+
+    def with_version(self, f):
+        def wrapped(item):
+            return f(item, self.header.version)
+        return wrapped
 
     docinfo_class = Hwp5Object
     preview_text_class = PreviewText
     bodytext_class = Sections
-    viewtext_class = Hwp5Object
 
     @cached_property
     def fileheader(self):
@@ -685,19 +696,19 @@ class Hwp5File(ItemsModifyingStorage):
 
     @cached_property
     def docinfo(self):
-        return self.docinfo_class(self, 'DocInfo', self.header.version)
+        return self['DocInfo']
 
     @cached_property
     def preview_text(self):
-        return self.preview_text_class(self, 'PrvText', self.header.version)
+        return self['PrvText']
 
     @cached_property
     def bodytext(self):
-        return self.bodytext_class(self, 'BodyText', self.header.version)
+        return self['BodyText']
 
     @cached_property
     def viewtext(self):
-        return self.viewtext_class(self, 'ViewText', self.header.version)
+        return self['ViewText']
 
 
 def unole():

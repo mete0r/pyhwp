@@ -62,7 +62,7 @@ class ItemsModifyingStorage(StorageWrapper):
                 if other_formats:
                     for ext, func in other_formats.items():
                         if root + ext == name:
-                            return func()
+                            return Open2Stream(func)
             raise KeyError(name)
         else:
             # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
@@ -78,6 +78,12 @@ class ItemsModifyingStorage(StorageWrapper):
     def resolve_conversion_for(self, name):
         ''' return a conversion function for the specified storage item '''
         pass
+
+
+class Open2Stream(StorageItem):
+
+    def __init__(self, open):
+        self.open = open
 
 
 def iter_storage_leafs(stg, basepath=''):
@@ -110,14 +116,15 @@ def unpack(stg, outbase):
                 os.mkdir(outpath)
             unpack(item, outpath)
         else:
+            f = item.open()
             try:
                 outfile = file(outpath, 'w')
                 try:
-                    outfile.write(item.read())
+                    outfile.write(f.read())
                 finally:
                     outfile.close()
             finally:
-                item.close()
+                f.close()
 
 
 def open_storage_item(stg, path):

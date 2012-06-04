@@ -161,7 +161,7 @@ class TestOleStorage(TestBase):
             pass
 
         fileheader = olestg['FileHeader']
-        self.assertTrue(hasattr(fileheader, 'read'))
+        self.assertTrue(hasattr(fileheader, 'open'))
         
         bindata = olestg['BinData']
         self.assertTrue(isinstance(bindata, FS.OleStorage))
@@ -171,7 +171,7 @@ class TestOleStorage(TestBase):
                           sorted(iter(bindata)))
 
         bin0002 = bindata['BIN0002.jpg']
-        self.assertTrue(hasattr(bin0002, 'read'))
+        self.assertTrue(hasattr(bin0002, 'open'))
 
 
     def test_iter_storage_leafs(self):
@@ -226,8 +226,7 @@ class TestHwp5DistDocStream(TestBase):
     @cached_property
     def jscriptversion(self):
         from .filestructure import Hwp5DistDocStream
-        return Hwp5DistDocStream(self.olestg['Scripts'],
-                                 'JScriptVersion',
+        return Hwp5DistDocStream(self.olestg['Scripts']['JScriptVersion'],
                                  self.hwp5file.header.version)
 
     def test_head_record(self):
@@ -273,7 +272,6 @@ class TestHwp5DistDicStorage(TestBase):
 
     def test_resolve_baseitemobject(self):
         version = self.scripts.resolve_baseitemobject('JScriptVersion')
-        self.assertTrue(version.stg is self.scripts.stg)
         self.assertTrue(version is not None)
         self.assertEquals(4+256+16, len(version.open().read()))
         self.assertTrue(version.other_formats() is not None)
@@ -410,17 +408,17 @@ class TestHwp5File(TestBase):
     def test_getitem_storage_classes(self):
         hwp5file = self.hwp5file
         self.assertTrue(isinstance(hwp5file['BinData'], FS.StorageWrapper))
-        self.assertTrue(isinstance(hwp5file['BodyText'], FS.SectionStorage))
+        self.assertTrue(isinstance(hwp5file['BodyText'], FS.Sections))
         self.assertTrue(isinstance(hwp5file['Scripts'], FS.StorageWrapper))
 
     def test_prv_text(self):
         prvtext = self.hwp5file['PrvText.utf8']
         expected = '한글 2005 예제 파일입니다.'
-        self.assertEquals(expected, prvtext.read()[0:len(expected)])
+        self.assertEquals(expected, prvtext.open().read()[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
         self.hwp5file_name = 'viewtext.hwp'
-        self.assertTrue('Section0.tail' in self.viewtext.open())
+        self.assertTrue('Section0.tail' in self.viewtext)
 
     def test_unpack(self):
         outpath = 'test_unpack'
@@ -466,27 +464,26 @@ class TestHwp5File(TestBase):
             docinfo.close()
 
         import zlib
-        self.assertEquals(zlib.decompress(self.olestg['DocInfo'].read(), -15), data)
+        self.assertEquals(zlib.decompress(self.olestg['DocInfo'].open().read(), -15), data)
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, FS.Sections))
-        bodytext = bodytext.open()
         self.assertEquals(['Section0'], list(bodytext))
 
 
-class TestSectionStorage(TestCase):
+class TestSections(TestBase):
 
     @property
-    def section_storage(self):
-        from .filestructure import SectionStorage, Hwp5Object
-        return SectionStorage(None, None, Hwp5Object)
+    def sections(self):
+        from .filestructure import Sections
+        return Sections(self.hwp5file.stg['BodyText'], self.hwp5file.header.version)
 
     def test_resolve_other_formats_for_section(self):
-        self.assertTrue(self.section_storage.resolve_other_formats_for('Section0') is not None)
+        self.assertTrue(self.sections.resolve_other_formats_for('Section0') is not None)
 
     def test_resolve_other_formats_for_nonsection(self):
-        self.assertTrue(self.section_storage.resolve_other_formats_for('NoneSection') is None)
+        self.assertTrue(self.sections.resolve_other_formats_for('NoneSection') is None)
 
 
 class TestGeneratorReader(object):
