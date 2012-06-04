@@ -139,5 +139,5 @@ def printstorage(stg, basepath=''):
         item = stg[name]
         if isinstance(item, Storage):
             printstorage(item, path+'/')
-        if hasattr(item, 'read'):
+        if hasattr(item, 'open'):
             print path.encode('string_escape')
