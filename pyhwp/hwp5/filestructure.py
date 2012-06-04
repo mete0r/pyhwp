@@ -323,7 +323,9 @@ class OleStorage(OleStorageItem, Storage):
     def close(self):
         # if this is root, close underlying olefile
         if self.path == '':
-            self.olefile.close()
+            # old version of OleFileIO has no close()
+            if hasattr(self.olefile, 'close'):
+                self.olefile.close()
 
 
 class GeneratorReader(object):
