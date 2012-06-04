@@ -612,7 +612,7 @@ class TestModelStream(TestBase):
     @cached_property
     def docinfo(self):
         from .binmodel import ModelStream
-        return ModelStream(self.hwp5file, 'DocInfo',
+        return ModelStream(self.hwp5file['DocInfo'],
                            self.hwp5file.header.version)
 
     def test_models(self):
