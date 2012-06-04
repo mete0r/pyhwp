@@ -20,7 +20,7 @@ class TestRecord(TestBase):
         from .tagids import HWPTAG_DOCUMENT_PROPERTIES
         docinfo_stream = self.hwp5file['DocInfo']
 
-        record = read_record(docinfo_stream, 0)
+        record = read_record(docinfo_stream.open(), 0)
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
 
 
@@ -29,7 +29,7 @@ class TestRecordStream(TestBase):
     @cached_property
     def docinfo(self):
         from .recordstream import RecordStream
-        return RecordStream(self.hwp5file, 'DocInfo',
+        return RecordStream(self.hwp5file['DocInfo'],
                             self.hwp5file.header.version)
 
     def test_records(self):
@@ -57,7 +57,7 @@ class TestHwp5File(TestBase):
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
-        self.assertEquals(['Section0', 'Section0.records'], list(bodytext.open()))
+        self.assertEquals(['Section0', 'Section0.records'], list(bodytext))
 
 
 class TestJson(TestBase):
