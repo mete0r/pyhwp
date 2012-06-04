@@ -2,7 +2,6 @@
 from unittest import TestCase
 from hwp5 import filestructure as FS
 from OleFileIO_PL import OleFileIO
-import OleFileIO_PL
 from .utils import cached_property
 
 class TestBase(TestCase):
@@ -94,61 +93,6 @@ class TestModuleFunctions(TestBase):
         olefile = OleFileIO(self.hwp5file_path)
         fileheader = FS.get_fileheader(olefile)
         assert isinstance(fileheader, FS.FileHeader)
-
-    def test_open(self):
-        f = FS.open(self.hwp5file_path)
-        assert isinstance(f, FS.File)
-
-        import os.path
-        nonole_filename = os.path.join(self.fixtures_dir, 'nonole.txt')
-        self.assertRaises(FS.BadFormatError, FS.open, nonole_filename)
-
-    def test_listdir(self):
-        olefile = OleFileIO(self.hwp5file_path)
-        hwpfile = FS.File(olefile)
-        self.assertEquals(sorted(['Section0']),
-                          sorted(hwpfile.listdir('BodyText')))
-        self.assertEquals(sorted(['BIN0002.jpg', 'BIN0002.png', 'BIN0003.png']),
-                          sorted(hwpfile.listdir('BinData')))
-        self.assertEquals(sorted(['DefaultJScript', 'JScriptVersion']),
-                          sorted(hwpfile.listdir('Scripts')))
-
-        expected = ['FileHeader', 'BodyText', 'BinData', 'Scripts', 'DocOptions', 'DocInfo',
-                    'PrvText', 'PrvImage', '\x05HwpSummaryInformation']
-        self.assertEquals(sorted(expected), sorted(hwpfile.listdir('/')))
-        self.assertEquals(sorted(expected), sorted(hwpfile.listdir('')))
-
-    def test_is_storage(self):
-        olefile = OleFileIO(self.hwp5file_path)
-        hwpfile = FS.File(olefile)
-        self.assertTrue(hwpfile.is_storage('BodyText'))
-        self.assertTrue(hwpfile.is_storage('BinData'))
-        self.assertTrue(hwpfile.is_storage('Scripts'))
-
-    def test_is_stream(self):
-        olefile = OleFileIO(self.hwp5file_path)
-        hwpfile = FS.File(olefile)
-        self.assertTrue(hwpfile.is_stream('BodyText/Section0'))
-        self.assertTrue(hwpfile.is_stream('BinData/BIN0002.jpg'))
-        self.assertTrue(hwpfile.is_stream('BinData/BIN0002.png'))
-        self.assertTrue(hwpfile.is_stream('BinData/BIN0003.png'))
-        self.assertTrue(hwpfile.is_stream('Scripts/DefaultJScript'))
-        self.assertTrue(hwpfile.is_stream('Scripts/JScriptVersion'))
-
-    def test_walk(self):
-        olefile = OleFileIO(self.hwp5file_path)
-        hwpfile = FS.File(olefile)
-        from hwp5.filestructure import walk
-
-        result = list(walk(hwpfile))
-        self.assertEquals('', result[0][0])
-        self.assertEquals(sorted(['BinData', 'BodyText', 'DocOptions', 'Scripts']),
-                          sorted(result[0][1]))
-        self.assertEquals(sorted(['\x05HwpSummaryInformation', 'DocInfo', 'FileHeader', 'PrvImage', 'PrvText']),
-                          sorted(result[0][2]))
-
-        #for dirpath, dirs, files in walk(hwpfile):
-        #    print dirpath, dirs, files
 
 
 class TestOleStorage(TestBase):

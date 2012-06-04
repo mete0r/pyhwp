@@ -240,34 +240,6 @@ class BadFormatError(Exception):
         return '%s: \'%s\'' % (self.args)
 
 
-def open(filename):
-    if not is_hwp5file(filename):
-        raise BadFormatError('Not an hwp5 file', filename)
-    olefile = OleFileIO(filename)
-    return File(olefile)
-
-
-def walk(hwpfile, dirpath=''):
-    if dirpath == '' or dirpath == '/':
-        base = ''
-    else:
-        base = dirpath + '/'
-    names = hwpfile.listdir(dirpath)
-    files = []
-    dirs = []
-    for name in names:
-        path = base + name
-        if hwpfile.is_storage(path):
-            dirs.append(name)
-        else:
-            files.append(name)
-    yield dirpath, dirs, files
-    for name in dirs:
-        path = base + name
-        for x in walk(hwpfile, path):
-            yield x
-
-
 def olefile_listdir(olefile, path):
     if path == '' or path == '/':
         # we use a list instead of a set
@@ -689,104 +661,6 @@ class Hwp5File(ItemsModifyingStorage):
     @cached_property
     def viewtext(self):
         return self.viewtext_class(self, 'ViewText', self.header.version)
-
-
-class File(object):
-
-    def __init__(self, olefile):
-        self.olefile = olefile
-
-    def close(self):
-        if hasattr(self.olefile, 'close'):
-            self.olefile.close()
-
-    def listdir(self, path):
-        if path == '' or path == '/':
-            # we use a list instead of a set
-            # for python 2.3 compatibility
-            yielded = []
-
-            for stream in self.olefile.listdir():
-                top_item = stream[0]
-                if top_item in yielded:
-                    continue
-                yielded.append(top_item)
-                yield top_item
-            return
-
-        if not self.olefile.exists(path):
-            raise IOError('not exists')
-        if self.olefile.get_type(path) != 1:
-            raise IOError('not a storage')
-        path_segments = path.split('/')
-        for stream in self.olefile.listdir():
-            if len(stream) == len(path_segments) + 1:
-                if stream[:-1] == path_segments:
-                    yield stream[-1]
-
-    def is_storage(self, path):
-        return self.olefile.get_type(path) == 1  # OleFileIO_PL.STGTY_STORAGE
-
-    def is_stream(self, path):
-        return self.olefile.get_type(path) == 2  # OleFileIO_PL.STGTY_STREAM
-
-    def list_streams(self):
-        return list_streams(self.olefile)
-
-    def list_bodytext_sections(self):
-        return list_sections(self.olefile)
-
-    def list_bindata(self):
-        return list_bindata(self.olefile)
-
-    def _fileheader(self):
-        return open_fileheader(self.olefile)
-    fileheader = cached_property(lambda self: get_fileheader(self.olefile))
-
-    def _summaryinfo(self):
-        return open_summaryinfo(self.olefile)
-
-    def summaryinfo(self):
-        f = open_summaryinfo(self.olefile)
-        context = dict(version=self.fileheader.version)
-        summaryinfo = SummaryInfo.read(f, context)
-        #print '#### %o'%f.tell()
-        return summaryinfo
-    summaryinfo = property(summaryinfo)
-
-    def preview_text(self):
-        return open_previewtext(self.olefile, 'utf-8')
-
-    def preview_image(self):
-        return open_previewimage(self.olefile)
-
-    def docinfo(self):
-        return open_docinfo(self.olefile, self.fileheader.flags.compressed)
-
-    def bodytext(self, idx):
-        return open_bodytext(self.olefile, idx, self.fileheader.flags.compressed)
-
-    def viewtext(self, idx):
-        return open_viewtext(self.olefile, idx)
-
-    def viewtext_head(self, idx):
-        return open_viewtext_head(self.olefile, idx)
-
-    def viewtext_tail(self, idx):
-        return open_viewtext_tail(self.olefile, idx)
-
-    def bindata(self, name):
-        return open_bindata(self.olefile, name, self.fileheader.flags.compressed)
-
-    def script(self, name):
-        return open_script(self.olefile, name, self.fileheader.flags.compressed)
-
-    def pseudostream(self, name):
-        args = name.split('/', 1)
-        name = args.pop(0)
-        pseudostream = getattr(self, name, None)
-        if pseudostream:
-            return pseudostream(*args)
 
 
 def unole():
