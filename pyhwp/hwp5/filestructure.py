@@ -452,7 +452,7 @@ class Hwp5FileBase(StorageWrapper):
 
     @cached_property
     def header(self):
-        return decode_fileheader(self.stg['FileHeader'])
+        return decode_fileheader(self.stg['FileHeader'].open())
 
 
 class Hwp5DistDocStream(Hwp5Object):
