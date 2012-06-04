@@ -118,3 +118,14 @@ def open_storage_item(stg, path):
     for name in path_segments:
         item = item[name]
     return item
+
+def printstorage(stg, basepath=''):
+    names = list(stg)
+    names.sort()
+    for name in names:
+        path = basepath + name
+        item = stg[name]
+        if isinstance(item, Storage):
+            printstorage(item, path+'/')
+        if hasattr(item, 'read'):
+            print path.encode('string_escape')
