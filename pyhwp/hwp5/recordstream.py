@@ -166,11 +166,24 @@ class Hwp5File(filestructure.Hwp5File):
     bodytext_class = Sections
 
 
+def parse_recordstream_name(hwpfile, streamname):
+    if streamname == 'docinfo':
+        return hwpfile.docinfo
+    segments = streamname.split('/')
+    if len(segments) == 2:
+        if segments[0] == 'bodytext':
+            try:
+                idx = int(segments[1])
+                return hwpfile.bodytext.section(idx)
+            except ValueError:
+                pass
+    raise ValueError('invalid stream name: %s' % streamname)
+
+
 def main():
     import sys
-    from .filestructure import open
     from ._scriptutils import (OptionParser, args_pop, args_pop_range,
-                               getlogger, open_or_exit)
+                               getlogger)
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream> [<record-range>]\n\n<record-range> : <index> | <start-index>: | :<end-index> | <start-index>:<end-index>')
     op.add_option('-f', '--format', dest='format', default='hex',
@@ -184,14 +197,13 @@ def main():
     if filename == '-':
         filename = 'STDIN'
         streamname = 'STDIN'
-        file = sys.stdin
-        bytestream = file
+        bytestream = sys.stdin
+        records = read_records(bytestream, streamname, filename)
     else:
-        file = open_or_exit(open, filename)
+        hwpfile = Hwp5File(filename)
         streamname = args_pop(args, '<record-stream>')
-        bytestream = file.pseudostream(streamname)
-
-    records = read_records(bytestream, streamname, filename)
+        stream = parse_recordstream_name(hwpfile, streamname)
+        records = stream.records()
 
     from itertools import islice as ranged_records
     record_range = args_pop_range(args)
@@ -255,10 +267,6 @@ def main():
 
     for rec in records:
         oformat.write(rec)
-
-    while True:
-        if '' == bytestream.read(4096):
-            return
 
 if __name__ == '__main__':
     main()
