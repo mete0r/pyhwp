@@ -336,7 +336,7 @@ class TestHwp5Compression(TestBase):
 
     @cached_property
     def docinfo(self):
-        return self.hwp5file_compressed['DocInfo']
+        return self.hwp5file_compressed['DocInfo'].open()
 
     @cached_property
     def bodytext(self):
@@ -355,14 +355,14 @@ class TestHwp5Compression(TestBase):
     def test_bodytext_uncompressed(self):
         from .recordstream import read_record
         from .tagids import HWPTAG_PARA_HEADER
-        record = read_record(self.bodytext['Section0'], 0)
+        record = read_record(self.bodytext['Section0'].open(), 0)
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
 
     def test_scripts_version(self):
         hwp5file = self.hwp5file_compressed
         self.assertFalse(hwp5file.header.flags.distributable)
 
-        JScriptVersion = self.scripts['JScriptVersion'].read()
+        JScriptVersion = self.scripts['JScriptVersion'].open().read()
         self.assertEquals(8, len(JScriptVersion))
 
     def test_viewtext_scripts(self):
@@ -370,7 +370,7 @@ class TestHwp5Compression(TestBase):
         hwp5file = self.hwp5file_compressed
         self.assertTrue(hwp5file.header.flags.distributable)
 
-        JScriptVersion = self.scripts['JScriptVersion']
+        JScriptVersion = self.scripts['JScriptVersion'].open()
 
         from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
         from .recordstream import read_record

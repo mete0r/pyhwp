@@ -515,7 +515,7 @@ class Hwp5Compression(ItemsModifyingStorage):
         if name in ('BinData', 'BodyText'):
             return CompressedStorage
         elif name == 'DocInfo':
-            return uncompress
+            return CompressedStream
         elif name == 'Scripts':
             if not self.header.flags.distributable:
                 return CompressedStorage
