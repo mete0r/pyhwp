@@ -562,8 +562,7 @@ class Sections(ItemsModifyingStorage):
 
     def section_indexes(self):
         def gen():
-            stg = self.open()
-            for name in stg:
+            for name in self:
                 if name.startswith('Section'):
                     idx = name[len('Section'):]
                     try:
