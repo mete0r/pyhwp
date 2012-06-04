@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import with_statement
 from unittest import TestCase
 from hwp5.utils import cached_property
 
