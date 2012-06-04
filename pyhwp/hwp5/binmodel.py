@@ -1912,8 +1912,7 @@ def create_context(file=None, **context):
 
 def main():
     import sys
-    from ._scriptutils import OptionParser, args_pop, open_or_exit
-    from .filestructure import open
+    from ._scriptutils import OptionParser, args_pop
     from .recordstream import read_records
 
     op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
@@ -1928,15 +1927,15 @@ def main():
         streamname = 'STDIN'
         bytestream = sys.stdin
         version = args_pop(args, 'version').split('.')
-    else:
-        file = open_or_exit(open, filename)
-        streamname = args_pop(args, '<record-stream>')
-        bytestream = file.pseudostream(streamname)
-        version = file.fileheader.version
 
-    context = create_context(version=version)
-    records = read_records(bytestream, streamname, filename)
-    models = parse_models(context, records)
+        context = create_context(version=version)
+        records = read_records(bytestream, streamname, filename)
+        models = parse_models(context, records)
+    else:
+        hwpfile = Hwp5File(filename)
+        streamname = args_pop(args, '<record-stream>')
+        stream = recordstream.parse_recordstream_name(hwpfile, streamname)
+        models = stream.models()
 
     def statistics(models):
         occurrences = dict()
