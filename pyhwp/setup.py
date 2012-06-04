@@ -26,8 +26,8 @@ setup(
         packages = ['hwp5'],
         package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
-        install_requires=['OleFileIO_PL >=0.20'],
-        extras_require=dict(test=['simplejson', 'lxml']),
+        install_requires=['OleFileIO_PL >=0.20', 'simplejson'],
+        extras_require=dict(test=['lxml']),
 
         entry_points = {
             'console_scripts': [
