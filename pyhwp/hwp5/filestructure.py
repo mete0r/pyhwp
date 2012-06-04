@@ -557,8 +557,8 @@ class Sections(ItemsModifyingStorage):
         return dict()
 
     def section(self, idx):
-        stg = self.open()
-        return self.section_class(stg, 'Section%d' % idx, self.version)
+        stream = self['Section%d' % idx]
+        return self.section_class(stream, self.version)
 
     def section_indexes(self):
         def gen():
