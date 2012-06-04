@@ -131,7 +131,10 @@ def bin2json_stream(f):
 
 def nth(iterable, n, default=None):
     from itertools import islice
-    return next(islice(iterable, n, None), default)
+    try:
+        return islice(iterable, n, None).next()
+    except StopIteration:
+        return default
 
 
 class RecordStream(filestructure.Hwp5Object):
