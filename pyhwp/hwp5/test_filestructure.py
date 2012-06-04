@@ -117,7 +117,7 @@ class TestOleStorage(TestBase):
         olestg = self.olestg
 
         try:
-            a = olestg['non-exists']
+            olestg['non-exists']
             self.fail('KeyError expected')
         except KeyError:
             pass
@@ -322,12 +322,13 @@ class TestHwp5Compression(TestBase):
         JScriptVersion = self.scripts['JScriptVersion']
 
         from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
-        from .recordstream import read_record, record_to_json
+        from .recordstream import read_record
         distdoc = read_record(JScriptVersion, 0)
         encrypted = JScriptVersion.read()
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, distdoc['tagid'])
         self.assertEquals(16, len(encrypted))
 
+        #from .recordstream import record_to_json
         #print record_to_json(distdoc, sort_keys=True, indent=2)
         #from .dataio import dumpbytes
         #print 'Encrypted:', '\n'.join(dumpbytes(encrypted))
