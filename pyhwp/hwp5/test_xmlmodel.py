@@ -53,14 +53,17 @@ class TestHwp5File(TestBase):
         from .externprogs import xmllint
         xmllint = xmllint('--format')
 
-        import sys
-        out = xmllint(outfile=sys.stdout)
+        outfile = file(self.id()+'.xml', 'w')
         try:
-            from .xmlformat import XmlFormat
-            oformat = XmlFormat(out)
-            self.hwp5file.flatxml(oformat)
+            out = xmllint(outfile=outfile)
+            try:
+                from .xmlformat import XmlFormat
+                oformat = XmlFormat(out)
+                self.hwp5file.flatxml(oformat)
+            finally:
+                out.close()
         finally:
-            out.close()
+            outfile.close()
 
 
 from .xmlmodel import make_ranged_shapes, split_and_shape
