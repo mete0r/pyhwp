@@ -100,26 +100,22 @@ class TestOleStorage(TestBase):
     def test_getitem0(self):
         olestg = self.olestg
         self.assertEquals(None, olestg.name)
-        self.assertEquals(None, olestg.parent)
         self.assertTrue(olestg.is_storage())
         self.assertEquals('', olestg.path)
 
         docinfo = olestg['DocInfo']
         self.assertEquals('DocInfo', docinfo.name)
         self.assertTrue(docinfo.is_stream())
-        self.assertTrue(docinfo.parent is olestg)
         self.assertEquals('DocInfo', docinfo.path)
 
         bodytext = olestg['BodyText']
         self.assertEquals('BodyText', bodytext.name)
-        self.assertTrue(bodytext.parent is olestg)
         self.assertTrue(bodytext.is_storage())
         self.assertEquals('BodyText', bodytext.path)
 
         section = bodytext['Section0']
         self.assertEquals('Section0', section.name)
         self.assertTrue(section.is_stream())
-        self.assertTrue(section.parent is bodytext)
         self.assertEquals('BodyText/Section0', section.path)
 
         f = section.open()
@@ -310,12 +306,10 @@ class TestCompressedStorage(TestBase):
         stg = FS.CompressedStorage(self.olestg['BinData'])
         self.assertTrue(stg.is_storage())
         self.assertTrue(stg.name is None)
-        self.assertTrue(stg.parent is None)
 
         item = stg['BIN0002.jpg']
         self.assertTrue(item.is_stream())
         self.assertEquals('BIN0002.jpg', item.name)
-        #self.assertTrue(item.parent is stg)
 
         f = item.open()
         try:

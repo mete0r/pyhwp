@@ -271,7 +271,6 @@ class OleStorageItem(StorageItem):
     def __init__(self, olefile, path, parent=None):
         self.olefile = olefile
         self.path = path  # path DOES NOT end with '/'
-        self.parent = parent
 
     def get_name(self):
         if self.path == '':
@@ -422,11 +421,6 @@ class CompressedStream(StorageItem):
 
     name = property(get_name)
 
-    def get_parent(self):
-        return self.item.parent
-
-    parent = property(get_parent)
-
 
 class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
@@ -448,11 +442,6 @@ class Hwp5Object(StorageItem):
         return self.item.name
 
     name = property(get_name)
-
-    def get_parent(self):
-        return self.item.parent
-
-    parent = property(get_parent)
 
     def open(self):
         return self.item.open()

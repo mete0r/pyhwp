@@ -3,7 +3,6 @@
 class StorageItem(object):
 
     name = None
-    parent = None
 
     def is_storage(self):
         return isinstance(self, Storage)
