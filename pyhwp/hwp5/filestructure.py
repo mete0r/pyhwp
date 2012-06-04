@@ -516,7 +516,10 @@ class Hwp5Compression(ItemsModifyingStorage):
                 return CompressedStorage
 
 
-class PreviewText(Hwp5Object):
+class PreviewText(StorageItem):
+
+    def __init__(self, item):
+        self.open = item.open
 
     def other_formats(self):
         return {'.utf8': self.utf8_stream}
@@ -664,7 +667,7 @@ class Hwp5File(ItemsModifyingStorage):
         if name == 'BodyText':
             return self.with_version(self.bodytext_class)
         if name == 'PrvText':
-            return self.with_version(self.preview_text_class)
+            return PreviewText
         if name == '\005HwpSummaryInformation':
             return self.with_version(HwpSummaryInfo)
 
@@ -674,7 +677,6 @@ class Hwp5File(ItemsModifyingStorage):
         return wrapped
 
     docinfo_class = Hwp5Object
-    preview_text_class = PreviewText
     bodytext_class = Sections
 
     @cached_property
