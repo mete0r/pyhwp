@@ -567,7 +567,10 @@ class Sections(ItemsModifyingStorage):
                     for idx in self.section_indexes())
 
 
-class HwpFileHeader(Hwp5Object):
+class HwpFileHeader(StorageItem):
+
+    def __init__(self, item):
+        self.open = item.open
 
     def to_dict(self):
         f = self.open()
@@ -642,24 +645,28 @@ class Hwp5File(ItemsModifyingStorage):
         self.stg = stg
 
     def resolve_other_formats_for(self, name):
-        #if name == 'FileHeader':
-        #    return self.fileheader.other_formats()
+        if name == 'FileHeader':
+            return self.fileheader.other_formats()
         if name == 'PrvText':
             return self.preview_text.other_formats()
         if name == 'DocInfo':
             return self.docinfo.other_formats()
         if name == 'BodyText':
             return self.bodytext.other_formats()
-        #if name == '\005HwpSummaryInformation':
-        #    return self.summaryinfo.other_formats()
+        if name == '\005HwpSummaryInformation':
+            return self.summaryinfo.other_formats()
 
     def resolve_conversion_for(self, name):
+        if name == 'FileHeader':
+            return HwpFileHeader
         if name == 'DocInfo':
             return self.with_version(self.docinfo_class)
         if name == 'BodyText':
             return self.with_version(self.bodytext_class)
         if name == 'PrvText':
             return self.with_version(self.preview_text_class)
+        if name == '\005HwpSummaryInformation':
+            return self.with_version(HwpSummaryInfo)
 
     def with_version(self, f):
         def wrapped(item):
@@ -672,12 +679,11 @@ class Hwp5File(ItemsModifyingStorage):
 
     @cached_property
     def fileheader(self):
-        return HwpFileHeader(self, 'FileHeader', self.header.version)
+        return self['FileHeader']
 
     @cached_property
     def summaryinfo(self):
-        return HwpSummaryInfo(self, '\005HwpSummaryInformation',
-                              self.header.version)
+        return self['\005HwpSummaryInformation']
 
     @cached_property
     def docinfo(self):
