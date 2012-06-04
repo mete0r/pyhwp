@@ -310,9 +310,22 @@ class TestHwp5DistDoc(TestBase):
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
         stg = FS.CompressedStorage(self.olestg['BinData'])
-        data = stg['BIN0002.jpg'].read()
-        self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
-        self.assertEquals(15895, len(data))
+        self.assertTrue(stg.is_storage())
+        self.assertTrue(stg.name is None)
+        self.assertTrue(stg.parent is None)
+
+        item = stg['BIN0002.jpg']
+        self.assertTrue(item.is_stream())
+        self.assertEquals('BIN0002.jpg', item.name)
+        #self.assertTrue(item.parent is stg)
+
+        f = item.open()
+        try:
+            data = f.read()
+            self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
+            self.assertEquals(15895, len(data))
+        finally:
+            f.close()
 
 
 class TestHwp5Compression(TestBase):

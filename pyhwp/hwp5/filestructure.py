@@ -402,12 +402,31 @@ def uncompress(stream):
     return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
 
 
+class CompressedStream(StorageItem):
+
+    def __init__(self, item):
+        self.item = item
+
+    def open(self):
+        return uncompress(self.item.open())
+
+    def get_name(self):
+        return self.item.name
+
+    name = property(get_name)
+
+    def get_parent(self):
+        return self.item.parent
+
+    parent = property(get_parent)
+
+
 class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
     def __getitem__(self, name):
         item = self.stg[name]
-        if not isinstance(item, Storage):
-            return uncompress(item)
+        if item.is_stream():
+            return CompressedStream(item)
         else:
             return item
 
