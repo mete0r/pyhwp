@@ -805,61 +805,49 @@ def unole():
 
 
 def main():
-    from ._scriptutils import OptionParser, args_pop, open_or_exit
+    from ._scriptutils import OptionParser, args_pop
     op = OptionParser(usage='usage: %prog [options] filename <stream>')
     options, args = op.parse_args()
 
     filename = args_pop(args, 'filename')
-    file = open_or_exit(open, filename)
+    hwpfile = Hwp5File(filename)
 
     if len(args) == 0:
         print 'FileHeader'
         print '----------'
-        print 'signature:%s' % file.fileheader.signature
-        print '  version: %d.%d.%d.%d' % file.fileheader.version
-        print '    flags: 0x%x' % file.fileheader.flags
-        for k, v in FileHeader.Flags.dictvalue(file.fileheader.flags).items():
-            print '%20s: %d' % (k, v)
-        print ''
-        print 'Pseudo streams'
-        print '--------------'
-        print '          _fileheader : synonym of FileHeader'
-        print '         _summaryinfo : synonym of \\x05HwpSummaryInformation'
-        print '         preview_text : PrvText (UTF-8)'
-        print '        preview_image : synonym of PrvImage'
-        print '              docinfo : DocInfo (uncompressed, record stream)'
-        print '     bodytext/<index> : BodyText/Section<index> (uncompressed, record stream)'
-        print '   bindata/<filename> : BIN/<filename> (uncompressed)'
-        print '    script/<filename> : Scripts/<filename> (uncompressed)'
-        print '     viewtext/<index> : ViewText/Section<index>'
-        print 'viewtext_head/<index> : head part of ViewText/Section<index> (a record)'
-        print 'viewtext_tail/<index> : tail part of ViewText/Section<index> (block data)'
-        print ''
-        print 'Raw streams'
-        print '-----------'
-        for name in file.list_streams():
-            print name.encode('string_escape')
-        print ''
-        print 'SummaryInfo'
-        print '-----------'
-        for k, v in file.summaryinfo.iteritems():
-            if isinstance(v, unicode):
-                v = v.encode('utf-8')
-            print '%20s: %s' % (k, v)
-        return 0
+        f = hwpfile.fileheader.to_text()
+        try:
+            for line in f:
+                print line,
+        finally:
+            f.close()
 
-    streamname = args_pop(args, '<stream>')
-    if streamname == 'list':
-        streamname = args_pop(args, 'bindata | bodytext')
-        if streamname == 'bindata':
-            for name in file.list_bindata():
-                print name
-        elif streamname == 'bodytext':
-            for idx in file.list_bodytext_sections():
-                print 'bodytext/%d' % idx
+        print 'SummaryInfo'
+        print '----------'
+        f = hwpfile.summaryinfo.to_text()
+        try:
+            for line in f:
+                print line,
+        finally:
+            f.close()
+
+        print 'Streams'
+        print '----------'
+        from hwp5.storage import printstorage
+        printstorage(hwpfile)
         return 0
-    stream = file.pseudostream(streamname)
-    if not stream:
-        stream = file.openstream(streamname)
-    import sys
-    sys.stdout.write(stream.read())
+    else:
+        import sys
+        out = sys.stdout
+        streamname = args_pop(args, '<stream>')
+        from .storage import open_storage_item
+        f = open_storage_item(hwpfile, streamname)
+        try:
+            while True:
+                d = f.read(8192)
+                if len(d) > 0:
+                    out.write(d)
+                else:
+                    return 0
+        finally:
+            f.close()
