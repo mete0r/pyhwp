@@ -87,16 +87,22 @@ class ProcContext(Context):
     def storage(self):
         layer = self.options.get('layer')
         if layer == 'ole':
-            return self.olestorage
+            storage = self.olestorage
         elif layer == 'fs':
-            return self.hwp5file_fs
+            storage = self.hwp5file_fs
         elif layer == 'rec':
-            return self.hwp5file_rec
+            storage = self.hwp5file_rec
         elif layer == 'bin':
-            return self.hwp5file_bin
+            storage = self.hwp5file_bin
         elif layer == 'xml':
-            return self.hwp5file_xml
-        return self.hwp5file
+            storage = self.hwp5file_xml
+        else:
+            storage = self.hwp5file
+
+        if not self.options.get('no-extra'):
+            from .storage import ExtraItemStorage
+            storage = ExtraItemStorage(storage)
+        return storage
 
     @property
     def stream(self):

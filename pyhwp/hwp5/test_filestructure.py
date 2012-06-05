@@ -97,6 +97,37 @@ class TestModuleFunctions(TestBase):
 
 class TestOleStorage(TestBase):
 
+    def test_getitem0(self):
+        from hwp5.storage import is_storage, is_stream
+        olestg = self.olestg
+        self.assertTrue(is_storage(olestg))
+        self.assertEquals('', olestg.path)
+
+        docinfo = olestg['DocInfo']
+        self.assertTrue(is_stream(docinfo))
+        self.assertEquals('DocInfo', docinfo.path)
+
+        bodytext = olestg['BodyText']
+        self.assertTrue(is_storage(bodytext))
+        self.assertEquals('BodyText', bodytext.path)
+
+        section = bodytext['Section0']
+        self.assertTrue(is_stream(section))
+        self.assertEquals('BodyText/Section0', section.path)
+
+        f = section.open()
+        try:
+            data = f.read()
+            self.assertEquals(1529, len(data))
+        finally:
+            f.close()
+
+        try:
+            bodytext['nonexists']
+            self.fail('KeyError expected')
+        except KeyError:
+            pass
+
     def test_init_should_receive_string_olefile(self):
         from .filestructure import OleStorage
         import os.path
@@ -123,7 +154,7 @@ class TestOleStorage(TestBase):
             pass
 
         fileheader = olestg['FileHeader']
-        self.assertTrue(hasattr(fileheader, 'read'))
+        self.assertTrue(hasattr(fileheader, 'open'))
         
         bindata = olestg['BinData']
         self.assertTrue(isinstance(bindata, FS.OleStorage))
@@ -133,7 +164,7 @@ class TestOleStorage(TestBase):
                           sorted(iter(bindata)))
 
         bin0002 = bindata['BIN0002.jpg']
-        self.assertTrue(hasattr(bin0002, 'read'))
+        self.assertTrue(hasattr(bin0002, 'open'))
 
 
     def test_iter_storage_leafs(self):
@@ -175,10 +206,15 @@ class TestHwp5FileBase(TestBase):
         from .filestructure import Hwp5FileBase
         return Hwp5FileBase(self.olestg)
 
+    def test_item_is_hwpfileheader(self):
+        from .filestructure import HwpFileHeader
+        fileheader = self.hwp5file_base['FileHeader']
+        self.assertTrue(isinstance(fileheader, HwpFileHeader))
+
     def test_header(self):
-        from .filestructure import FileHeader
+        from .filestructure import HwpFileHeader
         header = self.hwp5file_base.header
-        self.assertTrue(isinstance(header, FileHeader))
+        self.assertTrue(isinstance(header, HwpFileHeader))
 
 
 class TestHwp5DistDocStream(TestBase):
@@ -188,8 +224,7 @@ class TestHwp5DistDocStream(TestBase):
     @cached_property
     def jscriptversion(self):
         from .filestructure import Hwp5DistDocStream
-        return Hwp5DistDocStream(self.olestg['Scripts'],
-                                 'JScriptVersion',
+        return Hwp5DistDocStream(self.olestg['Scripts']['JScriptVersion'],
                                  self.hwp5file.header.version)
 
     def test_head_record(self):
@@ -233,18 +268,10 @@ class TestHwp5DistDicStorage(TestBase):
         from .filestructure import Hwp5DistDocStorage
         return Hwp5DistDocStorage(self.olestg['Scripts'])
 
-    def test_resolve_baseitemobject(self):
-        version = self.scripts.resolve_baseitemobject('JScriptVersion')
-        self.assertTrue(version.stg is self.scripts.stg)
-        self.assertTrue(version is not None)
-        self.assertEquals(4+256+16, len(version.open().read()))
-        self.assertTrue(version.other_formats() is not None)
-
-    def test_resolve_other_formats_for_version(self):
-        other_formats = self.scripts.resolve_other_formats_for('JScriptVersion')
-        self.assertTrue(other_formats is not None)
-        self.assertEquals(set(['.head.record', '.head', '.tail']),
-                          set(other_formats.keys()))
+    def test_scripts_other_formats(self):
+        from .filestructure import Hwp5DistDocStream
+        jscriptversion = self.scripts['JScriptVersion']
+        self.assertTrue(isinstance(jscriptversion, Hwp5DistDocStream))
 
 
 class TestHwp5DistDoc(TestBase):
@@ -271,10 +298,20 @@ class TestHwp5DistDoc(TestBase):
 
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
+        from hwp5.storage import is_storage, is_stream
         stg = FS.CompressedStorage(self.olestg['BinData'])
-        data = stg['BIN0002.jpg'].read()
-        self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
-        self.assertEquals(15895, len(data))
+        self.assertTrue(is_storage(stg))
+
+        item = stg['BIN0002.jpg']
+        self.assertTrue(is_stream(item))
+
+        f = item.open()
+        try:
+            data = f.read()
+            self.assertEquals('\xff\xd8\xff\xe0', data[0:4])
+            self.assertEquals(15895, len(data))
+        finally:
+            f.close()
 
 
 class TestHwp5Compression(TestBase):
@@ -285,7 +322,7 @@ class TestHwp5Compression(TestBase):
 
     @cached_property
     def docinfo(self):
-        return self.hwp5file_compressed['DocInfo']
+        return self.hwp5file_compressed['DocInfo'].open()
 
     @cached_property
     def bodytext(self):
@@ -304,14 +341,14 @@ class TestHwp5Compression(TestBase):
     def test_bodytext_uncompressed(self):
         from .recordstream import read_record
         from .tagids import HWPTAG_PARA_HEADER
-        record = read_record(self.bodytext['Section0'], 0)
+        record = read_record(self.bodytext['Section0'].open(), 0)
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
 
     def test_scripts_version(self):
         hwp5file = self.hwp5file_compressed
         self.assertFalse(hwp5file.header.flags.distributable)
 
-        JScriptVersion = self.scripts['JScriptVersion'].read()
+        JScriptVersion = self.scripts['JScriptVersion'].open().read()
         self.assertEquals(8, len(JScriptVersion))
 
     def test_viewtext_scripts(self):
@@ -319,7 +356,7 @@ class TestHwp5Compression(TestBase):
         hwp5file = self.hwp5file_compressed
         self.assertTrue(hwp5file.header.flags.distributable)
 
-        JScriptVersion = self.scripts['JScriptVersion']
+        JScriptVersion = self.scripts['JScriptVersion'].open()
 
         from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
         from .recordstream import read_record
@@ -359,25 +396,29 @@ class TestHwp5File(TestBase):
     def test_getitem_storage_classes(self):
         hwp5file = self.hwp5file
         self.assertTrue(isinstance(hwp5file['BinData'], FS.StorageWrapper))
-        self.assertTrue(isinstance(hwp5file['BodyText'], FS.SectionStorage))
+        self.assertTrue(isinstance(hwp5file['BodyText'], FS.Sections))
         self.assertTrue(isinstance(hwp5file['Scripts'], FS.StorageWrapper))
 
     def test_prv_text(self):
-        prvtext = self.hwp5file['PrvText.utf8']
+        prvtext = self.hwp5file['PrvText']
+        from .filestructure import PreviewText
+        self.assertTrue(isinstance(prvtext, PreviewText))
         expected = '한글 2005 예제 파일입니다.'
-        self.assertEquals(expected, prvtext.read()[0:len(expected)])
+        self.assertEquals(expected, str(prvtext)[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
+        from .storage import ExtraItemStorage
         self.hwp5file_name = 'viewtext.hwp'
-        self.assertTrue('Section0.tail' in self.viewtext.open())
+        self.assertTrue('Section0.tail' in ExtraItemStorage(self.viewtext))
 
     def test_unpack(self):
+        from .storage import ExtraItemStorage
         outpath = 'test_unpack'
         import os, os.path, shutil
         if os.path.exists(outpath):
             shutil.rmtree(outpath)
         os.mkdir(outpath)
-        FS.unpack(self.hwp5file, outpath)
+        FS.unpack(ExtraItemStorage(self.hwp5file), outpath)
 
         self.assertTrue(os.path.exists('test_unpack/\x05HwpSummaryInformation'))
         self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.jpg'))
@@ -394,20 +435,16 @@ class TestHwp5File(TestBase):
         self.assertTrue(os.path.exists('test_unpack/Scripts/JScriptVersion'))
 
     def test_if_hwp5file_contains_other_formats(self):
-        self.assertTrue('PrvText.utf8' in list(self.hwp5file))
+        from .storage import ExtraItemStorage
+        stg = ExtraItemStorage(self.hwp5file)
+        self.assertTrue('PrvText.utf8' in list(stg))
 
     def test_resolve_conversion_for_bodytext(self):
         self.assertTrue(self.hwp5file.resolve_conversion_for('BodyText'))
 
-    def test_resolve_other_formats_for_preview_text(self):
-        self.assertTrue(self.hwp5file.resolve_other_formats_for('PrvText') is not None)
-
-    def test_resolve_other_formats_for_docinfo(self):
-        self.assertTrue(self.hwp5file.resolve_other_formats_for('DocInfo') is not None)
-
     def test_docinfo(self):
         hwp5file = self.hwp5file
-        self.assertTrue(isinstance(hwp5file.docinfo, FS.Hwp5Object))
+        self.assertTrue(isinstance(hwp5file.docinfo, FS.VersionSensitiveItem))
         docinfo = hwp5file.docinfo.open()
         try:
             data = docinfo.read()
@@ -415,27 +452,20 @@ class TestHwp5File(TestBase):
             docinfo.close()
 
         import zlib
-        self.assertEquals(zlib.decompress(self.olestg['DocInfo'].read(), -15), data)
+        self.assertEquals(zlib.decompress(self.olestg['DocInfo'].open().read(), -15), data)
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, FS.Sections))
-        bodytext = bodytext.open()
         self.assertEquals(['Section0'], list(bodytext))
 
 
-class TestSectionStorage(TestCase):
+class TestSections(TestBase):
 
     @property
-    def section_storage(self):
-        from .filestructure import SectionStorage, Hwp5Object
-        return SectionStorage(None, None, Hwp5Object)
-
-    def test_resolve_other_formats_for_section(self):
-        self.assertTrue(self.section_storage.resolve_other_formats_for('Section0') is not None)
-
-    def test_resolve_other_formats_for_nonsection(self):
-        self.assertTrue(self.section_storage.resolve_other_formats_for('NoneSection') is None)
+    def sections(self):
+        from .filestructure import Sections
+        return Sections(self.hwp5file.stg['BodyText'], self.hwp5file.header.version)
 
 
 class TestGeneratorReader(object):

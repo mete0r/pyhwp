@@ -86,7 +86,7 @@ class Converter(object):
                 if 'BinData' in hwpfile:
                     bindata = hwpfile['BinData']
                     for name in bindata:
-                        f = bindata[name]
+                        f = bindata[name].open()
                         yield f, 'bindata/'+name, 'application/octet-stream'
 
             make_odtpkg(odtpkg, styles, content, additional_files())

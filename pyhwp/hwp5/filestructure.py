@@ -5,8 +5,8 @@ import zlib
 from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
-from .storage import Storage, StorageWrapper, unpack
-from .storage import ItemsModifyingStorage
+from .storage import StorageWrapper, unpack
+from .storage import ItemConversionStorage
 from .importhelper import importStringIO
 import logging
 
@@ -265,9 +265,30 @@ def olefile_listdir(olefile, path):
                 yield stream[-1]
 
 
-class OleStorage(Storage):
+class OleStorageItem(object):
 
-    def __init__(self, olefile, path=''):
+    def __init__(self, olefile, path, parent=None):
+        self.olefile = olefile
+        self.path = path  # path DOES NOT end with '/'
+
+    def get_name(self):
+        if self.path == '':
+            return None
+        segments = self.path.split('/')
+        return segments[-1]
+
+    name = cached_property(get_name)
+
+
+class OleStream(OleStorageItem):
+
+    def open(self):
+        return self.olefile.openstream(self.path)
+
+
+class OleStorage(OleStorageItem):
+
+    def __init__(self, olefile, path='', parent=None):
         ''' create a OleStorage instance
 
             @param olefile : a OleFileIO instance
@@ -277,8 +298,7 @@ class OleStorage(Storage):
         if not hasattr(olefile, 'openstream'):
             from OleFileIO_PL import OleFileIO
             olefile = OleFileIO(olefile)
-        self.olefile = olefile
-        self.path = path  # path DOES NOT end with '/'
+        OleStorageItem.__init__(self, olefile, path, parent)
 
     def __iter__(self):
         return olefile_listdir(self.olefile, self.path)
@@ -292,15 +312,18 @@ class OleStorage(Storage):
             raise KeyError('%s not found' % path)
         t = self.olefile.get_type(path)
         if t == 1:  # Storage
-            return OleStorage(self.olefile, path)
+            return OleStorage(self.olefile, path, self)
         elif t == 2:  # Stream
-            return self.olefile.openstream(path)
+            return OleStream(self.olefile, path, self)
         else:
             raise KeyError('%s is invalid' % path)
 
     def close(self):
-        if hasattr(self.olefile, 'close'):
-            self.olefile.close()
+        # if this is root, close underlying olefile
+        if self.path == '':
+            # old version of OleFileIO has no close()
+            if hasattr(self.olefile, 'close'):
+                self.olefile.close()
 
 
 class GeneratorReader(object):
@@ -384,41 +407,54 @@ def uncompress(stream):
     return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
 
 
+class CompressedStream(object):
+
+    def __init__(self, item):
+        self.item = item
+
+    def open(self):
+        return uncompress(self.item.open())
+
+
 class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
     def __getitem__(self, name):
+        from hwp5.storage import is_stream
         item = self.stg[name]
-        if not isinstance(item, Storage):
-            return uncompress(item)
+        if is_stream(item):
+            return CompressedStream(item)
         else:
             return item
 
 
-class Hwp5Object(object):
+class VersionSensitiveItem(object):
 
-    def __init__(self, stg, name, version):
-        self.stg = stg
-        self.name = name
+    def __init__(self, item, version):
+        self.item = item
         self.version = version
 
     def open(self):
-        return self.stg[self.name]
-
-    def conversion(self, item):
-        return item
+        return self.item.open()
 
     def other_formats(self):
         return dict()
 
 
-class Hwp5FileBase(StorageWrapper):
+class Hwp5FileBase(ItemConversionStorage):
 
-    @cached_property
-    def header(self):
-        return decode_fileheader(self.stg['FileHeader'])
+    def resolve_conversion_for(self, name):
+        if name == 'FileHeader':
+            return HwpFileHeader
+
+    def get_fileheader(self):
+        return self['FileHeader']
+
+    fileheader = cached_property(get_fileheader)
+
+    header = fileheader
 
 
-class Hwp5DistDocStream(Hwp5Object):
+class Hwp5DistDocStream(VersionSensitiveItem):
 
     def head_record(self):
         item = self.open()
@@ -454,76 +490,81 @@ class Hwp5DistDocStream(Hwp5Object):
                 '.tail': self.tail_stream}
 
 
-class Hwp5DistDocStorage(ItemsModifyingStorage):
+class Hwp5DistDocStorage(ItemConversionStorage):
 
-    def resolve_baseitemobject(self, name):
-        return Hwp5DistDocStream(self.stg, name, None)
-
-    def resolve_other_formats_for(self, name):
-        item = self.resolve_baseitemobject(name)
-        return item.other_formats()
+    def resolve_conversion_for(self, name):
+        def conversion(item):
+            return Hwp5DistDocStream(self.stg[name], None)  # TODO: version
+        return conversion
 
 
-class Hwp5DistDoc(ItemsModifyingStorage):
+class Hwp5DistDoc(ItemConversionStorage):
 
     def resolve_conversion_for(self, name):
         if name in ('Scripts', 'ViewText'):
             return Hwp5DistDocStorage
 
 
-class Hwp5Compression(ItemsModifyingStorage):
+class Hwp5Compression(ItemConversionStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     def resolve_conversion_for(self, name):
         if name in ('BinData', 'BodyText'):
             return CompressedStorage
         elif name == 'DocInfo':
-            return uncompress
+            return CompressedStream
         elif name == 'Scripts':
             if not self.header.flags.distributable:
                 return CompressedStorage
 
 
-class PreviewText(Hwp5Object):
+class PreviewText(object):
+
+    def __init__(self, item):
+        self.open = item.open
 
     def other_formats(self):
-        return {'.utf8': self.utf8_stream}
+        return {'.utf8': self.open_utf8}
 
-    def utf8_stream(self):
+    def open_utf8(self):
         recode = recoder('utf-16le', 'utf-8')
         return recode(self.open())
 
+    def get_utf8(self):
+        f = self.open_utf8()
+        try:
+            return f.read()
+        finally:
+            f.close()
 
-class SectionStorage(ItemsModifyingStorage):
+    utf8 = cached_property(get_utf8)
 
-    def __init__(self, stg, version, section_class):
+    def __str__(self):
+        return self.utf8
+
+
+class Sections(ItemConversionStorage):
+
+    section_class = VersionSensitiveItem
+
+    def __init__(self, stg, version):
         self.stg = stg
         self.version = version
-        self.section_class = section_class
 
-    def resolve_other_formats_for(self, name):
-        if name.startswith('Section'):
-            section = self.section_class(self.stg, name, self.version)
-            return section.other_formats()
+    def resolve_conversion_for(self, name):
+        def conversion(item):
+            return self.section_class(self.stg[name], self.version)
+        return conversion
 
-
-class Sections(Hwp5Object):
-
-    section_class = Hwp5Object
-    storage_class = SectionStorage
-
-    def conversion(self, item):
-        assert isinstance(item, Storage)
-        return self.storage_class(item, self.version, self.section_class)
+    def other_formats(self):
+        return dict()
 
     def section(self, idx):
-        stg = self.open()
-        return self.section_class(stg, 'Section%d' % idx, self.version)
+        return self['Section%d' % idx]
 
     def section_indexes(self):
         def gen():
-            stg = self.open()
-            for name in stg:
+            for name in self:
                 if name.startswith('Section'):
                     idx = name[len('Section'):]
                     try:
@@ -542,7 +583,10 @@ class Sections(Hwp5Object):
                     for idx in self.section_indexes())
 
 
-class HwpFileHeader(Hwp5Object):
+class HwpFileHeader(object):
+
+    def __init__(self, item):
+        self.open = item.open
 
     def to_dict(self):
         f = self.open()
@@ -553,7 +597,17 @@ class HwpFileHeader(Hwp5Object):
 
     value = cached_property(to_dict)
 
-    def to_text(self):
+    def get_version(self):
+        return self.value['version']
+
+    version = cached_property(get_version)
+
+    def get_flags(self):
+        return FileHeader.Flags(self.value['flags'])
+
+    flags = cached_property(get_flags)
+
+    def open_text(self):
         d = FileHeader.Flags.dictvalue(self.value['flags'])
         d['signature'] = self.value['signature']
         d['version'] = '%d.%d.%d.%d' % self.value['version']
@@ -564,13 +618,13 @@ class HwpFileHeader(Hwp5Object):
         return out
 
     def other_formats(self):
-        return {'.txt': self.to_text}
+        return {'.txt': self.open_text}
 
 
-class HwpSummaryInfo(Hwp5Object):
+class HwpSummaryInfo(VersionSensitiveItem):
 
     def other_formats(self):
-        return {'.txt': self.to_text}
+        return {'.txt': self.open_text}
 
     def to_dict(self):
         f = self.open()
@@ -583,7 +637,7 @@ class HwpSummaryInfo(Hwp5Object):
 
     value = cached_property(to_dict)
 
-    def to_text(self):
+    def open_text(self):
         out = StringIO()
         for k, v in sorted(self.value.iteritems()):
             if isinstance(v, unicode):
@@ -594,7 +648,7 @@ class HwpSummaryInfo(Hwp5Object):
         return out
 
 
-class Hwp5File(ItemsModifyingStorage):
+class Hwp5File(ItemConversionStorage):
     ''' represents HWPv5 File
 
         Hwp5File(stg)
@@ -603,7 +657,8 @@ class Hwp5File(ItemsModifyingStorage):
     '''
 
     def __init__(self, stg):
-        if not isinstance(stg, Storage):
+        from hwp5.storage import is_storage
+        if not is_storage(stg):
             stg = OleStorage(stg)
 
         stg = Hwp5FileBase(stg)
@@ -616,51 +671,43 @@ class Hwp5File(ItemsModifyingStorage):
 
         self.stg = stg
 
-    def resolve_other_formats_for(self, name):
-        if name == 'FileHeader':
-            return self.fileheader.other_formats()
-        if name == 'PrvText':
-            return self.preview_text.other_formats()
-        if name == 'DocInfo':
-            return self.docinfo.other_formats()
-        if name == 'BodyText':
-            return self.bodytext.other_formats()
-        if name == '\005HwpSummaryInformation':
-            return self.summaryinfo.other_formats()
-
     def resolve_conversion_for(self, name):
+        if name == 'DocInfo':
+            return self.with_version(self.docinfo_class)
         if name == 'BodyText':
-            return self.bodytext.conversion
+            return self.with_version(self.bodytext_class)
+        if name == 'PrvText':
+            return PreviewText
+        if name == '\005HwpSummaryInformation':
+            return self.with_version(HwpSummaryInfo)
 
-    docinfo_class = Hwp5Object
-    preview_text_class = PreviewText
+    def with_version(self, f):
+        def wrapped(item):
+            return f(item, self.header.version)
+        return wrapped
+
+    docinfo_class = VersionSensitiveItem
     bodytext_class = Sections
-    viewtext_class = Hwp5Object
-
-    @cached_property
-    def fileheader(self):
-        return HwpFileHeader(self, 'FileHeader', self.header.version)
 
     @cached_property
     def summaryinfo(self):
-        return HwpSummaryInfo(self, '\005HwpSummaryInformation',
-                              self.header.version)
+        return self['\005HwpSummaryInformation']
 
     @cached_property
     def docinfo(self):
-        return self.docinfo_class(self, 'DocInfo', self.header.version)
+        return self['DocInfo']
 
     @cached_property
     def preview_text(self):
-        return self.preview_text_class(self, 'PrvText', self.header.version)
+        return self['PrvText']
 
     @cached_property
     def bodytext(self):
-        return self.bodytext_class(self, 'BodyText', self.header.version)
+        return self['BodyText']
 
     @cached_property
     def viewtext(self):
-        return self.viewtext_class(self, 'ViewText', self.header.version)
+        return self['ViewText']
 
 
 def unole():

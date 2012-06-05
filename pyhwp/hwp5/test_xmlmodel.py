@@ -18,7 +18,7 @@ class TestModelEventStream(TestBase):
     @cached_property
     def docinfo(self):
         from .xmlmodel import ModelEventStream
-        return ModelEventStream(self.hwp5file, 'DocInfo',
+        return ModelEventStream(self.hwp5file_bin['DocInfo'],
                                 self.hwp5file.header.version)
 
     def test_modelevents(self):
@@ -32,7 +32,7 @@ class TestDocInfo(TestBase):
     @cached_property
     def docinfo(self):
         from .xmlmodel import DocInfo
-        return DocInfo(self.hwp5file, 'DocInfo',
+        return DocInfo(self.hwp5file_bin['DocInfo'],
                        self.hwp5file.header.version)
 
     def test_events(self):
