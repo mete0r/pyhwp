@@ -46,7 +46,9 @@ class TestRecordStream(TestBase):
 class TestHwp5File(TestBase):
 
     def test_if_hwp5file_contains_other_formats(self):
-        self.assertTrue('DocInfo.records' in list(self.hwp5file))
+        from .storage import ExtraItemStorage
+        stg = ExtraItemStorage(self.hwp5file)
+        self.assertTrue('DocInfo.records' in list(stg))
 
     def test_docinfo(self):
         docinfo = self.hwp5file.docinfo
@@ -55,9 +57,11 @@ class TestHwp5File(TestBase):
         self.assertEquals(67, len(records))
 
     def test_bodytext(self):
+        from .storage import ExtraItemStorage
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
-        self.assertEquals(['Section0', 'Section0.records'], list(bodytext))
+        stg = ExtraItemStorage(bodytext)
+        self.assertEquals(['Section0', 'Section0.records'], list(stg))
 
 
 class TestJson(TestBase):

@@ -67,53 +67,6 @@ class ExtraItemStorage(StorageWrapper):
             raise
 
 
-class ItemsModifyingStorage(StorageWrapper):
-    ''' a Storage class which modifies its base storage items
-
-        It modifies base storage items:
-            - by conversion them
-            - by adding differently-formatted items based on them
-
-        Derived classes may implement resolve_conversion_for() and/or
-        resolve_other_formats_for().
-    '''
-
-    def __iter__(self):
-        for name in self.stg:
-            yield name
-            other_formats = self.resolve_other_formats_for(name)
-            if other_formats:
-                for ext in other_formats:
-                    yield name + ext
-
-    def __getitem__(self, name):
-        try:
-            item = self.stg[name]
-        except KeyError:
-            # 기반 스토리지에는 없으므로, other_formats() 중에서 찾아본다.
-            for root in self.stg:
-                other_formats = self.resolve_other_formats_for(root)
-                if other_formats:
-                    for ext, func in other_formats.items():
-                        if root + ext == name:
-                            return Open2Stream(func)
-            raise KeyError(name)
-        else:
-            # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
-            conversion = self.resolve_conversion_for(name)
-            if conversion:
-                return conversion(item)
-            return item
-
-    def resolve_other_formats_for(self, name):
-        ''' return other formats for the specified storage item '''
-        pass
-
-    def resolve_conversion_for(self, name):
-        ''' return a conversion function for the specified storage item '''
-        pass
-
-
 class Open2Stream(object):
 
     def __init__(self, open):

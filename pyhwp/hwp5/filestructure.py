@@ -7,7 +7,6 @@ from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
 from .storage import StorageWrapper, unpack
 from .storage import ItemConversionStorage
-from .storage import ItemsModifyingStorage
 from .importhelper import importStringIO
 import logging
 
@@ -492,24 +491,22 @@ class Hwp5DistDocStream(VersionSensitiveItem):
                 '.tail': self.tail_stream}
 
 
-class Hwp5DistDocStorage(ItemsModifyingStorage):
+class Hwp5DistDocStorage(ItemConversionStorage):
 
-    def resolve_baseitemobject(self, name):
-        return Hwp5DistDocStream(self[name], None)
-
-    def resolve_other_formats_for(self, name):
-        item = self.resolve_baseitemobject(name)
-        return item.other_formats()
+    def resolve_conversion_for(self, name):
+        def conversion(item):
+            return Hwp5DistDocStream(self.stg[name], None)  # TODO: version
+        return conversion
 
 
-class Hwp5DistDoc(ItemsModifyingStorage):
+class Hwp5DistDoc(ItemConversionStorage):
 
     def resolve_conversion_for(self, name):
         if name in ('Scripts', 'ViewText'):
             return Hwp5DistDocStorage
 
 
-class Hwp5Compression(ItemsModifyingStorage):
+class Hwp5Compression(ItemConversionStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     def resolve_conversion_for(self, name):
@@ -535,7 +532,7 @@ class PreviewText(object):
         return recode(self.open())
 
 
-class Sections(ItemsModifyingStorage):
+class Sections(ItemConversionStorage):
 
     section_class = VersionSensitiveItem
 
@@ -543,10 +540,10 @@ class Sections(ItemsModifyingStorage):
         self.stg = stg
         self.version = version
 
-    def resolve_other_formats_for(self, name):
-        if name.startswith('Section'):
-            section = self.section_class(self[name], self.version)
-            return section.other_formats()
+    def resolve_conversion_for(self, name):
+        def conversion(item):
+            return self.section_class(self.stg[name], self.version)
+        return conversion
 
     def other_formats(self):
         return dict()
@@ -631,7 +628,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
         return out
 
 
-class Hwp5File(ItemsModifyingStorage):
+class Hwp5File(ItemConversionStorage):
     ''' represents HWPv5 File
 
         Hwp5File(stg)
@@ -653,18 +650,6 @@ class Hwp5File(ItemsModifyingStorage):
             stg = Hwp5Compression(stg)
 
         self.stg = stg
-
-    def resolve_other_formats_for(self, name):
-        if name == 'FileHeader':
-            return self.fileheader.other_formats()
-        if name == 'PrvText':
-            return self.preview_text.other_formats()
-        if name == 'DocInfo':
-            return self.docinfo.other_formats()
-        if name == 'BodyText':
-            return self.bodytext.other_formats()
-        if name == '\005HwpSummaryInformation':
-            return self.summaryinfo.other_formats()
 
     def resolve_conversion_for(self, name):
         if name == 'DocInfo':

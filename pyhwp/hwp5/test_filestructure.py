@@ -268,17 +268,10 @@ class TestHwp5DistDicStorage(TestBase):
         from .filestructure import Hwp5DistDocStorage
         return Hwp5DistDocStorage(self.olestg['Scripts'])
 
-    def test_resolve_baseitemobject(self):
-        version = self.scripts.resolve_baseitemobject('JScriptVersion')
-        self.assertTrue(version is not None)
-        self.assertEquals(4+256+16, len(version.open().read()))
-        self.assertTrue(version.other_formats() is not None)
-
-    def test_resolve_other_formats_for_version(self):
-        other_formats = self.scripts.resolve_other_formats_for('JScriptVersion')
-        self.assertTrue(other_formats is not None)
-        self.assertEquals(set(['.head.record', '.head', '.tail']),
-                          set(other_formats.keys()))
+    def test_scripts_other_formats(self):
+        from .filestructure import Hwp5DistDocStream
+        jscriptversion = self.scripts['JScriptVersion']
+        self.assertTrue(isinstance(jscriptversion, Hwp5DistDocStream))
 
 
 class TestHwp5DistDoc(TestBase):
@@ -407,21 +400,25 @@ class TestHwp5File(TestBase):
         self.assertTrue(isinstance(hwp5file['Scripts'], FS.StorageWrapper))
 
     def test_prv_text(self):
-        prvtext = self.hwp5file['PrvText.utf8']
+        prvtext = self.hwp5file['PrvText']
+        from .filestructure import PreviewText
+        self.assertTrue(isinstance(prvtext, PreviewText))
         expected = '한글 2005 예제 파일입니다.'
-        self.assertEquals(expected, prvtext.open().read()[0:len(expected)])
+        self.assertEquals(expected, prvtext.utf8_stream().read()[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
+        from .storage import ExtraItemStorage
         self.hwp5file_name = 'viewtext.hwp'
-        self.assertTrue('Section0.tail' in self.viewtext)
+        self.assertTrue('Section0.tail' in ExtraItemStorage(self.viewtext))
 
     def test_unpack(self):
+        from .storage import ExtraItemStorage
         outpath = 'test_unpack'
         import os, os.path, shutil
         if os.path.exists(outpath):
             shutil.rmtree(outpath)
         os.mkdir(outpath)
-        FS.unpack(self.hwp5file, outpath)
+        FS.unpack(ExtraItemStorage(self.hwp5file), outpath)
 
         self.assertTrue(os.path.exists('test_unpack/\x05HwpSummaryInformation'))
         self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.jpg'))
@@ -438,16 +435,12 @@ class TestHwp5File(TestBase):
         self.assertTrue(os.path.exists('test_unpack/Scripts/JScriptVersion'))
 
     def test_if_hwp5file_contains_other_formats(self):
-        self.assertTrue('PrvText.utf8' in list(self.hwp5file))
+        from .storage import ExtraItemStorage
+        stg = ExtraItemStorage(self.hwp5file)
+        self.assertTrue('PrvText.utf8' in list(stg))
 
     def test_resolve_conversion_for_bodytext(self):
         self.assertTrue(self.hwp5file.resolve_conversion_for('BodyText'))
-
-    def test_resolve_other_formats_for_preview_text(self):
-        self.assertTrue(self.hwp5file.resolve_other_formats_for('PrvText') is not None)
-
-    def test_resolve_other_formats_for_docinfo(self):
-        self.assertTrue(self.hwp5file.resolve_other_formats_for('DocInfo') is not None)
 
     def test_docinfo(self):
         hwp5file = self.hwp5file
@@ -473,12 +466,6 @@ class TestSections(TestBase):
     def sections(self):
         from .filestructure import Sections
         return Sections(self.hwp5file.stg['BodyText'], self.hwp5file.header.version)
-
-    def test_resolve_other_formats_for_section(self):
-        self.assertTrue(self.sections.resolve_other_formats_for('Section0') is not None)
-
-    def test_resolve_other_formats_for_nonsection(self):
-        self.assertTrue(self.sections.resolve_other_formats_for('NoneSection') is None)
 
 
 class TestGeneratorReader(object):
