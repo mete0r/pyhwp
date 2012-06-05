@@ -525,11 +525,23 @@ class PreviewText(object):
         self.open = item.open
 
     def other_formats(self):
-        return {'.utf8': self.utf8_stream}
+        return {'.utf8': self.open_utf8}
 
-    def utf8_stream(self):
+    def open_utf8(self):
         recode = recoder('utf-16le', 'utf-8')
         return recode(self.open())
+
+    def get_utf8(self):
+        f = self.open_utf8()
+        try:
+            return f.read()
+        finally:
+            f.close()
+
+    utf8 = cached_property(get_utf8)
+
+    def __str__(self):
+        return self.utf8
 
 
 class Sections(ItemConversionStorage):

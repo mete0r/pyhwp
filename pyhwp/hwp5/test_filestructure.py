@@ -404,7 +404,7 @@ class TestHwp5File(TestBase):
         from .filestructure import PreviewText
         self.assertTrue(isinstance(prvtext, PreviewText))
         expected = '한글 2005 예제 파일입니다.'
-        self.assertEquals(expected, prvtext.utf8_stream().read()[0:len(expected)])
+        self.assertEquals(expected, str(prvtext)[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
         from .storage import ExtraItemStorage
