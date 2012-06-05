@@ -632,7 +632,8 @@ class Hwp5File(ItemsModifyingStorage):
     '''
 
     def __init__(self, stg):
-        if not isinstance(stg, Storage):
+        from hwp5.storage import is_storage
+        if not is_storage(stg):
             stg = OleStorage(stg)
 
         stg = Hwp5FileBase(stg)

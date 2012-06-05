@@ -95,7 +95,7 @@ def iter_storage_leafs(stg, basepath=''):
     for name in stg:
         path = basepath + name
         item = stg[name]
-        if isinstance(item, Storage):
+        if is_storage(item):
             for x in iter_storage_leafs(item, path+'/'):
                 yield x
         else:
@@ -112,7 +112,7 @@ def unpack(stg, outbase):
     for name in stg:
         outpath = os.path.join(outbase, name)
         item = stg[name]
-        if isinstance(item, Storage):
+        if is_storage(item):
             if not os.path.exists(outpath):
                 os.mkdir(outpath)
             unpack(item, outpath)
@@ -145,7 +145,7 @@ def printstorage(stg, basepath=''):
     for name in names:
         path = basepath + name
         item = stg[name]
-        if isinstance(item, Storage):
+        if is_storage(item):
             printstorage(item, path+'/')
-        if hasattr(item, 'open'):
+        elif is_stream(item):
             print path.encode('string_escape')
