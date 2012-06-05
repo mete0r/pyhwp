@@ -20,6 +20,21 @@ class StorageWrapper(object):
         return getattr(self.stg, name)
 
 
+class ItemConversionStorage(StorageWrapper):
+
+    def __getitem__(self, name):
+        item = self.stg[name]
+        # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
+        conversion = self.resolve_conversion_for(name)
+        if conversion:
+            return conversion(item)
+        return item
+
+    def resolve_conversion_for(self, name):
+        ''' return a conversion function for the specified storage item '''
+        pass
+
+
 class ItemsModifyingStorage(StorageWrapper):
     ''' a Storage class which modifies its base storage items
 
