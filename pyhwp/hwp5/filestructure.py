@@ -436,9 +436,6 @@ class VersionSensitiveItem(StorageItem):
     def open(self):
         return self.item.open()
 
-    def conversion(self, item):
-        return item
-
     def other_formats(self):
         return dict()
 
