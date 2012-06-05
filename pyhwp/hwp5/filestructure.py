@@ -624,7 +624,7 @@ class HwpFileHeader(object):
 class HwpSummaryInfo(VersionSensitiveItem):
 
     def other_formats(self):
-        return {'.txt': self.to_text}
+        return {'.txt': self.open_text}
 
     def to_dict(self):
         f = self.open()
@@ -637,7 +637,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
     value = cached_property(to_dict)
 
-    def to_text(self):
+    def open_text(self):
         out = StringIO()
         for k, v in sorted(self.value.iteritems()):
             if isinstance(v, unicode):
