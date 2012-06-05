@@ -561,8 +561,7 @@ class Sections(ItemConversionStorage):
         return dict()
 
     def section(self, idx):
-        stream = self['Section%d' % idx]
-        return self.section_class(stream, self.version)
+        return self['Section%d' % idx]
 
     def section_indexes(self):
         def gen():
