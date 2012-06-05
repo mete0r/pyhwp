@@ -5,7 +5,7 @@ import zlib
 from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
-from .storage import Storage, StorageWrapper, unpack
+from .storage import StorageWrapper, unpack
 from .storage import ItemsModifyingStorage
 from .importhelper import importStringIO
 import logging
@@ -265,8 +265,7 @@ def olefile_listdir(olefile, path):
                 yield stream[-1]
 
 
-from .storage import StorageItem
-class OleStorageItem(StorageItem):
+class OleStorageItem(object):
 
     def __init__(self, olefile, path, parent=None):
         self.olefile = olefile
@@ -287,7 +286,7 @@ class OleStream(OleStorageItem):
         return self.olefile.openstream(self.path)
 
 
-class OleStorage(OleStorageItem, Storage):
+class OleStorage(OleStorageItem):
 
     def __init__(self, olefile, path='', parent=None):
         ''' create a OleStorage instance
@@ -408,7 +407,7 @@ def uncompress(stream):
     return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
 
 
-class CompressedStream(StorageItem):
+class CompressedStream(object):
 
     def __init__(self, item):
         self.item = item
@@ -428,7 +427,7 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
-class VersionSensitiveItem(StorageItem):
+class VersionSensitiveItem(object):
 
     def __init__(self, item, version):
         self.item = item
@@ -514,7 +513,7 @@ class Hwp5Compression(ItemsModifyingStorage):
                 return CompressedStorage
 
 
-class PreviewText(StorageItem):
+class PreviewText(object):
 
     def __init__(self, item):
         self.open = item.open
@@ -568,7 +567,7 @@ class Sections(ItemsModifyingStorage):
                     for idx in self.section_indexes())
 
 
-class HwpFileHeader(StorageItem):
+class HwpFileHeader(object):
 
     def __init__(self, item):
         self.open = item.open

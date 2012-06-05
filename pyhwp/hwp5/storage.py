@@ -9,21 +9,7 @@ def is_stream(item):
     return hasattr(item, 'open') and callable(item.open)
 
 
-class StorageItem(object):
-    pass
-
-
-class Storage(StorageItem):
-    def __iter__(self):
-        ''' generates item names '''
-        raise NotImplementedError()
-
-    def __getitem__(self, name):
-        ''' return the item specified by the name '''
-        raise NotImplementedError()
-
-
-class StorageWrapper(Storage):
+class StorageWrapper(object):
     def __init__(self, stg):
         self.stg = stg
     def __iter__(self):
@@ -81,7 +67,7 @@ class ItemsModifyingStorage(StorageWrapper):
         pass
 
 
-class Open2Stream(StorageItem):
+class Open2Stream(object):
 
     def __init__(self, open):
         self.open = open
