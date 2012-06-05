@@ -212,9 +212,9 @@ class TestHwp5FileBase(TestBase):
         self.assertTrue(isinstance(fileheader, HwpFileHeader))
 
     def test_header(self):
-        from .filestructure import FileHeader
+        from .filestructure import HwpFileHeader
         header = self.hwp5file_base.header
-        self.assertTrue(isinstance(header, FileHeader))
+        self.assertTrue(isinstance(header, HwpFileHeader))
 
 
 class TestHwp5DistDocStream(TestBase):

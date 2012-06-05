@@ -285,7 +285,7 @@ class FileFromStream(object):
     def close(self):
         if hasattr(self.stream, 'closeInput'):
             self.stream.closeInput()
-        if hasattr(self.stream, 'closeOutput'):
+        elif hasattr(self.stream, 'closeOutput'):
             self.stream.closeOutput()
 
 def container_recurse_elements(parent, parent_path_segments):

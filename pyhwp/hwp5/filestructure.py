@@ -442,17 +442,16 @@ class VersionSensitiveItem(object):
 
 class Hwp5FileBase(ItemConversionStorage):
 
-    @cached_property
-    def header(self):
-        return decode_fileheader(self.stg['FileHeader'].open())
-
     def resolve_conversion_for(self, name):
         if name == 'FileHeader':
             return HwpFileHeader
 
-    @cached_property
-    def fileheader(self):
+    def get_fileheader(self):
         return self['FileHeader']
+
+    fileheader = cached_property(get_fileheader)
+
+    header = fileheader
 
 
 class Hwp5DistDocStream(VersionSensitiveItem):
@@ -598,7 +597,17 @@ class HwpFileHeader(object):
 
     value = cached_property(to_dict)
 
-    def to_text(self):
+    def get_version(self):
+        return self.value['version']
+
+    version = cached_property(get_version)
+
+    def get_flags(self):
+        return FileHeader.Flags(self.value['flags'])
+
+    flags = cached_property(get_flags)
+
+    def open_text(self):
         d = FileHeader.Flags.dictvalue(self.value['flags'])
         d['signature'] = self.value['signature']
         d['version'] = '%d.%d.%d.%d' % self.value['version']
@@ -609,7 +618,7 @@ class HwpFileHeader(object):
         return out
 
     def other_formats(self):
-        return {'.txt': self.to_text}
+        return {'.txt': self.open_text}
 
 
 class HwpSummaryInfo(VersionSensitiveItem):
