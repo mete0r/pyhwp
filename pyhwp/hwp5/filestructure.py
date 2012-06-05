@@ -420,8 +420,9 @@ class CompressedStream(StorageItem):
 class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
     def __getitem__(self, name):
+        from hwp5.storage import is_stream
         item = self.stg[name]
-        if item.is_stream():
+        if is_stream(item):
             return CompressedStream(item)
         else:
             return item

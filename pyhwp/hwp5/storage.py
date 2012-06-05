@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
+
+def is_storage(item):
+    return hasattr(item, '__iter__') and hasattr(item, '__getitem__')
+
+
+def is_stream(item):
+    return hasattr(item, 'open') and callable(item.open)
+
+
 class StorageItem(object):
-
-    def is_storage(self):
-        return isinstance(self, Storage)
-
-    def is_stream(self):
-        return hasattr(self, 'open')
+    pass
 
 
 class Storage(StorageItem):

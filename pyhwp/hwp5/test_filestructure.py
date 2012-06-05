@@ -98,20 +98,21 @@ class TestModuleFunctions(TestBase):
 class TestOleStorage(TestBase):
 
     def test_getitem0(self):
+        from hwp5.storage import is_storage, is_stream
         olestg = self.olestg
-        self.assertTrue(olestg.is_storage())
+        self.assertTrue(is_storage(olestg))
         self.assertEquals('', olestg.path)
 
         docinfo = olestg['DocInfo']
-        self.assertTrue(docinfo.is_stream())
+        self.assertTrue(is_stream(docinfo))
         self.assertEquals('DocInfo', docinfo.path)
 
         bodytext = olestg['BodyText']
-        self.assertTrue(bodytext.is_storage())
+        self.assertTrue(is_storage(bodytext))
         self.assertEquals('BodyText', bodytext.path)
 
         section = bodytext['Section0']
-        self.assertTrue(section.is_stream())
+        self.assertTrue(is_stream(section))
         self.assertEquals('BodyText/Section0', section.path)
 
         f = section.open()
@@ -299,11 +300,12 @@ class TestHwp5DistDoc(TestBase):
 
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
+        from hwp5.storage import is_storage, is_stream
         stg = FS.CompressedStorage(self.olestg['BinData'])
-        self.assertTrue(stg.is_storage())
+        self.assertTrue(is_storage(stg))
 
         item = stg['BIN0002.jpg']
-        self.assertTrue(item.is_stream())
+        self.assertTrue(is_stream(item))
 
         f = item.open()
         try:
