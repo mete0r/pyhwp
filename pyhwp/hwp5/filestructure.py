@@ -6,6 +6,7 @@ from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
 from .storage import StorageWrapper, unpack
+from .storage import ItemConversionStorage
 from .storage import ItemsModifyingStorage
 from .importhelper import importStringIO
 import logging
@@ -440,11 +441,19 @@ class VersionSensitiveItem(object):
         return dict()
 
 
-class Hwp5FileBase(StorageWrapper):
+class Hwp5FileBase(ItemConversionStorage):
 
     @cached_property
     def header(self):
         return decode_fileheader(self.stg['FileHeader'].open())
+
+    def resolve_conversion_for(self, name):
+        if name == 'FileHeader':
+            return HwpFileHeader
+
+    @cached_property
+    def fileheader(self):
+        return self['FileHeader']
 
 
 class Hwp5DistDocStream(VersionSensitiveItem):
@@ -658,8 +667,6 @@ class Hwp5File(ItemsModifyingStorage):
             return self.summaryinfo.other_formats()
 
     def resolve_conversion_for(self, name):
-        if name == 'FileHeader':
-            return HwpFileHeader
         if name == 'DocInfo':
             return self.with_version(self.docinfo_class)
         if name == 'BodyText':
@@ -676,10 +683,6 @@ class Hwp5File(ItemsModifyingStorage):
 
     docinfo_class = VersionSensitiveItem
     bodytext_class = Sections
-
-    @cached_property
-    def fileheader(self):
-        return self['FileHeader']
 
     @cached_property
     def summaryinfo(self):
