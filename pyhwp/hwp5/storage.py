@@ -35,6 +35,38 @@ class ItemConversionStorage(StorageWrapper):
         pass
 
 
+class ExtraItemStorage(StorageWrapper):
+
+    def __iter__(self):
+        for name in self.stg:
+            yield name
+
+            item = self.stg[name]
+            if hasattr(item, 'other_formats'):
+                other_formats = item.other_formats()
+                if other_formats:
+                    for ext in other_formats:
+                        yield name + ext
+
+    def __getitem__(self, name):
+        try:
+            item = self.stg[name]
+            if is_storage(item):
+                item = ExtraItemStorage(item)
+            return item
+        except KeyError:
+            # 기반 스토리지에는 없으므로, other_formats() 중에서 찾아본다.
+            for root in self.stg:
+                item = self.stg[root]
+                if hasattr(item, 'other_formats'):
+                    other_formats = item.other_formats()
+                    if other_formats:
+                        for ext, func in other_formats.items():
+                            if root + ext == name:
+                                return Open2Stream(func)
+            raise
+
+
 class ItemsModifyingStorage(StorageWrapper):
     ''' a Storage class which modifies its base storage items
 
