@@ -13,7 +13,7 @@ def read(filename):
     finally:
         f.close()
 
-from setuptools import setup
+from setuptools import setup, find_packages
 setup(
         name='pyhwp',
         version='0.1a7',
@@ -23,7 +23,8 @@ setup(
         author = 'mete0r',
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
-        packages = ['hwp5'],
+        packages = find_packages('pyhwp'),
+        package_dir={'': 'pyhwp'},
         package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
         install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt == 0.3'],
