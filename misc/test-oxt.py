@@ -11,9 +11,20 @@ def with_soffice_headless(f):
     try:
         # waiting for soffice to be ready (guessed)
         import time
-        time.sleep(2)
-
-        f(uno_url)
+        trycount = 0
+        while trycount < 3:
+            trycount += 1
+            try:
+                f(uno_url)
+                break
+            except Exception, e:
+                name = type(e).__name__
+                print name
+                noconnect = 'com.sun.star.connection.NoConnectException'
+                if name == noconnect:
+                    time.sleep(2)
+                    continue
+                raise
     finally:
         p.terminate()
 
