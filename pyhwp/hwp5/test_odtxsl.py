@@ -7,13 +7,12 @@ def example(filename):
     return Hwp5File('fixtures/'+filename)
 
 def example_to_xml(filename):
-    from .hwp5odt import generate_hwp5xml
     hwp5file = example(filename)
 
     xmlfilename = filename+'.xml'
     xmlfile = file(xmlfilename, 'w')
     try:
-        generate_hwp5xml(xmlfile, hwp5file)
+        hwp5file.xmlevents().dump(xmlfile)
         return xmlfilename
     finally:
         xmlfile.close()

@@ -72,7 +72,7 @@ class TestHwp5File(TestBase):
     def test_events(self):
         list(self.hwp5file.events())
 
-    def test_flatxml(self):
+    def test_xmlevents_dump(self):
         from .externprogs import xmllint
         xmllint = xmllint('--format')
 
@@ -80,9 +80,7 @@ class TestHwp5File(TestBase):
         try:
             out = xmllint(outfile=outfile)
             try:
-                from .xmlformat import XmlFormat
-                oformat = XmlFormat(out)
-                self.hwp5file.flatxml(oformat)
+                self.hwp5file.xmlevents().dump(out)
             finally:
                 out.close()
         finally:

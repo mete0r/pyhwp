@@ -485,8 +485,3 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
         events = give_elements_unique_id(events)
 
         return events
-
-    def flatxml(self, oformat):
-        oformat.startDocument()
-        dispatch_model_events(oformat, self.events())
-        oformat.endDocument()

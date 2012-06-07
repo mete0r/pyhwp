@@ -64,7 +64,7 @@ class Converter(object):
         import tempfile
         hwpxmlfile = tempfile.TemporaryFile()
         try:
-            generate_hwp5xml(hwpxmlfile, hwpfile)
+            hwpfile.xmlevents().dump(hwpxmlfile)
 
             styles = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
@@ -152,7 +152,3 @@ def manifest_rdf(f):
 
 def mimetype(f):
     f.write('application/vnd.oasis.opendocument.text')
-
-def generate_hwp5xml(f, hwpfile):
-    from .xmlformat import XmlFormat
-    hwpfile.flatxml(XmlFormat(f))
