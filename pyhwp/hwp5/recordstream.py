@@ -148,11 +148,22 @@ class RecordStream(filestructure.VersionSensitiveItem):
         ''' get the record at `idx' '''
         return nth(self.records(), idx)
 
-    def records_stream(self):
-        return bin2json_stream(self.open())
+    def records_json_generate(self, **kwargs):
+        kwargs.setdefault('sort_keys', True)
+        kwargs.setdefault('indent', 2)
+        return generate_simplejson_dumps(self.records(**kwargs),
+                                         **kwargs)
+
+    def records_json_open(self, **kwargs):
+        from .filestructure import GeneratorReader
+        return GeneratorReader(self.records_json_generate(**kwargs))
+
+    def records_json_dump(self, outfile, **kwargs):
+        for s in self.records_json_generate(**kwargs):
+            outfile.write(s)
 
     def other_formats(self):
-        return {'.records': self.records_stream}
+        return {'.records': self.records_json_open}
 
 
 class Sections(filestructure.Sections):
