@@ -125,11 +125,25 @@ def unpack(args):
     storage.unpack(hwp5file, outdir)
 
 
+def parse_recordstream_name(hwpfile, streamname):
+    from .storage import open_storage_item
+    if streamname == 'docinfo':
+        return hwpfile.docinfo
+    segments = streamname.split('/')
+    if len(segments) == 2:
+        if segments[0] == 'bodytext':
+            try:
+                idx = int(segments[1])
+                return hwpfile.bodytext.section(idx)
+            except ValueError:
+                pass
+    return open_storage_item(hwpfile, streamname)
+
+
 def records(args):
     filename = args['<hwp5file>']
     if filename:
         from .recordstream import Hwp5File
-        from .recordstream import parse_recordstream_name
         hwpfile = Hwp5File(filename)
         streamname = args['<record-stream>']
         stream = parse_recordstream_name(hwpfile, streamname)
@@ -218,7 +232,6 @@ def models(args):
     filename = args['<hwp5file>']
     if filename:
         from .binmodel import Hwp5File
-        from .recordstream import parse_recordstream_name
         streamname = args['<record-stream>']
         hwpfile = Hwp5File(filename)
         stream = parse_recordstream_name(hwpfile, streamname)

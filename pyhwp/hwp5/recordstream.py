@@ -164,17 +164,3 @@ class Hwp5File(filestructure.Hwp5File):
 
     docinfo_class = RecordStream
     bodytext_class = Sections
-
-
-def parse_recordstream_name(hwpfile, streamname):
-    if streamname == 'docinfo':
-        return hwpfile.docinfo
-    segments = streamname.split('/')
-    if len(segments) == 2:
-        if segments[0] == 'bodytext':
-            try:
-                idx = int(segments[1])
-                return hwpfile.bodytext.section(idx)
-            except ValueError:
-                pass
-    raise ValueError('invalid stream name: %s' % streamname)
