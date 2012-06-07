@@ -9,6 +9,7 @@ Usage:
     hwp5proc summaryinfo <hwp5file>
     hwp5proc records [<hwp5file> <record-stream>]
     hwp5proc models [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc xml <hwp5file>
     hwp5proc -h | --help
     hwp5proc --version
 
@@ -39,6 +40,8 @@ def main():
         records(args)
     elif args['models']:
         models(args)
+    elif args['xml']:
+        xml(args)
     elif args['ls']:
         ls(args)
     elif args['cat']:
@@ -249,3 +252,25 @@ def models(args):
     from .binmodel import generate_models_json_array
     for s in generate_models_json_array(models, indent=2, sort_keys=True):
         sys.stdout.write(s)
+
+
+def xml(args):
+    import sys
+    from .xmlmodel import Hwp5File
+    from .xmlmodel import ModelEventHandler
+
+    hwp5file = Hwp5File(args['<hwp5file>'])
+
+    class NulFormat(ModelEventHandler):
+        def __init__(self, out): pass
+        def startDocument(self): pass
+        def endDocument(self): pass
+        def startModel(self, model, attributes, **context): pass
+        def endModel(self, model): pass
+    from .xmlformat import XmlFormat
+
+    formats = dict(xml=XmlFormat, nul=NulFormat)
+    # TODO
+    fmt = 'xml'
+    oformat = formats[fmt](sys.stdout)
+    hwp5file.flatxml(oformat)

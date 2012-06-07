@@ -33,7 +33,6 @@ setup(
         entry_points = {
             'console_scripts': [
                 'hwp5proc = hwp5.proc:main',
-                'hwp5xml = hwp5.xmlmodel:main',
                 'rawzlib = hwp5.zlib_raw_codec:main',
                 'hwp5odt = hwp5.hwp5odt:main',
                 'hwp5txt = hwp5.hwp5txt:main',

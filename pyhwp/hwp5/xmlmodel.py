@@ -486,32 +486,3 @@ class Hwp5File(binmodel.Hwp5File):
         oformat.startDocument()
         dispatch_model_events(oformat, self.events())
         oformat.endDocument()
-
-
-def main():
-    from ._scriptutils import OptionParser, args_pop
-    op = OptionParser(usage='usage: %prog [options] filename')
-    op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
-
-    options, args = op.parse_args()
-
-    filename = args_pop(args, 'filename')
-
-    hwp5file = Hwp5File(filename)
-    out = options.outfile
-
-    class NulFormat(ModelEventHandler):
-        def __init__(self, out): pass
-        def startDocument(self): pass
-        def endDocument(self): pass
-        def startModel(self, model, attributes, **context): pass
-        def endModel(self, model): pass
-    from .xmlformat import XmlFormat
-
-    formats = dict(xml=XmlFormat, nul=NulFormat)
-    oformat = formats[options.format](out)
-    hwp5file.flatxml(oformat)
-    
-
-if __name__ == '__main__':
-    main()
