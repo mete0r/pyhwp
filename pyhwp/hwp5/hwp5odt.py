@@ -1,10 +1,25 @@
+# -*- coding: utf-8 -*-
+'''HWPv5 to ODT converter
+
+Usage:
+    hwp5odt <hwp5file>
+    hwp5odt -h | --help
+    hwp5odt --version
+
+Options:
+    -h --help       Show this screen
+    --version       Show version
+'''
+
 import os, os.path
 from hwp5 import tools
 
 def main():
-    import sys
-    hwpfilename = sys.argv[1]
-    make(hwpfilename)
+    from docopt import docopt
+    from pkg_resources import get_distribution
+    dist = get_distribution('pyhwp')
+    args = docopt(__doc__, version=dist.version)
+    make(args)
 
 class ODTPackage(object):
     def __init__(self, path_or_zipfile):
@@ -96,7 +111,8 @@ class Converter(object):
 
 convert = Converter(tools.xsltproc, tools.relaxng)
 
-def make(hwpfilename):
+def make(args):
+    hwpfilename = args['<hwp5file>']
     root = os.path.basename(hwpfilename)
     if root.lower().endswith('.hwp'):
         root = root[0:-4]
