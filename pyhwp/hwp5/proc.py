@@ -10,6 +10,7 @@ Usage:
     hwp5proc records [<hwp5file> <record-stream>]
     hwp5proc models [<hwp5file> <record-stream> | -V <version>]
     hwp5proc xml <hwp5file>
+    hwp5proc rawunz
     hwp5proc -h | --help
     hwp5proc --version
 
@@ -48,6 +49,8 @@ def main():
         cat(args)
     elif args['unpack']:
         unpack(args)
+    elif args['rawunz']:
+        rawunz(args)
 
 
 def version(args):
@@ -179,3 +182,15 @@ def xml(args):
 
     hwp5file = Hwp5File(args['<hwp5file>'])
     hwp5file.xmlevents().dump(sys.stdout)
+
+
+def rawunz(args):
+    ''' Uncompress(raw-zlib) the standard input to the standard output '''
+    import sys
+    from .zlib_raw_codec import StreamReader
+    stream = StreamReader(sys.stdin)
+    while True:
+        buf = stream.read(64)
+        if len(buf) == 0:
+            break
+        sys.stdout.write(buf)

@@ -111,12 +111,3 @@ _codecinfo = codecs.CodecInfo(
     streamreader=StreamReader,
     streamwriter=StreamWriter,
 )
-
-def main():
-    import sys
-    stream = StreamReader(sys.stdin)
-    while True:
-        buf = stream.read(64)
-        if len(buf) == 0:
-            break
-        sys.stdout.write(buf)
