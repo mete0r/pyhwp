@@ -8,6 +8,7 @@ Usage:
     hwp5proc version <hwp5file>
     hwp5proc summaryinfo <hwp5file>
     hwp5proc records [<hwp5file> <record-stream>]
+    hwp5proc models [<hwp5file> <record-stream> | -V <version>]
     hwp5proc -h | --help
     hwp5proc --version
 
@@ -16,6 +17,7 @@ Options:
     --version       Show version
     --with-extra    process with extra parsed items
     --ole           treat <hwpfile> as an OLE Compound File
+    -V              HWPv5 version [default: 5.0.0.0]
 '''
 
 import logging
@@ -35,6 +37,8 @@ def main():
         summaryinfo(args)
     elif args['records']:
         records(args)
+    elif args['models']:
+        models(args)
     elif args['ls']:
         ls(args)
     elif args['cat']:
@@ -204,3 +208,44 @@ def records(args):
 
     for rec in records:
         oformat.write(rec)
+
+
+def models(args):
+    import sys
+    filename = args['<hwp5file>']
+    if filename:
+        from .binmodel import Hwp5File
+        from .recordstream import parse_recordstream_name
+        streamname = args['<record-stream>']
+        hwpfile = Hwp5File(filename)
+        stream = parse_recordstream_name(hwpfile, streamname)
+        models = stream.models()
+    else:
+        filename = 'STDIN'
+        streamname = 'STDIN'
+        bytestream = sys.stdin
+        version = args['<version>'] or '5.0.0.0'
+        version = version.split('.')
+
+        from .recordstream import read_records
+        from .binmodel import create_context
+        from .binmodel import parse_models
+        context = create_context(version=version)
+        records = read_records(bytestream, streamname, filename)
+        models = parse_models(context, records)
+
+
+    def statistics(models):
+        occurrences = dict()
+        for model in models:
+            model_type = model['type']
+            occurrences.setdefault(model_type, 0)
+            occurrences[model_type] += 1
+            yield model
+        for model_type, count in occurrences.iteritems():
+            logger.info('%30s: %d', model_type.__name__, count)
+    models = statistics(models)
+
+    from .binmodel import generate_models_json_array
+    for s in generate_models_json_array(models, indent=2, sort_keys=True):
+        sys.stdout.write(s)
