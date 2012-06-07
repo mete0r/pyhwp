@@ -152,7 +152,7 @@ def records(args):
         from .storage import Open2Stream
         from .recordstream import RecordStream
         stream = RecordStream(Open2Stream(lambda: sys.stdin), None)
-    stream.records_json_dump(sys.stdout)
+    stream.records_json().dump(sys.stdout)
 
 
 def models(args):
@@ -170,7 +170,7 @@ def models(args):
         from .storage import Open2Stream
         from .binmodel import ModelStream
         stream = ModelStream(Open2Stream(lambda: sys.stdin), version)
-    stream.models_json_dump(sys.stdout)
+    stream.models_json().dump(sys.stdout)
 
 
 def xml(args):

@@ -81,10 +81,9 @@ class TestJson(TestBase):
         self.assertEquals('HWPTAG_DOCUMENT_PROPERTIES', jsonobject['tagname'])
 
     def test_generate_simplejson_dumps(self):
-        from .recordstream import generate_simplejson_dumps
         import simplejson
-        records = self.hwp5file.docinfo.records()
-        json = ''.join(generate_simplejson_dumps(records))
+        records_json = self.hwp5file.docinfo.records_json()
+        json = ''.join(records_json.generate())
 
         jsonobject = simplejson.loads(json)
         self.assertEquals(67, len(jsonobject))

@@ -97,38 +97,6 @@ def record_to_json(record, *args, **kwargs):
     return simplejson.dumps(record, *args, **kwargs)
 
 
-def generate_json_array(tokens):
-    ''' generate json array with given tokens '''
-    first = True
-    for token in tokens:
-        if first:
-            yield '[\n'
-            first = False
-        else:
-            yield ',\n'
-        yield token
-    yield '\n]'
-
-
-def generate_simplejson_dumps(records, *args, **kwargs):
-    ''' generate simplejson.dumps()ed strings for each records
-
-        records: record iterable
-        args, kwargs: options for simplejson.dumps
-    '''
-    tokens = (record_to_json(record, *args, **kwargs)
-              for record in records)
-    return generate_json_array(tokens)
-
-
-def bin2json_stream(f):
-    ''' convert binary record stream into json stream '''
-    records = read_records(f)
-    gen = generate_simplejson_dumps(records, sort_keys=True, indent=2)
-    from .filestructure import GeneratorReader
-    return GeneratorReader(gen)
-
-
 def nth(iterable, n, default=None):
     from itertools import islice
     try:
@@ -148,22 +116,13 @@ class RecordStream(filestructure.VersionSensitiveItem):
         ''' get the record at `idx' '''
         return nth(self.records(), idx)
 
-    def records_json_generate(self, **kwargs):
-        kwargs.setdefault('sort_keys', True)
-        kwargs.setdefault('indent', 2)
-        return generate_simplejson_dumps(self.records(**kwargs),
-                                         **kwargs)
-
-    def records_json_open(self, **kwargs):
-        from .filestructure import GeneratorReader
-        return GeneratorReader(self.records_json_generate(**kwargs))
-
-    def records_json_dump(self, outfile, **kwargs):
-        for s in self.records_json_generate(**kwargs):
-            outfile.write(s)
+    def records_json(self, **kwargs):
+        from .utils import JsonObjects
+        records = self.records(**kwargs)
+        return JsonObjects(records, record_to_json)
 
     def other_formats(self):
-        return {'.records': self.records_json_open}
+        return {'.records': self.records_json().open}
 
 
 class Sections(filestructure.Sections):

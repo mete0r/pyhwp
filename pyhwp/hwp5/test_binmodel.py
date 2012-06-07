@@ -599,9 +599,8 @@ class TestModelJson(TestBase):
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
 
     def test_generate_models_json_array(self):
-        from .binmodel import generate_models_json_array
-        models = self.hwp5file.bodytext.section(0).models()
-        gen = generate_models_json_array(models)
+        models_json = self.hwp5file.bodytext.section(0).models_json()
+        gen = models_json.generate()
 
         import simplejson
         json_array = simplejson.loads(''.join(gen))
@@ -627,7 +626,7 @@ class TestModelStream(TestBase):
 
     def test_models_json_open(self):
         import simplejson
-        f = self.docinfo.models_json_open()
+        f = self.docinfo.models_json().open()
         try:
             self.assertEquals(67, len(simplejson.load(f)))
         finally:
