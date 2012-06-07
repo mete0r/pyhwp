@@ -139,8 +139,10 @@ def nth(iterable, n, default=None):
 
 class RecordStream(filestructure.VersionSensitiveItem):
 
-    def records(self):
-        return read_records(self.open(), '', '')
+    def records(self, **kwargs):
+        return read_records(self.open(),
+                            streamid=kwargs.get('streamid'),
+                            filename=kwargs.get('filename'))
 
     def record(self, idx):
         ''' get the record at `idx' '''

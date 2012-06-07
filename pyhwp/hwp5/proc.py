@@ -151,10 +151,7 @@ def records(args):
     else:
         from .recordstream import read_records
         import sys
-        filename = 'STDIN'
-        streamname = 'STDIN'
-        bytestream = sys.stdin
-        records = read_records(bytestream, streamname, filename)
+        records = read_records(sys.stdin)
 
     # TODO: range
     #from itertools import islice as ranged_records
@@ -237,9 +234,6 @@ def models(args):
         stream = parse_recordstream_name(hwpfile, streamname)
         models = stream.models()
     else:
-        filename = 'STDIN'
-        streamname = 'STDIN'
-        bytestream = sys.stdin
         version = args['<version>'] or '5.0.0.0'
         version = version.split('.')
 
@@ -247,7 +241,7 @@ def models(args):
         from .binmodel import create_context
         from .binmodel import parse_models
         context = create_context(version=version)
-        records = read_records(bytestream, streamname, filename)
+        records = read_records(sys.stdin)
         models = parse_models(context, records)
 
 
