@@ -6,6 +6,7 @@ Usage:
     hwp5proc cat [--with-extra | --ole] <hwp5file> <stream>
     hwp5proc unpack [--with-extra | --ole] <hwp5file> [<out-directory>]
     hwp5proc version <hwp5file>
+    hwp5proc summaryinfo <hwp5file>
     hwp5proc -h | --help
     hwp5proc --version
 
@@ -29,6 +30,8 @@ def main():
     args = docopt(__doc__, version=dist.version)
     if args['version']:
         version(args)
+    elif args['summaryinfo']:
+        summaryinfo(args)
     elif args['ls']:
         ls(args)
     elif args['cat']:
@@ -43,6 +46,20 @@ def version(args):
     h = hwp5file.fileheader
     #print h.signature.replace('\x00', ''),
     print '%d.%d.%d.%d' % h.version
+
+
+def summaryinfo(args):
+    from .xmlmodel import Hwp5File
+    hwpfile = Hwp5File(args['<hwp5file>'])
+    try:
+        f = hwpfile.summaryinfo.open_text()
+        try:
+            for line in f:
+                print line,
+        finally:
+            f.close()
+    finally:
+        hwpfile.close()
 
 
 def open_hwpfile(args):
