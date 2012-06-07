@@ -2,9 +2,9 @@
 '''HWP format version 5 processor.
 
 Usage:
-    hwp5proc ls [--with-extra] <hwp5file>
-    hwp5proc cat [--with-extra] <hwp5file> <stream>
-    hwp5proc unpack [--with-extra] <hwp5file> [<out-directory>]
+    hwp5proc ls [--with-extra | --ole] <hwp5file>
+    hwp5proc cat [--with-extra | --ole] <hwp5file> <stream>
+    hwp5proc unpack [--with-extra | --ole] <hwp5file> [<out-directory>]
     hwp5proc version <hwp5file>
     hwp5proc -h | --help
     hwp5proc --version
@@ -13,6 +13,7 @@ Options:
     -h --help       Show this screen
     --version       Show version
     --with-extra    process with extra parsed items
+    --ole           treat <hwpfile> as an OLE Compound File
 '''
 
 import logging
@@ -44,24 +45,30 @@ def version(args):
     print '%d.%d.%d.%d' % h.version
 
 
-def ls(args):
+def open_hwpfile(args):
     from .xmlmodel import Hwp5File
     from .storage import ExtraItemStorage
+    from .filestructure import OleStorage
+    filename = args['<hwp5file>']
+    if args['--ole']:
+        hwpfile = OleStorage(filename)
+    else:
+        hwpfile = Hwp5File(filename)
+        if args['--with-extra']:
+            hwpfile = ExtraItemStorage(hwpfile)
+    return hwpfile
+
+
+def ls(args):
     from .storage import printstorage
-    hwpfile = Hwp5File(args['<hwp5file>'])
-    if args['--with-extra']:
-        hwpfile = ExtraItemStorage(hwpfile)
+    hwpfile = open_hwpfile(args)
     printstorage(hwpfile)
 
 
 def cat(args):
-    from .xmlmodel import Hwp5File
-    from .storage import ExtraItemStorage
     from .storage import open_storage_item
     import sys
-    hwp5file = Hwp5File(args['<hwp5file>'])
-    if args['--with-extra']:
-        hwp5file = ExtraItemStorage(hwp5file)
+    hwp5file = open_hwpfile(args)
     stream = open_storage_item(hwp5file, args['<stream>'])
     f = stream.open()
     try:
@@ -77,19 +84,15 @@ def cat(args):
 
 
 def unpack(args):
-    from .xmlmodel import Hwp5File
-    from .storage import ExtraItemStorage
-    from . import filestructure
+    from . import storage
     import os, os.path
 
     filename = args['<hwp5file>']
-    hwp5file = Hwp5File(filename)
-    if args['--with-extra']:
-        hwp5file = ExtraItemStorage(hwp5file)
+    hwp5file = open_hwpfile(args)
 
     outdir = args['<out-directory>']
     if outdir is None:
         outdir, ext = os.path.splitext(os.path.basename(filename))
     if not os.path.exists(outdir):
         os.mkdir(outdir)
-    filestructure.unpack(hwp5file, outdir)
+    storage.unpack(hwp5file, outdir)

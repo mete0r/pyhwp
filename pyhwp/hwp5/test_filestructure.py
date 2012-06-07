@@ -176,7 +176,7 @@ class TestOleStorage(TestBase):
         self.assertEquals(sorted(expected), sorted(result))
 
     def test_unpack(self):
-        from hwp5.filestructure import unpack
+        from hwp5.storage import unpack
         import shutil
         import os, os.path
 
@@ -413,12 +413,13 @@ class TestHwp5File(TestBase):
 
     def test_unpack(self):
         from .storage import ExtraItemStorage
+        from .storage import unpack
         outpath = 'test_unpack'
         import os, os.path, shutil
         if os.path.exists(outpath):
             shutil.rmtree(outpath)
         os.mkdir(outpath)
-        FS.unpack(ExtraItemStorage(self.hwp5file), outpath)
+        unpack(ExtraItemStorage(self.hwp5file), outpath)
 
         self.assertTrue(os.path.exists('test_unpack/\x05HwpSummaryInformation'))
         self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.jpg'))

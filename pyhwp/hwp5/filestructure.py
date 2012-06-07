@@ -5,7 +5,7 @@ import zlib
 from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
-from .storage import StorageWrapper, unpack
+from .storage import StorageWrapper
 from .storage import ItemConversionStorage
 from .importhelper import importStringIO
 import logging
@@ -708,21 +708,6 @@ class Hwp5File(ItemConversionStorage):
     @cached_property
     def viewtext(self):
         return self['ViewText']
-
-
-def unole():
-    import sys
-    from OleFileIO_PL import OleFileIO
-    import os.path
-
-    olefilepath = sys.argv[1]
-    olefile = OleFileIO(olefilepath)
-    olestg = OleStorage(olefile)
-    olefilename = os.path.split(olefilepath)[-1]
-    base = '.'.join(olefilename.split('.')[:-1])
-    if not os.path.exists(base):
-        os.mkdir(base)
-    unpack(olestg, base)
 
 
 def main():
