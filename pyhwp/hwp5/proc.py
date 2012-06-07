@@ -176,20 +176,6 @@ def models(args):
 def xml(args):
     import sys
     from .xmlmodel import Hwp5File
-    from .xmlmodel import ModelEventHandler
 
     hwp5file = Hwp5File(args['<hwp5file>'])
-
-    class NulFormat(ModelEventHandler):
-        def __init__(self, out): pass
-        def startDocument(self): pass
-        def endDocument(self): pass
-        def startModel(self, model, attributes, **context): pass
-        def endModel(self, model): pass
-    from .xmlformat import XmlFormat
-
-    formats = dict(xml=XmlFormat, nul=NulFormat)
-    # TODO
-    fmt = 'xml'
-    oformat = formats[fmt](sys.stdout)
-    hwp5file.flatxml(oformat)
+    hwp5file.xmlevents().dump(sys.stdout)
