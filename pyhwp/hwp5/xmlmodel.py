@@ -200,7 +200,7 @@ def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
             yield ENDEVENT, ctrlch
 
 
-def wrap_section(sect_id, event_prefixed_mac):
+def wrap_section(event_prefixed_mac, sect_id=None):
     ''' wrap a section with SectionDef '''
     starting_buffer = list()
     started = False
@@ -212,7 +212,8 @@ def wrap_section(sect_id, event_prefixed_mac):
             model, attributes, context = item
             if model is SectionDef and event is STARTEVENT:
                 sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
-                attributes['section_id'] = sect_id
+                if sect_id is not None:
+                    attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
                 for k in tree_events_multi(sectiondef_childs):
                     yield k
@@ -418,7 +419,7 @@ class DocInfo(ModelEventStream):
 
 class Section(ModelEventStream):
 
-    def events(self):
+    def events(self, **kwargs):
         events = self.modelevents()
 
         events = make_texts_linesegmented_and_charshaped(events)
@@ -427,6 +428,9 @@ class Section(ModelEventStream):
         events = make_paragraphs_children_of_listheader(events)
         events = make_paragraphs_children_of_listheader(events, TableBody, TableCell)
         events = restructure_tablebody(events)
+
+        section_idx = kwargs.get('section_idx')
+        events = wrap_section(events, section_idx)
 
         return events
 
@@ -446,7 +450,7 @@ class Sections(binmodel.Sections):
         bodytext_events = []
         for idx in self.section_indexes():
             section = self.section(idx)
-            events = wrap_section(idx, section.events())
+            events = section.events(section_idx=idx)
             bodytext_events.append(events)
 
         class BodyText(object): pass

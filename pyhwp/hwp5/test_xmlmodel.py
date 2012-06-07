@@ -40,6 +40,28 @@ class TestDocInfo(TestBase):
         self.assertEquals(112, len(events))
         #print len(events)
 
+class TestSection(TestBase):
+
+    def test_events(self):
+        from .xmlmodel import Section
+        from .treeop import STARTEVENT, ENDEVENT
+        from .binmodel import SectionDef, PageDef
+        section = Section(self.hwp5file.stg['BodyText']['Section0'],
+                          self.hwp5file.fileheader.version)
+        events = list(section.events())
+        ev, (tag, attrs, ctx) = events[0]
+        self.assertEquals((STARTEVENT, SectionDef), (ev, tag))
+        self.assertFalse('section-id' in attrs)
+
+        ev, (tag, attrs, ctx) = events[1]
+        self.assertEquals((STARTEVENT, PageDef), (ev, tag))
+
+        ev, (tag, attrs, ctx) = events[2]
+        self.assertEquals((ENDEVENT, PageDef), (ev, tag))
+
+        ev, (tag, attrs, ctx) = events[-1]
+        self.assertEquals((ENDEVENT, SectionDef), (ev, tag))
+
 
 class TestHwp5File(TestBase):
 
@@ -153,3 +175,4 @@ class TestDistributionBodyText(TestBase):
 
         # we can merge events without a problem
         list(evs)
+
