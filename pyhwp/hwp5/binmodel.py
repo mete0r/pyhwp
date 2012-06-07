@@ -1867,29 +1867,35 @@ from . import recordstream
 
 class ModelStream(recordstream.RecordStream):
 
-    def other_formats(self):
-        d = super(ModelStream, self).other_formats()
-        d['.models'] = self.models_stream
-        return d
+    @cached_property
+    def model_parsing_context(self):
+        return dict(version=self.version)
 
-    def models(self):
+    def models(self, **kwargs):
         return parse_models(self.model_parsing_context,
-                            self.records())
+                            self.records(**kwargs))
 
     def model(self, idx):
         from .recordstream import nth
         return nth(self.models(), idx)
 
-    def models_stream(self):
-        from .filestructure import GeneratorReader
-        gen = generate_models_json_array(self.models(),
-                                         sort_keys=True,
-                                         indent=2)
-        return GeneratorReader(gen)
+    def models_json_generate(self, **kwargs):
+        kwargs.setdefault('sort_keys', True)
+        kwargs.setdefault('indent', 2)
+        return generate_models_json_array(self.models(**kwargs), **kwargs)
 
-    @cached_property
-    def model_parsing_context(self):
-        return dict(version=self.version)
+    def models_json_open(self, **kwargs):
+        from .filestructure import GeneratorReader
+        return GeneratorReader(self.models_json_generate(**kwargs))
+
+    def models_json_dump(self, outfile, **kwargs):
+        for s in self.models_json_generate(**kwargs):
+            outfile.write(s)
+
+    def other_formats(self):
+        d = super(ModelStream, self).other_formats()
+        d['.models'] = self.models_json_open
+        return d
 
 
 class Sections(recordstream.Sections):
