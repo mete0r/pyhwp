@@ -163,33 +163,14 @@ def models(args):
         streamname = args['<record-stream>']
         hwpfile = Hwp5File(filename)
         stream = parse_recordstream_name(hwpfile, streamname)
-        models = stream.models()
     else:
         version = args['<version>'] or '5.0.0.0'
         version = version.split('.')
 
-        from .recordstream import read_records
-        from .binmodel import create_context
-        from .binmodel import parse_models
-        context = create_context(version=version)
-        records = read_records(sys.stdin)
-        models = parse_models(context, records)
-
-
-    def statistics(models):
-        occurrences = dict()
-        for model in models:
-            model_type = model['type']
-            occurrences.setdefault(model_type, 0)
-            occurrences[model_type] += 1
-            yield model
-        for model_type, count in occurrences.iteritems():
-            logger.info('%30s: %d', model_type.__name__, count)
-    models = statistics(models)
-
-    from .binmodel import generate_models_json_array
-    for s in generate_models_json_array(models, indent=2, sort_keys=True):
-        sys.stdout.write(s)
+        from .storage import Open2Stream
+        from .binmodel import ModelStream
+        stream = ModelStream(Open2Stream(lambda: sys.stdin), version)
+    stream.models_json_dump(sys.stdout)
 
 
 def xml(args):
