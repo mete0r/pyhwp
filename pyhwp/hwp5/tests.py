@@ -14,11 +14,15 @@ def test_suite():
     tests.append(test_recordstream)
     tests.append(test_treeop)
 
+    import test_externprogs
+    tests[0:0] = [test_externprogs]
+
     # localtest: a unittest module which resides at the local test site only;
     # should not be checked in the source code repository
     try:
         import localtest
-    except ImportError:
+    except ImportError, e:
+        print 'localtest import failed: ', e
         pass
     else:
         tests[0:0] = [localtest]

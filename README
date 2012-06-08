@@ -1,0 +1,12 @@
+pyhwp
+=====
+
+HWPv5 format processor.
+
+Features
+--------
+
+- Analyze and extract internal streams out from a HWPv5 file
+- Conversion to OpenDocument format (.odt) or plain text (.txt) (Experimental)
+
+Documentation is `here <http://pyhwp.readthedocs.org>`.

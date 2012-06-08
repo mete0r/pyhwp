@@ -14,4 +14,3 @@ ${buildout:directory}/bin/coverage combine
 # Generates a "coverage.xml" file that Jenkins can read and process from the
 # ".coverage" file that the coverage report created.
 ${buildout:directory}/bin/coverage xml -i -o ${buildout:directory}/coverage.xml
-

@@ -1,37 +1,53 @@
 # -*- coding: utf-8 -*-
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
 
 import logging
 logger = logging.getLogger(__name__)
 
-from .dataio import readn, read_struct_attributes, match_attribute_types,\
-        StructType, Struct, Flags, Enum, BYTE, WORD, UINT32, UINT16, INT32, INT16, UINT8, INT8,\
-        DOUBLE, ARRAY, N_ARRAY, SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR
+from .dataio import (readn, read_struct_attributes, match_attribute_types,
+                     StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
+                     UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
+                     SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
 from .utils import cached_property
-from .tagids import tagnames, HWPTAG_BEGIN, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS, HWPTAG_BIN_DATA, HWPTAG_FACE_NAME,\
-        HWPTAG_BORDER_FILL, HWPTAG_CHAR_SHAPE, HWPTAG_TAB_DEF, HWPTAG_NUMBERING, HWPTAG_BULLET,\
-        HWPTAG_PARA_SHAPE, HWPTAG_STYLE, HWPTAG_DOC_DATA, HWPTAG_DISTRIBUTE_DOC_DATA,\
-        HWPTAG_COMPATIBLE_DOCUMENT, HWPTAG_LAYOUT_COMPATIBILITY,\
-        HWPTAG_PARA_HEADER, HWPTAG_PARA_TEXT, HWPTAG_PARA_CHAR_SHAPE, HWPTAG_PARA_LINE_SEG, HWPTAG_PARA_RANGE_TAG,\
-        HWPTAG_CTRL_HEADER, HWPTAG_LIST_HEADER, HWPTAG_PAGE_DEF, HWPTAG_FOOTNOTE_SHAPE, HWPTAG_PAGE_BORDER_FILL,\
-        HWPTAG_SHAPE_COMPONENT, HWPTAG_TABLE, HWPTAG_SHAPE_COMPONENT_LINE, HWPTAG_SHAPE_COMPONENT_RECTANGLE,\
-        HWPTAG_SHAPE_COMPONENT_ELLIPSE, HWPTAG_SHAPE_COMPONENT_ARC, HWPTAG_SHAPE_COMPONENT_POLYGON,\
-        HWPTAG_SHAPE_COMPONENT_CURVE, HWPTAG_SHAPE_COMPONENT_OLE, HWPTAG_SHAPE_COMPONENT_PICTURE,\
-        HWPTAG_SHAPE_COMPONENT_CONTAINER, HWPTAG_CTRL_DATA, HWPTAG_CTRL_EQEDIT, HWPTAG_SHAPE_COMPONENT_TEXTART,\
-        HWPTAG_FORBIDDEN_CHAR
-
+from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
+                     HWPTAG_BIN_DATA, HWPTAG_FACE_NAME, HWPTAG_BORDER_FILL,
+                     HWPTAG_CHAR_SHAPE, HWPTAG_TAB_DEF, HWPTAG_NUMBERING,
+                     HWPTAG_BULLET, HWPTAG_PARA_SHAPE, HWPTAG_STYLE,
+                     HWPTAG_DOC_DATA, HWPTAG_DISTRIBUTE_DOC_DATA,
+                     HWPTAG_COMPATIBLE_DOCUMENT, HWPTAG_LAYOUT_COMPATIBILITY,
+                     HWPTAG_PARA_HEADER, HWPTAG_PARA_TEXT,
+                     HWPTAG_PARA_CHAR_SHAPE, HWPTAG_PARA_LINE_SEG,
+                     HWPTAG_PARA_RANGE_TAG, HWPTAG_CTRL_HEADER,
+                     HWPTAG_LIST_HEADER, HWPTAG_PAGE_DEF,
+                     HWPTAG_FOOTNOTE_SHAPE, HWPTAG_PAGE_BORDER_FILL,
+                     HWPTAG_SHAPE_COMPONENT, HWPTAG_TABLE,
+                     HWPTAG_SHAPE_COMPONENT_LINE,
+                     HWPTAG_SHAPE_COMPONENT_RECTANGLE,
+                     HWPTAG_SHAPE_COMPONENT_ELLIPSE,
+                     HWPTAG_SHAPE_COMPONENT_ARC,
+                     HWPTAG_SHAPE_COMPONENT_POLYGON,
+                     HWPTAG_SHAPE_COMPONENT_CURVE, HWPTAG_SHAPE_COMPONENT_OLE,
+                     HWPTAG_SHAPE_COMPONENT_PICTURE,
+                     HWPTAG_SHAPE_COMPONENT_CONTAINER, HWPTAG_CTRL_DATA,
+                     HWPTAG_CTRL_EQEDIT, HWPTAG_SHAPE_COMPONENT_TEXTART,
+                     HWPTAG_FORBIDDEN_CHAR)
+from .importhelper import importStringIO
 from . import dataio
 
+
+StringIO = importStringIO()
+
+
 def parse_model_attributes(model, attributes, context):
-    return model, read_struct_attributes(model, attributes, context, context['stream'])
+    return model, read_struct_attributes(model, attributes, context,
+                                         context['stream'])
+
 
 def typed_model_attributes(model, attributes, context):
     import inspect
     attributes = dict(attributes)
-    for cls in filter(lambda x: x is not RecordModel and issubclass(x, RecordModel), inspect.getmro(model)):
+    for cls in filter(lambda x: (x is not RecordModel
+                                 and issubclass(x, RecordModel)),
+                      inspect.getmro(model)):
         types = getattr(cls, 'attributes', None)
         if types:
             types = types(context)
@@ -42,6 +58,7 @@ def typed_model_attributes(model, attributes, context):
 
 tag_models = dict()
 
+
 class RecordModelType(StructType):
     def __init__(cls, name, bases, attrs):
         super(RecordModelType, cls).__init__(name, bases, attrs)
@@ -49,20 +66,22 @@ class RecordModelType(StructType):
             tagid = attrs['tagid']
             existing = tag_models.get(tagid)
             assert not tagid in tag_models,\
-                    'duplicated RecordModels for tagid \'%s\': new=%s, existing=%s'%(tagnames[tagid], name, existing.__name__)
+                    ('duplicated RecordModels for tagid \'%s\': '
+                    + 'new=%s, existing=%s'
+                    % (tagnames[tagid], name, existing.__name__))
             tag_models[tagid] = cls
+
 
 class RecordModel(object):
     __metaclass__ = RecordModelType
-    def __init__(self, context, attributes):
-        self.__dict__.update(attributes)
-        self.context = context
 
 
 class BasicRecordModel(RecordModel):
     def attributes(context):
-        if False: yield
+        if False:
+            yield
     attributes = staticmethod(attributes)
+
     def parse_pass1(model, context):
         attributes = dict()
         return parse_model_attributes(model, attributes, context)
@@ -71,6 +90,7 @@ class BasicRecordModel(RecordModel):
 
 class AttributeDeterminedRecordModel(BasicRecordModel):
     key_attribute = None
+
     def concrete_type_by_attribute(cls, key_attribute_value):
         raise Exception()
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
@@ -78,7 +98,8 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
     def parse_pass1(model, context):
         attributes = dict()
         model, attributes = parse_model_attributes(model, attributes, context)
-        altered_model = model.concrete_type_by_attribute(attributes[model.key_attribute])
+        get_altered_model = model.concrete_type_by_attribute
+        altered_model = get_altered_model(attributes[model.key_attribute])
         if altered_model is not None:
             return parse_model_attributes(altered_model, attributes, context)
         return model, attributes
@@ -87,6 +108,7 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
 
 class DocumentProperties(BasicRecordModel):
     tagid = HWPTAG_DOCUMENT_PROPERTIES
+
     def attributes(context):
         yield UINT16, 'section_count',
         yield UINT16, 'page_startnum',
@@ -104,6 +126,7 @@ class DocumentProperties(BasicRecordModel):
 
 class IdMappings(BasicRecordModel):
     tagid = HWPTAG_ID_MAPPINGS
+
     def attributes(context):
         yield UINT16, 'bindata',
         yield UINT16, 'ko_fonts',
@@ -122,7 +145,7 @@ class IdMappings(BasicRecordModel):
         yield UINT16, 'styles',
         yield UINT16, 'memoshapes',
         if context['version'] >= (5, 0, 1, 7):
-            yield ARRAY(UINT32, 8), 'unknown' # SPEC
+            yield ARRAY(UINT32, 8), 'unknown'  # SPEC
     attributes = staticmethod(attributes)
 
 
@@ -135,6 +158,7 @@ class BinData(BasicRecordModel):
             0, 3, StorageType, 'storage',
             4, 5, CompressionType, 'compression',
             16, 17, AccessState, 'access')
+
     def attributes(cls, context):
         flags = yield cls.Flags, 'flags'
         if flags.storage == cls.StorageType.LINK:
@@ -147,8 +171,10 @@ class BinData(BasicRecordModel):
             yield BinStorageId, 'storage_id'
     attributes = classmethod(attributes)
 
+
 class BinStorageId(UINT16):
     pass
+
 
 class AlternateFont(Struct):
     def attributes(context):
@@ -179,6 +205,7 @@ class FaceName(BasicRecordModel):
         6, 'metric',
         7, 'alternate',
         )
+
     def attributes(cls, context):
         has = yield cls.Flags, 'has'
         yield BSTR, 'name'
@@ -194,21 +221,65 @@ class FaceName(BasicRecordModel):
 class COLORREF(int):
     read = staticmethod(INT32.read)
     __slots__ = []
+
     def __getattr__(self, name):
-        if name == 'r': return self & 0xff
-        elif name == 'g': return (self & 0xff00) >> 8
-        elif name == 'b': return (self & 0xff0000) >> 16
-        elif name == 'a': return (self & 0xff000000) >> 24
-        elif name == 'rgb': return self.r, self.g, self.b
-    def __str__(self): return '#%02x%02x%02x'%(self.r, self.g, self.b)
-    def __repr__(self): return self.__class__.__name__+('(0x%02x, 0x%02x, 0x%02x)'%self.rgb)
+        if name == 'r':
+            return self & 0xff
+        elif name == 'g':
+            return (self & 0xff00) >> 8
+        elif name == 'b':
+            return (self & 0xff0000) >> 16
+        elif name == 'a':
+            return (self & 0xff000000) >> 24
+        elif name == 'rgb':
+            return self.r, self.g, self.b
+
+    def __str__(self):
+        return '#%02x%02x%02x' % (self.r, self.g, self.b)
+
+    def __repr__(self):
+        class_name = self.__class__.__name__
+        value = '(0x%02x, 0x%02x, 0x%02x)' % self.rgb
+        return class_name + value
+
 
 class Border(Struct):
-    def attributes(context):
-        yield UINT8, 'style',
-        yield UINT8, 'width',
+
+    # 표 20 테두리선 종류
+    StrokeEnum = Enum('none', 'solid', 'dashed', 'dotted', 'dash-dot', 'dash-dot-dot',
+                      'long-dash', 'large-dot',
+                      'double', 'double-2', 'double-3', 'triple',
+                      'wave', 'double-wave',
+                      'inset', 'outset', 'groove', 'ridge')
+    StrokeType = Flags(UINT8,
+                       0, 4, StrokeEnum, 'stroke_type')
+
+    # 표 21 테두리선 굵기
+    widths = {'0.1mm': 0,
+              '0.12mm': 1,
+              '0.15mm': 2,
+              '0.2mm': 3,
+              '0.25mm': 4,
+              '0.3mm': 5,
+              '0.4mm': 6,
+              '0.5mm': 7,
+              '0.6mm': 8,
+              '0.7mm': 9,
+              '1.0mm': 10,
+              '1.5mm': 11,
+              '2.0mm': 12,
+              '3.0mm': 13,
+              '4.0mm': 14,
+              '5.0mm': 15}
+    WidthEnum = Enum(**widths)
+    Width = Flags(UINT8,
+                  0, 4, WidthEnum, 'width')
+
+    def attributes(cls, context):
+        yield cls.StrokeType, 'stroke_flags',
+        yield cls.Width, 'width_flags',
         yield COLORREF, 'color',
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class Fill(Struct):
@@ -217,15 +288,17 @@ class Fill(Struct):
 
 class FillNone(Fill):
     def attributes(context):
-        yield UINT32, 'size', # SPEC is confusing
+        yield UINT32, 'size',  # SPEC is confusing
     attributes = staticmethod(attributes)
 
 
 class FillColorPattern(Fill):
     ''' 표 23 채우기 정보 '''
-    PatternTypeEnum = Enum(NONE=255, HORIZONTAL=0, VERTICAL=1, BACKSLASH=2, SLASH=3, GRID=4, CROSS=5)
+    PatternTypeEnum = Enum(NONE=255, HORIZONTAL=0, VERTICAL=1, BACKSLASH=2,
+                           SLASH=3, GRID=4, CROSS=5)
     PatternTypeFlags = Flags(INT32,
             0, 7, PatternTypeEnum, 'pattern_type')
+
     def attributes(cls, context):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
@@ -248,9 +321,11 @@ class FillGradation(Fill):
 
 class BorderFill(BasicRecordModel):
     tagid = HWPTAG_BORDER_FILL
-    FILL_NONE = 0
-    FILL_COLOR_PATTERN = 1
-    FILL_GRADATION = 4
+
+    Fill = Enum(NONE=0, COLORPATTERN=1, GRADATION=4)
+    FillFlags = Flags(UINT32,
+                      0, 7, Fill, 'fill_type')
+
     def attributes(cls, context):
         yield UINT16, 'attr'
         yield Border, 'left',
@@ -258,12 +333,12 @@ class BorderFill(BasicRecordModel):
         yield Border, 'top',
         yield Border, 'bottom',
         yield Border, 'diagonal'
-        fill_type = yield UINT32, 'fill_type'
-        if fill_type == cls.FILL_NONE:
+        fill_type = yield cls.FillFlags, 'fillflags'
+        if fill_type == cls.Fill.NONE:
             pass
-        elif fill_type == cls.FILL_COLOR_PATTERN:
+        elif fill_type == cls.Fill.COLORPATTERN:
             yield FillColorPattern, 'fill'
-        elif fill_type == cls.FILL_GRADATION:
+        elif fill_type == cls.Fill.GRADATION:
             yield FillGradation, 'fill'
     attributes = classmethod(attributes)
 
@@ -274,8 +349,10 @@ class LanguageStructType(StructType):
         for lang in ('ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'):
             yield basetype, lang
 
+
 def LanguageStruct(name, basetype):
     return LanguageStructType(name, (Struct,), dict(basetype=basetype))
+
 
 class CharShape(BasicRecordModel):
     tagid = HWPTAG_CHAR_SHAPE
@@ -291,7 +368,8 @@ class CharShape(BasicRecordModel):
 
     def attributes(cls, context):
         yield LanguageStruct('FontFace', WORD), 'font_face',
-        yield LanguageStruct('LetterWidthExpansion', UINT8), 'letter_width_expansion'
+        yield LanguageStruct('LetterWidthExpansion', UINT8),\
+                'letter_width_expansion'
         yield LanguageStruct('LetterSpacing', INT8), 'letter_spacing'
         yield LanguageStruct('RelativeSize', INT8), 'relative_size'
         yield LanguageStruct('Position', INT8), 'position'
@@ -307,9 +385,9 @@ class CharShape(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-
 class TabDef(BasicRecordModel):
     tagid = HWPTAG_TAB_DEF
+
     def attributes(context):
         # SPEC is confusing
         if context['version'] == (5, 0, 1, 7):
@@ -334,13 +412,14 @@ class Numbering(BasicRecordModel):
         3, 'auto_dedent',
         4, DistanceType, 'distance_to_body_type',
         )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'width_correction'
         yield HWPUNIT16, 'distance_to_body'
-        yield UINT32, 'charshape_id' # SPEC ?????
+        yield UINT32, 'charshape_id'  # SPEC ?????
     attributes = classmethod(attributes)
-        
+
 
 class Bullet(BasicRecordModel):
     tagid = HWPTAG_BULLET
@@ -350,7 +429,8 @@ class ParaShape(BasicRecordModel):
     ''' 4.1.10. 문단 모양 '''
     tagid = HWPTAG_PARA_SHAPE
     LineSpacingType = Enum(RATIO=0, FIXED=1, SPACEONLY=2, MINIMUM=3)
-    Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4, DISTRIBUTE_SPACE=5)
+    Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4,
+                 DISTRIBUTE_SPACE=5)
     VAlign = Enum(FONT=0, TOP=1, CENTER=2, BOTTOM=3)
     LineBreakAlphabet = Enum(WORD=0, HYPHEN=1, CHAR=2)
     LineBreakHangul = Enum(WORD=0, CHAR=1)
@@ -361,18 +441,18 @@ class ParaShape(BasicRecordModel):
             5, 6, LineBreakAlphabet, 'linebreak_alphabet',
             7, LineBreakHangul, 'linebreak_hangul',
             8, 'use_paper_grid',
-            9, 15, 'minimum_space', # 공백 최소값
-            16, 'protect_single_line', # 외톨이줄 보호
-            17, 'with_next_paragraph', # 다음 문단과 함께
-            18, 'protect', # 문단 보호
-            19, 'start_new_page', # 문단 앞에서 항상 쪽 나눔
-            20, 21, VAlign, 'valign', 
-            22, 'lineheight_along_fontsize', # 글꼴에 어울리는 줄 높이
-            23, 24, HeadShape, 'head_shape', # 문단 머리 모양
-            25, 27, 'level', # 문단 수준
-            28, 'linked_border', # 문단 테두리 연결 여부
-            29, 'ignore_margin', # 문단 여백 무시
-            30, 'tail_shape', # 문단 꼬리 모양
+            9, 15, 'minimum_space',  # 공백 최소값
+            16, 'protect_single_line',  # 외톨이줄 보호
+            17, 'with_next_paragraph',  # 다음 문단과 함께
+            18, 'protect',  # 문단 보호
+            19, 'start_new_page',  # 문단 앞에서 항상 쪽 나눔
+            20, 21, VAlign, 'valign',
+            22, 'lineheight_along_fontsize',  # 글꼴에 어울리는 줄 높이
+            23, 24, HeadShape, 'head_shape',  # 문단 머리 모양
+            25, 27, 'level',  # 문단 수준
+            28, 'linked_border',  # 문단 테두리 연결 여부
+            29, 'ignore_margin',  # 문단 여백 무시
+            30, 'tail_shape',  # 문단 꼬리 모양
             )
     Flags2 = dataio.Flags(UINT32,
             0, 1, 'in_single_line',
@@ -383,13 +463,14 @@ class ParaShape(BasicRecordModel):
     Flags3 = dataio.Flags(UINT32,
             0, 4, LineSpacingType, 'linespacing_type3'
             )
+
     def attributes(cls, context):
         yield cls.Flags, 'parashapeflags',
         yield INT32,  'doubled_margin_left',   # 1/7200 * 2 # DIFFSPEC
         yield INT32,  'doubled_margin_right',  # 1/7200 * 2
         yield SHWPUNIT,  'indent',
         yield INT32,  'doubled_margin_top',    # 1/7200 * 2
-        yield INT32,  'doubled_margin_bottom', # 1/7200 * 2
+        yield INT32,  'doubled_margin_bottom',  # 1/7200 * 2
         yield SHWPUNIT,  'linespacing',
         yield UINT16, 'tabdef_id',
         yield UINT16, 'numbering_bullet_id',
@@ -407,6 +488,7 @@ class ParaShape(BasicRecordModel):
 
 class Style(BasicRecordModel):
     tagid = HWPTAG_STYLE
+
     def attributes(context):
         yield BSTR, 'local_name',
         yield BSTR, 'name',
@@ -435,6 +517,7 @@ class CompatibleDocument(BasicRecordModel):
     Flags = dataio.Flags(UINT32,
             0, 1, 'target',
             )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
@@ -442,6 +525,7 @@ class CompatibleDocument(BasicRecordModel):
 
 class LayoutCompatibility(BasicRecordModel):
     tagid = HWPTAG_LAYOUT_COMPATIBILITY
+
     def attributes(context):
         yield UINT32, 'char',
         yield UINT32, 'paragraph',
@@ -505,24 +589,29 @@ class CHID(str):
 
 control_models = dict()
 
+
 class ControlType(RecordModelType):
     def __init__(cls, name, bases, attrs):
         super(ControlType, cls).__init__(name, bases, attrs)
         if 'chid' in attrs:
             chid = attrs['chid']
             existing = control_models.get(chid)
-            assert not chid in control_models, 'duplicated ControlType instances for chid \'%s\': new=%s, existing=%s'%(chid, name, existing.__name__)
+            assert not chid in control_models,\
+                    ('duplicated ControlType instances for chid \'%s\':'
+                     + 'new=%s, existing=%s' % (chid, name, existing.__name__))
             control_models[chid] = cls
+
 
 class Control(AttributeDeterminedRecordModel):
     __metaclass__ = ControlType
     tagid = HWPTAG_CTRL_HEADER
 
     def attributes(context):
-        chid = yield CHID, 'chid'
+        yield CHID, 'chid'
     attributes = staticmethod(attributes)
 
     key_attribute = 'chid'
+
     def concrete_type_by_attribute(cls, chid):
         return control_models.get(chid)
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
@@ -536,12 +625,13 @@ class Margin(Struct):
         yield HWPUNIT16, 'bottom'
     attributes = staticmethod(attributes)
 
+
 class CommonControl(Control):
     Flow = Enum(FLOAT=0, BLOCK=1, BACK=2, FRONT=3)
     TextSide = Enum(BOTH=0, LEFT=1, RIGHT=2, LARGER=3)
     VRelTo = Enum(PAPER=0, PAGE=1, PARAGRAPH=2)
     HRelTo = Enum(PAPER=0, PAGE=1, COLUMN=2, PARAGRAPH=3)
-    VAlign = Enum(TOP=0, CENTER=1, BOTTOM=2, INSIDE=3, OUTSIDE=4)
+    VAlign = Enum(TOP=0, MIDDLE=1, BOTTOM=2)
     HAlign = Enum(LEFT=0, CENTER=1, RIGHT=2, INSIDE=3, OUTSIDE=4)
     WidthRelTo = Enum(PAPER=0, PAGE=1, COLUMN=2, PARAGRAPH=3, ABSOLUTE=4)
     HeightRelTo = Enum(PAPER=0, PAGE=1, ABSOLUTE=2)
@@ -568,6 +658,7 @@ class CommonControl(Control):
     MARGIN_RIGHT = 1
     MARGIN_TOP = 2
     MARGIN_BOTTOM = 3
+
     def attributes(cls, context):
         yield cls.CommonControlFlags, 'flags',
         yield SHWPUNIT, 'y',    # DIFFSPEC
@@ -586,9 +677,6 @@ class CommonControl(Control):
 
 class TableControl(CommonControl):
     chid = CHID.TBL
-    def getBorderFill(self):
-        return self.context.mappings[BorderFill][tbl.body.borderfill_id - 1] # TODO: is this right?
-    borderFill = property(getBorderFill)
 
     def parse_child(cls, attributes, context, child):
         child_context, child_model, child_attributes = child
@@ -596,9 +684,11 @@ class TableControl(CommonControl):
             context['table_body'] = True
         elif child_model is ListHeader:
             if context.get('table_body', False):
-                return parse_model_attributes(TableCell, child_attributes, child_context)
+                return parse_model_attributes(TableCell, child_attributes,
+                                              child_context)
             else:
-                return parse_model_attributes(TableCaption, child_attributes, child_context)
+                return parse_model_attributes(TableCaption, child_attributes,
+                                              child_context)
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
 
@@ -614,6 +704,7 @@ class ListHeader(BasicRecordModel):
     VALIGN_TOP      = 0x00
     VALIGN_MIDDLE   = 0x20
     VALIGN_BOTTOM   = 0x40
+
     def attributes(cls, context):
         yield UINT16, 'paragraphs',
         yield UINT16, 'unknown1',
@@ -629,6 +720,7 @@ class PageDef(BasicRecordModel):
                 0, Orientation, 'orientation',
                 1, 2, BookBinding, 'bookbinding'
                 )
+
     def attributes(cls, context):
         yield HWPUNIT, 'width',
         yield HWPUNIT, 'height',
@@ -644,27 +736,37 @@ class PageDef(BasicRecordModel):
     attributes = classmethod(attributes)
 
     def getDimension(self):
-        width = HWPUNIT( self.paper_width - self.offsetLeft - self.offsetRight )
-        height = HWPUNIT( self.paper_height - (self.offsetTop + self.offsetHeader) - (self.offsetBottom + self.offsetFooter))
+        width = HWPUNIT(self.paper_width - self.offsetLeft - self.offsetRight)
+        height = HWPUNIT(self.paper_height
+                         - (self.offsetTop + self.offsetHeader)
+                         - (self.offsetBottom + self.offsetFooter))
         if self.attr.landscape:
             return (height, width)
         else:
             return (width, height)
     dimension = property(getDimension)
+
     def getHeight(self):
         if self.attr.landscape:
-            width = HWPUNIT( self.paper_width - self.offsetLeft - self.offsetRight )
+            width = HWPUNIT(self.paper_width - self.offsetLeft -
+                            self.offsetRight)
             return width
         else:
-            height = HWPUNIT( self.paper_height - (self.offsetTop + self.offsetHeader) - (self.offsetBottom + self.offsetFooter))
+            height = HWPUNIT(self.paper_height
+                             - (self.offsetTop + self.offsetHeader)
+                             - (self.offsetBottom + self.offsetFooter))
             return height
     height = property(getHeight)
+
     def getWidth(self):
         if self.attr.landscape:
-            height = HWPUNIT( self.paper_height - (self.offsetTop + self.offsetHeader) - (self.offsetBottom + self.offsetFooter))
+            height = HWPUNIT(self.paper_height
+                             - (self.offsetTop + self.offsetHeader)
+                             - (self.offsetBottom + self.offsetFooter))
             return height
         else:
-            width = HWPUNIT( self.paper_width - self.offsetLeft - self.offsetRight )
+            width = HWPUNIT(self.paper_width - self.offsetLeft -
+                            self.offsetRight)
             return width
     width = property(getWidth)
 
@@ -673,11 +775,12 @@ class FootnoteShape(BasicRecordModel):
     tagid = HWPTAG_FOOTNOTE_SHAPE
     Flags = Flags(UINT32,
         )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
         yield WCHAR, 'usersymbol'
-        yield WCHAR, 'prefix' 
-        yield WCHAR, 'suffix' 
+        yield WCHAR, 'prefix'
+        yield WCHAR, 'suffix'
         yield UINT16, 'starting_number'
         yield HWPUNIT16, 'splitter_length'
         yield HWPUNIT16, 'splitter_margin_top'
@@ -685,7 +788,7 @@ class FootnoteShape(BasicRecordModel):
         yield HWPUNIT16, 'notes_spacing'
         yield Border, 'splitter_border'
         if context['version'] >= (5, 0, 0, 6):
-            yield UINT16, 'unknown1' # TODO
+            yield UINT16, 'unknown1'  # TODO
     attributes = classmethod(attributes)
 
 
@@ -699,6 +802,7 @@ class PageBorderFill(BasicRecordModel):
         2, 'include_footer',
         3, 4, FillArea, 'fill',
         )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
         yield Margin, 'margin'
@@ -712,10 +816,11 @@ class TableCaption(ListHeader):
                 0, 1, Position, 'position',
                 2, 'include_margin',
                 )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags',
         yield HWPUNIT, 'width',
-        yield HWPUNIT16, 'separation', # 캡션과 틀 사이 간격
+        yield HWPUNIT16, 'separation',  # 캡션과 틀 사이 간격
         yield HWPUNIT, 'maxsize',
     attributes = classmethod(attributes)
 
@@ -733,10 +838,6 @@ class TableCell(ListHeader):
         yield HWPUNIT, 'unknown_width',
     attributes = staticmethod(attributes)
 
-    def getBorderFill(self):
-        return context.mappings[BorderFill][self.borderfill_id - 1] # TODO: is this right?
-    borderFill = property(getBorderFill)
-
 
 class TableBody(BasicRecordModel):
     tagid = HWPTAG_TABLE
@@ -746,6 +847,7 @@ class TableBody(BasicRecordModel):
                 2, 'repeat_header',
                 )
     ZoneInfo = ARRAY(UINT16, 5)
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
         nRows = yield UINT16, 'rows'
@@ -755,7 +857,7 @@ class TableBody(BasicRecordModel):
         yield ARRAY(UINT16, nRows), 'rowcols'
         yield UINT16, 'borderfill_id'
         if context['version'] > (5, 0, 0, 6):
-            yield N_ARRAY(UINT16, cls.ZoneInfo), 'validZones' # above 5006
+            yield N_ARRAY(UINT16, cls.ZoneInfo), 'validZones'  # above 5006
     attributes = classmethod(attributes)
 
 
@@ -777,6 +879,7 @@ class Paragraph(BasicRecordModel):
             31, 'unknown',
             0, 30, 'chars',
             )
+
     def attributes(cls, context):
         yield cls.Flags, 'text',
         yield cls.ControlMask, 'controlmask',
@@ -789,50 +892,55 @@ class Paragraph(BasicRecordModel):
         yield UINT32, 'instance_id',
     attributes = classmethod(attributes)
 
+
 class ControlChar(object):
     class CHAR(object):
         size = 1
+
     class INLINE(object):
         size = 8
+
     class EXTENDED(object):
         size = 8
     chars = {
-            0x00 : ('NULL', CHAR),
-            0x01 : ('CTLCHR01', EXTENDED),
-            0x02 : ('SECTION_COLUMN_DEF', EXTENDED),
-            0x03 : ('FIELD_START', EXTENDED),
-            0x04 : ('FIELD_END', INLINE),
-            0x05 : ('CTLCHR05', INLINE),
-            0x06 : ('CTLCHR06', INLINE),
-            0x07 : ('CTLCHR07', INLINE),
-            0x08 : ('TITLE_MARK', INLINE),
-            0x09 : ('TAB', INLINE),
-            0x0a : ('LINE_BREAK', CHAR),
-            0x0b : ('DRAWING_TABLE_OBJECT', EXTENDED),
-            0x0c : ('CTLCHR0C', EXTENDED),
-            0x0d : ('PARAGRAPH_BREAK', CHAR),
-            0x0e : ('CTLCHR0E', EXTENDED),
-            0x0f : ('HIDDEN_EXPLANATION', EXTENDED),
-            0x10 : ('HEADER_FOOTER', EXTENDED),
-            0x11 : ('FOOT_END_NOTE', EXTENDED),
-            0x12 : ('AUTO_NUMBER', EXTENDED),
-            0x13 : ('CTLCHR13', INLINE),
-            0x14 : ('CTLCHR14', INLINE),
-            0x15 : ('PAGE_CTLCHR', EXTENDED),
-            0x16 : ('BOOKMARK', EXTENDED),
-            0x17 : ('CTLCHR17', EXTENDED),
-            0x18 : ('HYPHEN', CHAR),
-            0x1e : ('NONBREAK_SPACE', CHAR),
-            0x1f : ('FIXWIDTH_SPACE', CHAR),
+            0x00: ('NULL', CHAR),
+            0x01: ('CTLCHR01', EXTENDED),
+            0x02: ('SECTION_COLUMN_DEF', EXTENDED),
+            0x03: ('FIELD_START', EXTENDED),
+            0x04: ('FIELD_END', INLINE),
+            0x05: ('CTLCHR05', INLINE),
+            0x06: ('CTLCHR06', INLINE),
+            0x07: ('CTLCHR07', INLINE),
+            0x08: ('TITLE_MARK', INLINE),
+            0x09: ('TAB', INLINE),
+            0x0a: ('LINE_BREAK', CHAR),
+            0x0b: ('DRAWING_TABLE_OBJECT', EXTENDED),
+            0x0c: ('CTLCHR0C', EXTENDED),
+            0x0d: ('PARAGRAPH_BREAK', CHAR),
+            0x0e: ('CTLCHR0E', EXTENDED),
+            0x0f: ('HIDDEN_EXPLANATION', EXTENDED),
+            0x10: ('HEADER_FOOTER', EXTENDED),
+            0x11: ('FOOT_END_NOTE', EXTENDED),
+            0x12: ('AUTO_NUMBER', EXTENDED),
+            0x13: ('CTLCHR13', INLINE),
+            0x14: ('CTLCHR14', INLINE),
+            0x15: ('PAGE_CTLCHR', EXTENDED),
+            0x16: ('BOOKMARK', EXTENDED),
+            0x17: ('CTLCHR17', EXTENDED),
+            0x18: ('HYPHEN', CHAR),
+            0x1e: ('NONBREAK_SPACE', CHAR),
+            0x1f: ('FIXWIDTH_SPACE', CHAR),
     }
     names = dict((unichr(code), name) for code, (name, kind) in chars.items())
     kinds = dict((unichr(code), kind) for code, (name, kind) in chars.items())
+
     def _populate(cls):
         for ch, name in cls.names.items():
             setattr(cls, name, ch)
     _populate = classmethod(_populate)
     import re
     regex = re.compile('[\x00-\x1f]\x00')
+
     def find(cls, data, start_idx):
         while True:
             m = cls.regex.search(data, start_idx)
@@ -843,19 +951,14 @@ class ControlChar(object):
                     continue
                 char = unichr(ord(data[i]))
                 size = cls.kinds[char].size
-                return i, i+size*2
+                return i, i + (size * 2)
         data_len = len(data)
         return data_len, data_len
     find = classmethod(find)
 
-    __slots__ = ['ch', 'chid', 'param']
-    def __init__(self, ch, chid=None, param=None):
-        self.ch = ch
-        self.chid = chid
-        self.param = param
     def decode_bytes(cls, bytes):
-        ch = dataio.decode_utf16le_besteffort(bytes[0:2])
-        code = ord(ch)
+        code = UINT16.decode(bytes[0:2])
+        ch = unichr(code)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
             if ch == ControlChar.TAB:
@@ -873,35 +976,26 @@ class ControlChar(object):
             return dict(code=code)
     decode_bytes = classmethod(decode_bytes)
 
-    def kind(self):
-        return self.kinds[self.ch]
-    kind = property(kind)
-
-    def code(self):
-        return ord(self.ch)
-    code = property(code)
+    def get_kind_by_code(cls, code):
+        ch = unichr(code)
+        return cls.kinds[ch]
+    get_kind_by_code = classmethod(get_kind_by_code)
 
     def get_name_by_code(cls, code):
         ch = unichr(code)
-        return cls.names.get(ch, 'CTLCHR%02x'%code)
+        return cls.names.get(ch, 'CTLCHR%02x' % code)
     get_name_by_code = classmethod(get_name_by_code)
 
-    def name(self):
-        return self.names.get(self.ch, 'CTLCHR%02x'%self.code)
-    name = property(name)
-
-    def __len__(self):
-        return self.kind.size
-
-    def __repr__(self):
-        return 'ControlChar(%s, %s, %s)'%( self.name, repr(self.chid), repr(self.param))
 ControlChar._populate()
+
 
 class Text(object):
     pass
 
+
 class ParaText(RecordModel):
     tagid = HWPTAG_PARA_TEXT
+
     def parse_with_parent(cls, attributes, context, parent):
         stream = context['stream']
         bytes = stream.read()
@@ -915,41 +1009,48 @@ class ParaText(RecordModel):
         while idx < size:
             ctrlpos, ctrlpos_end = ControlChar.find(bytes, idx)
             if idx < ctrlpos:
-                yield (idx/2, ctrlpos/2), bytes[idx:ctrlpos].decode('utf-16le', 'replace')
+                text = bytes[idx:ctrlpos].decode('utf-16le', 'replace')
+                yield (idx / 2, ctrlpos / 2), text
             if ctrlpos < ctrlpos_end:
-                yield (ctrlpos/2, ctrlpos_end/2), ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
+                cch = ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
+                yield (ctrlpos / 2, ctrlpos_end / 2), cch
             idx = ctrlpos_end
     parseBytes = staticmethod(parseBytes)
 
 
 class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
-    def parse_with_parent(cls, attributes, context, (parent_context,
-                                                     parent_model)):
-        stream = context['stream']
-        parent_content = parent_model['content']
 
-        nCharShapes = parent_content['charshapes']
-        #attributes['charshapes'] = ARRAY(ARRAY(UINT32, 2), nCharShapes).read(stream)
-        attributes = cls.decode(stream.read(), context)
-        return cls, attributes
-    parse_with_parent = classmethod(parse_with_parent)
+    def attributes(context):
+        yield ARRAY(ARRAY(UINT16, 2), 1), 'charshapes'
+    attributes = staticmethod(attributes)
 
-    def decode(cls, payload, context=None):
+    def parse_pass1(cls, context):
+        return cls, cls.read(context['stream'], context)
+    parse_pass1 = classmethod(parse_pass1)
+
+    def read(cls, f, context):
+        bytes = f.read()
+        return dict(charshapes=cls.decode(bytes, context))
+    read = classmethod(read)
+
+    def decode(payload, context=None):
         import struct
         fmt = 'II'
         unitsize = struct.calcsize('<'+fmt)
         unitcount = len(payload) / unitsize
         values = struct.unpack('<'+(fmt*unitcount), payload)
-        return dict(charshapes=list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount)))
-    decode = classmethod(decode)
+        return list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount))
+    decode = staticmethod(decode)
 
 
 class ParaLineSeg(RecordModel):
     tagid = HWPTAG_PARA_LINE_SEG
+
     class LineSeg(Struct):
         Flags = Flags(UINT16,
                 4, 'indented')
+
         def attributes(cls, context):
             yield INT32, 'chpos',
             yield SHWPUNIT, 'y',
@@ -963,18 +1064,17 @@ class ParaLineSeg(RecordModel):
             yield cls.Flags, 'flags'
         attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, attributes, context, (parent_context,
-                                                     parent_model)):
-        stream = context['stream']
-        parent_content = parent_model['content']
+    def attributes(cls, context):
+        yield ARRAY(cls.LineSeg, 1), 'linesegs'
+    attributes = classmethod(attributes)
 
-        nLineSegs = parent_content['linesegs']
-        #attributes['linesegs'] = ARRAY(cls.LineSeg, nLineSegs).read(stream)
-        attributes['linesegs'] = cls.decode(attributes, context, stream.read())
-        return cls, attributes
-    parse_with_parent = classmethod(parse_with_parent)
+    def parse_pass1(cls, context):
+        payload = context['stream'].read()
+        linesegs = cls.decode(context, payload)
+        return cls, dict(linesegs=linesegs)
+    parse_pass1 = classmethod(parse_pass1)
 
-    def decode(cls, attributes, context, payload):
+    def decode(cls, context, payload):
         from itertools import izip
         import struct
         unitfmt = 'iiiiiiiiHH'
@@ -982,12 +1082,17 @@ class ParaLineSeg(RecordModel):
         unitcount = len(payload) / unitsize
         values = struct.unpack('<'+unitfmt*unitcount, payload)
         names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below', 'x', 'width', 'a8', 'flags']
-        return list(dict(izip(names, tuple(values[i*10:i*10+10]))) for i in range(0, unitcount))
+        x = list(dict(izip(names, tuple(values[i*10:i*10+10])))
+                 for i in range(0, unitcount))
+        for d in x:
+            d['flags'] = cls.LineSeg.Flags(d['flags'])
+        return x
     decode = classmethod(decode)
 
 
 class ParaRangeTag(BasicRecordModel):
     tagid = HWPTAG_PARA_RANGE_TAG
+
     def attributes(context):
         yield UINT32, 'start'
         yield UINT32, 'end'
@@ -998,37 +1103,29 @@ class ParaRangeTag(BasicRecordModel):
 
 class GShapeObjectControl(CommonControl):
     chid = CHID.GSO
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
+
+    def parse_child(cls, attributes, context,
+                    (child_context, child_model, child_attributes)):
         # TODO: ListHeader to Caption
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
 
 
-class Matrix(tuple):
-    def read(f, context):
-        return ARRAY(ARRAY(DOUBLE, 3), 2).read(f, context) + ((0.0, 0.0, 1.0),)
-    read = staticmethod(read)
+class Matrix(Struct):
+    ''' 2D Transform Matrix
 
-    def applyTo(self, (x, y)):
-        ret = []
-        for row in self:
-            ret.append(row[0] * x + row[1] * y + row[2] * 1)
-        return (ret[0], ret[1])
-    def scale(self, (w, h)):
-        ret = []
-        for row in self:
-            ret.append(row[0] * w + row[1] * h + row[2] * 0)
-        return (ret[0], ret[1])
-    def product(self, mat):
-        ret = []
-        rs = [0, 1, 2]
-        cs = [0, 1, 2]
-        for r in rs:
-            row = []
-            for c in cs:
-                row.append( self[r][c] * mat[c][r])
-            ret.append(row)
-        return Matrix(ret)
+    [a c e][x]
+    [b d f][y]
+    [0 0 1][1]
+    '''
+    def attributes(context):
+        yield DOUBLE, 'a'
+        yield DOUBLE, 'c'
+        yield DOUBLE, 'e'
+        yield DOUBLE, 'b'
+        yield DOUBLE, 'd'
+        yield DOUBLE, 'f'
+    attributes = staticmethod(attributes)
 
 
 class ScaleRotationMatrix(Struct):
@@ -1036,6 +1133,7 @@ class ScaleRotationMatrix(Struct):
         yield Matrix, 'scaler',
         yield Matrix, 'rotator',
     attributes = staticmethod(attributes)
+
 
 class ShapeComponent(RecordModel):
     ''' 4.2.9.2 그리기 개체 '''
@@ -1076,6 +1174,8 @@ class ShapeComponent(RecordModel):
                 yield FillColorPattern, 'colorpattern'
             if fill_flags.fill_gradation:
                 yield FillGradation, 'gradation'
+        elif chid == CHID.LINE:
+            yield BorderLine, 'line'
     attributes = classmethod(attributes)
 
     def parse_with_parent(cls, attributes, context, (parent_context,
@@ -1083,13 +1183,17 @@ class ShapeComponent(RecordModel):
         stream = context['stream']
 
         if parent_model['type'] is GShapeObjectControl:
-            attributes['chid0'] = CHID.read(stream) # GSO-child ShapeComponent specific: it may be a GSO model's attribute, e.g. 'child_chid'
+            # GSO-child ShapeComponent specific:
+            # it may be a GSO model's attribute, e.g. 'child_chid'
+            attributes['chid0'] = CHID.read(stream)
         return parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
+    def parse_child(cls, attributes, context,
+                    (child_context, child_model, child_attributes)):
         if child_model is ListHeader:
-            return parse_model_attributes(TextboxParagraphList, child_attributes, child_context)
+            return parse_model_attributes(TextboxParagraphList,
+                                          child_attributes, child_context)
         else:
             return child_model, child_attributes
     parse_child = classmethod(parse_child)
@@ -1108,8 +1212,10 @@ class Coord(Struct):
         yield SHWPUNIT, 'y'
     attributes = staticmethod(attributes)
 
+
 class ShapeLine(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
+
     def attributes(context):
         yield ARRAY(Coord, 2), 'coords'
         yield UINT16, 'attr'
@@ -1118,6 +1224,7 @@ class ShapeLine(BasicRecordModel):
 
 class ShapeRectangle(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_RECTANGLE
+
     def attributes(context):
         yield BYTE, 'round',
         yield ARRAY(Coord, 4), 'coords',
@@ -1126,7 +1233,8 @@ class ShapeRectangle(BasicRecordModel):
 
 class ShapeEllipse(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ELLIPSE
-    Flags = Flags(UINT32) # TODO
+    Flags = Flags(UINT32)  # TODO
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
         yield Coord, 'center'
@@ -1141,6 +1249,7 @@ class ShapeEllipse(BasicRecordModel):
 
 class ShapeArc(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ARC
+
     def attributes(cls, context):
         #yield ShapeEllipse.Flags, 'flags' # SPEC
         yield Coord, 'center'
@@ -1151,6 +1260,7 @@ class ShapeArc(BasicRecordModel):
 
 class ShapePolygon(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_POLYGON
+
     def attributes(cls, context):
         count = yield UINT16, 'count'
         yield ARRAY(Coord, count), 'points'
@@ -1159,6 +1269,7 @@ class ShapePolygon(BasicRecordModel):
 
 class ShapeCurve(BasicRecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_CURVE
+
     def attributes(cls, context):
         count = yield UINT16, 'count'
         yield ARRAY(Coord, count), 'points'
@@ -1183,11 +1294,13 @@ class PictureInfo(Struct):
 class BorderLine(Struct):
     ''' 표 81. 테두리 선 정보 '''
 
-    StrokeType = Enum('none', 'solid', 'dashed', 'dotted') # TODO: more types
+    StrokeType = Enum('none', 'solid', 'dashed', 'dotted')  # TODO: more types
     LineEnd = Enum('round', 'flat')
-    ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect', 'diamondfilled', 'disc', 'rectfilled')
-    ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal', 'abitlarge', 'large', 'larger', 'largest')
-    Flags = Flags(UINT32, 
+    ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect',
+                      'diamondfilled', 'disc', 'rectfilled')
+    ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal',
+                     'abitlarge', 'large', 'larger', 'largest')
+    Flags = Flags(UINT32,
             0, 5, StrokeType, 'stroke',
             6, 9, LineEnd, 'line_end',
             10, 15, ArrowShape, 'arrow_start',
@@ -1213,7 +1326,7 @@ class ImageRect(Struct):
         yield Coord, 'p1'
         yield Coord, 'p2'
         yield Coord, 'p3'
-    attributes=staticmethod(attributes)
+    attributes = staticmethod(attributes)
 
 
 # HWPML에서의 이름 사용
@@ -1225,7 +1338,7 @@ class ImageClip(Struct):
         yield SHWPUNIT, 'top',
         yield SHWPUNIT, 'right',
         yield SHWPUNIT, 'bottom',
-    attributes=staticmethod(attributes)
+    attributes = staticmethod(attributes)
 
 
 class ShapePicture(BasicRecordModel):
@@ -1272,6 +1385,7 @@ class ForbiddenChar(BasicRecordModel):
 class SectionDef(Control):
     ''' 4.2.10.1. 구역 정의 '''
     chid = CHID.SECD
+
     def attributes(context):
         yield UINT32, 'attr',
         yield HWPUNIT16, 'columnspacing',
@@ -1300,6 +1414,7 @@ class ColumnsDef(Control):
             10, 11, Direction, 'direction',
             12, 'same_widths',
             )
+
     def attributes(cls, context):
         flags = yield cls.Flags, 'flags'
         flags = cls.Flags(flags)
@@ -1317,6 +1432,7 @@ class HeaderFooter(Control):
     Flags = Flags(UINT32,
         0, 1, Places, 'places'
     )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
@@ -1329,16 +1445,20 @@ class HeaderFooter(Control):
             yield BYTE, 'numberrefsbitmap'
         attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
+    def parse_child(cls, attributes, context,
+                    (child_context, child_model, child_attributes)):
         if child_model is ListHeader:
-            return parse_model_attributes(cls.ParagraphList, child_attributes, child_context)
+            return parse_model_attributes(cls.ParagraphList,
+                                          child_attributes, child_context)
         else:
             return child_model, child_attributes
     parse_child = classmethod(parse_child)
 
+
 class Header(HeaderFooter):
     ''' 머리말 '''
     chid = CHID.HEADER
+
 
 class Footer(HeaderFooter):
     ''' 꼬리말 '''
@@ -1349,12 +1469,14 @@ class Note(Control):
     ''' 4.2.10.4 미주/각주 '''
     def attributes(context):
         if context['version'] >= (5, 0, 0, 6):
-            yield UINT32, 'number' # SPEC
+            yield UINT32, 'number'  # SPEC
     attributes = staticmethod(attributes)
+
 
 class FootNote(Note):
     ''' 각주 '''
     chid = CHID.FN
+
 
 class EndNote(Note):
     ''' 미주 '''
@@ -1368,6 +1490,7 @@ class NumberingControl(Control):
             4, 11, 'footnoteshape',
             12, 'superscript',
             )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags',
         yield UINT16, 'number',
@@ -1377,6 +1500,7 @@ class NumberingControl(Control):
 class AutoNumbering(NumberingControl):
     ''' 4.2.10.5. 자동 번호 '''
     chid = CHID.ATNO
+
     def attributes(cls, context):
         for x in NumberingControl.attributes(context):
             yield x
@@ -1384,6 +1508,7 @@ class AutoNumbering(NumberingControl):
         yield WCHAR, 'prefix',
         yield WCHAR, 'suffix',
     attributes = classmethod(attributes)
+
     def __unicode__(self):
         prefix = u''
         suffix = u''
@@ -1409,6 +1534,7 @@ class PageHide(Control):
             4, 'pagefill',
             5, 'pagenumber'
             )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
@@ -1421,6 +1547,7 @@ class PageOddEven(Control):
     Flags = Flags(UINT32,
         0, 1, 'pages'
         )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
@@ -1438,6 +1565,7 @@ class PageNumberPosition(Control):
         0, 7, 'shape',
         8, 11, Position, 'position',
         )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags'
         yield WCHAR, 'usersymbol'
@@ -1450,6 +1578,7 @@ class PageNumberPosition(Control):
 class IndexMarker(Control):
     ''' 4.2.10.10. 찾아보기 표식 '''
     chid = CHID.IDXM
+
     def attributes(context):
         yield BSTR, 'keyword1'
         yield BSTR, 'keyword2'
@@ -1460,15 +1589,20 @@ class IndexMarker(Control):
 class BookmarkControl(Control):
     ''' 4.2.10.11. 책갈피 '''
     chid = CHID.BOKM
+
     def attributes(context):
-        if False: yield
+        if False:
+            yield
     attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context, (child_context, child_model, child_attributes)):
+    def parse_child(cls, attributes, context,
+                    (child_context, child_model, child_attributes)):
         if child_model is ControlData:
-            return parse_model_attributes(BookmarkControlData, child_attributes, child_context)
+            return parse_model_attributes(BookmarkControlData,
+                                          child_attributes, child_context)
         return child_model, child_attributes
     parse_child = classmethod(parse_child)
+
 
 class BookmarkControlData(ControlData):
     def attributes(context):
@@ -1482,6 +1616,7 @@ class BookmarkControlData(ControlData):
 class TCPSControl(Control):
     ''' 4.2.10.12. 글자 겹침 '''
     chid = CHID.TCPS
+
     def attributes(context):
         yield BSTR, 'textlength'
         #yield UINT8, 'frameType'
@@ -1495,7 +1630,9 @@ class Dutmal(Control):
     ''' 4.2.10.13. 덧말 '''
     chid = CHID.TDUT
     Position = Enum(ABOVE=0, BELOW=1, CENTER=2)
-    Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4, DISTRIBUTE_SPACE=5)
+    Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4,
+                 DISTRIBUTE_SPACE=5)
+
     def attributes(context):
         yield BSTR, 'maintext'
         yield BSTR, 'subtext'
@@ -1510,8 +1647,10 @@ class Dutmal(Control):
 class HiddenComment(Control):
     ''' 4.2.10.14 숨은 설명 '''
     chid = CHID.TCMT
+
     def attributes(context):
-        if False: yield
+        if False:
+            yield
     attributes = staticmethod(attributes)
 
 
@@ -1523,6 +1662,7 @@ class Field(Control):
             11, 14, 'visitedType',
             15, 'modified',
             )
+
     def attributes(cls, context):
         yield cls.Flags, 'flags',
         yield BYTE, 'extra_attr',
@@ -1534,46 +1674,60 @@ class Field(Control):
 class FieldUnknown(Field):
     chid = '%unk'
 
+
 class FieldDate(Field):
     chid = CHID.DTE
+
 
 class FieldDocDate(Field):
     chid = '%ddt'
 
+
 class FieldPath(Field):
     chid = '%pat'
+
 
 class FieldBookmark(Field):
     chid = '%bmk'
 
+
 class FieldMailMerge(Field):
     chid = '%mmg'
+
 
 class FieldCrossRef(Field):
     chid = '%xrf'
 
+
 class FieldFormula(Field):
     chid = '%fmu'
+
 
 class FieldClickHere(Field):
     chid = '%clk'
 
+
 class FieldSummary(Field):
     chid = '%smr'
+
 
 class FieldUserInfo(Field):
     chid = '%usr'
 
+
 class FieldHyperLink(Field):
     chid = CHID.HLK
+
     def geturl(self):
         s = self.command.split(';')
         return s[0].replace('\\:', ':')
 
 # TODO: FieldRevisionXXX
 
+
 class FieldMemo(Field):
     chid = '%%me'
+
 
 class FieldPrivateInfoSecurity(Field):
     chid = '%cpr'
@@ -1581,8 +1735,9 @@ class FieldPrivateInfoSecurity(Field):
 
 def _check_tag_models():
     for tagid, name in tagnames.iteritems():
-        assert tagid in tag_models, 'RecordModel for %s is missing!'%name
+        assert tagid in tag_models, 'RecordModel for %s is missing!' % name
 _check_tag_models()
+
 
 def init_record_parsing_context(base, record):
     ''' Initialize a context to parse the given record
@@ -1598,6 +1753,7 @@ def init_record_parsing_context(base, record):
     '''
 
     return dict(base, record=record, stream=StringIO(record['payload']))
+
 
 def parse_pass1_record(context, record):
     ''' HWPTAG로 모델 결정 후 기본 파싱 '''
@@ -1618,6 +1774,7 @@ def parse_pass1_record(context, record):
                  content=model_content)
     return context, model
 
+
 def parse_pass1(context, records):
     for record in records:
         tag = record['tagname']
@@ -1629,11 +1786,10 @@ def parse_pass1(context, records):
         logger.debug('pass1: %s, %s', model['type'], model['content'].keys())
         yield context, model
 
+
 def parse_pass2_record_with_parent(parent, (context, model)):
     model_type = model['type']
     model_content = model['content']
-
-    stream = context['stream']
 
     parent_context, parent_model = parent
     parent_type = parent_model.get('type')
@@ -1657,6 +1813,7 @@ def parse_pass2_record_with_parent(parent, (context, model)):
     model['content'] = model_content
     return context, model
 
+
 def parse_pass2(context_models):
     from .treeop import prefix_ancestors_from_level
     level_prefixed = ((model['record']['level'], (context, model))
@@ -1667,9 +1824,11 @@ def parse_pass2(context_models):
         parent = ancestors[-1]
         yield parse_pass2_record_with_parent(parent, (context, model))
 
+
 def parse_models(context, records):
     for context, model in parse_models_intern(context, records):
         yield model
+
 
 def parse_models_intern(context, records, passes=3):
     context_models = parse_pass1(context, records)
@@ -1682,10 +1841,11 @@ def parse_models_intern(context, records, passes=3):
             model['unparsed'] = unparsed
         yield context, model
 
+
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
     from .dataio import dumpbytes
-    import simplejson # TODO: simplejson is for python2.5+
+    import simplejson  # TODO: simplejson is for python2.5+
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model['record']
@@ -1694,39 +1854,33 @@ def model_to_json(model, *args, **kwargs):
         model['unparsed'] = list(dumpbytes(model['unparsed']))
     return simplejson.dumps(model, *args, **kwargs)
 
-def generate_models_json_array(models, *args, **kwargs):
-    from .recordstream import generate_json_array
-    tokens = (model_to_json(model, *args, **kwargs)
-              for model in models)
-    return generate_json_array(tokens)
-
 
 from . import recordstream
+
+
 class ModelStream(recordstream.RecordStream):
 
-    def other_formats(self):
-        d = super(ModelStream, self).other_formats()
-        d['.models'] = self.models_stream
-        return d
+    @cached_property
+    def model_parsing_context(self):
+        return dict(version=self.version)
 
-    def models(self):
+    def models(self, **kwargs):
         return parse_models(self.model_parsing_context,
-                            self.records())
+                            self.records(**kwargs))
 
     def model(self, idx):
         from .recordstream import nth
         return nth(self.models(), idx)
 
-    def models_stream(self):
-        from .filestructure import GeneratorReader
-        gen = generate_models_json_array(self.models(),
-                                         sort_keys=True,
-                                         indent=2)
-        return GeneratorReader(gen)
+    def models_json(self, **kwargs):
+        from .utils import JsonObjects
+        models = self.models(**kwargs)
+        return JsonObjects(models, model_to_json)
 
-    @cached_property
-    def model_parsing_context(self):
-        return dict(version=self.version)
+    def other_formats(self):
+        d = super(ModelStream, self).other_formats()
+        d['.models'] = self.models_json().open
+        return d
 
 
 class Sections(recordstream.Sections):
@@ -1739,52 +1893,9 @@ class Hwp5File(recordstream.Hwp5File):
     docinfo_class = ModelStream
     bodytext_class = Sections
 
+
 def create_context(file=None, **context):
     if file is not None:
         context['version'] = file.fileheader.version
     assert 'version' in context
     return context
-
-def main():
-    import sys
-    import itertools
-    from ._scriptutils import OptionParser, args_pop, args_pop_range, open_or_exit
-    from .filestructure import open
-    from .recordstream import read_records
-
-    op = OptionParser(usage='usage: %prog [options] filename <record-stream>')
-
-    options, args = op.parse_args()
-
-    out = options.outfile
-
-    filename = args_pop(args, 'filename')
-    if filename == '-':
-        filename = 'STDIN'
-        streamname = 'STDIN'
-        bytestream = sys.stdin
-        version = args_pop(args, 'version').split('.')
-    else:
-        file = open_or_exit(open, filename)
-        streamname = args_pop(args, '<record-stream>')
-        bytestream = file.pseudostream(streamname)
-        version = file.fileheader.version
-
-    from ._scriptutils import getlogger
-    context = create_context(version=version)
-    records = read_records(bytestream, streamname, filename)
-    models = parse_models(context, records)
-
-    def statistics(models):
-        occurrences = dict()
-        for model in models:
-            model_type = model['type']
-            occurrences.setdefault(model_type, 0)
-            occurrences[model_type] += 1
-            yield model
-        for model_type, count in occurrences.iteritems():
-            logger.info('%30s: %d', model_type.__name__, count)
-    models = statistics(models)
-
-    for s in generate_models_json_array(models, indent=2, sort_keys=True):
-        out.write(s)

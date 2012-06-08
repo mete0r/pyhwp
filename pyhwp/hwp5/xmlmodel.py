@@ -1,4 +1,4 @@
-from itertools import chain
+# -*- coding: utf-8 -*-
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
 from .treeop import tree_events, tree_events_multi
@@ -120,7 +120,7 @@ def line_segmented(chunks, ranged_linesegs):
 def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
     ''' lineseg/charshaped text chunks '''
     from .binmodel import ParaText, ParaLineSeg, ParaCharShape
-    from .binmodel import ControlChar
+
     stack = [] # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
         model, attributes, context = item
@@ -134,33 +134,11 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 paralineseg = stack[-1].get(ParaLineSeg)
                 if paratext is None:
                     paratext = ParaText, dict(chunks=[((0,0),'')]), dict(context)
-                paratext_model, paratext_attributes, paratext_context = paratext
-                chunks = ((range, None, chunk) for range, chunk in paratext_attributes['chunks'])
-                charshapes = paracharshape[1]['charshapes']
-                shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
-                linesegs = ((lineseg['chpos'], lineseg) for lineseg in paralineseg[1]['linesegs'])
-                lined_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
-                for lineseg, line in lined_chunks:
-                    yield STARTEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
-                    for (startpos, endpos), (shape, none), chunk in line:
-                        if isinstance(chunk, basestring):
-                            textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
-                            yield STARTEVENT, textitem
-                            yield ENDEVENT, textitem
-                        elif isinstance(chunk, dict):
-                            ch = chr(chunk['code'])
-                            if 'chid' in chunk:
-                                chunk = ControlChar(ch, chunk['chid'],
-                                                    chunk['param'])
-                            else:
-                                chunk = ControlChar(ch)
-                            chunk_attributes = dict(name=chunk.name, code=chunk.code, kind=chunk.kind, charshape_id=shape)
-                            if chunk.code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
-                                chunk_attributes['char'] = unichr(chunk.code)
-                            ctrlch = (ControlChar, chunk_attributes, paratext_context)
-                            yield STARTEVENT, ctrlch
-                            yield ENDEVENT, ctrlch
-                    yield ENDEVENT, (ParaLineSeg.LineSeg, lineseg, paralineseg[2])
+                for x in merge_paragraph_text_charshape_lineseg(paratext,
+                                                                paracharshape,
+                                                                paralineseg):
+                    yield x
+
                 yield ENDEVENT, (model, attributes, context)
                 stack.pop()
         #elif model in (ParaText, ParaCharShape):
@@ -170,7 +148,59 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
         else:
             yield event, (model, attributes, context)
 
-def wrap_section(sect_id, event_prefixed_mac):
+def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
+                                           paralineseg):
+    from .binmodel import ParaText, ParaLineSeg
+    LineSeg = ParaLineSeg.LineSeg
+
+    paratext_model, paratext_attributes, paratext_context = paratext
+
+    chunks = ((range, None, chunk) for range, chunk in paratext_attributes['chunks'])
+    charshapes = paracharshape[1]['charshapes']
+    shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
+
+    if paralineseg:
+        paralineseg_content = paralineseg[1]
+        paralineseg_context = paralineseg[2]
+    else:
+        # 배포용 문서의 더미 BodyText 에는 LineSeg 정보가 없음
+        # (see https://github.com/mete0r/pyhwp/issues/33)
+        # 더미 LineSeg를 만들어 준다
+        lineseg = dict(chpos=0, y=0, height=0, height2=0, height85=0,
+                       space_below=0, x=0, width=0, a8=0, flags=0)
+        paralineseg_content = dict(linesegs=[lineseg])
+        paralineseg_context = dict()
+    linesegs = ((lineseg['chpos'], lineseg)
+                for lineseg in paralineseg_content['linesegs'])
+    lined_shaped_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
+    for lineseg_content, shaped_chunks in lined_shaped_chunks:
+        lineseg = (LineSeg, lineseg_content, paralineseg_context)
+        chunk_events = range_shaped_textchunk_events(paratext_context,
+                                                     shaped_chunks)
+        for x in wrap_modelevents(lineseg, chunk_events):
+            yield x
+
+def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
+    from .binmodel import ControlChar
+    for (startpos, endpos), (shape, none), chunk in range_shaped_textchunks:
+        if isinstance(chunk, basestring):
+            textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
+            yield STARTEVENT, textitem
+            yield ENDEVENT, textitem
+        elif isinstance(chunk, dict):
+            code = chunk['code']
+            uch = unichr(code)
+            name = ControlChar.get_name_by_code(code)
+            kind = ControlChar.kinds[uch]
+            chunk_attributes = dict(name=name, code=code, kind=kind, charshape_id=shape)
+            if code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
+                chunk_attributes['char'] = uch
+            ctrlch = (ControlChar, chunk_attributes, paratext_context)
+            yield STARTEVENT, ctrlch
+            yield ENDEVENT, ctrlch
+
+
+def wrap_section(event_prefixed_mac, sect_id=None):
     ''' wrap a section with SectionDef '''
     starting_buffer = list()
     started = False
@@ -182,7 +212,8 @@ def wrap_section(sect_id, event_prefixed_mac):
             model, attributes, context = item
             if model is SectionDef and event is STARTEVENT:
                 sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
-                attributes['section_id'] = sect_id
+                if sect_id is not None:
+                    attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
                 for k in tree_events_multi(sectiondef_childs):
                     yield k
@@ -334,115 +365,123 @@ def dispatch_model_events(handler, events):
         elif event == ENDEVENT:
             handler.endModel(model)
 
-def flatxml(hwpfile, logger, oformat):
-    ''' convert hwpfile into a flat xml
 
-    hwpfile - hwp file
-    oformat - output formatter
-    '''
-    from .recordstream import read_records
-    from .binmodel import parse_models
-    from .binmodel import create_context
-    context = create_context(hwpfile)
+class XmlEvents(object):
 
-    class HwpDoc(object): pass
-    class DocInfo(object): pass
-    class BodyText(object): pass
-    hwpdoc = HwpDoc, dict(version=hwpfile.fileheader.version), dict(context)
-    docinfo = DocInfo, dict(), dict(context)
-    docinfo_records = read_records(hwpfile.docinfo(), 'docinfo')
-    docinfo_models = parse_models(context, docinfo_records)
-    docinfo_events = prefix_binmodels_with_event(context, docinfo_models)
-    docinfo_events = wrap_modelevents(docinfo, docinfo_events)
+    def __init__(self, events):
+        self.events = events
 
-    docinfo_events = remove_redundant_facenames(docinfo_events)
+    def dump(self, outfile, **kwargs):
+        from hwp5.xmlformat import XmlFormat
+        oformat = XmlFormat(outfile)
+        oformat.startDocument()
+        dispatch_model_events(oformat, self.events)
+        oformat.endDocument()
 
-    bodytext = BodyText, dict(), dict(context)
-    bodytext_events = []
-    for idx in hwpfile.list_bodytext_sections():
-        section_records = read_records(hwpfile.bodytext(idx), 'bodytext/%d'%idx)
-        section_models = parse_models(context, section_records)
-        section_events = prefix_binmodels_with_event(context, section_models)
+    def open(self, **kwargs):
+        import os
+        r, w = os.pipe()
+        r = os.fdopen(r, 'r')
+        w = os.fdopen(w, 'w')
 
-        section_events = make_texts_linesegmented_and_charshaped(section_events)
-        section_events = make_extended_controls_inline(section_events)
-        section_events = match_field_start_end(section_events)
-        section_events = make_paragraphs_children_of_listheader(section_events)
-        section_events = make_paragraphs_children_of_listheader(section_events, TableBody, TableCell)
-        section_events = restructure_tablebody(section_events)
-
-        section_events = wrap_section(idx, section_events)
-        bodytext_events.append(section_events)
-    bodytext_events = chain(*bodytext_events)
-    bodytext_events = wrap_modelevents(bodytext, bodytext_events)
-
-    hwpdoc_events = chain(docinfo_events, bodytext_events)
-    hwpdoc_events = wrap_modelevents(hwpdoc, hwpdoc_events)
-
-    # for easy references in styles
-    hwpdoc_events = give_elements_unique_id(hwpdoc_events)
-
-    oformat.startDocument()
-    dispatch_model_events(oformat, hwpdoc_events)
-    oformat.endDocument()
+        import threading
+        t = threading.Thread(target=self.dump,
+                             args=(w,), kwargs=kwargs)
+        t.daemon = True
+        t.start()
+        return r
 
 
-class ModelEventStream(binmodel.ModelStream):
+class XmlEventsMixin(object):
+
+    def xmlevents(self, **kwargs):
+        return XmlEvents(self.events())
+
+
+class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
 
     @property
     def eventgen_context(self):
         return dict(self.model_parsing_context)
 
-    def modelevents(self):
+    def modelevents(self, **kwargs):
         context = self.eventgen_context
-        models = self.models()
+        models = self.models(**kwargs)
         return prefix_binmodels_with_event(context, models)
+
+    def other_formats(self):
+        d = super(ModelEventStream, self).other_formats()
+        d['.xml'] = self.xmlevents().open
+        return d
 
 
 class DocInfo(ModelEventStream):
 
-    def events(self):
+    def events(self, **kwargs):
         docinfo = DocInfo, dict(), self.eventgen_context
-        events = self.modelevents()
+        events = self.modelevents(**kwargs)
         events = wrap_modelevents(docinfo, events)
         return remove_redundant_facenames(events)
 
 
-class Hwp5File(binmodel.Hwp5File):
+class Section(ModelEventStream):
+
+    def events(self, **kwargs):
+        events = self.modelevents(**kwargs)
+
+        events = make_texts_linesegmented_and_charshaped(events)
+        events = make_extended_controls_inline(events)
+        events = match_field_start_end(events)
+        events = make_paragraphs_children_of_listheader(events)
+        events = make_paragraphs_children_of_listheader(events, TableBody, TableCell)
+        events = restructure_tablebody(events)
+
+        section_idx = kwargs.get('section_idx')
+        events = wrap_section(events, section_idx)
+
+        return events
+
+
+class Sections(binmodel.Sections, XmlEventsMixin):
+
+    section_class = Section
+
+    def events(self, **kwargs):
+        bodytext_events = []
+        for idx in self.section_indexes():
+            kwargs['section_idx'] = idx
+            section = self.section(idx)
+            events = section.events(**kwargs)
+            bodytext_events.append(events)
+
+        class BodyText(object): pass
+        from itertools import chain
+        bodytext_events = chain(*bodytext_events)
+        bodytext = BodyText, dict(), dict()
+        return wrap_modelevents(bodytext, bodytext_events)
+
+    def other_formats(self):
+        d = super(Sections, self).other_formats()
+        d['.xml'] = self.xmlevents().open
+        return d
+
+
+
+class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
 
     docinfo_class = DocInfo
+    bodytext_class = Sections
 
+    def events(self, **kwargs):
+        from itertools import chain
+        events = chain(self.docinfo.events(**kwargs),
+                       self.bodytext.events(**kwargs))
 
-def main():
-    import sys
-    import itertools
-    from .filestructure import open
+        class HwpDoc(object): pass
+        hwpdoc = HwpDoc, dict(version=self.header.version), dict()
+        events = wrap_modelevents(hwpdoc, events)
 
-    from ._scriptutils import OptionParser, args_pop, open_or_exit
-    op = OptionParser(usage='usage: %prog [options] filename')
-    op.add_option('-f', '--format', dest='format', default='xml', help='output format: xml | nul [default: xml]')
+        # for easy references in styles
+        events = give_elements_unique_id(events)
 
-    options, args = op.parse_args()
-
-    filename = args_pop(args, 'filename')
-    hwpfile = open_or_exit(open, filename)
-
-    out = options.outfile
-
-    class NulFormat(ModelEventHandler):
-        def __init__(self, out): pass
-        def startDocument(self): pass
-        def endDocument(self): pass
-        def startModel(self, model, attributes, **context): pass
-        def endModel(self, model): pass
-    from .xmlformat import XmlFormat
-
-    formats = dict(xml=XmlFormat, nul=NulFormat)
-    oformat = formats[options.format](out)
-
-    from ._scriptutils import getlogger, loghandler, logformat_xml
-    flatxml(hwpfile, logger, oformat)
-    
-
-if __name__ == '__main__':
-    main()
+        return events

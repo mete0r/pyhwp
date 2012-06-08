@@ -3,17 +3,16 @@ from unittest import TestCase
 from .utils import cached_property
 
 def example(filename):
-    from .filestructure import open
-    return open('fixtures/'+filename)
+    from .xmlmodel import Hwp5File
+    return Hwp5File('fixtures/'+filename)
 
 def example_to_xml(filename):
-    from .hwp5odt import generate_hwp5xml
     hwp5file = example(filename)
 
     xmlfilename = filename+'.xml'
     xmlfile = file(xmlfilename, 'w')
     try:
-        generate_hwp5xml(xmlfile, hwp5file)
+        hwp5file.xmlevents().dump(xmlfile)
         return xmlfilename
     finally:
         xmlfile.close()
@@ -23,13 +22,17 @@ class example_to_odt(object):
         self.xmlfilename = example_to_xml(filename)
 
     def open_content(self):
-        from .hwp5odt import xslt_odt_content
+        from .hwp5odt import convert
         import os
         r, w = os.pipe()
         r = os.fdopen(r, 'r')
         w = os.fdopen(w, 'w')
         try:
-            xslt_odt_content(w, self.xmlfilename)
+            xmlfile = file(self.xmlfilename, 'r')
+            try:
+                convert.xslt_content(xmlfile, w)
+            finally:
+                xmlfile.close()
             return r
         except:
             r.close()
@@ -47,13 +50,17 @@ class example_to_odt(object):
     content = cached_property(content)
 
     def open_styles(self):
-        from .hwp5odt import xslt_odt_styles
+        from .hwp5odt import convert
         import os
         r, w = os.pipe()
         r = os.fdopen(r, 'r')
         w = os.fdopen(w, 'w')
         try:
-            xslt_odt_styles(w, self.xmlfilename)
+            xmlfile = file(self.xmlfilename, 'r')
+            try:
+                convert.xslt_styles(xmlfile, w)
+            finally:
+                xmlfile.close()
             return r
         except:
             r.close()
@@ -126,7 +133,7 @@ class example_to_odt(object):
             return xpath1(style, 'style:paragraph-properties')
 
     def automatic_style_shaperect(self, shape_id):
-        style = self.automatic_style('ShapeRect-%d'%shape_id)
+        style = self.automatic_style('Shape-%d'%shape_id)
         if style is not None:
             assert 'graphic' == xpath1(style, '@style:family')
         return style
@@ -504,7 +511,7 @@ class TestODTXSL(TestCase):
 
         rect = xpath1(odt.content, '//draw:rect[2]')
         assert rect is not None
-        assert 'ShapeRect-2' == xpath1(rect, '@draw:style-name')
+        assert 'Shape-2' == xpath1(rect, '@draw:style-name')
         assert '39.69mm' == xpath1(rect, '@svg:x')
         assert '73.55mm' == xpath1(rect, '@svg:y')
         assert '71.26mm' == xpath1(rect, '@svg:width')
@@ -518,25 +525,33 @@ class TestODTXSL(TestCase):
         assert 'solid' == xpath1(props, '@draw:fill')
         assert '#66ccff' ==  xpath1(props, '@draw:fill-color')
         assert 'none' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#000000' == xpath1(props, '@svg:stroke-color')
 
         # TODO: gradation fill
         props = odt.automatic_style_shaperect_graphic_properties(2)
         assert 'none' == xpath1(props, '@draw:fill')
         assert None is xpath1(props, '@draw:fill-color')
-        assert 'solid' == xpath1(props, '@draw:stroke')
+        assert 'dash' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#000000' == xpath1(props, '@svg:stroke-color')
 
         # fill none
         # stroke solid
         props = odt.automatic_style_shaperect_graphic_properties(3)
         assert 'none' == xpath1(props, '@draw:fill')
         assert None is xpath1(props, '@draw:fill-color')
-        assert 'solid' == xpath1(props, '@draw:stroke')
+        assert 'dash' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#000000' == xpath1(props, '@svg:stroke-color')
 
         # TODO: hatched fill
         props = odt.automatic_style_shaperect_graphic_properties(4)
         assert 'solid' == xpath1(props, '@draw:fill')
         assert '#ffffff' == xpath1(props, '@draw:fill-color')
         assert 'solid' == xpath1(props, '@draw:stroke')
+        assert '0.12mm' == xpath1(props, '@svg:stroke-width')
+        assert '#ff0033' == xpath1(props, '@svg:stroke-color')
 
     def test_shapeline(self):
         ''' 그리기 객체 ShapeLine '''
@@ -558,7 +573,7 @@ class TestODTXSL(TestCase):
         frame1, frame2 = xpath(odt.content, '//draw:frame')
 
         assert frame1 is not None
-        assert 'DrawFrame-1' == xpath1(frame1, '@draw:style-name')
+        assert 'Shape-1' == xpath1(frame1, '@draw:style-name')
         assert 'paragraph' == xpath1(frame1, '@text:anchor-type')
         assert '111.73pt' == xpath1(frame1, '@svg:x')
         assert '4.9pt' == xpath1(frame1, '@svg:y')
@@ -568,12 +583,182 @@ class TestODTXSL(TestCase):
         assert 'bindata/BIN0002.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
 
         assert frame2 is not None
-        assert 'DrawFrame-2' == xpath1(frame2, '@draw:style-name')
+        assert 'Shape-2' == xpath1(frame2, '@draw:style-name')
         # inline: as-char and no svg:x,y
         assert 'as-char' == xpath1(frame2, '@text:anchor-type')
         assert None is xpath1(frame2, '@svg:x')
         assert None is xpath1(frame2, '@svg:y')
         assert '4' == xpath1(frame2, '@draw:z-index')
-        assert '4.23mm' == xpath1(frame2, '@svg:width')
-        assert '4.23mm' == xpath1(frame2, '@svg:height')
+        assert '5.69mm' == xpath1(frame2, '@svg:width')
+        assert '5.69mm' == xpath1(frame2, '@svg:height')
         assert 'bindata/BIN0003.png' == xpath1(frame2, 'draw:image/@xlink:href')
+
+    def test_shapepict_scaled(self):
+        ''' 그림 객체 ShapePicture (scaled) '''
+        odt = example_to_odt('shapepict-scaled.hwp')
+
+        assert 2 == len(xpath(odt.content, '//draw:frame'))
+
+        frame1, frame2 = xpath(odt.content, '//draw:frame')
+
+        assert frame1 is not None
+        assert 'Shape-1' == xpath1(frame1, '@draw:style-name')
+        assert 'paragraph' == xpath1(frame1, '@text:anchor-type')
+        assert '0pt' == xpath1(frame1, '@svg:x')
+        assert '0pt' == xpath1(frame1, '@svg:y')
+        assert '0' == xpath1(frame1, '@draw:z-index')
+        assert '20.07mm' == xpath1(frame1, '@svg:width')
+        assert '12.04mm' == xpath1(frame1, '@svg:height')
+        assert 'bindata/BIN0002.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
+
+        assert frame2 is not None
+        assert 'Shape-2' == xpath1(frame2, '@draw:style-name')
+        assert '0pt' == xpath1(frame2, '@svg:x')
+        assert '0pt' == xpath1(frame2, '@svg:y')
+        assert '1' == xpath1(frame2, '@draw:z-index')
+        assert '20.07mm' == xpath1(frame2, '@svg:width')
+        assert '12.04mm' == xpath1(frame2, '@svg:height')
+        assert 'bindata/BIN0002.jpg' == xpath1(frame2, 'draw:image/@xlink:href')
+
+    def test_shapepict_scaled_in_group(self):
+        ''' 그림 객체 ShapePicture (scaled, grouped) '''
+        odt = example_to_odt('shapecontainer-2.hwp')
+
+        assert 1 == len(xpath(odt.content, '//draw:frame'))
+
+        frame1 = xpath1(odt.content, '//draw:frame')
+
+        assert frame1 is not None
+        assert 'Shape-3' == xpath1(frame1, '@draw:style-name')
+        assert None is xpath1(frame1, '@text:anchor-type')
+        assert None is xpath1(frame1, '@svg:x')
+        assert None is xpath1(frame1, '@svg:y')
+        assert None is xpath1(frame1, '@draw:z-index')  # TODO
+        assert '161.92mm' == xpath1(frame1, '@svg:width')
+        assert '22.23mm' == xpath1(frame1, '@svg:height')
+        assert 'bindata/BIN0001.jpg' == xpath1(frame1, 'draw:image/@xlink:href')
+
+    def test_aligns(self):
+        ''' 그림 객체 ShapePicture '''
+        odt = example_to_odt('aligns.hwp')
+        rect = xpath(odt.content, '//draw:rect')
+
+        # NOTE: svg:x/svg:y와 연계해서 위치를 지정할 수 있는 건
+        # from-left, from-top 뿐이므로, 다른 방향으로부터 지정된
+        # 값들은 기준 공간과 객체의 너비/높이를 사용하여
+        # from-left와 ftom-top의 값으로 변환되어야 함
+        # 이때 기준 공간은 horizontal/vertical-rel 값으로
+        # 정해짐. 이 테스트에서는 page-content로 고정되어 있으므로,
+        # 기준 공간은 종이의 여백을 제외한 텍스트 영역이 됨.
+
+        # NOTE: horizontal/vertical-pos를 center/right/middle/bottom
+        # 등으로 지정할 수 있는 특수한 경우들에 대한 처리가 되는지 확인한다
+        # 가령 halign=center, x=0 이라면 horizontal-pos를 center로
+        # 지정할 수 있다
+
+        # halign: left 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(1)
+        self.assertEquals('from-left', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[0], '@svg:x'))
+
+        # halign: left 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(2)
+        self.assertEquals('from-left', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('10mm', xpath1(rect[1], '@svg:x'))
+
+        # halign: center 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(3)
+        self.assertEquals('center', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[2], '@svg:x'))
+
+        # halign: center -10mm
+        props = odt.automatic_style_shaperect_graphic_properties(4)
+        #self.assertEquals('center', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[3], '@svg:x'))
+
+        # halign: right 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(5)
+        self.assertEquals('right', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[4], '@svg:x'))
+
+        # halign: right 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(6)
+        #self.assertEquals('right', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[5], '@svg:x'))
+
+        # halign: inside 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(7)
+        self.assertEquals('from-inside', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[6], '@svg:x'))
+
+        # halign: inside 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(8)
+        #self.assertEquals('from-inside', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[7], '@svg:x'))
+
+        # halign: outside 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(9)
+        self.assertEquals('outside', xpath1(props, '@style:horizontal-pos'))
+        self.assertEquals('0mm', xpath1(rect[8], '@svg:x'))
+
+        # halign: outside 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(10)
+        #self.assertEquals('outside', xpath1(props, '@style:horizontal-pos'))
+        #self.assertEquals('0mm', xpath1(rect[9], '@svg:x'))
+
+        # valign: top 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(11)
+        self.assertEquals('from-top', xpath1(props, '@style:vertical-pos'))
+        self.assertEquals('0mm', xpath1(rect[10], '@svg:y'))
+
+        # valign: top 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(12)
+        self.assertEquals('from-top', xpath1(props, '@style:vertical-pos'))
+        self.assertEquals('10mm', xpath1(rect[11], '@svg:y'))
+
+        # valign: center 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(13)
+        self.assertEquals('middle', xpath1(props, '@style:vertical-pos'))
+        #self.assertEquals('0mm', xpath1(rect[12], '@svg:y'))
+
+        # valign: center 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(14)
+        #self.assertEquals('middle', xpath1(props, '@style:vertical-pos'))
+        #self.assertEquals('10mm', xpath1(rect[13], '@svg:y'))
+
+        # valign: bottom 0mm
+        props = odt.automatic_style_shaperect_graphic_properties(15)
+        self.assertEquals('bottom', xpath1(props, '@style:vertical-pos'))
+        self.assertEquals('0mm', xpath1(rect[14], '@svg:y'))
+
+        # valign: bottom 10mm
+        props = odt.automatic_style_shaperect_graphic_properties(16)
+        #self.assertEquals('bottom', xpath1(props, '@style:vertical-pos'))
+        #self.assertEquals('10mm', xpath1(rect[15], '@svg:y'))
+
+
+class TestConverter(TestCase):
+
+    def test_convert_bindata(self):
+        hwp5file = example('sample-5017.hwp')
+        try:
+            f = hwp5file['BinData']['BIN0002.jpg'].open()
+            try:
+                data1 = f.read()
+            finally:
+                f.close()
+
+            from hwp5.hwp5odt import convert, ODTPackage
+            odtpkg = ODTPackage('sample-5017.odt')
+            try:
+                convert(hwp5file, odtpkg)
+            finally:
+                odtpkg.close()
+        finally:
+            hwp5file.close()
+
+        from zipfile import ZipFile
+        zf = ZipFile('sample-5017.odt')
+        data2 = zf.read('bindata/BIN0002.jpg')
+
+        self.assertEquals(data1, data2)

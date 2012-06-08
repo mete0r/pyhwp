@@ -13,31 +13,26 @@ def read(filename):
     finally:
         f.close()
 
-from setuptools import setup
+from setuptools import setup, find_packages
 setup(
         name='pyhwp',
-        version='0.1a7',
+        version='0.1a8',
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
         long_description=read('README'),
         author = 'mete0r',
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
-        packages = ['hwp5'],
-        package_data = dict(hwp5=['xsl/*.xsl']),
+        packages = find_packages('pyhwp'),
+        package_dir={'': 'pyhwp'},
+        package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
-        install_requires=['OleFileIO_PL >=0.20'],
-        extras_require=dict(test=['simplejson', 'lxml']),
+        install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt == 0.3'],
+        extras_require=dict(test=['lxml']),
 
         entry_points = {
             'console_scripts': [
                 'hwp5proc = hwp5.proc:main',
-                'hwp5file = hwp5.filestructure:main',
-                'unole = hwp5.filestructure:unole',
-                'hwp5rec = hwp5.recordstream:main',
-                'hwp5bin = hwp5.binmodel:main',
-                'hwp5xml = hwp5.xmlmodel:main',
-                'rawzlib = hwp5.zlib_raw_codec:main',
                 'hwp5odt = hwp5.hwp5odt:main',
                 'hwp5txt = hwp5.hwp5txt:main',
                 ]

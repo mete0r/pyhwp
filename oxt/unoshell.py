@@ -92,9 +92,7 @@ class Fac(pyhwp.Fac):
 
         tempfile = self.TempFile()
         tmpfile = FileFromStream(tempfile)
-
-        from hwp5.hwp5odt import generate_hwp5xml
-        generate_hwp5xml(tmpfile, hwpfile)
+        hwpfile.xmlevents().dump(tmpfile)
         tmpfile.seek(0)
         return tempfile
 

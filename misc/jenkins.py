@@ -33,13 +33,18 @@ def test():
 
 def pylint():
     print 'running pylint'
-    system('bin/pylint -f parseable hwp5 | tee pylint.out')
+    system('bin/pylint --rcfile=etc/pylint.rc -f parseable hwp5 | tee pylint.out')
+
+def pep8():
+    print 'running pep8'
+    system('find pyhwp -name "*.py" | grep -v "^pyhwp/build" | xargs bin/pep8 | tee pep8.out')
 
 def main():
     bootstrap()
     buildout()
     test()
     pylint()
+    pep8()
     return 0
 
 if __name__ == '__main__':

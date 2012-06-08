@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import os
 import os.path
@@ -112,8 +113,8 @@ class Fac(object):
     def HwpFileFromInputStream(self, inputstream):
         olestorage = self.OLESimpleStorage(inputstream)
         olefile = OleFileIO_from_OLESimpleStorage(olestorage)
-        from hwp5.filestructure import File
-        return File(olefile)
+        from hwp5.xmlmodel import Hwp5File
+        return Hwp5File(olefile)
 
     def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
         from com.sun.star.beans import NamedValue
@@ -223,15 +224,16 @@ class Fac(object):
         from hwp5.hwp5odt import ODTPackage
         odtpkg = ODTPackage(zf)
         try:
-            from hwp5.hwp5odt import hwp5file_to_odtpkg_converter
+            from hwp5.hwp5odt import Converter
 
             # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
             # we use default xsltproc which uses external `xsltproc' program
             #xsltproc = self.xsltproc_with_LibXSLTTransformer
-            from hwp5.hwp5odt import xsltproc
+            from hwp5.tools import xsltproc
 
-            hwp5file_convert_to_odtpkg = hwp5file_to_odtpkg_converter(xsltproc)
-            hwp5file_convert_to_odtpkg(hwp5file, odtpkg)
+            # convert without RelaxNG validation
+            convert = Converter(xsltproc)
+            convert(hwp5file, odtpkg)
         finally:
             odtpkg.close()
 
@@ -283,7 +285,7 @@ class FileFromStream(object):
     def close(self):
         if hasattr(self.stream, 'closeInput'):
             self.stream.closeInput()
-        if hasattr(self.stream, 'closeOutput'):
+        elif hasattr(self.stream, 'closeOutput'):
             self.stream.closeOutput()
 
 def container_recurse_elements(parent, parent_path_segments):
@@ -316,19 +318,36 @@ class OleFileIO_from_OLESimpleStorage(object):
     def __init__(self, storage):
         self.storage = storage
 
-    def exists(self, name):
-        return self.storage.hasByName(name)
+    def exists(self, path):
+        path_segments = path.split('/')
+        element = container_find_element(self.storage, path_segments)
+        return element is not None
 
     def listdir(self):
         for x in container_recurse_elements(self.storage, []):
             yield x
 
     def openstream(self, path):
-        from com.sun.star.container import NoSuchElementException
         path_segments = path.split('/')
         stream = container_find_element(self.storage, path_segments)
         if stream is not None:
             return FileFromStream(stream)
+
+    def get_type(self, path):
+        path_segments = path.split('/')
+        element = container_find_element(self.storage, path_segments)
+        services = element.SupportedServiceNames
+        if 'com.sun.star.embed.OLESimpleStorage' in services:
+            return 1
+        elif hasattr(element, 'readBytes'):
+            return 2
+        else:
+            return 0
+
+    def close(self):
+        self.storage.dispose()
+        self.storage = None
+
 
 def unofy_value(value):
     if isinstance(value, dict):
@@ -336,6 +355,13 @@ def unofy_value(value):
     elif isinstance(value, list):
         value = tuple(value)
     return value
+
+def xenumeration_generator(xenum):
+    while xenum.hasMoreElements():
+        yield xenum.nextElement()
+
+def xenumeration_list(xenum):
+    return list(xenumeration_generator(xenum))
 
 def dict_to_propseq(d):
     from com.sun.star.beans import PropertyValue
@@ -359,7 +385,7 @@ class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
 
     def skipBytes(self, nBytesToSkip):
         #logging.debug('InputStream.skipBytes(%d)', nBytesToSkip)
-        data = self.f.read(nBytesToSkip)
+        self.f.read(nBytesToSkip)
 
     def available(self):
         #logging.debug('InputStream.available()')
@@ -461,3 +487,150 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
     def cancel(self):
         logging.debug('Importer cancel')
 
+
+@implementation('pyhwp.TestJob', 'com.sun.star.task.XJobExecutor')
+class TestJob(unohelper.Base, XJobExecutor):
+    def __init__(self, ctx):
+        self.ctx = ctx
+
+    def trigger(self, args):
+        logging.debug('testjob %s', args)
+
+        wd = args
+
+        import os
+        original_wd = os.getcwd()
+        try:
+            os.chdir(wd)
+
+            from unittest import TextTestRunner
+            testrunner = TextTestRunner()
+
+            from unittest import TestSuite
+            testrunner.run(TestSuite(self.tests()))
+        finally:
+            os.chdir(original_wd)
+
+    def tests(self):
+        from unittest import defaultTestLoader
+        yield defaultTestLoader.loadTestsFromTestCase(OleFileTest)
+        yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
+        yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
+        from hwp5.tests import test_suite
+        yield test_suite()
+
+
+from unittest import TestCase
+class DetectorTest(TestCase):
+
+    def test_detect(self):
+        context = uno.getComponentContext()
+
+        f = file('fixtures/sample-5017.hwp', 'r')
+        stream = InputStreamFromFileLike(f)
+        mediadesc = dict_to_propseq(dict(InputStream=stream))
+
+        svm = context.ServiceManager
+        detector = svm.createInstanceWithContext('pyhwp.Detector', context)
+        typename, mediadesc2 = detector.detect(mediadesc)
+        self.assertEquals('writer_pyhwp_HWPv5', typename)
+
+class ImporterTest(TestCase):
+
+    def test_filter(self):
+        context = uno.getComponentContext()
+        f = file('fixtures/sample-5017.hwp', 'r')
+        stream = InputStreamFromFileLike(f)
+        mediadesc = dict_to_propseq(dict(InputStream=stream))
+
+        svm = context.ServiceManager
+        importer = svm.createInstanceWithContext('pyhwp.Importer', context)
+        desktop = svm.createInstanceWithContext('com.sun.star.frame.Desktop',
+                                                context)
+        doc = desktop.loadComponentFromURL('private:factory/swriter', '_blank',
+                                           0, ())
+
+        importer.setTargetDocument(doc)
+        importer.filter(mediadesc)
+
+        text = doc.getText()
+
+        paragraphs = text.createEnumeration()
+        paragraphs = xenumeration_list(paragraphs)
+        for paragraph_ix, paragraph in enumerate(paragraphs):
+            logging.info('Paragraph %s', paragraph_ix)
+            logging.debug('%s', paragraph)
+
+            services = paragraph.SupportedServiceNames
+            if 'com.sun.star.text.Paragraph' in services:
+                portions = xenumeration_list(paragraph.createEnumeration())
+                for portion_ix, portion in enumerate(portions):
+                    logging.info('Portion %s: %s', portion_ix,
+                                 portion.TextPortionType)
+                    if portion.TextPortionType == 'Text':
+                        logging.info('- %s', portion.getString())
+                    elif portion.TextPortionType == 'Frame':
+                        logging.debug('%s', portion)
+                        textcontent_name = 'com.sun.star.text.TextContent'
+                        en = portion.createContentEnumeration(textcontent_name)
+                        contents = xenumeration_list(en)
+                        for content in contents:
+                            logging.debug('content: %s', content)
+                            content_services = content.SupportedServiceNames
+                            if ('com.sun.star.drawing.GraphicObjectShape' in
+                                content_services):
+                                logging.info('graphic url: %s',
+                                             content.GraphicURL)
+                                logging.info('graphic stream url: %s',
+                                             content.GraphicStreamURL)
+            if 'com.sun.star.text.TextTable' in services:
+                pass
+            else:
+                pass
+
+        paragraph_portions = paragraphs[0].createEnumeration()
+        paragraph_portions = xenumeration_list(paragraph_portions)
+        self.assertEquals(u'한글 ', paragraph_portions[0].getString())
+
+        paragraph_portions = paragraphs[16].createEnumeration()
+        paragraph_portions = xenumeration_list(paragraph_portions)
+        contents = paragraph_portions[1].createContentEnumeration('com.sun.star.text.TextContent')
+        contents = xenumeration_list(contents)
+        self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
+                          contents[0].GraphicStreamURL)
+
+        graphics = doc.getGraphicObjects()
+        graphics = xenumeration_list(graphics.createEnumeration())
+        logging.debug('graphic: %s', graphics)
+
+        frames = doc.getTextFrames()
+        frames = xenumeration_list(frames.createEnumeration())
+        logging.debug('frames: %s', frames)
+
+class OleFileTest(TestCase):
+
+    def test_open(self):
+        context = uno.getComponentContext()
+        fac = Fac(context)
+
+        f = file('fixtures/sample-5017.hwp', 'r')
+        inputstream = InputStreamFromFileLike(f)
+        olestorage = fac.OLESimpleStorage(inputstream)
+        olefile = OleFileIO_from_OLESimpleStorage(olestorage)
+        self.assertEquals(1, olefile.get_type('BodyText'))
+        self.assertEquals(2, olefile.get_type('BodyText/Section0'))
+        self.assertEquals(2, olefile.get_type('DocInfo'))
+
+        self.assertTrue(olefile.exists('BodyText'))
+        self.assertTrue(olefile.exists('BodyText/Section0'))
+        self.assertTrue(olefile.exists('DocInfo'))
+        self.assertFalse(olefile.exists('nonexists'))
+
+        from hwp5.xmlmodel import Hwp5File
+        hwp5file = Hwp5File(olefile)
+        section0 = hwp5file.bodytext.section(0)
+        record = section0.record(0)
+        from hwp5.tagids import HWPTAG_PARA_HEADER
+        self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
+
+        olefile.close()

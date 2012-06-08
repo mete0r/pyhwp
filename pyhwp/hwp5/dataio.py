@@ -21,10 +21,8 @@
 #
 import struct
 import logging
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from .importhelper import importStringIO
+StringIO = importStringIO()
 
 class Eof(Exception):
     def __init__(self, *args):
@@ -45,7 +43,9 @@ def readn(f, size):
 
 class Primitive(type):
     def read(self, f, context=None):
-        return struct.unpack(self.fmt, readn(f, self.calcsize))[0]
+        return self.decode(readn(f, self.calcsize))
+    def decode(self, s, context=None):
+        return struct.unpack(self.fmt, s)[0]
 
 class _new(object):
     def __init__(self, basetype):
