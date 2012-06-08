@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-'''HWP format version 5 processor.
+'''Do various operations on HWPv5 files.
 
-Usage:
+Usage::
+
+    hwp5proc version <hwp5file>
+    hwp5proc summaryinfo <hwp5file>
     hwp5proc ls [--with-extra | --ole] <hwp5file>
     hwp5proc cat [--with-extra | --ole] <hwp5file> <stream>
     hwp5proc unpack [--with-extra | --ole] <hwp5file> [<out-directory>]
-    hwp5proc version <hwp5file>
-    hwp5proc summaryinfo <hwp5file>
     hwp5proc records [<hwp5file> <record-stream>]
     hwp5proc models [<hwp5file> <record-stream> | -V <version>]
     hwp5proc xml <hwp5file>
@@ -14,12 +15,155 @@ Usage:
     hwp5proc -h | --help
     hwp5proc --version
 
-Options:
+Options::
+
     -h --help       Show this screen
     --version       Show version
-    --with-extra    process with extra parsed items
-    --ole           treat <hwpfile> as an OLE Compound File
-    -V              HWPv5 version [default: 5.0.0.0]
+    --with-extra    Process with extra parsed items
+    --ole           Treat <hwpfile> as an OLE Compound File. As a result,
+                    some streams will be presented as-is. (i.e. not decompressed)
+    -V              HWPv5 format version [default: 5.0.0.0]
+
+
+``hwp5proc version``
+--------------------
+Print HWP file format version of <hwp5file>.
+
+
+``hwp5proc summaryinfo``
+------------------------
+Print summary information of <hwp5file>.
+
+
+``hwp5proc ls``
+---------------
+List streams in the <hwp5file>.
+
+Example: List without virtual streams::
+
+    $ hwp5proc ls sample/sample-5017.hwp
+
+    \\x05HwpSummaryInformation
+    BinData/BIN0002.jpg
+    BinData/BIN0002.png
+    BinData/BIN0003.png
+    BodyText/Section0
+    DocInfo
+    DocOptions/_LinkDoc
+    FileHeader
+    PrvImage
+    PrvText
+    Scripts/DefaultJScript
+    Scripts/JScriptVersion
+
+Example: List virtual streams too::
+
+    $ hwp5proc ls --with-extra sample/sample-5017.hwp
+
+    \\x05HwpSummaryInformation
+    \\x05HwpSummaryInformation.txt
+    BinData/BIN0002.jpg
+    BinData/BIN0002.png
+    BinData/BIN0003.png
+    BodyText/Section0
+    BodyText/Section0.models
+    BodyText/Section0.records
+    BodyText/Section0.xml
+    BodyText.xml
+    DocInfo
+    DocInfo.models
+    DocInfo.records
+    DocInfo.xml
+    DocOptions/_LinkDoc
+    FileHeader
+    FileHeader.txt
+    PrvImage
+    PrvText
+    PrvText.utf8
+    Scripts/DefaultJScript
+    Scripts/JScriptVersion
+
+
+``hwp5proc cat``
+----------------
+
+Extract out the specified stream in the <hwp5file> to the standard output.
+
+Example::
+
+    $ hwp5proc cat --with-extra samples/sample-5017.hwp FileHeader.txt
+
+    ccl: 0
+    cert_drm: 0
+    cert_encrypted: 0
+    cert_signature_extra: 0
+    cert_signed: 0
+    compressed: 1
+    distributable: 0
+    drm: 0
+    history: 0
+    password: 0
+    script: 0
+    signature: HWP Document File
+    version: 5.0.1.7
+    xmltemplate_storage: 0
+
+    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg > BIN0002.jpg
+
+
+``hwp5proc unpack``
+-------------------
+Extract out streams in the specified <hwp5file> to a directory.
+
+Example::
+
+    $ hwp5proc unpack samples/sample-5017.hwp
+    $ ls sample-5017
+
+Example::
+
+    $ hwp5proc unpack --with-extra samples/sample-5017.hwp
+    $ cat sample-5017/PrvText.utf8
+
+
+``hwp5proc records``
+--------------------
+Print records in the specified <record-stream>.
+
+Example::
+
+    $ hwp5proc records samples/sample-5017.hwp DocInfo
+
+Example::
+
+    $ hwp5proc unpack samples/sample-5017.hwp
+    $ hwp5proc records < sample-5017/DocInfo
+
+
+``hwp5proc models``
+-------------------
+Print parsed binary models in the specified <record-stream>.
+
+Example::
+
+    $ hwp5proc models samples/sample-5017.hwp BodyText/Section0
+
+Example::
+
+    $ hwp5proc models samples/sample-5017.hwp BodyText/Section0 > Section0.bin
+    $ hwp5proc models < Section0.bin
+    $ hwp5proc models -V 5.0.1.7 < Section0.bin
+
+
+``hwp5proc xml``
+----------------
+Transform <hwp5file> into an XML.
+
+Example::
+
+    $ hwp5proc xml samples/sample-5017.hwp > sample-5017.xml
+    $ xmllint --format sample-5017.xml
+
 '''
 
 import logging
@@ -31,8 +175,12 @@ logger = logging.getLogger(__name__)
 def main():
     from docopt import docopt
     from pkg_resources import get_distribution
+
+    # ReST to docopt conversion
+    doc = __doc__.replace('::\n\n', ':\n').replace('``', '')
+
     dist = get_distribution('pyhwp')
-    args = docopt(__doc__, version=dist.version)
+    args = docopt(doc, version=dist.version)
     if args['version']:
         version(args)
     elif args['summaryinfo']:
@@ -54,6 +202,8 @@ def main():
 
 
 def version(args):
+    ''' Print HWP file format version of <hwp5file>.
+    '''
     from .xmlmodel import Hwp5File
     hwp5file = Hwp5File(args['<hwp5file>'])
     h = hwp5file.fileheader
@@ -62,6 +212,8 @@ def version(args):
 
 
 def summaryinfo(args):
+    ''' Print summary information of <hwp5file>.
+    '''
     from .xmlmodel import Hwp5File
     hwpfile = Hwp5File(args['<hwp5file>'])
     try:
@@ -90,12 +242,16 @@ def open_hwpfile(args):
 
 
 def ls(args):
+    ''' List streams in the <hwp5file>.
+    '''
     from .storage import printstorage
     hwpfile = open_hwpfile(args)
     printstorage(hwpfile)
 
 
 def cat(args):
+    ''' Extract out the specified stream in the <hwp5file> to the standard output.
+    '''
     from .storage import open_storage_item
     import sys
     hwp5file = open_hwpfile(args)
@@ -114,6 +270,8 @@ def cat(args):
 
 
 def unpack(args):
+    ''' Extract out streams in the specified <hwp5file> to a directory.
+    '''
     from . import storage
     import os, os.path
 
@@ -144,6 +302,8 @@ def parse_recordstream_name(hwpfile, streamname):
 
 
 def records(args):
+    ''' Print records in the specified <record-stream>.
+    '''
     import sys
     filename = args['<hwp5file>']
     if filename:
@@ -159,6 +319,8 @@ def records(args):
 
 
 def models(args):
+    ''' Print parsed binary models in the specified <record-stream>.
+    '''
     import sys
     filename = args['<hwp5file>']
     if filename:
@@ -177,6 +339,8 @@ def models(args):
 
 
 def xml(args):
+    ''' Transform <hwp5file> into an XML.
+    '''
     import sys
     from .xmlmodel import Hwp5File
 
