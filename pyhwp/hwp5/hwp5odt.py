@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 '''HWPv5 to ODT converter
 
-Usage:
+Usage::
+
     hwp5odt <hwp5file>
     hwp5odt -h | --help
     hwp5odt --version
 
-Options:
+Options::
+
     -h --help       Show this screen
     --version       Show version
 '''
@@ -15,10 +17,12 @@ import os, os.path
 from hwp5 import tools
 
 def main():
+    from hwp5.proc import rest_to_docopt
     from docopt import docopt
     from pkg_resources import get_distribution
+    doc = rest_to_docopt(__doc__)
     dist = get_distribution('pyhwp')
-    args = docopt(__doc__, version=dist.version)
+    args = docopt(doc, version=dist.version)
     make(args)
 
 class ODTPackage(object):

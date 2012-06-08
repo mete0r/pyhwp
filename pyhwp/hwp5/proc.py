@@ -172,14 +172,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def rest_to_docopt(doc):
+    ''' ReST to docopt conversion
+    '''
+    return doc.replace('::\n\n', ':\n').replace('``', '')
 
 def main():
     from docopt import docopt
     from pkg_resources import get_distribution
 
-    # ReST to docopt conversion
-    doc = __doc__.replace('::\n\n', ':\n').replace('``', '')
-
+    doc = rest_to_docopt(__doc__)
     dist = get_distribution('pyhwp')
     args = docopt(doc, version=dist.version)
     if args['version']:

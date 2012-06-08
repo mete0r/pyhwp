@@ -1,22 +1,26 @@
 # -*- coding: utf-8 -*-
 '''HWPv5 to text converter
 
-Usage:
+Usage::
+
     hwp5txt <hwp5file>
     hwp5txt -h | --help
     hwp5txt --version
 
-Options:
+Options::
+
     -h --help       Show this screen
     --version       Show version
 '''
 import os, os.path
 
 def main():
+    from hwp5.proc import rest_to_docopt
     from docopt import docopt
     from pkg_resources import get_distribution
+    doc = rest_to_docopt(__doc__)
     dist = get_distribution('pyhwp')
-    args = docopt(__doc__, version=dist.version)
+    args = docopt(doc, version=dist.version)
     make(args)
 
 def make(args):
