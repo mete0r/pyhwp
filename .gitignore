@@ -17,3 +17,5 @@ coverage.xml
 *.egg-info
 deb_dist
 pep8.out
+build
+dist
