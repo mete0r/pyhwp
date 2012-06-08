@@ -5,9 +5,9 @@ Usage::
 
     hwp5proc version <hwp5file>
     hwp5proc summaryinfo <hwp5file>
-    hwp5proc ls [--with-extra | --ole] <hwp5file>
-    hwp5proc cat [--with-extra | --ole] <hwp5file> <stream>
-    hwp5proc unpack [--with-extra | --ole] <hwp5file> [<out-directory>]
+    hwp5proc ls [--vstreams | --ole] <hwp5file>
+    hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
+    hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
     hwp5proc records [<hwp5file> <record-stream>]
     hwp5proc models [<hwp5file> <record-stream> | -V <version>]
     hwp5proc xml <hwp5file>
@@ -19,7 +19,8 @@ Options::
 
     -h --help       Show this screen
     --version       Show version
-    --with-extra    Process with extra parsed items
+    --vstreams      Process with virtual streams (i.e. parsed/converted form
+                    of real streams)
     --ole           Treat <hwpfile> as an OLE Compound File. As a result,
                     some streams will be presented as-is. (i.e. not decompressed)
     -V              HWPv5 format version [default: 5.0.0.0]
@@ -58,7 +59,7 @@ Example: List without virtual streams::
 
 Example: List virtual streams too::
 
-    $ hwp5proc ls --with-extra sample/sample-5017.hwp
+    $ hwp5proc ls --vstreams sample/sample-5017.hwp
 
     \\x05HwpSummaryInformation
     \\x05HwpSummaryInformation.txt
@@ -91,7 +92,7 @@ Extract out the specified stream in the <hwp5file> to the standard output.
 
 Example::
 
-    $ hwp5proc cat --with-extra samples/sample-5017.hwp FileHeader.txt
+    $ hwp5proc cat --vstreams samples/sample-5017.hwp FileHeader.txt
 
     ccl: 0
     cert_drm: 0
@@ -122,7 +123,7 @@ Example::
 
 Example::
 
-    $ hwp5proc unpack --with-extra samples/sample-5017.hwp
+    $ hwp5proc unpack --vstreams samples/sample-5017.hwp
     $ cat sample-5017/PrvText.utf8
 
 
@@ -236,7 +237,7 @@ def open_hwpfile(args):
         hwpfile = OleStorage(filename)
     else:
         hwpfile = Hwp5File(filename)
-        if args['--with-extra']:
+        if args['--vstreams']:
             hwpfile = ExtraItemStorage(hwpfile)
     return hwpfile
 
