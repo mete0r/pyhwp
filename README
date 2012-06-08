@@ -1,12 +1,59 @@
 pyhwp
 =====
 
-HWPv5 format processor.
+HWP Document Format v5 parser & processor.
 
 Features
 --------
 
-- Analyze and extract internal streams out from a HWPv5 file
-- Conversion to OpenDocument format (.odt) or plain text (.txt) (Experimental)
+- Analyze and extract internal streams out from a HWP Document Format v5 file
+- Conversion to OpenDocument format (.odt) or plain text (.txt) (*Experimental*)
 
-Documentation is `here <http://pyhwp.readthedocs.org>`.
+Installation
+------------
+
+from `pypi <http://pypi.python.org/pypi/pyhwp>`_::
+
+   pip install pyhwp
+
+from `github <https://github.com/mete0r/pyhwp>`_::
+
+   git clone git://github.com/mete0r/pyhwp.git
+   cd pyhwp
+   python bootstrap.py
+   bin/buildout
+
+Requirements
+------------
+
+- Python 2.5, 2.6 or 2.7
+- simplejson
+- OleFileIO >= 0.20
+
+Development & Documentation
+---------------------------
+
+- Documentation: `http://pyhwp.readthedocs.org <http://pyhwp.readthedocs.org>`_
+- PyPI: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/pyhwp>`_
+- GitHub: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_
+- Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_
+- Feedbacks & contributions are welcome!
+
+Contributors
+------------
+
+Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_
+
+License
+-------
+
+.. image:: http://www.gnu.org/graphics/agplv3-155x51.png
+
+`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-3.0.html>`_
+`(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_
+
+Disclosure
+----------
+
+pyhwp는 `(주)한글과컴퓨터 <http://www.hancom.co.kr>`_ 의 한/글 문서 파일(.hwp) 공개 문서를
+참고하여 개발하였습니다.
