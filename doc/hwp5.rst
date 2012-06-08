@@ -63,5 +63,5 @@ module :mod:`hwp5.treeop`
 
 module :mod:`hwp5.utils`
 =========================
-.. automodule:: hwp5.treeop
+.. automodule:: hwp5.utils
    :members:
