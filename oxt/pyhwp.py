@@ -112,9 +112,9 @@ class Fac(object):
 
     def HwpFileFromInputStream(self, inputstream):
         olestorage = self.OLESimpleStorage(inputstream)
-        olefile = OleFileIO_from_OLESimpleStorage(olestorage)
+        adapter = OleStorageAdapter(olestorage)
         from hwp5.xmlmodel import Hwp5File
-        return Hwp5File(olefile)
+        return Hwp5File(adapter)
 
     def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
         from com.sun.star.beans import NamedValue
@@ -326,68 +326,6 @@ class OleStorageStream(object):
         return FileFromStream(stream)
 
 
-def container_recurse_elements(parent, parent_path_segments):
-    for name in parent.getElementNames():
-        elem = parent.getByName(name)
-
-        path_segments = parent_path_segments + [name]
-        yield path_segments
-
-        if hasattr(elem, 'getElementNames'):
-            for x in container_recurse_elements(elem, path_segments):
-                yield x
-
-def container_find_element(parent, path_segments):
-    if len(path_segments) == 0:
-        return parent
-
-    if not hasattr(parent, 'getByName'):
-        return None
-
-    from com.sun.star.container import NoSuchElementException
-    child_name = path_segments[0]
-    try:
-        child = parent.getByName(child_name)
-    except NoSuchElementException:
-        return None
-    return container_find_element(child, path_segments[1:])
-
-
-class OleFileIO_from_OLESimpleStorage(object):
-    def __init__(self, storage):
-        self.storage = storage
-
-    def exists(self, path):
-        path_segments = path.split('/')
-        element = container_find_element(self.storage, path_segments)
-        return element is not None
-
-    def listdir(self):
-        for x in container_recurse_elements(self.storage, []):
-            yield x
-
-    def openstream(self, path):
-        path_segments = path.split('/')
-        stream = container_find_element(self.storage, path_segments)
-        if stream is not None:
-            return FileFromStream(stream)
-
-    def get_type(self, path):
-        path_segments = path.split('/')
-        element = container_find_element(self.storage, path_segments)
-        services = element.SupportedServiceNames
-        if 'com.sun.star.embed.OLESimpleStorage' in services:
-            return 1
-        elif hasattr(element, 'readBytes'):
-            return 2
-        else:
-            return 0
-
-    def close(self):
-        self.storage.dispose()
-        self.storage = None
-
-
 def unofy_value(value):
     if isinstance(value, dict):
         value = dict_to_propseq(value)
@@ -545,7 +483,6 @@ class TestJob(unohelper.Base, XJobExecutor):
     def tests(self):
         from unittest import defaultTestLoader
         yield defaultTestLoader.loadTestsFromTestCase(OleStorageAdapterTest)
-        yield defaultTestLoader.loadTestsFromTestCase(OleFileTest)
         yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
         yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
         from hwp5.tests import test_suite
@@ -638,34 +575,6 @@ class ImporterTest(TestCase):
         frames = doc.getTextFrames()
         frames = xenumeration_list(frames.createEnumeration())
         logging.debug('frames: %s', frames)
-
-class OleFileTest(TestCase):
-
-    def test_open(self):
-        context = uno.getComponentContext()
-        fac = Fac(context)
-
-        f = file('fixtures/sample-5017.hwp', 'r')
-        inputstream = InputStreamFromFileLike(f)
-        olestorage = fac.OLESimpleStorage(inputstream)
-        olefile = OleFileIO_from_OLESimpleStorage(olestorage)
-        self.assertEquals(1, olefile.get_type('BodyText'))
-        self.assertEquals(2, olefile.get_type('BodyText/Section0'))
-        self.assertEquals(2, olefile.get_type('DocInfo'))
-
-        self.assertTrue(olefile.exists('BodyText'))
-        self.assertTrue(olefile.exists('BodyText/Section0'))
-        self.assertTrue(olefile.exists('DocInfo'))
-        self.assertFalse(olefile.exists('nonexists'))
-
-        from hwp5.xmlmodel import Hwp5File
-        hwp5file = Hwp5File(olefile)
-        section0 = hwp5file.bodytext.section(0)
-        record = section0.record(0)
-        from hwp5.tagids import HWPTAG_PARA_HEADER
-        self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
-
-        olefile.close()
 
 
 class OleStorageAdapterTest(TestCase):
