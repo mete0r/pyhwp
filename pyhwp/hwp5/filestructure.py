@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import os.path
 import codecs
 import zlib
-from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
 from .storage import StorageWrapper
@@ -118,126 +116,11 @@ def recoder(backend_encoding, frontend_encoding, errors='strict'):
 
 
 def is_hwp5file(filename):
+    from OleFileIO_PL import OleFileIO, isOleFile
     if not isOleFile(filename):
         return False
     olefile = OleFileIO(filename)
     return olefile.exists('FileHeader')
-
-
-def open_fileheader(olefile):
-    return olefile.openstream('FileHeader')
-
-
-def decode_fileheader(f):
-    attributes = FileHeader.read(f)
-    fileheader = FileHeader()
-    fileheader.__dict__.update((name, type(attributes.get(name)))
-                               for type, name in FileHeader.attributes(dict()))
-    return fileheader
-
-
-def get_fileheader(olefile):
-    f = open_fileheader(olefile)
-    return decode_fileheader(f)
-
-
-def open_summaryinfo(olefile):
-    return olefile.openstream('\005HwpSummaryInformation')
-
-
-def open_previewtext(olefile, charset=None):
-    f = olefile.openstream('PrvText')
-    if charset:
-        f = recode(f, 'utf-16le', charset)
-    return f
-
-
-def open_previewimage(olefile):
-    return olefile.openstream('PrvImage')
-
-
-def open_docinfo(olefile, compressed=True):
-    f = olefile.openstream('DocInfo')
-    if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15))  # without gzip header
-    return f
-
-
-def open_bodytext(olefile, idx, compressed=True):
-    try:
-        f = olefile.openstream('BodyText/Section' + str(idx))
-    except IOError:
-        raise IndexError(idx)
-    if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15))
-    return f
-
-
-def open_viewtext(olefile, idx):
-    try:
-        f = olefile.openstream('ViewText/Section' + str(idx))
-    except IOError:
-        raise IndexError(idx)
-    return f
-
-
-def open_viewtext_head(olefile, idx):
-    f = open_viewtext(olefile, idx)
-    head = f.read(4 + 256)
-    return StringIO(head)
-
-
-def open_viewtext_tail(olefile, idx):
-    f = open_viewtext(olefile, idx)
-    f.seek(4 + 256)
-    return f
-
-
-def open_bindata(olefile, name, compressed=True):
-    try:
-        f = olefile.openstream('BinData/%s' % name)
-    except IOError:
-        raise KeyError(name)
-    if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15))
-    return f
-
-
-def open_script(olefile, name, compressed=True):
-    try:
-        f = olefile.openstream('Scripts/%s' % name)
-    except IOError:
-        raise KeyError(name)
-    if compressed:
-        return StringIO(zlib.decompress(f.read(), -15))
-    return f
-
-
-def list_streams(olefile):
-    for e in olefile.listdir():
-        yield os.path.join(*e)
-
-
-def list_sections(olefile):
-    prefix = 'BodyText/Section'
-    l = []
-    for name in list_streams(olefile):
-        if name.startswith(prefix):
-            l.append(int(name[len(prefix):]))
-    l.sort()
-    return l
-
-
-def list_bindata(olefile):
-    for name in list_streams(olefile):
-        prefix = 'BinData/'
-        if name.startswith(prefix):
-            yield name[len(prefix):]
-
-
-class BadFormatError(Exception):
-    def __str__(self):
-        return '%s: \'%s\'' % (self.args)
 
 
 class GeneratorReader(object):
