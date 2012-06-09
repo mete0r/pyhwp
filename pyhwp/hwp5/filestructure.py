@@ -15,6 +15,9 @@ logger = logging.getLogger(__name__)
 StringIO = importStringIO()
 
 
+HWP5_SIGNATURE = 'HWP Document File'+('\x00'*15)
+
+
 class BYTES(type):
     def __new__(mcs, size):
         return type.__new__(mcs, 'BYTES%d' % size, (str,), dict(size=size))
@@ -116,11 +119,22 @@ def recoder(backend_encoding, frontend_encoding, errors='strict'):
 
 
 def is_hwp5file(filename):
+    from hwp5.storage.ole import OleStorage
     from OleFileIO_PL import OleFileIO, isOleFile
     if not isOleFile(filename):
         return False
     olefile = OleFileIO(filename)
-    return olefile.exists('FileHeader')
+    olestg = OleStorage(olefile)
+    return storage_is_hwp5file(olestg)
+
+
+def storage_is_hwp5file(stg):
+    try:
+        fileheader = stg['FileHeader']
+    except KeyError:
+        return False
+    fileheader = HwpFileHeader(fileheader)
+    return fileheader.signature == HWP5_SIGNATURE
 
 
 class GeneratorReader(object):
@@ -398,6 +412,11 @@ class HwpFileHeader(object):
         return self.value['version']
 
     version = cached_property(get_version)
+
+    def get_signature(self):
+        return self.value['signature']
+
+    signature = cached_property(get_signature)
 
     def get_flags(self):
         return FileHeader.Flags(self.value['flags'])
