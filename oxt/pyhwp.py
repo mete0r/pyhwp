@@ -288,6 +288,44 @@ class FileFromStream(object):
         elif hasattr(self.stream, 'closeOutput'):
             self.stream.closeOutput()
 
+
+class OleStorageAdapter(object):
+
+    def __init__(self, oless):
+        ''' an OLESimpleStorage to hwp5 storage adapter.
+
+        :param oless: an instance of OLESimpleStorage
+        '''
+        self.oless = oless
+
+    def __iter__(self):
+        return iter(self.oless.getElementNames())
+
+    def __getitem__(self, name):
+        from com.sun.star.container import NoSuchElementException
+        try:
+            elem = self.oless.getByName(name)
+        except NoSuchElementException:
+            raise KeyError(name)
+        services = elem.SupportedServiceNames
+        if 'com.sun.star.embed.OLESimpleStorage' in services:
+            return OleStorageAdapter(elem)
+        else:
+            elem.closeInput()
+            return OleStorageStream(self.oless, name)
+
+
+class OleStorageStream(object):
+
+    def __init__(self, oless, name):
+        self.oless = oless
+        self.name = name
+
+    def open(self):
+        stream = self.oless.getByName(self.name)
+        return FileFromStream(stream)
+
+
 def container_recurse_elements(parent, parent_path_segments):
     for name in parent.getElementNames():
         elem = parent.getByName(name)
@@ -313,6 +351,7 @@ def container_find_element(parent, path_segments):
     except NoSuchElementException:
         return None
     return container_find_element(child, path_segments[1:])
+
 
 class OleFileIO_from_OLESimpleStorage(object):
     def __init__(self, storage):
@@ -431,19 +470,11 @@ class Detector(unohelper.Base, XExtendedFilterDetection):
         inputstream = desc['InputStream']
         try:
             olestorage = self.fac.OLESimpleStorage(inputstream)
-            olefile = OleFileIO_from_OLESimpleStorage(olestorage)
+            adapter = OleStorageAdapter(olestorage)
 
-            from hwp5.filestructure import get_fileheader
-
-            if not olefile.exists('FileHeader'):
+            from hwp5.filestructure import storage_is_hwp5file
+            if not storage_is_hwp5file(adapter):
                 return '', mediadesc
-
-            fileheader = get_fileheader(olefile)
-            logging.debug('signature: %s', fileheader.signature)
-            logging.debug('version: %s', fileheader.version)
-            if fileheader.version[0] != 5:
-                return '', mediadesc
-
             logging.debug('TypeName: %s', 'writer_pyhwp_HWPv5')
             return 'writer_pyhwp_HWPv5', mediadesc
         except Exception, e:
@@ -513,6 +544,7 @@ class TestJob(unohelper.Base, XJobExecutor):
 
     def tests(self):
         from unittest import defaultTestLoader
+        yield defaultTestLoader.loadTestsFromTestCase(OleStorageAdapterTest)
         yield defaultTestLoader.loadTestsFromTestCase(OleFileTest)
         yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
         yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
@@ -634,3 +666,42 @@ class OleFileTest(TestCase):
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
 
         olefile.close()
+
+
+class OleStorageAdapterTest(TestCase):
+
+    def get_adapter(self):
+        context = uno.getComponentContext()
+        fac = Fac(context)
+
+        f = file('fixtures/sample-5017.hwp', 'r')
+        inputstream = InputStreamFromFileLike(f)
+        oless = fac.OLESimpleStorage(inputstream)
+        return OleStorageAdapter(oless)
+
+    def test_iter(self):
+        adapter = self.get_adapter()
+
+        self.assertTrue('FileHeader' in adapter)
+        self.assertTrue('DocInfo' in adapter)
+        self.assertTrue('BodyText' in adapter)
+
+    def test_getitem(self):
+        adapter = self.get_adapter()
+
+        bodytext = adapter['BodyText']
+        self.assertTrue('Section0' in bodytext)
+
+        from hwp5.filestructure import HwpFileHeader
+        from hwp5.filestructure import HWP5_SIGNATURE
+
+        fileheader = adapter['FileHeader']
+        fileheader = HwpFileHeader(fileheader)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
+        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
+
+        # reopen (just being careful)
+        fileheader = adapter['FileHeader']
+        fileheader = HwpFileHeader(fileheader)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
+        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
