@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from .utils import cached_property
+from hwp5.utils import cached_property
 
 def example(filename):
-    from .xmlmodel import Hwp5File
+    from hwp5.xmlmodel import Hwp5File
     return Hwp5File('fixtures/'+filename)
 
 def example_to_xml(filename):
@@ -22,7 +22,7 @@ class example_to_odt(object):
         self.xmlfilename = example_to_xml(filename)
 
     def open_content(self):
-        from .hwp5odt import convert
+        from hwp5.hwp5odt import convert
         import os
         r, w = os.pipe()
         r = os.fdopen(r, 'r')
@@ -50,7 +50,7 @@ class example_to_odt(object):
     content = cached_property(content)
 
     def open_styles(self):
-        from .hwp5odt import convert
+        from hwp5.hwp5odt import convert
         import os
         r, w = os.pipe()
         r = os.fdopen(r, 'r')

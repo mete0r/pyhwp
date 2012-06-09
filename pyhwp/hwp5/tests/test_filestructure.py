@@ -2,7 +2,7 @@
 from unittest import TestCase
 from hwp5 import filestructure as FS
 from OleFileIO_PL import OleFileIO
-from .utils import cached_property
+from hwp5.utils import cached_property
 
 class TestBase(TestCase):
 
@@ -165,16 +165,16 @@ class TestHwp5FileBase(TestBase):
 
     @cached_property
     def hwp5file_base(self):
-        from .filestructure import Hwp5FileBase
+        from hwp5.filestructure import Hwp5FileBase
         return Hwp5FileBase(self.olestg)
 
     def test_item_is_hwpfileheader(self):
-        from .filestructure import HwpFileHeader
+        from hwp5.filestructure import HwpFileHeader
         fileheader = self.hwp5file_base['FileHeader']
         self.assertTrue(isinstance(fileheader, HwpFileHeader))
 
     def test_header(self):
-        from .filestructure import HwpFileHeader
+        from hwp5.filestructure import HwpFileHeader
         header = self.hwp5file_base.header
         self.assertTrue(isinstance(header, HwpFileHeader))
 
@@ -185,17 +185,17 @@ class TestHwp5DistDocStream(TestBase):
 
     @cached_property
     def jscriptversion(self):
-        from .filestructure import Hwp5DistDocStream
+        from hwp5.filestructure import Hwp5DistDocStream
         return Hwp5DistDocStream(self.olestg['Scripts']['JScriptVersion'],
                                  self.hwp5file.header.version)
 
     def test_head_record(self):
-        from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
+        from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
         record = self.jscriptversion.head_record()
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
 
     def test_head_record_stream(self):
-        from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
+        from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
         import simplejson
         stream = self.jscriptversion.head_record_stream()
         record = simplejson.load(stream)
@@ -227,11 +227,11 @@ class TestHwp5DistDicStorage(TestBase):
 
     @cached_property
     def scripts(self):
-        from .filestructure import Hwp5DistDocStorage
+        from hwp5.filestructure import Hwp5DistDocStorage
         return Hwp5DistDocStorage(self.olestg['Scripts'])
 
     def test_scripts_other_formats(self):
-        from .filestructure import Hwp5DistDocStream
+        from hwp5.filestructure import Hwp5DistDocStream
         jscriptversion = self.scripts['JScriptVersion']
         self.assertTrue(isinstance(jscriptversion, Hwp5DistDocStream))
 
@@ -242,16 +242,16 @@ class TestHwp5DistDoc(TestBase):
 
     @cached_property
     def hwp5distdoc(self):
-        from .filestructure import Hwp5DistDoc
+        from hwp5.filestructure import Hwp5DistDoc
         return Hwp5DistDoc(self.olestg)
 
     def test_conversion_for(self):
-        from .filestructure import Hwp5DistDocStorage
+        from hwp5.filestructure import Hwp5DistDocStorage
         conversion = self.hwp5distdoc.resolve_conversion_for('Scripts')
         self.assertTrue(conversion is Hwp5DistDocStorage)
 
     def test_getitem(self):
-        from .filestructure import Hwp5DistDocStorage
+        from hwp5.filestructure import Hwp5DistDocStorage
         self.assertTrue(isinstance(self.hwp5distdoc['Scripts'],
                                    Hwp5DistDocStorage))
         self.assertTrue(isinstance(self.hwp5distdoc['ViewText'],
@@ -295,14 +295,14 @@ class TestHwp5Compression(TestBase):
         return self.hwp5file_compressed['Scripts']
 
     def test_docinfo_uncompressed(self):
-        from .recordstream import read_record
-        from .tagids import HWPTAG_DOCUMENT_PROPERTIES
+        from hwp5.recordstream import read_record
+        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
         record = read_record(self.docinfo, 0)
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
 
     def test_bodytext_uncompressed(self):
-        from .recordstream import read_record
-        from .tagids import HWPTAG_PARA_HEADER
+        from hwp5.recordstream import read_record
+        from hwp5.tagids import HWPTAG_PARA_HEADER
         record = read_record(self.bodytext['Section0'].open(), 0)
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
 
@@ -320,33 +320,33 @@ class TestHwp5Compression(TestBase):
 
         JScriptVersion = self.scripts['JScriptVersion'].open()
 
-        from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
-        from .recordstream import read_record
+        from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
+        from hwp5.recordstream import read_record
         distdoc = read_record(JScriptVersion, 0)
         encrypted = JScriptVersion.read()
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, distdoc['tagid'])
         self.assertEquals(16, len(encrypted))
 
-        #from .recordstream import record_to_json
+        #from hwp5.recordstream import record_to_json
         #print record_to_json(distdoc, sort_keys=True, indent=2)
-        #from .dataio import dumpbytes
+        #from hwp5.dataio import dumpbytes
         #print 'Encrypted:', '\n'.join(dumpbytes(encrypted))
 
 
 class TestHwp5File(TestBase):
 
     def test_init_should_accept_string_path(self):
-        from .filestructure import Hwp5File
+        from hwp5.filestructure import Hwp5File
         hwp5file = Hwp5File(self.hwp5file_path)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
     def test_init_should_accept_olefile(self):
-        from .filestructure import Hwp5File
+        from hwp5.filestructure import Hwp5File
         hwp5file = Hwp5File(self.olefile)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
     def test_init_should_accept_olestorage(self):
-        from .filestructure import Hwp5File
+        from hwp5.filestructure import Hwp5File
         hwp5file = Hwp5File(self.olestg)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
@@ -363,19 +363,19 @@ class TestHwp5File(TestBase):
 
     def test_prv_text(self):
         prvtext = self.hwp5file['PrvText']
-        from .filestructure import PreviewText
+        from hwp5.filestructure import PreviewText
         self.assertTrue(isinstance(prvtext, PreviewText))
         expected = '한글 2005 예제 파일입니다.'
         self.assertEquals(expected, str(prvtext)[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
-        from .storage import ExtraItemStorage
+        from hwp5.storage import ExtraItemStorage
         self.hwp5file_name = 'viewtext.hwp'
         self.assertTrue('Section0.tail' in ExtraItemStorage(self.viewtext))
 
     def test_unpack(self):
-        from .storage import ExtraItemStorage
-        from .storage import unpack
+        from hwp5.storage import ExtraItemStorage
+        from hwp5.storage import unpack
         outpath = 'test_unpack'
         import os, os.path, shutil
         if os.path.exists(outpath):
@@ -398,7 +398,7 @@ class TestHwp5File(TestBase):
         self.assertTrue(os.path.exists('test_unpack/Scripts/JScriptVersion'))
 
     def test_if_hwp5file_contains_other_formats(self):
-        from .storage import ExtraItemStorage
+        from hwp5.storage import ExtraItemStorage
         stg = ExtraItemStorage(self.hwp5file)
         self.assertTrue('PrvText.utf8' in list(stg))
 
@@ -427,7 +427,7 @@ class TestSections(TestBase):
 
     @property
     def sections(self):
-        from .filestructure import Sections
+        from hwp5.filestructure import Sections
         return Sections(self.hwp5file.stg['BodyText'], self.hwp5file.header.version)
 
 
@@ -439,7 +439,7 @@ class TestGeneratorReader(object):
             yield 'gen'
             yield 'reader'
 
-        from .filestructure import GeneratorReader
+        from hwp5.filestructure import GeneratorReader
 
         f = GeneratorReader(data())
         self.assertEquals('Hel', f.read(3))
@@ -461,7 +461,7 @@ class TestGeneratorReader(object):
         self.assertEquals(' name isgenreader', f.read(1000))
 
 
-from .utils import cached_property
+from hwp5.utils import cached_property
 class TestUncompress(TestCase):
 
     @cached_property
@@ -480,7 +480,7 @@ class TestUncompress(TestCase):
     def test_incremental_decode(self):
         compressed_data = self.compressed_data
 
-        from .filestructure import ZLibIncrementalDecoder
+        from hwp5.filestructure import ZLibIncrementalDecoder
         dec = ZLibIncrementalDecoder(wbits=-15)
         data = dec.decode(compressed_data[2:2048])
         data += dec.decode(compressed_data[2048:2048+1024])
@@ -492,13 +492,13 @@ class TestUncompress(TestCase):
     def test_uncompress(self):
         from StringIO import StringIO
 
-        from .filestructure import uncompress_gen
+        from hwp5.filestructure import uncompress_gen
         gen = uncompress_gen(StringIO(self.compressed_data[2:]))
         self.assertEquals(self.original_data, ''.join(gen))
 
         #print '-----'
 
-        from .filestructure import uncompress
+        from hwp5.filestructure import uncompress
 
         f = uncompress(StringIO(self.compressed_data[2:]))
         g = StringIO(self.original_data)

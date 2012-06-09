@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from .storage import StorageWrapper
+from hwp5.storage import StorageWrapper
 
 class TestStorageWrapper(TestCase):
 
