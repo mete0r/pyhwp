@@ -233,7 +233,7 @@ def summaryinfo(args):
 def open_hwpfile(args):
     from .xmlmodel import Hwp5File
     from .storage import ExtraItemStorage
-    from .filestructure import OleStorage
+    from .storage.ole import OleStorage
     filename = args['<hwp5file>']
     if args['--ole']:
         hwpfile = OleStorage(filename)

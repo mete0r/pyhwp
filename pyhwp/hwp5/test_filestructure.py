@@ -21,7 +21,8 @@ class TestBase(TestCase):
 
     @property
     def olestg(self):
-        return FS.OleStorage(self.olefile)
+        from hwp5.storage.ole import OleStorage
+        return OleStorage(self.olefile)
 
     @cached_property
     def hwp5file_base(self):
@@ -129,7 +130,7 @@ class TestOleStorage(TestBase):
             pass
 
     def test_init_should_receive_string_olefile(self):
-        from .filestructure import OleStorage
+        from hwp5.storage.ole import OleStorage
         import os.path
         olestg = OleStorage(os.path.join(self.fixtures_dir,
                                          self.hwp5file_name))
@@ -145,6 +146,7 @@ class TestOleStorage(TestBase):
         self.assertEquals(sorted(expected), sorted(gen))
 
     def test_getitem(self):
+        from hwp5.storage.ole import OleStorage
         olestg = self.olestg
 
         try:
@@ -157,7 +159,7 @@ class TestOleStorage(TestBase):
         self.assertTrue(hasattr(fileheader, 'open'))
         
         bindata = olestg['BinData']
-        self.assertTrue(isinstance(bindata, FS.OleStorage))
+        self.assertTrue(isinstance(bindata, OleStorage))
         self.assertEquals('BinData', bindata.path)
 
         self.assertEquals(sorted(['BIN0002.jpg', 'BIN0002.png', 'BIN0003.png']),

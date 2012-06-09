@@ -240,92 +240,6 @@ class BadFormatError(Exception):
         return '%s: \'%s\'' % (self.args)
 
 
-def olefile_listdir(olefile, path):
-    if path == '' or path == '/':
-        # we use a list instead of a set
-        # for python 2.3 compatibility
-        yielded = []
-
-        for stream in olefile.listdir():
-            top_item = stream[0]
-            if top_item in yielded:
-                continue
-            yielded.append(top_item)
-            yield top_item
-        return
-
-    if not olefile.exists(path):
-        raise IOError('%s not exists' % path)
-    if olefile.get_type(path) != 1:
-        raise IOError('%s not a storage' % path)
-    path_segments = path.split('/')
-    for stream in olefile.listdir():
-        if len(stream) == len(path_segments) + 1:
-            if stream[:-1] == path_segments:
-                yield stream[-1]
-
-
-class OleStorageItem(object):
-
-    def __init__(self, olefile, path, parent=None):
-        self.olefile = olefile
-        self.path = path  # path DOES NOT end with '/'
-
-    def get_name(self):
-        if self.path == '':
-            return None
-        segments = self.path.split('/')
-        return segments[-1]
-
-    name = cached_property(get_name)
-
-
-class OleStream(OleStorageItem):
-
-    def open(self):
-        return self.olefile.openstream(self.path)
-
-
-class OleStorage(OleStorageItem):
-
-    def __init__(self, olefile, path='', parent=None):
-        ''' create a OleStorage instance
-
-            @param olefile : a OleFileIO instance
-                             or path to the file in the file system
-            @param path : a base path in the storage
-        '''
-        if not hasattr(olefile, 'openstream'):
-            from OleFileIO_PL import OleFileIO
-            olefile = OleFileIO(olefile)
-        OleStorageItem.__init__(self, olefile, path, parent)
-
-    def __iter__(self):
-        return olefile_listdir(self.olefile, self.path)
-
-    def __getitem__(self, name):
-        if self.path == '' or self.path == '/':
-            path = name
-        else:
-            path = self.path + '/' + name
-        if not self.olefile.exists(path):
-            raise KeyError('%s not found' % path)
-        t = self.olefile.get_type(path)
-        if t == 1:  # Storage
-            return OleStorage(self.olefile, path, self)
-        elif t == 2:  # Stream
-            return OleStream(self.olefile, path, self)
-        else:
-            raise KeyError('%s is invalid' % path)
-
-    def close(self):
-        # if this is root, close underlying olefile
-        if self.path == '':
-            # old version of OleFileIO has no close()
-            if hasattr(self.olefile, 'close'):
-                self.olefile.close()
-
-
 class GeneratorReader(object):
     ''' convert a string generator into file-like reader
 
@@ -658,6 +572,7 @@ class Hwp5File(ItemConversionStorage):
 
     def __init__(self, stg):
         from hwp5.storage import is_storage
+        from hwp5.storage.ole import OleStorage
         if not is_storage(stg):
             stg = OleStorage(stg)
 
