@@ -88,6 +88,10 @@ class Fac(object):
             return SM.createInstance(name)
 
     def GraphicObjectResolver(self, storage):
+        # svx/inc/svx/xmlgrhlp.hxx
+        # svx/source/xml/xmlgrhlp.cxx
+        # svx/util/svx.component
+        # new SvXMLGraphicImportExportHelper
         name = 'com.sun.star.comp.Svx.GraphicImportHelper'
         return self.createInstance(name, storage)
 
@@ -105,8 +109,17 @@ class Fac(object):
         infoset = self.PropertySet()
         url = ''
         uri = self.createBaseURI(storage, url, '')
+
+        # SfxBaseModel::loadMetadataFromStorage
+        # -> sfx2::DocumentMetadataAccess::loadMetadataFromStorage
+        # ---> initLoading
+        # ---> collectFilesFromStorage
         doc.loadMetadataFromStorage(storage, uri, None)
-        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', (infoset, None), '')
+
+        # currently hwp5odt does not produce meta.xml
+        #emptyargs = (infoset, statusindicator)
+        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', emptyargs, '')
+
         graphicresolver = self.GraphicObjectResolver(storage)
         objectresolver = None
         lateinitsettings = None
