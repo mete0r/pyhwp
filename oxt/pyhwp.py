@@ -39,23 +39,22 @@ class Fac(object):
 
     @property
     def storage_factory(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.embed.StorageFactory')
+        return self.createInstance('com.sun.star.embed.StorageFactory')
 
     def StorageFromInputStream(self, inputstream):
         return self.storage_factory.createInstanceWithArguments( (inputstream, 1) ) # com.sun.star.embed.ElementModes.READ
 
     def OLESimpleStorage(self, *args):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.embed.OLESimpleStorage', args)
+        return self.createInstance('com.sun.star.embed.OLESimpleStorage', *args)
 
     def SequenceInputStream(self, s):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.io.SequenceInputStream',
-                (uno.ByteSequence(s),) )
+        return self.createInstance('com.sun.star.io.SequenceInputStream', uno.ByteSequence(s))
 
     def UriReferenceFactory(self):
         return self.context.ServiceManager.createInstanceWithContext('com.sun.star.uri.UriReferenceFactory', self.context)
 
     def rdf_URI_create(self, uri):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.rdf.URI', (uri, ))
+        return self.createInstance('com.sun.star.rdf.URI', uri)
 
     def createBaseURI(self, storage, baseuri, subdoc):
         return self.rdf_URI_create(baseuri+'/')
@@ -79,10 +78,28 @@ class Fac(object):
         return True
 
     def PropertySet(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.beans.PropertySet')
+        return self.createInstance('com.sun.star.beans.PropertySet')
+
+    def createInstance(self, name, *args):
+        SM = self.context.ServiceManager
+        if len(args) > 0:
+            return SM.createInstanceWithArguments(name, args)
+        else:
+            return SM.createInstance(name)
 
     def GraphicObjectResolver(self, storage):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.comp.Svx.GraphicImportHelper', (storage,))
+        name = 'com.sun.star.comp.Svx.GraphicImportHelper'
+        return self.createInstance(name, storage)
+
+    def EmbeddedObjectResolver(self, storage, persist):
+        # persist: an instance of SfxObjectShell (doc.GetPersist())
+        # svx/inc/svx/xmleohlp.cxx
+        # svx/source/xml/xmleohlp.cxx
+        # pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+        #                 xStorage, *pPersist,
+        #                 EMBEDDEDOBJECTHELPER_MODE_READ,
+        #                 sal_False );
+        return None
 
     def load_odt_from_storage(self, doc, storage, statusindicator=None):
         infoset = self.PropertySet()
@@ -108,7 +125,7 @@ class Fac(object):
         self.load_odt_from_storage(doc, odtpkg_storage, statusindicator)
 
     def saxParser(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.xml.sax.Parser')
+        return self.createInstance('com.sun.star.xml.sax.Parser')
 
     def HwpFileFromInputStream(self, inputstream):
         olestorage = self.OLESimpleStorage(inputstream)
@@ -121,7 +138,8 @@ class Fac(object):
         args = (NamedValue('StylesheetURL', stylesheet_url),
                 NamedValue('SourceURL', source_url),
                 NamedValue('SourceBaseURL', source_url_base))
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.comp.documentconversion.LibXSLTTransformer', args)
+        return self.createInstance('com.sun.star.comp.documentconversion.LibXSLTTransformer',
+                                   *args)
 
     def xsltproc_with_LibXSLTTransforrmer(self, stylesheet_path):
         stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
