@@ -17,12 +17,11 @@ import os, os.path
 from hwp5 import tools
 
 def main():
+    from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
     from docopt import docopt
-    from pkg_resources import get_distribution
     doc = rest_to_docopt(__doc__)
-    dist = get_distribution('pyhwp')
-    args = docopt(doc, version=dist.version)
+    args = docopt(doc, version=version)
     make(args)
 
 class ODTPackage(object):

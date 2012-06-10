@@ -179,11 +179,10 @@ def rest_to_docopt(doc):
 
 def main():
     from docopt import docopt
-    from pkg_resources import get_distribution
+    from hwp5 import __version__ as version
 
     doc = rest_to_docopt(__doc__)
-    dist = get_distribution('pyhwp')
-    args = docopt(doc, version=dist.version)
+    args = docopt(doc, version=version)
     if args['version']:
         version(args)
     elif args['summaryinfo']:
