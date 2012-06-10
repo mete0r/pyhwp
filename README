@@ -7,7 +7,7 @@ Features
 --------
 
 - Analyze and extract internal streams out from a HWP Document Format v5 file
-- Conversion to OpenDocument format (.odt) or plain text (.txt) (*Experimental*)
+- (*Experimental*) Conversion to OpenDocument format (.odt) or plain text (.txt)
 
 Installation
 ------------
