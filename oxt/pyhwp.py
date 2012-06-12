@@ -33,9 +33,14 @@ def implementation(component_name, *services):
         return cls
     return decorator
 
-class Fac(object):
-    def __init__(self, context):
-        self.context = context
+class FacMixin(object):
+
+    def createInstance(self, name, *args):
+        SM = self.context.ServiceManager
+        if len(args) > 0:
+            return SM.createInstanceWithArguments(name, args)
+        else:
+            return SM.createInstance(name)
 
     @property
     def storage_factory(self):
@@ -59,33 +64,8 @@ class Fac(object):
     def createBaseURI(self, storage, baseuri, subdoc):
         return self.rdf_URI_create(baseuri+'/')
 
-    def readThroughComponent(self, storage, doc, streamname, filtername, filterargs, name):
-        stream = storage.openStreamElement(streamname, 1) # READ
-        return self.readStreamThroughComponent(stream, doc, filtername, filterargs, name)
-
-    def readStreamThroughComponent(self, stream, doc, filtername, filterargs, name):
-        from com.sun.star.xml.sax import InputSource
-        inputsource = InputSource()
-        inputsource.sSystemId = name
-        inputsource.aInputStream = stream
-        inputsource.sEncoding = 'utf-8'
-
-        parser = self.saxParser()
-        filter = self.context.ServiceManager.createInstanceWithArguments(filtername, filterargs)
-        filter.setTargetDocument(doc)
-        parser.setDocumentHandler(filter)
-        parser.parseStream(inputsource)
-        return True
-
     def PropertySet(self):
         return self.createInstance('com.sun.star.beans.PropertySet')
-
-    def createInstance(self, name, *args):
-        SM = self.context.ServiceManager
-        if len(args) > 0:
-            return SM.createInstanceWithArguments(name, args)
-        else:
-            return SM.createInstance(name)
 
     def GraphicObjectResolver(self, storage):
         # svx/inc/svx/xmlgrhlp.hxx
@@ -105,46 +85,8 @@ class Fac(object):
         #                 sal_False );
         return None
 
-    def load_odt_from_storage(self, doc, storage, statusindicator=None):
-        infoset = self.PropertySet()
-        url = ''
-        uri = self.createBaseURI(storage, url, '')
-
-        # SfxBaseModel::loadMetadataFromStorage
-        # -> sfx2::DocumentMetadataAccess::loadMetadataFromStorage
-        # ---> initLoading
-        # ---> collectFilesFromStorage
-        doc.loadMetadataFromStorage(storage, uri, None)
-
-        # currently hwp5odt does not produce meta.xml
-        #emptyargs = (infoset, statusindicator)
-        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', emptyargs, '')
-
-        graphicresolver = self.GraphicObjectResolver(storage)
-        objectresolver = None
-        lateinitsettings = None
-        filterargs = (infoset, statusindicator, graphicresolver, objectresolver, lateinitsettings)
-        self.readThroughComponent(storage, doc, 'styles.xml', 'com.sun.star.comp.Writer.XMLOasisStylesImporter', filterargs, '')
-        self.readThroughComponent(storage, doc, 'content.xml', 'com.sun.star.comp.Writer.XMLOasisContentImporter', filterargs, '')
-
-    def load_hwp5file_into_doc(self, hwp5file, doc, statusindicator=None):
-        odtpkg_file = self.hwp5file_convert_to_odtpkg_file(hwp5file)
-        logging.debug('hwp to odtpkg completed')
-
-        odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
-
-        odtpkg_storage = self.StorageFromInputStream(odtpkg_stream)
-
-        self.load_odt_from_storage(doc, odtpkg_storage, statusindicator)
-
     def saxParser(self):
         return self.createInstance('com.sun.star.xml.sax.Parser')
-
-    def HwpFileFromInputStream(self, inputstream):
-        olestorage = self.OLESimpleStorage(inputstream)
-        adapter = OleStorageAdapter(olestorage)
-        from hwp5.xmlmodel import Hwp5File
-        return Hwp5File(adapter)
 
     def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
         from com.sun.star.beans import NamedValue
@@ -243,33 +185,6 @@ class Fac(object):
                 print 'XSLT transform over!'
 
         return transform
-
-    def hwp5file_convert_to_odtpkg_file(self, hwp5file):
-        from tempfile import TemporaryFile
-        tmpfile = TemporaryFile()
-        import os
-        tmpfile2 = os.fdopen( os.dup(tmpfile.fileno()), 'r')
-
-        from zipfile import ZipFile
-        zf = ZipFile(tmpfile, 'w')
-        from hwp5.hwp5odt import ODTPackage
-        odtpkg = ODTPackage(zf)
-        try:
-            from hwp5.hwp5odt import Converter
-
-            # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
-            # we use default xsltproc which uses external `xsltproc' program
-            #xsltproc = self.xsltproc_with_LibXSLTTransformer
-            from hwp5.tools import xsltproc
-
-            # convert without RelaxNG validation
-            convert = Converter(xsltproc)
-            convert(hwp5file, odtpkg)
-        finally:
-            odtpkg.close()
-
-        tmpfile2.seek(0)
-        return tmpfile2
 
 
 class FileFromStream(object):
@@ -423,10 +338,9 @@ class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
             self.f.seek(pos)
 
 @implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
-class Detector(unohelper.Base, XExtendedFilterDetection):
+class Detector(unohelper.Base, XExtendedFilterDetection, FacMixin):
     def __init__(self, ctx):
-        self.ctx = ctx
-        self.fac = Fac(ctx)
+        self.context = ctx
 
     @log_exception
     def detect(self, mediadesc):
@@ -438,7 +352,7 @@ class Detector(unohelper.Base, XExtendedFilterDetection):
 
         inputstream = desc['InputStream']
         try:
-            olestorage = self.fac.OLESimpleStorage(inputstream)
+            olestorage = self.OLESimpleStorage(inputstream)
             adapter = OleStorageAdapter(olestorage)
 
             from hwp5.filestructure import storage_is_hwp5file
@@ -452,12 +366,11 @@ class Detector(unohelper.Base, XExtendedFilterDetection):
 
 
 @implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
-class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
+class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
     @log_exception
     def __init__(self, ctx):
-        self.ctx = ctx
-        self.fac = Fac(ctx)
+        self.context = ctx
 
     @log_exception
     def initialize(self, args):
@@ -480,12 +393,95 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
         statusindicator = desc.get('StatusIndicator')
 
         inputstream = desc['InputStream']
-        hwpfile = self.fac.HwpFileFromInputStream(inputstream)
-        self.fac.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
+        hwpfile = self.HwpFileFromInputStream(inputstream)
+        self.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
         return True
 
     def cancel(self):
         logging.debug('Importer cancel')
+
+    def HwpFileFromInputStream(self, inputstream):
+        olestorage = self.OLESimpleStorage(inputstream)
+        adapter = OleStorageAdapter(olestorage)
+        from hwp5.xmlmodel import Hwp5File
+        return Hwp5File(adapter)
+
+    def load_hwp5file_into_doc(self, hwp5file, doc, statusindicator=None):
+        odtpkg_file = self.hwp5file_convert_to_odtpkg_file(hwp5file)
+        logging.debug('hwp to odtpkg completed')
+
+        odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
+
+        odtpkg_storage = self.StorageFromInputStream(odtpkg_stream)
+
+        self.load_odt_from_storage(doc, odtpkg_storage, statusindicator)
+
+    def hwp5file_convert_to_odtpkg_file(self, hwp5file):
+        from tempfile import TemporaryFile
+        tmpfile = TemporaryFile()
+        import os
+        tmpfile2 = os.fdopen( os.dup(tmpfile.fileno()), 'r')
+
+        from zipfile import ZipFile
+        zf = ZipFile(tmpfile, 'w')
+        from hwp5.hwp5odt import ODTPackage
+        odtpkg = ODTPackage(zf)
+        try:
+            from hwp5.hwp5odt import Converter
+
+            # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
+            # we use default xsltproc which uses external `xsltproc' program
+            #xsltproc = self.xsltproc_with_LibXSLTTransformer
+            from hwp5.tools import xsltproc
+
+            # convert without RelaxNG validation
+            convert = Converter(xsltproc)
+            convert(hwp5file, odtpkg)
+        finally:
+            odtpkg.close()
+
+        tmpfile2.seek(0)
+        return tmpfile2
+
+    def load_odt_from_storage(self, doc, storage, statusindicator=None):
+        infoset = self.PropertySet()
+        url = ''
+        uri = self.createBaseURI(storage, url, '')
+
+        # SfxBaseModel::loadMetadataFromStorage
+        # -> sfx2::DocumentMetadataAccess::loadMetadataFromStorage
+        # ---> initLoading
+        # ---> collectFilesFromStorage
+        doc.loadMetadataFromStorage(storage, uri, None)
+
+        # currently hwp5odt does not produce meta.xml
+        #emptyargs = (infoset, statusindicator)
+        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', emptyargs, '')
+
+        graphicresolver = self.GraphicObjectResolver(storage)
+        objectresolver = None
+        lateinitsettings = None
+        filterargs = (infoset, statusindicator, graphicresolver, objectresolver, lateinitsettings)
+        self.readThroughComponent(storage, doc, 'styles.xml', 'com.sun.star.comp.Writer.XMLOasisStylesImporter', filterargs, '')
+        self.readThroughComponent(storage, doc, 'content.xml', 'com.sun.star.comp.Writer.XMLOasisContentImporter', filterargs, '')
+
+    def readThroughComponent(self, storage, doc, streamname, filtername, filterargs, name):
+        stream = storage.openStreamElement(streamname, 1) # READ
+        return self.readStreamThroughComponent(stream, doc, filtername, filterargs, name)
+
+    def readStreamThroughComponent(self, stream, doc, filtername, filterargs, name):
+        from com.sun.star.xml.sax import InputSource
+        inputsource = InputSource()
+        inputsource.sSystemId = name
+        inputsource.aInputStream = stream
+        inputsource.sEncoding = 'utf-8'
+
+        parser = self.saxParser()
+        filter = self.context.ServiceManager.createInstanceWithArguments(filtername, filterargs)
+        filter.setTargetDocument(doc)
+        parser.setDocumentHandler(filter)
+        parser.parseStream(inputsource)
+        return True
 
 
 @implementation('pyhwp.TestJob', 'com.sun.star.task.XJobExecutor')
@@ -608,15 +604,14 @@ class ImporterTest(TestCase):
         logging.debug('frames: %s', frames)
 
 
-class OleStorageAdapterTest(TestCase):
+class OleStorageAdapterTest(TestCase, FacMixin):
+
+    context = uno.getComponentContext()
 
     def get_adapter(self):
-        context = uno.getComponentContext()
-        fac = Fac(context)
-
         f = file('fixtures/sample-5017.hwp', 'r')
         inputstream = InputStreamFromFileLike(f)
-        oless = fac.OLESimpleStorage(inputstream)
+        oless = self.OLESimpleStorage(inputstream)
         return OleStorageAdapter(oless)
 
     def test_iter(self):
