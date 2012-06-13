@@ -302,7 +302,9 @@ class FillColorPattern(Fill):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
         yield cls.PatternTypeFlags, 'pattern_type_flags',
-        yield UINT32, 'unknown',
+        if context['version'] > (5, 0, 0, 5):
+            # TODO 이것이 존재하는 버젼이 실제로 있는지 확인 필요
+            yield UINT32, 'unknown',
     attributes = classmethod(attributes)
 
 
