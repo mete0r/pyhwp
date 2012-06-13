@@ -782,12 +782,14 @@ class FootnoteShape(BasicRecordModel):
         yield WCHAR, 'suffix'
         yield UINT16, 'starting_number'
         yield HWPUNIT16, 'splitter_length'
+        yield HWPUNIT16, 'splitter_unknown'
         yield HWPUNIT16, 'splitter_margin_top'
         yield HWPUNIT16, 'splitter_margin_bottom'
         yield HWPUNIT16, 'notes_spacing'
-        yield Border, 'splitter_border'
+        yield Border.StrokeType, 'splitter_stroke_type'
+        yield Border.Width, 'splitter_width'
         if context['version'] >= (5, 0, 0, 6):
-            yield UINT16, 'unknown1'  # TODO
+            yield COLORREF, 'splitter_color'
     attributes = classmethod(attributes)
 
 

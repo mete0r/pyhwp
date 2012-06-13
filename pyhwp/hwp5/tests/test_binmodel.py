@@ -559,6 +559,24 @@ class TestControlChar(TestBase):
                                for tab in tabs))
 
 
+class TestFootnoteShape(TestBase):
+
+    def test_footnote_shape(self):
+        import pickle
+        f = open('fixtures/5000-footnote-shape.dat', 'r')
+        try:
+            records = pickle.load(f)
+        finally:
+            f.close()
+
+        context = dict(version=(5,0,0,0))
+        from hwp5.binmodel import parse_models
+        models = parse_models(context, records)
+        models = list(models)
+        self.assertEquals(850, models[0]['content']['splitter_margin_top'])
+        self.assertEquals(567, models[0]['content']['splitter_margin_bottom'])
+
+
 class TestModelJson(TestBase):
     def test_model_to_json(self):
         from hwp5.binmodel import model_to_json
