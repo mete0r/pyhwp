@@ -7,7 +7,6 @@ from .dataio import (readn, read_struct_attributes, match_attribute_types,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
                      UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
                      SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
-from .utils import cached_property
 from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_BIN_DATA, HWPTAG_FACE_NAME, HWPTAG_BORDER_FILL,
                      HWPTAG_CHAR_SHAPE, HWPTAG_TAB_DEF, HWPTAG_NUMBERING,
@@ -1860,13 +1859,10 @@ from . import recordstream
 
 class ModelStream(recordstream.RecordStream):
 
-    @cached_property
-    def model_parsing_context(self):
-        return dict(version=self.version)
-
     def models(self, **kwargs):
-        return parse_models(self.model_parsing_context,
-                            self.records(**kwargs))
+        # prepare binmodel parsing context
+        kwargs.setdefault('version', self.version)
+        return parse_models(kwargs, self.records(**kwargs))
 
     def model(self, idx):
         from .recordstream import nth
