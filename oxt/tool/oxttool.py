@@ -62,6 +62,9 @@ def test():
 
 def console():
     import uno
+    import oxthelper
     with soffice(headless=False) as context:
-        local=dict(uno=uno, context=context)
+        fac = oxthelper.FacMixin()
+        fac.context = context
+        local=dict(uno=uno, context=context, fac=fac)
         __import__('code').interact(banner='oxt-console', local=local)
