@@ -244,6 +244,32 @@ class ShapeComponentTest(TestBase):
         # if parent model is not GShapeObjectControl
         # TODO
 
+    def test_colorpattern_gradation(self):
+        import pickle
+        from hwp5.binmodel import parse_models
+        f = open('fixtures/5005-shapecomponent-with-colorpattern-and-gradation.dat', 'r')
+        try:
+            records = pickle.load(f)
+        finally:
+            f.close()
+
+        context = dict(version=(5,0,0,5))
+        models = parse_models(context, records)
+        models = list(models)
+        self.assertEquals(1280, models[-1]['content']['fill_flags'])
+        colorpattern = models[-1]['content']['colorpattern']
+        gradation = models[-1]['content']['gradation']
+        self.assertEquals(32768, colorpattern['background_color'])
+        self.assertEquals(0, colorpattern['pattern_color'])
+        self.assertEquals(-1, colorpattern['pattern_type_flags'])
+
+        self.assertEquals(50, gradation['blur'])
+        self.assertEquals(50, gradation['blur_center'])
+        self.assertEquals((0, 100), gradation['center'])
+        self.assertEquals([64512, 13171936], gradation['colors'])
+        self.assertEquals(1, gradation['shape'])
+        self.assertEquals(180, gradation['shear'])
+        self.assertEquals(1, gradation['type'])
 
 class HeaderFooterTest(TestBase):
 
