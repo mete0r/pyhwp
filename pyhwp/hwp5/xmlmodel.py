@@ -293,7 +293,10 @@ def match_field_start_end(event_prefixed_mac):
                 pass
         elif model is ControlChar and attributes['name'] == 'FIELD_END':
             if event is ENDEVENT:
-                yield event, stack.pop()
+                if len(stack) > 0:
+                    yield event, stack.pop()
+                else:
+                    logger.warning('unmatched field end')
         else:
             yield event, item
 

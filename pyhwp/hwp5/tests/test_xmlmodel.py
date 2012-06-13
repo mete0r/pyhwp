@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from unittest import TestCase
 from hwp5.tests import test_binmodel
 from hwp5.utils import cached_property
@@ -174,3 +175,22 @@ class TestDistributionBodyText(TestBase):
         # we can merge events without a problem
         list(evs)
 
+
+class TestMatchFieldStartEnd(TestCase):
+
+    def test_match_field_start_end(self):
+        from hwp5 import binmodel, xmlmodel
+
+        import pickle
+        f = open('fixtures/match-field-start-end.dat', 'r')
+        try:
+            records = pickle.load(f)
+        finally:
+            f.close()
+
+        models = binmodel.parse_models(dict(), records)
+        events = xmlmodel.prefix_binmodels_with_event(dict(), models)
+        events = xmlmodel.make_texts_linesegmented_and_charshaped(events)
+        events = xmlmodel.make_extended_controls_inline(events)
+        events = xmlmodel.match_field_start_end(events)
+        events = list(events)
