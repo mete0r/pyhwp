@@ -183,24 +183,50 @@ def main():
 
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=__version__)
-    if args['version']:
-        version(args)
-    elif args['summaryinfo']:
-        summaryinfo(args)
-    elif args['records']:
-        records(args)
-    elif args['models']:
-        models(args)
-    elif args['xml']:
-        xml(args)
-    elif args['ls']:
-        ls(args)
-    elif args['cat']:
-        cat(args)
-    elif args['unpack']:
-        unpack(args)
-    elif args['rawunz']:
-        rawunz(args)
+
+    from hwp5.dataio import ParseError
+    try:
+        if args['version']:
+            version(args)
+        elif args['summaryinfo']:
+            summaryinfo(args)
+        elif args['records']:
+            records(args)
+        elif args['models']:
+            models(args)
+        elif args['xml']:
+            xml(args)
+        elif args['ls']:
+            ls(args)
+        elif args['cat']:
+            cat(args)
+        elif args['unpack']:
+            unpack(args)
+        elif args['rawunz']:
+            rawunz(args)
+    except ParseError, e:
+        logging.error('ParseError: %s', e)
+        logging.error('Caused by: %s', repr(e.cause))
+        logging.error('Record: %s', e.record['seqno'])
+        logging.error('Record Payload:')
+        from hwp5.dataio import dumpbytes
+        for line in dumpbytes(e.record['payload'], True):
+            logging.error('  %s', line)
+        logging.error('Problem Offset: at %d (=0x%x)', e.offset, e.offset)
+        logging.error('Model Stack:')
+        for level, c in enumerate(reversed(e.context)):
+            model = c['model']
+            from hwp5.dataio import StructType
+            if isinstance(model, StructType):
+                logging.error('  %s', model)
+                members = c['members']
+                for (offset, offset_end), (name, value) in members:
+                    logging.error('    %06x:%06x: %s = %s', offset, offset_end-1, name,
+                                  value)
+                logging.error('    %06x:      : %s', c['offset'], c['member'])
+                pass
+            else:
+                logging.error('  %s%s', ' '*level, c)
 
 
 def version(args):
