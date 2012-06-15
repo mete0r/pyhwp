@@ -179,10 +179,10 @@ def rest_to_docopt(doc):
 
 def main():
     from docopt import docopt
-    from hwp5 import __version__ as version
+    from hwp5 import __version__
 
     doc = rest_to_docopt(__doc__)
-    args = docopt(doc, version=version)
+    args = docopt(doc, version=__version__)
     if args['version']:
         version(args)
     elif args['summaryinfo']:
