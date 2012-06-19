@@ -611,8 +611,8 @@ class TestModelStream(TestBase):
     @cached_property
     def docinfo(self):
         from hwp5.binmodel import ModelStream
-        return ModelStream(self.hwp5file['DocInfo'],
-                           self.hwp5file.header.version)
+        return ModelStream(self.hwp5file_rec['DocInfo'],
+                           self.hwp5file_rec.header.version)
 
     def test_models(self):
         self.assertEquals(67, len(list(self.docinfo.models())))

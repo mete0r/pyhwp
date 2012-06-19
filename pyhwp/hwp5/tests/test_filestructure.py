@@ -186,8 +186,8 @@ class TestHwp5DistDocStream(TestBase):
     @cached_property
     def jscriptversion(self):
         from hwp5.filestructure import Hwp5DistDocStream
-        return Hwp5DistDocStream(self.olestg['Scripts']['JScriptVersion'],
-                                 self.hwp5file.header.version)
+        return Hwp5DistDocStream(self.hwp5file_base['Scripts']['JScriptVersion'],
+                                 self.hwp5file_base.header.version)
 
     def test_head_record(self):
         from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA

@@ -19,7 +19,7 @@ class TestModelEventStream(TestBase):
     def docinfo(self):
         from hwp5.xmlmodel import ModelEventStream
         return ModelEventStream(self.hwp5file_bin['DocInfo'],
-                                self.hwp5file.header.version)
+                                self.hwp5file_bin.header.version)
 
     def test_modelevents(self):
         self.assertEquals(len(list(self.docinfo.models())) * 2,
@@ -33,7 +33,7 @@ class TestDocInfo(TestBase):
     def docinfo(self):
         from hwp5.xmlmodel import DocInfo
         return DocInfo(self.hwp5file_bin['DocInfo'],
-                       self.hwp5file.header.version)
+                       self.hwp5file_bin.header.version)
 
     def test_events(self):
         events = list(self.docinfo.events())
@@ -46,8 +46,8 @@ class TestSection(TestBase):
         from hwp5.xmlmodel import Section
         from hwp5.treeop import STARTEVENT, ENDEVENT
         from hwp5.binmodel import SectionDef, PageDef
-        section = Section(self.hwp5file.stg['BodyText']['Section0'],
-                          self.hwp5file.fileheader.version)
+        section = Section(self.hwp5file_bin['BodyText']['Section0'],
+                          self.hwp5file_bin.fileheader.version)
         events = list(section.events())
         ev, (tag, attrs, ctx) = events[0]
         self.assertEquals((STARTEVENT, SectionDef), (ev, tag))
