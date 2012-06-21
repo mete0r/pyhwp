@@ -3,6 +3,7 @@ import codecs
 import zlib
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
+from .storage import ItemWrapper
 from .storage import StorageWrapper
 from .storage import ItemConversionStorage
 from .importhelper import importStringIO
@@ -218,13 +219,10 @@ def uncompress(stream):
     return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
 
 
-class CompressedStream(object):
-
-    def __init__(self, item):
-        self.item = item
+class CompressedStream(ItemWrapper):
 
     def open(self):
-        return uncompress(self.item.open())
+        return uncompress(self.wrapped.open())
 
 
 class CompressedStorage(StorageWrapper):
@@ -238,14 +236,14 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
-class VersionSensitiveItem(object):
+class VersionSensitiveItem(ItemWrapper):
 
     def __init__(self, item, version):
-        self.item = item
+        ItemWrapper.__init__(self, item)
         self.version = version
 
     def open(self):
-        return self.item.open()
+        return self.wrapped.open()
 
     def other_formats(self):
         return dict()
