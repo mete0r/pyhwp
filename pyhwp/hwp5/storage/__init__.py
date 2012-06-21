@@ -9,13 +9,16 @@ def is_stream(item):
     return hasattr(item, 'open') and callable(item.open)
 
 
-class StorageWrapper(object):
+class ItemWrapper(object):
     def __init__(self, wrapped):
         self.wrapped = wrapped
-    def __iter__(self):
-        return iter(self.wrapped)
     def __getattr__(self, name):
         return getattr(self.wrapped, name)
+
+
+class StorageWrapper(ItemWrapper):
+    def __iter__(self):
+        return iter(self.wrapped)
     def __getitem__(self, name):
         return self.wrapped[name]
 
