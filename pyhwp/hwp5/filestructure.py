@@ -251,6 +251,14 @@ class VersionSensitiveItem(ItemWrapper):
 
 class Hwp5FileBase(ItemConversionStorage):
 
+    def __init__(self, stg):
+        from hwp5.storage import is_storage
+        from hwp5.storage.ole import OleStorage
+        if not is_storage(stg):
+            stg = OleStorage(stg)
+
+        ItemConversionStorage.__init__(self, stg)
+
     def resolve_conversion_for(self, name):
         if name == 'FileHeader':
             return HwpFileHeader
@@ -471,11 +479,6 @@ class Hwp5File(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        from hwp5.storage import is_storage
-        from hwp5.storage.ole import OleStorage
-        if not is_storage(stg):
-            stg = OleStorage(stg)
-
         stg = Hwp5FileBase(stg)
 
         if stg.header.flags.distributable:

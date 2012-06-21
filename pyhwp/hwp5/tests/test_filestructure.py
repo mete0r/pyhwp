@@ -168,6 +168,11 @@ class TestHwp5FileBase(TestBase):
         from hwp5.filestructure import Hwp5FileBase
         return Hwp5FileBase(self.olestg)
 
+    def test_create_with_filename(self):
+        from hwp5.filestructure import Hwp5FileBase
+        hwp5file = Hwp5FileBase(self.hwp5file_path)
+        self.assertTrue('FileHeader' in hwp5file)
+
     def test_item_is_hwpfileheader(self):
         from hwp5.filestructure import HwpFileHeader
         fileheader = self.hwp5file_base['FileHeader']
