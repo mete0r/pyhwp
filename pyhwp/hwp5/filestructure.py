@@ -231,7 +231,7 @@ class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
     def __getitem__(self, name):
         from hwp5.storage import is_stream
-        item = self.stg[name]
+        item = self.wrapped[name]
         if is_stream(item):
             return CompressedStream(item)
         else:
@@ -305,7 +305,7 @@ class Hwp5DistDocStorage(ItemConversionStorage):
 
     def resolve_conversion_for(self, name):
         def conversion(item):
-            return Hwp5DistDocStream(self.stg[name], None)  # TODO: version
+            return Hwp5DistDocStream(self.wrapped[name], None)  # TODO: version
         return conversion
 
 
@@ -359,12 +359,12 @@ class Sections(ItemConversionStorage):
     section_class = VersionSensitiveItem
 
     def __init__(self, stg, version):
-        self.stg = stg
+        ItemConversionStorage.__init__(self, stg)
         self.version = version
 
     def resolve_conversion_for(self, name):
         def conversion(item):
-            return self.section_class(self.stg[name], self.version)
+            return self.section_class(self.wrapped[name], self.version)
         return conversion
 
     def other_formats(self):
@@ -486,7 +486,7 @@ class Hwp5File(ItemConversionStorage):
         if stg.header.flags.compressed:
             stg = Hwp5Compression(stg)
 
-        self.stg = stg
+        ItemConversionStorage.__init__(self, stg)
 
     def resolve_conversion_for(self, name):
         if name == 'DocInfo':
