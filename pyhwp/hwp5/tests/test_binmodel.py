@@ -40,7 +40,7 @@ class BinEmbeddedTest(TestCase):
     def testParsePass1(self):
         from hwp5.binmodel import BinData
         from hwp5.binmodel import init_record_parsing_context
-        record = read_records(self.stream, 'docinfo').next()
+        record = read_records(self.stream).next()
         context = init_record_parsing_context(testcontext, record)
         model_type, attributes = BinData.parse_pass1(context)
 
@@ -85,7 +85,7 @@ class TableTest(TestBase):
     def testParsePass1(self):
         from hwp5.binmodel import Control, TableControl
         from hwp5.binmodel import init_record_parsing_context
-        record = read_records(self.stream, 'bodytext/0').next()
+        record = read_records(self.stream).next()
         context = init_record_parsing_context(testcontext, record)
         model_type, attributes = Control.parse_pass1(context)
 
@@ -291,7 +291,7 @@ class ListHeaderTest(TestCase):
     def testParse(self):
         from hwp5.binmodel import ListHeader
         from hwp5.binmodel import init_record_parsing_context
-        record = read_records(self.stream, 'bodytext/0').next()
+        record = read_records(self.stream).next()
         context = init_record_parsing_context(testcontext, record)
         model, attributes = ListHeader.parse_pass1(context)
 
@@ -308,7 +308,7 @@ class TableBodyTest(TestCase):
     def testParsePass1(self):
         from hwp5.binmodel import TableBody
         from hwp5.binmodel import parse_pass1_record
-        record = read_records(self.stream, 'bodytext/0').next()
+        record = read_records(self.stream).next()
 
         context, model = parse_pass1_record(self.ctx, record)
         model_type = model['type']
@@ -377,7 +377,7 @@ class TableCaptionCellTest(TestCase):
         from hwp5.binmodel import TableControl, TableBody, ListHeader
         from hwp5.binmodel import parse_pass1
         stream = StringIO(self.records_bytes)
-        records = list(read_records(stream, 'bodytext/0'))
+        records = list(read_records(stream))
 
         pass1 = list(parse_pass1(self.ctx, records))
 

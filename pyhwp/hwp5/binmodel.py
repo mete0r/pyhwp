@@ -1776,10 +1776,10 @@ def parse_pass1_record(context, record):
 
 def parse_pass1(context, records):
     for record in records:
-        tag = record['tagname']
-        record_id = (record.get('filename', ''), record.get('streamid', ''),
-                     record['seqno'])
-        logger.debug('Record %s at %s:%s:%d', tag, *record_id)
+        #tag = record['tagname']
+        #record_id = (record.get('filename', ''), record.get('streamid', ''),
+        #             record['seqno'])
+        #logger.debug('Record %s at %s:%s:%d', tag, *record_id)
 
         context, model = parse_pass1_record(context, record)
         logger.debug('pass1: %s, %s', model['type'], model['content'].keys())
