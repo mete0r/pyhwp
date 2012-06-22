@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from . import test_filestructure
-from . import recordstream as RS
-from .utils import cached_property
+from hwp5.tests import test_filestructure
+from hwp5 import recordstream as RS
+from hwp5.utils import cached_property
 
 class TestBase(test_filestructure.TestBase):
 
@@ -16,8 +16,8 @@ class TestBase(test_filestructure.TestBase):
 class TestRecord(TestBase):
 
     def test_read_record(self):
-        from .recordstream import read_record
-        from .tagids import HWPTAG_DOCUMENT_PROPERTIES
+        from hwp5.recordstream import read_record
+        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
         docinfo_stream = self.hwp5file['DocInfo']
 
         record = read_record(docinfo_stream.open(), 0)
@@ -28,9 +28,9 @@ class TestRecordStream(TestBase):
 
     @cached_property
     def docinfo(self):
-        from .recordstream import RecordStream
-        return RecordStream(self.hwp5file['DocInfo'],
-                            self.hwp5file.header.version)
+        from hwp5.recordstream import RecordStream
+        return RecordStream(self.hwp5file_fs['DocInfo'],
+                            self.hwp5file_fs.header.version)
 
     def test_records(self):
         self.assertEquals(67, len(list(self.docinfo.records())))
@@ -46,7 +46,7 @@ class TestRecordStream(TestBase):
 class TestHwp5File(TestBase):
 
     def test_if_hwp5file_contains_other_formats(self):
-        from .storage import ExtraItemStorage
+        from hwp5.storage import ExtraItemStorage
         stg = ExtraItemStorage(self.hwp5file)
         self.assertTrue('DocInfo.records' in list(stg))
 
@@ -57,7 +57,7 @@ class TestHwp5File(TestBase):
         self.assertEquals(67, len(records))
 
     def test_bodytext(self):
-        from .storage import ExtraItemStorage
+        from hwp5.storage import ExtraItemStorage
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
         stg = ExtraItemStorage(bodytext)
@@ -66,7 +66,7 @@ class TestHwp5File(TestBase):
 
 class TestJson(TestBase):
     def test_record_to_json(self):
-        from .recordstream import record_to_json
+        from hwp5.recordstream import record_to_json
         import simplejson
         record = self.hwp5file.docinfo.records().next()
         json = record_to_json(record)

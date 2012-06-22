@@ -7,7 +7,7 @@ Features
 --------
 
 - Analyze and extract internal streams out from a HWP Document Format v5 file
-- Conversion to OpenDocument format (.odt) or plain text (.txt) (*Experimental*)
+- (*Experimental*) Conversion to OpenDocument format (.odt) or plain text (.txt)
 
 Installation
 ------------
@@ -28,7 +28,8 @@ Requirements
 
 - Python 2.5, 2.6 or 2.7
 - simplejson
-- OleFileIO >= 0.20
+- OleFileIO_PL >= 0.20
+- docopt >= 0.3
 
 Development & Documentation
 ---------------------------

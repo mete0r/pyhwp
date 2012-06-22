@@ -7,7 +7,6 @@ from .dataio import (readn, read_struct_attributes, match_attribute_types,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
                      UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
                      SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
-from .utils import cached_property
 from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_BIN_DATA, HWPTAG_FACE_NAME, HWPTAG_BORDER_FILL,
                      HWPTAG_CHAR_SHAPE, HWPTAG_TAB_DEF, HWPTAG_NUMBERING,
@@ -303,7 +302,9 @@ class FillColorPattern(Fill):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
         yield cls.PatternTypeFlags, 'pattern_type_flags',
-        yield UINT32, 'unknown',
+        if context['version'] > (5, 0, 0, 5):
+            # TODO 이것이 존재하는 버젼이 실제로 있는지 확인 필요
+            yield UINT32, 'unknown',
     attributes = classmethod(attributes)
 
 
@@ -783,12 +784,14 @@ class FootnoteShape(BasicRecordModel):
         yield WCHAR, 'suffix'
         yield UINT16, 'starting_number'
         yield HWPUNIT16, 'splitter_length'
+        yield HWPUNIT16, 'splitter_unknown'
         yield HWPUNIT16, 'splitter_margin_top'
         yield HWPUNIT16, 'splitter_margin_bottom'
         yield HWPUNIT16, 'notes_spacing'
-        yield Border, 'splitter_border'
+        yield Border.StrokeType, 'splitter_stroke_type'
+        yield Border.Width, 'splitter_width'
         if context['version'] >= (5, 0, 0, 6):
-            yield UINT16, 'unknown1'  # TODO
+            yield COLORREF, 'splitter_color'
     attributes = classmethod(attributes)
 
 
@@ -1777,10 +1780,10 @@ def parse_pass1_record(context, record):
 
 def parse_pass1(context, records):
     for record in records:
-        tag = record['tagname']
-        record_id = (record.get('filename', ''), record.get('streamid', ''),
-                     record['seqno'])
-        logger.debug('Record %s at %s:%s:%d', tag, *record_id)
+        #tag = record['tagname']
+        #record_id = (record.get('filename', ''), record.get('streamid', ''),
+        #             record['seqno'])
+        #logger.debug('Record %s at %s:%s:%d', tag, *record_id)
 
         context, model = parse_pass1_record(context, record)
         logger.debug('pass1: %s, %s', model['type'], model['content'].keys())
@@ -1860,13 +1863,14 @@ from . import recordstream
 
 class ModelStream(recordstream.RecordStream):
 
-    @cached_property
-    def model_parsing_context(self):
-        return dict(version=self.version)
-
     def models(self, **kwargs):
-        return parse_models(self.model_parsing_context,
-                            self.records(**kwargs))
+        # prepare binmodel parsing context
+        kwargs.setdefault('version', self.version)
+        try:
+            kwargs.setdefault('path', self.path)
+        except AttributeError:
+            pass
+        return parse_models(kwargs, self.records(**kwargs))
 
     def model(self, idx):
         from .recordstream import nth

@@ -279,28 +279,60 @@ def N_ARRAY(counttype, itemtype):
     return t
 
 
+class ParseError(Exception):
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)
+        self.cause = None
+        self.path = None
+        self.record = None
+        self.context = []
+
+
 def read_struct_attributes(model, attributes, context, stream):
+    iterable = read_struct_attributes_with_offset(model, context, stream)
+    for span, (name, value) in iterable:
+        attributes[name] = value
+    return attributes
+
+
+def read_struct_attributes_with_offset(model, context, stream):
+    members = list()
+
     try:
-        gen = model.attributes(context)
-    except Exception, e:
-        msg = 'can\'t parse %s' % model
-        logging.error(msg)
-        raise Exception(msg, e)
+        tell = stream.tell
+    except AttributeError:
+        tell = lambda: None
+
+    gen = model.attributes(context)
 
     try:
         type, identifier = gen.next()
         while True:
+            offset = tell()
             try:
                 value = type.read(stream, context)
+            except ParseError, e:
+                e.context.append(dict(model=model, members=members,
+                                      member=identifier, offset=offset))
+                raise
             except Exception, e:
-                logging.exception(e)
                 msg = 'can\'t parse %s named "%s" of %s' % (type, identifier, model)
-                raise Exception(msg, e)
-            attributes[identifier] = value
+                pe = ParseError(msg)
+                pe.context.append(dict(model=model, members=members,
+                                       member=identifier, offset=offset))
+                pe.cause = e
+                pe.path = context.get('path')
+                pe.record = context['record']
+                pe.offset = offset
+                raise pe
+            offset_end = tell()
+            item = (offset, offset_end), (identifier, value)
+            members.append(item)
+            yield item
             type, identifier = gen.send(value)
     except StopIteration:
         pass
-    return attributes
+
 
 def match_attribute_types(types_generator, values):
     try:

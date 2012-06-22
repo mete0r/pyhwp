@@ -2,11 +2,11 @@
 from unittest import TestCase
 from StringIO import StringIO
 
-from .recordstream import Record, read_records
-from .utils import cached_property
-from . import test_recordstream
-from .binmodel import RecordModel, typed_model_attributes
-from .dataio import INT32, BSTR
+from hwp5.tests import test_recordstream
+from hwp5.recordstream import Record, read_records
+from hwp5.utils import cached_property
+from hwp5.binmodel import RecordModel, typed_model_attributes
+from hwp5.dataio import INT32, BSTR
 
 
 def TestContext(**ctx):
@@ -20,8 +20,8 @@ testcontext = TestContext()
 
 class TestRecordParsing(TestCase):
     def test_init_record_parsing_context(self):
-        from .tagids import HWPTAG_BEGIN
-        from .binmodel import init_record_parsing_context
+        from hwp5.tagids import HWPTAG_BEGIN
+        from hwp5.binmodel import init_record_parsing_context
         record = dict(tagid=HWPTAG_BEGIN, payload='abcd')
         context = init_record_parsing_context(testcontext, record)
 
@@ -38,9 +38,9 @@ class BinEmbeddedTest(TestCase):
     stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00\x6a\x00\x70\x00\x67\x00')
 
     def testParsePass1(self):
-        from .binmodel import BinData
-        from .binmodel import init_record_parsing_context
-        record = read_records(self.stream, 'docinfo').next()
+        from hwp5.binmodel import BinData
+        from hwp5.binmodel import init_record_parsing_context
+        record = read_records(self.stream).next()
         context = init_record_parsing_context(testcontext, record)
         model_type, attributes = BinData.parse_pass1(context)
 
@@ -54,7 +54,7 @@ class TestBase(test_recordstream.TestBase):
 
     @cached_property
     def hwp5file_bin(self):
-        from .binmodel import Hwp5File
+        from hwp5.binmodel import Hwp5File
         return Hwp5File(self.olestg)
 
     hwp5file = hwp5file_bin
@@ -83,9 +83,9 @@ class TableTest(TestBase):
         return self.bodytext.section(0).record(32)
 
     def testParsePass1(self):
-        from .binmodel import Control, TableControl
-        from .binmodel import init_record_parsing_context
-        record = read_records(self.stream, 'bodytext/0').next()
+        from hwp5.binmodel import Control, TableControl
+        from hwp5.binmodel import init_record_parsing_context
+        record = read_records(self.stream).next()
         context = init_record_parsing_context(testcontext, record)
         model_type, attributes = Control.parse_pass1(context)
 
@@ -103,8 +103,8 @@ class TableTest(TestBase):
         self.assertEquals('tbl ', attributes['chid'])
 
     def test_parse_child_table_body(self):
-        from .binmodel import TableControl, TableBody
-        from .binmodel import init_record_parsing_context
+        from hwp5.binmodel import TableControl, TableBody
+        from hwp5.binmodel import init_record_parsing_context
         record = self.tablecontrol_record
         context = init_record_parsing_context(testcontext, record)
 
@@ -122,9 +122,9 @@ class TableTest(TestBase):
         self.assertEquals(dict(), child_attributes)
 
     def test_parse_child_table_cell(self):
-        from .binmodel import TableControl
-        from .binmodel import init_record_parsing_context
-        from .binmodel import ListHeader, TableCell
+        from hwp5.binmodel import TableControl
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import ListHeader, TableCell
         record = self.tablecontrol_record
         context = init_record_parsing_context(testcontext, record)
 
@@ -155,9 +155,9 @@ class TableTest(TestBase):
         self.assertEquals('', child_context['stream'].read())
 
     def test_parse_child_table_caption(self):
-        from .binmodel import TableControl
-        from .binmodel import init_record_parsing_context
-        from .binmodel import ListHeader, TableCaption
+        from hwp5.binmodel import TableControl
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import ListHeader, TableCaption
         record = self.tablecontrol_record
         context = init_record_parsing_context(testcontext, record)
 
@@ -198,8 +198,8 @@ class ShapeComponentTest(TestBase):
         return self.bodytext.section(0).record(20)
 
     def test_parse_shapecomponent_textbox_paragraph_list(self):
-        from .binmodel import init_record_parsing_context
-        from .binmodel import ListHeader, ShapeComponent, TextboxParagraphList
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import ListHeader, ShapeComponent, TextboxParagraphList
         record = self.shapecomponent_record
         context = init_record_parsing_context(testcontext, record)
 
@@ -223,8 +223,8 @@ class ShapeComponentTest(TestBase):
         self.assertEquals('', child_context['stream'].read())
 
     def test_parse_with_parent(self):
-        from .binmodel import init_record_parsing_context
-        from .binmodel import GShapeObjectControl, ShapeComponent
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import GShapeObjectControl, ShapeComponent
 
         parent_record = self.control_gso_record
         parent_context = init_record_parsing_context(testcontext, parent_record)
@@ -244,6 +244,32 @@ class ShapeComponentTest(TestBase):
         # if parent model is not GShapeObjectControl
         # TODO
 
+    def test_colorpattern_gradation(self):
+        import pickle
+        from hwp5.binmodel import parse_models
+        f = open('fixtures/5005-shapecomponent-with-colorpattern-and-gradation.dat', 'r')
+        try:
+            records = pickle.load(f)
+        finally:
+            f.close()
+
+        context = dict(version=(5,0,0,5))
+        models = parse_models(context, records)
+        models = list(models)
+        self.assertEquals(1280, models[-1]['content']['fill_flags'])
+        colorpattern = models[-1]['content']['colorpattern']
+        gradation = models[-1]['content']['gradation']
+        self.assertEquals(32768, colorpattern['background_color'])
+        self.assertEquals(0, colorpattern['pattern_color'])
+        self.assertEquals(-1, colorpattern['pattern_type_flags'])
+
+        self.assertEquals(50, gradation['blur'])
+        self.assertEquals(50, gradation['blur_center'])
+        self.assertEquals((0, 100), gradation['center'])
+        self.assertEquals([64512, 13171936], gradation['colors'])
+        self.assertEquals(1, gradation['shape'])
+        self.assertEquals(180, gradation['shear'])
+        self.assertEquals(1, gradation['type'])
 
 class HeaderFooterTest(TestBase):
 
@@ -258,8 +284,8 @@ class HeaderFooterTest(TestBase):
         return self.bodytext.section(0).record(17)
 
     def test_parse_child(self):
-        from .binmodel import init_record_parsing_context
-        from .binmodel import ListHeader, Header
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import ListHeader, Header
         record = self.header_record
         context = init_record_parsing_context(testcontext, record)
 
@@ -289,9 +315,9 @@ class ListHeaderTest(TestCase):
     stream = StringIO(record_bytes)
 
     def testParse(self):
-        from .binmodel import ListHeader
-        from .binmodel import init_record_parsing_context
-        record = read_records(self.stream, 'bodytext/0').next()
+        from hwp5.binmodel import ListHeader
+        from hwp5.binmodel import init_record_parsing_context
+        record = read_records(self.stream).next()
         context = init_record_parsing_context(testcontext, record)
         model, attributes = ListHeader.parse_pass1(context)
 
@@ -306,9 +332,9 @@ class TableBodyTest(TestCase):
     stream = StringIO('M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00')
 
     def testParsePass1(self):
-        from .binmodel import TableBody
-        from .binmodel import parse_pass1_record
-        record = read_records(self.stream, 'bodytext/0').next()
+        from hwp5.binmodel import TableBody
+        from hwp5.binmodel import parse_pass1_record
+        record = read_records(self.stream).next()
 
         context, model = parse_pass1_record(self.ctx, record)
         model_type = model['type']
@@ -330,9 +356,9 @@ class Pass2Test(TestCase):
     ctx = TestContext()
 
     def test_pass2_events(self):
-        from .treeop import STARTEVENT, ENDEVENT
-        from .treeop import prefix_event
-        from .tagids import HWPTAG_BEGIN
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.treeop import prefix_event
+        from hwp5.tagids import HWPTAG_BEGIN
 
         def items():
             yield Record(HWPTAG_BEGIN + 4, 0, ''),
@@ -362,7 +388,7 @@ class LineSegTest(TestCase):
         data = '00000000481e0000e8030000e80300005203000058020000dc0500003ca00000000006003300000088240000e8030000e80300005203000058020000dc0500003ca000000000060067000000c82a0000e8030000e80300005203000058020000dc0500003ca0000000000600'
         import binascii
         data = binascii.a2b_hex(data)
-        from .binmodel import ParaLineSeg
+        from hwp5.binmodel import ParaLineSeg
         lines = list(ParaLineSeg.decode(dict(), data))
         self.assertEquals(0, lines[0]['chpos'])
         self.assertEquals(51, lines[1]['chpos'])
@@ -374,10 +400,10 @@ class TableCaptionCellTest(TestCase):
     records_bytes = 'G\x04\xc0\x02 lbt\x10#*(\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00\x04\n\x00\x00\x03\x00\x00\x00\x1b\x01R\x037\x02n\x04\n^\xc0V\x00\x00\x00\x00H\x08`\x01\x02\x00\x00\x00\x00\x00\x00\x00\x03\x00\x00\x008!\x00\x00R\x03\x06\x9e\x00\x00M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00'
 
     def testParsePass1(self):
-        from .binmodel import TableControl, TableBody, ListHeader
-        from .binmodel import parse_pass1
+        from hwp5.binmodel import TableControl, TableBody, ListHeader
+        from hwp5.binmodel import parse_pass1
         stream = StringIO(self.records_bytes)
-        records = list(read_records(stream, 'bodytext/0'))
+        records = list(read_records(stream))
 
         pass1 = list(parse_pass1(self.ctx, records))
 
@@ -393,8 +419,8 @@ class TableCaptionCellTest(TestCase):
         return pass1
 
     def testParsePass2(self):
-        from .binmodel import TableCaption, TableCell
-        from .binmodel import parse_pass2
+        from hwp5.binmodel import TableCaption, TableCell
+        from hwp5.binmodel import parse_pass2
         pass1 = self.testParsePass1()
         pass2 = list(parse_pass2(pass1))
 
@@ -463,8 +489,8 @@ class TestTypedModelAttributes(TestCase):
 
 class TestRecordModel(TestCase):
     def test_assign_enum_flags_name(self):
-        from .dataio import Flags, Enum, UINT32
-        from .binmodel import RecordModel
+        from hwp5.dataio import Flags, Enum, UINT32
+        from hwp5.binmodel import RecordModel
 
         class FooRecord(RecordModel):
             Bar = Flags(UINT32)
@@ -475,7 +501,7 @@ class TestRecordModel(TestCase):
 
 class TestControlType(TestCase):
     def test_ControlType(self):
-        from .binmodel import Control
+        from hwp5.binmodel import Control
 
         class FooControl(Control):
             chid = 'foo!'
@@ -491,7 +517,7 @@ class TestControlType(TestCase):
 class TestControlChar(TestBase):
 
     def test_decode_bytes(self):
-        from .binmodel import ControlChar
+        from hwp5.binmodel import ControlChar
         paratext_record = self.hwp5file.bodytext.section(0).record(1)
         payload = paratext_record['payload']
         controlchar = ControlChar.decode_bytes(payload[0:16])
@@ -500,7 +526,7 @@ class TestControlChar(TestBase):
                                param='\x00' * 8), controlchar)
 
     def test_tab(self):
-        from .binmodel import ParaText, ControlChar
+        from hwp5.binmodel import ParaText, ControlChar
         self.hwp5file_name = 'tabdef.hwp'
         models = self.hwp5file.bodytext.section(0).models()
         paratexts = list(model for model in models
@@ -559,9 +585,27 @@ class TestControlChar(TestBase):
                                for tab in tabs))
 
 
+class TestFootnoteShape(TestBase):
+
+    def test_footnote_shape(self):
+        import pickle
+        f = open('fixtures/5000-footnote-shape.dat', 'r')
+        try:
+            records = pickle.load(f)
+        finally:
+            f.close()
+
+        context = dict(version=(5,0,0,0))
+        from hwp5.binmodel import parse_models
+        models = parse_models(context, records)
+        models = list(models)
+        self.assertEquals(850, models[0]['content']['splitter_margin_top'])
+        self.assertEquals(567, models[0]['content']['splitter_margin_bottom'])
+
+
 class TestModelJson(TestBase):
     def test_model_to_json(self):
-        from .binmodel import model_to_json
+        from hwp5.binmodel import model_to_json
         model = self.hwp5file.docinfo.model(0)
         json = model_to_json(model)
 
@@ -570,13 +614,13 @@ class TestModelJson(TestBase):
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
     def test_model_to_json_should_not_modify_input(self):
-        from .binmodel import model_to_json
+        from hwp5.binmodel import model_to_json
         model = self.hwp5file.docinfo.model(0)
         model_to_json(model, indent=2, sort_keys=True)
         self.assertFalse(isinstance(model['type'], basestring))
 
     def test_model_to_json_with_controlchar(self):
-        from .binmodel import model_to_json
+        from hwp5.binmodel import model_to_json
         model = self.hwp5file.bodytext.section(0).model(1)
         json = model_to_json(model)
 
@@ -587,7 +631,7 @@ class TestModelJson(TestBase):
                          jsonobject['content']['chunks'][0])
 
     def test_model_to_json_with_unparsed(self):
-        from .binmodel import model_to_json
+        from hwp5.binmodel import model_to_json
 
         record = dict(payload='\x00\x01\x02\x03')
         model = dict(type=RecordModel, content=[], record=record,
@@ -610,9 +654,9 @@ class TestModelJson(TestBase):
 class TestModelStream(TestBase):
     @cached_property
     def docinfo(self):
-        from .binmodel import ModelStream
-        return ModelStream(self.hwp5file['DocInfo'],
-                           self.hwp5file.header.version)
+        from hwp5.binmodel import ModelStream
+        return ModelStream(self.hwp5file_rec['DocInfo'],
+                           self.hwp5file_rec.header.version)
 
     def test_models(self):
         self.assertEquals(67, len(list(self.docinfo.models())))

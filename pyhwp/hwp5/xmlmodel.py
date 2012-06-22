@@ -150,7 +150,7 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
 
 def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
                                            paralineseg):
-    from .binmodel import ParaText, ParaLineSeg
+    from .binmodel import ParaLineSeg
     LineSeg = ParaLineSeg.LineSeg
 
     paratext_model, paratext_attributes, paratext_context = paratext
@@ -293,7 +293,10 @@ def match_field_start_end(event_prefixed_mac):
                 pass
         elif model is ControlChar and attributes['name'] == 'FIELD_END':
             if event is ENDEVENT:
-                yield event, stack.pop()
+                if len(stack) > 0:
+                    yield event, stack.pop()
+                else:
+                    logger.warning('unmatched field end')
         else:
             yield event, item
 
@@ -395,19 +398,17 @@ class XmlEvents(object):
 class XmlEventsMixin(object):
 
     def xmlevents(self, **kwargs):
-        return XmlEvents(self.events())
+        return XmlEvents(self.events(**kwargs))
 
 
 class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
 
-    @property
-    def eventgen_context(self):
-        return dict(self.model_parsing_context)
-
     def modelevents(self, **kwargs):
-        context = self.eventgen_context
         models = self.models(**kwargs)
-        return prefix_binmodels_with_event(context, models)
+
+        # prepare modelevents context
+        kwargs.setdefault('version', self.version)
+        return prefix_binmodels_with_event(kwargs, models)
 
     def other_formats(self):
         d = super(ModelEventStream, self).other_formats()
@@ -418,7 +419,7 @@ class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
 class DocInfo(ModelEventStream):
 
     def events(self, **kwargs):
-        docinfo = DocInfo, dict(), self.eventgen_context
+        docinfo = DocInfo, dict(), dict()
         events = self.modelevents(**kwargs)
         events = wrap_modelevents(docinfo, events)
         return remove_redundant_facenames(events)

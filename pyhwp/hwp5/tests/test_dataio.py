@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from .dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
-from .dataio import match_attribute_types, typed_struct_attributes
+from hwp5.dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
+from hwp5.dataio import match_attribute_types, typed_struct_attributes
 class TestArray(TestCase):
     def test_new(self):
         t1 = ARRAY(INT32, 3)
@@ -45,7 +45,7 @@ class TestTypedAttributes(TestCase):
 
 class TestStructType(TestCase):
     def test_assign_enum_flags_name(self):
-        from .dataio import StructType, Enum, Flags, UINT16
+        from hwp5.dataio import StructType, Enum, Flags, UINT16
         class Foo(object):
             __metaclass__ = StructType
             bar = Enum()
@@ -147,7 +147,7 @@ class TestStructMemberTypes(TestCase):
 
 class TestEnumType(TestCase):
     def test_enum(self):
-        from .dataio import EnumType
+        from hwp5.dataio import EnumType
         FooEnum = EnumType('FooEnum', (int,), dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4)))
         self.assertEquals(0, FooEnum.a)
         self.assertEquals(1, FooEnum.b)
@@ -166,7 +166,7 @@ class TestEnumType(TestCase):
 
 class TestFlags(TestCase):
     def test_parse_args(self):
-        from .dataio import _parse_flags_args
+        from hwp5.dataio import _parse_flags_args
         x = list(_parse_flags_args([0, 1, long, 'bit01']))
         bit01 = ('bit01', (0, 1, long))
         self.assertEquals([bit01], x)

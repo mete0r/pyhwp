@@ -20,6 +20,7 @@ def log_exception(f):
 
 import uno
 import unohelper
+from oxthelper import FacMixin, FileFromStream, InputStreamFromFileLike
 
 from com.sun.star.lang import XInitialization
 from com.sun.star.document import XFilter, XImporter, XExtendedFilterDetection
@@ -33,69 +34,133 @@ def implementation(component_name, *services):
         return cls
     return decorator
 
-class Fac(object):
-    def __init__(self, context):
-        self.context = context
+class OleStorageAdapter(object):
 
-    @property
-    def storage_factory(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.embed.StorageFactory')
+    def __init__(self, oless):
+        ''' an OLESimpleStorage to hwp5 storage adapter.
 
-    def StorageFromInputStream(self, inputstream):
-        return self.storage_factory.createInstanceWithArguments( (inputstream, 1) ) # com.sun.star.embed.ElementModes.READ
+        :param oless: an instance of OLESimpleStorage
+        '''
+        self.oless = oless
 
-    def OLESimpleStorage(self, *args):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.embed.OLESimpleStorage', args)
+    def __iter__(self):
+        return iter(self.oless.getElementNames())
 
-    def SequenceInputStream(self, s):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.io.SequenceInputStream',
-                (uno.ByteSequence(s),) )
+    def __getitem__(self, name):
+        from com.sun.star.container import NoSuchElementException
+        try:
+            elem = self.oless.getByName(name)
+        except NoSuchElementException:
+            raise KeyError(name)
+        services = elem.SupportedServiceNames
+        if 'com.sun.star.embed.OLESimpleStorage' in services:
+            return OleStorageAdapter(elem)
+        else:
+            elem.closeInput()
+            return OleStorageStream(self.oless, name)
 
-    def UriReferenceFactory(self):
-        return self.context.ServiceManager.createInstanceWithContext('com.sun.star.uri.UriReferenceFactory', self.context)
 
-    def rdf_URI_create(self, uri):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.rdf.URI', (uri, ))
+class OleStorageStream(object):
 
-    def createBaseURI(self, storage, baseuri, subdoc):
-        return self.rdf_URI_create(baseuri+'/')
+    def __init__(self, oless, name):
+        self.oless = oless
+        self.name = name
 
-    def readThroughComponent(self, storage, doc, streamname, filtername, filterargs, name):
-        stream = storage.openStreamElement(streamname, 1) # READ
-        return self.readStreamThroughComponent(stream, doc, filtername, filterargs, name)
+    def open(self):
+        stream = self.oless.getByName(self.name)
+        return FileFromStream(stream)
 
-    def readStreamThroughComponent(self, stream, doc, filtername, filterargs, name):
-        from com.sun.star.xml.sax import InputSource
-        inputsource = InputSource()
-        inputsource.sSystemId = name
-        inputsource.aInputStream = stream
-        inputsource.sEncoding = 'utf-8'
 
-        parser = self.saxParser()
-        filter = self.context.ServiceManager.createInstanceWithArguments(filtername, filterargs)
-        filter.setTargetDocument(doc)
-        parser.setDocumentHandler(filter)
-        parser.parseStream(inputsource)
+def unofy_value(value):
+    if isinstance(value, dict):
+        value = dict_to_propseq(value)
+    elif isinstance(value, list):
+        value = tuple(value)
+    return value
+
+def xenumeration_generator(xenum):
+    while xenum.hasMoreElements():
+        yield xenum.nextElement()
+
+def xenumeration_list(xenum):
+    return list(xenumeration_generator(xenum))
+
+def dict_to_propseq(d):
+    from com.sun.star.beans import PropertyValue
+    DIRECT_VALUE = uno.Enum('com.sun.star.beans.PropertyState', 'DIRECT_VALUE')
+    return tuple(PropertyValue(k, 0, unofy_value(v), DIRECT_VALUE) for k, v in d.iteritems())
+
+def propseq_to_dict(propvalues):
+    return dict((p.Name, p.Value) for p in propvalues)
+
+@implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
+class Detector(unohelper.Base, XExtendedFilterDetection, FacMixin):
+    def __init__(self, ctx):
+        self.context = ctx
+
+    @log_exception
+    def detect(self, mediadesc):
+        logging.debug('Detector detect()')
+        desc = propseq_to_dict(mediadesc)
+
+        #for k, v in desc.iteritems():
+        #    logging.debug('Detector detect: %s: %s', k, str(v))
+
+        inputstream = desc['InputStream']
+        try:
+            olestorage = self.OLESimpleStorage(inputstream)
+            adapter = OleStorageAdapter(olestorage)
+
+            from hwp5.filestructure import storage_is_hwp5file
+            if not storage_is_hwp5file(adapter):
+                return '', mediadesc
+            logging.debug('TypeName: %s', 'writer_pyhwp_HWPv5')
+            return 'writer_pyhwp_HWPv5', mediadesc
+        except Exception, e:
+            logging.exception(e)
+            return '', mediadesc
+
+
+@implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
+class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
+
+    @log_exception
+    def __init__(self, ctx):
+        self.context = ctx
+
+    @log_exception
+    def initialize(self, args):
+        logging.debug('Importer initialize: %s', args)
+
+    @log_exception
+    def setTargetDocument(self, target):
+        logging.debug('Importer setTargetDocument: %s', target)
+        self.target = target
+
+    @log_exception
+    def filter(self, mediadesc):
+        logging.debug('Importer filter')
+        desc = propseq_to_dict(mediadesc)
+
+        logging.debug('mediadesc: %s', str(desc.keys()))
+        for k, v in desc.iteritems():
+            logging.debug('%s: %s', k, str(v))
+
+        statusindicator = desc.get('StatusIndicator')
+
+        inputstream = desc['InputStream']
+        hwpfile = self.HwpFileFromInputStream(inputstream)
+        self.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
         return True
 
-    def PropertySet(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.beans.PropertySet')
+    def cancel(self):
+        logging.debug('Importer cancel')
 
-    def GraphicObjectResolver(self, storage):
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.comp.Svx.GraphicImportHelper', (storage,))
-
-    def load_odt_from_storage(self, doc, storage, statusindicator=None):
-        infoset = self.PropertySet()
-        url = ''
-        uri = self.createBaseURI(storage, url, '')
-        doc.loadMetadataFromStorage(storage, uri, None)
-        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', (infoset, None), '')
-        graphicresolver = self.GraphicObjectResolver(storage)
-        objectresolver = None
-        lateinitsettings = None
-        filterargs = (infoset, statusindicator, graphicresolver, objectresolver, lateinitsettings)
-        self.readThroughComponent(storage, doc, 'styles.xml', 'com.sun.star.comp.Writer.XMLOasisStylesImporter', filterargs, '')
-        self.readThroughComponent(storage, doc, 'content.xml', 'com.sun.star.comp.Writer.XMLOasisContentImporter', filterargs, '')
+    def HwpFileFromInputStream(self, inputstream):
+        olestorage = self.OLESimpleStorage(inputstream)
+        adapter = OleStorageAdapter(olestorage)
+        from hwp5.xmlmodel import Hwp5File
+        return Hwp5File(adapter)
 
     def load_hwp5file_into_doc(self, hwp5file, doc, statusindicator=None):
         odtpkg_file = self.hwp5file_convert_to_odtpkg_file(hwp5file)
@@ -106,112 +171,6 @@ class Fac(object):
         odtpkg_storage = self.StorageFromInputStream(odtpkg_stream)
 
         self.load_odt_from_storage(doc, odtpkg_storage, statusindicator)
-
-    def saxParser(self):
-        return self.context.ServiceManager.createInstance('com.sun.star.xml.sax.Parser')
-
-    def HwpFileFromInputStream(self, inputstream):
-        olestorage = self.OLESimpleStorage(inputstream)
-        olefile = OleFileIO_from_OLESimpleStorage(olestorage)
-        from hwp5.xmlmodel import Hwp5File
-        return Hwp5File(olefile)
-
-    def LibXSLTTransformer(self, stylesheet_url, source_url, source_url_base):
-        from com.sun.star.beans import NamedValue
-        args = (NamedValue('StylesheetURL', stylesheet_url),
-                NamedValue('SourceURL', source_url),
-                NamedValue('SourceBaseURL', source_url_base))
-        return self.context.ServiceManager.createInstanceWithArguments('com.sun.star.comp.documentconversion.LibXSLTTransformer', args)
-
-    def xsltproc_with_LibXSLTTransforrmer(self, stylesheet_path):
-        stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
-        import unohelper
-        from com.sun.star.io import XOutputStream
-        class OutputStreamToFileLikeNonClosing(unohelper.Base, XOutputStream):
-            def __init__(self, f):
-                self.f = f
-
-            def writeBytes(self, bytesequence):
-                self.f.write(bytesequence.value)
-
-            def flush(self):
-                self.f.flush()
-
-            def closeOutput(self):
-                # non closing
-                pass
-
-        class InputStreamFromFileLikeNonClosing(InputStreamFromFileLike):
-            def closeInput(self):
-                # non closing
-                pass
-
-        def transform(stdin=None, stdout=None):
-
-            if stdin:
-                inputstream = InputStreamFromFileLikeNonClosing(stdin)
-            else:
-                inputstream = p_outputstream = self.pipe()
-
-            if stdout:
-                outputstream = OutputStreamToFileLikeNonClosing(stdout)
-            else:
-                p_inputstream = outputstream = self.pipe()
-
-            transformer = self.LibXSLTTransformer(stylesheet_url, '', '')
-            transformer.setInputStream(inputstream)
-            transformer.setOutputStream(outputstream)
-            if stdin and stdout:
-                import os
-                pin, pout = os.pipe()
-                pin = os.fdopen(pin, 'r')
-                pout = os.fdopen(pout, 'w')
-                from com.sun.star.io import XStreamListener
-                class Listener(unohelper.Base, XStreamListener):
-                    def __init__(self):
-                        # workaround for a bug in LibXSLTTransformer:
-                        #
-                        # we should retain a reference to the LibXSLTTransformer
-                        # while transforming is ongoing or the transformer
-                        # will be disposed and the internal Reader thread crashes!
-                        # (the Reader thread seems not retain the reference to the
-                        # transformer instance.)
-                        self.t = transformer
-                    def started(self):
-                        print 'XSLT started'
-                    def closed(self):
-                        print 'XSLT closed'
-                        pout.close()
-                        self.t = None
-                    def terminated(self):
-                        print 'XSLT terminated'
-                        pout.close()
-                        self.t = None
-                    def error(self, exception):
-                        print 'XSLT error:', exception
-                        print exception
-                        pout.close()
-                        self.t = None
-                    def disposing(self, source):
-                        print 'XSLT disposing:', source
-                        pout.close()
-                        self.t = None
-                transformer.addListener(Listener())
-
-            transformer.start()
-
-            if stdin is None and stdout is None:
-                return FileFromStream(p_inputstream), FileFromStream(p_outputstream)
-            elif stdin is None:
-                return FileFromStream(p_outputstream)
-            elif stdout is None:
-                return FileFromStream(p_inputstream)
-            else:
-                pin.read()
-                pin.close()
-                print 'XSLT transform over!'
-
-        return transform
 
     def hwp5file_convert_to_odtpkg_file(self, hwp5file):
         from tempfile import TemporaryFile
@@ -240,252 +199,45 @@ class Fac(object):
         tmpfile2.seek(0)
         return tmpfile2
 
+    def load_odt_from_storage(self, doc, storage, statusindicator=None):
+        infoset = self.PropertySet()
+        url = ''
+        uri = self.createBaseURI(storage, url, '')
 
-class FileFromStream(object):
-    def __init__(self, stream):
-        self.stream = stream
+        # SfxBaseModel::loadMetadataFromStorage
+        # -> sfx2::DocumentMetadataAccess::loadMetadataFromStorage
+        # ---> initLoading
+        # ---> collectFilesFromStorage
+        doc.loadMetadataFromStorage(storage, uri, None)
 
-        if hasattr(stream, 'readBytes'):
-            def read(size=None):
-                if size is None:
-                    data = ''
-                    while True:
-                        bytes = uno.ByteSequence('')
-                        n_read, bytes = stream.readBytes(bytes, 4096)
-                        if n_read == 0:
-                            return data
-                        data += bytes.value
-                bytes = uno.ByteSequence('')
-                n_read, bytes = stream.readBytes(bytes, size)
-                return bytes.value
-            self.read = read
+        # currently hwp5odt does not produce meta.xml
+        #emptyargs = (infoset, statusindicator)
+        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', emptyargs, '')
 
-        if hasattr(stream, 'seek'):
-            self.tell = stream.getPosition
+        graphicresolver = self.GraphicObjectResolver(storage)
+        objectresolver = None
+        lateinitsettings = None
+        filterargs = (infoset, statusindicator, graphicresolver, objectresolver, lateinitsettings)
+        self.readThroughComponent(storage, doc, 'styles.xml', 'com.sun.star.comp.Writer.XMLOasisStylesImporter', filterargs, '')
+        self.readThroughComponent(storage, doc, 'content.xml', 'com.sun.star.comp.Writer.XMLOasisContentImporter', filterargs, '')
 
-            def seek(offset, whence=0):
-                if whence == 0:
-                    pass
-                elif whence == 1:
-                    offset += stream.getPosition()
-                elif whence == 2:
-                    offset += stream.getLength()
-                stream.seek(offset)
-            self.seek = seek
+    def readThroughComponent(self, storage, doc, streamname, filtername, filterargs, name):
+        stream = storage.openStreamElement(streamname, 1) # READ
+        return self.readStreamThroughComponent(stream, doc, filtername, filterargs, name)
 
-        if hasattr(stream, 'writeBytes'):
-            def write(s):
-                stream.writeBytes(uno.ByteSequence(s))
-            self.write = write
+    def readStreamThroughComponent(self, stream, doc, filtername, filterargs, name):
+        from com.sun.star.xml.sax import InputSource
+        inputsource = InputSource()
+        inputsource.sSystemId = name
+        inputsource.aInputStream = stream
+        inputsource.sEncoding = 'utf-8'
 
-            def flush():
-                stream.flush()
-            self.flush = flush
-
-    def close(self):
-        if hasattr(self.stream, 'closeInput'):
-            self.stream.closeInput()
-        elif hasattr(self.stream, 'closeOutput'):
-            self.stream.closeOutput()
-
-def container_recurse_elements(parent, parent_path_segments):
-    for name in parent.getElementNames():
-        elem = parent.getByName(name)
-
-        path_segments = parent_path_segments + [name]
-        yield path_segments
-
-        if hasattr(elem, 'getElementNames'):
-            for x in container_recurse_elements(elem, path_segments):
-                yield x
-
-def container_find_element(parent, path_segments):
-    if len(path_segments) == 0:
-        return parent
-
-    if not hasattr(parent, 'getByName'):
-        return None
-
-    from com.sun.star.container import NoSuchElementException
-    child_name = path_segments[0]
-    try:
-        child = parent.getByName(child_name)
-    except NoSuchElementException:
-        return None
-    return container_find_element(child, path_segments[1:])
-
-class OleFileIO_from_OLESimpleStorage(object):
-    def __init__(self, storage):
-        self.storage = storage
-
-    def exists(self, path):
-        path_segments = path.split('/')
-        element = container_find_element(self.storage, path_segments)
-        return element is not None
-
-    def listdir(self):
-        for x in container_recurse_elements(self.storage, []):
-            yield x
-
-    def openstream(self, path):
-        path_segments = path.split('/')
-        stream = container_find_element(self.storage, path_segments)
-        if stream is not None:
-            return FileFromStream(stream)
-
-    def get_type(self, path):
-        path_segments = path.split('/')
-        element = container_find_element(self.storage, path_segments)
-        services = element.SupportedServiceNames
-        if 'com.sun.star.embed.OLESimpleStorage' in services:
-            return 1
-        elif hasattr(element, 'readBytes'):
-            return 2
-        else:
-            return 0
-
-    def close(self):
-        self.storage.dispose()
-        self.storage = None
-
-
-def unofy_value(value):
-    if isinstance(value, dict):
-        value = dict_to_propseq(value)
-    elif isinstance(value, list):
-        value = tuple(value)
-    return value
-
-def xenumeration_generator(xenum):
-    while xenum.hasMoreElements():
-        yield xenum.nextElement()
-
-def xenumeration_list(xenum):
-    return list(xenumeration_generator(xenum))
-
-def dict_to_propseq(d):
-    from com.sun.star.beans import PropertyValue
-    DIRECT_VALUE = uno.Enum('com.sun.star.beans.PropertyState', 'DIRECT_VALUE')
-    return tuple(PropertyValue(k, 0, unofy_value(v), DIRECT_VALUE) for k, v in d.iteritems())
-
-def propseq_to_dict(propvalues):
-    return dict((p.Name, p.Value) for p in propvalues)
-
-from com.sun.star.io import XInputStream, XSeekable
-class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
-    def __init__(self, f):
-        self.f = f
-
-    def readBytes(self, aData, nBytesToRead):
-        #logging.debug('InputStream.readBytes(%d)', nBytesToRead)
-        data = self.f.read(nBytesToRead)
-        return len(data), uno.ByteSequence(data)
-
-    readSomeBytes = readBytes
-
-    def skipBytes(self, nBytesToSkip):
-        #logging.debug('InputStream.skipBytes(%d)', nBytesToSkip)
-        self.f.read(nBytesToSkip)
-
-    def available(self):
-        #logging.debug('InputStream.available()')
-        return 0
-
-    def closeInput(self):
-        #logging.debug('InputStream.close()')
-        self.f.close()
-
-    def seek(self, location):
-        #logging.debug('InputStream.seek(%d)', location)
-        self.f.seek(location)
-
-    def getPosition(self):
-        pos = self.f.tell()
-        #logging.debug('InputStream.getPosition(): %d', pos)
-        return pos
-
-    def getLength(self):
-        pos = self.f.tell()
-        try:
-            self.f.seek(0, 2)
-            length = self.f.tell()
-            #logging.debug('InputStream.getLength(): %d', length)
-            return length
-        finally:
-            self.f.seek(pos)
-
-@implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
-class Detector(unohelper.Base, XExtendedFilterDetection):
-    def __init__(self, ctx):
-        self.ctx = ctx
-        self.fac = Fac(ctx)
-
-    @log_exception
-    def detect(self, mediadesc):
-        logging.debug('Detector detect()')
-        desc = propseq_to_dict(mediadesc)
-
-        #for k, v in desc.iteritems():
-        #    logging.debug('Detector detect: %s: %s', k, str(v))
-
-        inputstream = desc['InputStream']
-        try:
-            olestorage = self.fac.OLESimpleStorage(inputstream)
-            olefile = OleFileIO_from_OLESimpleStorage(olestorage)
-
-            from hwp5.filestructure import get_fileheader
-
-            if not olefile.exists('FileHeader'):
-                return '', mediadesc
-
-            fileheader = get_fileheader(olefile)
-            logging.debug('signature: %s', fileheader.signature)
-            logging.debug('version: %s', fileheader.version)
-            if fileheader.version[0] != 5:
-                return '', mediadesc
-
-            logging.debug('TypeName: %s', 'writer_pyhwp_HWPv5')
-            return 'writer_pyhwp_HWPv5', mediadesc
-        except Exception, e:
-            logging.exception(e)
-            return '', mediadesc
-
-
-@implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
-class Importer(unohelper.Base, XInitialization, XFilter, XImporter):
-
-    @log_exception
-    def __init__(self, ctx):
-        self.ctx = ctx
-        self.fac = Fac(ctx)
-
-    @log_exception
-    def initialize(self, args):
-        logging.debug('Importer initialize: %s', args)
-
-    @log_exception
-    def setTargetDocument(self, target):
-        logging.debug('Importer setTargetDocument: %s', target)
-        self.target = target
-
-    @log_exception
-    def filter(self, mediadesc):
-        logging.debug('Importer filter')
-        desc = propseq_to_dict(mediadesc)
-
-        logging.debug('mediadesc: %s', str(desc.keys()))
-        for k, v in desc.iteritems():
-            logging.debug('%s: %s', k, str(v))
-
-        statusindicator = desc.get('StatusIndicator')
-
-        inputstream = desc['InputStream']
-        hwpfile = self.fac.HwpFileFromInputStream(inputstream)
-        self.fac.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
+        parser = self.saxParser()
+        filter = self.context.ServiceManager.createInstanceWithArguments(filtername, filterargs)
+        filter.setTargetDocument(doc)
+        parser.setDocumentHandler(filter)
+        parser.parseStream(inputsource)
         return True
-
-    def cancel(self):
-        logging.debug('Importer cancel')
 
 
 @implementation('pyhwp.TestJob', 'com.sun.star.task.XJobExecutor')
@@ -513,7 +265,7 @@ class TestJob(unohelper.Base, XJobExecutor):
 
     def tests(self):
         from unittest import defaultTestLoader
-        yield defaultTestLoader.loadTestsFromTestCase(OleFileTest)
+        yield defaultTestLoader.loadTestsFromTestCase(OleStorageAdapterTest)
         yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
         yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
         from hwp5.tests import test_suite
@@ -607,30 +359,40 @@ class ImporterTest(TestCase):
         frames = xenumeration_list(frames.createEnumeration())
         logging.debug('frames: %s', frames)
 
-class OleFileTest(TestCase):
 
-    def test_open(self):
-        context = uno.getComponentContext()
-        fac = Fac(context)
+class OleStorageAdapterTest(TestCase, FacMixin):
 
+    context = uno.getComponentContext()
+
+    def get_adapter(self):
         f = file('fixtures/sample-5017.hwp', 'r')
         inputstream = InputStreamFromFileLike(f)
-        olestorage = fac.OLESimpleStorage(inputstream)
-        olefile = OleFileIO_from_OLESimpleStorage(olestorage)
-        self.assertEquals(1, olefile.get_type('BodyText'))
-        self.assertEquals(2, olefile.get_type('BodyText/Section0'))
-        self.assertEquals(2, olefile.get_type('DocInfo'))
+        oless = self.OLESimpleStorage(inputstream)
+        return OleStorageAdapter(oless)
 
-        self.assertTrue(olefile.exists('BodyText'))
-        self.assertTrue(olefile.exists('BodyText/Section0'))
-        self.assertTrue(olefile.exists('DocInfo'))
-        self.assertFalse(olefile.exists('nonexists'))
+    def test_iter(self):
+        adapter = self.get_adapter()
 
-        from hwp5.xmlmodel import Hwp5File
-        hwp5file = Hwp5File(olefile)
-        section0 = hwp5file.bodytext.section(0)
-        record = section0.record(0)
-        from hwp5.tagids import HWPTAG_PARA_HEADER
-        self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
+        self.assertTrue('FileHeader' in adapter)
+        self.assertTrue('DocInfo' in adapter)
+        self.assertTrue('BodyText' in adapter)
 
-        olefile.close()
+    def test_getitem(self):
+        adapter = self.get_adapter()
+
+        bodytext = adapter['BodyText']
+        self.assertTrue('Section0' in bodytext)
+
+        from hwp5.filestructure import HwpFileHeader
+        from hwp5.filestructure import HWP5_SIGNATURE
+
+        fileheader = adapter['FileHeader']
+        fileheader = HwpFileHeader(fileheader)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
+        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
+
+        # reopen (just being careful)
+        fileheader = adapter['FileHeader']
+        fileheader = HwpFileHeader(fileheader)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
+        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)

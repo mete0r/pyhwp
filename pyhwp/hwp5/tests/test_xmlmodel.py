@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
 from unittest import TestCase
-from . import test_binmodel
-from .utils import cached_property
+from hwp5.tests import test_binmodel
+from hwp5.utils import cached_property
 
 
 class TestBase(test_binmodel.TestBase):
 
     @cached_property
     def hwp5file_xml(self):
-        from .xmlmodel import Hwp5File
+        from hwp5.xmlmodel import Hwp5File
         return Hwp5File(self.olestg)
 
     hwp5file = hwp5file_xml
@@ -17,9 +18,9 @@ class TestModelEventStream(TestBase):
 
     @cached_property
     def docinfo(self):
-        from .xmlmodel import ModelEventStream
+        from hwp5.xmlmodel import ModelEventStream
         return ModelEventStream(self.hwp5file_bin['DocInfo'],
-                                self.hwp5file.header.version)
+                                self.hwp5file_bin.header.version)
 
     def test_modelevents(self):
         self.assertEquals(len(list(self.docinfo.models())) * 2,
@@ -31,9 +32,9 @@ class TestDocInfo(TestBase):
 
     @cached_property
     def docinfo(self):
-        from .xmlmodel import DocInfo
+        from hwp5.xmlmodel import DocInfo
         return DocInfo(self.hwp5file_bin['DocInfo'],
-                       self.hwp5file.header.version)
+                       self.hwp5file_bin.header.version)
 
     def test_events(self):
         events = list(self.docinfo.events())
@@ -43,11 +44,11 @@ class TestDocInfo(TestBase):
 class TestSection(TestBase):
 
     def test_events(self):
-        from .xmlmodel import Section
-        from .treeop import STARTEVENT, ENDEVENT
-        from .binmodel import SectionDef, PageDef
-        section = Section(self.hwp5file.stg['BodyText']['Section0'],
-                          self.hwp5file.fileheader.version)
+        from hwp5.xmlmodel import Section
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.binmodel import SectionDef, PageDef
+        section = Section(self.hwp5file_bin['BodyText']['Section0'],
+                          self.hwp5file_bin.fileheader.version)
         events = list(section.events())
         ev, (tag, attrs, ctx) = events[0]
         self.assertEquals((STARTEVENT, SectionDef), (ev, tag))
@@ -66,14 +67,14 @@ class TestSection(TestBase):
 class TestHwp5File(TestBase):
 
     def test_docinfo_class(self):
-        from .xmlmodel import DocInfo
+        from hwp5.xmlmodel import DocInfo
         self.assertTrue(isinstance(self.hwp5file.docinfo, DocInfo))
 
     def test_events(self):
         list(self.hwp5file.events())
 
     def test_xmlevents_dump(self):
-        from .externprogs import xmllint
+        from hwp5.externprogs import xmllint
         xmllint = xmllint('--format')
 
         outfile = file(self.id() + '.xml', 'w')
@@ -87,7 +88,7 @@ class TestHwp5File(TestBase):
             outfile.close()
 
 
-from .xmlmodel import make_ranged_shapes, split_and_shape
+from hwp5.xmlmodel import make_ranged_shapes, split_and_shape
 
 
 class TestShapedText(TestCase):
@@ -134,7 +135,7 @@ class TestShapedText(TestCase):
 
 class TestLineSeg(TestCase):
     def test_line_segmented(self):
-        from .xmlmodel import line_segmented
+        from hwp5.xmlmodel import line_segmented
         chunks = [((0, 3), None, 'aaa'), ((3, 6), None, 'bbb'),
                   ((6, 9), None, 'ccc'), ((9, 12), None, 'ddd')]
         linesegs = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
@@ -174,3 +175,22 @@ class TestDistributionBodyText(TestBase):
         # we can merge events without a problem
         list(evs)
 
+
+class TestMatchFieldStartEnd(TestCase):
+
+    def test_match_field_start_end(self):
+        from hwp5 import binmodel, xmlmodel
+
+        import pickle
+        f = open('fixtures/match-field-start-end.dat', 'r')
+        try:
+            records = pickle.load(f)
+        finally:
+            f.close()
+
+        models = binmodel.parse_models(dict(), records)
+        events = xmlmodel.prefix_binmodels_with_event(dict(), models)
+        events = xmlmodel.make_texts_linesegmented_and_charshaped(events)
+        events = xmlmodel.make_extended_controls_inline(events)
+        events = xmlmodel.match_field_start_end(events)
+        events = list(events)

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import os.path
 import codecs
 import zlib
-from OleFileIO_PL import OleFileIO, isOleFile
 from .utils import cached_property
 from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
+from .storage import ItemWrapper
 from .storage import StorageWrapper
 from .storage import ItemConversionStorage
 from .importhelper import importStringIO
@@ -15,6 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 StringIO = importStringIO()
+
+
+HWP5_SIGNATURE = 'HWP Document File'+('\x00'*15)
 
 
 class BYTES(type):
@@ -118,212 +120,22 @@ def recoder(backend_encoding, frontend_encoding, errors='strict'):
 
 
 def is_hwp5file(filename):
+    from hwp5.storage.ole import OleStorage
+    from OleFileIO_PL import OleFileIO, isOleFile
     if not isOleFile(filename):
         return False
     olefile = OleFileIO(filename)
-    return olefile.exists('FileHeader')
+    olestg = OleStorage(olefile)
+    return storage_is_hwp5file(olestg)
 
 
-def open_fileheader(olefile):
-    return olefile.openstream('FileHeader')
-
-
-def decode_fileheader(f):
-    attributes = FileHeader.read(f)
-    fileheader = FileHeader()
-    fileheader.__dict__.update((name, type(attributes.get(name)))
-                               for type, name in FileHeader.attributes(dict()))
-    return fileheader
-
-
-def get_fileheader(olefile):
-    f = open_fileheader(olefile)
-    return decode_fileheader(f)
-
-
-def open_summaryinfo(olefile):
-    return olefile.openstream('\005HwpSummaryInformation')
-
-
-def open_previewtext(olefile, charset=None):
-    f = olefile.openstream('PrvText')
-    if charset:
-        f = recode(f, 'utf-16le', charset)
-    return f
-
-
-def open_previewimage(olefile):
-    return olefile.openstream('PrvImage')
-
-
-def open_docinfo(olefile, compressed=True):
-    f = olefile.openstream('DocInfo')
-    if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15))  # without gzip header
-    return f
-
-
-def open_bodytext(olefile, idx, compressed=True):
+def storage_is_hwp5file(stg):
     try:
-        f = olefile.openstream('BodyText/Section' + str(idx))
-    except IOError:
-        raise IndexError(idx)
-    if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15))
-    return f
-
-
-def open_viewtext(olefile, idx):
-    try:
-        f = olefile.openstream('ViewText/Section' + str(idx))
-    except IOError:
-        raise IndexError(idx)
-    return f
-
-
-def open_viewtext_head(olefile, idx):
-    f = open_viewtext(olefile, idx)
-    head = f.read(4 + 256)
-    return StringIO(head)
-
-
-def open_viewtext_tail(olefile, idx):
-    f = open_viewtext(olefile, idx)
-    f.seek(4 + 256)
-    return f
-
-
-def open_bindata(olefile, name, compressed=True):
-    try:
-        f = olefile.openstream('BinData/%s' % name)
-    except IOError:
-        raise KeyError(name)
-    if compressed:
-        f = StringIO(zlib.decompress(f.read(), -15))
-    return f
-
-
-def open_script(olefile, name, compressed=True):
-    try:
-        f = olefile.openstream('Scripts/%s' % name)
-    except IOError:
-        raise KeyError(name)
-    if compressed:
-        return StringIO(zlib.decompress(f.read(), -15))
-    return f
-
-
-def list_streams(olefile):
-    for e in olefile.listdir():
-        yield os.path.join(*e)
-
-
-def list_sections(olefile):
-    prefix = 'BodyText/Section'
-    l = []
-    for name in list_streams(olefile):
-        if name.startswith(prefix):
-            l.append(int(name[len(prefix):]))
-    l.sort()
-    return l
-
-
-def list_bindata(olefile):
-    for name in list_streams(olefile):
-        prefix = 'BinData/'
-        if name.startswith(prefix):
-            yield name[len(prefix):]
-
-
-class BadFormatError(Exception):
-    def __str__(self):
-        return '%s: \'%s\'' % (self.args)
-
-
-def olefile_listdir(olefile, path):
-    if path == '' or path == '/':
-        # we use a list instead of a set
-        # for python 2.3 compatibility
-        yielded = []
-
-        for stream in olefile.listdir():
-            top_item = stream[0]
-            if top_item in yielded:
-                continue
-            yielded.append(top_item)
-            yield top_item
-        return
-
-    if not olefile.exists(path):
-        raise IOError('%s not exists' % path)
-    if olefile.get_type(path) != 1:
-        raise IOError('%s not a storage' % path)
-    path_segments = path.split('/')
-    for stream in olefile.listdir():
-        if len(stream) == len(path_segments) + 1:
-            if stream[:-1] == path_segments:
-                yield stream[-1]
-
-
-class OleStorageItem(object):
-
-    def __init__(self, olefile, path, parent=None):
-        self.olefile = olefile
-        self.path = path  # path DOES NOT end with '/'
-
-    def get_name(self):
-        if self.path == '':
-            return None
-        segments = self.path.split('/')
-        return segments[-1]
-
-    name = cached_property(get_name)
-
-
-class OleStream(OleStorageItem):
-
-    def open(self):
-        return self.olefile.openstream(self.path)
-
-
-class OleStorage(OleStorageItem):
-
-    def __init__(self, olefile, path='', parent=None):
-        ''' create a OleStorage instance
-
-            @param olefile : a OleFileIO instance
-                             or path to the file in the file system
-            @param path : a base path in the storage
-        '''
-        if not hasattr(olefile, 'openstream'):
-            from OleFileIO_PL import OleFileIO
-            olefile = OleFileIO(olefile)
-        OleStorageItem.__init__(self, olefile, path, parent)
-
-    def __iter__(self):
-        return olefile_listdir(self.olefile, self.path)
-
-    def __getitem__(self, name):
-        if self.path == '' or self.path == '/':
-            path = name
-        else:
-            path = self.path + '/' + name
-        if not self.olefile.exists(path):
-            raise KeyError('%s not found' % path)
-        t = self.olefile.get_type(path)
-        if t == 1:  # Storage
-            return OleStorage(self.olefile, path, self)
-        elif t == 2:  # Stream
-            return OleStream(self.olefile, path, self)
-        else:
-            raise KeyError('%s is invalid' % path)
-
-    def close(self):
-        # if this is root, close underlying olefile
-        if self.path == '':
-            # old version of OleFileIO has no close()
-            if hasattr(self.olefile, 'close'):
-                self.olefile.close()
+        fileheader = stg['FileHeader']
+    except KeyError:
+        return False
+    fileheader = HwpFileHeader(fileheader)
+    return fileheader.signature == HWP5_SIGNATURE
 
 
 class GeneratorReader(object):
@@ -407,40 +219,45 @@ def uncompress(stream):
     return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
 
 
-class CompressedStream(object):
-
-    def __init__(self, item):
-        self.item = item
+class CompressedStream(ItemWrapper):
 
     def open(self):
-        return uncompress(self.item.open())
+        return uncompress(self.wrapped.open())
 
 
 class CompressedStorage(StorageWrapper):
     ''' uncompress streams in the underlying storage '''
     def __getitem__(self, name):
         from hwp5.storage import is_stream
-        item = self.stg[name]
+        item = self.wrapped[name]
         if is_stream(item):
             return CompressedStream(item)
         else:
             return item
 
 
-class VersionSensitiveItem(object):
+class VersionSensitiveItem(ItemWrapper):
 
     def __init__(self, item, version):
-        self.item = item
+        ItemWrapper.__init__(self, item)
         self.version = version
 
     def open(self):
-        return self.item.open()
+        return self.wrapped.open()
 
     def other_formats(self):
         return dict()
 
 
 class Hwp5FileBase(ItemConversionStorage):
+
+    def __init__(self, stg):
+        from hwp5.storage import is_storage
+        from hwp5.storage.ole import OleStorage
+        if not is_storage(stg):
+            stg = OleStorage(stg)
+
+        ItemConversionStorage.__init__(self, stg)
 
     def resolve_conversion_for(self, name):
         if name == 'FileHeader':
@@ -494,7 +311,7 @@ class Hwp5DistDocStorage(ItemConversionStorage):
 
     def resolve_conversion_for(self, name):
         def conversion(item):
-            return Hwp5DistDocStream(self.stg[name], None)  # TODO: version
+            return Hwp5DistDocStream(self.wrapped[name], None)  # TODO: version
         return conversion
 
 
@@ -548,12 +365,12 @@ class Sections(ItemConversionStorage):
     section_class = VersionSensitiveItem
 
     def __init__(self, stg, version):
-        self.stg = stg
+        ItemConversionStorage.__init__(self, stg)
         self.version = version
 
     def resolve_conversion_for(self, name):
         def conversion(item):
-            return self.section_class(self.stg[name], self.version)
+            return self.section_class(self.wrapped[name], self.version)
         return conversion
 
     def other_formats(self):
@@ -601,6 +418,11 @@ class HwpFileHeader(object):
         return self.value['version']
 
     version = cached_property(get_version)
+
+    def get_signature(self):
+        return self.value['signature']
+
+    signature = cached_property(get_signature)
 
     def get_flags(self):
         return FileHeader.Flags(self.value['flags'])
@@ -657,10 +479,6 @@ class Hwp5File(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        from hwp5.storage import is_storage
-        if not is_storage(stg):
-            stg = OleStorage(stg)
-
         stg = Hwp5FileBase(stg)
 
         if stg.header.flags.distributable:
@@ -669,7 +487,7 @@ class Hwp5File(ItemConversionStorage):
         if stg.header.flags.compressed:
             stg = Hwp5Compression(stg)
 
-        self.stg = stg
+        ItemConversionStorage.__init__(self, stg)
 
     def resolve_conversion_for(self, name):
         if name == 'DocInfo':

@@ -9,21 +9,24 @@ def is_stream(item):
     return hasattr(item, 'open') and callable(item.open)
 
 
-class StorageWrapper(object):
-    def __init__(self, stg):
-        self.stg = stg
-    def __iter__(self):
-        return iter(self.stg)
-    def __getitem__(self, name):
-        return self.stg[name]
+class ItemWrapper(object):
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
     def __getattr__(self, name):
-        return getattr(self.stg, name)
+        return getattr(self.wrapped, name)
+
+
+class StorageWrapper(ItemWrapper):
+    def __iter__(self):
+        return iter(self.wrapped)
+    def __getitem__(self, name):
+        return self.wrapped[name]
 
 
 class ItemConversionStorage(StorageWrapper):
 
     def __getitem__(self, name):
-        item = self.stg[name]
+        item = self.wrapped[name]
         # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
         conversion = self.resolve_conversion_for(name)
         if conversion:
@@ -38,10 +41,10 @@ class ItemConversionStorage(StorageWrapper):
 class ExtraItemStorage(StorageWrapper):
 
     def __iter__(self):
-        for name in self.stg:
+        for name in self.wrapped:
             yield name
 
-            item = self.stg[name]
+            item = self.wrapped[name]
             if hasattr(item, 'other_formats'):
                 other_formats = item.other_formats()
                 if other_formats:
@@ -50,14 +53,14 @@ class ExtraItemStorage(StorageWrapper):
 
     def __getitem__(self, name):
         try:
-            item = self.stg[name]
+            item = self.wrapped[name]
             if is_storage(item):
                 item = ExtraItemStorage(item)
             return item
         except KeyError:
             # 기반 스토리지에는 없으므로, other_formats() 중에서 찾아본다.
-            for root in self.stg:
-                item = self.stg[root]
+            for root in self.wrapped:
+                item = self.wrapped[root]
                 if hasattr(item, 'other_formats'):
                     other_formats = item.other_formats()
                     if other_formats:

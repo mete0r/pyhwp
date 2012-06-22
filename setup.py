@@ -16,7 +16,7 @@ def read(filename):
 from setuptools import setup, find_packages
 setup(
         name='pyhwp',
-        version='0.1a9',
+        version='0.1a10',
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
         long_description=read('README'),
@@ -27,7 +27,7 @@ setup(
         package_dir={'': 'pyhwp'},
         package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
-        install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt == 0.3'],
+        install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt >= 0.3'],
         extras_require=dict(test=['lxml']),
 
         entry_points = {

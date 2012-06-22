@@ -11,17 +11,13 @@ def tagname(tagid):
     return tagnames.get(tagid, 'HWPTAG%d' % (tagid - HWPTAG_BEGIN))
 
 
-def Record(tagid, level, payload, size=None, seqno=None, streamid=None, filename=None):
+def Record(tagid, level, payload, size=None, seqno=None):
     if size is None:
         size = len(payload)
     d = dict(tagid=tagid, tagname=tagname(tagid), level=level,
                 size=size, payload=payload)
     if seqno is not None:
         d['seqno'] = seqno
-    if streamid:
-        d['streamid'] = streamid
-    if filename:
-        d['filename'] = filename
     return d
 
 
@@ -61,15 +57,11 @@ def read_record(f, seqno):
     return Record(tagid, level, payload, size, seqno)
 
 
-def read_records(f, streamid='', filename=''):
+def read_records(f):
     seqno = 0
     while True:
         record = read_record(f, seqno)
         if record:
-            if streamid:
-                record['streamid'] = streamid
-            if filename:
-                record['filename'] = filename
             yield record
         else:
             return
@@ -108,9 +100,7 @@ def nth(iterable, n, default=None):
 class RecordStream(filestructure.VersionSensitiveItem):
 
     def records(self, **kwargs):
-        return read_records(self.open(),
-                            streamid=kwargs.get('streamid'),
-                            filename=kwargs.get('filename'))
+        return read_records(self.open())
 
     def record(self, idx):
         ''' get the record at `idx' '''
