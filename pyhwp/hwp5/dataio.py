@@ -283,6 +283,7 @@ class ParseError(Exception):
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
         self.cause = None
+        self.path = None
         self.record = None
         self.context = []
 
@@ -320,6 +321,7 @@ def read_struct_attributes_with_offset(model, context, stream):
                 pe.context.append(dict(model=model, members=members,
                                        member=identifier, offset=offset))
                 pe.cause = e
+                pe.path = context.get('path')
                 pe.record = context['record']
                 pe.offset = offset
                 raise pe

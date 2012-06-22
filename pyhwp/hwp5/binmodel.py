@@ -1862,6 +1862,10 @@ class ModelStream(recordstream.RecordStream):
     def models(self, **kwargs):
         # prepare binmodel parsing context
         kwargs.setdefault('version', self.version)
+        try:
+            kwargs.setdefault('path', self.path)
+        except AttributeError:
+            pass
         return parse_models(kwargs, self.records(**kwargs))
 
     def model(self, idx):

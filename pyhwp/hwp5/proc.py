@@ -207,6 +207,7 @@ def main():
     except ParseError, e:
         logging.error('ParseError: %s', e)
         logging.error('Caused by: %s', repr(e.cause))
+        logging.error('Path: %s', e.path)
         logging.error('Record: %s', e.record['seqno'])
         logging.error('Record Payload:')
         from hwp5.dataio import dumpbytes
