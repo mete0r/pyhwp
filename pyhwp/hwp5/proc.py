@@ -221,8 +221,8 @@ def main():
             from hwp5.dataio import StructType
             if isinstance(model, StructType):
                 logging.error('  %s', model)
-                members = c['members']
-                for (offset, offset_end), (name, value) in members:
+                parsed_members = c['parsed']
+                for (offset, offset_end), (name, value) in parsed_members:
                     logging.error('    %06x:%06x: %s = %s', offset, offset_end-1, name,
                                   value)
                 logging.error('    %06x:      : %s', c['offset'], c['member'])

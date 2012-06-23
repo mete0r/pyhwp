@@ -290,48 +290,66 @@ class ParseError(Exception):
 
 def read_struct_attributes(model, attributes, context, stream):
     iterable = read_struct_attributes_with_offset(model, context, stream)
+    iterable = supplement_parse_error_with_parsed(iterable)
     for span, (name, value) in iterable:
         attributes[name] = value
     return attributes
 
 
+def supplement_parse_error_with_parsed(members):
+    parsed_members = list()
+    try:
+        for member in members:
+            yield member
+            parsed_members.append(member)
+    except ParseError, e:
+        e.context[-1]['parsed'] = parsed_members
+        raise
+        
+
 def read_struct_attributes_with_offset(model, context, stream):
-    members = list()
+    name_values = read_struct_attributes_name_value(model, context, stream)
+    while True:
+        offset = stream.tell()
+        try:
+            name_value = name_values.next()
+        except StopIteration:
+            return
+        except ParseError, e:
+            e.context[-1]['offset'] = offset
+            raise
+        yield (offset, stream.tell()), name_value
 
-    try:
-        tell = stream.tell
-    except AttributeError:
-        tell = lambda: None
 
+def read_struct_attributes_name_value(model, context, stream):
     gen = model.attributes(context)
-
     try:
-        type, identifier = gen.next()
+        type, name = gen.next()
         while True:
-            offset = tell()
             try:
-                value = type.read(stream, context)
+                value = read_type_value(context, type, stream)
             except ParseError, e:
-                e.context.append(dict(model=model, members=members,
-                                      member=identifier, offset=offset))
+                e.context.append(dict(model=model, member=name))
                 raise
-            except Exception, e:
-                msg = 'can\'t parse %s named "%s" of %s' % (type, identifier, model)
-                pe = ParseError(msg)
-                pe.context.append(dict(model=model, members=members,
-                                       member=identifier, offset=offset))
-                pe.cause = e
-                pe.path = context.get('path')
-                pe.record = context.get('record')
-                pe.offset = offset
-                raise pe
-            offset_end = tell()
-            item = (offset, offset_end), (identifier, value)
-            members.append(item)
-            yield item
-            type, identifier = gen.send(value)
+            yield name, value
+            type, name = gen.send(value)
     except StopIteration:
         pass
+
+
+def read_type_value(context, type, stream):
+    try:
+        return type.read(stream, context)
+    except ParseError:
+        raise
+    except Exception, e:
+        msg = 'can\'t parse %s' % type
+        pe = ParseError(msg)
+        pe.cause = e
+        pe.path = context.get('path')
+        pe.record = context.get('record')
+        pe.offset = stream.tell()
+        raise pe
 
 
 def match_attribute_types(types_generator, values):
