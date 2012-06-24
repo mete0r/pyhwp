@@ -239,44 +239,65 @@ def Enum(*items, **moreitems):
 
 
 class ArrayType(type):
-    def __init__(cls, name, bases, attrs):
-        super(ArrayType, cls).__init__(name, bases, attrs)
-        assert 'itemtype' in attrs
+    def __init__(self, *args, **kwargs):
+        pass
 
-ARRAY_instances = dict()
-def ARRAY(itemtype, count):
-    key = (itemtype, count)
-    instance = ARRAY_instances.get(key)
-    if instance is not None:
-        return instance
+
+class FixedArrayType(ArrayType):
+
+    classes = dict()
+
+    def __new__(mcs, itemtype, size):
+        key = itemtype, size
+
+        cls = mcs.classes.get(key)
+        if cls is not None:
+            return cls
+
+        attrs = dict(itemtype=itemtype, size=size)
+        name = 'ARRAY(%s,%s)' % (itemtype.__name__, size)
+        cls = ArrayType.__new__(mcs, name, (tuple,), attrs)
+        mcs.classes[key] = cls
+        return cls
+
     def read(cls, f, context=None):
         result = []
-        for i in range(0, count):
-            value = itemtype.read(f, context)
+        for i in range(0, cls.size):
+            value = cls.itemtype.read(f, context)
             result.append( value )
         return tuple(result)
-    attrs = dict(itemtype=itemtype, size=count, read=classmethod(read))
-    t = ArrayType('ARRAY', (tuple,), attrs)
-    ARRAY_instances[key] = t
-    return t
 
-N_ARRAY_instances = dict()
-def N_ARRAY(counttype, itemtype):
-    key = (counttype, itemtype)
-    instance = N_ARRAY_instances.get(key)
-    if instance is not None:
-        return instance
+
+ARRAY = FixedArrayType
+
+
+class VariableLengthArrayType(ArrayType):
+
+    classes = dict()
+
+    def __new__(mcs, counttype, itemtype):
+        key = counttype, itemtype
+
+        cls = mcs.classes.get(key)
+        if cls is not None:
+            return cls
+
+        attrs = dict(itemtype=itemtype, counttype=counttype)
+        name = 'N_ARRAY(%s,%s)' % (counttype.__name__, itemtype.__name__)
+        cls = ArrayType.__new__(mcs, name, (list,), attrs)
+        mcs.classes[key] = cls
+        return cls
+
     def read(cls, f, context):
         result = []
-        count = counttype.read(f, context)
+        count = cls.counttype.read(f, context)
         for i in range(0, count):
-            value = itemtype.read(f, context)
+            value = cls.itemtype.read(f, context)
             result.append( value )
         return result
-    attrs = dict(itemtype=itemtype, counttype=counttype, read=classmethod(read))
-    t = ArrayType('N_ARRAY', (list,), attrs)
-    N_ARRAY_instances[key] = t
-    return t
+
+
+N_ARRAY = VariableLengthArrayType
 
 
 class ParseError(Exception):
