@@ -238,7 +238,11 @@ def Enum(*items, **moreitems):
     return EnumType('Enum', (int,), attrs)
 
 
-class ArrayType(type):
+class CompoundType(type):
+    pass
+
+
+class ArrayType(CompoundType):
     def __init__(self, *args, **kwargs):
         pass
 
@@ -394,7 +398,7 @@ def typed_struct_attributes(struct, attributes, context):
     for name, value in attributes.iteritems():
         yield name, (type(value), value)
 
-class StructType(type):
+class StructType(CompoundType):
     def __init__(cls, name, bases, attrs):
         super(StructType, cls).__init__(name, bases, attrs)
         for k, v in attrs.iteritems():
