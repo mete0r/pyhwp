@@ -330,14 +330,14 @@ class TableBodyTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
     stream = StringIO('M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00')
 
-    def testParsePass1(self):
+    def test_parse_model(self):
         from hwp5.binmodel import TableBody
         from hwp5.binmodel import init_record_parsing_context
-        from hwp5.binmodel import parse_pass1_record
+        from hwp5.binmodel import parse_model
         record = read_records(self.stream).next()
         context, model = init_record_parsing_context(self.ctx, record)
 
-        parse_pass1_record(context, model)
+        parse_model(context, model)
         model_type = model['type']
         model_content = model['content']
 
@@ -402,30 +402,25 @@ class TableCaptionCellTest(TestCase):
 
     def testParsePass1(self):
         from hwp5.binmodel import TableControl, TableBody, ListHeader
+        from hwp5.binmodel import TableCaption, TableCell
         from hwp5.binmodel import parse_pass0
-        from hwp5.binmodel import parse_pass1
+        from hwp5.binmodel import parse_models_with_parent
         stream = StringIO(self.records_bytes)
         records = list(read_records(stream))
 
         pass0 = parse_pass0(self.ctx, records)
-        pass1 = list(parse_pass1(pass0))
+        pass2 = list(parse_models_with_parent(pass0))
 
+        from itertools import chain
         def expected():
             yield TableControl, set([name for type, name in TableControl.attributes(self.ctx)] + ['chid'])
-            yield ListHeader, set(name for type, name in ListHeader.attributes(self.ctx))
+            yield TableCaption, set(name for type, name in chain(ListHeader.attributes(self.ctx), TableCaption.attributes(self.ctx)))
             yield TableBody, set(name for type, name in TableBody.attributes(self.ctx))
-            yield ListHeader, set(name for type, name in ListHeader.attributes(self.ctx))
+            yield TableCell, set(name for type, name in chain(ListHeader.attributes(self.ctx), TableCell.attributes(self.ctx)))
         expected = list(expected())
         self.assertEquals(expected, [(model['type'],
                                       set(model['content'].keys()))
-                                     for context, model in pass1])
-        return pass1
-
-    def testParsePass2(self):
-        from hwp5.binmodel import TableCaption, TableCell
-        from hwp5.binmodel import parse_pass2
-        pass1 = self.testParsePass1()
-        pass2 = list(parse_pass2(pass1))
+                                     for context, model in pass2])
 
         result = pass2
         tablecaption = result[1]

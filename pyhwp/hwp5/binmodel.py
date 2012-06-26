@@ -1758,7 +1758,7 @@ def parse_pass0(base_context, records):
         yield init_record_parsing_context(base_context, record)
 
 
-def parse_pass1_record(context, model):
+def parse_model(context, model):
     ''' HWPTAG로 모델 결정 후 기본 파싱 '''
 
     # HWPTAG로 모델 결정
@@ -1770,15 +1770,9 @@ def parse_pass1_record(context, model):
     if parse_pass1:
         model['type'], model['content'] = parse_pass1(context)
 
+    if 'parent' not in context:
+        return
 
-def parse_pass1(context_models):
-    for context, model in context_models:
-        parse_pass1_record(context, model)
-        logger.debug('pass1: %s, %s', model['type'], model['content'].keys())
-        yield context, model
-
-
-def parse_pass2_record_with_parent(context, model):
     parent = context['parent']
     parent_context, parent_model = parent
     parent_type = parent_model.get('type')
@@ -1796,7 +1790,7 @@ def parse_pass2_record_with_parent(context, model):
     logger.debug('pass2: %s, %s', model['type'], model['content'])
 
 
-def parse_pass2(context_models):
+def parse_models_with_parent(context_models):
     from .treeop import prefix_ancestors_from_level
     level_prefixed = ((model['record']['level'], (context, model))
                       for context, model in context_models)
@@ -1804,7 +1798,7 @@ def parse_pass2(context_models):
     ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
     for ancestors, (context, model) in ancestors_prefixed:
         context['parent'] = ancestors[-1]
-        parse_pass2_record_with_parent(context, model)
+        parse_model(context, model)
         yield context, model
 
 
@@ -1815,9 +1809,7 @@ def parse_models(context, records):
 
 def parse_models_intern(context, records, passes=3):
     context_models = parse_pass0(context, records)
-    context_models = parse_pass1(context_models)
-    if passes >= 2:
-        context_models = parse_pass2(context_models)
+    context_models = parse_models_with_parent(context_models)
     for context, model in context_models:
         stream = context['stream']
         unparsed = stream.read()
