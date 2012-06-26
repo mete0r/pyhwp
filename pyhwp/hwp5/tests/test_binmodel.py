@@ -225,17 +225,16 @@ class ShapeComponentTest(TestBase):
         from hwp5.binmodel import init_record_parsing_context
         from hwp5.binmodel import GShapeObjectControl, ShapeComponent
 
-        parent_record = self.control_gso_record
-        parent_context = init_record_parsing_context(testcontext, parent_record)
+        #parent_record = self.control_gso_record
 
         # if parent model is GShapeObjectControl
         parent_model = dict(type=GShapeObjectControl)
-        parent = (parent_context, parent_model)
 
         record = self.shapecomponent_record
         context = init_record_parsing_context(testcontext, record)
         model_type, model_content = ShapeComponent, dict()
-        model_type, model_content = model_type.parse_with_parent(model_content, context, parent)
+        model_content = model_type.parse_with_parent(model_content, context,
+                                                     parent_model)
 
         self.assertEquals(model_type, ShapeComponent)
         self.assertTrue('chid0' in model_content)

@@ -998,11 +998,11 @@ class Text(object):
 class ParaText(RecordModel):
     tagid = HWPTAG_PARA_TEXT
 
-    def parse_with_parent(cls, attributes, context, parent):
+    def parse_with_parent(cls, attributes, context, parent_model):
         stream = context['stream']
         bytes = stream.read()
         attributes['chunks'] = [x for x in cls.parseBytes(bytes)]
-        return cls, attributes
+        return attributes
     parse_with_parent = classmethod(parse_with_parent)
 
     def parseBytes(bytes):
@@ -1180,15 +1180,14 @@ class ShapeComponent(RecordModel):
             yield BorderLine, 'line'
     attributes = classmethod(attributes)
 
-    def parse_with_parent(cls, attributes, context, (parent_context,
-                                                     parent_model)):
+    def parse_with_parent(cls, attributes, context, parent_model):
         stream = context['stream']
 
         if parent_model['type'] is GShapeObjectControl:
             # GSO-child ShapeComponent specific:
             # it may be a GSO model's attribute, e.g. 'child_chid'
             attributes['chid0'] = CHID.read(stream)
-        return cls, parse_model_attributes(cls, attributes, context)
+        return parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
     def parse_child(cls, attributes, context,
@@ -1800,9 +1799,8 @@ def parse_pass2_record_with_parent(parent, (context, model)):
 
     parse_with_parent = getattr(model_type, 'parse_with_parent', None)
     if parse_with_parent:
-        model_type, model_content = parse_with_parent(model_content, context,
-                                                      (parent_context,
-                                                       parent_model))
+        model['content'] = parse_with_parent(model['content'], context,
+                                             parent_model)
 
     logger.debug('pass2: %s, %s', model_type, model_content)
 
