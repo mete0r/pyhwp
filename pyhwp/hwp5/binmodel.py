@@ -81,9 +81,10 @@ class BasicRecordModel(RecordModel):
             yield
     attributes = staticmethod(attributes)
 
-    def parse_pass1(model, context):
-        attributes = dict()
-        return model, parse_model_attributes(model, attributes, context)
+    def parse_pass1(cls, context, model):
+        model['type'] = cls
+        model['content'] = dict()
+        model['content'] = parse_model_attributes(cls, model['content'], context)
     parse_pass1 = classmethod(parse_pass1)
 
 
@@ -94,14 +95,16 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
         raise Exception()
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
 
-    def parse_pass1(model, context):
-        attributes = dict()
-        attributes = parse_model_attributes(model, attributes, context)
-        get_altered_model = model.concrete_type_by_attribute
-        altered_model = get_altered_model(attributes[model.key_attribute])
+    def parse_pass1(cls, context, model):
+        model['type'] = cls
+        model['content'] = dict()
+        model['content'] = parse_model_attributes(cls, model['content'], context)
+        get_altered_model = cls.concrete_type_by_attribute
+        key = cls.key_attribute
+        altered_model = get_altered_model(model['content'][key])
         if altered_model is not None:
-            return altered_model, parse_model_attributes(altered_model, attributes, context)
-        return model, attributes
+            model['type'] = altered_model
+            model['content'] = parse_model_attributes(model['type'], model['content'], context)
     parse_pass1 = classmethod(parse_pass1)
 
 
@@ -1027,8 +1030,9 @@ class ParaCharShape(RecordModel):
         yield ARRAY(ARRAY(UINT16, 2), 1), 'charshapes'
     attributes = staticmethod(attributes)
 
-    def parse_pass1(cls, context):
-        return cls, cls.read(context['stream'], context)
+    def parse_pass1(cls, context, model):
+        model['type'] = cls
+        model['content'] = cls.read(context['stream'], context)
     parse_pass1 = classmethod(parse_pass1)
 
     def read(cls, f, context):
@@ -1070,10 +1074,11 @@ class ParaLineSeg(RecordModel):
         yield ARRAY(cls.LineSeg, 1), 'linesegs'
     attributes = classmethod(attributes)
 
-    def parse_pass1(cls, context):
+    def parse_pass1(cls, context, model):
         payload = context['stream'].read()
         linesegs = cls.decode(context, payload)
-        return cls, dict(linesegs=linesegs)
+        model['type'] = cls
+        model['content'] = dict(linesegs=linesegs)
     parse_pass1 = classmethod(parse_pass1)
 
     def decode(cls, context, payload):
@@ -1768,7 +1773,7 @@ def parse_model(context, model):
     # 1차 파싱
     parse_pass1 = getattr(model['type'], 'parse_pass1', None)
     if parse_pass1:
-        model['type'], model['content'] = parse_pass1(context)
+        parse_pass1(context, model)
 
     if 'parent' not in context:
         return
