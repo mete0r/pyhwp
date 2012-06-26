@@ -1748,37 +1748,32 @@ def init_record_parsing_context(base, record):
         returns new context
     '''
 
-    return dict(base, record=record, stream=StringIO(record['payload']))
-
-
-def parse_pass1_record(context, record):
-    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
-
-    context = init_record_parsing_context(context, record)
-
-    # HWPTAG로 모델 결정
-    model_type = tag_models.get(record['tagid'], RecordModel)
-    model_content = dict()
-
-    # 1차 파싱
-    parse_pass1 = getattr(model_type, 'parse_pass1', None)
-    if parse_pass1:
-        model_type, model_content = parse_pass1(context)
-
-    model = dict(record=record,
-                 type=model_type,
-                 content=model_content)
+    context = dict(base, record=record, stream=StringIO(record['payload']))
+    model = dict(record=record)
     return context, model
 
 
-def parse_pass1(context, records):
+def parse_pass0(base_context, records):
     for record in records:
-        #tag = record['tagname']
-        #record_id = (record.get('filename', ''), record.get('streamid', ''),
-        #             record['seqno'])
-        #logger.debug('Record %s at %s:%s:%d', tag, *record_id)
+        yield init_record_parsing_context(base_context, record)
 
-        context, model = parse_pass1_record(context, record)
+
+def parse_pass1_record(context, model):
+    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
+
+    # HWPTAG로 모델 결정
+    model['type'] = tag_models.get(model['record']['tagid'], RecordModel)
+    model['content'] = dict()
+
+    # 1차 파싱
+    parse_pass1 = getattr(model['type'], 'parse_pass1', None)
+    if parse_pass1:
+        model['type'], model['content'] = parse_pass1(context)
+
+
+def parse_pass1(context_models):
+    for context, model in context_models:
+        parse_pass1_record(context, model)
         logger.debug('pass1: %s, %s', model['type'], model['content'].keys())
         yield context, model
 
@@ -1819,7 +1814,8 @@ def parse_models(context, records):
 
 
 def parse_models_intern(context, records, passes=3):
-    context_models = parse_pass1(context, records)
+    context_models = parse_pass0(context, records)
+    context_models = parse_pass1(context_models)
     if passes >= 2:
         context_models = parse_pass2(context_models)
     for context, model in context_models:
