@@ -680,17 +680,15 @@ class TableControl(CommonControl):
     chid = CHID.TBL
 
     def parse_child(cls, attributes, context, child):
-        child_context, child_model, child_attributes = child
-        if child_model is TableBody:
+        child_context, child_model = child
+        if child_model['type'] is TableBody:
             context['table_body'] = True
-        elif child_model is ListHeader:
+        elif child_model['type'] is ListHeader:
             if context.get('table_body', False):
-                return parse_model_attributes(TableCell, child_attributes,
-                                              child_context)
+                child_model['type'] = TableCell
             else:
-                return parse_model_attributes(TableCaption, child_attributes,
-                                              child_context)
-        return child_model, child_attributes
+                child_model['type'] = TableCaption
+            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
@@ -1108,9 +1106,9 @@ class GShapeObjectControl(CommonControl):
     chid = CHID.GSO
 
     def parse_child(cls, attributes, context,
-                    (child_context, child_model, child_attributes)):
+                    (child_context, child_model)):
         # TODO: ListHeader to Caption
-        return child_model, child_attributes
+        pass
     parse_child = classmethod(parse_child)
 
 
@@ -1193,12 +1191,10 @@ class ShapeComponent(RecordModel):
     parse_with_parent = classmethod(parse_with_parent)
 
     def parse_child(cls, attributes, context,
-                    (child_context, child_model, child_attributes)):
-        if child_model is ListHeader:
-            return parse_model_attributes(TextboxParagraphList,
-                                          child_attributes, child_context)
-        else:
-            return child_model, child_attributes
+                    (child_context, child_model)):
+        if child_model['type'] is ListHeader:
+            child_model['type'] = TextboxParagraphList
+            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
@@ -1449,12 +1445,10 @@ class HeaderFooter(Control):
         attributes = staticmethod(attributes)
 
     def parse_child(cls, attributes, context,
-                    (child_context, child_model, child_attributes)):
-        if child_model is ListHeader:
-            return parse_model_attributes(cls.ParagraphList,
-                                          child_attributes, child_context)
-        else:
-            return child_model, child_attributes
+                    (child_context, child_model)):
+        if child_model['type'] is ListHeader:
+            child_model['type'] = cls.ParagraphList
+            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
@@ -1599,11 +1593,10 @@ class BookmarkControl(Control):
     attributes = staticmethod(attributes)
 
     def parse_child(cls, attributes, context,
-                    (child_context, child_model, child_attributes)):
-        if child_model is ControlData:
-            return parse_model_attributes(BookmarkControlData,
-                                          child_attributes, child_context)
-        return child_model, child_attributes
+                    (child_context, child_model)):
+        if child_model['type'] is ControlData:
+            child_model['type'] = BookmarkControlData
+            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
@@ -1800,9 +1793,9 @@ def parse_pass2_record_with_parent(parent, (context, model)):
 
     parse_child = getattr(parent_type, 'parse_child', None)
     if parse_child:
-        model_type, model_content = parse_child(parent_content, parent_context,
-                                                (context, model_type,
-                                                 model_content))
+        parse_child(parent_content, parent_context, (context, model))
+        model_type = model['type']
+        model_content = model['content']
 
     parse_with_parent = getattr(model_type, 'parse_with_parent', None)
     if parse_with_parent:

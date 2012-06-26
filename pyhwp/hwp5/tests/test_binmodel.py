@@ -110,16 +110,16 @@ class TableTest(TestBase):
 
         tablebody_record = self.tablebody_record
         tablebody_context = init_record_parsing_context(testcontext, tablebody_record)
-        child = (tablebody_context, TableBody, dict())
+        child_model = dict(type=TableBody, content=dict())
+        child = (tablebody_context, child_model)
 
         self.assertFalse(context.get('table_body'))
-        child_model, child_attributes = TableControl.parse_child(dict(),
-                                                                 context, child)
+        TableControl.parse_child(dict(), context, child)
         # 'table_body' in table record context should have been changed to True
         self.assertTrue(context['table_body'])
         # model and attributes should not have been changed
-        self.assertEquals(TableBody, child_model)
-        self.assertEquals(dict(), child_attributes)
+        self.assertEquals(TableBody, child_model['type'])
+        self.assertEquals(dict(), child_model['content'])
 
     def test_parse_child_table_cell(self):
         from hwp5.binmodel import TableControl
@@ -134,11 +134,11 @@ class TableTest(TestBase):
         child_context = init_record_parsing_context(testcontext, child_record)
         child_model, child_attributes = ListHeader.parse_pass1(child_context)
         self.assertEquals(ListHeader, child_model)
-        child = (child_context, child_model, child_attributes)
+        child_model = dict(type=child_model, content=child_attributes)
+        child = (child_context, child_model)
 
-        child_model, child_attributes = TableControl.parse_child(dict(),
-                                                                 context, child)
-        self.assertEquals(TableCell, child_model)
+        TableControl.parse_child(dict(), context, child)
+        self.assertEquals(TableCell, child_model['type'])
         self.assertEquals(dict(padding=dict(top=141, right=141, bottom=141,
                                             left=141),
                                rowspan=1,
@@ -151,7 +151,7 @@ class TableTest(TestBase):
                                unknown_width=20227,
                                paragraphs=1,
                                col=0,
-                               row=0), child_attributes)
+                               row=0), child_model['content'])
         self.assertEquals('', child_context['stream'].read())
 
     def test_parse_child_table_caption(self):
@@ -166,18 +166,18 @@ class TableTest(TestBase):
         child_record = self.tablecaption_record
         child_context = init_record_parsing_context(testcontext, child_record)
         child_model, child_attributes = ListHeader.parse_pass1(child_context)
-        child = (child_context, child_model, child_attributes)
+        child_model = dict(type=child_model, content=child_attributes)
+        child = (child_context, child_model)
 
-        child_model, child_attributes = TableControl.parse_child(dict(),
-                                                                 context, child)
-        self.assertEquals(TableCaption, child_model)
+        TableControl.parse_child(dict(), context, child)
+        self.assertEquals(TableCaption, child_model['type'])
         self.assertEquals(dict(listflags=0,
                                width=8504,
                                maxsize=40454,
                                unknown1=0,
                                flags=3L,
                                separation=850,
-                               paragraphs=2), child_attributes)
+                               paragraphs=2), child_model['content'])
         self.assertEquals('', child_context['stream'].read())
 
 
@@ -208,18 +208,17 @@ class ShapeComponentTest(TestBase):
                                                     child_record)
         child_model, child_attributes = ListHeader.parse_pass1(child_context)
         self.assertEquals(ListHeader, child_model)
-        child = (child_context, child_model, child_attributes)
+        child_model = dict(type=child_model, content=child_attributes)
+        child = (child_context, child_model)
 
-        child_model, child_attributes = ShapeComponent.parse_child(dict(),
-                                                                   context,
-                                                                   child)
-        self.assertEquals(TextboxParagraphList, child_model)
+        ShapeComponent.parse_child(dict(), context, child)
+        self.assertEquals(TextboxParagraphList, child_model['type'])
         self.assertEquals(dict(listflags=32L,
                                padding=dict(top=283, right=283, bottom=283,
                                             left=283),
                                unknown1=0,
                                maxwidth=11763,
-                               paragraphs=1), child_attributes)
+                               paragraphs=1), child_model['content'])
         self.assertEquals('', child_context['stream'].read())
 
     def test_parse_with_parent(self):
@@ -293,18 +292,18 @@ class HeaderFooterTest(TestBase):
         child_context = init_record_parsing_context(testcontext,
                                                     child_record)
         child_model, child_attributes = ListHeader.parse_pass1(child_context)
-        child = (child_context, child_model, child_attributes)
+        child_model = dict(type=child_model, content=child_attributes)
+        child = (child_context, child_model)
 
-        child_model, child_attributes = Header.parse_child(dict(), context,
-                                                           child)
-        self.assertEquals(Header.ParagraphList, child_model)
+        Header.parse_child(dict(), context, child)
+        self.assertEquals(Header.ParagraphList, child_model['type'])
         self.assertEquals(dict(textrefsbitmap=0,
                                numberrefsbitmap=0,
                                height=4252,
                                listflags=0,
                                width=42520,
                                unknown1=0,
-                               paragraphs=1), child_attributes)
+                               paragraphs=1), child_model['content'])
         # TODO
         #self.assertEquals('', child_context['stream'].read())
 
