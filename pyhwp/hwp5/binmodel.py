@@ -37,7 +37,7 @@ StringIO = importStringIO()
 
 
 def parse_model_attributes(model, attributes, context):
-    return model, read_struct_attributes(model, attributes, context,
+    return read_struct_attributes(model, attributes, context,
                                          context['stream'])
 
 
@@ -83,7 +83,7 @@ class BasicRecordModel(RecordModel):
 
     def parse_pass1(model, context):
         attributes = dict()
-        return parse_model_attributes(model, attributes, context)
+        return model, parse_model_attributes(model, attributes, context)
     parse_pass1 = classmethod(parse_pass1)
 
 
@@ -96,11 +96,11 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
 
     def parse_pass1(model, context):
         attributes = dict()
-        model, attributes = parse_model_attributes(model, attributes, context)
+        attributes = parse_model_attributes(model, attributes, context)
         get_altered_model = model.concrete_type_by_attribute
         altered_model = get_altered_model(attributes[model.key_attribute])
         if altered_model is not None:
-            return parse_model_attributes(altered_model, attributes, context)
+            return altered_model, parse_model_attributes(altered_model, attributes, context)
         return model, attributes
     parse_pass1 = classmethod(parse_pass1)
 
@@ -688,7 +688,8 @@ class TableControl(CommonControl):
                 child_model['type'] = TableCell
             else:
                 child_model['type'] = TableCaption
-            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
+            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
+        return child_model
     parse_child = classmethod(parse_child)
 
 
@@ -1187,14 +1188,14 @@ class ShapeComponent(RecordModel):
             # GSO-child ShapeComponent specific:
             # it may be a GSO model's attribute, e.g. 'child_chid'
             attributes['chid0'] = CHID.read(stream)
-        return parse_model_attributes(cls, attributes, context)
+        return cls, parse_model_attributes(cls, attributes, context)
     parse_with_parent = classmethod(parse_with_parent)
 
     def parse_child(cls, attributes, context,
                     (child_context, child_model)):
         if child_model['type'] is ListHeader:
             child_model['type'] = TextboxParagraphList
-            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
+            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
@@ -1448,7 +1449,7 @@ class HeaderFooter(Control):
                     (child_context, child_model)):
         if child_model['type'] is ListHeader:
             child_model['type'] = cls.ParagraphList
-            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
+            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
@@ -1596,7 +1597,7 @@ class BookmarkControl(Control):
                     (child_context, child_model)):
         if child_model['type'] is ControlData:
             child_model['type'] = BookmarkControlData
-            child_model['type'], child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
+            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
     parse_child = classmethod(parse_child)
 
 
