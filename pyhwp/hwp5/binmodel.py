@@ -1783,10 +1783,8 @@ def parse_pass1(context, records):
         yield context, model
 
 
-def parse_pass2_record_with_parent(parent, (context, model)):
-    model_type = model['type']
-    model_content = model['content']
-
+def parse_pass2_record_with_parent(context, model):
+    parent = context['parent']
     parent_context, parent_model = parent
     parent_type = parent_model.get('type')
     parent_content = parent_model.get('content')
@@ -1794,19 +1792,13 @@ def parse_pass2_record_with_parent(parent, (context, model)):
     parse_child = getattr(parent_type, 'parse_child', None)
     if parse_child:
         parse_child(parent_content, parent_context, (context, model))
-        model_type = model['type']
-        model_content = model['content']
 
-    parse_with_parent = getattr(model_type, 'parse_with_parent', None)
+    parse_with_parent = getattr(model['type'], 'parse_with_parent', None)
     if parse_with_parent:
         model['content'] = parse_with_parent(model['content'], context,
                                              parent_model)
 
-    logger.debug('pass2: %s, %s', model_type, model_content)
-
-    model['type'] = model_type
-    model['content'] = model_content
-    return context, model
+    logger.debug('pass2: %s, %s', model['type'], model['content'])
 
 
 def parse_pass2(context_models):
@@ -1816,8 +1808,9 @@ def parse_pass2(context_models):
     root_item = (dict(), dict())
     ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
     for ancestors, (context, model) in ancestors_prefixed:
-        parent = ancestors[-1]
-        yield parse_pass2_record_with_parent(parent, (context, model))
+        context['parent'] = ancestors[-1]
+        parse_pass2_record_with_parent(context, model)
+        yield context, model
 
 
 def parse_models(context, records):
