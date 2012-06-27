@@ -684,18 +684,16 @@ class CommonControl(Control):
 class TableControl(CommonControl):
     chid = CHID.TBL
 
-    def parse_child(cls, attributes, context, child):
+    def alternate_child_type(cls, attributes, context, child):
         child_context, child_model = child
         if child_model['type'] is TableBody:
             context['table_body'] = True
         elif child_model['type'] is ListHeader:
             if context.get('table_body', False):
-                child_model['type'] = TableCell
+                return TableCell
             else:
-                child_model['type'] = TableCaption
-            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
-        return child_model
-    parse_child = classmethod(parse_child)
+                return TableCaption
+    alternate_child_type = classmethod(alternate_child_type)
 
 
 class ListHeader(BasicRecordModel):
@@ -1123,11 +1121,11 @@ class ParaRangeTag(BasicRecordModel):
 class GShapeObjectControl(CommonControl):
     chid = CHID.GSO
 
-    def parse_child(cls, attributes, context,
+    def alternate_child_type(cls, attributes, context,
                     (child_context, child_model)):
         # TODO: ListHeader to Caption
         pass
-    parse_child = classmethod(parse_child)
+    alternate_child_type = classmethod(alternate_child_type)
 
 
 class Matrix(Struct):
@@ -1204,12 +1202,11 @@ class ShapeComponent(BasicRecordModel):
             yield BorderLine, 'line'
     attributes = classmethod(attributes)
 
-    def parse_child(cls, attributes, context,
+    def alternate_child_type(cls, attributes, context,
                     (child_context, child_model)):
         if child_model['type'] is ListHeader:
-            child_model['type'] = TextboxParagraphList
-            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
-    parse_child = classmethod(parse_child)
+            return TextboxParagraphList
+    alternate_child_type = classmethod(alternate_child_type)
 
 
 class TextboxParagraphList(ListHeader):
@@ -1458,12 +1455,11 @@ class HeaderFooter(Control):
             yield BYTE, 'numberrefsbitmap'
         attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context,
+    def alternate_child_type(cls, attributes, context,
                     (child_context, child_model)):
         if child_model['type'] is ListHeader:
-            child_model['type'] = cls.ParagraphList
-            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
-    parse_child = classmethod(parse_child)
+            return cls.ParagraphList
+    alternate_child_type = classmethod(alternate_child_type)
 
 
 class Header(HeaderFooter):
@@ -1606,12 +1602,11 @@ class BookmarkControl(Control):
             yield
     attributes = staticmethod(attributes)
 
-    def parse_child(cls, attributes, context,
+    def alternate_child_type(cls, attributes, context,
                     (child_context, child_model)):
         if child_model['type'] is ControlData:
-            child_model['type'] = BookmarkControlData
-            child_model['content'] = parse_model_attributes(child_model['type'], child_model['content'], child_context)
-    parse_child = classmethod(parse_child)
+            return BookmarkControlData
+    alternate_child_type = classmethod(alternate_child_type)
 
 
 class BookmarkControlData(ControlData):
@@ -1792,9 +1787,12 @@ def parse_model(context, model):
     parent_type = parent_model.get('type')
     parent_content = parent_model.get('content')
 
-    parse_child = getattr(parent_type, 'parse_child', None)
-    if parse_child:
-        parse_child(parent_content, parent_context, (context, model))
+    alternate_child_type = getattr(parent_type, 'alternate_child_type', None)
+    if alternate_child_type:
+        alter_type = alternate_child_type(parent_content, parent_context, (context, model))
+        if alter_type:
+            model['type'] = alter_type
+            model['content'] = parse_model_attributes(model['type'], model['content'], context)
 
     logger.debug('pass2: %s, %s', model['type'], model['content'])
 

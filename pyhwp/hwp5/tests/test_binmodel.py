@@ -109,22 +109,23 @@ class TableTest(TestBase):
         context, model = init_record_parsing_context(testcontext, record)
 
         tablebody_record = self.tablebody_record
-        tablebody_context = init_record_parsing_context(testcontext, tablebody_record)
+        child_context, child_model = init_record_parsing_context(testcontext, tablebody_record)
         child_model = dict(type=TableBody, content=dict())
-        child = (tablebody_context, child_model)
+        child = (child_context, child_model)
 
         self.assertFalse(context.get('table_body'))
-        TableControl.parse_child(dict(), context, child)
+        alter_type = TableControl.alternate_child_type(dict(), context, child)
         # 'table_body' in table record context should have been changed to True
         self.assertTrue(context['table_body'])
         # model and attributes should not have been changed
-        self.assertEquals(TableBody, child_model['type'])
+        self.assertEquals(None, alter_type)
         self.assertEquals(dict(), child_model['content'])
 
     def test_parse_child_table_cell(self):
         from hwp5.binmodel import TableControl
         from hwp5.binmodel import init_record_parsing_context
         from hwp5.binmodel import parse_model
+        from hwp5.binmodel import parse_model_attributes
         from hwp5.binmodel import ListHeader, TableCell
         record = self.tablecontrol_record
         context, model = init_record_parsing_context(testcontext, record)
@@ -137,8 +138,10 @@ class TableTest(TestBase):
         self.assertEquals(ListHeader, child_model['type'])
         child = (child_context, child_model)
 
-        TableControl.parse_child(dict(), context, child)
+        child_model['type'] = TableControl.alternate_child_type(dict(), context, child)
         self.assertEquals(TableCell, child_model['type'])
+        parse_model_attributes(child_model['type'], child_model['content'],
+                               child_context)
         self.assertEquals(dict(padding=dict(top=141, right=141, bottom=141,
                                             left=141),
                                rowspan=1,
@@ -158,6 +161,7 @@ class TableTest(TestBase):
         from hwp5.binmodel import TableControl
         from hwp5.binmodel import init_record_parsing_context
         from hwp5.binmodel import parse_model
+        from hwp5.binmodel import parse_model_attributes
         from hwp5.binmodel import TableCaption
         record = self.tablecontrol_record
         context, model = init_record_parsing_context(testcontext, record)
@@ -169,8 +173,10 @@ class TableTest(TestBase):
         parse_model(child_context, child_model)
         child = (child_context, child_model)
 
-        TableControl.parse_child(dict(), context, child)
+        child_model['type'] = TableControl.alternate_child_type(dict(), context, child)
         self.assertEquals(TableCaption, child_model['type'])
+        parse_model_attributes(child_model['type'], child_model['content'],
+                               child_context)
         self.assertEquals(dict(listflags=0,
                                width=8504,
                                maxsize=40454,
@@ -200,6 +206,7 @@ class ShapeComponentTest(TestBase):
     def test_parse_shapecomponent_textbox_paragraph_list(self):
         from hwp5.binmodel import init_record_parsing_context
         from hwp5.binmodel import parse_model
+        from hwp5.binmodel import parse_model_attributes
         from hwp5.binmodel import ListHeader, ShapeComponent, TextboxParagraphList
         record = self.shapecomponent_record
         context, model = init_record_parsing_context(testcontext, record)
@@ -211,8 +218,9 @@ class ShapeComponentTest(TestBase):
         self.assertEquals(ListHeader, child_model['type'])
         child = (child_context, child_model)
 
-        ShapeComponent.parse_child(dict(), context, child)
+        child_model['type'] = ShapeComponent.alternate_child_type(dict(), context, child)
         self.assertEquals(TextboxParagraphList, child_model['type'])
+        parse_model_attributes(child_model['type'], child_model['content'], child_context)
         self.assertEquals(dict(listflags=32L,
                                padding=dict(top=283, right=283, bottom=283,
                                             left=283),
@@ -284,6 +292,7 @@ class HeaderFooterTest(TestBase):
     def test_parse_child(self):
         from hwp5.binmodel import init_record_parsing_context
         from hwp5.binmodel import parse_model
+        from hwp5.binmodel import parse_model_attributes
         from hwp5.binmodel import Header
         record = self.header_record
         context, modl = init_record_parsing_context(testcontext, record)
@@ -294,8 +303,10 @@ class HeaderFooterTest(TestBase):
         parse_model(child_context, child_model)
         child = (child_context, child_model)
 
-        Header.parse_child(dict(), context, child)
+        child_model['type'] = Header.alternate_child_type(dict(), context, child)
         self.assertEquals(Header.ParagraphList, child_model['type'])
+        parse_model_attributes(child_model['type'], child_model['content'],
+                               child_context)
         self.assertEquals(dict(textrefsbitmap=0,
                                numberrefsbitmap=0,
                                height=4252,
