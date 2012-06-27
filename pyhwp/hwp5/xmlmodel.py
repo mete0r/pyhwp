@@ -340,7 +340,7 @@ def restructure_tablebody(event_prefixed_mac):
 
 def prefix_binmodels_with_event(context, models):
     from .treeop import prefix_event
-    level_prefixed = ((model['record']['level'],
+    level_prefixed = ((model['level'],
                        (model['type'], model['content'], context))
                       for model in models)
     return prefix_event(level_prefixed)

@@ -155,7 +155,7 @@ class TestDistributionBodyText(TestBase):
         from hwp5.tagids import HWPTAG_PARA_LINE_SEG
         from hwp5.binmodel import ParaLineSeg
         section0 = self.hwp5file_bin.bodytext.section(0)
-        tagids = set(model['record']['tagid'] for model in section0.models())
+        tagids = set(model['tagid'] for model in section0.models())
         types = set(model['type'] for model in section0.models())
         self.assertTrue(HWPTAG_PARA_LINE_SEG not in tagids)
         self.assertTrue(ParaLineSeg not in types)

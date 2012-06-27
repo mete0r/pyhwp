@@ -1754,7 +1754,7 @@ def init_record_parsing_context(base, record):
     '''
 
     context = dict(base, record=record, stream=StringIO(record['payload']))
-    model = dict(record=record)
+    model = record
     return context, model
 
 
@@ -1767,7 +1767,7 @@ def parse_model(context, model):
     ''' HWPTAG로 모델 결정 후 기본 파싱 '''
 
     # HWPTAG로 모델 결정
-    model['type'] = tag_models.get(model['record']['tagid'], RecordModel)
+    model['type'] = tag_models.get(model['tagid'], RecordModel)
     model['content'] = dict()
 
     # 1차 파싱
@@ -1797,7 +1797,7 @@ def parse_model(context, model):
 
 def parse_models_with_parent(context_models):
     from .treeop import prefix_ancestors_from_level
-    level_prefixed = ((model['record']['level'], (context, model))
+    level_prefixed = ((model['level'], (context, model))
                       for context, model in context_models)
     root_item = (dict(), dict())
     ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
@@ -1829,7 +1829,7 @@ def model_to_json(model, *args, **kwargs):
     import simplejson  # TODO: simplejson is for python2.5+
     model = dict(model)
     model['type'] = model['type'].__name__
-    record = model['record']
+    record = model
     record['payload'] = list(dumpbytes(record['payload']))
     if 'unparsed' in model:
         model['unparsed'] = list(dumpbytes(model['unparsed']))

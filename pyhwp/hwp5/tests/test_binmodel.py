@@ -25,7 +25,6 @@ class TestRecordParsing(TestCase):
         record = dict(tagid=HWPTAG_BEGIN, payload='abcd')
         context, model = init_record_parsing_context(testcontext, record)
 
-        self.assertEquals(record, model['record'])
         self.assertEquals(record, context['record'])
         self.assertEquals('abcd', context['stream'].read())
 
@@ -631,8 +630,7 @@ class TestModelJson(TestBase):
     def test_model_to_json_with_unparsed(self):
         from hwp5.binmodel import model_to_json
 
-        record = dict(payload='\x00\x01\x02\x03')
-        model = dict(type=RecordModel, content=[], record=record,
+        model = dict(type=RecordModel, content=[], payload='\x00\x01\x02\x03',
                      unparsed='\xff\xfe\xfd\xfc')
         json = model_to_json(model)
 
@@ -661,10 +659,10 @@ class TestModelStream(TestBase):
 
     def test_model(self):
         model = self.docinfo.model(0)
-        self.assertEquals(0, model['record']['seqno'])
+        self.assertEquals(0, model['seqno'])
 
         model = self.docinfo.model(10)
-        self.assertEquals(10, model['record']['seqno'])
+        self.assertEquals(10, model['seqno'])
 
     def test_models_json_open(self):
         import simplejson
