@@ -1796,11 +1796,6 @@ def parse_model(context, model):
     if parse_child:
         parse_child(parent_content, parent_context, (context, model))
 
-    parse_with_parent = getattr(model['type'], 'parse_with_parent', None)
-    if parse_with_parent:
-        model['content'] = parse_with_parent(model['content'], context,
-                                             parent_model)
-
     logger.debug('pass2: %s, %s', model['type'], model['content'])
 
 
