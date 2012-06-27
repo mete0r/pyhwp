@@ -1142,7 +1142,7 @@ class ScaleRotationMatrix(Struct):
     attributes = staticmethod(attributes)
 
 
-class ShapeComponent(RecordModel):
+class ShapeComponent(BasicRecordModel):
     ''' 4.2.9.2 그리기 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT
     FillFlags = Flags(UINT16,
@@ -1155,6 +1155,13 @@ class ShapeComponent(RecordModel):
             )
 
     def attributes(cls, context):
+        if 'parent' in context:
+            parent_context, parent_model = context['parent']
+            if parent_model['type'] is GShapeObjectControl:
+                # GSO-child ShapeComponent specific:
+                # it may be a GSO model's attribute, e.g. 'child_chid'
+                yield CHID, 'chid0'
+
         chid = yield CHID, 'chid'
         yield SHWPUNIT, 'x_in_group'
         yield SHWPUNIT, 'y_in_group'
@@ -1184,16 +1191,6 @@ class ShapeComponent(RecordModel):
         elif chid == CHID.LINE:
             yield BorderLine, 'line'
     attributes = classmethod(attributes)
-
-    def parse_with_parent(cls, attributes, context, parent_model):
-        stream = context['stream']
-
-        if parent_model['type'] is GShapeObjectControl:
-            # GSO-child ShapeComponent specific:
-            # it may be a GSO model's attribute, e.g. 'child_chid'
-            attributes['chid0'] = CHID.read(stream)
-        return parse_model_attributes(cls, attributes, context)
-    parse_with_parent = classmethod(parse_with_parent)
 
     def parse_child(cls, attributes, context,
                     (child_context, child_model)):

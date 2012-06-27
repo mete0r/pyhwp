@@ -221,8 +221,9 @@ class ShapeComponentTest(TestBase):
                                paragraphs=1), child_model['content'])
         self.assertEquals('', child_context['stream'].read())
 
-    def test_parse_with_parent(self):
+    def test_parse(self):
         from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import parse_model
         from hwp5.binmodel import GShapeObjectControl, ShapeComponent
 
         #parent_record = self.control_gso_record
@@ -232,12 +233,11 @@ class ShapeComponentTest(TestBase):
 
         record = self.shapecomponent_record
         context, model = init_record_parsing_context(testcontext, record)
-        model_type, model_content = ShapeComponent, dict()
-        model_content = model_type.parse_with_parent(model_content, context,
-                                                     parent_model)
+        context['parent'] = dict(), parent_model
+        parse_model(context, model)
 
-        self.assertEquals(model_type, ShapeComponent)
-        self.assertTrue('chid0' in model_content)
+        self.assertEquals(model['type'], ShapeComponent)
+        self.assertTrue('chid0' in model['content'])
 
         # if parent model is not GShapeObjectControl
         # TODO
