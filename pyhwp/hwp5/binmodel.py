@@ -4,6 +4,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from .dataio import (readn, read_struct_attributes, match_attribute_types,
+                     CompoundType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
                      UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
                      SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
@@ -998,17 +999,15 @@ class Text(object):
     pass
 
 
-class ParaText(RecordModel):
-    tagid = HWPTAG_PARA_TEXT
+class ParaTextChunks(list):
+    __metaclass__ = CompoundType
 
-    def parse_with_parent(cls, attributes, context, parent_model):
-        stream = context['stream']
-        bytes = stream.read()
-        attributes['chunks'] = [x for x in cls.parseBytes(bytes)]
-        return attributes
-    parse_with_parent = classmethod(parse_with_parent)
+    def read(cls, f, context):
+        bytes = f.read()
+        return [x for x in cls.parse_chunks(bytes)]
+    read = classmethod(read)
 
-    def parseBytes(bytes):
+    def parse_chunks(bytes):
         size = len(bytes)
         idx = 0
         while idx < size:
@@ -1020,7 +1019,15 @@ class ParaText(RecordModel):
                 cch = ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
                 yield (ctrlpos / 2, ctrlpos_end / 2), cch
             idx = ctrlpos_end
-    parseBytes = staticmethod(parseBytes)
+    parse_chunks = staticmethod(parse_chunks)
+
+
+class ParaText(BasicRecordModel):
+    tagid = HWPTAG_PARA_TEXT
+
+    def attributes(context):
+        yield ParaTextChunks, 'chunks'
+    attributes = staticmethod(attributes)
 
 
 class ParaCharShape(RecordModel):
