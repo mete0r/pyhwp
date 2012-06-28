@@ -76,15 +76,13 @@ class RecordModelType(StructType):
 class RecordModel(object):
     __metaclass__ = RecordModelType
 
-
-class BasicRecordModel(RecordModel):
     def attributes(context):
         if False:
             yield
     attributes = staticmethod(attributes)
 
 
-class DocumentProperties(BasicRecordModel):
+class DocumentProperties(RecordModel):
     tagid = HWPTAG_DOCUMENT_PROPERTIES
 
     def attributes(context):
@@ -102,7 +100,7 @@ class DocumentProperties(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class IdMappings(BasicRecordModel):
+class IdMappings(RecordModel):
     tagid = HWPTAG_ID_MAPPINGS
 
     def attributes(context):
@@ -127,7 +125,7 @@ class IdMappings(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class BinData(BasicRecordModel):
+class BinData(RecordModel):
     tagid = HWPTAG_BIN_DATA
     StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
     CompressionType = Enum(STORAGE_DEFAULT=0, YES=1, NO=2)
@@ -176,7 +174,7 @@ class Panose1(Struct):
     attributes = staticmethod(attributes)
 
 
-class FaceName(BasicRecordModel):
+class FaceName(RecordModel):
     tagid = HWPTAG_FACE_NAME
     Flags = Flags(BYTE,
         5, 'default',
@@ -299,7 +297,7 @@ class FillGradation(Fill):
     attributes = staticmethod(attributes)
 
 
-class BorderFill(BasicRecordModel):
+class BorderFill(RecordModel):
     tagid = HWPTAG_BORDER_FILL
 
     Fill = Enum(NONE=0, COLORPATTERN=1, GRADATION=4)
@@ -334,7 +332,7 @@ def LanguageStruct(name, basetype):
     return LanguageStructType(name, (Struct,), dict(basetype=basetype))
 
 
-class CharShape(BasicRecordModel):
+class CharShape(RecordModel):
     tagid = HWPTAG_CHAR_SHAPE
 
     Underline = Enum(NONE=0, UNDERLINE=1, UNKNOWN=2, UPPERLINE=3)
@@ -365,7 +363,7 @@ class CharShape(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class TabDef(BasicRecordModel):
+class TabDef(RecordModel):
     tagid = HWPTAG_TAB_DEF
 
     def attributes(context):
@@ -382,7 +380,7 @@ class TabDef(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class Numbering(BasicRecordModel):
+class Numbering(RecordModel):
     tagid = HWPTAG_NUMBERING
     Align = Enum(LEFT=0, CENTER=1, RIGHT=2)
     DistanceType = Enum(RATIO=0, VALUE=1)
@@ -401,11 +399,11 @@ class Numbering(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class Bullet(BasicRecordModel):
+class Bullet(RecordModel):
     tagid = HWPTAG_BULLET
 
 
-class ParaShape(BasicRecordModel):
+class ParaShape(RecordModel):
     ''' 4.1.10. 문단 모양 '''
     tagid = HWPTAG_PARA_SHAPE
     LineSpacingType = Enum(RATIO=0, FIXED=1, SPACEONLY=2, MINIMUM=3)
@@ -466,7 +464,7 @@ class ParaShape(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class Style(BasicRecordModel):
+class Style(RecordModel):
     tagid = HWPTAG_STYLE
 
     def attributes(context):
@@ -483,15 +481,15 @@ class Style(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class DocData(BasicRecordModel):
+class DocData(RecordModel):
     tagid = HWPTAG_DOC_DATA
 
 
-class DistributeDocData(BasicRecordModel):
+class DistributeDocData(RecordModel):
     tagid = HWPTAG_DISTRIBUTE_DOC_DATA
 
 
-class CompatibleDocument(BasicRecordModel):
+class CompatibleDocument(RecordModel):
     tagid = HWPTAG_COMPATIBLE_DOCUMENT
     Target = Enum(DEFAULT=0, HWP2007=1, MSWORD=2)
     Flags = dataio.Flags(UINT32,
@@ -503,7 +501,7 @@ class CompatibleDocument(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class LayoutCompatibility(BasicRecordModel):
+class LayoutCompatibility(RecordModel):
     tagid = HWPTAG_LAYOUT_COMPATIBILITY
 
     def attributes(context):
@@ -582,7 +580,7 @@ class ControlType(RecordModelType):
             control_models[chid] = cls
 
 
-class Control(BasicRecordModel):
+class Control(RecordModel):
     __metaclass__ = ControlType
     tagid = HWPTAG_CTRL_HEADER
 
@@ -670,7 +668,7 @@ class TableControl(CommonControl):
     alternate_child_type = classmethod(alternate_child_type)
 
 
-class ListHeader(BasicRecordModel):
+class ListHeader(RecordModel):
     tagid = HWPTAG_LIST_HEADER
     Flags = Flags(UINT32,
         0, 2, 'textdirection',
@@ -689,7 +687,7 @@ class ListHeader(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class PageDef(BasicRecordModel):
+class PageDef(RecordModel):
     tagid = HWPTAG_PAGE_DEF
     Orientation = Enum(PORTRAIT=0, LANDSCAPE=1)
     BookBinding = Enum(LEFT=0, RIGHT=1, TOP=2, BOTTOM=3)
@@ -748,7 +746,7 @@ class PageDef(BasicRecordModel):
     width = property(getWidth)
 
 
-class FootnoteShape(BasicRecordModel):
+class FootnoteShape(RecordModel):
     tagid = HWPTAG_FOOTNOTE_SHAPE
     Flags = Flags(UINT32,
         )
@@ -771,7 +769,7 @@ class FootnoteShape(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class PageBorderFill(BasicRecordModel):
+class PageBorderFill(RecordModel):
     tagid = HWPTAG_PAGE_BORDER_FILL
     RelativeTo = Enum(BODY=0, PAPER=1)
     FillArea = Enum(PAPER=0, PAGE=1, BORDER=2)
@@ -818,7 +816,7 @@ class TableCell(ListHeader):
     attributes = staticmethod(attributes)
 
 
-class TableBody(BasicRecordModel):
+class TableBody(RecordModel):
     tagid = HWPTAG_TABLE
     Split = Enum(NONE=0, BY_CELL=1, SPLIT=2)
     Flags = Flags(UINT32,
@@ -840,7 +838,7 @@ class TableBody(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class Paragraph(BasicRecordModel):
+class Paragraph(RecordModel):
     tagid = HWPTAG_PARA_HEADER
 
     SplitFlags = Flags(BYTE,
@@ -995,7 +993,7 @@ class ParaTextChunks(list):
     parse_chunks = staticmethod(parse_chunks)
 
 
-class ParaText(BasicRecordModel):
+class ParaText(RecordModel):
     tagid = HWPTAG_PARA_TEXT
 
     def attributes(context):
@@ -1022,7 +1020,7 @@ class ParaCharShapeList(list):
     decode = staticmethod(decode)
 
 
-class ParaCharShape(BasicRecordModel):
+class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
 
     def attributes(context):
@@ -1073,7 +1071,7 @@ class ParaLineSegList(list):
     decode = classmethod(decode)
 
 
-class ParaLineSeg(BasicRecordModel):
+class ParaLineSeg(RecordModel):
     tagid = HWPTAG_PARA_LINE_SEG
 
     def attributes(cls, context):
@@ -1081,7 +1079,7 @@ class ParaLineSeg(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class ParaRangeTag(BasicRecordModel):
+class ParaRangeTag(RecordModel):
     tagid = HWPTAG_PARA_RANGE_TAG
 
     def attributes(context):
@@ -1126,7 +1124,7 @@ class ScaleRotationMatrix(Struct):
     attributes = staticmethod(attributes)
 
 
-class ShapeComponent(BasicRecordModel):
+class ShapeComponent(RecordModel):
     ''' 4.2.9.2 그리기 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT
     FillFlags = Flags(UINT16,
@@ -1197,7 +1195,7 @@ class Coord(Struct):
     attributes = staticmethod(attributes)
 
 
-class ShapeLine(BasicRecordModel):
+class ShapeLine(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
 
     def attributes(context):
@@ -1206,7 +1204,7 @@ class ShapeLine(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class ShapeRectangle(BasicRecordModel):
+class ShapeRectangle(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_RECTANGLE
 
     def attributes(context):
@@ -1215,7 +1213,7 @@ class ShapeRectangle(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class ShapeEllipse(BasicRecordModel):
+class ShapeEllipse(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ELLIPSE
     Flags = Flags(UINT32)  # TODO
 
@@ -1231,7 +1229,7 @@ class ShapeEllipse(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class ShapeArc(BasicRecordModel):
+class ShapeArc(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ARC
 
     def attributes(cls, context):
@@ -1242,7 +1240,7 @@ class ShapeArc(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class ShapePolygon(BasicRecordModel):
+class ShapePolygon(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_POLYGON
 
     def attributes(cls, context):
@@ -1251,7 +1249,7 @@ class ShapePolygon(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class ShapeCurve(BasicRecordModel):
+class ShapeCurve(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_CURVE
 
     def attributes(cls, context):
@@ -1261,7 +1259,7 @@ class ShapeCurve(BasicRecordModel):
     attributes = classmethod(attributes)
 
 
-class ShapeOLE(BasicRecordModel):
+class ShapeOLE(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_OLE
     # TODO
 
@@ -1325,7 +1323,7 @@ class ImageClip(Struct):
     attributes = staticmethod(attributes)
 
 
-class ShapePicture(BasicRecordModel):
+class ShapePicture(RecordModel):
     ''' 4.2.9.4. 그림 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_PICTURE
 
@@ -1342,26 +1340,26 @@ class ShapePicture(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class ShapeContainer(BasicRecordModel):
+class ShapeContainer(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_CONTAINER
     # TODO
 
 
-class ShapeTextArt(BasicRecordModel):
+class ShapeTextArt(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_TEXTART
     # TODO
 
 
-class ControlData(BasicRecordModel):
+class ControlData(RecordModel):
     tagid = HWPTAG_CTRL_DATA
 
 
-class EqEdit(BasicRecordModel):
+class EqEdit(RecordModel):
     tagid = HWPTAG_CTRL_EQEDIT
     # TODO
 
 
-class ForbiddenChar(BasicRecordModel):
+class ForbiddenChar(RecordModel):
     tagid = HWPTAG_FORBIDDEN_CHAR
     # TODO
 
