@@ -37,12 +37,13 @@ class BinEmbeddedTest(TestCase):
     ctx = TestContext()
     stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00\x6a\x00\x70\x00\x67\x00')
 
-    def testParsePass1(self):
+    def testParse(self):
         from hwp5.binmodel import BinData
         from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import parse_model
         record = read_records(self.stream).next()
         context, model = init_record_parsing_context(testcontext, record)
-        BinData.parse_pass1(context, model)
+        parse_model(context, model)
 
         self.assertTrue(BinData, model['type'])
         self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(model['content']['flags']).storage)
@@ -83,11 +84,12 @@ class TableTest(TestBase):
         return self.bodytext.section(0).record(32)
 
     def testParsePass1(self):
-        from hwp5.binmodel import Control, TableControl
+        from hwp5.binmodel import TableControl
         from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import parse_model
         record = read_records(self.stream).next()
         context, model = init_record_parsing_context(testcontext, record)
-        Control.parse_pass1(context, model)
+        parse_model(context, model)
 
         self.assertTrue(TableControl, model['type'])
         self.assertEquals(1453501933, model['content']['instance_id'])
@@ -326,10 +328,12 @@ class ListHeaderTest(TestCase):
     def testParse(self):
         from hwp5.binmodel import ListHeader
         from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import parse_model
         record = read_records(self.stream).next()
         context, model = init_record_parsing_context(testcontext, record)
-        ListHeader.parse_pass1(context, model)
+        parse_model(context, model)
 
+        self.assertEquals(ListHeader, model['type'])
         self.assertEquals(1, model['content']['paragraphs'])
         self.assertEquals(0x20L, model['content']['listflags'])
         self.assertEquals(0, model['content']['unknown1'])
@@ -609,6 +613,23 @@ class TestFootnoteShape(TestBase):
         models = list(models)
         self.assertEquals(850, models[0]['content']['splitter_margin_top'])
         self.assertEquals(567, models[0]['content']['splitter_margin_bottom'])
+
+
+class TestControlData(TestBase):
+    def test_parse(self):
+        import pickle
+        f = open('fixtures/5006-controldata.record', 'r')
+        try:
+            record = pickle.load(f)
+        finally:
+            f.close()
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import parse_model
+        from hwp5.binmodel import ControlData
+        context, model = init_record_parsing_context(dict(), record)
+        parse_model(context, model)
+        self.assertEquals(ControlData, model['type'])
+        self.assertEquals(dict(), model['content'])
 
 
 class TestModelJson(TestBase):

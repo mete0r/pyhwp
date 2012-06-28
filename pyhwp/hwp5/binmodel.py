@@ -83,12 +83,6 @@ class BasicRecordModel(RecordModel):
             yield
     attributes = staticmethod(attributes)
 
-    def parse_pass1(cls, context, model):
-        model['type'] = cls
-        model['content'] = dict()
-        model['content'] = parse_model_attributes(cls, model['content'], context)
-    parse_pass1 = classmethod(parse_pass1)
-
 
 class AttributeDeterminedRecordModel(BasicRecordModel):
     key_attribute = None
@@ -96,18 +90,6 @@ class AttributeDeterminedRecordModel(BasicRecordModel):
     def concrete_type_by_attribute(cls, key_attribute_value):
         raise Exception()
     concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
-
-    def parse_pass1(cls, context, model):
-        model['type'] = cls
-        model['content'] = dict()
-        model['content'] = parse_model_attributes(cls, model['content'], context)
-        get_altered_model = cls.concrete_type_by_attribute
-        key = cls.key_attribute
-        altered_model = get_altered_model(model['content'][key])
-        if altered_model is not None:
-            model['type'] = altered_model
-            model['content'] = parse_model_attributes(model['type'], model['content'], context)
-    parse_pass1 = classmethod(parse_pass1)
 
 
 class DocumentProperties(BasicRecordModel):
@@ -1378,7 +1360,7 @@ class ShapeTextArt(BasicRecordModel):
     # TODO
 
 
-class ControlData(RecordModel):
+class ControlData(BasicRecordModel):
     tagid = HWPTAG_CTRL_DATA
 
 
@@ -1775,9 +1757,17 @@ def parse_model(context, model):
     model['content'] = dict()
 
     # 1차 파싱
-    parse_pass1 = getattr(model['type'], 'parse_pass1', None)
-    if parse_pass1:
-        parse_pass1(context, model)
+    model['content'] = parse_model_attributes(model['type'], model['content'], context)
+
+    # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
+    get_altered_model = getattr(model['type'], 'concrete_type_by_attribute',
+                                None)
+    if get_altered_model:
+        key = model['type'].key_attribute
+        altered_model = get_altered_model(model['content'][key])
+        if altered_model is not None:
+            model['type'] = altered_model
+            model['content'] = parse_model_attributes(model['type'], model['content'], context)
 
     if 'parent' not in context:
         return
