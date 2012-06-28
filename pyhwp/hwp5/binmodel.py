@@ -84,14 +84,6 @@ class BasicRecordModel(RecordModel):
     attributes = staticmethod(attributes)
 
 
-class AttributeDeterminedRecordModel(BasicRecordModel):
-    key_attribute = None
-
-    def concrete_type_by_attribute(cls, key_attribute_value):
-        raise Exception()
-    concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
-
-
 class DocumentProperties(BasicRecordModel):
     tagid = HWPTAG_DOCUMENT_PROPERTIES
 
@@ -590,7 +582,7 @@ class ControlType(RecordModelType):
             control_models[chid] = cls
 
 
-class Control(AttributeDeterminedRecordModel):
+class Control(BasicRecordModel):
     __metaclass__ = ControlType
     tagid = HWPTAG_CTRL_HEADER
 
