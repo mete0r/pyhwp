@@ -150,8 +150,7 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
 
 def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
                                            paralineseg):
-    from .binmodel import ParaLineSeg
-    LineSeg = ParaLineSeg.LineSeg
+    from .binmodel import LineSeg
 
     paratext_model, paratext_attributes, paratext_context = paratext
 

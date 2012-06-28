@@ -1058,36 +1058,32 @@ class ParaCharShape(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class ParaLineSeg(RecordModel):
-    tagid = HWPTAG_PARA_LINE_SEG
-
-    class LineSeg(Struct):
-        Flags = Flags(UINT16,
-                4, 'indented')
-
-        def attributes(cls, context):
-            yield INT32, 'chpos',
-            yield SHWPUNIT, 'y',
-            yield SHWPUNIT, 'height',
-            yield SHWPUNIT, 'height2',
-            yield SHWPUNIT, 'height85',
-            yield SHWPUNIT, 'space_below',
-            yield SHWPUNIT, 'x',
-            yield SHWPUNIT, 'width'
-            yield UINT16, 'a8'
-            yield cls.Flags, 'flags'
-        attributes = classmethod(attributes)
+class LineSeg(Struct):
+    Flags = Flags(UINT16,
+            4, 'indented')
 
     def attributes(cls, context):
-        yield ARRAY(cls.LineSeg, 1), 'linesegs'
+        yield INT32, 'chpos',
+        yield SHWPUNIT, 'y',
+        yield SHWPUNIT, 'height',
+        yield SHWPUNIT, 'height2',
+        yield SHWPUNIT, 'height85',
+        yield SHWPUNIT, 'space_below',
+        yield SHWPUNIT, 'x',
+        yield SHWPUNIT, 'width'
+        yield UINT16, 'a8'
+        yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
-    def parse_pass1(cls, context, model):
+
+class ParaLineSegList(list):
+    __metaclass__ = ArrayType
+    itemtype = LineSeg
+
+    def read(cls, f, context):
         payload = context['stream'].read()
-        linesegs = cls.decode(context, payload)
-        model['type'] = cls
-        model['content'] = dict(linesegs=linesegs)
-    parse_pass1 = classmethod(parse_pass1)
+        return cls.decode(context, payload)
+    read = classmethod(read)
 
     def decode(cls, context, payload):
         from itertools import izip
@@ -1100,9 +1096,17 @@ class ParaLineSeg(RecordModel):
         x = list(dict(izip(names, tuple(values[i*10:i*10+10])))
                  for i in range(0, unitcount))
         for d in x:
-            d['flags'] = cls.LineSeg.Flags(d['flags'])
+            d['flags'] = LineSeg.Flags(d['flags'])
         return x
     decode = classmethod(decode)
+
+
+class ParaLineSeg(BasicRecordModel):
+    tagid = HWPTAG_PARA_LINE_SEG
+
+    def attributes(cls, context):
+        yield ParaLineSegList, 'linesegs'
+    attributes = classmethod(attributes)
 
 
 class ParaRangeTag(BasicRecordModel):

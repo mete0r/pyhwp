@@ -388,8 +388,8 @@ class LineSegTest(TestCase):
         data = '00000000481e0000e8030000e80300005203000058020000dc0500003ca00000000006003300000088240000e8030000e80300005203000058020000dc0500003ca000000000060067000000c82a0000e8030000e80300005203000058020000dc0500003ca0000000000600'
         import binascii
         data = binascii.a2b_hex(data)
-        from hwp5.binmodel import ParaLineSeg
-        lines = list(ParaLineSeg.decode(dict(), data))
+        from hwp5.binmodel import ParaLineSegList
+        lines = list(ParaLineSegList.decode(dict(), data))
         self.assertEquals(0, lines[0]['chpos'])
         self.assertEquals(51, lines[1]['chpos'])
         self.assertEquals(103, lines[2]['chpos'])
