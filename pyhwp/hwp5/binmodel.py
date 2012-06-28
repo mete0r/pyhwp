@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 
 from .dataio import (readn, read_struct_attributes, match_attribute_types,
                      CompoundType,
+                     ArrayType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
                      UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
                      SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
@@ -1030,21 +1031,13 @@ class ParaText(BasicRecordModel):
     attributes = staticmethod(attributes)
 
 
-class ParaCharShape(RecordModel):
-    tagid = HWPTAG_PARA_CHAR_SHAPE
-
-    def attributes(context):
-        yield ARRAY(ARRAY(UINT16, 2), 1), 'charshapes'
-    attributes = staticmethod(attributes)
-
-    def parse_pass1(cls, context, model):
-        model['type'] = cls
-        model['content'] = cls.read(context['stream'], context)
-    parse_pass1 = classmethod(parse_pass1)
+class ParaCharShapeList(list):
+    __metaclass__ = ArrayType
+    itemtype = ARRAY(UINT16, 2)
 
     def read(cls, f, context):
         bytes = f.read()
-        return dict(charshapes=cls.decode(bytes, context))
+        return cls.decode(bytes, context)
     read = classmethod(read)
 
     def decode(payload, context=None):
@@ -1055,6 +1048,14 @@ class ParaCharShape(RecordModel):
         values = struct.unpack('<'+(fmt*unitcount), payload)
         return list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount))
     decode = staticmethod(decode)
+
+
+class ParaCharShape(BasicRecordModel):
+    tagid = HWPTAG_PARA_CHAR_SHAPE
+
+    def attributes(context):
+        yield ParaCharShapeList, 'charshapes'
+    attributes = staticmethod(attributes)
 
 
 class ParaLineSeg(RecordModel):
