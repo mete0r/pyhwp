@@ -95,7 +95,8 @@ def startelement(context, xmlgen, (model, attributes)):
     elif model is dict:
         typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
     else:
-        typed_attributes = typed_model_attributes(model, attributes, context)
+        typed_attributes = ((v['name'], (v['type'], v['value']))
+                            for v in typed_model_attributes(model, attributes, context))
 
     typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
     yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)

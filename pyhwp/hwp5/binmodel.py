@@ -52,10 +52,10 @@ def typed_model_attributes(model, attributes, context):
         types = getattr(cls, 'attributes', None)
         if types:
             types = types(context)
-            for x in match_attribute_types(types, attributes):
-                yield x
+            for name, (t, value) in match_attribute_types(types, attributes):
+                yield dict(name=name, value=value, type=t)
     for name, value in attributes.iteritems():
-        yield name, (type(value), value)
+        yield dict(name=name, value=value, type=type(value))
 
 tag_models = dict()
 
