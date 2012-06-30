@@ -102,7 +102,6 @@ class TestStructMemberTypes(TestCase):
     def test_struct_member_types_without_attributes(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import struct_member_types
-        from hwp5.dataio import UINT8, UINT16, UINT32
 
         class A(object):
             __metaclass__ = StructType
