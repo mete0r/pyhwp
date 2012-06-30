@@ -151,7 +151,7 @@ Example::
 
 Example::
 
-    $ hwp5proc models samples/sample-5017.hwp BodyText/Section0 > Section0.bin
+    $ hwp5proc cat samples/sample-5017.hwp BodyText/Section0 > Section0.bin
     $ hwp5proc models < Section0.bin
     $ hwp5proc models -V 5.0.1.7 < Section0.bin
 
