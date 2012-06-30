@@ -46,9 +46,9 @@ def parse_model_attributes(model, attributes, context):
 def typed_model_attributes(model, attributes, context):
     import inspect
     attributes = dict(attributes)
-    for cls in filter(lambda x: (x is not RecordModel
+    for cls in reversed(filter(lambda x: (x is not RecordModel
                                  and issubclass(x, RecordModel)),
-                      inspect.getmro(model)):
+                      inspect.getmro(model))):
         types = getattr(cls, 'attributes', None)
         if types:
             types = types(context)

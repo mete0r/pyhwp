@@ -494,8 +494,8 @@ class TestTypedModelAttributes(TestCase):
         attributes = dict(a=1, b=u'abc', c=(2, 2))
         result = typed_model_attributes(Hoho, attributes, dict())
         result = list(result)
-        expected = [dict(name='b', type=BSTR, value='abc'),
-                    dict(name='a', type=INT32, value=1),
+        expected = [dict(name='a', type=INT32, value=1),
+                    dict(name='b', type=BSTR, value='abc'),
                     dict(name='c', type=tuple, value=(2, 2))]
         self.assertEquals(expected, result)
 
