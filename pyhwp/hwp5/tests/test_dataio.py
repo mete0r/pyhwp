@@ -27,7 +27,10 @@ class TestTypedAttributes(TestCase):
         matched = match_attribute_types(types, values)
         matched = list(matched)
         expected = dict(a=(int,1), b=(long,2)).items()
-        self.assertEquals(set(expected), set(matched))
+        expected = [dict(name='a', type=int, value=1),
+                    dict(name='b', type=long, value=2)]
+        self.assertEquals(expected, matched)
+        self.assertEquals(dict(c='abc'), values)
 
     def test_typed_struct_attributes(self):
         class SomeRandomStruct(Struct):

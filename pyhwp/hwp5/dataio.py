@@ -383,7 +383,7 @@ def match_attribute_types(types_generator, values):
         while True:
             if name in values:
                 value = values.pop(name)
-                yield name, (t, value)
+                yield dict(name=name, type=t, value=value)
             else:
                 value = t()
             t, name = types_generator.send(value)
@@ -393,8 +393,8 @@ def match_attribute_types(types_generator, values):
 def typed_struct_attributes(struct, attributes, context):
     types = struct.attributes(context)
     attributes = dict(attributes)
-    for name, (t, value) in match_attribute_types(types, attributes):
-        yield dict(name=name, type=t, value=value)
+    for d in match_attribute_types(types, attributes):
+        yield d
     # remnants
     for name, value in attributes.iteritems():
         yield dict(name=name, type=type(value), value=value)

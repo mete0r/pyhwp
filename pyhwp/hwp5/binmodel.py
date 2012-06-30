@@ -52,8 +52,8 @@ def typed_model_attributes(model, attributes, context):
         types = getattr(cls, 'attributes', None)
         if types:
             types = types(context)
-            for name, (t, value) in match_attribute_types(types, attributes):
-                yield dict(name=name, value=value, type=t)
+            for d in match_attribute_types(types, attributes):
+                yield d
     for name, value in attributes.iteritems():
         yield dict(name=name, value=value, type=type(value))
 
