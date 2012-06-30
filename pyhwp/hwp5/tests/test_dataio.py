@@ -191,3 +191,32 @@ class TestFlags(TestCase):
                                     4, long, 'bit4',
                                     5, 'bit5']))
         self.assertEquals([bit01, bit23, bit4, bit5], x)
+
+
+class TestReadStruct(TestCase):
+
+    def test_read_parse_error(self):
+        from hwp5.dataio import StructType
+        from hwp5.dataio import INT16
+        from hwp5.dataio import read_struct_attributes_with_offset
+        from hwp5.dataio import ParseError
+
+        class Foo(object):
+            __metaclass__ = StructType
+
+            def attributes(context):
+                yield INT16, 'a'
+            attributes = staticmethod(attributes)
+
+        from StringIO import StringIO
+        stream = StringIO()
+
+        record = dict()
+        context = dict(record=record)
+        members = read_struct_attributes_with_offset(Foo, context, stream)
+        try:
+            list(members)
+            assert False, 'ParseError expected'
+        except ParseError, e:
+            self.assertEquals(Foo, e.context[-1]['model'])
+            self.assertEquals('a', e.context[-1]['member'])

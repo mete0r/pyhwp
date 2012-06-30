@@ -3,7 +3,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from .dataio import (readn, read_struct_attributes, match_attribute_types,
+from .dataio import (readn, read_struct_attributes,
                      CompoundType,
                      ArrayType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
@@ -44,16 +44,25 @@ def parse_model_attributes(model, attributes, context):
 
 
 def typed_model_attributes(model, attributes, context):
+    def popvalue(member):
+        name = member['name']
+        if name in attributes:
+            return attributes.pop(name)
+        else:
+            return member['type']()
+
     import inspect
-    attributes = dict(attributes)
-    for cls in reversed(filter(lambda x: (x is not RecordModel
-                                 and issubclass(x, RecordModel)),
-                      inspect.getmro(model))):
-        types = getattr(cls, 'attributes', None)
-        if types:
-            types = types(context)
-            for d in match_attribute_types(types, attributes):
+    mro = inspect.getmro(model)
+    mro = (cls for cls in mro if issubclass(cls, RecordModel))
+    mro = (cls for cls in mro if cls is not RecordModel)
+    mro = list(mro)
+    mro = reversed(mro)
+    for cls in mro:
+        if 'attributes' in cls.__dict__:
+            for d in cls.iter_members(context, popvalue):
                 yield d
+
+    # remnants
     for name, value in attributes.iteritems():
         yield dict(name=name, value=value, type=type(value))
 

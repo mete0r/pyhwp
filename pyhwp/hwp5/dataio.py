@@ -347,19 +347,15 @@ def read_struct_attributes_with_offset(model, context, stream):
 
 
 def read_struct_attributes_name_value(model, context, stream):
-    gen = model.attributes(context)
-    try:
-        type, name = gen.next()
-        while True:
-            try:
-                value = read_type_value(context, type, stream)
-            except ParseError, e:
-                e.context.append(dict(model=model, member=name))
-                raise
-            yield name, value
-            type, name = gen.send(value)
-    except StopIteration:
-        pass
+    def read_member(member):
+        try:
+            return read_type_value(context, member['type'], stream)
+        except ParseError, e:
+            e.context.append(dict(model=model, member=member['name']))
+            raise
+
+    for member in model.iter_members(context, read_member):
+        yield member['name'], member['value']
 
 
 def read_type_value(context, type, stream):
@@ -391,13 +387,21 @@ def match_attribute_types(types_generator, values):
         pass
 
 def typed_struct_attributes(struct, attributes, context):
-    types = struct.attributes(context)
     attributes = dict(attributes)
-    for d in match_attribute_types(types, attributes):
-        yield d
+    def popvalue(member):
+        name = member['name']
+        if name in attributes:
+            return attributes.pop(name)
+        else:
+            return member['type']()
+
+    for member in struct.iter_members(context, popvalue):
+        yield member
+
     # remnants
     for name, value in attributes.iteritems():
         yield dict(name=name, type=type(value), value=value)
+
 
 class StructType(CompoundType):
     def __init__(cls, name, bases, attrs):
@@ -411,21 +415,31 @@ class StructType(CompoundType):
     def read(cls, f, context=None):
         return read_struct_attributes(cls, dict(), context, f)
 
+    def iter_members(cls, context, getvalue):
+        members = cls.attributes(context)
+        try:
+            member = members.next()
+            while True:
+                member_type, member_name = member
+                member = dict(type=member_type, name=member_name)
+                member['value'] = getvalue(member)
+                yield member
+                member = members.send(member['value'])
+        except StopIteration:
+            pass
+
+
 class Struct(object):
     __metaclass__ = StructType
 
 def struct_member_types_intern(cls, values, context):
     ''' StructType의 멤버 타입들을 반환.
     '''
-    attributes = cls.attributes(context)
-    try:
-        typ, name = attributes.next()
-        while True:
-            yield name, typ
-            value = values[name]
-            typ, name = attributes.send(value)
-    except StopIteration:
-        pass
+    def getvalue(member):
+        return values[member['name']]
+
+    for member in cls.iter_members(context, getvalue):
+        yield member['name'], member['type']
 
 def struct_member_types(struct_type, member_values, context):
     ''' StructType의 멤버 타입들을 반환. (상속 포함)
