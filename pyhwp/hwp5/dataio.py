@@ -393,10 +393,11 @@ def match_attribute_types(types_generator, values):
 def typed_struct_attributes(struct, attributes, context):
     types = struct.attributes(context)
     attributes = dict(attributes)
-    for x in match_attribute_types(types, attributes):
-        yield x
+    for name, (t, value) in match_attribute_types(types, attributes):
+        yield dict(name=name, type=t, value=value)
+    # remnants
     for name, value in attributes.iteritems():
-        yield name, (type(value), value)
+        yield dict(name=name, type=type(value), value=value)
 
 class StructType(CompoundType):
     def __init__(cls, name, bases, attrs):

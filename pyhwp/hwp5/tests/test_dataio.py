@@ -40,8 +40,10 @@ class TestTypedAttributes(TestCase):
         attributes = dict(a=1, b=u'abc', c=(4,5,6))
         typed_attributes = typed_struct_attributes(SomeRandomStruct, attributes, dict())
         typed_attributes = list(typed_attributes)
-        expected = dict(a=(INT32, 1), b=(BSTR,u'abc'), c=(ARRAY(INT32, 3),(4,5,6))).items()
-        self.assertEquals(set(expected), set(typed_attributes))
+        expected = [dict(name='a', type=INT32, value=1),
+                    dict(name='b', type=BSTR, value='abc'),
+                    dict(name='c', type=ARRAY(INT32, 3), value=(4,5,6))]
+        self.assertEquals(expected, typed_attributes)
 
 class TestStructType(TestCase):
     def test_assign_enum_flags_name(self):

@@ -90,7 +90,8 @@ def separate_plainvalues(typed_attributes):
 
 def startelement(context, xmlgen, (model, attributes)):
     if issubclass(model, Struct):
-        typed_attributes = typed_struct_attributes(model, attributes, context)
+        typed_attributes = ((v['name'], (v['type'], v['value']))
+                            for v in typed_struct_attributes(model, attributes, context))
     elif model is dict:
         typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
     else:
