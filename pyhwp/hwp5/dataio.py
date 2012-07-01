@@ -100,17 +100,22 @@ HWPUNIT16 = _Primitive('HWPUNIT16', int, '<h')
 
 class BitGroupDescriptor(object):
     def __init__(self, bitgroup):
-        self.bitgroup = bitgroup
-    def __get__(self, instance, owner):
         valuetype = int
-        itemdef = self.bitgroup
-        if isinstance(itemdef, tuple):
-            if len(itemdef) > 2:
-                lsb, msb, valuetype = itemdef
+        if isinstance(bitgroup, tuple):
+            if len(bitgroup) > 2:
+                lsb, msb, valuetype = bitgroup
             else:
-                lsb, msb = itemdef
+                lsb, msb = bitgroup
         else:
-            lsb = msb = itemdef
+            lsb = msb = bitgroup
+        self.lsb = lsb
+        self.msb = msb
+        self.valuetype = valuetype
+
+    def __get__(self, instance, owner):
+        valuetype = self.valuetype
+        lsb = self.lsb
+        msb = self.msb
         return valuetype(int(instance >> lsb) & int( (2**(msb+1-lsb)) - 1))
 
 class FlagsType(type):
