@@ -48,7 +48,7 @@ class TestStructType(TestCase):
         self.assertEquals('bar', Foo.bar.__name__)
         self.assertEquals('baz', Foo.baz.__name__)
 
-    def test_iter_members(self):
+    def test_parse_members(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import UINT8, UINT16, UINT32
 
@@ -64,12 +64,12 @@ class TestStructType(TestCase):
         def getvalue(member):
             return values[member['name']]
         context = dict()
-        result = list(A.iter_members(context, getvalue))
+        result = list(A.parse_members(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
                            dict(name='uint16', type=UINT16, value=16),
                            dict(name='uint32', type=UINT32, value=32)], result)
 
-    def test_iter_members_condition(self):
+    def test_parse_members_condition(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import UINT8, UINT16, UINT32
 
@@ -88,7 +88,7 @@ class TestStructType(TestCase):
         def getvalue(member):
             return values[member['name']]
         context = dict()
-        result = list(A.iter_members(context, getvalue))
+        result = list(A.parse_members(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
                            dict(name='uint16', type=UINT16, value=16),
                            dict(name='uint32', type=UINT32, value=32),
@@ -96,7 +96,7 @@ class TestStructType(TestCase):
                                 condition=uint32_is_32)],
                           result)
 
-    def test_iter_members_empty(self):
+    def test_parse_members_empty(self):
         from hwp5.dataio import StructType
 
         class A(object):
@@ -106,10 +106,10 @@ class TestStructType(TestCase):
         def getvalue(member):
             return value[member['name']]
         context = dict()
-        result = list(A.iter_members_with_inherited(context, getvalue))
+        result = list(A.parse_members_with_inherited(context, getvalue))
         self.assertEquals([], result)
 
-    def test_iter_members_inherited(self):
+    def test_parse_members_inherited(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import UINT8, UINT16, UINT32
         from hwp5.dataio import INT8, INT16, INT32
@@ -134,7 +134,7 @@ class TestStructType(TestCase):
         def getvalue(member):
             return value[member['name']]
         context = dict()
-        result = list(B.iter_members_with_inherited(context, getvalue))
+        result = list(B.parse_members_with_inherited(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
                            dict(name='uint16', type=UINT16, value=16),
                            dict(name='uint32', type=UINT32, value=32),

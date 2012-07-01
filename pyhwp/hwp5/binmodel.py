@@ -52,7 +52,7 @@ def typed_model_attributes(model, attributes, context):
             return member['type']()
 
     if issubclass(model, RecordModel):
-        for d in model.iter_members_with_inherited(context, popvalue):
+        for d in model.parse_members_with_inherited(context, popvalue):
             yield d
 
     # remnants

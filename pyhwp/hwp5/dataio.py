@@ -354,7 +354,7 @@ def read_struct_attributes_name_value(model, context, stream):
             e.context.append(dict(model=model, member=member['name']))
             raise
 
-    for member in model.iter_members(context, read_member):
+    for member in model.parse_members(context, read_member):
         yield member['name'], member['value']
 
 
@@ -382,7 +382,7 @@ def typed_struct_attributes(struct, attributes, context):
         else:
             return member['type']()
 
-    for member in struct.iter_members(context, popvalue):
+    for member in struct.parse_members(context, popvalue):
         yield member
 
     # remnants
@@ -408,7 +408,7 @@ class StructType(CompoundType):
     def read(cls, f, context=None):
         return read_struct_attributes(cls, dict(), context, f)
 
-    def iter_members(cls, context, getvalue):
+    def parse_members(cls, context, getvalue):
         values = dict()
         for member in cls.members:
             member = dict(member)
@@ -422,13 +422,13 @@ class StructType(CompoundType):
                     values[member['name']] = member['value'] = getvalue(member)
                     yield member
 
-    def iter_members_with_inherited(cls, context, getvalue):
+    def parse_members_with_inherited(cls, context, getvalue):
         import inspect
         mro = inspect.getmro(cls)
         mro = list(cls for cls in mro if 'attributes' in cls.__dict__)
         mro = reversed(mro)
         for cls in mro:
-            for member in cls.iter_members(context, getvalue):
+            for member in cls.parse_members(context, getvalue):
                 yield member
 
 
