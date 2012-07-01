@@ -1152,6 +1152,39 @@ class ScaleRotationMatrix(Struct):
     attributes = staticmethod(attributes)
 
 
+class Coord(Struct):
+    def attributes():
+        yield SHWPUNIT, 'x'
+        yield SHWPUNIT, 'y'
+    attributes = staticmethod(attributes)
+
+
+class BorderLine(Struct):
+    ''' 표 81. 테두리 선 정보 '''
+
+    StrokeType = Enum('none', 'solid', 'dashed', 'dotted')  # TODO: more types
+    LineEnd = Enum('round', 'flat')
+    ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect',
+                      'diamondfilled', 'disc', 'rectfilled')
+    ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal',
+                     'abitlarge', 'large', 'larger', 'largest')
+    Flags = Flags(UINT32,
+            0, 5, StrokeType, 'stroke',
+            6, 9, LineEnd, 'line_end',
+            10, 15, ArrowShape, 'arrow_start',
+            16, 21, ArrowShape, 'arrow_end',
+            22, 25, ArrowSize, 'arrow_start_size',
+            26, 29, ArrowSize, 'arrow_end_size',
+            30, 'arrow_start_fill',
+            31, 'arrow_end_fill')
+
+    def attributes(cls):
+        yield COLORREF, 'color'
+        yield INT32, 'width'
+        yield cls.Flags, 'flags'
+    attributes = classmethod(attributes)
+
+
 class ShapeComponent(RecordModel):
     ''' 4.2.9.2 그리기 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT
@@ -1239,13 +1272,6 @@ class TextboxParagraphList(ListHeader):
     attributes = staticmethod(attributes)
 
 
-class Coord(Struct):
-    def attributes():
-        yield SHWPUNIT, 'x'
-        yield SHWPUNIT, 'y'
-    attributes = staticmethod(attributes)
-
-
 class ShapeLine(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
 
@@ -1320,32 +1346,6 @@ class PictureInfo(Struct):
         yield BYTE, 'effect',
         yield UINT16, 'bindata_id',
     attributes = staticmethod(attributes)
-
-
-class BorderLine(Struct):
-    ''' 표 81. 테두리 선 정보 '''
-
-    StrokeType = Enum('none', 'solid', 'dashed', 'dotted')  # TODO: more types
-    LineEnd = Enum('round', 'flat')
-    ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect',
-                      'diamondfilled', 'disc', 'rectfilled')
-    ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal',
-                     'abitlarge', 'large', 'larger', 'largest')
-    Flags = Flags(UINT32,
-            0, 5, StrokeType, 'stroke',
-            6, 9, LineEnd, 'line_end',
-            10, 15, ArrowShape, 'arrow_start',
-            16, 21, ArrowShape, 'arrow_end',
-            22, 25, ArrowSize, 'arrow_start_size',
-            26, 29, ArrowSize, 'arrow_end_size',
-            30, 'arrow_start_fill',
-            31, 'arrow_end_fill')
-
-    def attributes(cls):
-        yield COLORREF, 'color'
-        yield INT32, 'width'
-        yield cls.Flags, 'flags'
-    attributes = classmethod(attributes)
 
 
 # HWPML에서의 이름 사용
