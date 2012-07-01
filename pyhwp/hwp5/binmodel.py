@@ -214,10 +214,13 @@ class FaceName(RecordModel):
         yield BSTR, 'name'
 
         def has_alternate(context, values):
+            ''' has.alternate == 1 '''
             return values['has'].alternate
         def has_metric(context, values):
+            ''' has.metric == 1 '''
             return values['has'].metric
         def has_default(context, values):
+            ''' has.default == 1 '''
             return values['has'].default
         yield dict(type=AlternateFont, name='alternate_font',
                    condition=has_alternate)
@@ -344,8 +347,10 @@ class BorderFill(RecordModel):
         yield Border, 'diagonal'
         yield cls.FillFlags, 'fillflags'
         def fill_colorpattern(context, values):
+            ''' fillflags.fill_type == Fill.COLORPATTERN '''
             return values['fillflags'].fill_type == cls.Fill.COLORPATTERN
         def fill_gradation(context, values):
+            ''' fillflags.fill_type == Fill.GRADATION '''
             return values['fillflags'].fill_type == cls.Fill.GRADATION
         yield dict(type=FillColorPattern, name='fill',
                    condition=fill_colorpattern)
@@ -856,6 +861,7 @@ class TableBody(RecordModel):
         yield HWPUNIT16, 'cellspacing'
         yield Margin, 'padding'
         def rowcols_type(context, values):
+            ''' ARRAY(UINT16, rows) '''
             return ARRAY(UINT16, values['rows'])
         yield dict(type_func=rowcols_type,
                    name='rowcols')
@@ -1200,6 +1206,7 @@ class ShapeComponent(RecordModel):
     def attributes(cls):
 
         def parent_must_be_gso(context, values):
+            ''' parent record type is GShapeObjectControl '''
             # GSO-child ShapeComponent specific:
             # it may be a GSO model's attribute, e.g. 'child_chid'
             if 'parent' in context:
@@ -1229,17 +1236,21 @@ class ShapeComponent(RecordModel):
         yield dict(type_func=scalerotations_type, name='scalerotations')
 
         def chid_is_container(context, values):
+            ''' chid == CHID.CONTAINER '''
             return values['chid'] == CHID.CONTAINER
         yield dict(type=N_ARRAY(WORD, CHID),
                    name='controls',
                    condition=chid_is_container)
 
         def chid_is_rect(context, values):
+            ''' chid == CHID.RECT '''
             return values['chid'] == CHID.RECT
         def chid_is_rect_and_fill_colorpattern(context, values):
+            ''' chid == CHID.RECT and fill_flags.fill_colorpattern '''
             return (values['chid'] == CHID.RECT and
                     values['fill_flags'].fill_colorpattern)
         def chid_is_rect_and_fill_gradation(context, values):
+            ''' chid == CHID.RECT and fill_flags.fill_gradation '''
             return (values['chid'] == CHID.RECT and
                     values['fill_flags'].fill_gradation)
         yield dict(type=BorderLine, name='border', condition=chid_is_rect)
@@ -1253,6 +1264,7 @@ class ShapeComponent(RecordModel):
                    condition=chid_is_rect_and_fill_gradation)
 
         def chid_is_line(context, values):
+            ''' chid == CHID.LINE '''
             return values['chid'] == CHID.LINE
         yield dict(type=BorderLine, name='line',
                    condition=chid_is_line)
@@ -1449,8 +1461,10 @@ class ColumnsDef(Control):
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'spacing'
         def not_same_widths(context, values):
+            ''' flags.same_widths == 0 '''
             return not values['flags'].same_widths
         def column_widths_type(context, values):
+            ''' ARRAY(WORD, flags.count) '''
             return ARRAY(WORD, values['flags'].count)
         yield dict(name='widths',
                    type_func=column_widths_type,
