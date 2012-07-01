@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from hwp5.dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
-from hwp5.dataio import match_attribute_types, typed_struct_attributes
+from hwp5.dataio import typed_struct_attributes
 class TestArray(TestCase):
     def test_new(self):
         t1 = ARRAY(INT32, 3)
@@ -21,16 +21,6 @@ class TestArray(TestCase):
         self.assertRaises(Exception, setattr, a, 'randomattr', 1)
 
 class TestTypedAttributes(TestCase):
-    def test_match_attributes_types(self):
-        types = ((v, k) for k, v in dict(a=int, b=long).items())
-        values = dict(a=1, b=2, c='abc')
-        matched = match_attribute_types(types, values)
-        matched = list(matched)
-        expected = dict(a=(int,1), b=(long,2)).items()
-        expected = [dict(name='a', type=int, value=1),
-                    dict(name='b', type=long, value=2)]
-        self.assertEquals(expected, matched)
-        self.assertEquals(dict(c='abc'), values)
 
     def test_typed_struct_attributes(self):
         class SomeRandomStruct(Struct):

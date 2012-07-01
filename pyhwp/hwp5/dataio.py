@@ -373,19 +373,6 @@ def read_type_value(context, type, stream):
         raise pe
 
 
-def match_attribute_types(types_generator, values):
-    try:
-        t, name = types_generator.next()
-        while True:
-            if name in values:
-                value = values.pop(name)
-                yield dict(name=name, type=t, value=value)
-            else:
-                value = t()
-            t, name = types_generator.send(value)
-    except StopIteration:
-        pass
-
 def typed_struct_attributes(struct, attributes, context):
     attributes = dict(attributes)
     def popvalue(member):
