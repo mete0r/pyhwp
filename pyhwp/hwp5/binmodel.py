@@ -353,15 +353,13 @@ class BorderFill(RecordModel):
     attributes = classmethod(attributes)
 
 
-class LanguageStructType(StructType):
-    def attributes(cls):
-        basetype = cls.basetype
+def LanguageStruct(name, basetype):
+    def attributes():
         for lang in ('ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'):
             yield basetype, lang
-
-
-def LanguageStruct(name, basetype):
-    return LanguageStructType(name, (Struct,), dict(basetype=basetype))
+    attributes = staticmethod(attributes)
+    return StructType(name, (Struct,), dict(basetype=basetype,
+                                            attributes=attributes))
 
 
 class CharShape(RecordModel):

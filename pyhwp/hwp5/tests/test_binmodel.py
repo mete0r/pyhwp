@@ -51,6 +51,13 @@ class BinEmbeddedTest(TestCase):
         self.assertEquals('jpg', model['content']['ext'])
 
 
+class LanguageStructTest(TestCase):
+    def test_cls_dict_has_attributes(self):
+        from hwp5.binmodel import LanguageStruct
+        from hwp5.dataio import WORD
+        FontFace = LanguageStruct('FontFace', WORD)
+        self.assertTrue('attributes' in FontFace.__dict__)
+
 class TestBase(test_recordstream.TestBase):
 
     @cached_property
