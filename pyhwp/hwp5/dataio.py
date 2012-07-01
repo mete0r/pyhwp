@@ -407,8 +407,9 @@ class StructType(CompoundType):
         try:
             member = members.next()
             while True:
-                member_type, member_name = member
-                member = dict(type=member_type, name=member_name)
+                if isinstance(member, tuple):
+                    member_type, member_name = member
+                    member = dict(type=member_type, name=member_name)
                 member['value'] = getvalue(member)
                 yield member
                 member = members.send(member['value'])
