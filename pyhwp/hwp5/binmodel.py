@@ -51,16 +51,9 @@ def typed_model_attributes(model, attributes, context):
         else:
             return member['type']()
 
-    import inspect
-    mro = inspect.getmro(model)
-    mro = (cls for cls in mro if issubclass(cls, RecordModel))
-    mro = (cls for cls in mro if cls is not RecordModel)
-    mro = list(mro)
-    mro = reversed(mro)
-    for cls in mro:
-        if 'attributes' in cls.__dict__:
-            for d in cls.iter_members(context, popvalue):
-                yield d
+    if issubclass(model, RecordModel):
+        for d in model.iter_members_with_inherited(context, popvalue):
+            yield d
 
     # remnants
     for name, value in attributes.iteritems():

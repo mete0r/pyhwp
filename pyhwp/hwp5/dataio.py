@@ -415,6 +415,15 @@ class StructType(CompoundType):
         except StopIteration:
             pass
 
+    def iter_members_with_inherited(cls, context, getvalue):
+        import inspect
+        mro = inspect.getmro(cls)
+        mro = list(cls for cls in mro if 'attributes' in cls.__dict__)
+        mro = reversed(mro)
+        for cls in mro:
+            for member in cls.iter_members(context, getvalue):
+                yield member
+
 
 class Struct(object):
     __metaclass__ = StructType
@@ -431,14 +440,12 @@ def struct_member_types_intern(cls, values, context):
 def struct_member_types(struct_type, member_values, context):
     ''' StructType의 멤버 타입들을 반환. (상속 포함)
     '''
-    import inspect
-    mro = list(inspect.getmro(struct_type))
-    mro.reverse()
-    for cls in mro:
-        if hasattr(cls, 'attributes'):
-            for x in struct_member_types_intern(cls, member_values,
-                                                context):
-                yield x # (name, type)
+    def getvalue(member):
+        return member_values[member['name']]
+
+    for member in struct_type.iter_members_with_inherited(context, getvalue):
+        yield member['name'], member['type']
+
 
 def dumpbytes(data, crust=False):
     offsbase = 0
