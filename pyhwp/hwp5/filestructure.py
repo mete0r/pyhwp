@@ -57,7 +57,7 @@ class FileHeader(Struct):
         11, 'ccl',
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield BYTES(32), 'signature'
         yield VERSION, 'version'
         yield cls.Flags, 'flags'
@@ -81,7 +81,7 @@ class TextField(unicode):
 
 
 class SummaryInfo(Struct):
-    def attributes(cls, context):
+    def attributes(cls):
         def version_lt_5010(context, values):
             return context['version'] < (5, 0, 1, 0)
         def version_gte_5010(context, version):

@@ -404,7 +404,8 @@ class StructType(CompoundType):
 
     def iter_members(cls, context, getvalue):
         values = dict()
-        for member in cls.attributes(context):
+        members = cls.attributes()
+        for member in members:
             if isinstance(member, tuple):
                 member_type, member_name = member
                 member = dict(type=member_type, name=member_name)

@@ -25,7 +25,7 @@ class TestTypedAttributes(TestCase):
     def test_typed_struct_attributes(self):
         class SomeRandomStruct(Struct):
             @staticmethod
-            def attributes(context):
+            def attributes():
                 yield INT32, 'a'
                 yield BSTR, 'b'
                 yield ARRAY(INT32, 3), 'c'
@@ -59,7 +59,7 @@ class TestStructMemberTypes(TestCase):
         class A(object):
             __metaclass__ = StructType
             @classmethod
-            def attributes(cls, context):
+            def attributes(cls):
                 yield UINT8, 'uint8'
                 yield UINT16, 'uint16'
                 yield UINT32, 'uint32'
@@ -79,7 +79,7 @@ class TestStructMemberTypes(TestCase):
         class A(object):
             __metaclass__ = StructType
             @classmethod
-            def attributes(cls, context):
+            def attributes(cls):
                 yield UINT8, 'uint8'
                 yield UINT16, 'uint16'
                 yield UINT32, 'uint32'
@@ -116,14 +116,14 @@ class TestStructMemberTypes(TestCase):
         class A(object):
             __metaclass__ = StructType
             @classmethod
-            def attributes(cls, context):
+            def attributes(cls):
                 yield UINT8, 'uint8'
                 yield UINT16, 'uint16'
                 yield UINT32, 'uint32'
 
         class B(A):
             @classmethod
-            def attributes(cls, context):
+            def attributes(cls):
                 yield INT8, 'int8'
                 yield INT16, 'int16'
                 yield INT32, 'int32'
@@ -195,7 +195,7 @@ class TestReadStruct(TestCase):
         class Foo(object):
             __metaclass__ = StructType
 
-            def attributes(context):
+            def attributes():
                 yield INT16, 'a'
             attributes = staticmethod(attributes)
 

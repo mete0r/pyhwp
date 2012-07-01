@@ -12,12 +12,12 @@ class TestHello(TestCase):
         xmlgen = XMLGenerator(sys.stdout, 'utf-8')
         class SomeStruct(Struct):
             @staticmethod
-            def attributes(context):
+            def attributes():
                 yield INT32, 'a'
                 yield BSTR, 'b'
         class SomeStruct2(Struct):
             @staticmethod
-            def attributes(context):
+            def attributes():
                 yield SomeStruct, 'somestruct'
         result = element(context, xmlgen, (SomeStruct2, dict(somestruct=dict(a=1, b=u'b'))))
         result = list(result)

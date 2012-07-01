@@ -471,12 +471,12 @@ class TestTypedModelAttributes(TestCase):
     def test_typed_model_attributes(self):
         class Hello(RecordModel):
             @staticmethod
-            def attributes(context):
+            def attributes():
                 yield INT32, 'a'
 
         class Hoho(Hello):
             @staticmethod
-            def attributes(context):
+            def attributes():
                 yield BSTR, 'b'
 
         attributes = dict(a=1, b=u'abc', c=(2, 2))

@@ -78,7 +78,7 @@ class RecordModelType(StructType):
 class RecordModel(object):
     __metaclass__ = RecordModelType
 
-    def attributes(context):
+    def attributes():
         if False:
             yield
     attributes = staticmethod(attributes)
@@ -87,7 +87,7 @@ class RecordModel(object):
 class DocumentProperties(RecordModel):
     tagid = HWPTAG_DOCUMENT_PROPERTIES
 
-    def attributes(context):
+    def attributes():
         yield UINT16, 'section_count',
         yield UINT16, 'page_startnum',
         yield UINT16, 'footnote_startnum',
@@ -105,7 +105,7 @@ class DocumentProperties(RecordModel):
 class IdMappings(RecordModel):
     tagid = HWPTAG_ID_MAPPINGS
 
-    def attributes(context):
+    def attributes():
         yield UINT16, 'bindata',
         yield UINT16, 'ko_fonts',
         yield UINT16, 'en_fonts',
@@ -138,7 +138,7 @@ class BinData(RecordModel):
             4, 5, CompressionType, 'compression',
             16, 17, AccessState, 'access')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
@@ -150,7 +150,7 @@ class BinData(RecordModel):
 
 
 class BinDataLink(BinData):
-    def attributes(context):
+    def attributes():
         yield BSTR, 'abspath'
         yield BSTR, 'relpath'
     attributes = staticmethod(attributes)
@@ -159,7 +159,7 @@ BinData.submodels[BinData.StorageType.LINK] = BinDataLink
 
 
 class BinDataEmbedding(BinData):
-    def attributes(context):
+    def attributes():
         yield BinStorageId, 'storage_id'
         yield BSTR, 'ext'
     attributes = staticmethod(attributes)
@@ -168,7 +168,7 @@ BinData.submodels[BinData.StorageType.EMBEDDING] = BinDataEmbedding
 
 
 class BinDataStorage(BinData):
-    def attributes(context):
+    def attributes():
         yield BinStorageId, 'storage_id'
     attributes = staticmethod(attributes)
 BinDataStorage.__name__ = 'BinData'
@@ -180,14 +180,14 @@ class BinStorageId(UINT16):
 
 
 class AlternateFont(Struct):
-    def attributes(context):
+    def attributes():
         yield BYTE, 'kind'
         yield BSTR, 'name'
     attributes = staticmethod(attributes)
 
 
 class Panose1(Struct):
-    def attributes(context):
+    def attributes():
         yield BYTE, 'family_kind',
         yield BYTE, 'serif_style',
         yield BYTE, 'weight',
@@ -209,7 +209,7 @@ class FaceName(RecordModel):
         7, 'alternate',
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'has'
         yield BSTR, 'name'
 
@@ -283,7 +283,7 @@ class Border(Struct):
     Width = Flags(UINT8,
                   0, 4, WidthEnum, 'width')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.StrokeType, 'stroke_flags',
         yield cls.Width, 'width_flags',
         yield COLORREF, 'color',
@@ -295,7 +295,7 @@ class Fill(Struct):
 
 
 class FillNone(Fill):
-    def attributes(context):
+    def attributes():
         yield UINT32, 'size',  # SPEC is confusing
     attributes = staticmethod(attributes)
 
@@ -307,7 +307,7 @@ class FillColorPattern(Fill):
     PatternTypeFlags = Flags(INT32,
             0, 7, PatternTypeEnum, 'pattern_type')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
         yield cls.PatternTypeFlags, 'pattern_type_flags',
@@ -317,7 +317,7 @@ class FillColorPattern(Fill):
 
 
 class FillGradation(Fill):
-    def attributes(context):
+    def attributes():
         yield BYTE,   'type',
         yield UINT32, 'shear',
         yield ARRAY(UINT32, 2), 'center'
@@ -335,7 +335,7 @@ class BorderFill(RecordModel):
     FillFlags = Flags(UINT32,
                       0, 7, Fill, 'fill_type')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield UINT16, 'attr'
         yield Border, 'left',
         yield Border, 'right',
@@ -354,7 +354,7 @@ class BorderFill(RecordModel):
 
 
 class LanguageStructType(StructType):
-    def attributes(cls, context):
+    def attributes(cls):
         basetype = cls.basetype
         for lang in ('ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'):
             yield basetype, lang
@@ -376,7 +376,7 @@ class CharShape(RecordModel):
             8, 10, 'outline',
             11, 13, 'shadow')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield LanguageStruct('FontFace', WORD), 'font_face',
         yield LanguageStruct('LetterWidthExpansion', UINT8),\
                 'letter_width_expansion'
@@ -398,7 +398,7 @@ class CharShape(RecordModel):
 class TabDef(RecordModel):
     tagid = HWPTAG_TAB_DEF
 
-    def attributes(context):
+    def attributes():
         # SPEC is confusing
         yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
         yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
@@ -422,7 +422,7 @@ class Numbering(RecordModel):
         4, DistanceType, 'distance_to_body_type',
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'width_correction'
         yield HWPUNIT16, 'distance_to_body'
@@ -473,7 +473,7 @@ class ParaShape(RecordModel):
             0, 4, LineSpacingType, 'linespacing_type3'
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'parashapeflags',
         yield INT32,  'doubled_margin_left',   # 1/7200 * 2 # DIFFSPEC
         yield INT32,  'doubled_margin_right',  # 1/7200 * 2
@@ -497,7 +497,7 @@ class ParaShape(RecordModel):
 class Style(RecordModel):
     tagid = HWPTAG_STYLE
 
-    def attributes(context):
+    def attributes():
         yield BSTR, 'local_name',
         yield BSTR, 'name',
         yield BYTE, 'attr',
@@ -524,7 +524,7 @@ class CompatibleDocument(RecordModel):
             0, 1, 'target',
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
@@ -532,7 +532,7 @@ class CompatibleDocument(RecordModel):
 class LayoutCompatibility(RecordModel):
     tagid = HWPTAG_LAYOUT_COMPATIBILITY
 
-    def attributes(context):
+    def attributes():
         yield UINT32, 'char',
         yield UINT32, 'paragraph',
         yield UINT32, 'section',
@@ -612,7 +612,7 @@ class Control(RecordModel):
     __metaclass__ = ControlType
     tagid = HWPTAG_CTRL_HEADER
 
-    def attributes(context):
+    def attributes():
         yield CHID, 'chid'
     attributes = staticmethod(attributes)
 
@@ -624,7 +624,7 @@ class Control(RecordModel):
 
 
 class Margin(Struct):
-    def attributes(context):
+    def attributes():
         yield HWPUNIT16, 'left'
         yield HWPUNIT16, 'right'
         yield HWPUNIT16, 'top'
@@ -665,7 +665,7 @@ class CommonControl(Control):
     MARGIN_TOP = 2
     MARGIN_BOTTOM = 3
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.CommonControlFlags, 'flags',
         yield SHWPUNIT, 'y',    # DIFFSPEC
         yield SHWPUNIT, 'x',    # DIFFSPEC
@@ -707,7 +707,7 @@ class ListHeader(RecordModel):
     VALIGN_MIDDLE   = 0x20
     VALIGN_BOTTOM   = 0x40
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield UINT16, 'paragraphs',
         yield UINT16, 'unknown1',
         yield cls.Flags, 'listflags',
@@ -723,7 +723,7 @@ class PageDef(RecordModel):
                 1, 2, BookBinding, 'bookbinding'
                 )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield HWPUNIT, 'width',
         yield HWPUNIT, 'height',
         yield HWPUNIT, 'left_offset',
@@ -778,7 +778,7 @@ class FootnoteShape(RecordModel):
     Flags = Flags(UINT32,
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield WCHAR, 'usersymbol'
         yield WCHAR, 'prefix'
@@ -806,7 +806,7 @@ class PageBorderFill(RecordModel):
         3, 4, FillArea, 'fill',
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield Margin, 'margin'
         yield UINT16, 'borderfill_id'
@@ -820,7 +820,7 @@ class TableCaption(ListHeader):
                 2, 'include_margin',
                 )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags',
         yield HWPUNIT, 'width',
         yield HWPUNIT16, 'separation',  # 캡션과 틀 사이 간격
@@ -829,7 +829,7 @@ class TableCaption(ListHeader):
 
 
 class TableCell(ListHeader):
-    def attributes(context):
+    def attributes():
         yield UINT16, 'col',
         yield UINT16, 'row',
         yield UINT16, 'colspan',
@@ -851,7 +851,7 @@ class TableBody(RecordModel):
                 )
     ZoneInfo = ARRAY(UINT16, 5)
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield UINT16, 'rows'
         yield UINT16, 'cols'
@@ -887,7 +887,7 @@ class Paragraph(RecordModel):
             0, 30, 'chars',
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'text',
         yield cls.ControlMask, 'controlmask',
         yield UINT16, 'parashape_id',
@@ -1026,7 +1026,7 @@ class ParaTextChunks(list):
 class ParaText(RecordModel):
     tagid = HWPTAG_PARA_TEXT
 
-    def attributes(context):
+    def attributes():
         yield ParaTextChunks, 'chunks'
     attributes = staticmethod(attributes)
 
@@ -1053,7 +1053,7 @@ class ParaCharShapeList(list):
 class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
 
-    def attributes(context):
+    def attributes():
         yield ParaCharShapeList, 'charshapes'
     attributes = staticmethod(attributes)
 
@@ -1062,7 +1062,7 @@ class LineSeg(Struct):
     Flags = Flags(UINT16,
             4, 'indented')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield INT32, 'chpos',
         yield SHWPUNIT, 'y',
         yield SHWPUNIT, 'height',
@@ -1104,7 +1104,7 @@ class ParaLineSegList(list):
 class ParaLineSeg(RecordModel):
     tagid = HWPTAG_PARA_LINE_SEG
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield ParaLineSegList, 'linesegs'
     attributes = classmethod(attributes)
 
@@ -1112,7 +1112,7 @@ class ParaLineSeg(RecordModel):
 class ParaRangeTag(RecordModel):
     tagid = HWPTAG_PARA_RANGE_TAG
 
-    def attributes(context):
+    def attributes():
         yield UINT32, 'start'
         yield UINT32, 'end'
         yield UINT32, 'tag'
@@ -1137,7 +1137,7 @@ class Matrix(Struct):
     [b d f][y]
     [0 0 1][1]
     '''
-    def attributes(context):
+    def attributes():
         yield DOUBLE, 'a'
         yield DOUBLE, 'c'
         yield DOUBLE, 'e'
@@ -1148,7 +1148,7 @@ class Matrix(Struct):
 
 
 class ScaleRotationMatrix(Struct):
-    def attributes(context):
+    def attributes():
         yield Matrix, 'scaler',
         yield Matrix, 'rotator',
     attributes = staticmethod(attributes)
@@ -1166,7 +1166,7 @@ class ShapeComponent(RecordModel):
             0, 'flip'
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
 
         def parent_must_be_gso(context, values):
             # GSO-child ShapeComponent specific:
@@ -1235,14 +1235,14 @@ class ShapeComponent(RecordModel):
 
 
 class TextboxParagraphList(ListHeader):
-    def attributes(context):
+    def attributes():
         yield Margin, 'padding'
         yield HWPUNIT, 'maxwidth'
     attributes = staticmethod(attributes)
 
 
 class Coord(Struct):
-    def attributes(context):
+    def attributes():
         yield SHWPUNIT, 'x'
         yield SHWPUNIT, 'y'
     attributes = staticmethod(attributes)
@@ -1251,7 +1251,7 @@ class Coord(Struct):
 class ShapeLine(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
 
-    def attributes(context):
+    def attributes():
         yield ARRAY(Coord, 2), 'coords'
         yield UINT16, 'attr'
     attributes = staticmethod(attributes)
@@ -1260,7 +1260,7 @@ class ShapeLine(RecordModel):
 class ShapeRectangle(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_RECTANGLE
 
-    def attributes(context):
+    def attributes():
         yield BYTE, 'round',
         yield ARRAY(Coord, 4), 'coords',
     attributes = staticmethod(attributes)
@@ -1270,7 +1270,7 @@ class ShapeEllipse(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ELLIPSE
     Flags = Flags(UINT32)  # TODO
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield Coord, 'center'
         yield Coord, 'axis1'
@@ -1285,7 +1285,7 @@ class ShapeEllipse(RecordModel):
 class ShapeArc(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_ARC
 
-    def attributes(cls, context):
+    def attributes(cls):
         #yield ShapeEllipse.Flags, 'flags' # SPEC
         yield Coord, 'center'
         yield Coord, 'axis1'
@@ -1296,7 +1296,7 @@ class ShapeArc(RecordModel):
 class ShapePolygon(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_POLYGON
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield N_ARRAY(UINT16, Coord), 'points'
     attributes = classmethod(attributes)
 
@@ -1304,7 +1304,7 @@ class ShapePolygon(RecordModel):
 class ShapeCurve(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_CURVE
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield ARRAY(UINT16, Coord), 'points'
         # TODO: segment type
     attributes = classmethod(attributes)
@@ -1316,7 +1316,7 @@ class ShapeOLE(RecordModel):
 
 
 class PictureInfo(Struct):
-    def attributes(context):
+    def attributes():
         yield INT8, 'brightness',
         yield INT8, 'contrast',
         yield BYTE, 'effect',
@@ -1343,7 +1343,7 @@ class BorderLine(Struct):
             30, 'arrow_start_fill',
             31, 'arrow_end_fill')
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield COLORREF, 'color'
         yield INT32, 'width'
         yield cls.Flags, 'flags'
@@ -1354,7 +1354,7 @@ class BorderLine(Struct):
 class ImageRect(Struct):
     ''' 이미지 좌표 정보 '''
 
-    def attributes(context):
+    def attributes():
         yield Coord, 'p0'
         yield Coord, 'p1'
         yield Coord, 'p2'
@@ -1366,7 +1366,7 @@ class ImageRect(Struct):
 class ImageClip(Struct):
     ''' 이미지 자르기 정보 '''
 
-    def attributes(context):
+    def attributes():
         yield SHWPUNIT, 'left',
         yield SHWPUNIT, 'top',
         yield SHWPUNIT, 'right',
@@ -1378,7 +1378,7 @@ class ShapePicture(RecordModel):
     ''' 4.2.9.4. 그림 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_PICTURE
 
-    def attributes(context):
+    def attributes():
         yield BorderLine, 'border'
         yield ImageRect, 'rect',
         yield ImageClip, 'clip',
@@ -1419,7 +1419,7 @@ class SectionDef(Control):
     ''' 4.2.10.1. 구역 정의 '''
     chid = CHID.SECD
 
-    def attributes(context):
+    def attributes():
         yield UINT32, 'attr',
         yield HWPUNIT16, 'columnspacing',
         yield ARRAY(HWPUNIT16, 2), 'grid',
@@ -1447,7 +1447,7 @@ class ColumnsDef(Control):
             12, 'same_widths',
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'spacing'
         def not_same_widths(context, values):
@@ -1469,12 +1469,12 @@ class HeaderFooter(Control):
         0, 1, Places, 'places'
     )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
     class ParagraphList(ListHeader):
-        def attributes(context):
+        def attributes():
             yield HWPUNIT, 'width'
             yield HWPUNIT, 'height'
             yield BYTE, 'textrefsbitmap'
@@ -1500,7 +1500,7 @@ class Footer(HeaderFooter):
 
 class Note(Control):
     ''' 4.2.10.4 미주/각주 '''
-    def attributes(context):
+    def attributes():
         yield dict(type=UINT32, name='number', version=(5, 0, 0, 6))  # SPEC
     attributes = staticmethod(attributes)
 
@@ -1523,7 +1523,7 @@ class NumberingControl(Control):
             12, 'superscript',
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags',
         yield UINT16, 'number',
     attributes = classmethod(attributes)
@@ -1533,8 +1533,8 @@ class AutoNumbering(NumberingControl):
     ''' 4.2.10.5. 자동 번호 '''
     chid = CHID.ATNO
 
-    def attributes(cls, context):
-        for x in NumberingControl.attributes(context):
+    def attributes(cls):
+        for x in NumberingControl.attributes():
             yield x
         yield WCHAR, 'usersymbol',
         yield WCHAR, 'prefix',
@@ -1567,7 +1567,7 @@ class PageHide(Control):
             5, 'pagenumber'
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
@@ -1580,7 +1580,7 @@ class PageOddEven(Control):
         0, 1, 'pages'
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
@@ -1598,7 +1598,7 @@ class PageNumberPosition(Control):
         8, 11, Position, 'position',
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags'
         yield WCHAR, 'usersymbol'
         yield WCHAR, 'prefix'
@@ -1611,7 +1611,7 @@ class IndexMarker(Control):
     ''' 4.2.10.10. 찾아보기 표식 '''
     chid = CHID.IDXM
 
-    def attributes(context):
+    def attributes():
         yield BSTR, 'keyword1'
         yield BSTR, 'keyword2'
         yield UINT16, 'dummy'
@@ -1622,7 +1622,7 @@ class BookmarkControl(Control):
     ''' 4.2.10.11. 책갈피 '''
     chid = CHID.BOKM
 
-    def attributes(context):
+    def attributes():
         if False:
             yield
     attributes = staticmethod(attributes)
@@ -1635,7 +1635,7 @@ class BookmarkControl(Control):
 
 
 class BookmarkControlData(ControlData):
-    def attributes(context):
+    def attributes():
         yield UINT32, 'unknown1'
         yield UINT32, 'unknown2'
         yield UINT16, 'unknown3'
@@ -1647,7 +1647,7 @@ class TCPSControl(Control):
     ''' 4.2.10.12. 글자 겹침 '''
     chid = CHID.TCPS
 
-    def attributes(context):
+    def attributes():
         yield BSTR, 'textlength'
         #yield UINT8, 'frameType'
         #yield INT8, 'internalCharacterSize'
@@ -1663,7 +1663,7 @@ class Dutmal(Control):
     Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4,
                  DISTRIBUTE_SPACE=5)
 
-    def attributes(context):
+    def attributes():
         yield BSTR, 'maintext'
         yield BSTR, 'subtext'
         yield UINT32, 'position'
@@ -1678,7 +1678,7 @@ class HiddenComment(Control):
     ''' 4.2.10.14 숨은 설명 '''
     chid = CHID.TCMT
 
-    def attributes(context):
+    def attributes():
         if False:
             yield
     attributes = staticmethod(attributes)
@@ -1693,7 +1693,7 @@ class Field(Control):
             15, 'modified',
             )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield cls.Flags, 'flags',
         yield BYTE, 'extra_attr',
         yield BSTR, 'command',
