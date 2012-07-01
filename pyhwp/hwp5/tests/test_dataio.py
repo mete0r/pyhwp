@@ -48,12 +48,8 @@ class TestStructType(TestCase):
         self.assertEquals('bar', Foo.bar.__name__)
         self.assertEquals('baz', Foo.baz.__name__)
 
-
-class TestStructMemberTypes(TestCase):
-
-    def test_struct_member_types_intern(self):
+    def test_iter_members(self):
         from hwp5.dataio import StructType
-        from hwp5.dataio import struct_member_types_intern
         from hwp5.dataio import UINT8, UINT16, UINT32
 
         class A(object):
@@ -64,18 +60,21 @@ class TestStructMemberTypes(TestCase):
                 yield UINT16, 'uint16'
                 yield UINT32, 'uint32'
 
-        a = dict(uint8=8, uint16=16, uint32=32)
+        values = dict(uint8=8, uint16=16, uint32=32)
+        def getvalue(member):
+            return values[member['name']]
         context = dict()
-        result = list(struct_member_types_intern(A, a, context))
-        self.assertEquals([('uint8', UINT8),
-                           ('uint16', UINT16),
-                           ('uint32', UINT32)], result)
+        result = list(A.iter_members(context, getvalue))
+        self.assertEquals([dict(name='uint8', type=UINT8, value=8),
+                           dict(name='uint16', type=UINT16, value=16),
+                           dict(name='uint32', type=UINT32, value=32)], result)
 
-    def test_struct_member_types_intern_send_value(self):
+    def test_iter_members_condition(self):
         from hwp5.dataio import StructType
-        from hwp5.dataio import struct_member_types_intern
         from hwp5.dataio import UINT8, UINT16, UINT32
 
+        def uint32_is_32(context, values):
+            return values['uint32'] == 32
         class A(object):
             __metaclass__ = StructType
             @classmethod
@@ -83,33 +82,35 @@ class TestStructMemberTypes(TestCase):
                 yield UINT8, 'uint8'
                 yield UINT16, 'uint16'
                 yield UINT32, 'uint32'
-                def uint32_is_32(context, values):
-                    return values['uint32'] == 32
                 yield dict(type=UINT32, name='extra', condition=uint32_is_32)
 
-        a = dict(uint8=8, uint16=16, uint32=32, extra=666)
+        values = dict(uint8=8, uint16=16, uint32=32, extra=666)
+        def getvalue(member):
+            return values[member['name']]
         context = dict()
-        result = list(struct_member_types_intern(A, a, context))
-        self.assertEquals([('uint8', UINT8),
-                           ('uint16', UINT16),
-                           ('uint32', UINT32),
-                           ('extra', UINT32)], result)
+        result = list(A.iter_members(context, getvalue))
+        self.assertEquals([dict(name='uint8', type=UINT8, value=8),
+                           dict(name='uint16', type=UINT16, value=16),
+                           dict(name='uint32', type=UINT32, value=32),
+                           dict(name='extra', type=UINT32, value=666,
+                                condition=uint32_is_32)],
+                          result)
 
-    def test_struct_member_types_without_attributes(self):
+    def test_iter_members_empty(self):
         from hwp5.dataio import StructType
-        from hwp5.dataio import struct_member_types
 
         class A(object):
             __metaclass__ = StructType
 
-        a = dict()
+        value = dict()
+        def getvalue(member):
+            return value[member['name']]
         context = dict()
-        result = list(struct_member_types(A, a, context))
+        result = list(A.iter_members_with_inherited(context, getvalue))
         self.assertEquals([], result)
 
-    def test_struct_member_types_inheritance(self):
+    def test_iter_members_inherited(self):
         from hwp5.dataio import StructType
-        from hwp5.dataio import struct_member_types
         from hwp5.dataio import UINT8, UINT16, UINT32
         from hwp5.dataio import INT8, INT16, INT32
 
@@ -128,16 +129,19 @@ class TestStructMemberTypes(TestCase):
                 yield INT16, 'int16'
                 yield INT32, 'int32'
 
-        b = dict(uint8=8, uint16=16, uint32=32,
-                 int8=-1, int16=-16, int32=-32)
+        value = dict(uint8=8, uint16=16, uint32=32,
+                     int8=-1, int16=-16, int32=-32)
+        def getvalue(member):
+            return value[member['name']]
         context = dict()
-        result = list(struct_member_types(B, b, context))
-        self.assertEquals([('uint8', UINT8),
-                           ('uint16', UINT16),
-                           ('uint32', UINT32),
-                           ('int8', INT8),
-                           ('int16', INT16),
-                           ('int32', INT32)], result)
+        result = list(B.iter_members_with_inherited(context, getvalue))
+        self.assertEquals([dict(name='uint8', type=UINT8, value=8),
+                           dict(name='uint16', type=UINT16, value=16),
+                           dict(name='uint32', type=UINT32, value=32),
+                           dict(name='int8', type=INT8, value=-1),
+                           dict(name='int16', type=INT16, value=-16),
+                           dict(name='int32', type=INT32, value=-32)],
+                          result)
 
 
 class TestEnumType(TestCase):
