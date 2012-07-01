@@ -393,6 +393,12 @@ def typed_struct_attributes(struct, attributes, context):
 class StructType(CompoundType):
     def __init__(cls, name, bases, attrs):
         super(StructType, cls).__init__(name, bases, attrs)
+        if 'attributes' in cls.__dict__:
+            members = (dict(type=member[0], name=member[1])
+                       if isinstance(member, tuple)
+                       else member
+                       for member in cls.attributes())
+            cls.members = list(members)
         for k, v in attrs.iteritems():
             if isinstance(v, EnumType):
                 v.__name__ = k
@@ -404,12 +410,8 @@ class StructType(CompoundType):
 
     def iter_members(cls, context, getvalue):
         values = dict()
-        members = cls.attributes()
-        for member in members:
-            if isinstance(member, tuple):
-                member_type, member_name = member
-                member = dict(type=member_type, name=member_name)
-
+        for member in cls.members:
+            member = dict(member)
             if 'type_func' in member:
                 member['type'] = member['type_func'](context, values)
 
