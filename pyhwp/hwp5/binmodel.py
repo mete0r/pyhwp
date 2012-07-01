@@ -128,6 +128,10 @@ class IdMappings(RecordModel):
     attributes = staticmethod(attributes)
 
 
+class BinStorageId(UINT16):
+    pass
+
+
 class BinData(RecordModel):
     tagid = HWPTAG_BIN_DATA
     StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
@@ -173,10 +177,6 @@ class BinDataStorage(BinData):
     attributes = staticmethod(attributes)
 BinDataStorage.__name__ = 'BinData'
 BinData.submodels[BinData.StorageType.STORAGE] = BinDataStorage
-
-
-class BinStorageId(UINT16):
-    pass
 
 
 class AlternateFont(Struct):
