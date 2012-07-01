@@ -1341,7 +1341,7 @@ class ShapeCurve(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_CURVE
 
     def attributes(cls):
-        yield ARRAY(UINT16, Coord), 'points'
+        yield N_ARRAY(UINT16, Coord), 'points'
         # TODO: segment type
     attributes = classmethod(attributes)
 
