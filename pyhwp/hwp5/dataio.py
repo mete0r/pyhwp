@@ -410,9 +410,14 @@ class StructType(CompoundType):
                 if isinstance(member, tuple):
                     member_type, member_name = member
                     member = dict(type=member_type, name=member_name)
-                member['value'] = getvalue(member)
-                yield member
-                member = members.send(member['value'])
+
+                member_value = None
+                member_version = member.get('version')
+                if member_version is None or context['version'] >= member_version:
+                    member_value = member['value'] = getvalue(member)
+                    yield member
+
+                member = members.send(member_value)
         except StopIteration:
             pass
 

@@ -415,7 +415,6 @@ class TableCaptionCellTest(TestCase):
     records_bytes = 'G\x04\xc0\x02 lbt\x10#*(\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00\x04\n\x00\x00\x03\x00\x00\x00\x1b\x01R\x037\x02n\x04\n^\xc0V\x00\x00\x00\x00H\x08`\x01\x02\x00\x00\x00\x00\x00\x00\x00\x03\x00\x00\x008!\x00\x00R\x03\x06\x9e\x00\x00M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00'
 
     def testParsePass1(self):
-        from hwp5.binmodel import TableControl, TableBody, ListHeader
         from hwp5.binmodel import TableCaption, TableCell
         from hwp5.binmodel import parse_pass0
         from hwp5.binmodel import parse_models_with_parent
@@ -424,17 +423,6 @@ class TableCaptionCellTest(TestCase):
 
         pass0 = parse_pass0(self.ctx, records)
         pass2 = list(parse_models_with_parent(pass0))
-
-        from itertools import chain
-        def expected():
-            yield TableControl, set([name for type, name in TableControl.attributes(self.ctx)] + ['chid'])
-            yield TableCaption, set(name for type, name in chain(ListHeader.attributes(self.ctx), TableCaption.attributes(self.ctx)))
-            yield TableBody, set(name for type, name in TableBody.attributes(self.ctx))
-            yield TableCell, set(name for type, name in chain(ListHeader.attributes(self.ctx), TableCell.attributes(self.ctx)))
-        expected = list(expected())
-        self.assertEquals(expected, [(model['type'],
-                                      set(model['content'].keys()))
-                                     for context, model in pass2])
 
         result = pass2
         tablecaption = result[1]

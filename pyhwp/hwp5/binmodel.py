@@ -122,8 +122,9 @@ class IdMappings(RecordModel):
         yield UINT16, 'parashapes',
         yield UINT16, 'styles',
         yield UINT16, 'memoshapes',
-        if context['version'] >= (5, 0, 1, 7):
-            yield ARRAY(UINT32, 8), 'unknown'  # SPEC
+        yield dict(type=ARRAY(UINT32, 8),
+                   name='unknown',
+                   version=(5, 0, 1, 7))  # SPEC
     attributes = staticmethod(attributes)
 
 
@@ -281,9 +282,8 @@ class FillColorPattern(Fill):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
         yield cls.PatternTypeFlags, 'pattern_type_flags',
-        if context['version'] > (5, 0, 0, 5):
-            # TODO 이것이 존재하는 버젼이 실제로 있는지 확인 필요
-            yield UINT32, 'unknown',
+        # TODO 이것이 존재하는 버젼이 실제로 있는지 확인 필요
+        yield dict(type=UINT32, name='unknown', version=(5, 0, 0, 6))
     attributes = classmethod(attributes)
 
 
@@ -370,9 +370,8 @@ class TabDef(RecordModel):
 
     def attributes(context):
         # SPEC is confusing
-        if context['version'] == (5, 0, 1, 7):
-            yield UINT32, 'unknown1'
-            yield UINT32, 'unknown2'
+        yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
+        yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
         #yield UINT32, 'attr',
         #yield UINT16, 'count',
         #yield HWPUNIT, 'pos',
@@ -459,10 +458,9 @@ class ParaShape(RecordModel):
         yield HWPUNIT16,  'border_right',
         yield HWPUNIT16,  'border_top',
         yield HWPUNIT16,  'border_bottom',
-        if context['version'] > (5, 0, 1, 6):
-            yield cls.Flags2, 'flags2',       # above 5016
-            #yield cls.Flags3, 'flags3',       # DIFFSPEC
-            #yield UINT32, 'lineSpacing', # DIFFSPEC
+        yield dict(type=cls.Flags2, name='flags2', version=(5, 0, 1, 7))
+        #yield cls.Flags3, 'flags3',   # DIFFSPEC
+        #yield UINT32, 'lineSpacing',  # DIFFSPEC
     attributes = classmethod(attributes)
 
 
@@ -477,9 +475,7 @@ class Style(RecordModel):
         yield INT16, 'lang_id',
         yield UINT16, 'parashape_id',
         yield UINT16, 'charshape_id',
-        if context['version'] >= (5, 0, 1, 7):
-            pass
-            #yield UINT16, 'unknown' # SPEC
+        yield dict(type=UINT16, name='unknown', version=(5, 0, 0, 5))  # SPEC
     attributes = staticmethod(attributes)
 
 
@@ -649,9 +645,8 @@ class CommonControl(Control):
         yield INT16, 'unknown1',
         yield Margin, 'margin',
         yield UINT32, 'instance_id',
-        if context['version'] > (5, 0, 0, 4):
-            yield INT16, 'unknown2',
-            yield BSTR, 'description'
+        yield dict(type=INT16, name='unknown2', version=(5, 0, 0, 5))
+        yield dict(type=BSTR, name='description', version=(5, 0, 0, 5))
     attributes = classmethod(attributes)
 
 
@@ -766,8 +761,7 @@ class FootnoteShape(RecordModel):
         yield HWPUNIT16, 'notes_spacing'
         yield Border.StrokeType, 'splitter_stroke_type'
         yield Border.Width, 'splitter_width'
-        if context['version'] >= (5, 0, 0, 6):
-            yield COLORREF, 'splitter_color'
+        yield dict(type=COLORREF, name='splitter_color', version=(5,0,0,6))
     attributes = classmethod(attributes)
 
 
@@ -835,8 +829,9 @@ class TableBody(RecordModel):
         yield Margin, 'padding'
         yield ARRAY(UINT16, nRows), 'rowcols'
         yield UINT16, 'borderfill_id'
-        if context['version'] > (5, 0, 0, 6):
-            yield N_ARRAY(UINT16, cls.ZoneInfo), 'validZones'  # above 5006
+        yield dict(type=N_ARRAY(UINT16, cls.ZoneInfo),
+                   name='validZones',
+                   version=(5, 0, 0, 7))
     attributes = classmethod(attributes)
 
 
@@ -1380,9 +1375,8 @@ class SectionDef(Control):
         yield UINT16, 'starting_picturenum',
         yield UINT16, 'starting_tablenum',
         yield UINT16, 'starting_equationnum',
-        if context['version'] >= (5, 0, 1, 7):
-            yield UINT32, 'unknown1',
-            yield UINT32, 'unknown2',
+        yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
+        yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
     attributes = staticmethod(attributes)
 
 
@@ -1449,8 +1443,7 @@ class Footer(HeaderFooter):
 class Note(Control):
     ''' 4.2.10.4 미주/각주 '''
     def attributes(context):
-        if context['version'] >= (5, 0, 0, 6):
-            yield UINT32, 'number'  # SPEC
+        yield dict(type=UINT32, name='number', version=(5, 0, 0, 6))  # SPEC
     attributes = staticmethod(attributes)
 
 
