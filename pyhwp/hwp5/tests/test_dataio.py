@@ -82,9 +82,10 @@ class TestStructMemberTypes(TestCase):
             def attributes(cls, context):
                 yield UINT8, 'uint8'
                 yield UINT16, 'uint16'
-                value = yield UINT32, 'uint32'
-                if value == 32:
-                    yield UINT32, 'extra'
+                yield UINT32, 'uint32'
+                def uint32_is_32(context, values):
+                    return values['uint32'] == 32
+                yield dict(type=UINT32, name='extra', condition=uint32_is_32)
 
         a = dict(uint8=8, uint16=16, uint32=32, extra=666)
         context = dict()

@@ -403,23 +403,21 @@ class StructType(CompoundType):
         return read_struct_attributes(cls, dict(), context, f)
 
     def iter_members(cls, context, getvalue):
-        members = cls.attributes(context)
-        try:
-            member = members.next()
-            while True:
-                if isinstance(member, tuple):
-                    member_type, member_name = member
-                    member = dict(type=member_type, name=member_name)
+        values = dict()
+        for member in cls.attributes(context):
+            if isinstance(member, tuple):
+                member_type, member_name = member
+                member = dict(type=member_type, name=member_name)
 
-                member_value = None
-                member_version = member.get('version')
-                if member_version is None or context['version'] >= member_version:
-                    member_value = member['value'] = getvalue(member)
+            if 'type_func' in member:
+                member['type'] = member['type_func'](context, values)
+
+            member_version = member.get('version')
+            if member_version is None or context['version'] >= member_version:
+                condition_func = member.get('condition')
+                if condition_func is None or condition_func(context, values):
+                    values[member['name']] = member['value'] = getvalue(member)
                     yield member
-
-                member = members.send(member_value)
-        except StopIteration:
-            pass
 
     def iter_members_with_inherited(cls, context, getvalue):
         import inspect

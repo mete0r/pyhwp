@@ -139,16 +139,40 @@ class BinData(RecordModel):
             16, 17, AccessState, 'access')
 
     def attributes(cls, context):
-        flags = yield cls.Flags, 'flags'
-        if flags.storage == cls.StorageType.LINK:
-            yield BSTR, 'abspath'
-            yield BSTR, 'relpath'
-        elif flags.storage == cls.StorageType.EMBEDDING:
-            yield BinStorageId, 'storage_id'
-            yield BSTR, 'ext'
-        elif flags.storage == cls.StorageType.STORAGE:
-            yield BinStorageId, 'storage_id'
+        yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
+
+    key_attribute = 'flags'
+    submodels = dict()
+    def concrete_type_by_attribute(cls, flags):
+        return cls.submodels.get(flags.storage)
+    concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
+
+
+class BinDataLink(BinData):
+    def attributes(context):
+        yield BSTR, 'abspath'
+        yield BSTR, 'relpath'
+    attributes = staticmethod(attributes)
+BinDataLink.__name__ = 'BinData'
+BinData.submodels[BinData.StorageType.LINK] = BinDataLink
+
+
+class BinDataEmbedding(BinData):
+    def attributes(context):
+        yield BinStorageId, 'storage_id'
+        yield BSTR, 'ext'
+    attributes = staticmethod(attributes)
+BinDataEmbedding.__name__ = 'BinData'
+BinData.submodels[BinData.StorageType.EMBEDDING] = BinDataEmbedding
+
+
+class BinDataStorage(BinData):
+    def attributes(context):
+        yield BinStorageId, 'storage_id'
+    attributes = staticmethod(attributes)
+BinDataStorage.__name__ = 'BinData'
+BinData.submodels[BinData.StorageType.STORAGE] = BinDataStorage
 
 
 class BinStorageId(UINT16):
@@ -186,14 +210,19 @@ class FaceName(RecordModel):
         )
 
     def attributes(cls, context):
-        has = yield cls.Flags, 'has'
+        yield cls.Flags, 'has'
         yield BSTR, 'name'
-        if has.alternate:
-            yield AlternateFont, 'alternate_font'
-        if has.metric:
-            yield Panose1, 'panose1'
-        if has.default:
-            yield BSTR, 'default_font'
+
+        def has_alternate(context, values):
+            return values['has'].alternate
+        def has_metric(context, values):
+            return values['has'].metric
+        def has_default(context, values):
+            return values['has'].default
+        yield dict(type=AlternateFont, name='alternate_font',
+                   condition=has_alternate)
+        yield dict(type=Panose1, name='panose1', condition=has_metric)
+        yield dict(type=BSTR, name='default_font', condition=has_default)
     attributes = classmethod(attributes)
 
 
@@ -313,13 +342,14 @@ class BorderFill(RecordModel):
         yield Border, 'top',
         yield Border, 'bottom',
         yield Border, 'diagonal'
-        fill_type = yield cls.FillFlags, 'fillflags'
-        if fill_type == cls.Fill.NONE:
-            pass
-        elif fill_type == cls.Fill.COLORPATTERN:
-            yield FillColorPattern, 'fill'
-        elif fill_type == cls.Fill.GRADATION:
-            yield FillGradation, 'fill'
+        yield cls.FillFlags, 'fillflags'
+        def fill_colorpattern(context, values):
+            return values['fillflags'].fill_type == cls.Fill.COLORPATTERN
+        def fill_gradation(context, values):
+            return values['fillflags'].fill_type == cls.Fill.GRADATION
+        yield dict(type=FillColorPattern, name='fill',
+                   condition=fill_colorpattern)
+        yield dict(type=FillGradation, name='fill', condition=fill_gradation)
     attributes = classmethod(attributes)
 
 
@@ -823,11 +853,14 @@ class TableBody(RecordModel):
 
     def attributes(cls, context):
         yield cls.Flags, 'flags'
-        nRows = yield UINT16, 'rows'
+        yield UINT16, 'rows'
         yield UINT16, 'cols'
         yield HWPUNIT16, 'cellspacing'
         yield Margin, 'padding'
-        yield ARRAY(UINT16, nRows), 'rowcols'
+        def rowcols_type(context, values):
+            return ARRAY(UINT16, values['rows'])
+        yield dict(type_func=rowcols_type,
+                   name='rowcols')
         yield UINT16, 'borderfill_id'
         yield dict(type=N_ARRAY(UINT16, cls.ZoneInfo),
                    name='validZones',
@@ -1134,14 +1167,17 @@ class ShapeComponent(RecordModel):
             )
 
     def attributes(cls, context):
-        if 'parent' in context:
-            parent_context, parent_model = context['parent']
-            if parent_model['type'] is GShapeObjectControl:
-                # GSO-child ShapeComponent specific:
-                # it may be a GSO model's attribute, e.g. 'child_chid'
-                yield CHID, 'chid0'
 
-        chid = yield CHID, 'chid'
+        def parent_must_be_gso(context, values):
+            # GSO-child ShapeComponent specific:
+            # it may be a GSO model's attribute, e.g. 'child_chid'
+            if 'parent' in context:
+                parent_context, parent_model = context['parent']
+                return parent_model['type'] is GShapeObjectControl
+
+        yield dict(type=CHID, name='chid0', condition=parent_must_be_gso)
+
+        yield CHID, 'chid'
         yield SHWPUNIT, 'x_in_group'
         yield SHWPUNIT, 'y_in_group'
         yield WORD, 'level_in_group'
@@ -1153,22 +1189,42 @@ class ShapeComponent(RecordModel):
         yield cls.Flags, 'flags'
         yield WORD, 'angle'
         yield Coord, 'rotation_center'
-        nMatrices = yield WORD, 'scalerotations_count'
+        yield WORD, 'scalerotations_count'
         yield Matrix, 'translation'
-        yield ARRAY(ScaleRotationMatrix, nMatrices), 'scalerotations'
-        if chid == CHID.CONTAINER:
-            yield N_ARRAY(WORD, CHID), 'controls',
-        elif chid == CHID.RECT:
-            yield BorderLine, 'border'
-            fill_flags = yield cls.FillFlags, 'fill_flags'
-            yield UINT16, 'unknown'
-            yield UINT8, 'unknown1'
-            if fill_flags.fill_colorpattern:
-                yield FillColorPattern, 'colorpattern'
-            if fill_flags.fill_gradation:
-                yield FillGradation, 'gradation'
-        elif chid == CHID.LINE:
-            yield BorderLine, 'line'
+
+        def scalerotations_type(context, values):
+            ''' ARRAY(ScaleRotationMatrix, scalerotations_count) '''
+            return ARRAY(ScaleRotationMatrix, values['scalerotations_count'])
+        yield dict(type_func=scalerotations_type, name='scalerotations')
+
+        def chid_is_container(context, values):
+            return values['chid'] == CHID.CONTAINER
+        yield dict(type=N_ARRAY(WORD, CHID),
+                   name='controls',
+                   condition=chid_is_container)
+
+        def chid_is_rect(context, values):
+            return values['chid'] == CHID.RECT
+        def chid_is_rect_and_fill_colorpattern(context, values):
+            return (values['chid'] == CHID.RECT and
+                    values['fill_flags'].fill_colorpattern)
+        def chid_is_rect_and_fill_gradation(context, values):
+            return (values['chid'] == CHID.RECT and
+                    values['fill_flags'].fill_gradation)
+        yield dict(type=BorderLine, name='border', condition=chid_is_rect)
+        yield dict(type=cls.FillFlags, name='fill_flags',
+                   condition=chid_is_rect)
+        yield dict(type=UINT16, name='unknown', condition=chid_is_rect)
+        yield dict(type=UINT8, name='unknown1', condition=chid_is_rect)
+        yield dict(type=FillColorPattern, name='colorpattern',
+                   condition=chid_is_rect_and_fill_colorpattern)
+        yield dict(type=FillGradation, name='gradation',
+                   condition=chid_is_rect_and_fill_gradation)
+
+        def chid_is_line(context, values):
+            return values['chid'] == CHID.LINE
+        yield dict(type=BorderLine, name='line',
+                   condition=chid_is_line)
     attributes = classmethod(attributes)
 
     def alternate_child_type(cls, attributes, context,
@@ -1241,8 +1297,7 @@ class ShapePolygon(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_POLYGON
 
     def attributes(cls, context):
-        count = yield UINT16, 'count'
-        yield ARRAY(Coord, count), 'points'
+        yield N_ARRAY(UINT16, Coord), 'points'
     attributes = classmethod(attributes)
 
 
@@ -1250,8 +1305,7 @@ class ShapeCurve(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_CURVE
 
     def attributes(cls, context):
-        count = yield UINT16, 'count'
-        yield ARRAY(Coord, count), 'points'
+        yield ARRAY(UINT16, Coord), 'points'
         # TODO: segment type
     attributes = classmethod(attributes)
 
@@ -1394,11 +1448,15 @@ class ColumnsDef(Control):
             )
 
     def attributes(cls, context):
-        flags = yield cls.Flags, 'flags'
-        flags = cls.Flags(flags)
+        yield cls.Flags, 'flags'
         yield HWPUNIT16, 'spacing'
-        if not flags.same_widths:
-            yield ARRAY(WORD, flags.count), 'widths'
+        def not_same_widths(context, values):
+            return not values['flags'].same_widths
+        def column_widths_type(context, values):
+            return ARRAY(WORD, values['flags'].count)
+        yield dict(name='widths',
+                   type_func=column_widths_type,
+                   condition=not_same_widths)
         yield UINT16, 'attr2'
         yield Border, 'splitter'
     attributes = classmethod(attributes)

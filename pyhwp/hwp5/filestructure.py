@@ -82,10 +82,16 @@ class TextField(unicode):
 
 class SummaryInfo(Struct):
     def attributes(cls, context):
-        if context['version'] < (5, 0, 1, 0):
-            yield ARRAY(UINT32, 0230 / 4), '_unk0'
-        else:
-            yield ARRAY(UINT32, 0250 / 4), '_unk0'
+        def version_lt_5010(context, values):
+            return context['version'] < (5, 0, 1, 0)
+        def version_gte_5010(context, version):
+            return context['version'] >= (5, 0, 1, 0)
+        yield dict(type=ARRAY(UINT32, 0230 / 4),
+                   name='_unk0',
+                   condition=version_lt_5010)
+        yield dict(type=ARRAY(UINT32, 0250 / 4),
+                   name='_unk0',
+                   condition=version_gte_5010)
         yield TextField, 'title'
         yield TextField, 'subject'
         yield TextField, 'author'
