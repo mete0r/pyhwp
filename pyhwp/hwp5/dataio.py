@@ -406,6 +406,8 @@ class StructType(CompoundType):
                 v.__name__ = k
 
     def read(cls, f, context=None):
+        if context is None:
+            context = dict()
         return read_struct_attributes(cls, dict(), context, f)
 
     def parse_members(cls, context, getvalue):
