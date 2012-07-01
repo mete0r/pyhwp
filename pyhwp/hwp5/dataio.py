@@ -435,24 +435,6 @@ class StructType(CompoundType):
 class Struct(object):
     __metaclass__ = StructType
 
-def struct_member_types_intern(cls, values, context):
-    ''' StructType의 멤버 타입들을 반환.
-    '''
-    def getvalue(member):
-        return values[member['name']]
-
-    for member in cls.iter_members(context, getvalue):
-        yield member['name'], member['type']
-
-def struct_member_types(struct_type, member_values, context):
-    ''' StructType의 멤버 타입들을 반환. (상속 포함)
-    '''
-    def getvalue(member):
-        return member_values[member['name']]
-
-    for member in struct_type.iter_members_with_inherited(context, getvalue):
-        yield member['name'], member['type']
-
 
 def dumpbytes(data, crust=False):
     offsbase = 0
