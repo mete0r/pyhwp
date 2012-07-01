@@ -208,11 +208,12 @@ def main():
         logging.error('ParseError: %s', e)
         logging.error('Caused by: %s', repr(e.cause))
         logging.error('Path: %s', e.path)
-        logging.error('Record: %s', e.record['seqno'])
-        logging.error('Record Payload:')
-        from hwp5.dataio import dumpbytes
-        for line in dumpbytes(e.record['payload'], True):
-            logging.error('  %s', line)
+        if e.record:
+            logging.error('Record: %s', e.record['seqno'])
+            logging.error('Record Payload:')
+            from hwp5.dataio import dumpbytes
+            for line in dumpbytes(e.record['payload'], True):
+                logging.error('  %s', line)
         logging.error('Problem Offset: at %d (=0x%x)', e.offset, e.offset)
         logging.error('Model Stack:')
         for level, c in enumerate(reversed(e.context)):

@@ -322,7 +322,7 @@ def read_struct_attributes_with_offset(model, context, stream):
                                        member=identifier, offset=offset))
                 pe.cause = e
                 pe.path = context.get('path')
-                pe.record = context['record']
+                pe.record = context.get('record')
                 pe.offset = offset
                 raise pe
             offset_end = tell()
