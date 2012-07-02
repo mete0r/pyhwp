@@ -359,11 +359,7 @@ def read_struct_attributes_with_offset(model, context, stream):
 
 def read_struct_attributes_name_value(model, context, stream):
     def read_member(member):
-        try:
-            return read_type_value(context, member['type'], stream)
-        except ParseError, e:
-            e.context.append(dict(model=model, member=member['name']))
-            raise
+        return read_type_value(context, member['type'], stream)
 
     for member in model.parse_members(context, read_member):
         yield member['name'], member['value']
@@ -432,7 +428,12 @@ class StructType(CompoundType):
             if member_version is None or context['version'] >= member_version:
                 condition_func = member.get('condition')
                 if condition_func is None or condition_func(context, values):
-                    values[member['name']] = member['value'] = getvalue(member)
+                    try:
+                        value = getvalue(member)
+                    except ParseError, e:
+                        e.context.append(dict(model=cls, member=member['name']))
+                        raise
+                    values[member['name']] = member['value'] = value
                     yield member
 
     def parse_members_with_inherited(cls, context, getvalue, up_to_cls=None):
