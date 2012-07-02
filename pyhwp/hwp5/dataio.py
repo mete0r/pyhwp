@@ -435,9 +435,11 @@ class StructType(CompoundType):
                     values[member['name']] = member['value'] = getvalue(member)
                     yield member
 
-    def parse_members_with_inherited(cls, context, getvalue):
+    def parse_members_with_inherited(cls, context, getvalue, up_to_cls=None):
         import inspect
+        from itertools import takewhile
         mro = inspect.getmro(cls)
+        mro = takewhile(lambda cls: cls is not up_to_cls, mro)
         mro = list(cls for cls in mro if 'attributes' in cls.__dict__)
         mro = reversed(mro)
         for cls in mro:
