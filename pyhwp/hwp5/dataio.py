@@ -122,20 +122,26 @@ class FlagsType(type):
     def __new__(mcs, name, bases, attrs):
         basetype = attrs.pop('basetype')
         bases = (basetype.basetype,)
-        bitgroup_names = attrs.keys()
-        attrs = dict((k, BitGroupDescriptor(v)) for k, v in attrs.iteritems())
-        attrs['read'] = classmethod(lambda cls, f, context: cls(basetype.read(f, context)))
-        attrs['__slots__'] = []
-        def _dictvalue(self):
-            d = dict((name, getattr(self, name)) for name in bitgroup_names)
-            #d['_rawvalue'] = basetype.basetype(self)
-            return d
-        attrs['dictvalue'] = staticmethod(_dictvalue)
-        def _str(self):
-            return str(_dictvalue(self))
-        #attrs['__str__'] = _str
+
+        bitgroups = dict((k, BitGroupDescriptor(v)) for k, v in attrs.iteritems())
+
+        attrs = dict(bitgroups)
         attrs['__name__'] = name
+        attrs['__slots__'] = ()
+
+        attrs['basetype'] = basetype
+        attrs['bitfields'] = bitgroups
+
+        def dictvalue(self):
+            return dict((name, getattr(self, name))
+                        for name in bitgroups.keys())
+        attrs['dictvalue'] = dictvalue
+
         return type.__new__(mcs, name, bases, attrs)
+
+    def read(cls, f, context):
+        return cls(cls.basetype.read(f, context))
+
 
 def _lex_flags_args(args):
     for idx, arg in enumerate(args):

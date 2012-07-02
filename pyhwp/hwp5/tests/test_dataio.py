@@ -187,6 +187,47 @@ class TestFlags(TestCase):
                                     5, 'bit5']))
         self.assertEquals([bit01, bit23, bit4, bit5], x)
 
+    def test_basetype(self):
+        from hwp5.dataio import UINT32
+        from hwp5.dataio import Flags
+        MyFlags = Flags(UINT32)
+        self.assertEquals(UINT32, MyFlags.basetype)
+
+    def test_bitfields(self):
+        from hwp5.dataio import UINT32
+        from hwp5.dataio import Flags
+        from hwp5.dataio import Enum
+        MyEnum = Enum(a=1, b=2)
+        MyFlags = Flags(UINT32, 0, 1, 'field0',
+                                2, 4, MyEnum, 'field2')
+        bitfields = MyFlags.bitfields
+        f = bitfields['field0']
+        self.assertEquals((0, 1, int),
+                          (f.lsb, f.msb, f.valuetype))
+        f = bitfields['field2']
+        self.assertEquals((2, 4, MyEnum),
+                          (f.lsb, f.msb, f.valuetype))
+
+    @property
+    def ByteFlags(self):
+        from hwp5.dataio import BYTE
+        from hwp5.dataio import Flags
+        return Flags(BYTE,
+                     0, 3, 'low',
+                     4, 7, 'high')
+
+    def test_read(self):
+        ByteFlags = self.ByteFlags
+        from StringIO import StringIO
+        stream = StringIO('\xf0')
+        flags = ByteFlags.read(stream, dict())
+        self.assertTrue(isinstance(flags, ByteFlags))
+
+    def test_dictvalue(self):
+        flags = self.ByteFlags(0xf0)
+        self.assertEquals(dict(low=0, high=0xf),
+                          flags.dictvalue())
+
 
 class TestReadStruct(TestCase):
 
