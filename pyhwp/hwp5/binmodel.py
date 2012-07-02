@@ -63,16 +63,14 @@ tag_models = dict()
 
 
 class RecordModelType(StructType):
-    def __init__(cls, name, bases, attrs):
-        super(RecordModelType, cls).__init__(name, bases, attrs)
+
+    def __new__(mcs, name, bases, attrs):
+        cls = StructType.__new__(mcs, name, bases, attrs)
         if 'tagid' in attrs:
             tagid = attrs['tagid']
-            existing = tag_models.get(tagid)
-            assert not tagid in tag_models,\
-                    ('duplicated RecordModels for tagid \'%s\': '
-                    + 'new=%s, existing=%s'
-                    % (tagnames[tagid], name, existing.__name__))
+            assert tagid not in tag_models
             tag_models[tagid] = cls
+        return cls
 
 
 class RecordModel(object):
@@ -600,15 +598,14 @@ control_models = dict()
 
 
 class ControlType(RecordModelType):
-    def __init__(cls, name, bases, attrs):
-        super(ControlType, cls).__init__(name, bases, attrs)
+
+    def __new__(mcs, name, bases, attrs):
+        cls = RecordModelType.__new__(mcs, name, bases, attrs)
         if 'chid' in attrs:
             chid = attrs['chid']
-            existing = control_models.get(chid)
-            assert not chid in control_models,\
-                    ('duplicated ControlType instances for chid \'%s\':'
-                     + 'new=%s, existing=%s' % (chid, name, existing.__name__))
+            assert chid not in control_models
             control_models[chid] = cls
+        return cls
 
 
 class Control(RecordModel):
