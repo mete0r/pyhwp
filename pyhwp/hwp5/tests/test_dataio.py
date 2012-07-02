@@ -234,7 +234,7 @@ class TestReadStruct(TestCase):
     def test_read_parse_error(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import INT16
-        from hwp5.dataio import read_struct_attributes_with_offset
+        from hwp5.dataio import read_struct_attributes
         from hwp5.dataio import ParseError
 
         class Foo(object):
@@ -249,10 +249,74 @@ class TestReadStruct(TestCase):
 
         record = dict()
         context = dict(record=record)
-        members = read_struct_attributes_with_offset(Foo, context, stream)
         try:
-            list(members)
+            read_struct_attributes(Foo, dict(), context, stream)
             assert False, 'ParseError expected'
         except ParseError, e:
             self.assertEquals(Foo, e.context[-1]['model'])
             self.assertEquals('a', e.context[-1]['member'])
+            self.assertEquals(0, e.offset)
+
+    def test_read_parse_error_nested(self):
+        from hwp5.dataio import StructType
+        from hwp5.dataio import BYTE
+        from hwp5.dataio import read_struct_attributes
+        from hwp5.dataio import ParseError
+
+        class Foo(object):
+            __metaclass__ = StructType
+
+            def attributes():
+                yield BYTE, 'a'
+            attributes = staticmethod(attributes)
+
+        class Bar(object):
+            __metaclass__ = StructType
+
+            def attributes():
+                yield BYTE, 'b'
+                yield Foo, 'foo'
+            attributes = staticmethod(attributes)
+
+        class Baz(object):
+            __metaclass__ = StructType
+
+            def attributes():
+                yield BYTE, 'c'
+                yield Bar, 'bar'
+            attributes = staticmethod(attributes)
+
+        class Qux(object):
+            __metaclass__ = StructType
+
+            def attributes():
+                yield BYTE, 'd'
+                yield Baz, 'baz'
+            attributes = staticmethod(attributes)
+
+        from StringIO import StringIO
+        stream = StringIO('\x01\x02\x03')
+
+        record = dict()
+        context = dict(record=record)
+        try:
+            read_struct_attributes(Qux, dict(), context, stream)
+            assert False, 'ParseError expected'
+        except ParseError, e:
+            self.assertEquals(Qux, e.context[-1]['model'])
+            self.assertEquals('baz', e.context[-1]['member'])
+            self.assertEquals(1, e.context[-1]['offset'])
+
+            self.assertEquals(Baz, e.context[-2]['model'])
+            self.assertEquals('bar', e.context[-2]['member'])
+            self.assertEquals(2, e.context[-2]['offset'])
+
+            self.assertEquals(Bar, e.context[-3]['model'])
+            self.assertEquals('foo', e.context[-3]['member'])
+            self.assertEquals(3, e.context[-3]['offset'])
+
+            self.assertEquals(Foo, e.context[-4]['model'])
+            self.assertEquals('a', e.context[-4]['member'])
+            self.assertEquals(3, e.context[-4]['offset'])
+
+            self.assertEquals(3, e.offset)
