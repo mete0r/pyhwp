@@ -3,7 +3,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from .dataio import (readn, read_struct_attributes,
+from .dataio import (readn,
                      CompoundType,
                      ArrayType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
@@ -36,11 +36,6 @@ from . import dataio
 
 
 StringIO = importStringIO()
-
-
-def parse_model_attributes(model, attributes, context):
-    return read_struct_attributes(model, attributes, context,
-                                         context['stream'])
 
 
 def typed_model_attributes(model, attributes, context):
@@ -1543,8 +1538,6 @@ class AutoNumbering(NumberingControl):
     chid = CHID.ATNO
 
     def attributes(cls):
-        for x in NumberingControl.attributes():
-            yield x
         yield WCHAR, 'usersymbol',
         yield WCHAR, 'prefix',
         yield WCHAR, 'suffix',
@@ -1809,7 +1802,7 @@ def parse_model(context, model):
     model['content'] = dict()
 
     # 1차 파싱
-    model['content'] = parse_model_attributes(model['type'], model['content'], context)
+    read_members(model['type'], model['content'], context)
 
     # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
     get_altered_model = getattr(model['type'], 'concrete_type_by_attribute',
@@ -1818,8 +1811,13 @@ def parse_model(context, model):
         key = model['type'].key_attribute
         altered_model = get_altered_model(model['content'][key])
         if altered_model is not None:
+            # 예: Control -> TableControl로 바뀌는 경우,
+            # Control의 member들은 이미 읽은 상태이고
+            # CommonControl, TableControl에서 각각 정의한
+            # 멤버들을 읽어들여야 함
+            read_members_up_to(altered_model, model['type'],
+                               model['content'], context)
             model['type'] = altered_model
-            model['content'] = parse_model_attributes(model['type'], model['content'], context)
 
     if 'parent' not in context:
         return
@@ -1833,10 +1831,26 @@ def parse_model(context, model):
     if alternate_child_type:
         alter_type = alternate_child_type(parent_content, parent_context, (context, model))
         if alter_type:
+            read_members_up_to(alter_type, model['type'],
+                               model['content'], context)
             model['type'] = alter_type
-            model['content'] = parse_model_attributes(model['type'], model['content'], context)
 
     logger.debug('pass2: %s, %s', model['type'], model['content'])
+
+
+def read_members(model_type, content, context):
+    from hwp5.dataio import read_struct_members_defined
+    members = read_struct_members_defined(model_type, context['stream'], context)
+    members = ((m['name'], m['value']) for m in members)
+    content.update(members)
+
+
+def read_members_up_to(model_type, up_to_type, content, context):
+    from hwp5.dataio import read_struct_members_up_to
+    members = read_struct_members_up_to(model_type, up_to_type,
+                                        context['stream'], context)
+    members = ((m['name'], m['value']) for m in members)
+    content.update(members)
 
 
 def parse_models_with_parent(context_models):

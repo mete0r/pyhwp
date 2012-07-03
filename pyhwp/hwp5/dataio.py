@@ -327,7 +327,7 @@ class ParseError(Exception):
 def read_struct_members(model, context, stream):
     def read_member(member):
         return read_type_value(context, member['type'], stream)
-    members =  model.parse_members(context, read_member)
+    members = model.parse_members_with_inherited(context, read_member)
     members = supplement_parse_error_with_offset(members, stream)
     members = supplement_parse_error_with_parsed(members)
     return members
@@ -442,6 +442,8 @@ class StructType(CompoundType):
         return dict(members)
 
     def parse_members(cls, context, getvalue):
+        if 'attributes' not in cls.__dict__:
+            return
         values = dict()
         for member in cls.members:
             member = dict(member)
