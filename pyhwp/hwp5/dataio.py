@@ -411,7 +411,7 @@ def typed_struct_attributes(struct, attributes, context):
         else:
             return member['type']()
 
-    for member in struct.parse_members(context, popvalue):
+    for member in struct.parse_members_with_inherited(context, popvalue):
         yield member
 
     # remnants

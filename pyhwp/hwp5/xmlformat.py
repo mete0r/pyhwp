@@ -4,7 +4,7 @@ from .filestructure import VERSION
 from .dataio import typed_struct_attributes, Struct, ArrayType, FlagsType, EnumType, WCHAR
 from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT
 from .dataio import hexdump
-from .binmodel import typed_model_attributes, COLORREF, BinStorageId, Margin, Text
+from .binmodel import COLORREF, BinStorageId, Margin, Text
 from .xmlmodel import ModelEventHandler
 
 import logging
@@ -89,14 +89,12 @@ def separate_plainvalues(typed_attributes):
     return d, p
 
 def startelement(context, xmlgen, (model, attributes)):
-    if issubclass(model, Struct):
+    from hwp5.dataio import StructType
+    if isinstance(model, StructType):
         typed_attributes = ((v['name'], (v['type'], v['value']))
                             for v in typed_struct_attributes(model, attributes, context))
-    elif model is dict:
-        typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
     else:
-        typed_attributes = ((v['name'], (v['type'], v['value']))
-                            for v in typed_model_attributes(model, attributes, context))
+        typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
 
     typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
     yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)
