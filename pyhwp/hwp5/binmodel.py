@@ -118,11 +118,12 @@ class BinData(RecordModel):
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)
 
-    key_attribute = 'flags'
-    submodels = dict()
-    def concrete_type_by_attribute(cls, flags):
-        return cls.submodels.get(flags.storage)
-    concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
+    def get_extension_key(cls, context, model):
+        ''' flags.storage '''
+        return model['content']['flags'].storage
+    get_extension_key = classmethod(get_extension_key)
+
+    extension_types = dict()
 
 
 class BinDataLink(BinData):
@@ -131,7 +132,7 @@ class BinDataLink(BinData):
         yield BSTR, 'relpath'
     attributes = staticmethod(attributes)
 BinDataLink.__name__ = 'BinData'
-BinData.submodels[BinData.StorageType.LINK] = BinDataLink
+BinData.extension_types[BinData.StorageType.LINK] = BinDataLink
 
 
 class BinDataEmbedding(BinData):
@@ -140,7 +141,7 @@ class BinDataEmbedding(BinData):
         yield BSTR, 'ext'
     attributes = staticmethod(attributes)
 BinDataEmbedding.__name__ = 'BinData'
-BinData.submodels[BinData.StorageType.EMBEDDING] = BinDataEmbedding
+BinData.extension_types[BinData.StorageType.EMBEDDING] = BinDataEmbedding
 
 
 class BinDataStorage(BinData):
@@ -148,7 +149,7 @@ class BinDataStorage(BinData):
         yield BinStorageId, 'storage_id'
     attributes = staticmethod(attributes)
 BinDataStorage.__name__ = 'BinData'
-BinData.submodels[BinData.StorageType.STORAGE] = BinDataStorage
+BinData.extension_types[BinData.StorageType.STORAGE] = BinDataStorage
 
 
 class AlternateFont(Struct):
@@ -590,11 +591,12 @@ class Control(RecordModel):
         yield CHID, 'chid'
     attributes = staticmethod(attributes)
 
-    key_attribute = 'chid'
+    extension_types = control_models
 
-    def concrete_type_by_attribute(cls, chid):
-        return control_models.get(chid)
-    concrete_type_by_attribute = classmethod(concrete_type_by_attribute)
+    def get_extension_key(cls, context, model):
+        ''' chid '''
+        return model['content']['chid']
+    get_extension_key = classmethod(get_extension_key)
 
 
 class Margin(Struct):
@@ -1784,19 +1786,18 @@ def parse_model(context, model):
     read_members(model['type'], model['content'], context)
 
     # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
-    get_altered_model = getattr(model['type'], 'concrete_type_by_attribute',
-                                None)
-    if get_altered_model:
-        key = model['type'].key_attribute
-        altered_model = get_altered_model(model['content'][key])
-        if altered_model is not None:
+    extension_types = getattr(model['type'], 'extension_types', None)
+    if extension_types:
+        key = model['type'].get_extension_key(context, model)
+        extension = extension_types.get(key)
+        if extension is not None:
             # 예: Control -> TableControl로 바뀌는 경우,
             # Control의 member들은 이미 읽은 상태이고
             # CommonControl, TableControl에서 각각 정의한
             # 멤버들을 읽어들여야 함
-            read_members_up_to(altered_model, model['type'],
+            read_members_up_to(extension, model['type'],
                                model['content'], context)
-            model['type'] = altered_model
+            model['type'] = extension
 
     if 'parent' not in context:
         return
