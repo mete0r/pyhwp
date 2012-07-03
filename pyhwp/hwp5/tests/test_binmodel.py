@@ -5,8 +5,7 @@ from StringIO import StringIO
 from hwp5.tests import test_recordstream
 from hwp5.recordstream import Record, read_records
 from hwp5.utils import cached_property
-from hwp5.binmodel import RecordModel, typed_model_attributes
-from hwp5.dataio import INT32, BSTR
+from hwp5.binmodel import RecordModel
 
 
 def TestContext(**ctx):
@@ -473,31 +472,9 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(0x4f03, model_content['unknown_width'])
 
 
-class TestTypedModelAttributes(TestCase):
-    def test_typed_model_attributes(self):
-        class Hello(RecordModel):
-            @staticmethod
-            def attributes():
-                yield INT32, 'a'
-
-        class Hoho(Hello):
-            @staticmethod
-            def attributes():
-                yield BSTR, 'b'
-
-        attributes = dict(a=1, b=u'abc', c=(2, 2))
-        result = typed_model_attributes(Hoho, attributes, dict())
-        result = list(result)
-        expected = [dict(name='a', type=INT32, value=1),
-                    dict(name='b', type=BSTR, value='abc'),
-                    dict(name='c', type=tuple, value=(2, 2))]
-        self.assertEquals(expected, result)
-
-
 class TestRecordModel(TestCase):
     def test_assign_enum_flags_name(self):
         from hwp5.dataio import Flags, Enum, UINT32
-        from hwp5.binmodel import RecordModel
 
         class FooRecord(RecordModel):
             Bar = Flags(UINT32)

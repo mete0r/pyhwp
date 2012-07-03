@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from hwp5.dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
-from hwp5.dataio import typed_struct_attributes
 class TestArray(TestCase):
     def test_new(self):
         t1 = ARRAY(INT32, 3)
@@ -23,6 +22,7 @@ class TestArray(TestCase):
 class TestTypedAttributes(TestCase):
 
     def test_typed_struct_attributes(self):
+        from hwp5.dataio import typed_struct_attributes
         class SomeRandomStruct(Struct):
             @staticmethod
             def attributes():
@@ -37,6 +37,27 @@ class TestTypedAttributes(TestCase):
                     dict(name='b', type=BSTR, value='abc'),
                     dict(name='c', type=ARRAY(INT32, 3), value=(4,5,6))]
         self.assertEquals(expected, typed_attributes)
+
+    def test_typed_struct_attributes_inherited(self):
+        from hwp5.dataio import typed_struct_attributes
+        class Hello(Struct):
+            @staticmethod
+            def attributes():
+                yield INT32, 'a'
+
+        class Hoho(Hello):
+            @staticmethod
+            def attributes():
+                yield BSTR, 'b'
+
+        attributes = dict(a=1, b=u'abc', c=(2, 2))
+        result = typed_struct_attributes(Hoho, attributes, dict())
+        result = list(result)
+        expected = [dict(name='a', type=INT32, value=1),
+                    dict(name='b', type=BSTR, value='abc'),
+                    dict(name='c', type=tuple, value=(2, 2))]
+        self.assertEquals(expected, result)
+
 
 class TestStructType(TestCase):
     def test_assign_enum_flags_name(self):

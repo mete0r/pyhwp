@@ -38,22 +38,6 @@ from . import dataio
 StringIO = importStringIO()
 
 
-def typed_model_attributes(model, attributes, context):
-    def popvalue(member):
-        name = member['name']
-        if name in attributes:
-            return attributes.pop(name)
-        else:
-            return member['type']()
-
-    if issubclass(model, RecordModel):
-        for d in model.parse_members_with_inherited(context, popvalue):
-            yield d
-
-    # remnants
-    for name, value in attributes.iteritems():
-        yield dict(name=name, value=value, type=type(value))
-
 tag_models = dict()
 
 
