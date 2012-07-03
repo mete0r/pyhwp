@@ -325,10 +325,13 @@ class ParseError(Exception):
 
 
 def read_struct_attributes(model, attributes, context, stream):
-    iterable = read_struct_attributes_with_offset(model, context, stream)
-    iterable = supplement_parse_error_with_parsed(iterable)
-    for span, (name, value) in iterable:
-        attributes[name] = value
+    def read_member(member):
+        return read_type_value(context, member['type'], stream)
+    members =  model.parse_members(context, read_member)
+    members = supplement_parse_error_with_offset(members, stream)
+    members = supplement_parse_error_with_parsed(members)
+    members = ((m['name'], m['value']) for m in members)
+    attributes.update(members)
     return attributes
 
 
@@ -343,26 +346,27 @@ def supplement_parse_error_with_parsed(members):
         raise
         
 
-def read_struct_attributes_with_offset(model, context, stream):
-    name_values = read_struct_attributes_name_value(model, context, stream)
+def supplement_parse_error_with_offset(members, stream):
     while True:
         offset = stream.tell()
         try:
-            name_value = name_values.next()
-        except StopIteration:
-            return
+            member = members.next()
         except ParseError, e:
             e.context[-1]['offset'] = offset
             raise
-        yield (offset, stream.tell()), name_value
+        except StopIteration:
+            return
+        yield member
 
 
-def read_struct_attributes_name_value(model, context, stream):
-    def read_member(member):
-        return read_type_value(context, member['type'], stream)
-
-    for member in model.parse_members(context, read_member):
-        yield member['name'], member['value']
+def augment_members_with_offset(members, stream):
+    while True:
+        offset = stream.tell()
+        try:
+            member = members.next()
+        except StopIteration:
+            return
+        yield (offset, stream.tell()), member
 
 
 def read_type_value(context, type, stream):
