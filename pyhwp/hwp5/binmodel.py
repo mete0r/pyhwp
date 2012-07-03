@@ -851,15 +851,14 @@ class TableBody(RecordModel):
     ZoneInfo = ARRAY(UINT16, 5)
 
     def attributes(cls):
+        from hwp5.dataio import X_ARRAY
+        from hwp5.dataio import ref_member
         yield cls.Flags, 'flags'
         yield UINT16, 'rows'
         yield UINT16, 'cols'
         yield HWPUNIT16, 'cellspacing'
         yield Margin, 'padding'
-        def rowcols_type(context, values):
-            ''' ARRAY(UINT16, rows) '''
-            return ARRAY(UINT16, values['rows'])
-        yield dict(type_func=rowcols_type,
+        yield dict(type_func=X_ARRAY(UINT16, ref_member('rows')),
                    name='rowcols')
         yield UINT16, 'borderfill_id'
         yield dict(type=N_ARRAY(UINT16, cls.ZoneInfo),
@@ -1199,6 +1198,8 @@ class ShapeComponent(RecordModel):
             )
 
     def attributes(cls):
+        from hwp5.dataio import X_ARRAY
+        from hwp5.dataio import ref_member
 
         def parent_must_be_gso(context, values):
             ''' parent record type is GShapeObjectControl '''
@@ -1224,11 +1225,9 @@ class ShapeComponent(RecordModel):
         yield Coord, 'rotation_center'
         yield WORD, 'scalerotations_count'
         yield Matrix, 'translation'
-
-        def scalerotations_type(context, values):
-            ''' ARRAY(ScaleRotationMatrix, scalerotations_count) '''
-            return ARRAY(ScaleRotationMatrix, values['scalerotations_count'])
-        yield dict(type_func=scalerotations_type, name='scalerotations')
+        yield dict(type_func=X_ARRAY(ScaleRotationMatrix,
+                                     ref_member('scalerotations_count')),
+                   name='scalerotations')
 
         def chid_is_container(context, values):
             ''' chid == CHID.CONTAINER '''
@@ -1481,16 +1480,15 @@ class ColumnsDef(Control):
             )
 
     def attributes(cls):
+        from hwp5.dataio import X_ARRAY
+        from hwp5.dataio import ref_member_flag
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'spacing'
         def not_same_widths(context, values):
             ''' flags.same_widths == 0 '''
             return not values['flags'].same_widths
-        def column_widths_type(context, values):
-            ''' ARRAY(WORD, flags.count) '''
-            return ARRAY(WORD, values['flags'].count)
         yield dict(name='widths',
-                   type_func=column_widths_type,
+                   type_func=X_ARRAY(WORD, ref_member_flag('flags', 'count')),
                    condition=not_same_widths)
         yield UINT16, 'attr2'
         yield Border, 'splitter'

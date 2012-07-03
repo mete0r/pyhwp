@@ -373,6 +373,32 @@ class VariableLengthArrayType(ArrayType):
 N_ARRAY = VariableLengthArrayType
 
 
+def ref_member(member_name):
+    f = lambda context, values: values[member_name]
+    f.__doc__ = member_name
+    return f
+
+
+def ref_member_flag(member_name, bitfield_name):
+    f = lambda context, values: getattr(values[member_name], bitfield_name)
+    f.__doc__ = '%s.%s' % (member_name, bitfield_name)
+    return f
+
+
+class X_ARRAY(object):
+
+    def __init__(self, itemtype, count_reference):
+        name = 'ARRAY(%s, \'%s\')' % (itemtype.__name__,
+                                      count_reference.__doc__)
+        self.__doc__ = self.__name__ = name
+        self.itemtype = itemtype
+        self.count_reference = count_reference
+
+    def __call__(self, context, values):
+        count = self.count_reference(context, values)
+        return ARRAY(self.itemtype, count)
+
+
 class ParseError(Exception):
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
