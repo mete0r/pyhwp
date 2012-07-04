@@ -202,47 +202,75 @@ def Flags(basetype, *args):
     return FlagsType('Flags', (), attrs)
 
 
-enum_types = dict()
+enum_type_instances = set()
 class EnumType(type):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(mcs, enum_type_name, bases, attrs):
         items = attrs.pop('items')
         moreitems = attrs.pop('moreitems')
-        names = dict()
-        registry = dict()
-        for k, v in moreitems.iteritems():
-            assert not k in attrs, 'name clashes: %s'%k
-            attrs[k] = v
-            names[v] = k
-            registry[k] = v
-        for v, k in enumerate(items):
-            assert not k in attrs, 'name clashes: %s'%k
-            attrs[k] = v
-            names[v] = k
-            registry[k] = v
-        def repr(self):
+
+        populate_state = [1]
+
+        names_by_instance = dict()
+        instances_by_name = dict()
+        instances_by_value = dict()
+        def __new__(cls, value, name=None):
+            if isinstance(value, cls):
+                return value
+
+            if name is None:
+                if value in instances_by_value:
+                    return instances_by_value[value]
+                else:
+                    raise ValueError('undefined %s value: %s' %
+                                     (cls.__name__, value))
+
+            if len(populate_state) == 0:
+                raise TypeError()
+
+            assert name not in instances_by_name
+
+            if value in instances_by_value:
+                self = instances_by_value[value]
+            else:
+                # define new instance of this enum
+                self = int.__new__(cls, value)
+                instances_by_value[value] = self
+                names_by_instance[self] = name
+
+            instances_by_name[name] = self
+            return self
+        attrs['__new__'] = __new__
+        attrs['__slots__'] = []
+
+        attrs['name'] = property(lambda self: names_by_instance[self])
+        def __repr__(self):
             enum_name = type(self).__name__
-            item_name = names.get(self)
+            item_name = self.name
             if item_name is not None:
                 return enum_name+'.'+item_name
             else:
                 return '%s(%d)'%(enum_name, self)
-        attrs['__repr__'] = repr
-        attrs['__slots__'] = []
-        cls = type.__new__(mcs, name, bases, attrs)
-        enum_types[cls] = dict(items=registry, value_instances=dict(), names=names)
+        attrs['__repr__'] = __repr__
+
+        cls = type.__new__(mcs, enum_type_name, bases, attrs)
+
+        for v, k in enumerate(items):
+            setattr(cls, k, cls(v, k))
+        for k, v in moreitems.iteritems():
+            setattr(cls, k, cls(v, k))
+
+        cls.names = set(instances_by_name.keys())
+        cls.instances = set(names_by_instance.keys())
+
+        # no more population
+        populate_state.pop()
+
+        enum_type_instances.add(cls)
         return cls
-    def __init__(cls, name, bases, attrs):
-        type.__init__(cls, name, bases, attrs)
-        for k, v in enum_types[cls]['items'].iteritems():
-            setattr(cls, k, cls(v))
-    def __call__(cls, value):
-        if isinstance(value, cls):
-            return value
-        value_instances = enum_types[cls]['value_instances']
-        instance = super(EnumType, cls).__call__(value)
-        return value_instances.setdefault(value, instance)
-    def name_for(cls, value):
-        return enum_types[cls]['names'].get(value, str(value))
+
+    def __init__(cls, *args, **kwargs):
+        pass
+
 
 def Enum(*items, **moreitems):
     attrs = dict(items=items, moreitems=moreitems)

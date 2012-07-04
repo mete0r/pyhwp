@@ -168,21 +168,53 @@ class TestStructType(TestCase):
 class TestEnumType(TestCase):
     def test_enum(self):
         from hwp5.dataio import EnumType
-        FooEnum = EnumType('FooEnum', (int,), dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4)))
-        self.assertEquals(0, FooEnum.a)
-        self.assertEquals(1, FooEnum.b)
-        self.assertEquals(2, FooEnum.c)
-        self.assertEquals(1, FooEnum.d)
-        self.assertEquals(4, FooEnum.e)
-        self.assertEquals('FooEnum.a', repr(FooEnum(0)))
-        self.assertEquals('FooEnum.b', repr(FooEnum(1)))
-        self.assertEquals('FooEnum.e', repr(FooEnum(4)))
-        self.assertEquals('b', FooEnum.name_for(1))
-        self.assertRaises(AttributeError, getattr, FooEnum(0), 'items')
-        self.assertRaises(AttributeError, getattr, FooEnum(0), 'moreitems')
-        self.assertTrue(isinstance(FooEnum.a, FooEnum))
-        self.assertTrue(FooEnum(0) is FooEnum(0))
-        self.assertTrue(FooEnum(0) is FooEnum.a)
+        from hwp5.dataio import Enum
+        Foo = EnumType('Foo', (int,), dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4)))
+
+        self.assertRaises(AttributeError, getattr, Foo, 'items')
+        self.assertRaises(AttributeError, getattr, Foo, 'moreitems')
+
+        # class members
+        self.assertEquals(0, Foo.a)
+        self.assertEquals(1, Foo.b)
+        self.assertEquals(2, Foo.c)
+        self.assertEquals(1, Foo.d)
+        self.assertEquals(4, Foo.e)
+        self.assertTrue(isinstance(Foo.a, Foo))
+
+        # same instances
+        self.assertTrue(Foo(0) is Foo(0))
+        self.assertTrue(Foo(0) is Foo.a)
+
+        # not an instance of int
+        self.assertTrue(Foo(0) is not 0)
+
+        # instance names
+        self.assertEquals('a', Foo.a.name)
+        self.assertEquals('b', Foo.b.name)
+
+        # aliases
+        self.assertEquals('b', Foo.d.name)
+        self.assertTrue(Foo.b is Foo.d)
+
+        # repr
+        self.assertEquals('Foo.a', repr(Foo(0)))
+        self.assertEquals('Foo.b', repr(Foo(1)))
+        self.assertEquals('Foo.e', repr(Foo(4)))
+
+        # frozen attribute set
+        self.assertRaises(AttributeError, setattr, Foo(0), 'bar', 0)
+        self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
+
+        # undefined value
+        self.assertRaises(ValueError, Foo, 5)
+
+        # can't define anymore
+        self.assertRaises(TypeError, Foo, 5, 'f')
+
+        # duplicate names
+        self.assertRaises(Exception, Enum, 'a', a=1)
+
 
 class TestFlags(TestCase):
     def test_parse_args(self):

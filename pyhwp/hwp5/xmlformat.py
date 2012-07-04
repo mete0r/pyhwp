@@ -14,7 +14,7 @@ def xmlattrval(value):
     if isinstance(value, basestring):
         return value
     elif isinstance(type(value), EnumType):
-        return type(value).name_for(value).lower()
+        return type(value)(value).name.lower()
     elif isinstance(value, type):
         return value.__name__
     else:
