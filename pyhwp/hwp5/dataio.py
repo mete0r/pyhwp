@@ -399,6 +399,18 @@ class X_ARRAY(object):
         return ARRAY(self.itemtype, count)
 
 
+class SelectiveType(object):
+
+    def __init__(self, selector_reference, selections):
+        self.__name__ = 'SelectiveType'
+        self.selections = selections
+        self.selector_reference = selector_reference
+
+    def __call__(self, context, values):
+        selector = self.selector_reference(context, values)
+        return self.selections.get(selector, Struct)  # default: empty struct
+
+
 class ParseError(Exception):
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
@@ -532,6 +544,8 @@ class StructType(CompoundType):
         for member in cls.members:
             member = dict(member)
             if isinstance(member['type'], X_ARRAY):
+                member['type'] = member['type'](context, values)
+            elif isinstance(member['type'], SelectiveType):
                 member['type'] = member['type'](context, values)
 
             member_version = member.get('version')
