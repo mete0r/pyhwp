@@ -38,6 +38,14 @@ from . import dataio
 StringIO = importStringIO()
 
 
+def ref_parent_member(member_name):
+    def f(context, values):
+        context, model = context['parent']
+        return model['content'][member_name]
+    f.__doc__ = 'PARENTREC.'+member_name
+    return f
+
+
 tag_models = dict()
 
 
@@ -1104,7 +1112,9 @@ class ParaLineSeg(RecordModel):
     tagid = HWPTAG_PARA_LINE_SEG
 
     def attributes(cls):
-        yield ParaLineSegList, 'linesegs'
+        from hwp5.dataio import X_ARRAY
+        yield dict(name='linesegs',
+                   type_func=X_ARRAY(LineSeg, ref_parent_member('linesegs')))
     attributes = classmethod(attributes)
 
 
