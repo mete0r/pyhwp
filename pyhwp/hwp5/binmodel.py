@@ -3,7 +3,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from .dataio import (readn,
+from .dataio import (PrimitiveType,
                      CompoundType,
                      ArrayType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
@@ -518,6 +518,10 @@ class LayoutCompatibility(RecordModel):
 
 
 class CHID(str):
+    __metaclass__ = PrimitiveType
+
+    fixed_size = 4
+
     # Common controls
     GSO = 'gso '
     TBL = 'tbl '
@@ -556,17 +560,9 @@ class CHID(str):
     #...
     HLK = '%hlk'
 
-    def decode(bytes):
+    def decode(bytes, context=None):
         return bytes[3] + bytes[2] + bytes[1] + bytes[0]
     decode = staticmethod(decode)
-
-    def read(cls, f, context=None):
-        bytes = readn(f, 4)
-        return cls.decode(bytes)
-    read = classmethod(read)
-
-    def __new__(cls, *args):
-        return str.__new__(cls, *args)
 
 
 control_models = dict()
