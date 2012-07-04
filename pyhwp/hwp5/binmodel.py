@@ -55,11 +55,6 @@ class RecordModelType(StructType):
 class RecordModel(object):
     __metaclass__ = RecordModelType
 
-    def attributes():
-        if False:
-            yield
-    attributes = staticmethod(attributes)
-
 
 class DocumentProperties(RecordModel):
     tagid = HWPTAG_DOCUMENT_PROPERTIES
