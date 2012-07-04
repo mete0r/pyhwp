@@ -112,6 +112,26 @@ class BinStorageId(UINT16):
     pass
 
 
+class BinDataLink(Struct):
+    def attributes():
+        yield BSTR, 'abspath'
+        yield BSTR, 'relpath'
+    attributes = staticmethod(attributes)
+
+
+class BinDataEmbedding(Struct):
+    def attributes():
+        yield BinStorageId, 'storage_id'
+        yield BSTR, 'ext'
+    attributes = staticmethod(attributes)
+
+
+class BinDataStorage(Struct):
+    def attributes():
+        yield BinStorageId, 'storage_id'
+    attributes = staticmethod(attributes)
+
+
 class BinData(RecordModel):
     tagid = HWPTAG_BIN_DATA
     StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
@@ -123,41 +143,14 @@ class BinData(RecordModel):
             16, 17, AccessState, 'access')
 
     def attributes(cls):
+        from hwp5.dataio import SelectiveType
+        from hwp5.dataio import ref_member_flag
         yield cls.Flags, 'flags'
+        yield SelectiveType(ref_member_flag('flags', 'storage'),
+                            {cls.StorageType.LINK: BinDataLink,
+                             cls.StorageType.EMBEDDING: BinDataEmbedding,
+                             cls.StorageType.STORAGE: BinDataStorage}), 'bindata'
     attributes = classmethod(attributes)
-
-    def get_extension_key(cls, context, model):
-        ''' flags.storage '''
-        return model['content']['flags'].storage
-    get_extension_key = classmethod(get_extension_key)
-
-    extension_types = dict()
-
-
-class BinDataLink(BinData):
-    def attributes():
-        yield BSTR, 'abspath'
-        yield BSTR, 'relpath'
-    attributes = staticmethod(attributes)
-BinDataLink.__name__ = 'BinData'
-BinData.extension_types[BinData.StorageType.LINK] = BinDataLink
-
-
-class BinDataEmbedding(BinData):
-    def attributes():
-        yield BinStorageId, 'storage_id'
-        yield BSTR, 'ext'
-    attributes = staticmethod(attributes)
-BinDataEmbedding.__name__ = 'BinData'
-BinData.extension_types[BinData.StorageType.EMBEDDING] = BinDataEmbedding
-
-
-class BinDataStorage(BinData):
-    def attributes():
-        yield BinStorageId, 'storage_id'
-    attributes = staticmethod(attributes)
-BinDataStorage.__name__ = 'BinData'
-BinData.extension_types[BinData.StorageType.STORAGE] = BinDataStorage
 
 
 class AlternateFont(Struct):

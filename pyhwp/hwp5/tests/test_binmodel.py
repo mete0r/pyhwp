@@ -42,8 +42,8 @@ class BinEmbeddedTest(TestCase):
 
         self.assertTrue(BinData, model['type'])
         self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(model['content']['flags']).storage)
-        self.assertEquals(2, model['content']['storage_id'])
-        self.assertEquals('jpg', model['content']['ext'])
+        self.assertEquals(2, model['content']['bindata']['storage_id'])
+        self.assertEquals('jpg', model['content']['bindata']['ext'])
 
 
 class LanguageStructTest(TestCase):
