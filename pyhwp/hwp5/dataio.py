@@ -41,35 +41,69 @@ def readn(f, size):
         raise Eof(pos)
     return data
 
-class Primitive(type):
-    def read(self, f, context=None):
-        return self.decode(readn(f, self.calcsize))
-    def decode(self, s, context=None):
-        return struct.unpack(self.fmt, s)[0]
 
-class _new(object):
-    def __init__(self, basetype):
-        self.basetype = basetype
-    def __call__(self, cls, *args, **kwargs):
-        return self.basetype.__new__(self.basetype, *args, **kwargs)
+class PrimitiveType(type):
+    def __new__(mcs, name, bases, attrs):
+        basetype = bases[0]
+        attrs['basetype'] = basetype
+        attrs.setdefault('__slots__', [])
 
-def _Primitive(name, basetype, fmt):
-    return Primitive(name, (basetype,), dict(basetype=basetype,
-                                             fmt=fmt,
-                                             calcsize=struct.calcsize(fmt),
-                                             __new__=staticmethod(_new(basetype)),
-                                             __slots__=[]))
+        if '__new__' not in attrs:
+            def __new__(cls, *args, **kwargs):
+                return basetype.__new__(basetype, *args, **kwargs)
+            attrs['__new__'] = __new__
 
-UINT32 = _Primitive('UINT32', long, '<I')
-INT32 = _Primitive('INT32', int, '<i')
-UINT16 = _Primitive('UINT16', int, '<H')
-INT16 = _Primitive('INT16', int, '<h')
-UINT8 = _Primitive('UINT8', int, '<B')
-INT8 = _Primitive('INT8', int, '<b')
-WORD = _Primitive('WORD', int, '<H')
-BYTE = _Primitive('BYTE', int, '<B')
-DOUBLE = _Primitive('DOUBLE', float, '<d')
-WCHAR = _Primitive('WCHAR', int, '<H')
+        if 'binfmt' in attrs:
+            binfmt = attrs['binfmt']
+            fixed_size = struct.calcsize(binfmt)
+
+            if 'fixed_size' in attrs:
+                assert fixed_size == attrs['fixed_size']
+            else:
+                attrs['fixed_size'] = fixed_size
+
+            if 'decode' not in attrs:
+                def decode(cls, s, context=None):
+                    return struct.unpack(binfmt, s)[0]
+                attrs['decode'] = classmethod(decode)
+
+        if 'fixed_size' in attrs and 'read' not in attrs:
+            fixed_size = attrs['fixed_size']
+            def read(cls, f, context=None):
+                s = readn(f, fixed_size)
+                decode = getattr(cls, 'decode', None)
+                if decode:
+                    return decode(s, context)
+                return s
+            attrs['read'] = classmethod(read)
+
+        return type.__new__(mcs, name, bases, attrs)
+
+
+def Primitive(name, basetype, binfmt):
+    attrs = dict(binfmt=binfmt)
+    return PrimitiveType(name, (basetype,), attrs)
+
+
+UINT32 = Primitive('UINT32', long, '<I')
+INT32 = Primitive('INT32', int, '<i')
+UINT16 = Primitive('UINT16', int, '<H')
+INT16 = Primitive('INT16', int, '<h')
+UINT8 = Primitive('UINT8', int, '<B')
+INT8 = Primitive('INT8', int, '<b')
+WORD = Primitive('WORD', int, '<H')
+BYTE = Primitive('BYTE', int, '<B')
+DOUBLE = Primitive('DOUBLE', float, '<d')
+WCHAR = Primitive('WCHAR', int, '<H')
+HWPUNIT = Primitive('HWPUNIT', long, '<I')
+SHWPUNIT = Primitive('SHWPUNIT', int, '<i')
+HWPUNIT16 = Primitive('HWPUNIT16', int, '<h')
+
+inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
+hwp2inch = lambda x: x / 7200.0
+hwp2mm = lambda x: inch2mm(hwp2inch(x))
+hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
+
 
 def decode_utf16le_besteffort(s):
     while True:
@@ -80,8 +114,10 @@ def decode_utf16le_besteffort(s):
             s = s[:e.start] + '.'*(e.end-e.start) + s[e.end:]
             continue
 
+
 class BSTR(unicode):
-    __new__ = _new(unicode)
+    __metaclass__ = PrimitiveType
+
     def read(f, context):
         size = UINT16.read(f, None)
         if size == 0:
@@ -90,13 +126,7 @@ class BSTR(unicode):
         return decode_utf16le_besteffort(data)
     read = staticmethod(read)
 
-inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
-hwp2inch = lambda x: x / 7200.0
-hwp2mm = lambda x: inch2mm(hwp2inch(x))
-hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
-HWPUNIT = _Primitive('HWPUNIT', long, '<I')
-SHWPUNIT = _Primitive('SHWPUNIT', int, '<i')
-HWPUNIT16 = _Primitive('HWPUNIT16', int, '<h')
+
 
 class BitGroupDescriptor(object):
     def __init__(self, bitgroup):
