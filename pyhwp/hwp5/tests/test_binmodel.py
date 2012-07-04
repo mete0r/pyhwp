@@ -63,6 +63,26 @@ class TestBase(test_recordstream.TestBase):
     hwp5file = hwp5file_bin
 
 
+class ParaCharShapeTest(TestBase):
+
+    @property
+    def paracharshape_record(self):
+        return self.bodytext.section(0).record(2)
+
+    def test_read_paracharshape(self):
+        from hwp5.binmodel import init_record_parsing_context
+        from hwp5.binmodel import parse_model
+        parent_context = dict()
+        parent_model = dict(content=dict(charshapes=5))
+
+        record = self.paracharshape_record
+        context, model = init_record_parsing_context(dict(), record)
+        context['parent'] = parent_context, parent_model
+        parse_model(context, model)
+        self.assertEquals(dict(charshapes=((0, 7), (19, 8), (23, 7), (24, 9), (26, 7))),
+                          model['content'])
+
+
 class TableTest(TestBase):
 
     @property

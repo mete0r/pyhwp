@@ -1061,7 +1061,10 @@ class ParaCharShape(RecordModel):
     tagid = HWPTAG_PARA_CHAR_SHAPE
 
     def attributes():
-        yield ParaCharShapeList, 'charshapes'
+        from hwp5.dataio import X_ARRAY
+        yield dict(name='charshapes',
+                   type_func=X_ARRAY(ARRAY(UINT32, 2),
+                                     ref_parent_member('charshapes')))
     attributes = staticmethod(attributes)
 
 
