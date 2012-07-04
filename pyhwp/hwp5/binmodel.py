@@ -866,7 +866,7 @@ class TableBody(RecordModel):
         yield UINT16, 'cols'
         yield HWPUNIT16, 'cellspacing'
         yield Margin, 'padding'
-        yield dict(type_func=X_ARRAY(UINT16, ref_member('rows')),
+        yield dict(type=X_ARRAY(UINT16, ref_member('rows')),
                    name='rowcols')
         yield UINT16, 'borderfill_id'
         yield dict(type=N_ARRAY(UINT16, cls.ZoneInfo),
@@ -1063,8 +1063,8 @@ class ParaCharShape(RecordModel):
     def attributes():
         from hwp5.dataio import X_ARRAY
         yield dict(name='charshapes',
-                   type_func=X_ARRAY(ARRAY(UINT32, 2),
-                                     ref_parent_member('charshapes')))
+                   type=X_ARRAY(ARRAY(UINT32, 2),
+                                ref_parent_member('charshapes')))
     attributes = staticmethod(attributes)
 
 
@@ -1117,7 +1117,7 @@ class ParaLineSeg(RecordModel):
     def attributes(cls):
         from hwp5.dataio import X_ARRAY
         yield dict(name='linesegs',
-                   type_func=X_ARRAY(LineSeg, ref_parent_member('linesegs')))
+                   type=X_ARRAY(LineSeg, ref_parent_member('linesegs')))
     attributes = classmethod(attributes)
 
 
@@ -1238,8 +1238,8 @@ class ShapeComponent(RecordModel):
         yield Coord, 'rotation_center'
         yield WORD, 'scalerotations_count'
         yield Matrix, 'translation'
-        yield dict(type_func=X_ARRAY(ScaleRotationMatrix,
-                                     ref_member('scalerotations_count')),
+        yield dict(type=X_ARRAY(ScaleRotationMatrix,
+                                ref_member('scalerotations_count')),
                    name='scalerotations')
 
         def chid_is_container(context, values):
@@ -1501,7 +1501,7 @@ class ColumnsDef(Control):
             ''' flags.same_widths == 0 '''
             return not values['flags'].same_widths
         yield dict(name='widths',
-                   type_func=X_ARRAY(WORD, ref_member_flag('flags', 'count')),
+                   type=X_ARRAY(WORD, ref_member_flag('flags', 'count')),
                    condition=not_same_widths)
         yield UINT16, 'attr2'
         yield Border, 'splitter'

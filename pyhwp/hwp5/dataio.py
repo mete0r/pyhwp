@@ -531,8 +531,8 @@ class StructType(CompoundType):
         values = dict()
         for member in cls.members:
             member = dict(member)
-            if 'type_func' in member:
-                member['type'] = member['type_func'](context, values)
+            if isinstance(member['type'], X_ARRAY):
+                member['type'] = member['type'](context, values)
 
             member_version = member.get('version')
             if member_version is None or context['version'] >= member_version:
