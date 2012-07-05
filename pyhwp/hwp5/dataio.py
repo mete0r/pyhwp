@@ -48,7 +48,8 @@ class PrimitiveType(type):
         attrs['basetype'] = basetype
         attrs.setdefault('__slots__', [])
 
-        if '__new__' not in attrs:
+        never_instantiate = attrs.pop('never_instantiate', True)
+        if never_instantiate and '__new__' not in attrs:
             def __new__(cls, *args, **kwargs):
                 return basetype.__new__(basetype, *args, **kwargs)
             attrs['__new__'] = __new__
@@ -80,8 +81,8 @@ class PrimitiveType(type):
         return type.__new__(mcs, name, bases, attrs)
 
 
-def Primitive(name, basetype, binfmt):
-    attrs = dict(binfmt=binfmt)
+def Primitive(name, basetype, binfmt, **attrs):
+    attrs['binfmt'] = binfmt
     return PrimitiveType(name, (basetype,), attrs)
 
 
