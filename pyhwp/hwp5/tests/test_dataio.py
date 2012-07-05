@@ -67,6 +67,7 @@ class TestStructType(TestCase):
             bar = Enum()
             baz = Flags(UINT16)
         self.assertEquals('bar', Foo.bar.__name__)
+        self.assertEquals(Foo, Foo.bar.scoping_struct)
         self.assertEquals('baz', Foo.baz.__name__)
 
     def test_parse_members(self):

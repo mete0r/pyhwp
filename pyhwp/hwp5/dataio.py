@@ -271,8 +271,15 @@ class EnumType(type):
             return self
         attrs['__new__'] = __new__
         attrs['__slots__'] = []
+        attrs['scoping_struct'] = None
 
-        attrs['name'] = property(lambda self: names_by_instance[self])
+        class NameDescriptor(object):
+            def __get__(self, instance, owner):
+                if instance is None:
+                    return owner.__name__
+                return names_by_instance[instance]
+
+        attrs['name'] = NameDescriptor()
         def __repr__(self):
             enum_name = type(self).__name__
             item_name = self.name
@@ -527,6 +534,7 @@ class StructType(CompoundType):
         for k, v in attrs.iteritems():
             if isinstance(v, EnumType):
                 v.__name__ = k
+                v.scoping_struct = cls
             elif isinstance(v, FlagsType):
                 v.__name__ = k
 
