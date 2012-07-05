@@ -682,15 +682,13 @@ class ListHeaderType(RecordModelType):
 class ListHeader(RecordModel):
     __metaclass__ = ListHeaderType
     tagid = HWPTAG_LIST_HEADER
+
+    VAlign = Enum(TOP=0, MIDDLE=1, BOTTOM=2)
     Flags = Flags(UINT32,
         0, 2, 'textdirection',
         3, 4, 'linebreak',
-        5, 6, 'valign',
+        5, 6, VAlign, 'valign',
         )
-    VALIGN_MASK     = 0x60
-    VALIGN_TOP      = 0x00
-    VALIGN_MIDDLE   = 0x20
-    VALIGN_BOTTOM   = 0x40
 
     def attributes(cls):
         yield UINT16, 'paragraphs',
