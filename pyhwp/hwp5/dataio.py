@@ -324,15 +324,33 @@ class ParseError(Exception):
         self.context = []
 
 
-def read_struct_attributes(model, attributes, context, stream):
+def read_struct_members(model, context, stream):
     def read_member(member):
         return read_type_value(context, member['type'], stream)
     members =  model.parse_members(context, read_member)
     members = supplement_parse_error_with_offset(members, stream)
     members = supplement_parse_error_with_parsed(members)
-    members = ((m['name'], m['value']) for m in members)
-    attributes.update(members)
-    return attributes
+    return members
+
+
+def read_struct_members_defined(struct_type, stream, context):
+    def read_member(member):
+        return read_type_value(context, member['type'], stream)
+    members = struct_type.parse_members(context, read_member)
+    members = supplement_parse_error_with_offset(members, stream)
+    members = supplement_parse_error_with_parsed(members)
+    return members
+
+
+def read_struct_members_up_to(struct_type, up_to_type, stream, context):
+    stream = context['stream']
+    def read_member(member):
+        return read_type_value(context, member['type'], stream)
+    members = struct_type.parse_members_with_inherited(context, read_member,
+                                                 up_to_type)
+    members = supplement_parse_error_with_offset(members, stream)
+    members = supplement_parse_error_with_parsed(members)
+    return members
 
 
 def supplement_parse_error_with_parsed(members):
@@ -419,7 +437,9 @@ class StructType(CompoundType):
     def read(cls, f, context=None):
         if context is None:
             context = dict()
-        return read_struct_attributes(cls, dict(), context, f)
+        members = read_struct_members(cls, context, f)
+        members = ((m['name'], m['value']) for m in members)
+        return dict(members)
 
     def parse_members(cls, context, getvalue):
         values = dict()

@@ -234,7 +234,6 @@ class TestReadStruct(TestCase):
     def test_read_parse_error(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import INT16
-        from hwp5.dataio import read_struct_attributes
         from hwp5.dataio import ParseError
 
         class Foo(object):
@@ -250,7 +249,7 @@ class TestReadStruct(TestCase):
         record = dict()
         context = dict(record=record)
         try:
-            read_struct_attributes(Foo, dict(), context, stream)
+            Foo.read(stream, context)
             assert False, 'ParseError expected'
         except ParseError, e:
             self.assertEquals(Foo, e.context[-1]['model'])
@@ -260,7 +259,6 @@ class TestReadStruct(TestCase):
     def test_read_parse_error_nested(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import BYTE
-        from hwp5.dataio import read_struct_attributes
         from hwp5.dataio import ParseError
 
         class Foo(object):
@@ -300,7 +298,7 @@ class TestReadStruct(TestCase):
         record = dict()
         context = dict(record=record)
         try:
-            read_struct_attributes(Qux, dict(), context, stream)
+            Qux.read(stream, context)
             assert False, 'ParseError expected'
         except ParseError, e:
             self.assertEquals(Qux, e.context[-1]['model'])
