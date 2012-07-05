@@ -127,7 +127,6 @@ class BSTR(unicode):
     read = staticmethod(read)
 
 
-
 class BitGroupDescriptor(object):
     def __init__(self, bitgroup):
         valuetype = int
@@ -147,6 +146,7 @@ class BitGroupDescriptor(object):
         lsb = self.lsb
         msb = self.msb
         return valuetype(int(instance >> lsb) & int( (2**(msb+1-lsb)) - 1))
+
 
 class FlagsType(type):
     def __new__(mcs, name, bases, attrs):
