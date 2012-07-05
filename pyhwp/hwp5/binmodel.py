@@ -1384,8 +1384,32 @@ class ShapeTextArt(RecordModel):
     # TODO
 
 
+control_data_models = dict()
+
+
+class ControlDataType(RecordModelType):
+
+    def __new__(mcs, name, bases, attrs):
+        cls = RecordModelType.__new__(mcs, name, bases, attrs)
+        if 'parent_model_type' in attrs:
+            parent_model_type = attrs['parent_model_type']
+            assert parent_model_type not in control_data_models
+            control_data_models[parent_model_type] = cls
+        return cls
+
+
 class ControlData(RecordModel):
+    __metaclass__ = ControlDataType
     tagid = HWPTAG_CTRL_DATA
+
+    extension_types = control_data_models
+
+    def get_extension_key(cls, context, model):
+        ''' parent model type '''
+        parent = context.get('parent')
+        if parent:
+            return parent[1]['type']
+    get_extension_key = classmethod(get_extension_key)
 
 
 class EqEdit(RecordModel):
@@ -1414,6 +1438,14 @@ class SectionDef(Control):
         yield UINT16, 'starting_equationnum',
         yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
         yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
+    attributes = staticmethod(attributes)
+
+
+class SectionDefData(ControlData):
+    parent_model_type = SectionDef
+
+    def attributes():
+        yield ARRAY(BYTE, 280), 'unknown'
     attributes = staticmethod(attributes)
 
 
@@ -1610,14 +1642,11 @@ class BookmarkControl(Control):
             yield
     attributes = staticmethod(attributes)
 
-    def alternate_child_type(cls, attributes, context,
-                    (child_context, child_model)):
-        if child_model['type'] is ControlData:
-            return BookmarkControlData
-    alternate_child_type = classmethod(alternate_child_type)
-
 
 class BookmarkControlData(ControlData):
+
+    parent_model_type = BookmarkControl
+
     def attributes():
         yield UINT32, 'unknown1'
         yield UINT32, 'unknown2'
@@ -1718,6 +1747,10 @@ class FieldFormula(Field):
 
 class FieldClickHere(Field):
     chid = '%clk'
+
+
+class FieldClickHereData(ControlData):
+    parent_model_type = FieldClickHere
 
 
 class FieldSummary(Field):
