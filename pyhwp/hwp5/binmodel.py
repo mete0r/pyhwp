@@ -204,8 +204,9 @@ class FaceName(RecordModel):
 
 
 class COLORREF(int):
-    read = staticmethod(INT32.read)
-    __slots__ = []
+    __metaclass__ = PrimitiveType
+    binfmt = INT32.binfmt
+    never_instantiate = False
 
     def __getattr__(self, name):
         if name == 'r':
@@ -215,7 +216,7 @@ class COLORREF(int):
         elif name == 'b':
             return (self & 0xff0000) >> 16
         elif name == 'a':
-            return (self & 0xff000000) >> 24
+            return int((self & 0xff000000) >> 24)
         elif name == 'rgb':
             return self.r, self.g, self.b
 
