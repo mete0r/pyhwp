@@ -663,15 +663,27 @@ class TableControl(CommonControl):
         child_context, child_model = child
         if child_model['type'] is TableBody:
             context['table_body'] = True
-        elif child_model['type'] is ListHeader:
-            if context.get('table_body', False):
-                return TableCell
-            else:
-                return TableCaption
     alternate_child_type = classmethod(alternate_child_type)
 
 
+list_header_models = dict()
+
+
+class ListHeaderType(RecordModelType):
+
+    def __new__(mcs, name, bases, attrs):
+        cls = RecordModelType.__new__(mcs, name, bases, attrs)
+        if 'parent_model_type' in attrs:
+            parent_model_type = attrs['parent_model_type']
+            before_tablebody = attrs.get('before_tablebody', False)
+            list_type_key = parent_model_type, before_tablebody
+            assert list_type_key not in list_header_models
+            list_header_models[list_type_key] = cls
+        return cls
+
+
 class ListHeader(RecordModel):
+    __metaclass__ = ListHeaderType
     tagid = HWPTAG_LIST_HEADER
     Flags = Flags(UINT32,
         0, 2, 'textdirection',
@@ -688,6 +700,15 @@ class ListHeader(RecordModel):
         yield UINT16, 'unknown1',
         yield cls.Flags, 'listflags',
     attributes = classmethod(attributes)
+
+    extension_types = list_header_models
+
+    def get_extension_key(context, model):
+        ''' (parent mode type, after TableBody) '''
+        if 'parent' in context:
+            context, model = context['parent']
+            return model['type'], context.get('table_body', False)
+    get_extension_key = staticmethod(get_extension_key)
 
 
 class PageDef(RecordModel):
@@ -790,6 +811,9 @@ class PageBorderFill(RecordModel):
 
 
 class TableCaption(ListHeader):
+    parent_model_type = TableControl
+    before_tablebody = False
+
     Position = Enum(LEFT=0, RIGHT=1, TOP=2, BOTTOM=3)
     Flags = Flags(UINT32,
                 0, 1, Position, 'position',
@@ -805,6 +829,9 @@ class TableCaption(ListHeader):
 
 
 class TableCell(ListHeader):
+    parent_model_type = TableControl
+    before_tablebody = True
+
     def attributes():
         yield UINT16, 'col',
         yield UINT16, 'row',
@@ -1243,14 +1270,10 @@ class ShapeComponent(RecordModel):
                    condition=chid_is_line)
     attributes = classmethod(attributes)
 
-    def alternate_child_type(cls, attributes, context,
-                    (child_context, child_model)):
-        if child_model['type'] is ListHeader:
-            return TextboxParagraphList
-    alternate_child_type = classmethod(alternate_child_type)
-
 
 class TextboxParagraphList(ListHeader):
+    parent_model_type = ShapeComponent
+
     def attributes():
         yield Margin, 'padding'
         yield HWPUNIT, 'maxwidth'
@@ -1498,21 +1521,23 @@ class HeaderFooter(Control):
             yield BYTE, 'numberrefsbitmap'
         attributes = staticmethod(attributes)
 
-    def alternate_child_type(cls, attributes, context,
-                    (child_context, child_model)):
-        if child_model['type'] is ListHeader:
-            return cls.ParagraphList
-    alternate_child_type = classmethod(alternate_child_type)
-
 
 class Header(HeaderFooter):
     ''' 머리말 '''
     chid = CHID.HEADER
 
 
+class HeaderParagraphList(HeaderFooter.ParagraphList):
+    parent_model_type = Header
+
+
 class Footer(HeaderFooter):
     ''' 꼬리말 '''
     chid = CHID.FOOTER
+
+
+class FooterParagraphList(HeaderFooter.ParagraphList):
+    parent_model_type = Footer
 
 
 class Note(Control):
