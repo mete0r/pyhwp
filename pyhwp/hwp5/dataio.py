@@ -427,6 +427,35 @@ class ParseError(Exception):
         self.record = None
         self.context = []
 
+    def print_to_logger(self, logger):
+        e = self
+        logger.error('ParseError: %s', e)
+        logger.error('Caused by: %s', repr(e.cause))
+        logger.error('Path: %s', e.path)
+        if e.record:
+            logger.error('Record: %s', e.record['seqno'])
+            logger.error('Record Payload:')
+            for line in dumpbytes(e.record['payload'], True):
+                logger.error('  %s', line)
+        logger.error('Problem Offset: at %d (=0x%x)', e.offset, e.offset)
+        logger.error('Model Stack:')
+        for level, c in enumerate(reversed(e.context)):
+            model = c['model']
+            if isinstance(model, StructType):
+                logger.error('  %s', model)
+                parsed_members = c['parsed']
+                for member in parsed_members:
+                    offset = member.get('offset', 0)
+                    offset_end = member.get('offset_end', 1)
+                    name = member['name']
+                    value = member['value']
+                    logger.error('    %06x:%06x: %s = %s', offset, offset_end-1, name,
+                                  value)
+                logger.error('    %06x:      : %s', c['offset'], c['member'])
+                pass
+            else:
+                logger.error('  %s%s', ' '*level, c)
+
 
 def read_struct_members(model, context, stream):
     def read_member(member):
