@@ -684,11 +684,11 @@ class CommonControl(Control):
 class TableControl(CommonControl):
     chid = CHID.TBL
 
-    def alternate_child_type(cls, attributes, context, child):
+    def on_child(cls, attributes, context, child):
         child_context, child_model = child
         if child_model['type'] is TableBody:
             context['table_body'] = True
-    alternate_child_type = classmethod(alternate_child_type)
+    on_child = classmethod(on_child)
 
 
 list_header_models = dict()
@@ -1153,12 +1153,6 @@ class ParaRangeTag(RecordModel):
 
 class GShapeObjectControl(CommonControl):
     chid = CHID.GSO
-
-    def alternate_child_type(cls, attributes, context,
-                    (child_context, child_model)):
-        # TODO: ListHeader to Caption
-        pass
-    alternate_child_type = classmethod(alternate_child_type)
 
 
 class Matrix(Struct):
@@ -1889,13 +1883,9 @@ def parse_model(context, model):
     parent_type = parent_model.get('type')
     parent_content = parent_model.get('content')
 
-    alternate_child_type = getattr(parent_type, 'alternate_child_type', None)
-    if alternate_child_type:
-        alter_type = alternate_child_type(parent_content, parent_context, (context, model))
-        if alter_type:
-            read_members_up_to(alter_type, model['type'],
-                               model['content'], context)
-            model['type'] = alter_type
+    on_child = getattr(parent_type, 'on_child', None)
+    if on_child:
+        on_child(parent_content, parent_context, (context, model))
 
     logger.debug('pass2: %s, %s', model['type'], model['content'])
 

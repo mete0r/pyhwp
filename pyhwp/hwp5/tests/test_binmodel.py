@@ -141,11 +141,10 @@ class TableTest(TestBase):
         child = (child_context, child_model)
 
         self.assertFalse(context.get('table_body'))
-        alter_type = TableControl.alternate_child_type(dict(), context, child)
+        TableControl.on_child(dict(), context, child)
         # 'table_body' in table record context should have been changed to True
         self.assertTrue(context['table_body'])
         # model and attributes should not have been changed
-        self.assertEquals(None, alter_type)
         self.assertEquals(dict(), child_model['content'])
 
     def test_parse_child_table_cell(self):
