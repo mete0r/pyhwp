@@ -10,6 +10,7 @@ Usage::
     hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
     hwp5proc records [--tree | --json] [<hwp5file> <record-stream>]
     hwp5proc models [--tree | --json] [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
     hwp5proc xml <hwp5file>
     hwp5proc rawunz
     hwp5proc -h | --help
@@ -25,6 +26,10 @@ Options::
                     some streams will be presented as-is. (i.e. not decompressed)
     --tree          print records as tree
     --json          print records as json
+    --model=<model-name> filter with record model name
+    --tag=<hwptag>  filter with record HWPTAG
+    --incomplete    filter with incompletely parsed content
+    --dump          dump record
     -V              HWPv5 format version [default: 5.0.0.0]
 
 
@@ -158,6 +163,22 @@ Example::
     $ hwp5proc models -V 5.0.1.7 < Section0.bin
 
 
+``hwp5proc find``
+-----------------
+Find models with specified predicates.
+
+Example: Find paragraphs::
+
+    $ hwp5proc find --model=Paragraph samples/*.hwp
+    $ hwp5proc find --tag=HWPTAG_PARA_TEXT samples/*.hwp
+    $ hwp5proc find --tag=66 samples/*.hwp
+
+Example: Find and dump records of HWPTAG_LIST_HEADER which is parsed
+incompletely::
+
+    $ hwp5proc find --tag=HWPTAG_LIST_HEADER --incomplete --dump samples/*.hwp
+
+
 ``hwp5proc xml``
 ----------------
 Transform <hwp5file> into an XML.
@@ -197,6 +218,8 @@ def main():
             records(args)
         elif args['models']:
             models(args)
+        elif args['find']:
+            find(args)
         elif args['xml']:
             xml(args)
         elif args['ls']:
@@ -356,6 +379,71 @@ def models(args):
             print '    '*model['level']+model['type'].__name__
     else:
         stream.models_json().dump(sys.stdout)
+
+
+def find(args):
+    filenames = args['<hwp5files>']
+    from hwp5.dataio import ParseError
+    from hwp5.binmodel import Hwp5File
+
+    conditions = []
+    if args['--model']:
+        def with_model_name(model):
+            return args['--model'] == model['type'].__name__
+        conditions.append(with_model_name)
+
+    if args['--tag']:
+        tag = args['--tag']
+        try:
+            tag = int(tag)
+        except ValueError:
+            pass
+        else:
+            from hwp5.tagids import tagnames
+            tag = tagnames[tag]
+
+        def with_tag(model):
+            return model['tagname'] == tag
+        conditions.append(with_tag)
+
+    if args['--incomplete']:
+        def with_incomplete(model):
+            return 'unparsed' in model
+        conditions.append(with_incomplete)
+
+    def flat_models(hwp5file, **kwargs):
+        for model in hwp5file.docinfo.models(**kwargs):
+            model['stream'] = 'DocInfo'
+            yield model
+
+        for section in hwp5file.bodytext:
+            for model in hwp5file.bodytext[section].models(**kwargs):
+                model['stream'] = 'BodyText/'+section
+                yield model
+
+    for filename in filenames:
+        try:
+            hwp5file = Hwp5File(filename)
+
+            def with_filename(models):
+                for model in models:
+                    model['filename'] = filename
+                    yield model
+
+            models = flat_models(hwp5file)
+            models = with_filename(models)
+
+            for model in models:
+                if all(condition(model) for condition in conditions):
+                    print '{0}:{1}({2}): {3}'.format(model['filename'],
+                                                     model['stream'],
+                                                     model['seqno'],
+                                                     model['type'].__name__)
+                    if args['--dump']:
+                        from hwp5.binmodel import model_to_json
+                        print model_to_json(model, sort_keys=True, indent=2)
+        except ParseError, e:
+            e.print_to_logger(logger)
 
 
 def xml(args):
