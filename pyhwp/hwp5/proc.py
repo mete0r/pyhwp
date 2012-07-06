@@ -185,6 +185,7 @@ def main():
 
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=__version__)
+    logger.addHandler(logging.StreamHandler())
 
     from hwp5.dataio import ParseError
     try:
