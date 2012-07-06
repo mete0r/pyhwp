@@ -1899,7 +1899,7 @@ def parse_models(context, records):
         yield model
 
 
-def parse_models_intern(context, records, passes=3):
+def parse_models_intern(context, records):
     context_models = ((init_record_parsing_context(context, record), record)
                       for record in records)
     context_models = parse_models_with_parent(context_models)
