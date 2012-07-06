@@ -478,6 +478,8 @@ def supplement_parse_error_with_offset(members, stream):
             raise
         except StopIteration:
             return
+        member['offset'] = offset
+        member['offset_end'] = stream.tell()
         yield member
 
 
