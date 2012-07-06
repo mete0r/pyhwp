@@ -1,4 +1,24 @@
 # -*- coding: utf-8 -*-
+#
+#                   GNU AFFERO GENERAL PUBLIC LICENSE
+#                      Version 3, 19 November 2007
+#
+#   pyhwp : hwp file format parser in python
+#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU Affero General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU Affero General Public License for more details.
+#
+#   You should have received a copy of the GNU Affero General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 import logging
 logger = logging.getLogger(__name__)
@@ -42,7 +62,7 @@ def ref_parent_member(member_name):
     def f(context, values):
         context, model = context['parent']
         return model['content'][member_name]
-    f.__doc__ = 'PARENTREC.'+member_name
+    f.__doc__ = 'PARENTREC.' + member_name
     return f
 
 
@@ -190,12 +210,15 @@ class FaceName(RecordModel):
         def has_alternate(context, values):
             ''' has.alternate == 1 '''
             return values['has'].alternate
+
         def has_metric(context, values):
             ''' has.metric == 1 '''
             return values['has'].metric
+
         def has_default(context, values):
             ''' has.default == 1 '''
             return values['has'].default
+
         yield dict(type=AlternateFont, name='alternate_font',
                    condition=has_alternate)
         yield dict(type=Panose1, name='panose1', condition=has_metric)
@@ -232,7 +255,8 @@ class COLORREF(int):
 class Border(Struct):
 
     # 표 20 테두리선 종류
-    StrokeEnum = Enum('none', 'solid', 'dashed', 'dotted', 'dash-dot', 'dash-dot-dot',
+    StrokeEnum = Enum('none', 'solid',
+                      'dashed', 'dotted', 'dash-dot', 'dash-dot-dot',
                       'long-dash', 'large-dot',
                       'double', 'double-2', 'double-3', 'triple',
                       'wave', 'double-wave',
@@ -321,12 +345,15 @@ class BorderFill(RecordModel):
         yield Border, 'bottom',
         yield Border, 'diagonal'
         yield cls.FillFlags, 'fillflags'
+
         def fill_colorpattern(context, values):
             ''' fillflags.fill_type == Fill.COLORPATTERN '''
             return values['fillflags'].fill_type == cls.Fill.COLORPATTERN
+
         def fill_gradation(context, values):
             ''' fillflags.fill_type == Fill.GRADATION '''
             return values['fillflags'].fill_type == cls.Fill.GRADATION
+
         yield dict(type=FillColorPattern, name='fill',
                    condition=fill_colorpattern)
         yield dict(type=FillGradation, name='fill', condition=fill_gradation)
@@ -784,7 +811,7 @@ class FootnoteShape(RecordModel):
         yield HWPUNIT16, 'notes_spacing'
         yield Border.StrokeType, 'splitter_stroke_type'
         yield Border.Width, 'splitter_width'
-        yield dict(type=COLORREF, name='splitter_color', version=(5,0,0,6))
+        yield dict(type=COLORREF, name='splitter_color', version=(5, 0, 0, 6))
     attributes = classmethod(attributes)
 
 
@@ -1244,14 +1271,17 @@ class ShapeComponent(RecordModel):
         def chid_is_rect(context, values):
             ''' chid == CHID.RECT '''
             return values['chid'] == CHID.RECT
+
         def chid_is_rect_and_fill_colorpattern(context, values):
             ''' chid == CHID.RECT and fill_flags.fill_colorpattern '''
             return (values['chid'] == CHID.RECT and
                     values['fill_flags'].fill_colorpattern)
+
         def chid_is_rect_and_fill_gradation(context, values):
             ''' chid == CHID.RECT and fill_flags.fill_gradation '''
             return (values['chid'] == CHID.RECT and
                     values['fill_flags'].fill_gradation)
+
         yield dict(type=BorderLine, name='border', condition=chid_is_rect)
         yield dict(type=cls.FillFlags, name='fill_flags',
                    condition=chid_is_rect)
@@ -1265,6 +1295,7 @@ class ShapeComponent(RecordModel):
         def chid_is_line(context, values):
             ''' chid == CHID.LINE '''
             return values['chid'] == CHID.LINE
+
         yield dict(type=BorderLine, name='line',
                    condition=chid_is_line)
     attributes = classmethod(attributes)
@@ -1489,9 +1520,11 @@ class ColumnsDef(Control):
         from hwp5.dataio import ref_member_flag
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'spacing'
+
         def not_same_widths(context, values):
             ''' flags.same_widths == 0 '''
             return not values['flags'].same_widths
+
         yield dict(name='widths',
                    type=X_ARRAY(WORD, ref_member_flag('flags', 'count')),
                    condition=not_same_widths)
@@ -1869,15 +1902,16 @@ def parse_model(context, model):
 
 def read_members(model_type, content, context):
     from hwp5.dataio import read_struct_members_defined
-    members = read_struct_members_defined(model_type, context['stream'], context)
+    stream = context['stream']
+    members = read_struct_members_defined(model_type, stream, context)
     members = ((m['name'], m['value']) for m in members)
     content.update(members)
 
 
 def read_members_up_to(model_type, up_to_type, content, context):
     from hwp5.dataio import read_struct_members_up_to
-    members = read_struct_members_up_to(model_type, up_to_type,
-                                        context['stream'], context)
+    stream = context['stream']
+    members = read_struct_members_up_to(model_type, up_to_type, stream, context)
     members = ((m['name'], m['value']) for m in members)
     content.update(members)
 
