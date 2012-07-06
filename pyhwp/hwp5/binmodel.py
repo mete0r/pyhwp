@@ -1725,15 +1725,17 @@ class Dutmal(Control):
     Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4,
                  DISTRIBUTE_SPACE=5)
 
-    def attributes():
+    def attributes(cls):
         yield BSTR, 'maintext'
         yield BSTR, 'subtext'
-        yield UINT32, 'position'
+        yield Flags(UINT32,
+                    0, 31, cls.Position, 'position'), 'position'
         yield UINT32, 'fsizeratio'
         yield UINT32, 'option'
         yield UINT32, 'stylenumber'
-        yield UINT32, 'align'
-    attributes = staticmethod(attributes)
+        yield Flags(UINT32,
+                    0, 31, cls.Align, 'align'), 'align'
+    attributes = classmethod(attributes)
 
 
 class HiddenComment(Control):
