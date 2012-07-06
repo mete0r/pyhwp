@@ -8,8 +8,8 @@ Usage::
     hwp5proc ls [--vstreams | --ole] <hwp5file>
     hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
     hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
-    hwp5proc records [<hwp5file> <record-stream>]
-    hwp5proc models [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc records [--tree | --json] [<hwp5file> <record-stream>]
+    hwp5proc models [--tree | --json] [<hwp5file> <record-stream> | -V <version>]
     hwp5proc xml <hwp5file>
     hwp5proc rawunz
     hwp5proc -h | --help
@@ -23,6 +23,8 @@ Options::
                     of real streams)
     --ole           Treat <hwpfile> as an OLE Compound File. As a result,
                     some streams will be presented as-is. (i.e. not decompressed)
+    --tree          print records as tree
+    --json          print records as json
     -V              HWPv5 format version [default: 5.0.0.0]
 
 
@@ -345,7 +347,12 @@ def records(args):
         from .storage import Open2Stream
         from .recordstream import RecordStream
         stream = RecordStream(Open2Stream(lambda: sys.stdin), None)
-    stream.records_json().dump(sys.stdout)
+
+    if args['--tree']:
+        for record in stream.records():
+            print '  '*record['level'], record['tagname']
+    else:
+        stream.records_json().dump(sys.stdout)
 
 
 def models(args):
@@ -365,7 +372,12 @@ def models(args):
         from .storage import Open2Stream
         from .binmodel import ModelStream
         stream = ModelStream(Open2Stream(lambda: sys.stdin), version)
-    stream.models_json().dump(sys.stdout)
+
+    if args['--tree']:
+        for model in stream.models():
+            print '    '*model['level']+model['type'].__name__
+    else:
+        stream.models_json().dump(sys.stdout)
 
 
 def xml(args):
