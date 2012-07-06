@@ -1642,7 +1642,7 @@ class PageOddEven(Control):
     chid = CHID.PGCT
     OddEven = Enum(BOTH_PAGES=0, EVEN_PAGE=1, ODD_PAGE=2)
     Flags = Flags(UINT32,
-        0, 1, 'pages'
+        0, 1, OddEven, 'pages'
         )
 
     def attributes(cls):
