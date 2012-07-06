@@ -1821,14 +1821,7 @@ def init_record_parsing_context(base, record):
         returns new context
     '''
 
-    context = dict(base, record=record, stream=StringIO(record['payload']))
-    model = record
-    return context, model
-
-
-def parse_pass0(base_context, records):
-    for record in records:
-        yield init_record_parsing_context(base_context, record)
+    return dict(base, record=record, stream=StringIO(record['payload']))
 
 
 def parse_model(context, model):
@@ -1907,7 +1900,8 @@ def parse_models(context, records):
 
 
 def parse_models_intern(context, records, passes=3):
-    context_models = parse_pass0(context, records)
+    context_models = ((init_record_parsing_context(context, record), record)
+                      for record in records)
     context_models = parse_models_with_parent(context_models)
     for context, model in context_models:
         stream = context['stream']
