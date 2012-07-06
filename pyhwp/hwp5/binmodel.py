@@ -700,7 +700,7 @@ class ListHeader(RecordModel):
     extension_types = list_header_models
 
     def get_extension_key(context, model):
-        ''' (parent mode type, after TableBody) '''
+        ''' (parent model type, after TableBody) '''
         if 'parent' in context:
             context, model = context['parent']
             return model['type'], context.get('table_body', False)
