@@ -23,6 +23,18 @@ class TestRecord(TestBase):
         record = read_record(docinfo_stream.open(), 0)
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
 
+    def test_dump_record(self):
+        from hwp5.recordstream import dump_record
+        from hwp5.recordstream import read_record
+        docinfo_stream = self.hwp5file['DocInfo']
+        record = read_record(docinfo_stream.open(), 0)
+        from StringIO import StringIO
+        stream = StringIO()
+        dump_record(stream, record)
+        stream.seek(0)
+        record2 = read_record(stream, 0)
+        self.assertEquals(record2, record)
+
 
 class TestRecordStream(TestBase):
 

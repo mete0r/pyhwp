@@ -57,6 +57,12 @@ def read_record(f, seqno):
     return Record(tagid, level, payload, size, seqno)
 
 
+def dump_record(f, record):
+    hdr = encode_record_header(record)
+    f.write(hdr)
+    f.write(record['payload'])
+
+
 def read_records(f):
     seqno = 0
     while True:
