@@ -164,6 +164,10 @@ Print parsed binary models in the specified <record-stream>.
 
 Example::
 
+    $ hwp5proc models --tree samples/sample-5017.hwp BodyText/Section0
+
+Example::
+
     $ hwp5proc models samples/sample-5017.hwp BodyText/Section0
 
 Example::
