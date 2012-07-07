@@ -106,7 +106,12 @@ def nth(iterable, n, default=None):
 class RecordStream(filestructure.VersionSensitiveItem):
 
     def records(self, **kwargs):
-        return read_records(self.open())
+        records = read_records(self.open())
+        if 'range' in kwargs:
+            from itertools import islice
+            range = kwargs['range']
+            records = islice(records, range[0], range[1])
+        return records
 
     def record(self, idx):
         ''' get the record at `idx' '''
