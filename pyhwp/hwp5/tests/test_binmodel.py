@@ -297,6 +297,34 @@ class ShapeComponentTest(TestBase):
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
 
+    def test_colorpattern_gradation_5017(self):
+        from hwp5.recordstream import read_records
+        from hwp5.binmodel import parse_models
+        f = open('fixtures/5017-shapecomponent-with-colorpattern-and-gradation.bin', 'r')
+        try:
+            records = list(read_records(f))
+        finally:
+            f.close()
+
+        context = dict(version=(5,0,1,7))
+        models = parse_models(context, records)
+        models = list(models)
+        self.assertEquals(1280, models[-1]['content']['fill_flags'])
+        colorpattern = models[-1]['content']['colorpattern']
+        gradation = models[-1]['content']['gradation']
+        self.assertEquals(32768, colorpattern['background_color'])
+        self.assertEquals(0, colorpattern['pattern_color'])
+        self.assertEquals(-1, colorpattern['pattern_type_flags'])
+
+        self.assertEquals(50, gradation['blur'])
+        self.assertEquals(50, gradation['blur_center'])
+        self.assertEquals((0, 100), gradation['center'])
+        self.assertEquals([64512, 13171936], gradation['colors'])
+        self.assertEquals(1, gradation['shape'])
+        self.assertEquals(180, gradation['shear'])
+        self.assertEquals(1, gradation['type'])
+
+
 class HeaderFooterTest(TestBase):
 
     hwp5file_name = 'headerfooter.hwp'

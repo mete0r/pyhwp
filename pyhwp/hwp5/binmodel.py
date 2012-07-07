@@ -313,8 +313,6 @@ class FillColorPattern(Fill):
         yield COLORREF, 'background_color',
         yield COLORREF, 'pattern_color',
         yield cls.PatternTypeFlags, 'pattern_type_flags',
-        # TODO 이것이 존재하는 버젼이 실제로 있는지 확인 필요
-        yield dict(type=UINT32, name='unknown', version=(5, 0, 0, 6))
     attributes = classmethod(attributes)
 
 
