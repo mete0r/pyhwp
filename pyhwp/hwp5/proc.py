@@ -443,6 +443,7 @@ def find(args):
                         from hwp5.binmodel import model_to_json
                         print model_to_json(model, sort_keys=True, indent=2)
         except ParseError, e:
+            logger.error('---- On processing %s:', filename)
             e.print_to_logger(logger)
 
 
