@@ -4,6 +4,7 @@
 Usage::
 
     hwp5proc version <hwp5file>
+    hwp5proc header <hwp5file>
     hwp5proc summaryinfo <hwp5file>
     hwp5proc ls [--vstreams | --ole] <hwp5file>
     hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
@@ -37,6 +38,11 @@ Options::
 ``hwp5proc version``
 --------------------
 Print HWP file format version of <hwp5file>.
+
+
+``hwp5proc header``
+------------------------
+Print FileHeader of <hwp5file>.
 
 
 ``hwp5proc summaryinfo``
@@ -226,6 +232,8 @@ def main():
     try:
         if args['version']:
             version(args)
+        elif args['header']:
+            header(args)
         elif args['summaryinfo']:
             summaryinfo(args)
         elif args['records']:
@@ -256,6 +264,22 @@ def version(args):
     h = hwp5file.fileheader
     #print h.signature.replace('\x00', ''),
     print '%d.%d.%d.%d' % h.version
+
+
+def header(args):
+    ''' Pring HWP file header.
+    '''
+    from hwp5.filestructure import Hwp5File
+    hwp5file = Hwp5File(args['<hwp5file>'])
+    f = hwp5file.header.open_text()
+    try:
+        try:
+            for line in f:
+                print line,
+        finally:
+            f.close()
+    finally:
+        hwp5file.close()
 
 
 def summaryinfo(args):
