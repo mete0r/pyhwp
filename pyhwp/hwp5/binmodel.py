@@ -1285,6 +1285,11 @@ class ShapeComponent(RecordModel):
             return (values['chid'] == CHID.RECT and
                     values['fill_flags'].fill_colorpattern)
 
+        def chid_is_rect_and_fill_image(context, values):
+            ''' chid == CHID.RECT and fill_flags.fill_image '''
+            return (values['chid'] == CHID.RECT and
+                    values['fill_flags'].fill_image)
+
         def chid_is_rect_and_fill_gradation(context, values):
             ''' chid == CHID.RECT and fill_flags.fill_gradation '''
             return (values['chid'] == CHID.RECT and
@@ -1295,10 +1300,22 @@ class ShapeComponent(RecordModel):
                    condition=chid_is_rect)
         yield dict(type=UINT16, name='unknown', condition=chid_is_rect)
         yield dict(type=UINT8, name='unknown1', condition=chid_is_rect)
-        yield dict(type=FillColorPattern, name='colorpattern',
+        yield dict(type=FillColorPattern, name='fill_colorpattern',
                    condition=chid_is_rect_and_fill_colorpattern)
-        yield dict(type=FillGradation, name='gradation',
+        yield dict(type=FillGradation, name='fill_gradation',
                    condition=chid_is_rect_and_fill_gradation)
+        yield dict(type=FillImage, name='fill_image',
+                   condition=chid_is_rect_and_fill_image)
+        yield dict(type=UINT32, name='fill_shape',
+                   condition=chid_is_rect)
+        yield dict(type=BYTE, name='fill_blur_center',
+                   condition=chid_is_rect_and_fill_gradation)
+
+        # TODO: 아래 두 필드: chid == $rec일 때만인지 확인 필요
+        yield dict(type=ARRAY(BYTE, 5), name='unknown2',
+                   condition=chid_is_rect, version=(5, 0, 2, 4))
+        yield dict(type=ARRAY(INT32, 4), name='unknown3',
+                   condition=chid_is_rect, version=(5, 0, 2, 4))
 
         def chid_is_line(context, values):
             ''' chid == CHID.LINE '''

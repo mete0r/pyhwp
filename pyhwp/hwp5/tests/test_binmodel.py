@@ -342,6 +342,75 @@ class ShapeComponentTest(TestBase):
         # if parent model is not GShapeObjectControl
         # TODO
 
+    def test_rect_fill(self):
+        from hwp5.binmodel import ShapeComponent
+        self.hwp5file_name = 'shapecomponent-rect-fill.hwp'
+
+        section = self.hwp5file_bin.bodytext.section(0)
+        shapecomps = (model for model in section.models()
+                      if model['type'] is ShapeComponent)
+        shapecomps = list(shapecomps)
+
+        shapecomp = shapecomps.pop(0)['content']
+        self.assertFalse(shapecomp['fill_flags'].fill_colorpattern)
+        self.assertFalse(shapecomp['fill_flags'].fill_gradation)
+        self.assertFalse(shapecomp['fill_flags'].fill_image)
+
+        shapecomp = shapecomps.pop(0)['content']
+        self.assertTrue(shapecomp['fill_flags'].fill_colorpattern)
+        self.assertFalse(shapecomp['fill_flags'].fill_gradation)
+        self.assertFalse(shapecomp['fill_flags'].fill_image)
+        self.assertEquals(dict(background_color=0xff7f3f,
+                               pattern_color=0,
+                               pattern_type_flags=-1),
+                          shapecomp['fill_colorpattern'])
+        self.assertEquals(None, shapecomp.get('fill_gradation'))
+        self.assertEquals(None, shapecomp.get('fill_image'))
+
+        shapecomp = shapecomps.pop(0)['content']
+        self.assertFalse(shapecomp['fill_flags'].fill_colorpattern)
+        self.assertTrue(shapecomp['fill_flags'].fill_gradation)
+        self.assertFalse(shapecomp['fill_flags'].fill_image)
+        self.assertEquals(None, shapecomp.get('fill_colorpattern'))
+        self.assertEquals(dict(type=1, shear=90,
+                              center=(0, 0),
+                              colors=[0xff7f3f, 0],
+                              blur=50), shapecomp['fill_gradation'])
+        self.assertEquals(None, shapecomp.get('fill_image'))
+
+        shapecomp = shapecomps.pop(0)['content']
+        self.assertFalse(shapecomp['fill_flags'].fill_colorpattern)
+        self.assertFalse(shapecomp['fill_flags'].fill_gradation)
+        self.assertTrue(shapecomp['fill_flags'].fill_image)
+        self.assertEquals(None, shapecomp.get('fill_colorpattern'))
+        self.assertEquals(None, shapecomp.get('fill_gradation'))
+        self.assertEquals(dict(flags=5, storage_id=1),
+                          shapecomp['fill_image'])
+
+        shapecomp = shapecomps.pop(0)['content']
+        self.assertTrue(shapecomp['fill_flags'].fill_colorpattern)
+        self.assertFalse(shapecomp['fill_flags'].fill_gradation)
+        self.assertTrue(shapecomp['fill_flags'].fill_image)
+        self.assertEquals(dict(background_color=0xff7f3f,
+                               pattern_color=0,
+                               pattern_type_flags=-1),
+                          shapecomp['fill_colorpattern'])
+        self.assertEquals(None, shapecomp.get('fill_gradation'))
+        self.assertEquals(dict(flags=5, storage_id=1),
+                          shapecomp['fill_image'])
+
+        shapecomp = shapecomps.pop(0)['content']
+        self.assertFalse(shapecomp['fill_flags'].fill_colorpattern)
+        self.assertTrue(shapecomp['fill_flags'].fill_gradation)
+        self.assertTrue(shapecomp['fill_flags'].fill_image)
+        self.assertEquals(None, shapecomp.get('fill_colorpattern'))
+        self.assertEquals(dict(type=1, shear=90,
+                              center=(0, 0),
+                              colors=[0xff7f3f, 0],
+                              blur=50), shapecomp['fill_gradation'])
+        self.assertEquals(dict(flags=5, storage_id=1),
+                          shapecomp['fill_image'])
+
     def test_colorpattern_gradation(self):
         import pickle
         from hwp5.binmodel import parse_models
@@ -355,8 +424,8 @@ class ShapeComponentTest(TestBase):
         models = parse_models(context, records)
         models = list(models)
         self.assertEquals(1280, models[-1]['content']['fill_flags'])
-        colorpattern = models[-1]['content']['colorpattern']
-        gradation = models[-1]['content']['gradation']
+        colorpattern = models[-1]['content']['fill_colorpattern']
+        gradation = models[-1]['content']['fill_gradation']
         self.assertEquals(32768, colorpattern['background_color'])
         self.assertEquals(0, colorpattern['pattern_color'])
         self.assertEquals(-1, colorpattern['pattern_type_flags'])
@@ -366,8 +435,8 @@ class ShapeComponentTest(TestBase):
         self.assertEquals([64512, 13171936], gradation['colors'])
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
-        #self.assertEquals(1, gradation['shape'])
-        #self.assertEquals(50, gradation['blur_center'])
+        self.assertEquals(1, models[-1]['content']['fill_shape'])
+        self.assertEquals(50, models[-1]['content']['fill_blur_center'])
 
     def test_colorpattern_gradation_5017(self):
         from hwp5.recordstream import read_records
@@ -382,8 +451,8 @@ class ShapeComponentTest(TestBase):
         models = parse_models(context, records)
         models = list(models)
         self.assertEquals(1280, models[-1]['content']['fill_flags'])
-        colorpattern = models[-1]['content']['colorpattern']
-        gradation = models[-1]['content']['gradation']
+        colorpattern = models[-1]['content']['fill_colorpattern']
+        gradation = models[-1]['content']['fill_gradation']
         self.assertEquals(32768, colorpattern['background_color'])
         self.assertEquals(0, colorpattern['pattern_color'])
         self.assertEquals(-1, colorpattern['pattern_type_flags'])
@@ -393,8 +462,8 @@ class ShapeComponentTest(TestBase):
         self.assertEquals([64512, 13171936], gradation['colors'])
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
-        #self.assertEquals(1, gradation['shape'])
-        #self.assertEquals(50, gradation['blur_center'])
+        self.assertEquals(1, models[-1]['content']['fill_shape'])
+        self.assertEquals(50, models[-1]['content']['fill_blur_center'])
 
 
 class HeaderFooterTest(TestBase):
