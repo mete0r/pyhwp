@@ -390,6 +390,7 @@ def models(args):
     else:
         version = args['<version>'] or '5.0.0.0'
         version = version.split('.')
+        version = tuple(int(x) for x in version)
 
         from .storage import Open2Stream
         from .binmodel import ModelStream
