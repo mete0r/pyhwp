@@ -8,7 +8,7 @@ Usage::
     hwp5proc ls [--vstreams | --ole] <hwp5file>
     hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
     hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
-    hwp5proc records [--tree | --json] [<hwp5file> <record-stream> [<records-range>]]
+    hwp5proc records [--tree | --json | --raw] [<hwp5file> <record-stream> [<records-range>]]
     hwp5proc models [--tree | --json] [<hwp5file> <record-stream> | -V <version>]
     hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
     hwp5proc xml <hwp5file>
@@ -26,6 +26,7 @@ Options::
                     some streams will be presented as-is. (i.e. not decompressed)
     --tree          print records as tree
     --json          print records as json
+    --raw           print records as is
     --model=<model-name> filter with record model name
     --tag=<hwptag>  filter with record HWPTAG
     --incomplete    filter with incompletely parsed content
@@ -145,6 +146,11 @@ Example::
 Example::
 
     $ hwp5proc records samples/sample-5017.hwp DocInfo 0-2
+
+Example::
+
+    $ hwp5proc records --raw samples/sample-5017.hwp DocInfo 0-2 > tmp.rec
+    $ hwp5proc records < tmp.rec
 
 Example::
 
@@ -363,6 +369,10 @@ def records(args):
     if args['--tree']:
         for record in stream.records(**opts):
             print '  '*record['level'], record['tagname']
+    elif args['--raw']:
+        from hwp5.recordstream import dump_record
+        for record in stream.records(**opts):
+            dump_record(sys.stdout, record)
     else:
         stream.records_json(**opts).dump(sys.stdout)
 
