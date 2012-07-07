@@ -289,8 +289,8 @@
   </xsl:template>
 
   <xsl:template mode="fo-background" match="BorderFill">
-    <xsl:choose>
-      <xsl:when test="@fill-type = 'colorpattern'">
+    <xsl:for-each select="FillColorPattern">
+      <xsl:attribute name="fo:background-color"><xsl:value-of select="@background-color"/></xsl:attribute>
 	<!--
 	<xsl:choose>
 	  <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
@@ -302,16 +302,10 @@
 	  <xsl:otherwise/>
 	</xsl:choose>
 	-->
-	<xsl:for-each select="FillColorPattern">
-	  <xsl:attribute name="fo:background-color"><xsl:value-of select="@background-color"/></xsl:attribute>
-	</xsl:for-each>
-      </xsl:when>
-      <!--
-      <xsl:when test="@fill-type = 'gradation'">
-	<xsl:attribute name="draw:fill">gradient</xsl:attribute>
-      </xsl:when>
-      -->
-    </xsl:choose>
+    </xsl:for-each>
+    <!--
+    <xsl:attribute name="draw:fill">gradient</xsl:attribute>
+    -->
   </xsl:template>
 
   <xsl:template mode="style" match="TableControl">
