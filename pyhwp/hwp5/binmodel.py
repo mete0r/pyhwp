@@ -316,6 +316,13 @@ class FillColorPattern(Fill):
     attributes = classmethod(attributes)
 
 
+class FillImage(Fill):
+    def attributes():
+        yield UINT32, 'flags'
+        yield BinStorageId, 'storage_id'
+    attributes = staticmethod(attributes)
+
+
 class FillGradation(Fill):
     def attributes():
         yield BYTE,   'type',
@@ -323,17 +330,16 @@ class FillGradation(Fill):
         yield ARRAY(UINT32, 2), 'center'
         yield UINT32, 'blur',
         yield N_ARRAY(UINT32, COLORREF), 'colors',
-        yield UINT32, 'shape',
-        yield BYTE,   'blur_center',
     attributes = staticmethod(attributes)
 
 
 class BorderFill(RecordModel):
     tagid = HWPTAG_BORDER_FILL
 
-    Fill = Enum(NONE=0, COLORPATTERN=1, GRADATION=4)
     FillFlags = Flags(UINT32,
-                      0, 7, Fill, 'fill_type')
+                      0, 'colorpattern',
+                      1, 'image',
+                      2, 'gradation')
 
     def attributes(cls):
         yield UINT16, 'attr'
@@ -345,16 +351,26 @@ class BorderFill(RecordModel):
         yield cls.FillFlags, 'fillflags'
 
         def fill_colorpattern(context, values):
-            ''' fillflags.fill_type == Fill.COLORPATTERN '''
-            return values['fillflags'].fill_type == cls.Fill.COLORPATTERN
+            ''' fillflags.fill_colorpattern '''
+            return values['fillflags'].colorpattern
+
+        def fill_image(context, values):
+            ''' fillflags.fill_image '''
+            return values['fillflags'].image
 
         def fill_gradation(context, values):
-            ''' fillflags.fill_type == Fill.GRADATION '''
-            return values['fillflags'].fill_type == cls.Fill.GRADATION
+            ''' fillflags.fill_gradation '''
+            return values['fillflags'].gradation
 
-        yield dict(type=FillColorPattern, name='fill',
+        yield dict(type=FillColorPattern, name='fill_colorpattern',
                    condition=fill_colorpattern)
-        yield dict(type=FillGradation, name='fill', condition=fill_gradation)
+        yield dict(type=FillGradation, name='fill_gradation',
+                   condition=fill_gradation)
+        yield dict(type=FillImage, name='fill_image',
+                   condition=fill_image)
+        yield UINT32, 'shape'
+        yield dict(type=BYTE, name='blur_center',
+                   condition=fill_gradation)
     attributes = classmethod(attributes)
 
 

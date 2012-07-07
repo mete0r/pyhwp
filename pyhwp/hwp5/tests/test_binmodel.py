@@ -64,6 +64,78 @@ class TestBase(test_recordstream.TestBase):
     hwp5file = hwp5file_bin
 
 
+class BorderFillTest(TestBase):
+    hwp5file_name = 'borderfill.hwp'
+
+    def test_parse_borderfill(self):
+        from hwp5.binmodel import BorderFill
+        from hwp5.binmodel import TableCell
+
+        docinfo = self.hwp5file.docinfo
+        borderfills = (model for model in docinfo.models()
+                       if model['type'] is BorderFill)
+        borderfills = list(borderfills)
+
+        section = self.hwp5file.bodytext.section(0)
+        tablecells = list(model for model in section.models()
+                          if model['type'] is TableCell)
+        for tablecell in tablecells:
+            borderfill_id = tablecell['content']['borderfill_id']
+            borderfill = borderfills[borderfill_id - 1]['content']
+            tablecell['borderfill'] = borderfill
+
+        borderfill = tablecells[0]['borderfill']
+        self.assertEquals(0, borderfill['fillflags'])
+        self.assertEquals(None, borderfill.get('fill_colorpattern'))
+        self.assertEquals(None, borderfill.get('fill_gradation'))
+        self.assertEquals(None, borderfill.get('fill_image'))
+
+        borderfill = tablecells[1]['borderfill']
+        self.assertEquals(1, borderfill['fillflags'])
+        self.assertEquals(dict(background_color=0xff7f3f,
+                               pattern_color=0,
+                               pattern_type_flags=-1),
+                          borderfill['fill_colorpattern'])
+        self.assertEquals(None, borderfill.get('fill_gradation'))
+        self.assertEquals(None, borderfill.get('fill_image'))
+
+        borderfill = tablecells[2]['borderfill']
+        self.assertEquals(4, borderfill['fillflags'])
+        self.assertEquals(None, borderfill.get('fill_colorpattern'))
+        self.assertEquals(dict(blur=40, center=(0, 0),
+                               colors=[0xff7f3f, 0],
+                               shear=90, type=1),
+                          borderfill['fill_gradation'])
+        self.assertEquals(None, borderfill.get('fill_image'))
+
+        borderfill = tablecells[3]['borderfill']
+        self.assertEquals(2, borderfill['fillflags'])
+        self.assertEquals(None, borderfill.get('fill_colorpattern'))
+        self.assertEquals(None, borderfill.get('fill_gradation'))
+        self.assertEquals(dict(flags=5, storage_id=1),
+                          borderfill.get('fill_image'))
+
+        borderfill = tablecells[4]['borderfill']
+        self.assertEquals(3, borderfill['fillflags'])
+        self.assertEquals(dict(background_color=0xff7f3f,
+                               pattern_color=0,
+                               pattern_type_flags=-1),
+                          borderfill['fill_colorpattern'])
+        self.assertEquals(None, borderfill.get('fill_gradation'))
+        self.assertEquals(dict(flags=5, storage_id=1),
+                          borderfill.get('fill_image'))
+
+        borderfill = tablecells[5]['borderfill']
+        self.assertEquals(6, borderfill['fillflags'])
+        self.assertEquals(None, borderfill.get('fill_colorpattern'))
+        self.assertEquals(dict(blur=40, center=(0, 0),
+                               colors=[0xff7f3f, 0],
+                               shear=90, type=1),
+                          borderfill['fill_gradation'])
+        self.assertEquals(dict(flags=5, storage_id=1),
+                          borderfill.get('fill_image'))
+
+
 class ParaCharShapeTest(TestBase):
 
     @property
@@ -290,12 +362,12 @@ class ShapeComponentTest(TestBase):
         self.assertEquals(-1, colorpattern['pattern_type_flags'])
 
         self.assertEquals(50, gradation['blur'])
-        self.assertEquals(50, gradation['blur_center'])
         self.assertEquals((0, 100), gradation['center'])
         self.assertEquals([64512, 13171936], gradation['colors'])
-        self.assertEquals(1, gradation['shape'])
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
+        #self.assertEquals(1, gradation['shape'])
+        #self.assertEquals(50, gradation['blur_center'])
 
     def test_colorpattern_gradation_5017(self):
         from hwp5.recordstream import read_records
@@ -317,12 +389,12 @@ class ShapeComponentTest(TestBase):
         self.assertEquals(-1, colorpattern['pattern_type_flags'])
 
         self.assertEquals(50, gradation['blur'])
-        self.assertEquals(50, gradation['blur_center'])
         self.assertEquals((0, 100), gradation['center'])
         self.assertEquals([64512, 13171936], gradation['colors'])
-        self.assertEquals(1, gradation['shape'])
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
+        #self.assertEquals(1, gradation['shape'])
+        #self.assertEquals(50, gradation['blur_center'])
 
 
 class HeaderFooterTest(TestBase):
