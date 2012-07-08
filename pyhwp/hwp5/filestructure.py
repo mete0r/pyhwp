@@ -242,6 +242,34 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
+class PasswordProtectedStream(ItemWrapper):
+
+    def open(self):
+        # TODO: 현재로선 암호화된 내용을 그냥 반환
+        logger.warning('Password-encrypted stream: currently decryption is '
+                       'not supported')
+        return self.wrapped.open()
+
+
+class PasswordProtectedStorage(StorageWrapper):
+    def __getitem__(self, name):
+        from hwp5.storage import is_stream
+        item = self.wrapped[name]
+        if is_stream(item):
+            return PasswordProtectedStream(item)
+        else:
+            return item
+
+
+class Hwp5PasswordProtectedDoc(ItemConversionStorage):
+
+    def resolve_conversion_for(self, name):
+        if name in ('BinData', 'BodyText', 'Scripts', 'ViewText'):
+            return PasswordProtectedStorage
+        elif name in ('DocInfo', ):
+            return PasswordProtectedStream
+
+
 class VersionSensitiveItem(ItemWrapper):
 
     def __init__(self, item, version):
@@ -486,6 +514,15 @@ class Hwp5File(ItemConversionStorage):
 
     def __init__(self, stg):
         stg = Hwp5FileBase(stg)
+
+        if stg.header.flags.password:
+            stg = Hwp5PasswordProtectedDoc(stg)
+
+            # TODO: 현재로선 decryption이 구현되지 않았으므로,
+            # 레코드 파싱은 불가능하다. 적어도 encrypted stream에
+            # 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
+            ItemConversionStorage.__init__(self, stg)
+            return
 
         if stg.header.flags.distributable:
             stg = Hwp5DistDoc(stg)
