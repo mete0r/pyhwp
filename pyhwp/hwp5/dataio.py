@@ -24,6 +24,10 @@ import logging
 from .importhelper import importStringIO
 StringIO = importStringIO()
 
+
+logger = logging.getLogger(__name__)
+
+
 class Eof(Exception):
     def __init__(self, *args):
         self.args = args
