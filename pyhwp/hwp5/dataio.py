@@ -256,8 +256,9 @@ class EnumType(type):
                 if value in instances_by_value:
                     return instances_by_value[value]
                 else:
-                    raise ValueError('undefined %s value: %s' %
-                                     (cls.__name__, value))
+                    logger.warning('undefined %s value: %s',
+                                   cls.__name__, value)
+                    return int.__new__(cls, value)
 
             if len(populate_state) == 0:
                 raise TypeError()
@@ -282,7 +283,7 @@ class EnumType(type):
             def __get__(self, instance, owner):
                 if instance is None:
                     return owner.__name__
-                return names_by_instance[instance]
+                return names_by_instance.get(instance)
 
         attrs['name'] = NameDescriptor()
         def __repr__(self):

@@ -208,7 +208,13 @@ class TestEnumType(TestCase):
         self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
 
         # undefined value
-        self.assertRaises(ValueError, Foo, 5)
+        #self.assertRaises(ValueError, Foo, 5)
+
+        # undefined value: warning but not error
+        undefined = Foo(5)
+        self.assertTrue(isinstance(undefined, Foo))
+        self.assertEquals(None, undefined.name)
+        self.assertEquals('Foo(5)', repr(undefined))
 
         # can't define anymore
         self.assertRaises(TypeError, Foo, 5, 'f')
