@@ -9,7 +9,7 @@ Usage::
     hwp5proc ls [--vstreams | --ole] <hwp5file>
     hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
     hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
-    hwp5proc records [--simple | --json | --raw] [<hwp5file> <record-stream> [<records-range>]]
+    hwp5proc records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
     hwp5proc models [--simple | --json] [<hwp5file> <record-stream> | -V <version>]
     hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
     hwp5proc xml <hwp5file>
@@ -388,11 +388,14 @@ def records(args):
         stream = RecordStream(Open2Stream(lambda: sys.stdin), None)
 
     opts = dict()
-    rng = args['<records-range>']
+    rng = args['--range']
     if rng:
         rng = rng.split('-', 1)
         rng = tuple(int(x) for x in rng)
         opts['range'] = rng
+    treegroup = args['--treegroup']
+    if treegroup is not None:
+        opts['treegroup'] = int(treegroup)
 
     if args['--simple']:
         for record in stream.records(**opts):
