@@ -1981,6 +1981,12 @@ def model_to_json(model, *args, **kwargs):
     return simplejson.dumps(model, *args, **kwargs)
 
 
+def chain_iterables(iterables):
+    for iterable in iterables:
+        for item in iterable:
+            yield item
+
+
 from . import recordstream
 
 
@@ -1993,7 +1999,8 @@ class ModelStream(recordstream.RecordStream):
             kwargs.setdefault('path', self.path)
         except AttributeError:
             pass
-        return parse_models(kwargs, self.records(**kwargs))
+        groups = self.models_treegrouped(**kwargs)
+        return chain_iterables(groups)
 
     def models_treegrouped(self, **kwargs):
         ''' iterable of iterable of the models, grouped by the top-level tree
