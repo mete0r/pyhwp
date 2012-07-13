@@ -9,8 +9,8 @@ Usage::
     hwp5proc ls [--vstreams | --ole] <hwp5file>
     hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
     hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
-    hwp5proc records [--tree | --json | --raw] [<hwp5file> <record-stream> [<records-range>]]
-    hwp5proc models [--tree | --json] [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc records [--simple | --json | --raw] [<hwp5file> <record-stream> [<records-range>]]
+    hwp5proc models [--simple | --json] [<hwp5file> <record-stream> | -V <version>]
     hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
     hwp5proc xml <hwp5file>
     hwp5proc rawunz
@@ -25,7 +25,7 @@ Options::
                     of real streams)
     --ole           Treat <hwpfile> as an OLE Compound File. As a result,
                     some streams will be presented as-is. (i.e. not decompressed)
-    --tree          print records as tree
+    --simple        print records as simple tree
     --json          print records as json
     --raw           print records as is
     --model=<model-name> filter with record model name
@@ -394,7 +394,7 @@ def records(args):
         rng = tuple(int(x) for x in rng)
         opts['range'] = rng
 
-    if args['--tree']:
+    if args['--simple']:
         for record in stream.records(**opts):
             print '  '*record['level'], record['tagname']
     elif args['--raw']:
@@ -424,7 +424,7 @@ def models(args):
         from .binmodel import ModelStream
         stream = ModelStream(Open2Stream(lambda: sys.stdin), version)
 
-    if args['--tree']:
+    if args['--simple']:
         for model in stream.models():
             print '    '*model['level']+model['type'].__name__
     else:
