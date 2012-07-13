@@ -137,6 +137,9 @@ class RecordStream(filestructure.VersionSensitiveItem):
             from itertools import islice
             range = kwargs['range']
             records = islice(records, range[0], range[1])
+        elif 'treegroup' in kwargs:
+            groups = group_records_by_toplevel(records, group_as_list=True)
+            records = nth(groups, kwargs['treegroup'])
         return records
 
     def record(self, idx):

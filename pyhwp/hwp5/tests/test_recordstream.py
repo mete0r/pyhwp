@@ -47,6 +47,21 @@ class TestRecordStream(TestBase):
     def test_records(self):
         self.assertEquals(67, len(list(self.docinfo.records())))
 
+    def test_records_kwargs_treegroup(self):
+        from hwp5.tagids import HWPTAG_ID_MAPPINGS
+        records = self.docinfo.records(treegroup=1)
+        self.assertEquals(66, len(records))
+        self.assertEquals(HWPTAG_ID_MAPPINGS, records[0]['tagid'])
+
+        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
+        records = self.docinfo.records(treegroup=0)
+        self.assertEquals(1, len(records))
+        self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, records[0]['tagid'])
+
+        records = self.bodytext.section(0).records(treegroup=5)
+        self.assertEquals(26, records[0]['seqno'])
+        self.assertEquals(37, len(records))
+
     def test_record(self):
         record = self.docinfo.record(0)
         self.assertEquals(0, record['seqno'])
