@@ -15,6 +15,11 @@ Options::
 
 import os, os.path
 from hwp5 import tools
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 def main():
     from hwp5 import __version__ as version
@@ -22,7 +27,9 @@ def main():
     from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
+    logging.getLogger('hwp5').addHandler(logging.StreamHandler())
     make(args)
+
 
 class ODTPackage(object):
     def __init__(self, path_or_zipfile):
