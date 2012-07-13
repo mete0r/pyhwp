@@ -425,6 +425,9 @@ class SelectiveType(object):
 
 
 class ParseError(Exception):
+
+    treegroup = None
+
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
         self.cause = None
@@ -437,6 +440,8 @@ class ParseError(Exception):
         logger.error('ParseError: %s', e)
         logger.error('Caused by: %s', repr(e.cause))
         logger.error('Path: %s', e.path)
+        if e.treegroup is not None:
+            logger.error('Treegroup: %s', e.treegroup)
         if e.record:
             logger.error('Record: %s', e.record['seqno'])
             logger.error('Record Payload:')
@@ -537,6 +542,7 @@ def read_type_value(context, type, stream):
         pe = ParseError(msg)
         pe.cause = e
         pe.path = context.get('path')
+        pe.treegroup = context.get('treegroup')
         pe.record = context.get('record')
         pe.offset = stream.tell()
         raise pe
