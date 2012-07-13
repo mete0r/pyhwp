@@ -429,7 +429,7 @@ class ParseError(Exception):
         self.cause = None
         self.path = None
         self.record = None
-        self.context = []
+        self.parse_stack_traces = []
 
     def print_to_logger(self, logger):
         e = self
@@ -443,7 +443,7 @@ class ParseError(Exception):
                 logger.error('  %s', line)
         logger.error('Problem Offset: at %d (=0x%x)', e.offset, e.offset)
         logger.error('Model Stack:')
-        for level, c in enumerate(reversed(e.context)):
+        for level, c in enumerate(reversed(e.parse_stack_traces)):
             model = c['model']
             if isinstance(model, StructType):
                 logger.error('  %s', model)
@@ -497,7 +497,7 @@ def supplement_parse_error_with_parsed(members):
             yield member
             parsed_members.append(member)
     except ParseError, e:
-        e.context[-1]['parsed'] = parsed_members
+        e.parse_stack_traces[-1]['parsed'] = parsed_members
         raise
         
 
@@ -507,7 +507,7 @@ def supplement_parse_error_with_offset(members, stream):
         try:
             member = members.next()
         except ParseError, e:
-            e.context[-1]['offset'] = offset
+            e.parse_stack_traces[-1]['offset'] = offset
             raise
         except StopIteration:
             return
@@ -599,7 +599,8 @@ class StructType(CompoundType):
                     try:
                         value = getvalue(member)
                     except ParseError, e:
-                        e.context.append(dict(model=cls, member=member['name']))
+                        e.parse_stack_traces.append(dict(model=cls,
+                                                         member=member['name']))
                         raise
                     values[member['name']] = member['value'] = value
                     yield member

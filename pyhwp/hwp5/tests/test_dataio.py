@@ -306,8 +306,8 @@ class TestReadStruct(TestCase):
             Foo.read(stream, context)
             assert False, 'ParseError expected'
         except ParseError, e:
-            self.assertEquals(Foo, e.context[-1]['model'])
-            self.assertEquals('a', e.context[-1]['member'])
+            self.assertEquals(Foo, e.parse_stack_traces[-1]['model'])
+            self.assertEquals('a', e.parse_stack_traces[-1]['member'])
             self.assertEquals(0, e.offset)
 
     def test_read_parse_error_nested(self):
@@ -355,20 +355,21 @@ class TestReadStruct(TestCase):
             Qux.read(stream, context)
             assert False, 'ParseError expected'
         except ParseError, e:
-            self.assertEquals(Qux, e.context[-1]['model'])
-            self.assertEquals('baz', e.context[-1]['member'])
-            self.assertEquals(1, e.context[-1]['offset'])
+            traces = e.parse_stack_traces
+            self.assertEquals(Qux, traces[-1]['model'])
+            self.assertEquals('baz', traces[-1]['member'])
+            self.assertEquals(1, traces[-1]['offset'])
 
-            self.assertEquals(Baz, e.context[-2]['model'])
-            self.assertEquals('bar', e.context[-2]['member'])
-            self.assertEquals(2, e.context[-2]['offset'])
+            self.assertEquals(Baz, traces[-2]['model'])
+            self.assertEquals('bar', traces[-2]['member'])
+            self.assertEquals(2, traces[-2]['offset'])
 
-            self.assertEquals(Bar, e.context[-3]['model'])
-            self.assertEquals('foo', e.context[-3]['member'])
-            self.assertEquals(3, e.context[-3]['offset'])
+            self.assertEquals(Bar, traces[-3]['model'])
+            self.assertEquals('foo', traces[-3]['member'])
+            self.assertEquals(3, traces[-3]['offset'])
 
-            self.assertEquals(Foo, e.context[-4]['model'])
-            self.assertEquals('a', e.context[-4]['member'])
-            self.assertEquals(3, e.context[-4]['offset'])
+            self.assertEquals(Foo, traces[-4]['model'])
+            self.assertEquals('a', traces[-4]['member'])
+            self.assertEquals(3, traces[-4]['offset'])
 
             self.assertEquals(3, e.offset)
