@@ -103,6 +103,32 @@ def nth(iterable, n, default=None):
         return default
 
 
+def group_records_by_toplevel(records, group_as_list=True):
+    ''' group records by top-level trees and return iterable of the groups
+    '''
+    context = dict()
+
+    try:
+        context['top'] = records.next()
+    except StopIteration:
+        return
+
+    def records_in_a_tree():
+        yield context.pop('top')
+
+        for record in records:
+            if record['level'] == 0:
+                context['top'] = record
+                return
+            yield record
+
+    while 'top' in context:
+        group = records_in_a_tree()
+        if group_as_list:
+            group = list(group)
+        yield group
+
+
 class RecordStream(filestructure.VersionSensitiveItem):
 
     def records(self, **kwargs):
@@ -125,28 +151,8 @@ class RecordStream(filestructure.VersionSensitiveItem):
     def records_treegrouped(self, group_as_list=True):
         ''' group records by top-level trees and return iterable of the groups
         '''
-        context = dict()
         records = self.records()
-
-        try:
-            context['top'] = records.next()
-        except StopIteration:
-            return
-
-        def records_in_a_tree():
-            yield context.pop('top')
-
-            for record in records:
-                if record['level'] == 0:
-                    context['top'] = record
-                    return
-                yield record
-
-        while 'top' in context:
-            group = records_in_a_tree()
-            if group_as_list:
-                group = list(group)
-            yield group
+        return group_records_by_toplevel(records, group_as_list)
 
     def records_treegroup(self, n):
         ''' returns list of records in `n'th top-level tree '''
