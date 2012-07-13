@@ -2012,7 +2012,8 @@ class ModelStream(recordstream.RecordStream):
         ''' iterable of iterable of the models, grouped by the top-level tree
         '''
         kwargs.setdefault('version', self.version)
-        for records in self.records_treegrouped():
+        for group_idx, records in enumerate(self.records_treegrouped()):
+            kwargs['treegroup'] = group_idx
             yield parse_models(kwargs, records)
 
     def model(self, idx):
