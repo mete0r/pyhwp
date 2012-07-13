@@ -28,7 +28,12 @@ def main():
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
     logging.getLogger('hwp5').addHandler(logging.StreamHandler())
-    make(args)
+
+    from hwp5.dataio import ParseError
+    try:
+        make(args)
+    except ParseError, e:
+        e.print_to_logger(logger)
 
 
 class ODTPackage(object):
