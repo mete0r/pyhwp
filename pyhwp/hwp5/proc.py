@@ -10,7 +10,7 @@ Usage::
     hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
     hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
     hwp5proc records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
-    hwp5proc models [--simple | --json] [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc models [--simple | --json] [--treegroup=<treegroup>] [<hwp5file> <record-stream> | -V <version>]
     hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
     hwp5proc xml <hwp5file>
     hwp5proc rawunz
@@ -427,11 +427,17 @@ def models(args):
         from .binmodel import ModelStream
         stream = ModelStream(Open2Stream(lambda: sys.stdin), version)
 
+    opts = dict()
+
+    treegroup = args['--treegroup']
+    if treegroup is not None:
+        opts['treegroup'] = int(treegroup)
+
     if args['--simple']:
-        for model in stream.models():
+        for model in stream.models(**opts):
             print '    '*model['level']+model['type'].__name__
     else:
-        stream.models_json().dump(sys.stdout)
+        stream.models_json(**opts).dump(sys.stdout)
 
 
 def find(args):
