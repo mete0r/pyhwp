@@ -3,7 +3,7 @@
 
 Usage::
 
-    hwp5odt <hwp5file>
+    hwp5odt [--embed-image] <hwp5file>
     hwp5odt -h | --help
     hwp5odt --version
 
@@ -90,11 +90,11 @@ class Converter(object):
         else:
             self.relaxng_validate = None
 
-    def __call__(self, hwpfile, odtpkg):
+    def __call__(self, hwpfile, odtpkg, embedimage=False):
         import tempfile
         hwpxmlfile = tempfile.TemporaryFile()
         try:
-            hwpfile.xmlevents().dump(hwpxmlfile)
+            hwpfile.xmlevents(embedbin=embedimage).dump(hwpxmlfile)
 
             styles = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
@@ -138,7 +138,7 @@ def make(args):
     try:
         odtpkg = ODTPackage(root+'.odt')
         try:
-            convert(hwpfile, odtpkg)
+            convert(hwpfile, odtpkg, args['--embed-image'])
         finally:
             odtpkg.close()
     finally:
