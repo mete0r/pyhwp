@@ -2,12 +2,29 @@
 import logging
 import os
 import os.path
-try:
-    homepath = os.environ['HOME']
-    logpath = os.path.join(homepath, 'pyhwp.oxt.log')
-    logging.basicConfig(filename=logpath, level=logging.DEBUG)
-except KeyError:
-    pass
+
+
+# initialize logging system
+config = dict()
+
+loglevel = os.environ.get('PYHWP_OXT_LOGLEVEL')
+if loglevel:
+    loglevel = dict(DEBUG=logging.DEBUG,
+                    INFO=logging.INFO,
+                    WARNING=logging.WARNING,
+                    ERROR=logging.ERROR,
+                    CRITICAL=logging.CRITICAL).get(loglevel.upper(),
+                                                   logging.WARNING)
+    config['level'] = loglevel
+del loglevel
+
+filename = os.environ.get('PYHWP_OXT_FILENAME')
+if filename:
+    config['filename'] = filename
+del filename
+
+logging.basicConfig(**config)
+
 
 def log_exception(f):
     def wrapper(*args, **kwargs):
