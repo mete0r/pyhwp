@@ -192,7 +192,9 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
             # convert without RelaxNG validation
             convert = Converter(xsltproc)
-            convert(hwp5file, odtpkg)
+
+            # Embed images: see #32 - https://github.com/mete0r/pyhwp/issues/32
+            convert(hwp5file, odtpkg, embedimage=True)
         finally:
             odtpkg.close()
 
@@ -348,8 +350,9 @@ class ImporterTest(TestCase):
         paragraph_portions = xenumeration_list(paragraph_portions)
         contents = paragraph_portions[1].createContentEnumeration('com.sun.star.text.TextContent')
         contents = xenumeration_list(contents)
-        self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
-                          contents[0].GraphicStreamURL)
+        self.assertEquals('image/x-vclgraphic', contents[0].Bitmap.MimeType)
+        #self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
+        #                  contents[0].GraphicStreamURL)
 
         graphics = doc.getGraphicObjects()
         graphics = xenumeration_list(graphics.createEnumeration())
