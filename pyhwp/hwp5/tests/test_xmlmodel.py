@@ -41,6 +41,18 @@ class TestDocInfo(TestBase):
         self.assertEquals(112, len(events))
         #print len(events)
 
+        # without embedbin, no <text> is embedded
+        self.assertTrue('<text>' not in events[4][1][1]['bindata'])
+
+    def test_events_with_embedbin(self):
+        import base64
+        bindata = self.hwp5file_bin['BinData']
+        events = list(self.docinfo.events(embedbin=bindata))
+        self.assertTrue('<text>' in events[4][1][1]['bindata'])
+        self.assertEquals(bindata['BIN0002.jpg'].open().read(),
+                          base64.b64decode(events[4][1][1]['bindata']['<text>']))
+
+
 class TestSection(TestBase):
 
     def test_events(self):
@@ -194,3 +206,18 @@ class TestMatchFieldStartEnd(TestCase):
         events = xmlmodel.make_extended_controls_inline(events)
         events = xmlmodel.match_field_start_end(events)
         events = list(events)
+
+
+class TestEmbedBinData(TestBase):
+
+    def test_embed_bindata(self):
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.binmodel import BinData
+        from hwp5.xmlmodel import embed_bindata
+
+        bindata = dict(flags=BinData.Flags(BinData.StorageType.EMBEDDING),
+                       bindata=dict(storage_id=2, ext='jpg'))
+        events = [(STARTEVENT, (BinData, bindata, dict())),
+                  (ENDEVENT, (BinData, bindata, dict()))]
+        events = list(embed_bindata(events, self.hwp5file_bin['BinData']))
+        self.assertTrue('<text>' in bindata['bindata'])

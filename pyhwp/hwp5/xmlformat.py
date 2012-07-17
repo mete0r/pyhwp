@@ -97,7 +97,11 @@ def startelement(context, xmlgen, (model, attributes)):
         typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
 
     typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
+    text = plainvalues.pop('<text>', None)
+
     yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)
+    if text:
+        yield xmlgen.characters, text[1]
     for _name, (_type, _value) in typed_attributes:
         if isinstance(_value, dict):
             assert isinstance(_value, dict)

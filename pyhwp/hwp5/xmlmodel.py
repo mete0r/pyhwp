@@ -337,6 +337,26 @@ def restructure_tablebody(event_prefixed_mac):
             yield event, item
 
 
+def embed_bindata(event_prefixed_mac, bindata):
+    from hwp5.binmodel import BinData
+    import base64
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if event is STARTEVENT and model is BinData:
+            if attributes['flags'].storage is BinData.StorageType.EMBEDDING:
+                name = ('BIN%04d' % attributes['bindata']['storage_id']
+                        + '.'
+                        + attributes['bindata']['ext'])
+                bin_stream = bindata[name].open()
+                try:
+                    binary = bin_stream.read()
+                finally:
+                    bin_stream.close()
+                b64 = base64.b64encode(binary)
+                attributes['bindata']['<text>'] = b64
+        yield event, item
+
+
 def prefix_binmodels_with_event(context, models):
     from .treeop import prefix_event
     level_prefixed = ((model['level'],
@@ -420,6 +440,8 @@ class DocInfo(ModelEventStream):
     def events(self, **kwargs):
         docinfo = DocInfo, dict(), dict()
         events = self.modelevents(**kwargs)
+        if 'embedbin' in kwargs:
+            events = embed_bindata(events, kwargs['embedbin'])
         events = wrap_modelevents(docinfo, events)
         return remove_redundant_facenames(events)
 
@@ -474,6 +496,10 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
 
     def events(self, **kwargs):
         from itertools import chain
+        if 'embedbin' in kwargs and kwargs['embedbin']:
+            kwargs['embedbin'] = self['BinData']
+        else:
+            kwargs.pop('embedbin', None)
         events = chain(self.docinfo.events(**kwargs),
                        self.bodytext.events(**kwargs))
 
