@@ -12,7 +12,7 @@ Usage::
     hwp5proc records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
     hwp5proc models [--simple | --json] [--treegroup=<treegroup>] [<hwp5file> <record-stream> | -V <version>]
     hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
-    hwp5proc xml <hwp5file>
+    hwp5proc xml [--embedbin] <hwp5file>
     hwp5proc rawunz
     hwp5proc -h | --help
     hwp5proc --version
@@ -512,8 +512,11 @@ def xml(args):
     import sys
     from .xmlmodel import Hwp5File
 
+    opts = dict()
+    opts['embedbin'] = args['--embedbin']
+
     hwp5file = Hwp5File(args['<hwp5file>'])
-    hwp5file.xmlevents().dump(sys.stdout)
+    hwp5file.xmlevents(**opts).dump(sys.stdout)
 
 
 def rawunz(args):
