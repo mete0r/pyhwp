@@ -354,6 +354,7 @@ def embed_bindata(event_prefixed_mac, bindata):
                     bin_stream.close()
                 b64 = base64.b64encode(binary)
                 attributes['bindata']['<text>'] = b64
+                attributes['bindata']['inline'] = 'true'
         yield event, item
 
 
