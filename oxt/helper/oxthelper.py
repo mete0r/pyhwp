@@ -3,6 +3,10 @@
 import uno
 import unohelper
 from com.sun.star.io import XInputStream, XSeekable
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
@@ -159,7 +163,7 @@ class FacMixin(object):
         return self.createInstance('com.sun.star.comp.documentconversion.LibXSLTTransformer',
                                    *args)
 
-    def xsltproc_with_LibXSLTTransforrmer(self, stylesheet_path):
+    def xsltproc_with_LibXSLTTransformer(self, stylesheet_path):
         import os.path
         stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
         import unohelper
@@ -215,22 +219,22 @@ class FacMixin(object):
                         # transformer instance.)
                         self.t = transformer
                     def started(self):
-                        print 'XSLT started'
+                        logger.debug('XSLT started')
                     def closed(self):
-                        print 'XSLT closed'
+                        logger.debug('XSLT closed')
                         pout.close()
                         self.t = None
                     def terminated(self):
-                        print 'XSLT terminated'
+                        logger.debug('XSLT terminated')
                         pout.close()
                         self.t = None
                     def error(self, exception):
-                        print 'XSLT error:', exception
-                        print exception
+                        logger.debug('XSLT error')
+                        logger.exception(exception)
                         pout.close()
                         self.t = None
                     def disposing(self, source):
-                        print 'XSLT disposing:', source
+                        logger.debug('XSLT disposing: %s', source)
                         pout.close()
                         self.t = None
                 transformer.addListener(Listener())
@@ -246,7 +250,7 @@ class FacMixin(object):
             else:
                 pin.read()
                 pin.close()
-                print 'XSLT transform over!'
+                logger.debug('XSLT transform over!')
 
         return transform
 
