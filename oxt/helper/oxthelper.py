@@ -3,6 +3,7 @@
 import uno
 import unohelper
 from com.sun.star.io import XInputStream, XSeekable
+from com.sun.star.io import XOutputStream
 import logging
 
 
@@ -167,26 +168,6 @@ class FacMixin(object):
         import os.path
         stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
         import unohelper
-        from com.sun.star.io import XOutputStream
-        class OutputStreamToFileLikeNonClosing(unohelper.Base, XOutputStream):
-            def __init__(self, f):
-                self.f = f
-
-            def writeBytes(self, bytesequence):
-                self.f.write(bytesequence.value)
-
-            def flush(self):
-                self.f.flush()
-
-            def closeOutput(self):
-                # non closing
-                pass
-
-        class InputStreamFromFileLikeNonClosing(InputStreamFromFileLike):
-            def closeInput(self):
-                # non closing
-                pass
-
         def transform(stdin=None, stdout=None):
 
             if stdin:
@@ -255,3 +236,22 @@ class FacMixin(object):
         return transform
 
 
+class OutputStreamToFileLikeNonClosing(unohelper.Base, XOutputStream):
+    def __init__(self, f):
+        self.f = f
+
+    def writeBytes(self, bytesequence):
+        self.f.write(bytesequence.value)
+
+    def flush(self):
+        self.f.flush()
+
+    def closeOutput(self):
+        # non closing
+        pass
+
+
+class InputStreamFromFileLikeNonClosing(InputStreamFromFileLike):
+    def closeInput(self):
+        # non closing
+        pass
