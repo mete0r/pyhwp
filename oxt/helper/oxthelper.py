@@ -161,8 +161,13 @@ class FacMixin(object):
         args = (NamedValue('StylesheetURL', stylesheet_url),
                 NamedValue('SourceURL', source_url),
                 NamedValue('SourceBaseURL', source_url_base))
-        return self.createInstance('com.sun.star.comp.documentconversion.LibXSLTTransformer',
-                                   *args)
+        serviceName = 'com.sun.star.comp.JAXTHelper'
+        serviceName = 'com.sun.star.comp.documentconversion.LibXSLTTransformer'
+        return self.createInstance(serviceName, *args)
+
+    def haveLibXSLTTransformer(self):
+        transformer = self.LibXSLTTransformer('', '', '')
+        return transformer is not None
 
     def xsltproc_with_LibXSLTTransformer(self, stylesheet_path):
         import os.path

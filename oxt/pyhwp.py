@@ -202,10 +202,12 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
         try:
             from hwp5.hwp5odt import Converter
 
-            # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
-            # we use default xsltproc which uses external `xsltproc' program
-            #xsltproc = self.xsltproc_with_LibXSLTTransformer
-            from hwp5.tools import xsltproc
+            if self.haveLibXSLTTransformer():
+                xsltproc = self.xsltproc_with_LibXSLTTransformer
+            else:
+                # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
+                # we use default xsltproc which uses external `xsltproc' program
+                from hwp5.tools import xsltproc
 
             # convert without RelaxNG validation
             convert = Converter(xsltproc)
