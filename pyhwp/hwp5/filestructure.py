@@ -285,12 +285,29 @@ class VersionSensitiveItem(ItemWrapper):
 
 
 class Hwp5FileBase(ItemConversionStorage):
+    ''' Base of an Hwp5File.
+
+    Hwp5FileBase checks basic validity of an HWP format v5 and provides
+    `fileheader` property.
+
+    :param stg: an OLE2 structured storage.
+    :type stg: an instance of storage, OleFileIO or filename
+    :raises InvalidHwp5FileError: `stg` is not a valid HWP format v5 document.
+    '''
 
     def __init__(self, stg):
+        from hwp5.errors import InvalidOleStorageError
+        from hwp5.errors import InvalidHwp5FileError
         from hwp5.storage import is_storage
         from hwp5.storage.ole import OleStorage
         if not is_storage(stg):
-            stg = OleStorage(stg)
+            try:
+                stg = OleStorage(stg)
+            except InvalidOleStorageError:
+                raise InvalidHwp5FileError('Not an OLE2 Compound Binary File.')
+
+        if not storage_is_hwp5file(stg):
+            raise InvalidHwp5FileError('Not an HWP Document format v5 storage.')
 
         ItemConversionStorage.__init__(self, stg)
 

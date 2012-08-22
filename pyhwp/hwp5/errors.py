@@ -24,3 +24,8 @@
 class InvalidOleStorageError(Exception):
     ''' Invalid OLE2 Compound Binary File. '''
     pass
+
+
+class InvalidHwp5FileError(Exception):
+    ''' Invalid HWP Document format v5 File. '''
+    pass

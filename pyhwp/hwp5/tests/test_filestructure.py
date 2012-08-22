@@ -49,6 +49,19 @@ class TestHwp5FileBase(TestBase):
         hwp5file = Hwp5FileBase(self.hwp5file_path)
         self.assertTrue('FileHeader' in hwp5file)
 
+    def test_create_with_nonole(self):
+        from hwp5.errors import InvalidHwp5FileError
+        from hwp5.filestructure import Hwp5FileBase
+        nonole = self.get_fixture_file('nonole.txt')
+        self.assertRaises(InvalidHwp5FileError, Hwp5FileBase, nonole)
+
+    def test_create_with_nonhwp5_storage(self):
+        from hwp5.errors import InvalidHwp5FileError
+        from hwp5.storage.fs import FileSystemStorage
+        from hwp5.filestructure import Hwp5FileBase
+        stg = FileSystemStorage(self.get_fixture_file('nonhwp5stg'))
+        self.assertRaises(InvalidHwp5FileError, Hwp5FileBase, stg)
+
     def test_item_is_hwpfileheader(self):
         from hwp5.filestructure import HwpFileHeader
         fileheader = self.hwp5file_base['FileHeader']
