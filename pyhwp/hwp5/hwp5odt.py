@@ -22,8 +22,10 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    import sys
     from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
+    from hwp5.errors import InvalidHwp5FileError
     from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
@@ -34,6 +36,9 @@ def main():
         make(args)
     except ParseError, e:
         e.print_to_logger(logger)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        sys.exit(1)
 
 
 class ODTPackage(object):

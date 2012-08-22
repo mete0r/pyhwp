@@ -221,8 +221,10 @@ def rest_to_docopt(doc):
     return doc.replace('::\n\n', ':\n').replace('``', '')
 
 def main():
+    import sys
     from docopt import docopt
     from hwp5 import __version__
+    from hwp5.errors import InvalidHwp5FileError
 
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=__version__)
@@ -254,6 +256,9 @@ def main():
             rawunz(args)
     except ParseError, e:
         e.print_to_logger(logger)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        sys.exit(1)
 
 
 def version(args):
