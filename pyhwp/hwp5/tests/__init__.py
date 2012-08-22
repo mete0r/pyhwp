@@ -20,6 +20,8 @@ def test_suite():
     tests.append(T)
     from hwp5.tests import test_treeop as T
     tests.append(T)
+    from hwp5.tests import test_ole as T
+    tests.append(T)
     from hwp5.tests import test_storage as T
     tests.append(T)
 
