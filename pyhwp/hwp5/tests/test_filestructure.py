@@ -33,8 +33,7 @@ class TestModuleFunctions(TestBase):
 
     def test_is_hwp5file(self):
         assert FS.is_hwp5file(self.hwp5file_path)
-        import os.path
-        nonole_filename = os.path.join(self.fixtures_dir, 'nonole.txt')
+        nonole_filename = self.get_fixture_file('nonole.txt')
         assert not FS.is_hwp5file(nonole_filename)
 
 

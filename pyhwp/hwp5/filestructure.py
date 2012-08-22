@@ -126,12 +126,13 @@ def recoder(backend_encoding, frontend_encoding, errors='strict'):
 
 
 def is_hwp5file(filename):
+    ''' Test whether it is an HWP format v5 file. '''
+    from hwp5.errors import InvalidOleStorageError
     from hwp5.storage.ole import OleStorage
-    from OleFileIO_PL import OleFileIO, isOleFile
-    if not isOleFile(filename):
+    try:
+        olestg = OleStorage(filename)
+    except InvalidOleStorageError:
         return False
-    olefile = OleFileIO(filename)
-    olestg = OleStorage(olefile)
     return storage_is_hwp5file(olestg)
 
 
