@@ -27,6 +27,19 @@ class TestBase(TestCase):
 
 class TestOleStorage(TestBase):
 
+    def test_OleStorage(self):
+        from hwp5.storage.ole import OleStorage
+        from hwp5.errors import InvalidOleStorageError
+
+        olestg = OleStorage(self.hwp5file_path)
+        self.assertTrue(isinstance(olestg, OleStorage))
+
+        olestg = OleStorage(self.olefile)
+        self.assertTrue(isinstance(olestg, OleStorage))
+
+        nonolefile = self.get_fixture_file('nonole.txt')
+        self.assertRaises(InvalidOleStorageError, OleStorage, nonolefile)
+
     def test_getitem0(self):
         from hwp5.storage import is_storage, is_stream
         olestg = self.olestg

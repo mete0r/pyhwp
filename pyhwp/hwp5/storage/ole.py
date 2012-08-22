@@ -44,15 +44,20 @@ class OleStream(OleStorageItem):
 
 
 class OleStorage(OleStorageItem):
+    ''' Create an OleStorage instance.
+
+    :param olefile: an OLE2 Compound Binary File.
+    :type olefile: an OleFileIO instance or an argument to OleFileIO()
+    :param path: internal path in the olefile. Should not end with '/'.
+    :raises: `InvalidOleStorageError` when `olefile` is not valid OLE2 format.
+    '''
 
     def __init__(self, olefile, path='', parent=None):
-        ''' create a OleStorage instance
-
-            @param olefile : a OleFileIO instance
-                             or path to the file in the file system
-            @param path : a base path in the storage
-        '''
         if not hasattr(olefile, 'openstream'):
+            from OleFileIO_PL import isOleFile
+            if not isOleFile(olefile):
+                from hwp5.errors import InvalidOleStorageError
+                raise InvalidOleStorageError('Not an OLE2 Compound Binary File.')
             from OleFileIO_PL import OleFileIO
             olefile = OleFileIO(olefile)
         OleStorageItem.__init__(self, olefile, path, parent)
