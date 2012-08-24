@@ -5,7 +5,7 @@ import os.path
 
 
 # initialize logging system
-config = dict()
+logger = logging.getLogger('hwp5')
 
 loglevel = os.environ.get('PYHWP_OXT_LOGLEVEL')
 if loglevel:
@@ -15,15 +15,13 @@ if loglevel:
                     ERROR=logging.ERROR,
                     CRITICAL=logging.CRITICAL).get(loglevel.upper(),
                                                    logging.WARNING)
-    config['level'] = loglevel
+    logger.setLevel(loglevel)
 del loglevel
 
 filename = os.environ.get('PYHWP_OXT_FILENAME')
 if filename:
-    config['filename'] = filename
+    logger.addHandler(logging.FileHandler(filename))
 del filename
-
-logging.basicConfig(**config)
 
 
 def log_exception(f):
@@ -31,7 +29,7 @@ def log_exception(f):
         try:
             return f(*args, **kwargs)
         except Exception, e:
-            logging.exception(e)
+            logger.exception(e)
             raise
     return wrapper
 
@@ -117,11 +115,11 @@ class Detector(unohelper.Base, XExtendedFilterDetection, FacMixin):
 
     @log_exception
     def detect(self, mediadesc):
-        logging.debug('Detector detect()')
+        logger.debug('Detector detect()')
         desc = propseq_to_dict(mediadesc)
 
         #for k, v in desc.iteritems():
-        #    logging.debug('Detector detect: %s: %s', k, str(v))
+        #    logger.debug('Detector detect: %s: %s', k, str(v))
 
         inputstream = desc['InputStream']
         try:
@@ -131,10 +129,10 @@ class Detector(unohelper.Base, XExtendedFilterDetection, FacMixin):
             from hwp5.filestructure import storage_is_hwp5file
             if not storage_is_hwp5file(adapter):
                 return '', mediadesc
-            logging.debug('TypeName: %s', 'writer_pyhwp_HWPv5')
+            logger.debug('TypeName: %s', 'writer_pyhwp_HWPv5')
             return 'writer_pyhwp_HWPv5', mediadesc
         except Exception, e:
-            logging.exception(e)
+            logger.exception(e)
             return '', mediadesc
 
 
@@ -147,21 +145,21 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
     @log_exception
     def initialize(self, args):
-        logging.debug('Importer initialize: %s', args)
+        logger.debug('Importer initialize: %s', args)
 
     @log_exception
     def setTargetDocument(self, target):
-        logging.debug('Importer setTargetDocument: %s', target)
+        logger.debug('Importer setTargetDocument: %s', target)
         self.target = target
 
     @log_exception
     def filter(self, mediadesc):
-        logging.debug('Importer filter')
+        logger.debug('Importer filter')
         desc = propseq_to_dict(mediadesc)
 
-        logging.debug('mediadesc: %s', str(desc.keys()))
+        logger.debug('mediadesc: %s', str(desc.keys()))
         for k, v in desc.iteritems():
-            logging.debug('%s: %s', k, str(v))
+            logger.debug('%s: %s', k, str(v))
 
         statusindicator = desc.get('StatusIndicator')
 
@@ -171,7 +169,7 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
         return True
 
     def cancel(self):
-        logging.debug('Importer cancel')
+        logger.debug('Importer cancel')
 
     def HwpFileFromInputStream(self, inputstream):
         olestorage = self.OLESimpleStorage(inputstream)
@@ -181,7 +179,7 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
     def load_hwp5file_into_doc(self, hwp5file, doc, statusindicator=None):
         odtpkg_file = self.hwp5file_convert_to_odtpkg_file(hwp5file)
-        logging.debug('hwp to odtpkg completed')
+        logger.debug('hwp to odtpkg completed')
 
         odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
 
@@ -267,7 +265,7 @@ class TestJob(unohelper.Base, XJobExecutor):
         self.ctx = ctx
 
     def trigger(self, args):
-        logging.debug('testjob %s', args)
+        logger.debug('testjob %s', args)
 
         wd = args
 
@@ -331,30 +329,30 @@ class ImporterTest(TestCase):
         paragraphs = text.createEnumeration()
         paragraphs = xenumeration_list(paragraphs)
         for paragraph_ix, paragraph in enumerate(paragraphs):
-            logging.info('Paragraph %s', paragraph_ix)
-            logging.debug('%s', paragraph)
+            logger.info('Paragraph %s', paragraph_ix)
+            logger.debug('%s', paragraph)
 
             services = paragraph.SupportedServiceNames
             if 'com.sun.star.text.Paragraph' in services:
                 portions = xenumeration_list(paragraph.createEnumeration())
                 for portion_ix, portion in enumerate(portions):
-                    logging.info('Portion %s: %s', portion_ix,
+                    logger.info('Portion %s: %s', portion_ix,
                                  portion.TextPortionType)
                     if portion.TextPortionType == 'Text':
-                        logging.info('- %s', portion.getString())
+                        logger.info('- %s', portion.getString())
                     elif portion.TextPortionType == 'Frame':
-                        logging.debug('%s', portion)
+                        logger.debug('%s', portion)
                         textcontent_name = 'com.sun.star.text.TextContent'
                         en = portion.createContentEnumeration(textcontent_name)
                         contents = xenumeration_list(en)
                         for content in contents:
-                            logging.debug('content: %s', content)
+                            logger.debug('content: %s', content)
                             content_services = content.SupportedServiceNames
                             if ('com.sun.star.drawing.GraphicObjectShape' in
                                 content_services):
-                                logging.info('graphic url: %s',
+                                logger.info('graphic url: %s',
                                              content.GraphicURL)
-                                logging.info('graphic stream url: %s',
+                                logger.info('graphic stream url: %s',
                                              content.GraphicStreamURL)
             if 'com.sun.star.text.TextTable' in services:
                 pass
@@ -375,11 +373,11 @@ class ImporterTest(TestCase):
 
         graphics = doc.getGraphicObjects()
         graphics = xenumeration_list(graphics.createEnumeration())
-        logging.debug('graphic: %s', graphics)
+        logger.debug('graphic: %s', graphics)
 
         frames = doc.getTextFrames()
         frames = xenumeration_list(frames.createEnumeration())
-        logging.debug('frames: %s', frames)
+        logger.debug('frames: %s', frames)
 
 
 class OleStorageAdapterTest(TestCase, FacMixin):
