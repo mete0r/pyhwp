@@ -154,6 +154,8 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
     @log_exception
     def filter(self, mediadesc):
+        from hwp5.dataio import ParseError
+
         logger.debug('Importer filter')
         desc = propseq_to_dict(mediadesc)
 
@@ -165,8 +167,16 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
         inputstream = desc['InputStream']
         hwpfile = self.HwpFileFromInputStream(inputstream)
-        self.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
-        return True
+        try:
+            self.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
+        except ParseError, e:
+            e.print_to_logger(logger)
+            return False
+        except Exception, e:
+            logger.exception(e)
+            return False
+        else:
+            return True
 
     def cancel(self):
         logger.debug('Importer cancel')
