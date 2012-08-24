@@ -106,9 +106,10 @@ class FacMixin(object):
     def createInstance(self, name, *args):
         SM = self.context.ServiceManager
         if len(args) > 0:
-            return SM.createInstanceWithArguments(name, args)
+            return SM.createInstanceWithArgumentsAndContext(name, args,
+                                                            self.context)
         else:
-            return SM.createInstance(name)
+            return SM.createInstanceWithContext(name, self.context)
 
     @property
     def storage_factory(self):
