@@ -35,6 +35,7 @@ def log_exception(f):
 
 import uno
 import unohelper
+import unokit
 from oxthelper import FacMixin, FileFromStream, InputStreamFromFileLike
 
 from com.sun.star.lang import XInitialization
@@ -109,11 +110,10 @@ def propseq_to_dict(propvalues):
     return dict((p.Name, p.Value) for p in propvalues)
 
 @implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
-class Detector(unohelper.Base, XExtendedFilterDetection, FacMixin):
-    def __init__(self, ctx):
-        self.context = ctx
+class Detector(unokit.Base, XExtendedFilterDetection, FacMixin):
 
     @log_exception
+    @unokit.component_context
     def detect(self, mediadesc):
         logger.debug('Detector detect()')
         desc = propseq_to_dict(mediadesc)
@@ -137,22 +137,21 @@ class Detector(unohelper.Base, XExtendedFilterDetection, FacMixin):
 
 
 @implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
-class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
+class Importer(unokit.Base, XInitialization, XFilter, XImporter, FacMixin):
 
     @log_exception
-    def __init__(self, ctx):
-        self.context = ctx
-
-    @log_exception
+    @unokit.component_context
     def initialize(self, args):
         logger.debug('Importer initialize: %s', args)
 
     @log_exception
+    @unokit.component_context
     def setTargetDocument(self, target):
         logger.debug('Importer setTargetDocument: %s', target)
         self.target = target
 
     @log_exception
+    @unokit.component_context
     def filter(self, mediadesc):
         from hwp5.dataio import ParseError
 
@@ -178,6 +177,7 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
         else:
             return True
 
+    @unokit.component_context
     def cancel(self):
         logger.debug('Importer cancel')
 
@@ -270,10 +270,9 @@ class Importer(unohelper.Base, XInitialization, XFilter, XImporter, FacMixin):
 
 
 @implementation('pyhwp.TestJob', 'com.sun.star.task.XJobExecutor')
-class TestJob(unohelper.Base, XJobExecutor):
-    def __init__(self, ctx):
-        self.ctx = ctx
+class TestJob(unokit.Base, XJobExecutor):
 
+    @unokit.component_context
     def trigger(self, args):
         logger.debug('testjob %s', args)
 
