@@ -1,7 +1,39 @@
 # -*- coding: utf-8 -*-
+#
+#                   GNU AFFERO GENERAL PUBLIC LICENSE
+#                      Version 3, 19 November 2007
+#
+#   pyhwp : hwp file format parser in python
+#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU Affero General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU Affero General Public License for more details.
+#
+#   You should have received a copy of the GNU Affero General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 import logging
 import os
 import os.path
+import uno
+import unohelper
+import unokit
+from unokit.util import propseq_to_dict
+from unokit.util import dict_to_propseq
+from unokit.util import xenumeration_list
+from unokit.adapters import InputStreamFromFileLike
+import hwp5_uno
+
+from com.sun.star.lang import XInitialization
+from com.sun.star.document import XFilter, XImporter, XExtendedFilterDetection
+from com.sun.star.task import XJobExecutor
 
 
 # initialize logging system
@@ -16,393 +48,224 @@ if loglevel:
                     CRITICAL=logging.CRITICAL).get(loglevel.upper(),
                                                    logging.WARNING)
     logger.setLevel(loglevel)
+    hwp5_uno.logger.setLevel(loglevel)
 del loglevel
 
 filename = os.environ.get('PYHWP_OXT_LOGFILE')
 if filename:
     logger.addHandler(logging.FileHandler(filename))
+    hwp5_uno.logger.addHandler(logging.FileHandler(filename))
 del filename
 
 
-def log_exception(f):
-    def wrapper(*args, **kwargs):
-        try:
-            return f(*args, **kwargs)
-        except Exception, e:
-            logger.exception(e)
-            raise
-    return wrapper
+try:
+    def log_exception(f):
+        def wrapper(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except Exception, e:
+                logger.exception(e)
+                raise
+        return wrapper
 
-import uno
-import unohelper
-import unokit
-from unokit.util import propseq_to_dict
-from unokit.util import dict_to_propseq
-from unokit.util import xenumeration_list
-from oxthelper import FacMixin, FileFromStream, InputStreamFromFileLike
+    g_ImplementationHelper = unohelper.ImplementationHelper()
 
-from com.sun.star.lang import XInitialization
-from com.sun.star.document import XFilter, XImporter, XExtendedFilterDetection
-from com.sun.star.task import XJobExecutor
-
-g_ImplementationHelper = unohelper.ImplementationHelper()
-
-def implementation(component_name, *services):
-    def decorator(cls):
-        g_ImplementationHelper.addImplementation(cls, component_name, services)
-        return cls
-    return decorator
-
-class OleStorageAdapter(object):
-
-    def __init__(self, oless):
-        ''' an OLESimpleStorage to hwp5 storage adapter.
-
-        :param oless: an instance of OLESimpleStorage
-        '''
-        self.oless = oless
-
-    def __iter__(self):
-        return iter(self.oless.getElementNames())
-
-    def __getitem__(self, name):
-        from com.sun.star.container import NoSuchElementException
-        try:
-            elem = self.oless.getByName(name)
-        except NoSuchElementException:
-            raise KeyError(name)
-        services = elem.SupportedServiceNames
-        if 'com.sun.star.embed.OLESimpleStorage' in services:
-            return OleStorageAdapter(elem)
-        else:
-            elem.closeInput()
-            return OleStorageStream(self.oless, name)
+    def implementation(component_name, *services):
+        def decorator(cls):
+            g_ImplementationHelper.addImplementation(cls, component_name, services)
+            return cls
+        return decorator
 
 
-class OleStorageStream(object):
+    @implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
+    class Detector(unokit.Base, XExtendedFilterDetection):
 
-    def __init__(self, oless, name):
-        self.oless = oless
-        self.name = name
+        @log_exception
+        @unokit.component_context
+        def detect(self, mediadesc):
+            from hwp5_uno import typedetect
 
-    def open(self):
-        stream = self.oless.getByName(self.name)
-        return FileFromStream(stream)
+            logger.info('pyhwp.Detector detect()')
 
+            desc = propseq_to_dict(mediadesc)
+            for k, v in desc.items():
+                logger.debug('\t%s: %s', k, v)
 
-@implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
-class Detector(unokit.Base, XExtendedFilterDetection, FacMixin):
+            inputstream = desc['InputStream']
 
-    @log_exception
-    @unokit.component_context
-    def detect(self, mediadesc):
-        logger.debug('Detector detect()')
-        desc = propseq_to_dict(mediadesc)
+            typename = typedetect(inputstream)
 
-        #for k, v in desc.iteritems():
-        #    logger.debug('Detector detect: %s: %s', k, str(v))
-
-        inputstream = desc['InputStream']
-        try:
-            olestorage = self.OLESimpleStorage(inputstream)
-            adapter = OleStorageAdapter(olestorage)
-
-            from hwp5.filestructure import storage_is_hwp5file
-            if not storage_is_hwp5file(adapter):
-                return '', mediadesc
-            logger.debug('TypeName: %s', 'writer_pyhwp_HWPv5')
-            return 'writer_pyhwp_HWPv5', mediadesc
-        except Exception, e:
-            logger.exception(e)
-            return '', mediadesc
+            logger.info('pyhwp.Detector: %s detected.', typename)
+            return typename, mediadesc
 
 
-@implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
-class Importer(unokit.Base, XInitialization, XFilter, XImporter, FacMixin):
+    @implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
+    class Importer(unokit.Base, XInitialization, XFilter, XImporter):
 
-    @log_exception
-    @unokit.component_context
-    def initialize(self, args):
-        logger.debug('Importer initialize: %s', args)
+        @log_exception
+        @unokit.component_context
+        def initialize(self, args):
+            logger.debug('Importer initialize: %s', args)
 
-    @log_exception
-    @unokit.component_context
-    def setTargetDocument(self, target):
-        logger.debug('Importer setTargetDocument: %s', target)
-        self.target = target
+        @log_exception
+        @unokit.component_context
+        def setTargetDocument(self, target):
+            logger.debug('Importer setTargetDocument: %s', target)
+            self.target = target
 
-    @log_exception
-    @unokit.component_context
-    def filter(self, mediadesc):
-        from hwp5.dataio import ParseError
+        @log_exception
+        @unokit.component_context
+        def filter(self, mediadesc):
+            from hwp5.dataio import ParseError
+            from hwp5_uno import HwpFileFromInputStream
+            from hwp5_uno import load_hwp5file_into_doc
 
-        logger.debug('Importer filter')
-        desc = propseq_to_dict(mediadesc)
+            logger.debug('Importer filter')
+            desc = propseq_to_dict(mediadesc)
 
-        logger.debug('mediadesc: %s', str(desc.keys()))
-        for k, v in desc.iteritems():
-            logger.debug('%s: %s', k, str(v))
+            logger.debug('mediadesc: %s', str(desc.keys()))
+            for k, v in desc.iteritems():
+                logger.debug('%s: %s', k, str(v))
 
-        statusindicator = desc.get('StatusIndicator')
+            statusindicator = desc.get('StatusIndicator')
 
-        inputstream = desc['InputStream']
-        hwpfile = self.HwpFileFromInputStream(inputstream)
-        try:
-            self.load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
-        except ParseError, e:
-            e.print_to_logger(logger)
-            return False
-        except Exception, e:
-            logger.exception(e)
-            return False
-        else:
-            return True
-
-    @unokit.component_context
-    def cancel(self):
-        logger.debug('Importer cancel')
-
-    def HwpFileFromInputStream(self, inputstream):
-        olestorage = self.OLESimpleStorage(inputstream)
-        adapter = OleStorageAdapter(olestorage)
-        from hwp5.xmlmodel import Hwp5File
-        return Hwp5File(adapter)
-
-    def load_hwp5file_into_doc(self, hwp5file, doc, statusindicator=None):
-        odtpkg_file = self.hwp5file_convert_to_odtpkg_file(hwp5file)
-        logger.debug('hwp to odtpkg completed')
-
-        odtpkg_stream = InputStreamFromFileLike(odtpkg_file)
-
-        odtpkg_storage = self.StorageFromInputStream(odtpkg_stream)
-
-        self.load_odt_from_storage(doc, odtpkg_storage, statusindicator)
-
-    def hwp5file_convert_to_odtpkg_file(self, hwp5file):
-        from tempfile import TemporaryFile
-        tmpfile = TemporaryFile()
-        import os
-        tmpfile2 = os.fdopen( os.dup(tmpfile.fileno()), 'r')
-
-        from zipfile import ZipFile
-        zf = ZipFile(tmpfile, 'w')
-        from hwp5.hwp5odt import ODTPackage
-        odtpkg = ODTPackage(zf)
-        try:
-            from hwp5.hwp5odt import Converter
-
-            if self.haveLibXSLTTransformer():
-                xsltproc = self.xsltproc_with_LibXSLTTransformer
+            inputstream = desc['InputStream']
+            hwpfile = HwpFileFromInputStream(inputstream)
+            try:
+                load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
+            except ParseError, e:
+                e.print_to_logger(logger)
+                return False
+            except Exception, e:
+                logger.exception(e)
+                return False
             else:
-                # TODO Libreoffice 3.2 does not have LibXSLTTransformer yet
-                # we use default xsltproc which uses external `xsltproc' program
-                from hwp5.tools import xsltproc
+                return True
 
-            # convert without RelaxNG validation
-            convert = Converter(xsltproc)
-
-            # Embed images: see #32 - https://github.com/mete0r/pyhwp/issues/32
-            convert(hwp5file, odtpkg, embedimage=True)
-        finally:
-            odtpkg.close()
-
-        tmpfile2.seek(0)
-        return tmpfile2
-
-    def load_odt_from_storage(self, doc, storage, statusindicator=None):
-        infoset = self.PropertySet()
-        url = ''
-        uri = self.createBaseURI(storage, url, '')
-
-        # SfxBaseModel::loadMetadataFromStorage
-        # -> sfx2::DocumentMetadataAccess::loadMetadataFromStorage
-        # ---> initLoading
-        # ---> collectFilesFromStorage
-        doc.loadMetadataFromStorage(storage, uri, None)
-
-        # currently hwp5odt does not produce meta.xml
-        #emptyargs = (infoset, statusindicator)
-        #self.readThroughComponent(storage, doc, 'meta.xml', 'com.sun.star.comp.Writer.XMLOasisMetaImporter', emptyargs, '')
-
-        graphicresolver = self.GraphicObjectResolver(storage)
-        objectresolver = None
-        lateinitsettings = None
-        filterargs = (infoset, statusindicator, graphicresolver, objectresolver, lateinitsettings)
-        self.readThroughComponent(storage, doc, 'styles.xml', 'com.sun.star.comp.Writer.XMLOasisStylesImporter', filterargs, '')
-        self.readThroughComponent(storage, doc, 'content.xml', 'com.sun.star.comp.Writer.XMLOasisContentImporter', filterargs, '')
-
-    def readThroughComponent(self, storage, doc, streamname, filtername, filterargs, name):
-        stream = storage.openStreamElement(streamname, 1) # READ
-        return self.readStreamThroughComponent(stream, doc, filtername, filterargs, name)
-
-    def readStreamThroughComponent(self, stream, doc, filtername, filterargs, name):
-        from com.sun.star.xml.sax import InputSource
-        inputsource = InputSource()
-        inputsource.sSystemId = name
-        inputsource.aInputStream = stream
-        inputsource.sEncoding = 'utf-8'
-
-        parser = self.saxParser()
-        filter = self.context.ServiceManager.createInstanceWithArguments(filtername, filterargs)
-        filter.setTargetDocument(doc)
-        parser.setDocumentHandler(filter)
-        parser.parseStream(inputsource)
-        return True
+        @unokit.component_context
+        def cancel(self):
+            logger.debug('Importer cancel')
 
 
-@implementation('pyhwp.TestJob', 'com.sun.star.task.XJobExecutor')
-class TestJob(unokit.Base, XJobExecutor):
+    @implementation('pyhwp.TestJob')
+    class TestJob(unokit.Base, XJobExecutor):
 
-    @unokit.component_context
-    def trigger(self, args):
-        logger.debug('testjob %s', args)
+        @unokit.component_context
+        def trigger(self, args):
+            logger.debug('testjob %s', args)
 
-        wd = args
+            wd = args
 
-        import os
-        original_wd = os.getcwd()
-        try:
-            os.chdir(wd)
+            import os
+            original_wd = os.getcwd()
+            try:
+                os.chdir(wd)
 
-            from unittest import TextTestRunner
-            testrunner = TextTestRunner()
+                from unittest import TextTestRunner
+                testrunner = TextTestRunner()
 
-            from unittest import TestSuite
-            testrunner.run(TestSuite(self.tests()))
-        finally:
-            os.chdir(original_wd)
+                from unittest import TestSuite
+                testrunner.run(TestSuite(self.tests()))
+            finally:
+                os.chdir(original_wd)
 
-    def tests(self):
-        from unittest import defaultTestLoader
-        yield defaultTestLoader.loadTestsFromTestCase(OleStorageAdapterTest)
-        yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
-        yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
-        from hwp5.tests import test_suite
-        yield test_suite()
-
-
-from unittest import TestCase
-class DetectorTest(TestCase):
-
-    def test_detect(self):
-        context = uno.getComponentContext()
-
-        f = file('fixtures/sample-5017.hwp', 'r')
-        stream = InputStreamFromFileLike(f)
-        mediadesc = dict_to_propseq(dict(InputStream=stream))
-
-        svm = context.ServiceManager
-        detector = svm.createInstanceWithContext('pyhwp.Detector', context)
-        typename, mediadesc2 = detector.detect(mediadesc)
-        self.assertEquals('writer_pyhwp_HWPv5', typename)
-
-class ImporterTest(TestCase):
-
-    def test_filter(self):
-        context = uno.getComponentContext()
-        f = file('fixtures/sample-5017.hwp', 'r')
-        stream = InputStreamFromFileLike(f)
-        mediadesc = dict_to_propseq(dict(InputStream=stream))
-
-        svm = context.ServiceManager
-        importer = svm.createInstanceWithContext('pyhwp.Importer', context)
-        desktop = svm.createInstanceWithContext('com.sun.star.frame.Desktop',
-                                                context)
-        doc = desktop.loadComponentFromURL('private:factory/swriter', '_blank',
-                                           0, ())
-
-        importer.setTargetDocument(doc)
-        importer.filter(mediadesc)
-
-        text = doc.getText()
-
-        paragraphs = text.createEnumeration()
-        paragraphs = xenumeration_list(paragraphs)
-        for paragraph_ix, paragraph in enumerate(paragraphs):
-            logger.info('Paragraph %s', paragraph_ix)
-            logger.debug('%s', paragraph)
-
-            services = paragraph.SupportedServiceNames
-            if 'com.sun.star.text.Paragraph' in services:
-                portions = xenumeration_list(paragraph.createEnumeration())
-                for portion_ix, portion in enumerate(portions):
-                    logger.info('Portion %s: %s', portion_ix,
-                                 portion.TextPortionType)
-                    if portion.TextPortionType == 'Text':
-                        logger.info('- %s', portion.getString())
-                    elif portion.TextPortionType == 'Frame':
-                        logger.debug('%s', portion)
-                        textcontent_name = 'com.sun.star.text.TextContent'
-                        en = portion.createContentEnumeration(textcontent_name)
-                        contents = xenumeration_list(en)
-                        for content in contents:
-                            logger.debug('content: %s', content)
-                            content_services = content.SupportedServiceNames
-                            if ('com.sun.star.drawing.GraphicObjectShape' in
-                                content_services):
-                                logger.info('graphic url: %s',
-                                             content.GraphicURL)
-                                logger.info('graphic stream url: %s',
-                                             content.GraphicStreamURL)
-            if 'com.sun.star.text.TextTable' in services:
-                pass
-            else:
-                pass
-
-        paragraph_portions = paragraphs[0].createEnumeration()
-        paragraph_portions = xenumeration_list(paragraph_portions)
-        self.assertEquals(u'한글 ', paragraph_portions[0].getString())
-
-        paragraph_portions = paragraphs[16].createEnumeration()
-        paragraph_portions = xenumeration_list(paragraph_portions)
-        contents = paragraph_portions[1].createContentEnumeration('com.sun.star.text.TextContent')
-        contents = xenumeration_list(contents)
-        self.assertEquals('image/x-vclgraphic', contents[0].Bitmap.MimeType)
-        #self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
-        #                  contents[0].GraphicStreamURL)
-
-        graphics = doc.getGraphicObjects()
-        graphics = xenumeration_list(graphics.createEnumeration())
-        logger.debug('graphic: %s', graphics)
-
-        frames = doc.getTextFrames()
-        frames = xenumeration_list(frames.createEnumeration())
-        logger.debug('frames: %s', frames)
+        def tests(self):
+            from unittest import defaultTestLoader
+            yield defaultTestLoader.loadTestsFromTestCase(DetectorTest)
+            yield defaultTestLoader.loadTestsFromTestCase(ImporterTest)
+            from hwp5_uno.tests import test_hwp5_uno
+            yield defaultTestLoader.loadTestsFromModule(test_hwp5_uno)
+            from hwp5.tests import test_suite
+            yield test_suite()
 
 
-class OleStorageAdapterTest(TestCase, FacMixin):
+    from unittest import TestCase
+    class DetectorTest(TestCase):
 
-    context = uno.getComponentContext()
+        def test_detect(self):
+            context = uno.getComponentContext()
 
-    def get_adapter(self):
-        f = file('fixtures/sample-5017.hwp', 'r')
-        inputstream = InputStreamFromFileLike(f)
-        oless = self.OLESimpleStorage(inputstream)
-        return OleStorageAdapter(oless)
+            f = file('fixtures/sample-5017.hwp', 'r')
+            stream = InputStreamFromFileLike(f)
+            mediadesc = dict_to_propseq(dict(InputStream=stream))
 
-    def test_iter(self):
-        adapter = self.get_adapter()
+            svm = context.ServiceManager
+            detector = svm.createInstanceWithContext('pyhwp.Detector', context)
+            typename, mediadesc2 = detector.detect(mediadesc)
+            self.assertEquals('writer_pyhwp_HWPv5', typename)
 
-        self.assertTrue('FileHeader' in adapter)
-        self.assertTrue('DocInfo' in adapter)
-        self.assertTrue('BodyText' in adapter)
+    class ImporterTest(TestCase):
 
-    def test_getitem(self):
-        adapter = self.get_adapter()
+        def test_filter(self):
+            context = uno.getComponentContext()
+            f = file('fixtures/sample-5017.hwp', 'r')
+            stream = InputStreamFromFileLike(f)
+            mediadesc = dict_to_propseq(dict(InputStream=stream))
 
-        bodytext = adapter['BodyText']
-        self.assertTrue('Section0' in bodytext)
+            svm = context.ServiceManager
+            importer = svm.createInstanceWithContext('pyhwp.Importer', context)
+            desktop = svm.createInstanceWithContext('com.sun.star.frame.Desktop',
+                                                    context)
+            doc = desktop.loadComponentFromURL('private:factory/swriter', '_blank',
+                                               0, ())
 
-        from hwp5.filestructure import HwpFileHeader
-        from hwp5.filestructure import HWP5_SIGNATURE
+            importer.setTargetDocument(doc)
+            importer.filter(mediadesc)
 
-        fileheader = adapter['FileHeader']
-        fileheader = HwpFileHeader(fileheader)
-        self.assertEquals((5, 0, 1, 7), fileheader.version)
-        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
+            text = doc.getText()
 
-        # reopen (just being careful)
-        fileheader = adapter['FileHeader']
-        fileheader = HwpFileHeader(fileheader)
-        self.assertEquals((5, 0, 1, 7), fileheader.version)
-        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
+            paragraphs = text.createEnumeration()
+            paragraphs = xenumeration_list(paragraphs)
+            for paragraph_ix, paragraph in enumerate(paragraphs):
+                logger.info('Paragraph %s', paragraph_ix)
+                logger.debug('%s', paragraph)
+
+                services = paragraph.SupportedServiceNames
+                if 'com.sun.star.text.Paragraph' in services:
+                    portions = xenumeration_list(paragraph.createEnumeration())
+                    for portion_ix, portion in enumerate(portions):
+                        logger.info('Portion %s: %s', portion_ix,
+                                     portion.TextPortionType)
+                        if portion.TextPortionType == 'Text':
+                            logger.info('- %s', portion.getString())
+                        elif portion.TextPortionType == 'Frame':
+                            logger.debug('%s', portion)
+                            textcontent_name = 'com.sun.star.text.TextContent'
+                            en = portion.createContentEnumeration(textcontent_name)
+                            contents = xenumeration_list(en)
+                            for content in contents:
+                                logger.debug('content: %s', content)
+                                content_services = content.SupportedServiceNames
+                                if ('com.sun.star.drawing.GraphicObjectShape' in
+                                    content_services):
+                                    logger.info('graphic url: %s',
+                                                 content.GraphicURL)
+                                    logger.info('graphic stream url: %s',
+                                                 content.GraphicStreamURL)
+                if 'com.sun.star.text.TextTable' in services:
+                    pass
+                else:
+                    pass
+
+            paragraph_portions = paragraphs[0].createEnumeration()
+            paragraph_portions = xenumeration_list(paragraph_portions)
+            self.assertEquals(u'한글 ', paragraph_portions[0].getString())
+
+            paragraph_portions = paragraphs[16].createEnumeration()
+            paragraph_portions = xenumeration_list(paragraph_portions)
+            contents = paragraph_portions[1].createContentEnumeration('com.sun.star.text.TextContent')
+            contents = xenumeration_list(contents)
+            self.assertEquals('image/x-vclgraphic', contents[0].Bitmap.MimeType)
+            #self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
+            #                  contents[0].GraphicStreamURL)
+
+            graphics = doc.getGraphicObjects()
+            graphics = xenumeration_list(graphics.createEnumeration())
+            logger.debug('graphic: %s', graphics)
+
+            frames = doc.getTextFrames()
+            frames = xenumeration_list(frames.createEnumeration())
+            logger.debug('frames: %s', frames)
+except Exception, e:
+    logger.exception(e)
+    raise
