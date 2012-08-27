@@ -1,104 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import uno
-import unohelper
-from com.sun.star.io import XInputStream, XSeekable
-from com.sun.star.io import XOutputStream
+from unokit.adapters import InputStreamFromFileLike
+from unokit.adapters import OutputStreamToFileLike
+from unokit.adapters import FileFromStream
 import logging
 
 
 logger = logging.getLogger(__name__)
-
-
-class InputStreamFromFileLike(unohelper.Base, XInputStream, XSeekable):
-    def __init__(self, f):
-        self.f = f
-
-    def readBytes(self, aData, nBytesToRead):
-        #logging.debug('InputStream.readBytes(%d)', nBytesToRead)
-        data = self.f.read(nBytesToRead)
-        return len(data), uno.ByteSequence(data)
-
-    readSomeBytes = readBytes
-
-    def skipBytes(self, nBytesToSkip):
-        #logging.debug('InputStream.skipBytes(%d)', nBytesToSkip)
-        self.f.read(nBytesToSkip)
-
-    def available(self):
-        #logging.debug('InputStream.available()')
-        return 0
-
-    def closeInput(self):
-        #logging.debug('InputStream.close()')
-        self.f.close()
-
-    def seek(self, location):
-        #logging.debug('InputStream.seek(%d)', location)
-        self.f.seek(location)
-
-    def getPosition(self):
-        pos = self.f.tell()
-        #logging.debug('InputStream.getPosition(): %d', pos)
-        return pos
-
-    def getLength(self):
-        pos = self.f.tell()
-        try:
-            self.f.seek(0, 2)
-            length = self.f.tell()
-            #logging.debug('InputStream.getLength(): %d', length)
-            return length
-        finally:
-            self.f.seek(pos)
-
-
-class FileFromStream(object):
-    def __init__(self, stream):
-        self.stream = stream
-
-        if hasattr(stream, 'readBytes'):
-            def read(size=None):
-                if size is None:
-                    data = ''
-                    while True:
-                        bytes = uno.ByteSequence('')
-                        n_read, bytes = stream.readBytes(bytes, 4096)
-                        if n_read == 0:
-                            return data
-                        data += bytes.value
-                bytes = uno.ByteSequence('')
-                n_read, bytes = stream.readBytes(bytes, size)
-                return bytes.value
-            self.read = read
-
-        if hasattr(stream, 'seek'):
-            self.tell = stream.getPosition
-
-            def seek(offset, whence=0):
-                if whence == 0:
-                    pass
-                elif whence == 1:
-                    offset += stream.getPosition()
-                elif whence == 2:
-                    offset += stream.getLength()
-                stream.seek(offset)
-            self.seek = seek
-
-        if hasattr(stream, 'writeBytes'):
-            def write(s):
-                stream.writeBytes(uno.ByteSequence(s))
-            self.write = write
-
-            def flush():
-                stream.flush()
-            self.flush = flush
-
-    def close(self):
-        if hasattr(self.stream, 'closeInput'):
-            self.stream.closeInput()
-        elif hasattr(self.stream, 'closeOutput'):
-            self.stream.closeOutput()
 
 
 class FacMixin(object):
@@ -242,16 +151,7 @@ class FacMixin(object):
         return transform
 
 
-class OutputStreamToFileLikeNonClosing(unohelper.Base, XOutputStream):
-    def __init__(self, f):
-        self.f = f
-
-    def writeBytes(self, bytesequence):
-        self.f.write(bytesequence.value)
-
-    def flush(self):
-        self.f.flush()
-
+class OutputStreamToFileLikeNonClosing(OutputStreamToFileLike):
     def closeOutput(self):
         # non closing
         pass
