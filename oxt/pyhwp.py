@@ -36,6 +36,9 @@ def log_exception(f):
 import uno
 import unohelper
 import unokit
+from unokit.util import propseq_to_dict
+from unokit.util import dict_to_propseq
+from unokit.util import xenumeration_list
 from oxthelper import FacMixin, FileFromStream, InputStreamFromFileLike
 
 from com.sun.star.lang import XInitialization
@@ -86,28 +89,6 @@ class OleStorageStream(object):
         stream = self.oless.getByName(self.name)
         return FileFromStream(stream)
 
-
-def unofy_value(value):
-    if isinstance(value, dict):
-        value = dict_to_propseq(value)
-    elif isinstance(value, list):
-        value = tuple(value)
-    return value
-
-def xenumeration_generator(xenum):
-    while xenum.hasMoreElements():
-        yield xenum.nextElement()
-
-def xenumeration_list(xenum):
-    return list(xenumeration_generator(xenum))
-
-def dict_to_propseq(d):
-    from com.sun.star.beans import PropertyValue
-    DIRECT_VALUE = uno.Enum('com.sun.star.beans.PropertyState', 'DIRECT_VALUE')
-    return tuple(PropertyValue(k, 0, unofy_value(v), DIRECT_VALUE) for k, v in d.iteritems())
-
-def propseq_to_dict(propvalues):
-    return dict((p.Name, p.Value) for p in propvalues)
 
 @implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
 class Detector(unokit.Base, XExtendedFilterDetection, FacMixin):
