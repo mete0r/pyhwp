@@ -129,7 +129,7 @@ class XmlFormat(ModelEventHandler):
         logger.debug('xmlmodel.XmlFormat: context: %s', context)
         recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
         hwptag = context.get('hwptag', '')
-        logger.info('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
+        logger.debug('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
         if model is Text:
             text = attributes.pop('text')
         else:
