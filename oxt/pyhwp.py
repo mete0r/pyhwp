@@ -18,7 +18,7 @@ if loglevel:
     logger.setLevel(loglevel)
 del loglevel
 
-filename = os.environ.get('PYHWP_OXT_FILENAME')
+filename = os.environ.get('PYHWP_OXT_LOGFILE')
 if filename:
     logger.addHandler(logging.FileHandler(filename))
 del filename
