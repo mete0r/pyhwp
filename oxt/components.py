@@ -77,7 +77,7 @@ try:
         return decorator
 
 
-    @implementation('pyhwp.Detector', 'com.sun.star.document.ExtendedTypeDetection')
+    @implementation('hwp5.Detector', 'com.sun.star.document.ExtendedTypeDetection')
     class Detector(unokit.Base, XExtendedFilterDetection):
 
         @log_exception
@@ -85,7 +85,7 @@ try:
         def detect(self, mediadesc):
             from hwp5_uno import typedetect
 
-            logger.info('pyhwp.Detector detect()')
+            logger.info('hwp5.Detector detect()')
 
             desc = propseq_to_dict(mediadesc)
             for k, v in desc.items():
@@ -95,11 +95,11 @@ try:
 
             typename = typedetect(inputstream)
 
-            logger.info('pyhwp.Detector: %s detected.', typename)
+            logger.info('hwp5.Detector: %s detected.', typename)
             return typename, mediadesc
 
 
-    @implementation('pyhwp.Importer', 'com.sun.star.document.ImportFilter')
+    @implementation('hwp5.Importer', 'com.sun.star.document.ImportFilter')
     class Importer(unokit.Base, XInitialization, XFilter, XImporter):
 
         @log_exception
@@ -147,7 +147,7 @@ try:
             logger.debug('Importer cancel')
 
 
-    @implementation('pyhwp.TestJob')
+    @implementation('hwp5.TestJob')
     class TestJob(unokit.Base, XJobExecutor):
 
         @unokit.component_context
@@ -190,9 +190,9 @@ try:
             mediadesc = dict_to_propseq(dict(InputStream=stream))
 
             svm = context.ServiceManager
-            detector = svm.createInstanceWithContext('pyhwp.Detector', context)
+            detector = svm.createInstanceWithContext('hwp5.Detector', context)
             typename, mediadesc2 = detector.detect(mediadesc)
-            self.assertEquals('writer_pyhwp_HWPv5', typename)
+            self.assertEquals('hwp5', typename)
 
     class ImporterTest(TestCase):
 
@@ -203,7 +203,7 @@ try:
             mediadesc = dict_to_propseq(dict(InputStream=stream))
 
             svm = context.ServiceManager
-            importer = svm.createInstanceWithContext('pyhwp.Importer', context)
+            importer = svm.createInstanceWithContext('hwp5.Importer', context)
             desktop = svm.createInstanceWithContext('com.sun.star.frame.Desktop',
                                                     context)
             doc = desktop.loadComponentFromURL('private:factory/swriter', '_blank',

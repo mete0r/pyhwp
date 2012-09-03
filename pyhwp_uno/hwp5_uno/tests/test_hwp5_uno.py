@@ -95,8 +95,7 @@ class TypedetectTest(TestBase):
         with file('fixtures/sample-5017.hwp', 'rb') as f:
             inputstream = InputStreamFromFileLike(f, dontclose=True)
             self.assertTrue(inputstream_is_hwp5file(inputstream))
-            self.assertEquals('writer_pyhwp_HWPv5',
-                              typedetect(inputstream))
+            self.assertEquals('hwp5', typedetect(inputstream))
 
 
 class LoadHwp5FileTest(TestBase):

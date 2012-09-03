@@ -274,5 +274,5 @@ def inputstream_is_hwp5file(inputstream):
 
 def typedetect(inputstream):
     if inputstream_is_hwp5file(inputstream):
-        return 'writer_pyhwp_HWPv5'
+        return 'hwp5'
     return ''

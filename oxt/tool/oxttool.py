@@ -5,9 +5,9 @@ import unokit.remote
 import unokit.contexts
 
 def runtest(working_directory):
-    pyhwp = unokit.services.NamespaceNode('pyhwp')
+    hwp5 = unokit.services.NamespaceNode('hwp5')
 
-    testjob = pyhwp.TestJob()
+    testjob = hwp5.TestJob()
     testjob.trigger(working_directory)
 
 
