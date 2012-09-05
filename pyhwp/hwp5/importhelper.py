@@ -29,3 +29,21 @@ def importStringIO():
     except:
         from StringIO import StringIO
         return StringIO
+
+
+def pkg_resources_filename(pkg_name, path):
+    ''' the equivalent of pkg_resources.resource_filename() '''
+    try:
+        import pkg_resources
+    except ImportError:
+        return pkg_resources_filename_fallback(pkg_name, path)
+    else:
+        return pkg_resources.resource_filename(pkg_name, path)
+
+
+def pkg_resources_filename_fallback(pkg_name, path):
+    ''' a fallback implementation of pkg_resources_filename() '''
+    import os.path
+    pkg_module = __import__(pkg_name)
+    pkg_dir = os.path.dirname(pkg_module.__file__)
+    return os.path.join(pkg_dir, path)
