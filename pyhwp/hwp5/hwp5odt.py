@@ -88,11 +88,10 @@ def hwp5_resources_filename(path):
 
 class Converter(object):
     def __init__(self, xsltproc, relaxng=None):
-        import pkg_resources
-        xsl_styles = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
-        xsl_content = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
+        xsl_styles = hwp5_resources_filename('xsl/odt-styles.xsl')
+        xsl_content = hwp5_resources_filename('xsl/odt-content.xsl')
         schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        schema = pkg_resources.resource_filename('hwp5', schema)
+        schema = hwp5_resources_filename(schema)
 
         self.xslt_styles = xsltproc(xsl_styles)
         self.xslt_content = xsltproc(xsl_content)
