@@ -79,6 +79,13 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
     for additional in additional_files:
         odtpkg.insert_stream(*additional)
 
+
+def hwp5_resources_filename(path):
+    ''' get paths of 'hwp5' package resources '''
+    from importhelper import pkg_resources_filename
+    return pkg_resources_filename('hwp5', path)
+
+
 class Converter(object):
     def __init__(self, xsltproc, relaxng=None):
         import pkg_resources
