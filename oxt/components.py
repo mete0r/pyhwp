@@ -21,18 +21,6 @@
 #
 import logging
 import os
-import os.path
-import uno
-import unohelper
-import unokit
-from unokit.util import propseq_to_dict
-from unokit.util import dict_to_propseq
-from unokit.util import xenumeration_list
-from unokit.adapters import InputStreamFromFileLike
-
-from com.sun.star.lang import XInitialization
-from com.sun.star.document import XFilter, XImporter, XExtendedFilterDetection
-from com.sun.star.task import XJobExecutor
 
 
 # initialize logging system
@@ -56,6 +44,18 @@ del filename
 
 
 try:
+    import uno
+    import unohelper
+    import unokit
+    from unokit.util import propseq_to_dict
+    from unokit.util import dict_to_propseq
+    from unokit.util import xenumeration_list
+    from unokit.adapters import InputStreamFromFileLike
+
+    from com.sun.star.lang import XInitialization
+    from com.sun.star.document import XFilter, XImporter, XExtendedFilterDetection
+    from com.sun.star.task import XJobExecutor
+
     def log_exception(f):
         def wrapper(*args, **kwargs):
             try:
