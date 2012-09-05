@@ -30,7 +30,7 @@ from com.sun.star.io import XStreamListener
 import logging
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('hwp5.uno')
 
 
 class OleStorageAdapter(object):
