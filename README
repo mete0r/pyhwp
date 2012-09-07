@@ -27,10 +27,10 @@ Requirements
 ------------
 
 - Python 2.5, 2.6 or 2.7
-- simplejson
-- OleFileIO_PL >= 0.20
-- docopt >= 0.3
-- hypua2jamo >= 0.1
+- `simplejson <http://pypi.python.org/pypi/simplejson>`_
+- `OleFileIO_PL <http://pypi.python.org/pypi/OleFileIO_PL>`_ >= 0.20
+- `docopt <http://pypi.python.org/pypi/docopt>`_ >= 0.3
+- `hypua2jamo <http://pypi.python.org/pypi/hypua2jamo>`_ >= 0.1
 
 Development & Documentation
 ---------------------------
