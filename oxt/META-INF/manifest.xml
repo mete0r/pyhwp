@@ -6,5 +6,5 @@
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
                        manifest:full-path="Filter.xcu" />
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-component;type=Python"
-                       manifest:full-path="pyhwp.py" />
+                       manifest:full-path="components.py" />
 </manifest:manifest>

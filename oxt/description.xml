@@ -2,13 +2,13 @@
 <description xmlns="http://openoffice.org/extensions/description/2006"
              xmlns:d="http://openoffice.org/extensions/description/2006"
              xmlns:xlink="http://www.w3.org/1999/xlink">
-  <identifier value="pyhwp.oxt" />
+  <identifier value="hwp5.oxt" />
 
-  <version value="0.0" />
+  <version value="0.1a11" />
 
   <display-name>
-    <name lang="en">HWP Document Format Filter</name>
-    <name lang="ko">HWP 문서 포맷 필터</name>
+    <name lang="en">HWP Document Format v5 Filter</name>
+    <name lang="ko">HWP 문서 포맷 (버젼 5) 필터</name>
   </display-name>
 
   <platform value="all" />

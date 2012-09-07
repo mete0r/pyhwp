@@ -57,7 +57,7 @@ class FileHeader(Struct):
         11, 'ccl',
         )
 
-    def attributes(cls, context):
+    def attributes(cls):
         yield BYTES(32), 'signature'
         yield VERSION, 'version'
         yield cls.Flags, 'flags'
@@ -81,11 +81,17 @@ class TextField(unicode):
 
 
 class SummaryInfo(Struct):
-    def attributes(cls, context):
-        if context['version'] < (5, 0, 1, 0):
-            yield ARRAY(UINT32, 0230 / 4), '_unk0'
-        else:
-            yield ARRAY(UINT32, 0250 / 4), '_unk0'
+    def attributes(cls):
+        def version_lt_5010(context, values):
+            return context['version'] < (5, 0, 1, 0)
+        def version_gte_5010(context, version):
+            return context['version'] >= (5, 0, 1, 0)
+        yield dict(type=ARRAY(UINT32, 0230 / 4),
+                   name='_unk0',
+                   condition=version_lt_5010)
+        yield dict(type=ARRAY(UINT32, 0250 / 4),
+                   name='_unk0',
+                   condition=version_gte_5010)
         yield TextField, 'title'
         yield TextField, 'subject'
         yield TextField, 'author'
@@ -120,12 +126,13 @@ def recoder(backend_encoding, frontend_encoding, errors='strict'):
 
 
 def is_hwp5file(filename):
+    ''' Test whether it is an HWP format v5 file. '''
+    from hwp5.errors import InvalidOleStorageError
     from hwp5.storage.ole import OleStorage
-    from OleFileIO_PL import OleFileIO, isOleFile
-    if not isOleFile(filename):
+    try:
+        olestg = OleStorage(filename)
+    except InvalidOleStorageError:
         return False
-    olefile = OleFileIO(filename)
-    olestg = OleStorage(olefile)
     return storage_is_hwp5file(olestg)
 
 
@@ -236,6 +243,34 @@ class CompressedStorage(StorageWrapper):
             return item
 
 
+class PasswordProtectedStream(ItemWrapper):
+
+    def open(self):
+        # TODO: 현재로선 암호화된 내용을 그냥 반환
+        logger.warning('Password-encrypted stream: currently decryption is '
+                       'not supported')
+        return self.wrapped.open()
+
+
+class PasswordProtectedStorage(StorageWrapper):
+    def __getitem__(self, name):
+        from hwp5.storage import is_stream
+        item = self.wrapped[name]
+        if is_stream(item):
+            return PasswordProtectedStream(item)
+        else:
+            return item
+
+
+class Hwp5PasswordProtectedDoc(ItemConversionStorage):
+
+    def resolve_conversion_for(self, name):
+        if name in ('BinData', 'BodyText', 'Scripts', 'ViewText'):
+            return PasswordProtectedStorage
+        elif name in ('DocInfo', ):
+            return PasswordProtectedStream
+
+
 class VersionSensitiveItem(ItemWrapper):
 
     def __init__(self, item, version):
@@ -250,12 +285,29 @@ class VersionSensitiveItem(ItemWrapper):
 
 
 class Hwp5FileBase(ItemConversionStorage):
+    ''' Base of an Hwp5File.
+
+    Hwp5FileBase checks basic validity of an HWP format v5 and provides
+    `fileheader` property.
+
+    :param stg: an OLE2 structured storage.
+    :type stg: an instance of storage, OleFileIO or filename
+    :raises InvalidHwp5FileError: `stg` is not a valid HWP format v5 document.
+    '''
 
     def __init__(self, stg):
+        from hwp5.errors import InvalidOleStorageError
+        from hwp5.errors import InvalidHwp5FileError
         from hwp5.storage import is_storage
         from hwp5.storage.ole import OleStorage
         if not is_storage(stg):
-            stg = OleStorage(stg)
+            try:
+                stg = OleStorage(stg)
+            except InvalidOleStorageError:
+                raise InvalidHwp5FileError('Not an OLE2 Compound Binary File.')
+
+        if not storage_is_hwp5file(stg):
+            raise InvalidHwp5FileError('Not an HWP Document format v5 storage.')
 
         ItemConversionStorage.__init__(self, stg)
 
@@ -480,6 +532,15 @@ class Hwp5File(ItemConversionStorage):
 
     def __init__(self, stg):
         stg = Hwp5FileBase(stg)
+
+        if stg.header.flags.password:
+            stg = Hwp5PasswordProtectedDoc(stg)
+
+            # TODO: 현재로선 decryption이 구현되지 않았으므로,
+            # 레코드 파싱은 불가능하다. 적어도 encrypted stream에
+            # 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
+            ItemConversionStorage.__init__(self, stg)
+            return
 
         if stg.header.flags.distributable:
             stg = Hwp5DistDoc(stg)

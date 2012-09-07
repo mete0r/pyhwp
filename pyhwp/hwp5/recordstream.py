@@ -57,6 +57,12 @@ def read_record(f, seqno):
     return Record(tagid, level, payload, size, seqno)
 
 
+def dump_record(f, record):
+    hdr = encode_record_header(record)
+    f.write(hdr)
+    f.write(record['payload'])
+
+
 def read_records(f):
     seqno = 0
     while True:
@@ -97,10 +103,44 @@ def nth(iterable, n, default=None):
         return default
 
 
+def group_records_by_toplevel(records, group_as_list=True):
+    ''' group records by top-level trees and return iterable of the groups
+    '''
+    context = dict()
+
+    try:
+        context['top'] = records.next()
+    except StopIteration:
+        return
+
+    def records_in_a_tree():
+        yield context.pop('top')
+
+        for record in records:
+            if record['level'] == 0:
+                context['top'] = record
+                return
+            yield record
+
+    while 'top' in context:
+        group = records_in_a_tree()
+        if group_as_list:
+            group = list(group)
+        yield group
+
+
 class RecordStream(filestructure.VersionSensitiveItem):
 
     def records(self, **kwargs):
-        return read_records(self.open())
+        records = read_records(self.open())
+        if 'range' in kwargs:
+            from itertools import islice
+            range = kwargs['range']
+            records = islice(records, range[0], range[1])
+        elif 'treegroup' in kwargs:
+            groups = group_records_by_toplevel(records, group_as_list=True)
+            records = nth(groups, kwargs['treegroup'])
+        return records
 
     def record(self, idx):
         ''' get the record at `idx' '''
@@ -110,6 +150,17 @@ class RecordStream(filestructure.VersionSensitiveItem):
         from .utils import JsonObjects
         records = self.records(**kwargs)
         return JsonObjects(records, record_to_json)
+
+    def records_treegrouped(self, group_as_list=True):
+        ''' group records by top-level trees and return iterable of the groups
+        '''
+        records = self.records()
+        return group_records_by_toplevel(records, group_as_list)
+
+    def records_treegroup(self, n):
+        ''' returns list of records in `n'th top-level tree '''
+        groups = self.records_treegrouped()
+        return nth(groups, n)
 
     def other_formats(self):
         return {'.records': self.records_json().open}

@@ -3,7 +3,7 @@
 
 Usage::
 
-    hwp5odt <hwp5file>
+    hwp5odt [--embed-image] <hwp5file>
     hwp5odt -h | --help
     hwp5odt --version
 
@@ -15,14 +15,31 @@ Options::
 
 import os, os.path
 from hwp5 import tools
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 def main():
+    import sys
     from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
+    from hwp5.errors import InvalidHwp5FileError
     from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
-    make(args)
+    logging.getLogger('hwp5').addHandler(logging.StreamHandler())
+
+    from hwp5.dataio import ParseError
+    try:
+        make(args)
+    except ParseError, e:
+        e.print_to_logger(logger)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        sys.exit(1)
+
 
 class ODTPackage(object):
     def __init__(self, path_or_zipfile):
@@ -62,13 +79,19 @@ def make_odtpkg(odtpkg, styles, content, additional_files):
     for additional in additional_files:
         odtpkg.insert_stream(*additional)
 
+
+def hwp5_resources_filename(path):
+    ''' get paths of 'hwp5' package resources '''
+    from importhelper import pkg_resources_filename
+    return pkg_resources_filename('hwp5', path)
+
+
 class Converter(object):
     def __init__(self, xsltproc, relaxng=None):
-        import pkg_resources
-        xsl_styles = pkg_resources.resource_filename('hwp5', 'xsl/odt-styles.xsl')
-        xsl_content = pkg_resources.resource_filename('hwp5', 'xsl/odt-content.xsl')
+        xsl_styles = hwp5_resources_filename('xsl/odt-styles.xsl')
+        xsl_content = hwp5_resources_filename('xsl/odt-content.xsl')
         schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        schema = pkg_resources.resource_filename('hwp5', schema)
+        schema = hwp5_resources_filename(schema)
 
         self.xslt_styles = xsltproc(xsl_styles)
         self.xslt_content = xsltproc(xsl_content)
@@ -78,11 +101,11 @@ class Converter(object):
         else:
             self.relaxng_validate = None
 
-    def __call__(self, hwpfile, odtpkg):
+    def __call__(self, hwpfile, odtpkg, embedimage=False):
         import tempfile
         hwpxmlfile = tempfile.TemporaryFile()
         try:
-            hwpfile.xmlevents().dump(hwpxmlfile)
+            hwpfile.xmlevents(embedbin=embedimage).dump(hwpxmlfile)
 
             styles = tempfile.TemporaryFile()
             hwpxmlfile.seek(0)
@@ -126,7 +149,7 @@ def make(args):
     try:
         odtpkg = ODTPackage(root+'.odt')
         try:
-            convert(hwpfile, odtpkg)
+            convert(hwpfile, odtpkg, args['--embed-image'])
         finally:
             odtpkg.close()
     finally:

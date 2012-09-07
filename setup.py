@@ -4,6 +4,14 @@ if version < '2.2.3':
     DistMeta.classifiers = None
     DistMeta.download_url = None
 
+
+import versioneer
+versioneer.versionfile_source = 'pyhwp/hwp5/_version.py'
+versioneer.versionfile_build = 'hwp5/_version.py'
+versioneer.tag_prefix = ''
+versioneer.parentdir_prefix = 'pyhwp-'
+
+
 def read(filename):
     import os.path
     filename = os.path.join(os.path.dirname(__file__), filename)
@@ -16,7 +24,8 @@ def read(filename):
 from setuptools import setup, find_packages
 setup(
         name='pyhwp',
-        version='0.1a10',
+        version=versioneer.get_version(),
+        cmdclass=versioneer.get_cmdclass(),
         license='GNU Affero GPL v3',
         description = 'hwp file format parser',
         long_description=read('README'),
@@ -27,11 +36,13 @@ setup(
         package_dir={'': 'pyhwp'},
         package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
-        install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt >= 0.3'],
+        install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt >= 0.3',
+                          'hypua2jamo'],
         extras_require=dict(test=['lxml']),
 
         entry_points = {
             'console_scripts': [
+                'hwp5spec = hwp5.binspec:main',
                 'hwp5proc = hwp5.proc:main',
                 'hwp5odt = hwp5.hwp5odt:main',
                 'hwp5txt = hwp5.hwp5txt:main',

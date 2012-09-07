@@ -1,2 +1,3 @@
 include pyhwp/hwp5/xsl/*.xsl
 include pyhwp/hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
+include versioneer.py

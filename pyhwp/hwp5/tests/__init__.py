@@ -1,21 +1,29 @@
 def test_suite():
     from unittest import defaultTestLoader as TL
     from unittest import TestSuite as TS
-    import test_treeop
-    import test_binmodel
-    import test_dataio
-    import test_xmlmodel
-    import test_xmlformat
-    import test_filestructure
-    import test_storage
-    import test_recordstream
-    import test_odtxsl
-    tests = [test_storage, test_filestructure, test_binmodel, test_dataio, test_xmlmodel, test_xmlformat, test_odtxsl]
-    tests.append(test_recordstream)
-    tests.append(test_treeop)
-
-    import test_externprogs
-    tests[0:0] = [test_externprogs]
+    tests = []
+    from hwp5.tests import test_odtxsl as T
+    tests.append(T)
+    from hwp5.tests import test_externprogs as T
+    tests.append(T)
+    from hwp5.tests import test_xmlformat as T
+    tests.append(T)
+    from hwp5.tests import test_xmlmodel as T
+    tests.append(T)
+    from hwp5.tests import test_binmodel as T
+    tests.append(T)
+    from hwp5.tests import test_recordstream as T
+    tests.append(T)
+    from hwp5.tests import test_filestructure as T
+    tests.append(T)
+    from hwp5.tests import test_dataio as T
+    tests.append(T)
+    from hwp5.tests import test_treeop as T
+    tests.append(T)
+    from hwp5.tests import test_ole as T
+    tests.append(T)
+    from hwp5.tests import test_storage as T
+    tests.append(T)
 
     # localtest: a unittest module which resides at the local test site only;
     # should not be checked in the source code repository
