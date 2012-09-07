@@ -20,3 +20,4 @@ pep8.out
 build
 dist
 docs/.build
+MANIFEST
