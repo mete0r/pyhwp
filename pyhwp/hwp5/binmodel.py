@@ -1049,12 +1049,13 @@ class ParaTextChunks(list):
     read = classmethod(read)
 
     def parse_chunks(bytes):
+        from hwp5.dataio import decode_utf16le_with_hypua
         size = len(bytes)
         idx = 0
         while idx < size:
             ctrlpos, ctrlpos_end = ControlChar.find(bytes, idx)
             if idx < ctrlpos:
-                text = bytes[idx:ctrlpos].decode('utf-16le', 'replace')
+                text = decode_utf16le_with_hypua(bytes[idx:ctrlpos])
                 yield (idx / 2, ctrlpos / 2), text
             if ctrlpos < ctrlpos_end:
                 cch = ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
