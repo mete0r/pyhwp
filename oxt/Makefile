@@ -18,7 +18,10 @@ uninstall:
 
 reinstall: uninstall install
 
+clean:
+	$(RM) $(OXTPKG)
+
 runserver:
 	PYTHONPATH=../pyhwp soffice "-accept=socket,host=localhost,port=2002;urp;"
 
-.PHONY: validate install uninstall runserver
+.PHONY: validate install uninstall runserver clean
