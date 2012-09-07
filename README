@@ -32,7 +32,7 @@ Requirements
 - `docopt <http://pypi.python.org/pypi/docopt>`_ >= 0.3
 - `hypua2jamo <http://pypi.python.org/pypi/hypua2jamo>`_ >= 0.1
 
-Development & Documentation
+Documentation & Development
 ---------------------------
 
 - Documentation: `http://pyhwp.readthedocs.org <http://pyhwp.readthedocs.org>`_
