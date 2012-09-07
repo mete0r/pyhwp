@@ -30,6 +30,7 @@ Requirements
 - simplejson
 - OleFileIO_PL >= 0.20
 - docopt >= 0.3
+- hypua2jamo >= 0.1
 
 Development & Documentation
 ---------------------------
