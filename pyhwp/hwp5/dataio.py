@@ -110,16 +110,6 @@ hwp2mm = lambda x: inch2mm(hwp2inch(x))
 hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
 
 
-def decode_utf16le_besteffort(s):
-    while True:
-        try:
-            return s.decode('utf-16le')
-        except UnicodeDecodeError, e:
-            logging.error('can\'t parse (%d-%d) %s'%(e.start, e.end, hexdump(s)))
-            s = s[:e.start] + '.'*(e.end-e.start) + s[e.end:]
-            continue
-
-
 class BSTR(unicode):
     __metaclass__ = PrimitiveType
 
@@ -128,8 +118,28 @@ class BSTR(unicode):
         if size == 0:
             return u''
         data = readn(f, 2*size)
-        return decode_utf16le_besteffort(data)
+        return decode_utf16le_with_hypua(data)
     read = staticmethod(read)
+
+
+def decode_utf16le_with_hypua(bytes):
+    ''' decode utf-16le encoded bytes with Hanyang-PUA codes into a unicode
+    string with Hangul Jamo codes
+
+    :param bytes: utf-16le encoded bytes with Hanyang-PUA codes
+    :returns: a unicode string with Hangul Jamo codes
+    '''
+    from array import array
+    codes = array('H', bytes)
+
+    import sys
+    if sys.byteorder == 'big':
+        codes.byteswap()
+
+    codes = codes.tolist()
+
+    from hypua2jamo import codes2unicode
+    return codes2unicode(codes)
 
 
 class BitGroupDescriptor(object):

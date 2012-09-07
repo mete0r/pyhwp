@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from unittest import TestCase
 
 from hwp5.dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
@@ -379,3 +380,24 @@ class TestReadStruct(TestCase):
             self.assertEquals(3, traces[-4]['offset'])
 
             self.assertEquals(3, e.offset)
+
+
+
+class TestBSTR(TestCase):
+
+    def test_read(self):
+        from hwp5.dataio import BSTR
+
+        from StringIO import StringIO
+        f = StringIO('\x03\x00' + u'가나다'.encode('utf-16le'))
+
+        s = BSTR.read(f, dict())
+        self.assertEquals(u'가나다', s)
+
+        pua = u'\ub098\ub78f\u302e\ub9d0\u302f\uebd4\ubbf8\u302e'
+        pua_utf16le = pua.encode('utf-16le')
+        f = StringIO(chr(len(pua)) + '\x00' + pua_utf16le)
+
+        jamo = BSTR.read(f, dict())
+        expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
+        self.assertEquals(expected, jamo)
