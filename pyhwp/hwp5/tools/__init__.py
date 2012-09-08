@@ -25,71 +25,39 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def xsltproc(xsl_filepath):
-    ''' create a XSLT function with specified XSL stylesheet file.
-
-        xsl_filepath: a XSL Stylesheet path in filesystem
-
-        returns a transform function
-    '''
-
-    def autoclose(p):
-        ''' start a detached thread which waits the given subprocess terminates. '''
-        import threading
-        t = threading.Thread(target=p.wait)
-        t.daemon = True
-        t.start()
-
-    def transform(infile=None, outfile=None):
-        ''' transform file streams with XSL stylesheet at `%s'
-
-            `xsltproc' executable should be in PATH directories.
-
-            transform(infile, outfile)
-                : transform infile stream into outfile stream
-
-            transform(infile):
-                : returns transformed stream (readable sink)
-
-            transform(outfile=outfile)
-                : returns stream to be transformed (writable source)
-
-            transform():
-                : returns a tuple of (writable source, readable sink) of transformation
-        '''
-        import subprocess
-        logger.debug('xsltproc process starting')
-
-        stdin = infile or subprocess.PIPE
-        stdout = outfile or subprocess.PIPE
-
-        p = subprocess.Popen(['xsltproc', xsl_filepath, '-'], stdin=stdin, stdout=stdout)
-
-        logger.debug('xsltproc process started')
-
-        if infile is None and outfile is None:
-            autoclose(p)
-            return p.stdin, p.stdout  # transform source, sink
-        elif outfile is None:
-            autoclose(p)
-            return p.stdout  # transformed stream
-        elif infile is None:
-            autoclose(p)
-            return p.stdin  # stream to be transformed
-        else:
-            p.wait()
-
-        logger.debug('xsltproc process end')
-    transform.__doc__ = transform.__doc__ % xsl_filepath
-    return transform
-
-
 class RelaxNGValidationFailed(Exception):
     pass
 
 
+class ImplementationNotAvailable(Exception):
+    pass
+
+
+def xslt(xsl_filepath):
+    ''' create an XSLT function with specified XSL stylesheet file.
+
+    :param xsl_filepath: a XSL Stylesheet path in filesystem
+    :returns: a transform function
+    '''
+    for impl in xslt.implementations:
+        try:
+            return impl(xsl_filepath)
+        except ImplementationNotAvailable, e:
+            logger.info('xslt: %s', e)
+    import impl_extern
+    logger.info('xslt: using external program as fallback')
+    return impl_extern.xslt(xsl_filepath)
+
+
+xslt.implementations = []
+
+
+# for compatibility; new code should use xslt()
+xsltproc = xslt
+
+
 def relaxng(rng_filepath):
-    ''' RelaxNG validator
+    ''' create an RelaxNG validator function with specified RelaxNG file.
 
     :param rng_filepath: RelaxNG schema filepath
     :return: `validate(f)`
@@ -97,33 +65,17 @@ def relaxng(rng_filepath):
     `validate(f)`: validate XML stream against the given RelaxNG schema
 
     :param f: open file to an XML file
-    :return: True if the XML is valid;
-             False if `xmllint' program is not found
+    :return: True if the XML is valid
     :raises RelaxNGValidationFailed: if the XML is not valid
-
-    >>> validate = relaxng(rng_filepath)
-    >>> f = file('sample.xml', 'r')
-    >>> validate(f)
     '''
-    from hwp5.externprogs import xmllint, ProgramNotFound
-
-    kwargs = dict()
-    import os
-    xmllint_path = os.environ.get('PYHWP_XMLLINT')
-    if xmllint_path:
-        kwargs['xmllint_path'] = xmllint_path
-
-    transform = xmllint('--noout', '--relaxng', rng_filepath, **kwargs)
-    def validate(xml_file):
-        from tempfile import TemporaryFile
-        tmpf = TemporaryFile()
+    for impl in relaxng.implementations:
         try:
-            retcode = transform(xml_file, tmpf)
-            if retcode != 0:
-                raise RelaxNGValidationFailed(tmpf.read())
-            return True
-        except ProgramNotFound:
-            return False
-        finally:
-            tmpf.close()
-    return validate
+            return impl(rng_filepath)
+        except ImplementationNotAvailable, e:
+            logger.info('relaxng: %s', e)
+    import impl_extern
+    logger.info('relaxng: using external program as fallback')
+    return impl_extern.relaxng(rng_filepath)
+
+
+relaxng.implementations = []
