@@ -46,6 +46,7 @@ setup(
                 'hwp5proc = hwp5.proc:main',
                 'hwp5odt = hwp5.hwp5odt:main',
                 'hwp5txt = hwp5.hwp5txt:main',
+                'hwp5html = hwp5.hwp5html:main',
                 ]
             },
 
