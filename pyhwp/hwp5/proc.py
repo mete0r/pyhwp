@@ -231,6 +231,14 @@ Example::
     $ hwp5proc xml samples/sample-5017.hwp > sample-5017.xml
     $ xmllint --format sample-5017.xml
 
+With ``--embedbin`` option, you can embed base64-encoded ``BinData/`` files in
+the output XML.
+
+Example::
+
+    $ hwp5proc xml --embedbin samples/sample-5017.hwp > sample-5017.xml
+    $ xmllint --format sample-5017.xml
+
 '''
 
 import logging
