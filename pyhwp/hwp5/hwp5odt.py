@@ -110,14 +110,14 @@ def hwp5_resources_filename(path):
 
 
 class Converter(object):
-    def __init__(self, xsltproc, relaxng=None):
+    def __init__(self, xslt, relaxng=None):
         xsl_styles = hwp5_resources_filename('xsl/odt-styles.xsl')
         xsl_content = hwp5_resources_filename('xsl/odt-content.xsl')
         schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
         schema = hwp5_resources_filename(schema)
 
-        self.xslt_styles = xsltproc(xsl_styles)
-        self.xslt_content = xsltproc(xsl_content)
+        self.xslt_styles = xslt(xsl_styles)
+        self.xslt_content = xslt(xsl_content)
 
         if relaxng is not None:
             self.relaxng_validate = relaxng(schema)
@@ -158,7 +158,7 @@ class Converter(object):
         finally:
             hwpxmlfile.close()
 
-convert = Converter(tools.xsltproc, tools.relaxng)
+convert = Converter(tools.xslt, tools.relaxng)
 
 def make(args):
     hwpfilename = args['<hwp5file>']

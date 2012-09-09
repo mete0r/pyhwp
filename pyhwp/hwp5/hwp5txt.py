@@ -80,7 +80,7 @@ def make(args):
         hwp5file.close()
 
 def xslt_plaintext():
-    from .tools import xsltproc
+    from hwp5.tools import xslt
     import pkg_resources
     content_xsl = pkg_resources.resource_filename('hwp5', 'xsl/plaintext.xsl')
-    return xsltproc(content_xsl)
+    return xslt(content_xsl)

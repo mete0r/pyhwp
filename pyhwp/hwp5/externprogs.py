@@ -19,6 +19,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class FileWrapper(object):
@@ -40,9 +44,9 @@ class FileWrapper(object):
         return self.wrapped.__exit__(type, value, traceback)
 
 
-
 class SubprocessError(Exception):
     pass
+
 
 class SubprocessReadable(FileWrapper):
 
@@ -68,7 +72,6 @@ class SubprocessReadable(FileWrapper):
         return data
 
 
-
 def which(program):
     import os, os.path
     def is_exe(fpath):
@@ -84,8 +87,10 @@ def which(program):
             if is_exe(exe_file):
                 return exe_file
 
+
 class ProgramNotFound(Exception):
     pass
+
 
 def tmpfile():
     import tempfile
@@ -96,6 +101,7 @@ def tmpfile():
         pass
     return f
 
+
 def xmllint(*options, **kwargs):
     ''' create a `xmllint' function
 
@@ -103,6 +109,15 @@ def xmllint(*options, **kwargs):
     '''
 
     xmllint_path = kwargs.get('xmllint_path', 'xmllint')
+    options += ('-', )
+    return external_transform(xmllint_path, *options)
+
+
+def external_transform(program, *options):
+    ''' create a transform function with the specified external program
+
+    :returns: a transform function
+    '''
 
     def autoclose(p):
         ''' start a detached thread which waits the given subprocess terminates. '''
@@ -112,9 +127,9 @@ def xmllint(*options, **kwargs):
         t.start()
 
     def transform(infile=None, outfile=None):
-        ''' transform file streams with `xmllint' program
+        ''' transform file streams with `%(program)s' program
 
-            `xmllint' executable should be in PATH directories.
+            `%(program)s' executable should be in PATH directories.
 
             transform(infile, outfile) -> returncode
                 : transform infile stream into outfile stream
@@ -127,27 +142,26 @@ def xmllint(*options, **kwargs):
 
             transform() -> (readable, writable)
                 : returns a tuple of (writable source, readable sink) of transformation
-        '''
+        ''' % dict(program=program)
         import subprocess
-        import logging
-
-        logging.debug('xsltproc process starting')
 
         stdin = infile.fileno() if infile is not None else subprocess.PIPE
         stdout = outfile.fileno() if outfile is not None else subprocess.PIPE
         stderr = tmpfile()
 
-        xmllint_found = which(xmllint_path)
-        if not xmllint_found:
-            raise ProgramNotFound(xmllint_path)
+        program_found = which(program)
+        if not program_found:
+            raise ProgramNotFound(program)
 
-        popen_args = [xmllint_found] + list(options) + ['-']
+        logger.info('program %s: found at %s ', program, program_found)
+
+        popen_args = [program_found] + list(options)
         p = subprocess.Popen(popen_args,
                              stdin=stdin,
                              stdout=stdout,
                              stderr=stderr)
 
-        logging.debug('xmllint process started')
+        logger.info('program %s started', program_found)
 
         if infile is None and outfile is None:
             return SubprocessReadable(p.stdout, p), p.stdin # readable, writable
@@ -156,9 +170,11 @@ def xmllint(*options, **kwargs):
         elif infile is None:
             return p.stdin # writable stream to be transformed
         else:
-            return p.wait()
+            try:
+                return p.wait()
+            finally:
+                logger.info('program %s exited', program_found)
 
-        logging.debug('xmllint process end')
     return transform
 
 
@@ -168,7 +184,7 @@ def xmllint_readable(f, *options, **kwargs):
 
     try:
         try:
-            fileno = f.fileno
+            f.fileno
             return transform(infile=f)
         except AttributeError:
             r, w = transform()
