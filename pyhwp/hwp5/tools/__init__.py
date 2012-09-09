@@ -52,10 +52,6 @@ def xslt(xsl_filepath):
 xslt.implementations = []
 
 
-# for compatibility; new code should use xslt()
-xsltproc = xslt
-
-
 def relaxng(rng_filepath):
     ''' create an RelaxNG validator function with specified RelaxNG file.
 

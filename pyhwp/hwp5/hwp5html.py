@@ -100,28 +100,28 @@ def generate_htmldir_files(hwp5file, base_dir):
 
 def generate_css_file(hwp5_xml, css_path):
     from hwp5.hwp5odt import hwp5_resources_filename
-    from hwp5.tools import xsltproc
+    from hwp5.tools import xslt
 
     css_xsl = hwp5_resources_filename('xsl/hwp5css.xsl')
 
     css_file = file(css_path, 'w')
     try:
-        xslt_css = xsltproc(css_xsl)
-        xslt_css(hwp5_xml, css_file)
+        transform = xslt(css_xsl)
+        transform(hwp5_xml, css_file)
     finally:
         css_file.close()
 
 
 def generate_html_file(hwp5_xml, html_path):
     from hwp5.hwp5odt import hwp5_resources_filename
-    from hwp5.tools import xsltproc
+    from hwp5.tools import xslt
 
     html_xsl = hwp5_resources_filename('xsl/hwp5html.xsl')
 
     html_file = file(html_path, 'w')
     try:
-        xslt_css = xsltproc(html_xsl)
-        xslt_css(hwp5_xml, html_file)
+        transform = xslt(html_xsl)
+        transform(hwp5_xml, html_file)
     finally:
         html_file.close()
 

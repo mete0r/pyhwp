@@ -137,7 +137,7 @@ class XSLTListener(unohelper.Base, XStreamListener):
         self.event.signal()
 
 
-def xsltproc_with_libreoffice(stylesheet_path):
+def xslt_with_libreoffice(stylesheet_path):
     import os.path
     stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
     def transform(inp, out):
@@ -149,7 +149,13 @@ def xsltproc_with_libreoffice(stylesheet_path):
         transformer.addListener(listener)
 
         transformer.start()
-        listener.event.wait()
+        import os.path
+        xsl_name = os.path.basename(stylesheet_path)
+        logger.info('xslt.soffice(%s) start', xsl_name)
+        try:
+            listener.event.wait()
+        finally:
+            logger.info('xslt.soffice(%s) end', xsl_name)
 
         transformer.removeListener(listener)
     return transform
@@ -177,13 +183,13 @@ def convert_hwp5file_into_odtpkg(hwp5file):
         import hwp5.tools
 
         if haveXSLTTransformer():
-            xsltproc = xsltproc_with_libreoffice
+            xslt = xslt_with_libreoffice
         else:
-            # we use default xsltproc which uses external `xsltproc' program
-            xsltproc = hwp5.tools.xsltproc
+            # we use default xslt
+            xslt = hwp5.tools.xslt
 
         # convert without RelaxNG validation
-        convert = Converter(xsltproc)
+        convert = Converter(xslt)
 
         # Embed images: see #32 - https://github.com/mete0r/pyhwp/issues/32
         convert(hwp5file, odtpkg, embedimage=True)
