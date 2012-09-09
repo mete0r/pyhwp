@@ -26,7 +26,7 @@ import os
 # initialize logging system
 logger = logging.getLogger('hwp5')
 
-loglevel = os.environ.get('PYHWP_OXT_LOGLEVEL')
+loglevel = os.environ.get('PYHWP_LOGLEVEL')
 if loglevel:
     loglevel = dict(DEBUG=logging.DEBUG,
                     INFO=logging.INFO,
@@ -37,7 +37,7 @@ if loglevel:
     logger.setLevel(loglevel)
 del loglevel
 
-filename = os.environ.get('PYHWP_OXT_LOGFILE')
+filename = os.environ.get('PYHWP_LOGFILE')
 if filename:
     logger.addHandler(logging.FileHandler(filename))
 del filename
