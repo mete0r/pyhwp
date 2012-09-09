@@ -23,24 +23,27 @@
 
 Usage::
 
-    hwp5proc version <hwp5file>
-    hwp5proc header <hwp5file>
-    hwp5proc summaryinfo <hwp5file>
-    hwp5proc ls [--vstreams | --ole] <hwp5file>
-    hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
-    hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
-    hwp5proc records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
-    hwp5proc models [--simple | --json] [--treegroup=<treegroup>] [<hwp5file> <record-stream> | -V <version>]
-    hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
-    hwp5proc xml [--embedbin] <hwp5file>
-    hwp5proc rawunz
+    hwp5proc [options] version <hwp5file>
+    hwp5proc [options] header <hwp5file>
+    hwp5proc [options] summaryinfo <hwp5file>
+    hwp5proc [options] ls [--vstreams | --ole] <hwp5file>
+    hwp5proc [options] cat [--vstreams | --ole] <hwp5file> <stream>
+    hwp5proc [options] unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
+    hwp5proc [options] records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
+    hwp5proc [options] models [--simple | --json] [--treegroup=<treegroup>] [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc [options] find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
+    hwp5proc [options] xml [--embedbin] <hwp5file>
+    hwp5proc [options] rawunz
     hwp5proc -h | --help
     hwp5proc --version
 
 Options::
 
-    -h --help       Show this screen
-    --version       Show version
+    -h --help           Show this screen
+    --version           Show version
+    --loglevel=<level>  Set log level.
+    --logfile=<file>    Set log file.
+
     --vstreams      Process with virtual streams (i.e. parsed/converted form
                     of real streams)
     --ole           Treat <hwpfile> as an OLE Compound File. As a result,
@@ -240,6 +243,33 @@ def rest_to_docopt(doc):
     '''
     return doc.replace('::\n\n', ':\n').replace('``', '')
 
+
+def init_logger(args):
+    import os
+    logger = logging.getLogger('hwp5')
+
+    loglevel = args.get('--loglevel', None)
+    if not loglevel:
+        loglevel = os.environ.get('PYHWP_LOGLEVEL')
+    if loglevel:
+        levels = dict(debug=logging.DEBUG,
+                      info=logging.INFO,
+                      warning=logging.WARNING,
+                      error=logging.ERROR,
+                      critical=logging.CRITICAL)
+        loglevel = loglevel.lower()
+        loglevel = levels.get(loglevel, logging.WARNING)
+        logger.setLevel(loglevel)
+
+    logfile = args.get('--logfile', None)
+    if not logfile:
+        logfile = os.environ.get('PYHWP_LOGFILE')
+    if logfile:
+        logger.addHandler(logging.FileHandler(logfile))
+    else:
+        logger.addHandler(logging.StreamHandler())
+
+
 def main():
     import sys
     from docopt import docopt
@@ -248,7 +278,7 @@ def main():
 
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=__version__)
-    logging.getLogger('hwp5').addHandler(logging.StreamHandler())
+    init_logger(args)
 
     from hwp5.dataio import ParseError
     try:

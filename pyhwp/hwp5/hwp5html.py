@@ -23,14 +23,16 @@
 
 Usage::
 
-    hwp5html <hwp5file> [<out-directory>]
+    hwp5html [options] <hwp5file> [<out-directory>]
     hwp5html -h | --help
     hwp5html --version
 
 Options::
 
-    -h --help       Show this screen
-    --version       Show version
+    -h --help           Show this screen
+    --version           Show version
+    --loglevel=<level>  Set log level.
+    --logfile=<file>    Set log file.
 '''
 
 import os, os.path
@@ -44,11 +46,12 @@ def main():
     import sys
     from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
+    from hwp5.proc import init_logger
     from hwp5.errors import InvalidHwp5FileError
     from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
-    logging.getLogger('hwp5').addHandler(logging.StreamHandler())
+    init_logger(args)
 
     filename = args['<hwp5file>']
     from hwp5.dataio import ParseError
