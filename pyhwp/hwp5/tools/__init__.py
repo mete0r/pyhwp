@@ -79,3 +79,8 @@ def relaxng(rng_filepath):
 
 
 relaxng.implementations = []
+
+
+from hwp5.tools import impl_lxml
+xslt.implementations[0:0] = [impl_lxml.xslt]
+relaxng.implementations[0:0] = [impl_lxml.relaxng]
