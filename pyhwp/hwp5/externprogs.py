@@ -105,6 +105,15 @@ def xmllint(*options, **kwargs):
     '''
 
     xmllint_path = kwargs.get('xmllint_path', 'xmllint')
+    options += ('-', )
+    return external_transform(xmllint_path, *options)
+
+
+def external_transform(program, *options):
+    ''' create a transform function with the specified external program
+
+    :returns: a transform function
+    '''
 
     def autoclose(p):
         ''' start a detached thread which waits the given subprocess terminates. '''
@@ -114,9 +123,9 @@ def xmllint(*options, **kwargs):
         t.start()
 
     def transform(infile=None, outfile=None):
-        ''' transform file streams with `xmllint' program
+        ''' transform file streams with `%(program)s' program
 
-            `xmllint' executable should be in PATH directories.
+            `%(program)s' executable should be in PATH directories.
 
             transform(infile, outfile) -> returncode
                 : transform infile stream into outfile stream
@@ -129,27 +138,27 @@ def xmllint(*options, **kwargs):
 
             transform() -> (readable, writable)
                 : returns a tuple of (writable source, readable sink) of transformation
-        '''
+        ''' % dict(program=program)
         import subprocess
         import logging
 
-        logging.debug('xmllint process starting')
+        logging.info('program %s starting', program)
 
         stdin = infile.fileno() if infile is not None else subprocess.PIPE
         stdout = outfile.fileno() if outfile is not None else subprocess.PIPE
         stderr = tmpfile()
 
-        xmllint_found = which(xmllint_path)
-        if not xmllint_found:
-            raise ProgramNotFound(xmllint_path)
+        program_found = which(program)
+        if not program_found:
+            raise ProgramNotFound(program)
 
-        popen_args = [xmllint_found] + list(options) + ['-']
+        popen_args = [program_found] + list(options)
         p = subprocess.Popen(popen_args,
                              stdin=stdin,
                              stdout=stdout,
                              stderr=stderr)
 
-        logging.debug('xmllint process started')
+        logging.debug('program %s started', program)
 
         if infile is None and outfile is None:
             return SubprocessReadable(p.stdout, p), p.stdin # readable, writable
@@ -160,7 +169,7 @@ def xmllint(*options, **kwargs):
         else:
             return p.wait()
 
-        logging.debug('xmllint process end')
+        logging.debug('program %s end', program)
     return transform
 
 
