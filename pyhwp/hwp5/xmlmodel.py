@@ -517,7 +517,7 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
 
     def events(self, **kwargs):
         from itertools import chain
-        if 'embedbin' in kwargs and kwargs['embedbin']:
+        if 'embedbin' in kwargs and kwargs['embedbin'] and 'BinData' in self:
             kwargs['embedbin'] = self['BinData']
         else:
             kwargs.pop('embedbin', None)

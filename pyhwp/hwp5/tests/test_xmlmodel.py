@@ -85,6 +85,13 @@ class TestHwp5File(TestBase):
     def test_events(self):
         list(self.hwp5file.events())
 
+    def test_events_embedbin_without_bindata(self):
+        # see issue 76: https://github.com/mete0r/pyhwp/issues/76
+        self.hwp5file_name = 'parashape.hwp' # an hwp5file without BinData
+        hwp5file = self.hwp5file
+        self.assertTrue('BinData' not in hwp5file)
+        list(hwp5file.events(embedbin=True))
+
     def test_xmlevents_dump(self):
         from hwp5.externprogs import xmllint
         xmllint = xmllint('--format')
