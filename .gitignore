@@ -21,3 +21,5 @@ build
 dist
 docs/.build
 MANIFEST
+*.mo
+*.po~

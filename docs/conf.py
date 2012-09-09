@@ -31,6 +31,7 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
+locale_dirs = ['translated']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
