@@ -40,9 +40,9 @@ class FileWrapper(object):
         return self.wrapped.__exit__(type, value, traceback)
 
 
-
 class SubprocessError(Exception):
     pass
+
 
 class SubprocessReadable(FileWrapper):
 
@@ -68,7 +68,6 @@ class SubprocessReadable(FileWrapper):
         return data
 
 
-
 def which(program):
     import os, os.path
     def is_exe(fpath):
@@ -84,8 +83,10 @@ def which(program):
             if is_exe(exe_file):
                 return exe_file
 
+
 class ProgramNotFound(Exception):
     pass
+
 
 def tmpfile():
     import tempfile
@@ -95,6 +96,7 @@ def tmpfile():
     except AttributeError:
         pass
     return f
+
 
 def xmllint(*options, **kwargs):
     ''' create a `xmllint' function
@@ -131,7 +133,7 @@ def xmllint(*options, **kwargs):
         import subprocess
         import logging
 
-        logging.debug('xsltproc process starting')
+        logging.debug('xmllint process starting')
 
         stdin = infile.fileno() if infile is not None else subprocess.PIPE
         stdout = outfile.fileno() if outfile is not None else subprocess.PIPE
@@ -168,7 +170,7 @@ def xmllint_readable(f, *options, **kwargs):
 
     try:
         try:
-            fileno = f.fileno
+            f.fileno
             return transform(infile=f)
         except AttributeError:
             r, w = transform()
