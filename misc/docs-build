@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# exit if any statement returns non-true return value
+set -e
+
+# exit on uninitialized variable
+set -u
+
+SRC_DIR=${buildout:directory}/docs
+PO_BASE=${buildout:directory}/docs/translated
+HTML_BASE=${buildout:directory}/docs/.build/html
+
+for LANG in ko en; do
+for FILE in index intro hwp5proc converters; do
+PO_FILE=$PO_BASE/$LANG/LC_MESSAGES/$FILE.po
+MO_FILE=$PO_BASE/$LANG/LC_MESSAGES/$FILE.mo
+echo $MO_FILE
+msgfmt $PO_FILE -o $MO_FILE
+done
+OUT_DIR=$HTML_BASE/$LANG
+echo $OUT_DIR
+# sphinx does not detect changes in .mo files
+# see https://bitbucket.org/birkenfeld/sphinx/issue/830
+rm -rf $OUT_DIR
+${buildout:directory}/bin/sphinx-build -b html -Dlanguage=$LANG $SRC_DIR $OUT_DIR
+done
