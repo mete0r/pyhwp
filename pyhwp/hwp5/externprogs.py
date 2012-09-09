@@ -19,6 +19,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class FileWrapper(object):
@@ -140,9 +144,6 @@ def external_transform(program, *options):
                 : returns a tuple of (writable source, readable sink) of transformation
         ''' % dict(program=program)
         import subprocess
-        import logging
-
-        logging.info('program %s starting', program)
 
         stdin = infile.fileno() if infile is not None else subprocess.PIPE
         stdout = outfile.fileno() if outfile is not None else subprocess.PIPE
@@ -152,13 +153,15 @@ def external_transform(program, *options):
         if not program_found:
             raise ProgramNotFound(program)
 
+        logger.info('program %s: found at %s ', program, program_found)
+
         popen_args = [program_found] + list(options)
         p = subprocess.Popen(popen_args,
                              stdin=stdin,
                              stdout=stdout,
                              stderr=stderr)
 
-        logging.debug('program %s started', program)
+        logger.info('program %s started', program_found)
 
         if infile is None and outfile is None:
             return SubprocessReadable(p.stdout, p), p.stdin # readable, writable
@@ -167,9 +170,11 @@ def external_transform(program, *options):
         elif infile is None:
             return p.stdin # writable stream to be transformed
         else:
-            return p.wait()
+            try:
+                return p.wait()
+            finally:
+                logger.info('program %s exited', program_found)
 
-        logging.debug('program %s end', program)
     return transform
 
 
