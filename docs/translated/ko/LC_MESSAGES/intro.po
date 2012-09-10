@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-11 08:41\n"
+"POT-Creation-Date: 2012-09-11 08:53\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,18 +105,22 @@ msgstr ""
 "pyhwp/ko>`_ [`English <http://packages.python.org/pyhwp>`_] [`개발 branch "
 "<http://pyhwp.readthedocs.org>`_]"
 
-# 85285a15a8574742b5e7e57d5ce9c7bb
+# 0d7548139cea4b37bb2298584800bffc
 #: ../../intro.rst:39
 msgid ""
-"PyPI: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/"
-"pyhwp>`_"
+"Distribution: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/"
+"pypi/pyhwp>`_"
 msgstr ""
+"배포: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/"
+"pyhwp>`_"
 
-# e638ce10db3e4e07ae412b24bf350d53
+# f0f93a1ed81747dc9c7a3c631b971e86
 #: ../../intro.rst:40
 msgid ""
-"GitHub: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_"
+"Development: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/"
+"pyhwp>`_"
 msgstr ""
+"개발: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_"
 
 # f0f93a1ed81747dc9c7a3c631b971e86
 #: ../../intro.rst:41
