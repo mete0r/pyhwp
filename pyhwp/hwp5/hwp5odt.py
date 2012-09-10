@@ -1,16 +1,38 @@
 # -*- coding: utf-8 -*-
+#
+#                   GNU AFFERO GENERAL PUBLIC LICENSE
+#                      Version 3, 19 November 2007
+#
+#   pyhwp : hwp file format parser in python
+#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU Affero General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU Affero General Public License for more details.
+#
+#   You should have received a copy of the GNU Affero General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 '''HWPv5 to ODT converter
 
 Usage::
 
-    hwp5odt [--embed-image] <hwp5file>
+    hwp5odt [options] [--embed-image] <hwp5file>
     hwp5odt -h | --help
     hwp5odt --version
 
 Options::
 
-    -h --help       Show this screen
-    --version       Show version
+    -h --help           Show this screen
+    --version           Show version
+    --loglevel=<level>  Set log level.
+    --logfile=<file>    Set log file.
 '''
 
 import os, os.path
@@ -25,11 +47,12 @@ def main():
     import sys
     from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
+    from hwp5.proc import init_logger
     from hwp5.errors import InvalidHwp5FileError
     from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
-    logging.getLogger('hwp5').addHandler(logging.StreamHandler())
+    init_logger(args)
 
     from hwp5.dataio import ParseError
     try:
@@ -87,14 +110,14 @@ def hwp5_resources_filename(path):
 
 
 class Converter(object):
-    def __init__(self, xsltproc, relaxng=None):
+    def __init__(self, xslt, relaxng=None):
         xsl_styles = hwp5_resources_filename('xsl/odt-styles.xsl')
         xsl_content = hwp5_resources_filename('xsl/odt-content.xsl')
         schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
         schema = hwp5_resources_filename(schema)
 
-        self.xslt_styles = xsltproc(xsl_styles)
-        self.xslt_content = xsltproc(xsl_content)
+        self.xslt_styles = xslt(xsl_styles)
+        self.xslt_content = xslt(xsl_content)
 
         if relaxng is not None:
             self.relaxng_validate = relaxng(schema)
@@ -135,7 +158,7 @@ class Converter(object):
         finally:
             hwpxmlfile.close()
 
-convert = Converter(tools.xsltproc, tools.relaxng)
+convert = Converter(tools.xslt, tools.relaxng)
 
 def make(args):
     hwpfilename = args['<hwp5file>']

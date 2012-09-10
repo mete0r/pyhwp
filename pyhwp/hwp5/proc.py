@@ -1,26 +1,49 @@
 # -*- coding: utf-8 -*-
+#
+#                   GNU AFFERO GENERAL PUBLIC LICENSE
+#                      Version 3, 19 November 2007
+#
+#   pyhwp : hwp file format parser in python
+#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU Affero General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU Affero General Public License for more details.
+#
+#   You should have received a copy of the GNU Affero General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 '''Do various operations on HWPv5 files.
 
 Usage::
 
-    hwp5proc version <hwp5file>
-    hwp5proc header <hwp5file>
-    hwp5proc summaryinfo <hwp5file>
-    hwp5proc ls [--vstreams | --ole] <hwp5file>
-    hwp5proc cat [--vstreams | --ole] <hwp5file> <stream>
-    hwp5proc unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
-    hwp5proc records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
-    hwp5proc models [--simple | --json] [--treegroup=<treegroup>] [<hwp5file> <record-stream> | -V <version>]
-    hwp5proc find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
-    hwp5proc xml [--embedbin] <hwp5file>
-    hwp5proc rawunz
+    hwp5proc [options] version <hwp5file>
+    hwp5proc [options] header <hwp5file>
+    hwp5proc [options] summaryinfo <hwp5file>
+    hwp5proc [options] ls [--vstreams | --ole] <hwp5file>
+    hwp5proc [options] cat [--vstreams | --ole] <hwp5file> <stream>
+    hwp5proc [options] unpack [--vstreams | --ole] <hwp5file> [<out-directory>]
+    hwp5proc [options] records [--simple | --json | --raw] [--treegroup=<treegroup> | --range=<range>] [<hwp5file> <record-stream>]
+    hwp5proc [options] models [--simple | --json] [--treegroup=<treegroup>] [<hwp5file> <record-stream> | -V <version>]
+    hwp5proc [options] find [--model=<model-name> | --tag=<hwptag>] [--incomplete] [--dump] <hwp5files>...
+    hwp5proc [options] xml [--embedbin] <hwp5file>
+    hwp5proc [options] rawunz
     hwp5proc -h | --help
     hwp5proc --version
 
 Options::
 
-    -h --help       Show this screen
-    --version       Show version
+    -h --help           Show this screen
+    --version           Show version
+    --loglevel=<level>  Set log level.
+    --logfile=<file>    Set log file.
+
     --vstreams      Process with virtual streams (i.e. parsed/converted form
                     of real streams)
     --ole           Treat <hwpfile> as an OLE Compound File. As a result,
@@ -208,6 +231,14 @@ Example::
     $ hwp5proc xml samples/sample-5017.hwp > sample-5017.xml
     $ xmllint --format sample-5017.xml
 
+With ``--embedbin`` option, you can embed base64-encoded ``BinData/`` files in
+the output XML.
+
+Example::
+
+    $ hwp5proc xml --embedbin samples/sample-5017.hwp > sample-5017.xml
+    $ xmllint --format sample-5017.xml
+
 '''
 
 import logging
@@ -220,6 +251,33 @@ def rest_to_docopt(doc):
     '''
     return doc.replace('::\n\n', ':\n').replace('``', '')
 
+
+def init_logger(args):
+    import os
+    logger = logging.getLogger('hwp5')
+
+    loglevel = args.get('--loglevel', None)
+    if not loglevel:
+        loglevel = os.environ.get('PYHWP_LOGLEVEL')
+    if loglevel:
+        levels = dict(debug=logging.DEBUG,
+                      info=logging.INFO,
+                      warning=logging.WARNING,
+                      error=logging.ERROR,
+                      critical=logging.CRITICAL)
+        loglevel = loglevel.lower()
+        loglevel = levels.get(loglevel, logging.WARNING)
+        logger.setLevel(loglevel)
+
+    logfile = args.get('--logfile', None)
+    if not logfile:
+        logfile = os.environ.get('PYHWP_LOGFILE')
+    if logfile:
+        logger.addHandler(logging.FileHandler(logfile))
+    else:
+        logger.addHandler(logging.StreamHandler())
+
+
 def main():
     import sys
     from docopt import docopt
@@ -228,7 +286,7 @@ def main():
 
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=__version__)
-    logging.getLogger('hwp5').addHandler(logging.StreamHandler())
+    init_logger(args)
 
     from hwp5.dataio import ParseError
     try:

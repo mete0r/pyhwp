@@ -19,3 +19,7 @@ deb_dist
 pep8.out
 build
 dist
+docs/.build
+MANIFEST
+*.mo
+*.po~

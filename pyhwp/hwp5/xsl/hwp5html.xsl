@@ -72,16 +72,38 @@
     </xsl:template>
 
     <xsl:template match="ShapePicture">
-        <xsl:variable name="binpath" select="'bindata/'"/>
-        <xsl:variable name="bindataid" select="PictureInfo/@bindata-id"/>
-        <xsl:variable name="bindata" select="/HwpDoc/DocInfo/IdMappings/BinData[number($bindataid)]"/>
-        <xsl:element name="img">
-            <xsl:choose>
-                <xsl:when test="$bindata/BinEmbedded">
-                    <xsl:attribute name="src"><xsl:value-of select="$binpath"/><xsl:value-of select="$bindata/BinEmbedded/@storage-id"/>.<xsl:value-of select="$bindata/BinEmbedded/@ext"/></xsl:attribute>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:attribute name="style">width:<xsl:value-of select="../@width div 100"/>pt; height:<xsl:value-of select="../@height div 100"/>pt;</xsl:attribute>
-        </xsl:element>
+      <xsl:variable name="bindataid" select="PictureInfo/@bindata-id"/>
+      <xsl:variable name="bindata" select="/HwpDoc/DocInfo/IdMappings/BinData[number($bindataid)]"/>
+      <xsl:element name="img">
+        <xsl:apply-templates select="$bindata" mode="img-src"/>
+        <xsl:attribute name="style">
+          <xsl:apply-templates select=".." mode="css-width" />
+          <xsl:text> </xsl:text>
+          <xsl:apply-templates select=".." mode="css-height" />
+        </xsl:attribute>
+      </xsl:element>
     </xsl:template>
+
+    <xsl:template match="BinDataEmbedding" mode="img-src">
+      <xsl:variable name="binpath" select="'bindata/'"/>
+      <xsl:attribute name="src">
+        <xsl:value-of select="$binpath"/>
+        <xsl:value-of select="@storage-id"/>
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="@ext"/>
+      </xsl:attribute>
+    </xsl:template>
+
+    <xsl:template match="ShapeComponent" mode="css-width">
+      <xsl:text>width: </xsl:text>
+      <xsl:value-of select="@width div 100" />
+      <xsl:text>pt;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="ShapeComponent" mode="css-height">
+      <xsl:text>height: </xsl:text>
+      <xsl:value-of select="@height div 100" />
+      <xsl:text>pt;</xsl:text>
+    </xsl:template>
+
 </xsl:stylesheet>

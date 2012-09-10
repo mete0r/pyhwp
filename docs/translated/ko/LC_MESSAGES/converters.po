@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, mete0r
+# This file is distributed under the same license as the pyhwp package.
+# mete0r <EMAIL@ADDRESS>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: pyhwp 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-10 07:59\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: mete0r <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../converters.rst:2
+# eafb3e22bc3740cb9f41f4f2df9e7800
+msgid "Converters (*Experimental*)"
+msgstr "변환기들 (*실험적*)"
+
+#: ../../converters.rst:4
+# 6b4bc6aa159144d4bb3a51e48e5909da
+msgid "Convert HWPv5 documents into other document formats."
+msgstr "HWPv5 문서들을 다른 문서 형식으로 변환한다."
+
+#: ../../converters.rst:7
+# 5d38e3678e074ca2b766734ae5247217
+msgid "Requirements"
+msgstr "필요한 것들"
+
+#: ../../converters.rst:8
+# 67f8cb2c410f45559ea36edddc5f3bd6
+msgid "The conversions are performed with `XSLT <http://www.w3.org/TR/xslt>`_ internally and verified with `Relax NG <http://relaxng.org/>`_ if possible."
+msgstr "이 변환들은 내부적으로 `XSLT <http://www.w3.org/TR/xslt>`_ 를 사용하며, 가능한 경우 `Relax NG <http://relaxng.org/>`_ 로 결과물이 검증된다."
+
+#: ../../converters.rst:11
+# 45e757bc017d449a95192776960d8b5d
+msgid "For these processing, the converters requires `lxml <http://pypi.python.org/pypi/lxml>`_ (`homepage <http://lxml.de>`_) or `libxml2 <http://www.xmlsoft.org/>`_'s `xsltproc <http://xmlsoft.org/XSLT/xsltproc2.html>`_ / `xmllint <http://infohost.nmt.edu/tcc/help/xml/lint.html>`_ programs."
+msgstr "이를 수행하기 위해서는 `lxml <http://pypi.python.org/pypi/lxml>`_ (`homepage <http://lxml.de>`_)이나 `libxml2 <http://www.xmlsoft.org/>`_ 의 `xsltproc <http://xmlsoft.org/XSLT/xsltproc2.html>`_ / `xmllint <http://infohost.nmt.edu/tcc/help/xml/lint.html>`_ 프로그램이 필요하다."
+
+#: ../../converters.rst:17
+# 4bbc12c733e64021b1e57753c362e03f
+msgid "For lxml installation::"
+msgstr "lxml를 설치하려면::"
+
+#: ../../converters.rst:22
+# 87c456830c3f40b0b0922d11b45e7f7a
+msgid "or see `Installing lxml <http://lxml.de/installation.html>`_."
+msgstr "혹은 `Installing lxml <http://lxml.de/installation.html>`_ 을 참조하라."
+
+#: ../../converters.rst:24
+# 279b07aa798c48238be60111a825bd7a
+msgid "(Currently conversions with lxml 2.3.5 is tested and verified to be working. lxml versions below that may work too, but those are not tested.)"
+msgstr "(현재 lxml 2.3.5 을 이용한 변환은 테스트되었고 잘 작동하는 것으로 확인되었다. 그보다 낮은 버젼의 lxml으로도 될 수 있으나, 테스트되지는 않았다.)"
+
+#: ../../converters.rst:27
+# 173347f476564817bd87068b394dbd6a
+msgid "For ``xsltproc`` / ``xmllint`` installation::"
+msgstr "``xsltproc`` / ``xmllint`` 를 설치하려면::"
+
+#: ../../converters.rst:31
+# 50fa23c1a25a4330bab200b3d4c5d753
+msgid "Optional environment variables ``PYHWP_XSLTPROC`` and ``PYHWP_XMLLINT`` specifies the paths of the each programs. (If not set, ``xsltproc`` and/or ``xmllint`` should be in the one of the directories specified in ``PATH``.)"
+msgstr "선택적으로 설정될 수 있는 ``PYHWP_XSLTPROC`` 과 ``PYHWP_XMLLINT`` 환경변수는 각 프로그램의 위치를 지정한다. (만약 설정되지 않으면, ``xsltproc`` 과 ``xmllint`` 는 환경변수 ``PATH`` 가 지정하는 디렉토리 중 하나에 존재해야 한다."
+
+#: ../../converters.rst:36
+# bc95c4ff391e4201a6ed44a1d0d56e5e
+msgid "``hwp5odt``: ODT conversion"
+msgstr "``hwp5odt``: ODT 변환"
+
+#: ../../../pyhwp/hwp5/hwp5odt.py:docstring of hwp5.hwp5odt:1
+# c4f68ae4a1294abfb389633cdbfbd335
+msgid "HWPv5 to ODT converter"
+msgstr "HWPv5-to-ODT 변환기"
+
+#: ../../../pyhwp/hwp5/hwp5odt.py:docstring of hwp5.hwp5odt:3
+#: ../../../pyhwp/hwp5/hwp5html.py:docstring of hwp5.hwp5html:3
+#: ../../../pyhwp/hwp5/hwp5txt.py:docstring of hwp5.hwp5txt:3
+# 3de42de0b2fe408280df0c1236fad4e0
+# 6d65211ee5dc4aae9509848ed33ad453
+# db61f8ccd1b24c80b24fc45cef56d189
+msgid "Usage::"
+msgstr "사용법::"
+
+#: ../../../pyhwp/hwp5/hwp5odt.py:docstring of hwp5.hwp5odt:9
+#: ../../../pyhwp/hwp5/hwp5html.py:docstring of hwp5.hwp5html:9
+#: ../../../pyhwp/hwp5/hwp5txt.py:docstring of hwp5.hwp5txt:9
+# 8e52e64968d9457da967a7f1b5826470
+# b650b764f0bc40d68cf0b3cff9bec9fc
+# ea68666462574d1da0411b50c9aaa33b
+msgid "Options::"
+msgstr "옵션::"
+
+#: ../../converters.rst:40
+# 41a0562c7de84f6087262873b7090b36
+msgid "``hwp5html``: HTML conversion"
+msgstr "``hwp5html``: HTML 변환"
+
+#: ../../../pyhwp/hwp5/hwp5html.py:docstring of hwp5.hwp5html:1
+# 7aa5783ccbe141a4b84397507548a5fb
+msgid "HWPv5 to HTML converter"
+msgstr "HWPv5-to-HTML 변환기"
+
+#: ../../converters.rst:44
+# c0616df18e5148faa66eeeecbe6920d3
+msgid "``hwp5txt``: text conversion"
+msgstr "``hwp5txt``: 텍스트 변환"
+
+#: ../../../pyhwp/hwp5/hwp5txt.py:docstring of hwp5.hwp5txt:1
+# 991947c6361e4eb3b2cf1ed6cfd4c15b
+msgid "HWPv5 to text converter"
+msgstr "HWPv5-to-텍스트 변환기"
+

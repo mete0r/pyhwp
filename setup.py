@@ -37,7 +37,7 @@ setup(
         package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
 
         install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt >= 0.3',
-                          'hypua2jamo'],
+                          'hypua2jamo >=0.1'],
         extras_require=dict(test=['lxml']),
 
         entry_points = {
@@ -46,6 +46,7 @@ setup(
                 'hwp5proc = hwp5.proc:main',
                 'hwp5odt = hwp5.hwp5odt:main',
                 'hwp5txt = hwp5.hwp5txt:main',
+                'hwp5html = hwp5.hwp5html:main',
                 ]
             },
 
