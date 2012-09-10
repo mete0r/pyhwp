@@ -35,7 +35,7 @@ Requirements
 Documentation & Development
 ---------------------------
 
-- Documentation: `http://pyhwp.readthedocs.org <http://pyhwp.readthedocs.org>`_
+- Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/pyhwp>`_ [`한국어 <http://packages.python.org/pyhwp/ko>`_] [`develop branch <http://pyhwp.readthedocs.org>`_]
 - PyPI: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/pyhwp>`_
 - GitHub: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_
 - Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_

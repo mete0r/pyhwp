@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-10 07:59\n"
+"POT-Creation-Date: 2012-09-11 08:07\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,133 +16,147 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../intro.rst:2
 # 229d7f6cb6e94b80b3ed276154632ea7
+#: ../../intro.rst:2
 msgid "pyhwp"
 msgstr ""
 
-#: ../../intro.rst:4
 # 75c5f1d6ce704cfb987f218ddac8e5c9
+#: ../../intro.rst:4
 msgid "HWP Document Format v5 parser & processor."
 msgstr ""
 
-#: ../../intro.rst:7
 # bdea2ae9aea14b619ceab66b9f6d685c
+#: ../../intro.rst:7
 msgid "Features"
 msgstr ""
 
-#: ../../intro.rst:9
 # 6b057a4ced754848bd138b559238556f
-msgid "Analyze and extract internal streams out from a HWP Document Format v5 file"
+#: ../../intro.rst:9
+msgid ""
+"Analyze and extract internal streams out from a HWP Document Format v5 file"
 msgstr ""
 
-#: ../../intro.rst:10
 # a68f3e9e704d45dda4278f0efaf64d8a
-msgid "(*Experimental*) Conversion to OpenDocument format (.odt) or plain text (.txt)"
+#: ../../intro.rst:10
+msgid ""
+"(*Experimental*) Conversion to OpenDocument format (.odt) or plain text (."
+"txt)"
 msgstr ""
 
-#: ../../intro.rst:13
 # ea5a3a8d49cc413eb9ef1fa6f58633ff
+#: ../../intro.rst:13
 msgid "Installation"
 msgstr ""
 
-#: ../../intro.rst:15
 # 0d7548139cea4b37bb2298584800bffc
+#: ../../intro.rst:15
 msgid "from `pypi <http://pypi.python.org/pypi/pyhwp>`_::"
 msgstr ""
 
-#: ../../intro.rst:19
 # ab2b026ca97f43ac8001e6dba8286ce8
+#: ../../intro.rst:19
 msgid "from `github <https://github.com/mete0r/pyhwp>`_::"
 msgstr ""
 
-#: ../../intro.rst:27
 # da4c2f33f39048e9a72ad43807cd7e37
+#: ../../intro.rst:27
 msgid "Requirements"
 msgstr ""
 
-#: ../../intro.rst:29
 # f760bb102652464aa8ec21e593f486bb
+#: ../../intro.rst:29
 msgid "Python 2.5, 2.6 or 2.7"
 msgstr ""
 
-#: ../../intro.rst:30
 # c0237c498d384683b8f3b478c5165513
+#: ../../intro.rst:30
 msgid "`simplejson <http://pypi.python.org/pypi/simplejson>`_"
 msgstr ""
 
-#: ../../intro.rst:31
 # 276d7456e63749adb1dc60f80396088f
+#: ../../intro.rst:31
 msgid "`OleFileIO_PL <http://pypi.python.org/pypi/OleFileIO_PL>`_ >= 0.20"
 msgstr ""
 
-#: ../../intro.rst:32
 # 4c51035029f840bf8a52929b89569b1f
+#: ../../intro.rst:32
 msgid "`docopt <http://pypi.python.org/pypi/docopt>`_ >= 0.3"
 msgstr ""
 
-#: ../../intro.rst:33
 # d14212bca57f46b393c6d83098bf2691
+#: ../../intro.rst:33
 msgid "`hypua2jamo <http://pypi.python.org/pypi/hypua2jamo>`_ >= 0.1"
 msgstr ""
 
-#: ../../intro.rst:36
 # 070821d20ddc4c6cb15fa70632bf6523
+#: ../../intro.rst:36
 msgid "Documentation & Development"
 msgstr ""
 
+# 8228a1248e8b4f6fb82be453d4ef4135
 #: ../../intro.rst:38
-# d21d1a96770c48399bf7d7962f96c816
-msgid "Documentation: `http://pyhwp.readthedocs.org <http://pyhwp.readthedocs.org>`_"
+msgid ""
+"Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/"
+"pyhwp>`_ [`한국어 <http://packages.python.org/pyhwp/ko>`_] [`develop branch "
+"<http://pyhwp.readthedocs.org>`_]"
 msgstr ""
 
-#: ../../intro.rst:39
 # 85285a15a8574742b5e7e57d5ce9c7bb
-msgid "PyPI: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/pyhwp>`_"
+#: ../../intro.rst:39
+msgid ""
+"PyPI: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/"
+"pyhwp>`_"
 msgstr ""
 
-#: ../../intro.rst:40
 # e638ce10db3e4e07ae412b24bf350d53
-msgid "GitHub: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_"
+#: ../../intro.rst:40
+msgid ""
+"GitHub: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_"
 msgstr ""
 
-#: ../../intro.rst:41
 # f0f93a1ed81747dc9c7a3c631b971e86
-msgid "Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_"
+#: ../../intro.rst:41
+msgid ""
+"Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/"
+"mete0r/pyhwp/issues>`_"
 msgstr ""
 
-#: ../../intro.rst:42
 # 317c633c180a4bda8045e2a5b1e757cf
+#: ../../intro.rst:42
 msgid "Feedbacks & contributions are welcome!"
 msgstr ""
 
-#: ../../intro.rst:45
 # b200736b60a04a8480b72cb24a513db0
+#: ../../intro.rst:45
 msgid "Contributors"
 msgstr ""
 
-#: ../../intro.rst:47
 # 38b9e22103b4432eaf4fdf9f452bc3e3
+#: ../../intro.rst:47
 msgid "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
 msgstr ""
 
-#: ../../intro.rst:50
 # 3968cb8206a14f398a248eed814ad9aa
+#: ../../intro.rst:50
 msgid "License"
 msgstr ""
 
-#: ../../intro.rst:54
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
-msgid "`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
+#: ../../intro.rst:54
+msgid ""
+"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-"
+"3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
 msgstr ""
 
-#: ../../intro.rst:58
 # c3270c668ef7418e951ef0bc8ac17fdd
+#: ../../intro.rst:58
 msgid "Disclosure"
 msgstr ""
 
-#: ../../intro.rst:60
 # 42e655554a964a3183584bed58452f29
-msgid "pyhwp는 `(주)한글과컴퓨터 <http://www.hancom.co.kr>`_ 의 한/글 문서 파일(.hwp) 공개 문서를 참고하여 개발하였습니다."
+#: ../../intro.rst:60
+msgid ""
+"pyhwp는 `(주)한글과컴퓨터 <http://www.hancom.co.kr>`_ 의 한/글 문서 파일(."
+"hwp) 공개 문서를 참고하여 개발하였습니다."
 msgstr ""
-
