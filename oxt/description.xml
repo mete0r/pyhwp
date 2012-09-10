@@ -4,7 +4,7 @@
              xmlns:xlink="http://www.w3.org/1999/xlink">
   <identifier value="hwp5.oxt" />
 
-  <version value="0.1a11" />
+  <version value="0.1a12" />
 
   <display-name>
     <name lang="en">HWP Document Format v5 Filter</name>
