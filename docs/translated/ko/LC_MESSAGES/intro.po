@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, mete0r
+# This file is distributed under the same license as the pyhwp package.
+# mete0r <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: pyhwp 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-10 07:59\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: mete0r <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../intro.rst:2
+# 229d7f6cb6e94b80b3ed276154632ea7
+msgid "pyhwp"
+msgstr ""
+
+#: ../../intro.rst:4
+# 75c5f1d6ce704cfb987f218ddac8e5c9
+msgid "HWP Document Format v5 parser & processor."
+msgstr "HWP 문서 포맷 버젼5 파서 & 처리기"
+
+#: ../../intro.rst:7
+# bdea2ae9aea14b619ceab66b9f6d685c
+msgid "Features"
+msgstr "기능"
+
+#: ../../intro.rst:9
+# 6b057a4ced754848bd138b559238556f
+msgid "Analyze and extract internal streams out from a HWP Document Format v5 file"
+msgstr "HWP 문서 버젼 5 파일의 내부 스트림을 분석/분리"
+
+#: ../../intro.rst:10
+# a68f3e9e704d45dda4278f0efaf64d8a
+msgid "(*Experimental*) Conversion to OpenDocument format (.odt) or plain text (.txt)"
+msgstr "(*실험적*) OpenDocument 포맷(.odt)나 일반 텍스트 문서로 변환"
+
+#: ../../intro.rst:13
+# ea5a3a8d49cc413eb9ef1fa6f58633ff
+msgid "Installation"
+msgstr "설치"
+
+#: ../../intro.rst:15
+# 0d7548139cea4b37bb2298584800bffc
+msgid "from `pypi <http://pypi.python.org/pypi/pyhwp>`_::"
+msgstr "`pypi <http://pypi.python.org/pypi/pyhwp>`_ 에서::"
+
+#: ../../intro.rst:19
+# ab2b026ca97f43ac8001e6dba8286ce8
+msgid "from `github <https://github.com/mete0r/pyhwp>`_::"
+msgstr "`github <https://github.com/mete0r/pyhwp>`_ 에서::"
+
+#: ../../intro.rst:27
+# da4c2f33f39048e9a72ad43807cd7e37
+msgid "Requirements"
+msgstr "필요한 것들"
+
+#: ../../intro.rst:29
+# f760bb102652464aa8ec21e593f486bb
+msgid "Python 2.5, 2.6 or 2.7"
+msgstr ""
+
+#: ../../intro.rst:30
+# c0237c498d384683b8f3b478c5165513
+msgid "`simplejson <http://pypi.python.org/pypi/simplejson>`_"
+msgstr ""
+
+#: ../../intro.rst:31
+# 276d7456e63749adb1dc60f80396088f
+msgid "`OleFileIO_PL <http://pypi.python.org/pypi/OleFileIO_PL>`_ >= 0.20"
+msgstr ""
+
+#: ../../intro.rst:32
+# 4c51035029f840bf8a52929b89569b1f
+msgid "`docopt <http://pypi.python.org/pypi/docopt>`_ >= 0.3"
+msgstr ""
+
+#: ../../intro.rst:33
+# d14212bca57f46b393c6d83098bf2691
+msgid "`hypua2jamo <http://pypi.python.org/pypi/hypua2jamo>`_ >= 0.1"
+msgstr ""
+
+#: ../../intro.rst:36
+# 070821d20ddc4c6cb15fa70632bf6523
+msgid "Documentation & Development"
+msgstr "문서화 및 개발"
+
+#: ../../intro.rst:38
+# d21d1a96770c48399bf7d7962f96c816
+msgid "Documentation: `http://pyhwp.readthedocs.org <http://pyhwp.readthedocs.org>`_"
+msgstr "문서화: `http://pyhwp.readthedocs.org <http://pyhwp.readthedocs.org>`_"
+
+#: ../../intro.rst:39
+# 85285a15a8574742b5e7e57d5ce9c7bb
+msgid "PyPI: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/pyhwp>`_"
+msgstr ""
+
+#: ../../intro.rst:40
+# e638ce10db3e4e07ae412b24bf350d53
+msgid "GitHub: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_"
+msgstr ""
+
+#: ../../intro.rst:41
+# f0f93a1ed81747dc9c7a3c631b971e86
+msgid "Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_"
+msgstr "버그 추적: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_"
+
+#: ../../intro.rst:42
+# 317c633c180a4bda8045e2a5b1e757cf
+msgid "Feedbacks & contributions are welcome!"
+msgstr "피드백이나 기여 환영합니다."
+
+#: ../../intro.rst:45
+# b200736b60a04a8480b72cb24a513db0
+msgid "Contributors"
+msgstr "기여한 이들"
+
+#: ../../intro.rst:47
+# 38b9e22103b4432eaf4fdf9f452bc3e3
+msgid "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
+msgstr "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
+
+#: ../../intro.rst:50
+# 3968cb8206a14f398a248eed814ad9aa
+msgid "License"
+msgstr "사용허가"
+
+#: ../../intro.rst:54
+# 32ed7d69ae9f4bf5bff4e8d68c113f4c
+msgid "`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
+msgstr ""
+
+#: ../../intro.rst:58
+# c3270c668ef7418e951ef0bc8ac17fdd
+msgid "Disclosure"
+msgstr "공개"
+
+#: ../../intro.rst:60
+# 42e655554a964a3183584bed58452f29
+msgid "pyhwp는 `(주)한글과컴퓨터 <http://www.hancom.co.kr>`_ 의 한/글 문서 파일(.hwp) 공개 문서를 참고하여 개발하였습니다."
+msgstr ""
+
