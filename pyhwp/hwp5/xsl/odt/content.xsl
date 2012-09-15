@@ -114,9 +114,7 @@
                 <xsl:element name="style:style">
                   <xsl:attribute name="style:family">text</xsl:attribute>
                   <xsl:attribute name="style:name">p<xsl:value-of select="$paragraph-id" />-<xsl:value-of select="$lineseg-pos"/>-<xsl:value-of select="$text-pos"/></xsl:attribute>
-                  <xsl:call-template name="charshape-to-text-properties">
-                    <xsl:with-param name="charshape" select="$charshape"/>
-                  </xsl:call-template>
+                  <xsl:apply-templates select="$charshape" mode="style:text-properties" />
                 </xsl:element>
               </xsl:if>
             </xsl:for-each>

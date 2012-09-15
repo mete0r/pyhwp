@@ -265,9 +265,7 @@
         <xsl:with-param name="parashape" select="$parashape"/>
       </xsl:call-template>
       </xsl:element>
-      <xsl:call-template name="charshape-to-text-properties">
-        <xsl:with-param name="charshape" select="$charshape"/>
-      </xsl:call-template>
+      <xsl:apply-templates select="$charshape" mode="style:text-properties" />
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>
