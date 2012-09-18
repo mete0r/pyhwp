@@ -45,7 +45,8 @@
           <xsl:when test="$parashape/@align = 'right'">right</xsl:when>
           <xsl:when test="$parashape/@align = 'center'">center</xsl:when>
           <xsl:when test="$parashape/@align = 'distribute'">justify</xsl:when>
-          <xsl:when test="$parashape/@align = 'distribute-space'">justify</xsl:when>
+          <xsl:when test="$parashape/@align = 'distribute_space'">justify</xsl:when>
+          <xsl:otherwise>justify</xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
       <xsl:variable name="margin-left" select="number($parashape/@doubled-margin-left)"/>
