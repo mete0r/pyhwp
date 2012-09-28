@@ -114,6 +114,20 @@ def build_subtree(event_prefixed_items):
         elif event == ENDEVENT:
             return item, childs
 
+
+def iter_subevents(event_prefixed_items):
+    level = 0
+    for event, item in event_prefixed_items:
+        yield event, item
+        if event is STARTEVENT:
+            level += 1
+        elif event is ENDEVENT:
+            if level > 0:
+                level -= 1
+            else:
+                return
+
+
 def tree_events(rootitem, childs):
     ''' generate tuples of (event, item) from a tree
     '''
