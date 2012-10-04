@@ -1945,6 +1945,7 @@ def parse_models_with_parent(context_models):
                       for context, model in context_models)
     root_item = (dict(), dict())
     ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
+    from hwp5.bintype import parse_model
     for ancestors, (context, model) in ancestors_prefixed:
         context['parent'] = ancestors[-1]
         parse_model(context, model)
@@ -1978,6 +1979,8 @@ def model_to_json(model, *args, **kwargs):
     record['payload'] = list(dumpbytes(record['payload']))
     if 'unparsed' in model:
         model['unparsed'] = list(dumpbytes(model['unparsed']))
+    if 'binevents' in model:
+        del model['binevents']
     return simplejson.dumps(model, *args, **kwargs)
 
 
