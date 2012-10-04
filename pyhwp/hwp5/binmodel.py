@@ -999,8 +999,8 @@ class ControlChar(object):
                 char = unichr(ord(data[i]))
                 size = cls.kinds[char].size
                 return i, i + (size * 2)
-        data_len = len(data)
-        return data_len, data_len
+            data_len = len(data)
+            return data_len, data_len
     find = classmethod(find)
 
     def decode_bytes(cls, bytes):

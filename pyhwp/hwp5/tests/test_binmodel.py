@@ -687,6 +687,11 @@ class TestControlChar(TestBase):
                                chid='secd',
                                param='\x00' * 8), controlchar)
 
+    def test_find(self):
+        from hwp5.binmodel import ControlChar
+        bytes = '\x41\x00'
+        self.assertEquals((2, 2), ControlChar.find(bytes, 0))
+
     def test_tab(self):
         from hwp5.binmodel import ParaText, ControlChar
         self.hwp5file_name = 'tabdef.hwp'
