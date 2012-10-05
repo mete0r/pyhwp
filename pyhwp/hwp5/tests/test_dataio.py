@@ -277,13 +277,6 @@ class TestFlags(TestCase):
                      0, 3, 'low',
                      4, 7, 'high')
 
-    def test_read(self):
-        ByteFlags = self.ByteFlags
-        from StringIO import StringIO
-        stream = StringIO('\xf0')
-        flags = ByteFlags.read(stream, dict())
-        self.assertTrue(isinstance(flags, ByteFlags))
-
     def test_dictvalue(self):
         flags = self.ByteFlags(0xf0)
         self.assertEquals(dict(low=0, high=0xf),
@@ -306,10 +299,11 @@ class TestReadStruct(TestCase):
         from StringIO import StringIO
         stream = StringIO()
 
+        from hwp5.bintype import read_type
         record = dict()
         context = dict(record=record)
         try:
-            Foo.read(stream, context)
+            read_type(Foo, context, stream)
             assert False, 'ParseError expected'
         except ParseError, e:
             self.assertEquals(Foo, e.binevents[0][1]['type'])

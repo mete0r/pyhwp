@@ -438,9 +438,10 @@ class HwpFileHeader(object):
         self.open = item.open
 
     def to_dict(self):
+        from hwp5.bintype import read_type
         f = self.open()
         try:
-            return FileHeader.read(f)
+            return read_type(FileHeader, dict(), f)
         finally:
             f.close()
 

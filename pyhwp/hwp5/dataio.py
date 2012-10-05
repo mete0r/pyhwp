@@ -184,9 +184,6 @@ class FlagsType(type):
 
         return type.__new__(mcs, name, bases, attrs)
 
-    def read(cls, f, context):
-        return cls(cls.basetype.read(f, context))
-
 
 def _lex_flags_args(args):
     for idx, arg in enumerate(args):
@@ -356,13 +353,6 @@ class FixedArrayType(ArrayType):
         mcs.classes[key] = cls
         return cls
 
-    def read(cls, f, context=None):
-        result = []
-        for i in range(0, cls.size):
-            value = cls.itemtype.read(f, context)
-            result.append( value )
-        return tuple(result)
-
 
 ARRAY = FixedArrayType
 
@@ -383,14 +373,6 @@ class VariableLengthArrayType(ArrayType):
         cls = ArrayType.__new__(mcs, name, (list,), attrs)
         mcs.classes[key] = cls
         return cls
-
-    def read(cls, f, context):
-        result = []
-        count = cls.counttype.read(f, context)
-        for i in range(0, count):
-            value = cls.itemtype.read(f, context)
-            result.append( value )
-        return result
 
 
 N_ARRAY = VariableLengthArrayType
@@ -554,13 +536,6 @@ class StructType(CompoundType):
 
 class Struct(object):
     __metaclass__ = StructType
-
-    def read(cls, f, context=None):
-        if context is None:
-            context = dict()
-        from hwp5.bintype import read_type
-        return read_type(cls, context, f)
-    read = classmethod(read)
 
 
 def dumpbytes(data, crust=False):
