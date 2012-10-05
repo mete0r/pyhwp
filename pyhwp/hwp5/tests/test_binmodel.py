@@ -153,7 +153,7 @@ class ParaCharShapeTest(TestBase):
         context['parent'] = parent_context, parent_model
         model = record
         parse_model(context, model)
-        self.assertEquals(dict(charshapes=((0, 7), (19, 8), (23, 7), (24, 9), (26, 7))),
+        self.assertEquals(dict(charshapes=[(0, 7), (19, 8), (23, 7), (24, 9), (26, 7)]),
                           model['content'])
 
 
@@ -549,7 +549,7 @@ class TableBodyTest(TestCase):
         self.assertEquals(2, model_content['cols'])
         self.assertEquals(2, model_content['rows'])
         self.assertEquals(1, model_content['borderfill_id'])
-        self.assertEquals((2, 2), model_content['rowcols'])
+        self.assertEquals([2, 2], model_content['rowcols'])
         self.assertEquals(0, model_content['cellspacing'])
         self.assertEquals([], model_content['validZones'])
 

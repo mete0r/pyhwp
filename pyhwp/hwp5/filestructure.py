@@ -22,7 +22,7 @@
 import codecs
 import zlib
 from .utils import cached_property
-from .dataio import UINT32, UINT16, Flags, Struct, ARRAY
+from .dataio import UINT32, Flags, Struct
 from .storage import ItemWrapper
 from .storage import StorageWrapper
 from .storage import ItemConversionStorage
@@ -41,24 +41,16 @@ HWP5_SIGNATURE = 'HWP Document File'+('\x00'*15)
 
 class BYTES(type):
     def __new__(mcs, size):
-        return type.__new__(mcs, 'BYTES%d' % size, (str,), dict(size=size))
-
-    def __init__(self, size):
-        return type.__init__(self, None, None, None)
-
-    def read(self, f, context=None):
-        if self.size < 0:
-            return f.read()
-        else:
-            return f.read(self.size)
+        return type.__new__(mcs, 'BYTES(%d)' % size, (str,), dict(fixed_size=size))
 
 
-class VERSION(tuple):
-    def read(cls, f, context=None):
-        version = f.read(4)
-        return (ord(version[3]), ord(version[2]),
-                ord(version[1]), ord(version[0]))
-    read = classmethod(read)
+class VERSION(object):
+    fixed_size = 4
+
+    def decode(cls, bytes):
+        return (ord(bytes[3]), ord(bytes[2]),
+                ord(bytes[1]), ord(bytes[0]))
+    decode = classmethod(decode)
 
 
 class FileHeader(Struct):
@@ -82,46 +74,6 @@ class FileHeader(Struct):
         yield VERSION, 'version'
         yield cls.Flags, 'flags'
         yield BYTES(216), 'reserved'
-    attributes = classmethod(attributes)
-
-
-class TextField(unicode):
-    def read(cls, f, context=None):
-        unk0 = UINT32.read(f, None)  # 1f
-        assert unk0 == 0x1f
-        size = UINT32.read(f, None)
-        if size > 0:
-            data = f.read(2 * size)
-        else:
-            data = ''
-        if size & 1:
-            f.read(2)
-        return data.decode('utf-16le', 'replace')
-    read = classmethod(read)
-
-
-class SummaryInfo(Struct):
-    def attributes(cls):
-        def version_lt_5010(context, values):
-            return context['version'] < (5, 0, 1, 0)
-        def version_gte_5010(context, version):
-            return context['version'] >= (5, 0, 1, 0)
-        yield dict(type=ARRAY(UINT32, 0230 / 4),
-                   name='_unk0',
-                   condition=version_lt_5010)
-        yield dict(type=ARRAY(UINT32, 0250 / 4),
-                   name='_unk0',
-                   condition=version_gte_5010)
-        yield TextField, 'title'
-        yield TextField, 'subject'
-        yield TextField, 'author'
-        yield TextField, 'datetime'
-        yield TextField, 'keywords'
-        yield TextField, 'etc'
-        yield TextField, 'hidden_username'
-        yield TextField, 'hidden_progversion'
-        yield ARRAY(ARRAY(UINT16, 6), 3), '_unk1'
-        #yield ARRAY(N_ARRAY(UINT32, UINT32), 2), '_unk2'
     attributes = classmethod(attributes)
 
 
@@ -478,9 +430,10 @@ class HwpFileHeader(object):
         self.open = item.open
 
     def to_dict(self):
+        from hwp5.bintype import read_type
         f = self.open()
         try:
-            return FileHeader.read(f)
+            return read_type(FileHeader, dict(), f)
         finally:
             f.close()
 
@@ -522,9 +475,10 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
     def to_dict(self):
         f = self.open()
+        from hwp5.msoleprops import MSOLEPropertySet
         try:
             context = dict(version=self.version)
-            summaryinfo = SummaryInfo.read(f, context)
+            summaryinfo = MSOLEPropertySet.read(f, context)
             return summaryinfo
         finally:
             f.close()
@@ -533,10 +487,22 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
     def open_text(self):
         out = StringIO()
-        for k, v in sorted(self.value.iteritems()):
-            if isinstance(v, unicode):
-                v = v.encode('utf-8')
-            print >> out, '%20s: %s' % (k, v)
+        def uuid_from_bytes_tuple(t):
+            from uuid import UUID
+            return UUID(bytes_le=''.join(chr(x) for x in t))
+
+        print >> out, 'byteorder: 0x%x' % self.value['byteorder']
+        print >> out, 'clsid: %s' % uuid_from_bytes_tuple(self.value['clsid'])
+        print >> out, 'format: %d' % self.value['format']
+        print >> out, 'os: %d' % self.value['os']
+        print >> out, 'osversion: %d' % self.value['osversion']
+
+        for section in self.value['sections']:
+            formatid = uuid_from_bytes_tuple(section['formatid'])
+            print >> out, ('-- Section %s --' % formatid)
+            for prop in section['properties'].values():
+                prop_str = u'%s: %s' % (prop['name'], prop.get('value'))
+                print >> out, prop_str.encode('utf-8')
 
         out.seek(0)
         return out

@@ -68,17 +68,17 @@ class PrimitiveType(type):
                 attrs['fixed_size'] = fixed_size
 
             if 'decode' not in attrs:
-                def decode(cls, s, context=None):
+                def decode(cls, s):
                     return struct.unpack(binfmt, s)[0]
                 attrs['decode'] = classmethod(decode)
 
         if 'fixed_size' in attrs and 'read' not in attrs:
             fixed_size = attrs['fixed_size']
-            def read(cls, f, context=None):
+            def read(cls, f):
                 s = readn(f, fixed_size)
                 decode = getattr(cls, 'decode', None)
                 if decode:
-                    return decode(s, context)
+                    return decode(s)
                 return s
             attrs['read'] = classmethod(read)
 
@@ -113,8 +113,8 @@ hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
 class BSTR(unicode):
     __metaclass__ = PrimitiveType
 
-    def read(f, context):
-        size = UINT16.read(f, None)
+    def read(f):
+        size = UINT16.read(f)
         if size == 0:
             return u''
         data = readn(f, 2*size)
@@ -183,9 +183,6 @@ class FlagsType(type):
         attrs['dictvalue'] = dictvalue
 
         return type.__new__(mcs, name, bases, attrs)
-
-    def read(cls, f, context):
-        return cls(cls.basetype.read(f, context))
 
 
 def _lex_flags_args(args):
@@ -356,13 +353,6 @@ class FixedArrayType(ArrayType):
         mcs.classes[key] = cls
         return cls
 
-    def read(cls, f, context=None):
-        result = []
-        for i in range(0, cls.size):
-            value = cls.itemtype.read(f, context)
-            result.append( value )
-        return tuple(result)
-
 
 ARRAY = FixedArrayType
 
@@ -383,14 +373,6 @@ class VariableLengthArrayType(ArrayType):
         cls = ArrayType.__new__(mcs, name, (list,), attrs)
         mcs.classes[key] = cls
         return cls
-
-    def read(cls, f, context):
-        result = []
-        count = cls.counttype.read(f, context)
-        for i in range(0, count):
-            value = cls.itemtype.read(f, context)
-            result.append( value )
-        return result
 
 
 N_ARRAY = VariableLengthArrayType
@@ -443,6 +425,7 @@ class ParseError(Exception):
         self.cause = None
         self.path = None
         self.record = None
+        self.binevents = None
         self.parse_stack_traces = []
 
     def print_to_logger(self, logger):
@@ -458,6 +441,11 @@ class ParseError(Exception):
             for line in dumpbytes(e.record['payload'], True):
                 logger.error('  %s', line)
         logger.error('Problem Offset: at %d (=0x%x)', e.offset, e.offset)
+        if self.binevents:
+            logger.error('Binary Parse Events:')
+            from hwp5.bintype import log_events
+            for ev, item in log_events(self.binevents, logger.error):
+                pass
         logger.error('Model Stack:')
         for level, c in enumerate(reversed(e.parse_stack_traces)):
             model = c['model']
@@ -475,87 +463,6 @@ class ParseError(Exception):
                 pass
             else:
                 logger.error('  %s%s', ' '*level, c)
-
-
-def read_struct_members(model, context, stream):
-    def read_member(member):
-        return read_type_value(context, member['type'], stream)
-    members = model.parse_members_with_inherited(context, read_member)
-    members = supplement_parse_error_with_offset(members, stream)
-    members = supplement_parse_error_with_parsed(members)
-    return members
-
-
-def read_struct_members_defined(struct_type, stream, context):
-    def read_member(member):
-        return read_type_value(context, member['type'], stream)
-    members = struct_type.parse_members(context, read_member)
-    members = supplement_parse_error_with_offset(members, stream)
-    members = supplement_parse_error_with_parsed(members)
-    return members
-
-
-def read_struct_members_up_to(struct_type, up_to_type, stream, context):
-    stream = context['stream']
-    def read_member(member):
-        return read_type_value(context, member['type'], stream)
-    members = struct_type.parse_members_with_inherited(context, read_member,
-                                                 up_to_type)
-    members = supplement_parse_error_with_offset(members, stream)
-    members = supplement_parse_error_with_parsed(members)
-    return members
-
-
-def supplement_parse_error_with_parsed(members):
-    parsed_members = list()
-    try:
-        for member in members:
-            yield member
-            parsed_members.append(member)
-    except ParseError, e:
-        e.parse_stack_traces[-1]['parsed'] = parsed_members
-        raise
-        
-
-def supplement_parse_error_with_offset(members, stream):
-    while True:
-        offset = stream.tell()
-        try:
-            member = members.next()
-        except ParseError, e:
-            e.parse_stack_traces[-1]['offset'] = offset
-            raise
-        except StopIteration:
-            return
-        member['offset'] = offset
-        member['offset_end'] = stream.tell()
-        yield member
-
-
-def augment_members_with_offset(members, stream):
-    while True:
-        offset = stream.tell()
-        try:
-            member = members.next()
-        except StopIteration:
-            return
-        yield (offset, stream.tell()), member
-
-
-def read_type_value(context, type, stream):
-    try:
-        return type.read(stream, context)
-    except ParseError:
-        raise
-    except Exception, e:
-        msg = 'can\'t parse %s' % type
-        pe = ParseError(msg)
-        pe.cause = e
-        pe.path = context.get('path')
-        pe.treegroup = context.get('treegroup')
-        pe.record = context.get('record')
-        pe.offset = stream.tell()
-        raise pe
 
 
 def typed_struct_attributes(struct, attributes, context):
@@ -590,13 +497,6 @@ class StructType(CompoundType):
                 v.scoping_struct = cls
             elif isinstance(v, FlagsType):
                 v.__name__ = k
-
-    def read(cls, f, context=None):
-        if context is None:
-            context = dict()
-        members = read_struct_members(cls, context, f)
-        members = ((m['name'], m['value']) for m in members)
-        return dict(members)
 
     def parse_members(cls, context, getvalue):
         if 'attributes' not in cls.__dict__:
