@@ -1003,17 +1003,16 @@ class ControlChar(object):
             return data_len, data_len
     find = classmethod(find)
 
-    def decode_bytes(cls, bytes):
+    def decode(cls, bytes):
         code = UINT16.decode(bytes[0:2])
         ch = unichr(code)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
             if ch == ControlChar.TAB:
-                s = StringIO(bytes)
-                param = dict(width=UINT32.read(s),
-                             unknown0=UINT8.read(s),
-                             unknown1=UINT8.read(s),
-                             unknown2=s.read())
+                param = dict(width=UINT32.decode(bytes[0:4]),
+                             unknown0=UINT8.decode(bytes[4:5]),
+                             unknown1=UINT8.decode(bytes[5:6]),
+                             unknown2=bytes[6:])
                 return dict(code=code, param=param)
             else:
                 chid = CHID.decode(bytes[0:4])
@@ -1021,7 +1020,7 @@ class ControlChar(object):
                 return dict(code=code, chid=chid, param=param)
         else:
             return dict(code=code)
-    decode_bytes = classmethod(decode_bytes)
+    decode = classmethod(decode)
 
     def get_kind_by_code(cls, code):
         ch = unichr(code)
@@ -1058,7 +1057,7 @@ class ParaTextChunks(list):
                 text = decode_utf16le_with_hypua(bytes[idx:ctrlpos])
                 yield (idx / 2, ctrlpos / 2), text
             if ctrlpos < ctrlpos_end:
-                cch = ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
+                cch = ControlChar.decode(bytes[ctrlpos:ctrlpos_end])
                 yield (ctrlpos / 2, ctrlpos_end / 2), cch
             idx = ctrlpos_end
     parse_chunks = staticmethod(parse_chunks)

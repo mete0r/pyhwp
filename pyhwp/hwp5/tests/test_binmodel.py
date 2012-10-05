@@ -678,11 +678,11 @@ class TestControlType(TestCase):
 
 class TestControlChar(TestBase):
 
-    def test_decode_bytes(self):
+    def test_decode(self):
         from hwp5.binmodel import ControlChar
         paratext_record = self.hwp5file.bodytext.section(0).record(1)
         payload = paratext_record['payload']
-        controlchar = ControlChar.decode_bytes(payload[0:16])
+        controlchar = ControlChar.decode(payload[0:16])
         self.assertEquals(dict(code=ord(ControlChar.SECTION_COLUMN_DEF),
                                chid='secd',
                                param='\x00' * 8), controlchar)
