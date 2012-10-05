@@ -396,6 +396,11 @@ def resolve_value_from_stream(item, stream):
         return BSTR.read(stream)
     elif item_type is ParaTextChunks:
         return ParaTextChunks.read(stream)
+    elif hasattr(item_type, 'fixed_size'):
+        bytes = readn(stream, item_type.fixed_size)
+        if hasattr(item_type, 'decode'):
+            return item_type.decode(bytes)
+        return bytes
     else:
         assert hasattr(item_type, 'read')
         logger.warning('%s: item type relies on its read() to resolve a value',
