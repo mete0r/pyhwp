@@ -43,27 +43,14 @@ class BYTES(type):
     def __new__(mcs, size):
         return type.__new__(mcs, 'BYTES(%d)' % size, (str,), dict(fixed_size=size))
 
-    def __init__(self, size):
-        return type.__init__(self, None, None, None)
 
-    def read(cls, f):
-        from hwp5.dataio import readn
-        return readn(f, cls.fixed_size)
-
-
-class VERSION(tuple):
+class VERSION(object):
     fixed_size = 4
 
     def decode(cls, bytes):
         return (ord(bytes[3]), ord(bytes[2]),
                 ord(bytes[1]), ord(bytes[0]))
     decode = classmethod(decode)
-
-    def read(cls, f):
-        from hwp5.dataio import readn
-        bytes = readn(f, cls.fixed_size)
-        return cls.decode(bytes)
-    read = classmethod(read)
 
 
 class FileHeader(Struct):
