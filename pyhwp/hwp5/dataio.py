@@ -68,7 +68,7 @@ class PrimitiveType(type):
                 attrs['fixed_size'] = fixed_size
 
             if 'decode' not in attrs:
-                def decode(cls, s, context=None):
+                def decode(cls, s):
                     return struct.unpack(binfmt, s)[0]
                 attrs['decode'] = classmethod(decode)
 
