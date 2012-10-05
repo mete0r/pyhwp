@@ -1042,7 +1042,7 @@ class Text(object):
 class ParaTextChunks(list):
     __metaclass__ = CompoundType
 
-    def read(cls, f, context):
+    def read(cls, f):
         bytes = f.read()
         return [x for x in cls.parse_chunks(bytes)]
     read = classmethod(read)

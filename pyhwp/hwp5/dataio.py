@@ -74,11 +74,11 @@ class PrimitiveType(type):
 
         if 'fixed_size' in attrs and 'read' not in attrs:
             fixed_size = attrs['fixed_size']
-            def read(cls, f, context=None):
+            def read(cls, f):
                 s = readn(f, fixed_size)
                 decode = getattr(cls, 'decode', None)
                 if decode:
-                    return decode(s, context)
+                    return decode(s)
                 return s
             attrs['read'] = classmethod(read)
 
@@ -113,8 +113,8 @@ hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
 class BSTR(unicode):
     __metaclass__ = PrimitiveType
 
-    def read(f, context):
-        size = UINT16.read(f, None)
+    def read(f):
+        size = UINT16.read(f)
         if size == 0:
             return u''
         data = readn(f, 2*size)

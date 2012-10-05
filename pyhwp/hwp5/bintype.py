@@ -393,14 +393,14 @@ def resolve_value_from_stream(item, stream):
         bytes = readn(stream, 4)
         return CHID.decode(bytes)
     elif item_type is BSTR:
-        return BSTR.read(stream, dict())
+        return BSTR.read(stream)
     elif item_type is ParaTextChunks:
-        return ParaTextChunks.read(stream, dict())
+        return ParaTextChunks.read(stream)
     else:
         assert hasattr(item_type, 'read')
         logger.warning('%s: item type relies on its read() to resolve a value',
                        item_type.__name__)
-        return item_type.read(stream, dict())
+        return item_type.read(stream)
 
 
 def read_type_events(type, context, stream):

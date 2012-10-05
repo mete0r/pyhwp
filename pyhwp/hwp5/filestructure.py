@@ -41,12 +41,12 @@ HWP5_SIGNATURE = 'HWP Document File'+('\x00'*15)
 
 class BYTES(type):
     def __new__(mcs, size):
-        return type.__new__(mcs, 'BYTES%d' % size, (str,), dict(size=size))
+        return type.__new__(mcs, 'BYTES(%d)' % size, (str,), dict(size=size))
 
     def __init__(self, size):
         return type.__init__(self, None, None, None)
 
-    def read(self, f, context=None):
+    def read(self, f):
         if self.size < 0:
             return f.read()
         else:
@@ -54,7 +54,7 @@ class BYTES(type):
 
 
 class VERSION(tuple):
-    def read(cls, f, context=None):
+    def read(cls, f):
         version = f.read(4)
         return (ord(version[3]), ord(version[2]),
                 ord(version[1]), ord(version[0]))
