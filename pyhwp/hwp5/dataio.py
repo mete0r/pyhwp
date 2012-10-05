@@ -516,12 +516,6 @@ class StructType(CompoundType):
             elif isinstance(v, FlagsType):
                 v.__name__ = k
 
-    def read(cls, f, context=None):
-        if context is None:
-            context = dict()
-        from hwp5.bintype import read_type_item
-        return read_type_item(cls, context, f)['value']
-
     def parse_members(cls, context, getvalue):
         if 'attributes' not in cls.__dict__:
             return
@@ -560,6 +554,13 @@ class StructType(CompoundType):
 
 class Struct(object):
     __metaclass__ = StructType
+
+    def read(cls, f, context=None):
+        if context is None:
+            context = dict()
+        from hwp5.bintype import read_type
+        return read_type(cls, context, f)
+    read = classmethod(read)
 
 
 def dumpbytes(data, crust=False):

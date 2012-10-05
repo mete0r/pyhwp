@@ -293,12 +293,11 @@ class TestFlags(TestCase):
 class TestReadStruct(TestCase):
 
     def test_read_parse_error(self):
-        from hwp5.dataio import StructType
+        from hwp5.dataio import Struct
         from hwp5.dataio import INT16
         from hwp5.dataio import ParseError
 
-        class Foo(object):
-            __metaclass__ = StructType
+        class Foo(Struct):
 
             def attributes():
                 yield INT16, 'a'
