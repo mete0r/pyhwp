@@ -313,74 +313,9 @@ class TestReadStruct(TestCase):
             Foo.read(stream, context)
             assert False, 'ParseError expected'
         except ParseError, e:
-            self.assertEquals(Foo, e.parse_stack_traces[-1]['model'])
-            self.assertEquals('a', e.parse_stack_traces[-1]['member'])
+            self.assertEquals(Foo, e.binevents[0][1]['type'])
+            self.assertEquals('a', e.binevents[-1][1]['name'])
             self.assertEquals(0, e.offset)
-
-    def test_read_parse_error_nested(self):
-        from hwp5.dataio import StructType
-        from hwp5.dataio import BYTE
-        from hwp5.dataio import ParseError
-
-        class Foo(object):
-            __metaclass__ = StructType
-
-            def attributes():
-                yield BYTE, 'a'
-            attributes = staticmethod(attributes)
-
-        class Bar(object):
-            __metaclass__ = StructType
-
-            def attributes():
-                yield BYTE, 'b'
-                yield Foo, 'foo'
-            attributes = staticmethod(attributes)
-
-        class Baz(object):
-            __metaclass__ = StructType
-
-            def attributes():
-                yield BYTE, 'c'
-                yield Bar, 'bar'
-            attributes = staticmethod(attributes)
-
-        class Qux(object):
-            __metaclass__ = StructType
-
-            def attributes():
-                yield BYTE, 'd'
-                yield Baz, 'baz'
-            attributes = staticmethod(attributes)
-
-        from StringIO import StringIO
-        stream = StringIO('\x01\x02\x03')
-
-        record = dict()
-        context = dict(record=record)
-        try:
-            Qux.read(stream, context)
-            assert False, 'ParseError expected'
-        except ParseError, e:
-            traces = e.parse_stack_traces
-            self.assertEquals(Qux, traces[-1]['model'])
-            self.assertEquals('baz', traces[-1]['member'])
-            self.assertEquals(1, traces[-1]['offset'])
-
-            self.assertEquals(Baz, traces[-2]['model'])
-            self.assertEquals('bar', traces[-2]['member'])
-            self.assertEquals(2, traces[-2]['offset'])
-
-            self.assertEquals(Bar, traces[-3]['model'])
-            self.assertEquals('foo', traces[-3]['member'])
-            self.assertEquals(3, traces[-3]['offset'])
-
-            self.assertEquals(Foo, traces[-4]['model'])
-            self.assertEquals('a', traces[-4]['member'])
-            self.assertEquals(3, traces[-4]['offset'])
-
-            self.assertEquals(3, e.offset)
-
 
 
 class TestBSTR(TestCase):

@@ -443,6 +443,7 @@ class ParseError(Exception):
         self.cause = None
         self.path = None
         self.record = None
+        self.binevents = None
         self.parse_stack_traces = []
 
     def print_to_logger(self, logger):
@@ -458,6 +459,11 @@ class ParseError(Exception):
             for line in dumpbytes(e.record['payload'], True):
                 logger.error('  %s', line)
         logger.error('Problem Offset: at %d (=0x%x)', e.offset, e.offset)
+        if self.binevents:
+            logger.error('Binary Parse Events:')
+            from hwp5.bintype import log_events
+            for ev, item in log_events(self.binevents, logger.error):
+                pass
         logger.error('Model Stack:')
         for level, c in enumerate(reversed(e.parse_stack_traces)):
             model = c['model']
@@ -594,9 +600,8 @@ class StructType(CompoundType):
     def read(cls, f, context=None):
         if context is None:
             context = dict()
-        members = read_struct_members(cls, context, f)
-        members = ((m['name'], m['value']) for m in members)
-        return dict(members)
+        from hwp5.bintype import read_type_item
+        return read_type_item(cls, context, f)['value']
 
     def parse_members(cls, context, getvalue):
         if 'attributes' not in cls.__dict__:
