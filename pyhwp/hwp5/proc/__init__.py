@@ -24,9 +24,11 @@
 Usage::
 
     hwp5proc [-h] <command> [option] [<args>...]
+    hwp5proc [--version]
     hwp5proc [--help]
 
-    -h --help   show this
+    -h --help       Show help messages.
+       --version    Show hwp5 package version.
 '''
 
 
