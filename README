@@ -1,1 +1,77 @@
-pyhwp/hwp5/README
+pyhwp
+=====
+
+HWP Document Format v5 parser & processor.
+
+Features
+--------
+
+- Analyze and extract internal streams out from a HWP Document Format v5 file
+- (*Experimental*) Conversion to OpenDocument format (.odt) or plain text (.txt)
+
+Installation
+------------
+
+from `pypi <http://pypi.python.org/pypi/pyhwp>`_::
+
+   pip install pyhwp
+
+from `github <https://github.com/mete0r/pyhwp>`_::
+
+   git clone git://github.com/mete0r/pyhwp.git
+   cd pyhwp
+   python bootstrap.py
+   bin/buildout
+
+Requirements
+------------
+
+- Python 2.5, 2.6 or 2.7
+- `simplejson <http://pypi.python.org/pypi/simplejson>`_
+- `OleFileIO_PL <http://pypi.python.org/pypi/OleFileIO_PL>`_ >= 0.20
+- `docopt <http://pypi.python.org/pypi/docopt>`_ >= 0.3
+- `hypua2jamo <http://pypi.python.org/pypi/hypua2jamo>`_ >= 0.1
+
+Documentation & Development
+---------------------------
+
+- Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/pyhwp>`_ [`한국/조선어 <http://packages.python.org/pyhwp/ko>`_] [`develop branch <http://pyhwp.readthedocs.org>`_]
+- Distribution: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/pyhwp>`_
+- Development: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_
+- Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_
+- Feedbacks & contributions are welcome!
+
+Contributors
+------------
+
+Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_
+
+License
+-------
+
+.. image:: http://www.gnu.org/graphics/agplv3-155x51.png
+
+`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-3.0.html>`_
+`(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_
+
+pyhwp: HWP Document Format v5 parser & processor
+Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Disclosure
+----------
+
+pyhwp는 `(주)한글과컴퓨터 <http://www.hancom.co.kr>`_ 의 한/글 문서 파일(.hwp) 공개 문서를
+참고하여 개발하였습니다.
