@@ -26,9 +26,11 @@ Usage::
     hwp5proc <command> [options] [<args>...]
     hwp5proc [--version]
     hwp5proc [--help]
+    hwp5proc [--help-commands]
 
-    -h --help       Show help messages.
-       --version    Show hwp5 package version.
+       --version        Show version and copyright information.
+    -h --help           Show help messages.
+       --help-commands  Show available commands.
 
 '''
 import sys
@@ -42,7 +44,6 @@ def rest_to_docopt(doc):
     ''' ReST to docopt conversion
     '''
     return doc.replace('::\n\n', ':\n').replace('``', '')
-
 
 def init_logger(args):
     import os
@@ -121,24 +122,42 @@ def docopt(doc, version, argv=sys.argv[1:], help=True, **kwargs):
 
     args = dict()
     args['<command>'] = cmd
+    args['--help-commands'] = False
+
+    if cmd == '--help-commands':
+        args['<command>'] = None
+        args['--help-commands'] = True
     return args
 
 
-def main():
-    from hwp5 import __version__
+import hwp5
+version = '''hwp5proc (pyhwp) %s
+Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>
+License AGPLv3+: GNU Affero GPL version 3 or any later
+<http://gnu.org/licenses/agpl.txt>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Disclosure: This program has been developed in accordance with a public
+document named "HWP Binary Specification 1.1" published by Hancom Inc.
+<http://www.hancom.co.kr>.'''
+version = version % hwp5.__version__
 
-    doc = __doc__ + '''
-Available commands::
+help_commands = '''Available <command> values:
 
     ''' + '\n    '.join(subcommands) + '''
 
-See 'hwp5proc <command> --help' for more information on a specific command.
+See 'hwp5proc <command> --help' for more information on a specific command.'''
 
-'''
-
+def main():
+    doc = __doc__
     doc = rest_to_docopt(doc)
 
-    args = docopt(doc, version=__version__, help=False)
+    args = docopt(doc, version=version, help=False)
+
+    if args['--help-commands']:
+        print doc,
+        print help_commands
+        return 0
 
     command = args['<command>']
     if command not in subcommands:
