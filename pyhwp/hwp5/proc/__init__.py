@@ -23,15 +23,15 @@
 
 Usage::
 
-    hwp5proc [-h] <command> [option] [<args>...]
+    hwp5proc <command> [options] [<args>...]
     hwp5proc [--version]
     hwp5proc [--help]
 
     -h --help       Show help messages.
        --version    Show hwp5 package version.
+
 '''
-
-
+import sys
 import logging
 
 
@@ -99,14 +99,39 @@ def entrypoint(rest_doc):
 subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
                'records', 'models', 'find', 'xml', 'rawunz']
 
+
+def docopt(doc, version, argv=sys.argv[1:], help=True, **kwargs):
+    ''' docopt stub implementation
+    '''
+    if len(argv) == 0:
+        cmd = '--help'
+    else:
+        cmd = argv[0]
+
+    if cmd == '-h':
+        cmd = '--help'
+
+    if cmd == '--help' and help:
+        print doc
+        sys.exit(1)
+
+    if cmd == '--version':
+        print version
+        sys.exit(0)
+
+    args = dict()
+    args['<command>'] = cmd
+    return args
+
+
 def main():
-    from docopt import docopt
     from hwp5 import __version__
 
     doc = __doc__ + '''
 Available commands::
 
     ''' + '\n    '.join(subcommands) + '''
+
 See 'hwp5proc <command> --help' for more information on a specific command.
 
 '''
@@ -120,7 +145,6 @@ See 'hwp5proc <command> --help' for more information on a specific command.
         print(doc.strip())
         return 1
 
-    import sys
     i = sys.argv.index(command)
     argv = sys.argv[i:]
 
