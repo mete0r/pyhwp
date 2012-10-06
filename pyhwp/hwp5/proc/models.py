@@ -76,7 +76,6 @@ version specified by -V option.
 Example::
 
     $ hwp5proc cat samples/sample-5017.hwp BodyText/Section0 > Section0.bin
-    $ hwp5proc models < Section0.bin
     $ hwp5proc models -V 5.0.1.7 < Section0.bin
 
 '''
