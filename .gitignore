@@ -24,3 +24,5 @@ MANIFEST
 *.mo
 *.po~
 releases
+downloads
+venv
