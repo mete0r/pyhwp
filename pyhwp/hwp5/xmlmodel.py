@@ -364,7 +364,7 @@ def embed_bindata(event_prefixed_mac, bindata):
         (model, attributes, context) = item
         if event is STARTEVENT and model is BinData:
             if attributes['flags'].storage is BinData.StorageType.EMBEDDING:
-                name = ('BIN%04d' % attributes['bindata']['storage_id']
+                name = ('BIN%04X' % attributes['bindata']['storage_id']
                         + '.'
                         + attributes['bindata']['ext'])
                 bin_stream = bindata[name].open()
