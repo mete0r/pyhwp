@@ -42,6 +42,14 @@ Options::
 
 Example::
 
+    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg | file -
+
+    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg > BIN0002.jpg
+
+    $ hwp5proc cat samples/sample-5017.hwp PrvText | iconv -f utf-16le -t utf-8
+
+    $ hwp5proc cat --vstreams samples/sample-5017.hwp PrvText.utf8
+
     $ hwp5proc cat --vstreams samples/sample-5017.hwp FileHeader.txt
 
     ccl: 0
@@ -58,8 +66,6 @@ Example::
     signature: HWP Document File
     version: 5.0.1.7
     xmltemplate_storage: 0
-
-    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg > BIN0002.jpg
 
 '''
 from hwp5.proc import entrypoint
