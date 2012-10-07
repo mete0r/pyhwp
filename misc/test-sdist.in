@@ -1,0 +1,2 @@
+#!/bin/sh
+bash ${buildout:directory}/misc/test-sdist

@@ -26,3 +26,5 @@ MANIFEST
 releases
 downloads
 venv
+sdist.log
+test-cli.log

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# exit if any statement returns non-true return value
+set -e
+
+# exit on uninitialized variable
+set -u
+
+VERSION=`python setup.py --version`
+echo pyhwp version: $VERSION
+VENV=venv-$VERSION
+SDIST=dist/pyhwp-$VERSION.tar.gz
+
+[ -f $SDIST ] && rm -f $SDIST
+python setup.py sdist > sdist.log
+tar tfz $SDIST | grep -F "pyhwp-$VERSION/README"
+tar tfz $SDIST | grep -F "pyhwp-$VERSION/COPYING"
+tar tfz $SDIST | grep -F "pyhwp-$VERSION/pyhwp/hwp5/README"
+tar tfz $SDIST | grep -F "pyhwp-$VERSION/pyhwp/hwp5/COPYING"
+
+[ -f $VENV/bin/activate ] || virtualenv --no-site-packages $VENV
+set +eu
+. $VENV/bin/activate
+set -eu
+
+pip install $SDIST
+python -c 'print __import__("pkg_resources").resource_filename("hwp5", "README")' | grep README
+python -c 'print __import__("pkg_resources").resource_filename("hwp5", "COPYING")' | grep COPYING
+hwp5proc --version | grep -F "$VERSION"
+hwp5odt --version | grep -F "$VERSION"
+bin/test-cli > test-cli.log
+
+pip uninstall pyhwp --yes
+rm -rf $VENV
+echo 'test-sdist SUCCESSFUL'
