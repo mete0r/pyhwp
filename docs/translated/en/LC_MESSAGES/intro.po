@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-11 08:53\n"
+"POT-Creation-Date: 2012-10-08 03:21\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,21 +143,52 @@ msgstr ""
 msgid "License"
 msgstr ""
 
+# 02c7962826ee4ccd81c428723a8d8d5a
+#: ../../intro.rst:52
+msgid "Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>"
+msgstr ""
+
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
-#: ../../intro.rst:54
+#: ../../intro.rst:56
 msgid ""
 "`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-"
 "3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
 msgstr ""
 
+# 164415d866774a9e9e7ad1008447cf74
+#: ../../intro.rst:59
+msgid ""
+"This program is free software: you can redistribute it and/or modify it "
+"under the terms of the GNU Affero General Public License as published by the "
+"Free Software Foundation, either version 3 of the License, or (at your "
+"option) any later version."
+msgstr ""
+
+# 6cc8ef94865e4196898a83b1b80dd2e5
+#: ../../intro.rst:64
+msgid ""
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License "
+"for more details."
+msgstr ""
+
+# d54697f2f7dc44869d43637b7e5dcb68
+#: ../../intro.rst:69
+msgid ""
+"You should have received a copy of the GNU Affero General Public License "
+"along with this program.  If not, see <http://www.gnu.org/licenses/>."
+msgstr ""
+
 # c3270c668ef7418e951ef0bc8ac17fdd
-#: ../../intro.rst:58
+#: ../../intro.rst:73
 msgid "Disclosure"
 msgstr ""
 
-# 42e655554a964a3183584bed58452f29
-#: ../../intro.rst:60
+# df57575778df4329940de5a8a2999e73
+#: ../../intro.rst:75
 msgid ""
-"pyhwp는 `(주)한글과컴퓨터 <http://www.hancom.co.kr>`_ 의 한/글 문서 파일(."
-"hwp) 공개 문서를 참고하여 개발하였습니다."
+"This program has been developed in accordance with a public document named "
+"\"HWP Binary Specification 1.1\" published by `Hancom Inc. <http://www."
+"hancom.co.kr>`_"
 msgstr ""
