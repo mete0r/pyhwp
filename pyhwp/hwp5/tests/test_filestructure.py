@@ -360,11 +360,8 @@ class TestUncompress(TestCase):
 
     @cached_property
     def original_data(self):
-        f = file('/dev/urandom', 'r')
-        try:
-            return f.read(16384)
-        finally:
-            f.close()
+        import os
+        return os.urandom(16384)
 
     @cached_property
     def compressed_data(self):
