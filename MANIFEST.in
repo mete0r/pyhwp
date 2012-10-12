@@ -4,4 +4,5 @@ include pyhwp/hwp5/README
 include pyhwp/hwp5/xsl/*.xsl
 include pyhwp/hwp5/xsl/odt/*
 include pyhwp/hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
+include pyhwp/hwp5/tests/fixtures/*
 include versioneer.py

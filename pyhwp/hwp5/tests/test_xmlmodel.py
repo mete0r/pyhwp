@@ -199,9 +199,11 @@ class TestMatchFieldStartEnd(TestCase):
 
     def test_match_field_start_end(self):
         from hwp5 import binmodel, xmlmodel
+        from hwp5.tests import get_fixture_path
 
+        path = get_fixture_path('match-field-start-end.dat')
         import pickle
-        f = open('fixtures/match-field-start-end.dat', 'r')
+        f = open(path, 'r')
         try:
             records = pickle.load(f)
         finally:

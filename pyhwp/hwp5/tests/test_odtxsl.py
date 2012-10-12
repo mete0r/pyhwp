@@ -3,8 +3,10 @@ from unittest import TestCase
 from hwp5.utils import cached_property
 
 def example(filename):
+    from hwp5.tests import get_fixture_path
     from hwp5.xmlmodel import Hwp5File
-    return Hwp5File('fixtures/'+filename)
+    path = get_fixture_path(filename)
+    return Hwp5File(path)
 
 def example_to_xml(filename):
     hwp5file = example(filename)

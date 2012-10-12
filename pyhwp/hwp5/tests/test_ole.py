@@ -3,12 +3,15 @@ from unittest import TestCase
 
 class TestBase(TestCase):
 
-    fixtures_dir = 'fixtures'
     hwp5file_name = 'sample-5017.hwp'
 
     def get_fixture_file(self, filename):
-        import os.path
-        return os.path.join(self.fixtures_dir, filename)
+        from hwp5.tests import get_fixture_path
+        return get_fixture_path(filename)
+
+    def open_fixture(self, filename, *args, **kwargs):
+        from hwp5.tests import open_fixture
+        return open_fixture(filename, *args, **kwargs)
 
     @property
     def hwp5file_path(self):
@@ -73,9 +76,8 @@ class TestOleStorage(TestBase):
 
     def test_init_should_receive_string_olefile(self):
         from hwp5.storage.ole import OleStorage
-        import os.path
-        olestg = OleStorage(os.path.join(self.fixtures_dir,
-                                         self.hwp5file_name))
+        path = self.get_fixture_file(self.hwp5file_name)
+        olestg = OleStorage(path)
         self.assertTrue(olestg['FileHeader'] is not None)
 
     def test_iter(self):

@@ -36,3 +36,15 @@ def test_suite():
         tests[0:0] = [localtest]
 
     return TS((TL.loadTestsFromModule(m) for m in tests))
+
+
+def get_fixture_path(filename):
+    import os.path
+    path = os.path.join('fixtures', filename)
+    import pkg_resources
+    return pkg_resources.resource_filename('hwp5.tests', path)
+
+
+def open_fixture(filename, *args, **kwargs):
+    path = get_fixture_path(filename)
+    return open(path, *args, **kwargs)

@@ -7,6 +7,14 @@ class TestBase(TestCase):
 
     layer = RemoteContextLayer
 
+    def get_fixture_path(self, filename):
+        from hwp5.tests import get_fixture_path
+        return get_fixture_path(filename)
+
+    def open_fixture(self, filename, *args, **kwargs):
+        from hwp5.tests import open_fixture
+        return open_fixture(filename, *args, **kwargs)
+
 
 class OleStorageAdapterTest(TestBase):
 
@@ -14,7 +22,7 @@ class OleStorageAdapterTest(TestBase):
         from unokit.services import css
         from hwp5_uno import InputStreamFromFileLike
         from hwp5_uno import OleStorageAdapter
-        f = file('fixtures/sample-5017.hwp', 'r')
+        f = self.open_fixture('sample-5017.hwp', 'r')
         inputstream = InputStreamFromFileLike(f)
         oless = css.embed.OLESimpleStorage(inputstream)
         return OleStorageAdapter(oless)
@@ -52,7 +60,7 @@ class HwpFileFromInputStreamTest(TestBase):
     def test_basic(self):
         from unokit.adapters import InputStreamFromFileLike
         from hwp5_uno import HwpFileFromInputStream
-        with file('fixtures/sample-5017.hwp', 'r') as f:
+        with self.open_fixture('sample-5017.hwp', 'r') as f:
             inputstream = InputStreamFromFileLike(f)
             hwpfile = HwpFileFromInputStream(inputstream)
             self.assertEquals((5, 0, 1, 7), hwpfile.fileheader.version)
@@ -92,7 +100,7 @@ class TypedetectTest(TestBase):
         from unokit.adapters import InputStreamFromFileLike
         from hwp5_uno import inputstream_is_hwp5file
         from hwp5_uno import typedetect
-        with file('fixtures/sample-5017.hwp', 'rb') as f:
+        with self.open_fixture('sample-5017.hwp', 'rb') as f:
             inputstream = InputStreamFromFileLike(f, dontclose=True)
             self.assertTrue(inputstream_is_hwp5file(inputstream))
             self.assertEquals('hwp5', typedetect(inputstream))
@@ -124,7 +132,8 @@ class LoadHwp5FileTest(TestBase):
         desktop = css.frame.Desktop()
         doc = desktop.loadComponentFromURL('private:factory/swriter', '_blank',
                                            0, tuple())
-        hwp5file = Hwp5File('fixtures/sample-5017.hwp')
+        hwp5path = self.get_fixture_path('sample-5017.hwp')
+        hwp5file = Hwp5File(hwp5path)
 
         load_hwp5file_into_doc(hwp5file, doc)
 
