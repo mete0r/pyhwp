@@ -25,22 +25,19 @@ class example_to_odt(object):
 
     def open_content(self):
         from hwp5.hwp5odt import convert
-        import os
-        r, w = os.pipe()
-        r = os.fdopen(r, 'r')
-        w = os.fdopen(w, 'w')
+        from tempfile import TemporaryFile
+        f = TemporaryFile()
         try:
             xmlfile = file(self.xmlfilename, 'r')
             try:
-                convert.xslt_content(xmlfile, w)
+                convert.xslt_content(xmlfile, f)
+                f.seek(0)
             finally:
                 xmlfile.close()
-            return r
+            return f
         except:
-            r.close()
+            f.close()
             raise
-        finally:
-            w.close()
 
     def content(self):
         from lxml import etree
@@ -53,22 +50,19 @@ class example_to_odt(object):
 
     def open_styles(self):
         from hwp5.hwp5odt import convert
-        import os
-        r, w = os.pipe()
-        r = os.fdopen(r, 'r')
-        w = os.fdopen(w, 'w')
+        from tempfile import TemporaryFile
+        f = TemporaryFile()
         try:
             xmlfile = file(self.xmlfilename, 'r')
             try:
-                convert.xslt_styles(xmlfile, w)
+                convert.xslt_styles(xmlfile, f)
+                f.seek(0)
             finally:
                 xmlfile.close()
-            return r
+            return f
         except:
-            r.close()
+            f.close()
             raise
-        finally:
-            w.close()
 
     def styles(self):
         from lxml import etree
