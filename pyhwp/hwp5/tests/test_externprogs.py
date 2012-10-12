@@ -85,24 +85,26 @@ class TestXmlLint(TestCase):
         self.assertEquals(1, r.subprocess.wait())
 
     def test_returncode_ok(self):
+        import os
 
         transform = xmllint()
 
         with file(self.id(), 'w') as f:
             f.write('<doc></doc>')
         with file(self.id(), 'r') as f:
-            with file('/dev/null', 'w') as g:
+            with file(os.devnull, 'w') as g:
                 returncode = transform(infile=f, outfile=g)
                 self.assertEquals(0, returncode)
 
     def test_returncode_fail(self):
+        import os
 
         transform = xmllint()
 
         with file(self.id(), 'w') as f:
             f.write('<doc></nondoc>')
         with file(self.id(), 'r') as f:
-            with file('/dev/null', 'w') as g:
+            with file(os.devnull, 'w') as g:
                 returncode = transform(infile=f, outfile=g)
                 self.assertEquals(1, returncode)
 
