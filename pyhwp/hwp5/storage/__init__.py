@@ -108,7 +108,7 @@ def unpack(stg, outbase):
         else:
             f = item.open()
             try:
-                outfile = file(outpath, 'w')
+                outfile = file(outpath, 'wb')
                 try:
                     outfile.write(f.read())
                 finally:

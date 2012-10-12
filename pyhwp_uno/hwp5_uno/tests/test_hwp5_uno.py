@@ -22,7 +22,7 @@ class OleStorageAdapterTest(TestBase):
         from unokit.services import css
         from hwp5_uno import InputStreamFromFileLike
         from hwp5_uno import OleStorageAdapter
-        f = self.open_fixture('sample-5017.hwp', 'r')
+        f = self.open_fixture('sample-5017.hwp', 'rb')
         inputstream = InputStreamFromFileLike(f)
         oless = css.embed.OLESimpleStorage(inputstream)
         return OleStorageAdapter(oless)
@@ -60,7 +60,7 @@ class HwpFileFromInputStreamTest(TestBase):
     def test_basic(self):
         from unokit.adapters import InputStreamFromFileLike
         from hwp5_uno import HwpFileFromInputStream
-        with self.open_fixture('sample-5017.hwp', 'r') as f:
+        with self.open_fixture('sample-5017.hwp', 'rb') as f:
             inputstream = InputStreamFromFileLike(f)
             hwpfile = HwpFileFromInputStream(inputstream)
             self.assertEquals((5, 0, 1, 7), hwpfile.fileheader.version)

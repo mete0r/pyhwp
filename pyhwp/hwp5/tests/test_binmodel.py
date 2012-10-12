@@ -414,7 +414,8 @@ class ShapeComponentTest(TestBase):
     def test_colorpattern_gradation(self):
         import pickle
         from hwp5.binmodel import parse_models
-        f = self.open_fixture('5005-shapecomponent-with-colorpattern-and-gradation.dat', 'r')
+        f = self.open_fixture('5005-shapecomponent-with-colorpattern-and-gradation.dat',
+                              'rb')
         try:
             records = pickle.load(f)
         finally:
@@ -441,7 +442,8 @@ class ShapeComponentTest(TestBase):
     def test_colorpattern_gradation_5017(self):
         from hwp5.recordstream import read_records
         from hwp5.binmodel import parse_models
-        f = self.open_fixture('5017-shapecomponent-with-colorpattern-and-gradation.bin', 'r')
+        f = self.open_fixture('5017-shapecomponent-with-colorpattern-and-gradation.bin',
+                              'rb')
         try:
             records = list(read_records(f))
         finally:
@@ -756,7 +758,7 @@ class TestFootnoteShape(TestBase):
 
     def test_footnote_shape(self):
         import pickle
-        f = self.open_fixture('5000-footnote-shape.dat', 'r')
+        f = self.open_fixture('5000-footnote-shape.dat', 'rb')
         try:
             records = pickle.load(f)
         finally:
@@ -773,7 +775,7 @@ class TestFootnoteShape(TestBase):
 class TestControlData(TestBase):
     def test_parse(self):
         import pickle
-        f = self.open_fixture('5006-controldata.record', 'r')
+        f = self.open_fixture('5006-controldata.record', 'rb')
         try:
             record = pickle.load(f)
         finally:

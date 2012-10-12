@@ -48,4 +48,4 @@ class FileSystemStream(object):
         self.path = path
 
     def open(self):
-        return file(self.path, 'r')
+        return file(self.path, 'rb')
