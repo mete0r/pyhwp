@@ -151,7 +151,10 @@ def external_transform(program, *options):
 
         program_found = which(program)
         if not program_found:
-            raise ProgramNotFound(program)
+            if not program.lower().endswith('.exe'):
+                program_found = which(program + '.exe')
+                if not program_found:
+                    raise ProgramNotFound(program)
 
         logger.info('program %s: found at %s ', program, program_found)
 

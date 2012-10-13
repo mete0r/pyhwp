@@ -114,9 +114,12 @@ class TestXmlLintReadable(TestCase):
     def test_xmllint_readable(self):
         from StringIO import StringIO
         f = StringIO('<doc/>')
-        with xmllint_readable(f) as g:
+        g = xmllint_readable(f)
+        try:
             assert isinstance(g, SubprocessReadable)
             linted = g.read()
+        finally:
+            g.close()
         self.assertEquals(0, g.subprocess.wait())
         self.assertEquals('<?xml version="1.0"?>\n<doc/>\n', linted)
 
@@ -132,10 +135,11 @@ class TestXmlLintReadable(TestCase):
     def test_xmllint_readable_error(self):
         from StringIO import StringIO
         f = StringIO('<doc></nondoc>')
-        with xmllint_readable(f) as g:
+        g = xmllint_readable(f)
+        try:
             try:
                 g.read()
             except SubprocessError, e:
                 self.assertEquals((1,), e.args)
-
-
+        finally:
+            g.close()
