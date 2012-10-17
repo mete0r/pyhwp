@@ -6,5 +6,6 @@ setup(name='oxttool',
           'console_scripts': [
               'oxt-test = oxttool:test',
               'oxt-console= oxttool:console',
+              'oxt-make = oxttool:make',
               ]
           })
