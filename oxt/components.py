@@ -43,6 +43,14 @@ if filename:
 del filename
 
 
+import sys
+logger.info('sys.executable = %s', sys.executable)
+logger.info('sys.version = %s', sys.version)
+logger.info('sys.path:')
+for path in sys.path:
+    logger.info('- %s', path)
+
+
 try:
     import uno
     import unohelper
