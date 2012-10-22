@@ -60,7 +60,7 @@ class Discover(object):
             # dummy executable
             easy_install.scripts([('java', 'sys', 'exit')],
                                  ws, sys.executable, location,
-                                 arguments='255')
+                                 arguments='0')
         yield os.path.join(location, 'java')
 
     update = install
