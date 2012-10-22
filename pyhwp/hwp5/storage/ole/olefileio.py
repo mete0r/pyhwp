@@ -22,6 +22,10 @@
 
 from hwp5.utils import cached_property
 
+
+__import__('OleFileIO_PL')
+
+
 class OleStorageItem(object):
 
     def __init__(self, olefile, path, parent=None):
