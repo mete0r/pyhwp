@@ -7,9 +7,14 @@ import sys
 from zc.buildout import easy_install
 
 
+def is_jre(dir):
+    java_path = os.path.join(dir, 'bin', 'java')
+    return os.path.exists(java_path)
+
+
 def discover():
     if 'JAVA_HOME' in os.environ:
-        return os.path.join(os.environ['JAVA_HOME'], 'bin', 'java')
+        return os.environ['JAVA_HOME']
 
 
 def routes_to(actual_executable):
@@ -19,6 +24,8 @@ def routes_to(actual_executable):
 
 
 class Discover(object):
+    ''' Discover and provide location.
+    '''
 
     def __init__(self, buildout, name, options):
         self.__logger = logger = logging.getLogger(name)
@@ -34,12 +41,13 @@ class Discover(object):
             self.__location = os.path.join(parts_dir, name)
 
         # discover java
-        self.__discovered_java_path = discover()
-        if self.__discovered_java_path:
-            logger.info('JRE discovered: %s', self.__discovered_java_path)
+        self.__discovered = discover()
+        if self.__discovered:
+            logger.info('JRE discovered: %s', self.__discovered)
+            options['location'] = self.__discovered
 
     def install(self):
-        discovered_java_path = self.__discovered_java_path
+        discovered = self.__discovered
 
         location = self.__location
         if not os.path.exists(location):
@@ -53,7 +61,8 @@ class Discover(object):
 
         import pkg_resources
         ws = [pkg_resources.get_distribution(self.__recipe)]
-        if discovered_java_path:
+        if discovered:
+            discovered_java_path = os.path.join(discovered, 'bin', 'java')
             # routes to the actual java executable
             arguments = ('" ".join(["%s"] + '
                          '[\'"\'+x+\'"\' for x in sys.argv[1:]])' %
