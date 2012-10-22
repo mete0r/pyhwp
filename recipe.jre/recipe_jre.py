@@ -5,6 +5,7 @@ import os
 import os.path
 import sys
 from zc.buildout import easy_install
+from zc.buildout import UserError
 
 
 def is_jre(dir):
@@ -12,19 +13,34 @@ def is_jre(dir):
     return os.path.exists(java_path)
 
 
-def discover():
+def discover_jre():
     if 'JAVA_HOME' in os.environ:
-        return os.environ['JAVA_HOME']
+        location = os.environ['JAVA_HOME']
+        if is_jre(location):
+            return location
+
+    if 'PATH' in os.environ:
+        path = os.environ['PATH']
+        path = path.split(os.pathsep)
+        for bin_dir in path:
+            executable = executable_in_dir('java', bin_dir)
+            if executable:
+                executable = os.path.realpath(executable)
+                return os.path.dirname(os.path.dirname(executable))
 
 
-def routes_to(actual_executable):
-    cmd = [actual_executable] + [('"%s"' % x) for x in sys.argv[1:]]
-    cmd = ' '.join(cmd)
-    sys.exit(os.system(cmd))
+def executable_in_dir(name, dir):
+    assert name == os.path.basename(name)
+    path = os.path.join(dir, name)
+    if not os.path.exists(path):
+        path = os.path.join(dir, name+'.exe')
+        if not os.path.exists(path):
+            return
+    return path
 
 
 class Discover(object):
-    ''' Discover and provide location.
+    ''' Discover JRE and provide its location.
     '''
 
     def __init__(self, buildout, name, options):
@@ -33,23 +49,36 @@ class Discover(object):
             logger.info('%s: %r', k, v)
 
         self.__recipe = options['recipe']
+        self.__generate_stub = None
 
         if 'location' in options:
-            self.__location = options['location']
-        else:
-            parts_dir = buildout['buildout']['parts-directory']
-            self.__location = os.path.join(parts_dir, name)
+            # if location is explicitly specified, it must contains java
+            # executable.
+            if is_jre(options['location']):
+                # JRE found, no further operation required.
+                return
+            raise UserError('JRE not found at %s' % options['location'])
 
-        # discover java
-        self.__discovered = discover()
-        if self.__discovered:
-            logger.info('JRE discovered: %s', self.__discovered)
-            options['location'] = self.__discovered
+        # location is not specified: try to discover a JRE installation
+        discovered = discover_jre()
+        if discovered:
+            logger.info('JRE discovered: %s', discovered)
+            logger.info('location = %s (updating)', discovered)
+            options['location'] = discovered
+            return
+
+        # no JRE found: stub generation is required
+        parts_dir = buildout['buildout']['parts-directory']
+        self.__generate_stub = os.path.join(parts_dir, name)
+        options['location'] = self.__generate_stub
+        logger.info('JRE not found: a dummy JRE will be generated')
+        logger.info('location = %s (updating)', self.__generate_stub)
 
     def install(self):
-        discovered = self.__discovered
+        location = self.__generate_stub
+        if location is None:
+            return
 
-        location = self.__location
         if not os.path.exists(location):
             os.makedirs(location)
         yield location
@@ -61,20 +90,11 @@ class Discover(object):
 
         import pkg_resources
         ws = [pkg_resources.get_distribution(self.__recipe)]
-        if discovered:
-            discovered_java_path = os.path.join(discovered, 'bin', 'java')
-            # routes to the actual java executable
-            arguments = ('" ".join(["%s"] + '
-                         '[\'"\'+x+\'"\' for x in sys.argv[1:]])' %
-                         discovered_java_path)
-            easy_install.scripts([('java', 'os', 'system')],
-                                 ws, sys.executable, bin_dir,
-                                 arguments=arguments)
-        else:
-            # dummy executable
-            easy_install.scripts([('java', 'sys', 'exit')],
-                                 ws, sys.executable, bin_dir,
-                                 arguments='0')
+        # dummy executable
+        easy_install.scripts([('java', 'sys', 'exit')],
+                             ws, sys.executable, bin_dir,
+                             arguments='0')
         yield os.path.join(bin_dir, 'java')
+        self.__logger.info('A dummy JRE has been generated: %s', location)
 
     update = install
