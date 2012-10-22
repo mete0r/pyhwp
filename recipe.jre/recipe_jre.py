@@ -46,6 +46,11 @@ class Discover(object):
             os.makedirs(location)
         yield location
 
+        bin_dir = os.path.join(location, 'bin')
+        if not os.path.exists(bin_dir):
+            os.mkdir(bin_dir)
+            yield bin_dir
+
         import pkg_resources
         ws = [pkg_resources.get_distribution(self.__recipe)]
         if discovered_java_path:
@@ -54,13 +59,13 @@ class Discover(object):
                          '[\'"\'+x+\'"\' for x in sys.argv[1:]])' %
                          discovered_java_path)
             easy_install.scripts([('java', 'os', 'system')],
-                                 ws, sys.executable, location,
+                                 ws, sys.executable, bin_dir,
                                  arguments=arguments)
         else:
             # dummy executable
             easy_install.scripts([('java', 'sys', 'exit')],
-                                 ws, sys.executable, location,
+                                 ws, sys.executable, bin_dir,
                                  arguments='0')
-        yield os.path.join(location, 'java')
+        yield os.path.join(bin_dir, 'java')
 
     update = install
