@@ -12,6 +12,14 @@ versioneer.tag_prefix = ''
 versioneer.parentdir_prefix = 'pyhwp-'
 
 
+import sys
+install_requires = []
+if 'java' not in sys.platform:
+    install_requires.append('OleFileIO_PL == 0.23')
+install_requires.append('simplejson')
+install_requires.append('docopt >= 0.3')
+install_requires.append('hypua2jamo >= 0.1')
+
 def read(filename):
     import os.path
     filename = os.path.join(os.path.dirname(__file__), filename)
@@ -39,8 +47,7 @@ setup(
                                 'xsl/*.xsl',
                                 'xsl/odt/*.xsl',
                                 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
-        install_requires=['OleFileIO_PL ==0.23', 'simplejson', 'docopt >= 0.3',
-                          'hypua2jamo >=0.1'],
+        install_requires=install_requires,
         extras_require=dict(test=['lxml']),
 
         entry_points = {
