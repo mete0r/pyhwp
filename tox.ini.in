@@ -11,5 +11,5 @@ commands=
 changedir={toxinidir}/parts/test
 
 [testenv:jy25]
-basepython= {toxinidir}/parts/jython25/jython
+basepython=${jython25:executable}
 deps=discover
