@@ -27,6 +27,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_implementation():
+    import sys
+    if 'java' in sys.platform:
+        from hwp5.storage.ole import jython_poifs
+        if jython_poifs.is_enabled():
+            logger.info('OleStorage implementation: jython_poifs')
+            return jython_poifs.OleStorage
+
     from hwp5.storage.ole import uno_olesimplestorage
     if uno_olesimplestorage.is_enabled():
         logger.info('OleStorage implementation: uno_olesimplestorage')
