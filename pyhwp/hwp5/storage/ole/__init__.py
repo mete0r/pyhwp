@@ -27,6 +27,10 @@ logger = logging.getLogger(__name__)
 
 
 def get_implementation():
+    from hwp5.storage.ole import uno_olesimplestorage
+    if uno_olesimplestorage.is_enabled():
+        logger.info('OleStorage implementation: uno_olesimplestorage')
+        return uno_olesimplestorage.OleStorage
     from hwp5.storage.ole import olefileio
     logger.info('OleStorage implementation: olefileio')
     return olefileio.OleStorage
