@@ -41,8 +41,8 @@ def test_suite():
 def get_fixture_path(filename):
     import os.path
     path = os.path.join('fixtures', filename)
-    import pkg_resources
-    return pkg_resources.resource_filename('hwp5.tests', path)
+    from hwp5.importhelper import pkg_resources_filename
+    return pkg_resources_filename('hwp5.tests', path)
 
 
 def open_fixture(filename, *args, **kwargs):
