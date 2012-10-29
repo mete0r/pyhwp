@@ -11,8 +11,12 @@ commands=
 changedir={toxinidir}/parts/test
 
 [testenv:jy25]
+setenv=JYTHONPATH=${java-poi:location}/poi-3.8-20120326.jar
 basepython=${jython25:executable}
 deps=discover
+commands =
+	jython -c 'from org.apache.poi.poifs.filesystem import POIFSFileSystem'
+	discover -s {toxinidir}/pyhwp
 
 [testenv:lo]
 setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
