@@ -90,7 +90,8 @@ class TestHwp5DistDocStream(TestBase):
 
     def test_head_record_stream(self):
         from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
-        import simplejson
+        from hwp5.importhelper import importjson
+        simplejson = importjson()
         stream = self.jscriptversion.head_record_stream()
         record = simplejson.load(stream)
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
