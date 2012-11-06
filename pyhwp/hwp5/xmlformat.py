@@ -173,6 +173,36 @@ def element(context, (model, attributes)):
     yield ENDEVENT, model.__name__
 
 
+def xmlevents_to_bytechunks(xmlevents, encoding='utf-8'):
+    from xml.sax.saxutils import escape
+    from xml.sax.saxutils import quoteattr
+    entities = {'\r': '&#13;',
+                '\n': '&#10;',
+                '\t': '&#9;'}
+    for event, item in xmlevents:
+        if event is STARTEVENT:
+            yield '<'
+            yield item[0]
+            for n, v in item[1].items():
+                yield ' '
+                yield n
+                yield '='
+                v = quoteattr(v, entities)
+                if isinstance(v, unicode):
+                    v = v.encode(encoding)
+                yield v
+            yield '>'
+        elif event is Text:
+            text = escape(item)
+            if isinstance(text, unicode):
+                text = text.encode(encoding)
+            yield text
+        elif event is ENDEVENT:
+            yield '</'
+            yield item
+            yield '>'
+
+
 class XmlFormat(ModelEventHandler):
     def __init__(self, out):
         self.xmlgen = XMLGenerator(out, 'utf-8')

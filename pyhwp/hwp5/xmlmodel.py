@@ -409,17 +409,34 @@ def dispatch_model_events(handler, events):
             handler.endModel(model)
 
 
+def modelevents_to_xmlevents(modelevents):
+    from hwp5.xmlformat import startelement
+    for event, (model, attributes, context) in modelevents:
+        if event is STARTEVENT:
+            for x in startelement(context, (model, attributes)):
+                yield x
+        elif event is ENDEVENT:
+            yield ENDEVENT, model.__name__
+
+
 class XmlEvents(object):
 
     def __init__(self, events):
         self.events = events
 
+    def bytechunks(self, **kwargs):
+        from hwp5.xmlformat import xmlevents_to_bytechunks
+        encoding = kwargs.get('xml_encoding', 'utf-8')
+        xmlevents = modelevents_to_xmlevents(self.events)
+        bytechunks = xmlevents_to_bytechunks(xmlevents, encoding)
+        yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
+        for chunk in bytechunks:
+            yield chunk
+
     def dump(self, outfile, **kwargs):
-        from hwp5.xmlformat import XmlFormat
-        oformat = XmlFormat(outfile)
-        oformat.startDocument()
-        dispatch_model_events(oformat, self.events)
-        oformat.endDocument()
+        bytechunks = self.bytechunks(**kwargs)
+        for chunk in bytechunks:
+            outfile.write(chunk)
 
     def open(self, **kwargs):
         import os

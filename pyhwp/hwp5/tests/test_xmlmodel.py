@@ -34,6 +34,21 @@ class TestXmlEvents(TestBase):
         data = sio.getvalue()
         self.assertTrue('&#13;' in data)
 
+    def test_bytechunks_quoteattr_cr(self):
+        from hwp5.xmlmodel import XmlEvents
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.binmodel import ControlChar
+
+        context = dict()
+        attrs = dict(char='\r')
+        item = (ControlChar, attrs, context)
+        modelevents = [(STARTEVENT, item),
+                       (ENDEVENT, item)]
+        xmlevents = XmlEvents(iter(modelevents))
+        xml = ''.join(xmlevents.bytechunks())
+
+        self.assertTrue('&#13;' in xml)
+
 
 class TestModelEventStream(TestBase):
 
