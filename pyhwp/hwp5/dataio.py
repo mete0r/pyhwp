@@ -19,6 +19,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import sys
 import struct
 import logging
 from .importhelper import importStringIO
@@ -110,6 +111,32 @@ hwp2mm = lambda x: inch2mm(hwp2inch(x))
 hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
 
 
+def decode_uint16le_array_default(bytes):
+    from array import array
+    codes = array('H', bytes)
+    if sys.byteorder == 'big':
+        codes.byteswap()
+    return codes
+
+
+def decode_uint16le_array_in_jython(bytes):
+    from array import array
+    codes = array('h', bytes)
+    assert codes.itemsize == 2
+    assert sys.byteorder == 'big'
+    codes.byteswap()
+    codes = array('H', codes.tostring())
+    assert codes.itemsize == 4
+    return codes
+
+
+in_jython = sys.platform.startswith('java')
+if in_jython:
+    decode_uint16le_array = decode_uint16le_array_in_jython
+else:
+    decode_uint16le_array = decode_uint16le_array_default
+
+
 class BSTR(unicode):
     __metaclass__ = PrimitiveType
 
@@ -129,17 +156,9 @@ def decode_utf16le_with_hypua(bytes):
     :param bytes: utf-16le encoded bytes with Hanyang-PUA codes
     :returns: a unicode string with Hangul Jamo codes
     '''
-    from array import array
-    codes = array('H', bytes)
-
-    import sys
-    if sys.byteorder == 'big':
-        codes.byteswap()
-
-    codes = codes.tolist()
-
     from hypua2jamo import codes2unicode
-    return codes2unicode(codes)
+    codes = decode_uint16le_array(bytes)
+    return codes2unicode(codes.tolist())
 
 
 class BitGroupDescriptor(object):

@@ -329,3 +329,14 @@ class TestBSTR(TestCase):
         jamo = BSTR.read(f)
         expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
         self.assertEquals(expected, jamo)
+
+
+class TestDecodeUTF16LEPUA(TestCase):
+
+    def test_decode(self):
+        from hwp5.dataio import decode_utf16le_with_hypua
+
+        expected = u'가나다'
+        bytes = expected.encode('utf-16le')
+        u = decode_utf16le_with_hypua(bytes)
+        self.assertEquals(expected, u)
