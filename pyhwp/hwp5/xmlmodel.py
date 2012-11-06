@@ -421,6 +421,8 @@ class XmlEvents(object):
         bytechunks = self.bytechunks(**kwargs)
         for chunk in bytechunks:
             outfile.write(chunk)
+        if hasattr(outfile, 'flush'):
+            outfile.flush()
 
     def open(self, **kwargs):
         import os
