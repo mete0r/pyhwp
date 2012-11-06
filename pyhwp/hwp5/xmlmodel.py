@@ -393,22 +393,6 @@ def wrap_modelevents(wrapper_model, modelevents):
     yield ENDEVENT, wrapper_model
 
 
-class ModelEventHandler(object):
-    def startModel(self, model, attributes, **kwargs):
-        raise NotImplementedError
-    def endModel(self, model):
-        raise NotImplementedError
-
-
-def dispatch_model_events(handler, events):
-    from .treeop import STARTEVENT, ENDEVENT
-    for event, (model, attributes, context) in events:
-        if event == STARTEVENT:
-            handler.startModel(model, attributes, **context)
-        elif event == ENDEVENT:
-            handler.endModel(model)
-
-
 def modelevents_to_xmlevents(modelevents):
     from hwp5.xmlformat import startelement
     for event, (model, attributes, context) in modelevents:

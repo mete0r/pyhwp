@@ -20,7 +20,6 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from itertools import chain
-from xml.sax.saxutils import XMLGenerator
 from hwp5.filestructure import VERSION
 from hwp5.dataio import typed_struct_attributes
 from hwp5.dataio import Struct
@@ -31,12 +30,10 @@ from hwp5.dataio import WCHAR
 from hwp5.dataio import HWPUNIT
 from hwp5.dataio import HWPUNIT16
 from hwp5.dataio import SHWPUNIT
-from hwp5.dataio import hexdump
 from hwp5.binmodel import COLORREF
 from hwp5.binmodel import BinStorageId
 from hwp5.binmodel import Margin
 from hwp5.binmodel import Text
-from hwp5.xmlmodel import ModelEventHandler
 from hwp5.treeop import STARTEVENT
 from hwp5.treeop import ENDEVENT
 import logging
@@ -201,37 +198,3 @@ def xmlevents_to_bytechunks(xmlevents, encoding='utf-8'):
             yield '</'
             yield item
             yield '>'
-
-
-class XmlFormat(ModelEventHandler):
-    def __init__(self, out):
-        self.xmlgen = XMLGenerator(out, 'utf-8')
-
-    def startDocument(self):
-        self.xmlgen.startDocument()
-
-    def startModel(self, model, attributes, **context):
-        logger.debug('xmlmodel.XmlFormat: model: %s, %s', model.__name__, attributes)
-        logger.debug('xmlmodel.XmlFormat: context: %s', context)
-        recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
-        hwptag = context.get('hwptag', '')
-        logger.debug('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
-
-        xmlgen = self.xmlgen
-        for ev, item in startelement(context, (model, attributes)):
-            if ev is STARTEVENT:
-                xmlgen.startElement(item[0], item[1])
-            elif ev is Text:
-                xmlgen.characters(item)
-            elif ev is ENDEVENT:
-                xmlgen.endElement(item)
-
-        unparsed = context.get('unparsed', '')
-        if len(unparsed) > 0:
-            logger.debug('UNPARSED: %s', hexdump(unparsed, True))
-
-    def endModel(self, model):
-        self.xmlgen.endElement(model.__name__)
-
-    def endDocument(self):
-        self.xmlgen.endDocument()
