@@ -135,11 +135,17 @@ def startelement(context, xmlgen, (model, attributes)):
         typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
 
     typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
-    text = plainvalues.pop('<text>', None)
+
+    if model is Text:
+        text = plainvalues.pop('text')[1]
+    elif '<text>' in plainvalues:
+        text = plainvalues.pop('<text>')[1]
+    else:
+        text = None
 
     yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)
     if text:
-        yield xmlgen.characters, text[1]
+        yield xmlgen.characters, text
     for _name, (_type, _value) in typed_attributes:
         if isinstance(_value, dict):
             assert isinstance(_value, dict)
@@ -176,16 +182,9 @@ class XmlFormat(ModelEventHandler):
         recordid = context.get('recordid', ('UNKNOWN', 'UNKNOWN', -1))
         hwptag = context.get('hwptag', '')
         logger.debug('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
-        if model is Text:
-            text = attributes.pop('text')
-        else:
-            text = None
 
         for x in startelement(context, self.xmlgen, (model, attributes)):
             x[0](*x[1:])
-
-        if model is Text and text is not None:
-            self.xmlgen.characters(text)
 
         unparsed = context.get('unparsed', '')
         if len(unparsed) > 0:
