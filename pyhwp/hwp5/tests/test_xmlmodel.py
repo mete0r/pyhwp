@@ -14,6 +14,27 @@ class TestBase(test_binmodel.TestBase):
     hwp5file = hwp5file_xml
 
 
+class TestXmlEvents(TestBase):
+
+    def test_dump_quoteattr_cr(self):
+        from hwp5.xmlmodel import XmlEvents
+        from hwp5.importhelper import importStringIO
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.binmodel import ControlChar
+        StringIO = importStringIO()
+        sio = StringIO()
+
+        context = dict()
+        attrs = dict(char='\r')
+        events = [(STARTEVENT, (ControlChar, attrs, context)),
+                  (ENDEVENT, (ControlChar, attrs, context))]
+        xmlevents = XmlEvents(iter(events))
+        xmlevents.dump(sio)
+
+        data = sio.getvalue()
+        self.assertTrue('&#13;' in data)
+
+
 class TestModelEventStream(TestBase):
 
     @cached_property
