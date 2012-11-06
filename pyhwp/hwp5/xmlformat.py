@@ -21,15 +21,25 @@
 #
 from itertools import chain
 from xml.sax.saxutils import XMLGenerator
-from .filestructure import VERSION
-from .dataio import typed_struct_attributes, Struct, ArrayType, FlagsType, EnumType, WCHAR
-from .dataio import HWPUNIT, HWPUNIT16, SHWPUNIT
-from .dataio import hexdump
-from .binmodel import COLORREF, BinStorageId, Margin, Text
-from .xmlmodel import ModelEventHandler
-
+from hwp5.filestructure import VERSION
+from hwp5.dataio import typed_struct_attributes
+from hwp5.dataio import Struct
+from hwp5.dataio import ArrayType
+from hwp5.dataio import FlagsType
+from hwp5.dataio import EnumType
+from hwp5.dataio import WCHAR
+from hwp5.dataio import HWPUNIT
+from hwp5.dataio import HWPUNIT16
+from hwp5.dataio import SHWPUNIT
+from hwp5.dataio import hexdump
+from hwp5.binmodel import COLORREF
+from hwp5.binmodel import BinStorageId
+from hwp5.binmodel import Margin
+from hwp5.binmodel import Text
+from hwp5.xmlmodel import ModelEventHandler
 import logging
 logger = logging.getLogger(__name__)
+
 
 def xmlattrval(value):
     if isinstance(value, basestring):
@@ -41,6 +51,7 @@ def xmlattrval(value):
     else:
         return str(value)
 
+
 def expanded_xmlattribute((name, (t, value))):
     if isinstance(t, FlagsType):
         yield name, hex(int(value))
@@ -50,7 +61,7 @@ def expanded_xmlattribute((name, (t, value))):
         for pos in ('left', 'right', 'top', 'bottom'):
             yield '-'.join([name, pos]), xmlattrval(value.get(pos))
     elif t is COLORREF:
-        yield name, xmlattrval( t(value) )
+        yield name, xmlattrval(t(value))
     elif t is VERSION:
         yield name, '.'.join(str(x) for x in value)
     elif t in (HWPUNIT, SHWPUNIT, HWPUNIT16):
@@ -61,25 +72,29 @@ def expanded_xmlattribute((name, (t, value))):
         else:
             yield name, unichr(value)
     elif t is BinStorageId:
-        yield name, 'BIN%04X'%value
+        yield name, 'BIN%04X' % value
     else:
         yield name, xmlattrval(value)
+
 
 def xmlattr_dashednames(attrs):
     for k, v in attrs:
         yield k.replace('_', '-'), v
 
+
 def xmlattr_uniqnames(attrs):
     names = set([])
     for k, v in attrs:
-        assert not k in names, 'name clashes: %s'%k
+        assert not k in names, 'name clashes: %s' % k
         yield k, v
         names.add(k)
+
 
 def xmlattributes_for_plainvalues(context, plainvalues):
     ntvs = plainvalues.iteritems()
     ntvs = chain(*(expanded_xmlattribute(ntv) for ntv in ntvs))
     return dict(xmlattr_uniqnames(xmlattr_dashednames(ntvs)))
+
 
 def is_complex_type(type, value):
     if isinstance(value, dict):
@@ -88,6 +103,7 @@ def is_complex_type(type, value):
         return True
     else:
         return False
+
 
 def separate_plainvalues(typed_attributes):
     d = []
@@ -99,7 +115,7 @@ def separate_plainvalues(typed_attributes):
             if t is Margin:
                 p[name] = item
             elif is_complex_type(t, value):
-                d.append( named_item )
+                d.append(named_item)
             else:
                 p[name] = item
         except Exception, e:
@@ -108,6 +124,7 @@ def separate_plainvalues(typed_attributes):
             logger.exception(e)
             raise e
     return d, p
+
 
 def startelement(context, xmlgen, (model, attributes)):
     from hwp5.dataio import StructType
@@ -128,23 +145,31 @@ def startelement(context, xmlgen, (model, attributes)):
             assert isinstance(_value, dict)
             _value = dict(_value)
             _value['attribute-name'] = _name
-            for x in element(context, xmlgen, (_type, _value)): yield x
+            for x in element(context, xmlgen, (_type, _value)):
+                yield x
         else:
-            assert isinstance(_value, (tuple, list)) and issubclass(_type.itemtype, Struct), (_value, _type)
-            yield xmlgen.startElement, 'Array', {'name':_name}
+            assert isinstance(_value, (tuple, list)), (_value, _type)
+            assert issubclass(_type.itemtype, Struct), (_value, _type)
+            yield xmlgen.startElement, 'Array', {'name': _name}
             for _itemvalue in _value:
-                for x in element(context, xmlgen, (_type.itemtype, _itemvalue)): yield x
+                for x in element(context, xmlgen, (_type.itemtype, _itemvalue)):
+                    yield x
             yield xmlgen.endElement, 'Array'
 
+
 def element(context, xmlgen, (model, attributes)):
-    for x in startelement(context, xmlgen, (model, attributes)): yield x
+    for x in startelement(context, xmlgen, (model, attributes)):
+        yield x
     yield xmlgen.endElement, model.__name__
+
 
 class XmlFormat(ModelEventHandler):
     def __init__(self, out):
         self.xmlgen = XMLGenerator(out, 'utf-8')
+
     def startDocument(self):
         self.xmlgen.startDocument()
+
     def startModel(self, model, attributes, **context):
         logger.debug('xmlmodel.XmlFormat: model: %s, %s', model.__name__, attributes)
         logger.debug('xmlmodel.XmlFormat: context: %s', context)
@@ -156,7 +181,8 @@ class XmlFormat(ModelEventHandler):
         else:
             text = None
 
-        for x in startelement(context, self.xmlgen, (model, attributes)): x[0](*x[1:])
+        for x in startelement(context, self.xmlgen, (model, attributes)):
+            x[0](*x[1:])
 
         if model is Text and text is not None:
             self.xmlgen.characters(text)
@@ -164,7 +190,9 @@ class XmlFormat(ModelEventHandler):
         unparsed = context.get('unparsed', '')
         if len(unparsed) > 0:
             logger.debug('UNPARSED: %s', hexdump(unparsed, True))
+
     def endModel(self, model):
         self.xmlgen.endElement(model.__name__)
+
     def endDocument(self):
         self.xmlgen.endDocument()
