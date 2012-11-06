@@ -76,8 +76,14 @@ class ODTPackage(object):
         self.zf = zipfile
 
     def insert_stream(self, f, path, media_type):
-        self.zf.writestr(path, f.read())
-        self.files.append(dict(full_path=path, media_type=media_type))
+        if isinstance(path, unicode):
+            path_bytes = path.encode('utf-8')
+            path_unicode = path
+        else:
+            path_bytes = path
+            path_unicode = unicode(path)
+        self.zf.writestr(path_bytes, f.read())
+        self.files.append(dict(full_path=path_unicode, media_type=media_type))
 
     def close(self):
 
