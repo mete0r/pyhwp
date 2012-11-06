@@ -37,6 +37,8 @@ from hwp5.binmodel import BinStorageId
 from hwp5.binmodel import Margin
 from hwp5.binmodel import Text
 from hwp5.xmlmodel import ModelEventHandler
+from hwp5.treeop import STARTEVENT
+from hwp5.treeop import ENDEVENT
 import logging
 logger = logging.getLogger(__name__)
 
@@ -126,7 +128,7 @@ def separate_plainvalues(typed_attributes):
     return d, p
 
 
-def startelement(context, xmlgen, (model, attributes)):
+def startelement(context, (model, attributes)):
     from hwp5.dataio import StructType
     if isinstance(model, StructType):
         typed_attributes = ((v['name'], (v['type'], v['value']))
@@ -143,30 +145,32 @@ def startelement(context, xmlgen, (model, attributes)):
     else:
         text = None
 
-    yield xmlgen.startElement, model.__name__, xmlattributes_for_plainvalues(context, plainvalues)
+    yield STARTEVENT, (model.__name__,
+                       xmlattributes_for_plainvalues(context, plainvalues))
     if text:
-        yield xmlgen.characters, text
+        yield Text, text
+
     for _name, (_type, _value) in typed_attributes:
         if isinstance(_value, dict):
             assert isinstance(_value, dict)
             _value = dict(_value)
             _value['attribute-name'] = _name
-            for x in element(context, xmlgen, (_type, _value)):
+            for x in element(context, (_type, _value)):
                 yield x
         else:
             assert isinstance(_value, (tuple, list)), (_value, _type)
             assert issubclass(_type.itemtype, Struct), (_value, _type)
-            yield xmlgen.startElement, 'Array', {'name': _name}
+            yield STARTEVENT, ('Array', {'name': _name})
             for _itemvalue in _value:
-                for x in element(context, xmlgen, (_type.itemtype, _itemvalue)):
+                for x in element(context, (_type.itemtype, _itemvalue)):
                     yield x
-            yield xmlgen.endElement, 'Array'
+            yield ENDEVENT, 'Array'
 
 
-def element(context, xmlgen, (model, attributes)):
-    for x in startelement(context, xmlgen, (model, attributes)):
+def element(context, (model, attributes)):
+    for x in startelement(context, (model, attributes)):
         yield x
-    yield xmlgen.endElement, model.__name__
+    yield ENDEVENT, model.__name__
 
 
 class XmlFormat(ModelEventHandler):
@@ -183,8 +187,14 @@ class XmlFormat(ModelEventHandler):
         hwptag = context.get('hwptag', '')
         logger.debug('xmlmodel.XmlFormat: rec:%d %s', recordid[2], hwptag)
 
-        for x in startelement(context, self.xmlgen, (model, attributes)):
-            x[0](*x[1:])
+        xmlgen = self.xmlgen
+        for ev, item in startelement(context, (model, attributes)):
+            if ev is STARTEVENT:
+                xmlgen.startElement(item[0], item[1])
+            elif ev is Text:
+                xmlgen.characters(item)
+            elif ev is ENDEVENT:
+                xmlgen.endElement(item)
 
         unparsed = context.get('unparsed', '')
         if len(unparsed) > 0:
