@@ -206,7 +206,11 @@ class TestEnumType(TestCase):
 
         # frozen attribute set
         self.assertRaises(AttributeError, setattr, Foo(0), 'bar', 0)
-        self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
+        import sys
+        if sys.platform.startswith('java'):  # Jython 2.5.3
+            self.assertRaises(TypeError, setattr, Foo(0), 'name', 'a')
+        else:
+            self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
 
         # undefined value
         #self.assertRaises(ValueError, Foo, 5)
