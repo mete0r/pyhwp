@@ -206,7 +206,11 @@ class TestEnumType(TestCase):
 
         # frozen attribute set
         self.assertRaises(AttributeError, setattr, Foo(0), 'bar', 0)
-        self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
+        import sys
+        if sys.platform.startswith('java'):  # Jython 2.5.3
+            self.assertRaises(TypeError, setattr, Foo(0), 'name', 'a')
+        else:
+            self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
 
         # undefined value
         #self.assertRaises(ValueError, Foo, 5)
@@ -329,3 +333,14 @@ class TestBSTR(TestCase):
         jamo = BSTR.read(f)
         expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
         self.assertEquals(expected, jamo)
+
+
+class TestDecodeUTF16LEPUA(TestCase):
+
+    def test_decode(self):
+        from hwp5.dataio import decode_utf16le_with_hypua
+
+        expected = u'가나다'
+        bytes = expected.encode('utf-16le')
+        u = decode_utf16le_with_hypua(bytes)
+        self.assertEquals(expected, u)

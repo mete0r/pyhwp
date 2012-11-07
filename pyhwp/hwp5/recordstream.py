@@ -24,6 +24,7 @@ from .dataio import UINT32, Eof
 from . import dataio
 from . import filestructure
 from .importhelper import importStringIO
+from hwp5.importhelper import importjson
 StringIO = importStringIO()
 
 
@@ -110,9 +111,9 @@ def link_records(records):
 def record_to_json(record, *args, **kwargs):
     ''' convert a record to json '''
     from .dataio import dumpbytes
-    import simplejson  # TODO: simplejson is for python2.5+
+    json = importjson()
     record['payload'] = list(dumpbytes(record['payload']))
-    return simplejson.dumps(record, *args, **kwargs)
+    return json.dumps(record, *args, **kwargs)
 
 
 def nth(iterable, n, default=None):

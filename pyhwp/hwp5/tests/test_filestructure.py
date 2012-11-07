@@ -90,7 +90,8 @@ class TestHwp5DistDocStream(TestBase):
 
     def test_head_record_stream(self):
         from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
-        import simplejson
+        from hwp5.importhelper import importjson
+        simplejson = importjson()
         stream = self.jscriptversion.head_record_stream()
         record = simplejson.load(stream)
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
@@ -234,11 +235,6 @@ class TestHwp5File(TestBase):
         hwp5file = Hwp5File(self.hwp5file_path)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
-    def test_init_should_accept_olefile(self):
-        from hwp5.filestructure import Hwp5File
-        hwp5file = Hwp5File(self.olefile)
-        self.assertTrue(hwp5file['FileHeader'] is not None)
-
     def test_init_should_accept_olestorage(self):
         from hwp5.filestructure import Hwp5File
         hwp5file = Hwp5File(self.olestg)
@@ -325,9 +321,9 @@ class TestSections(TestBase):
         return Sections(self.hwp5file.stg['BodyText'], self.hwp5file.header.version)
 
 
-class TestGeneratorReader(object):
+class TestGeneratorReader(TestCase):
     def test_generator_reader(self):
-        def data(self):
+        def data():
             yield 'Hello world'
             yield 'my name is'
             yield 'gen'
@@ -337,22 +333,22 @@ class TestGeneratorReader(object):
 
         f = GeneratorReader(data())
         self.assertEquals('Hel', f.read(3))
-        self.assertEquals('llo wo', f.read(6))
-        self.assertEquals('rldmy', f.read(5))
-        self.assertEquals(' name isgenr', f.read(12))
-        self.assertEquals('eader', f.read())
+        self.assertEquals('lo wor', f.read(6))
+        self.assertEquals('ldmy ', f.read(5))
+        self.assertEquals('name isgenre', f.read(12))
+        self.assertEquals('ader', f.read())
 
         f = GeneratorReader(data())
         self.assertEquals('Hel', f.read(3))
-        self.assertEquals('llo wo', f.read(6))
-        self.assertEquals('rldmy', f.read(5))
-        self.assertEquals(' name isgenreader', f.read())
+        self.assertEquals('lo wor', f.read(6))
+        self.assertEquals('ldmy ', f.read(5))
+        self.assertEquals('name isgenreader', f.read())
 
         f = GeneratorReader(data())
         self.assertEquals('Hel', f.read(3))
-        self.assertEquals('llo wo', f.read(6))
-        self.assertEquals('rldmy', f.read(5))
-        self.assertEquals(' name isgenreader', f.read(1000))
+        self.assertEquals('lo wor', f.read(6))
+        self.assertEquals('ldmy ', f.read(5))
+        self.assertEquals('name isgenreader', f.read(1000))
 
 
 from hwp5.utils import cached_property

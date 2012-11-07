@@ -6,6 +6,7 @@ from hwp5.tests import test_recordstream
 from hwp5.recordstream import Record, read_records
 from hwp5.utils import cached_property
 from hwp5.binmodel import RecordModel
+from hwp5.importhelper import importjson
 
 
 def TestContext(**ctx):
@@ -796,7 +797,7 @@ class TestModelJson(TestBase):
         model = self.hwp5file.docinfo.model(0)
         json = model_to_json(model)
 
-        import simplejson
+        simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
@@ -811,7 +812,7 @@ class TestModelJson(TestBase):
         model = self.hwp5file.bodytext.section(0).model(1)
         json = model_to_json(model)
 
-        import simplejson
+        simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals('ParaText', jsonobject['type'])
         self.assertEquals([[0, 8], dict(code=2, param='\x00' * 8, chid='secd')],
@@ -824,7 +825,7 @@ class TestModelJson(TestBase):
                      unparsed='\xff\xfe\xfd\xfc')
         json = model_to_json(model)
 
-        import simplejson
+        simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
 
@@ -832,7 +833,7 @@ class TestModelJson(TestBase):
         models_json = self.hwp5file.bodytext.section(0).models_json()
         gen = models_json.generate()
 
-        import simplejson
+        simplejson = importjson()
         json_array = simplejson.loads(''.join(gen))
         self.assertEquals(128, len(json_array))
 
@@ -867,7 +868,7 @@ class TestModelStream(TestBase):
         self.assertEquals(10, model['seqno'])
 
     def test_models_json_open(self):
-        import simplejson
+        simplejson = importjson()
         f = self.docinfo.models_json().open()
         try:
             self.assertEquals(67, len(simplejson.load(f)))

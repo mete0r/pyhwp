@@ -112,9 +112,14 @@ def storage_is_hwp5file(stg):
     try:
         fileheader = stg['FileHeader']
     except KeyError:
+        logger.info('stg has no FileHeader')
         return False
     fileheader = HwpFileHeader(fileheader)
-    return fileheader.signature == HWP5_SIGNATURE
+    if fileheader.signature == HWP5_SIGNATURE:
+        return True
+    else:
+        logger.info('fileheader.signature = %r', fileheader.signature)
+        return False
 
 
 class GeneratorReader(object):

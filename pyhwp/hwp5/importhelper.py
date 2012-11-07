@@ -31,6 +31,15 @@ def importStringIO():
         return StringIO
 
 
+def importjson():
+    try:
+        import json
+        return json
+    except ImportError:
+        import simplejson
+        return simplejson
+
+
 def pkg_resources_filename(pkg_name, path):
     ''' the equivalent of pkg_resources.resource_filename() '''
     try:
@@ -43,7 +52,10 @@ def pkg_resources_filename(pkg_name, path):
 
 def pkg_resources_filename_fallback(pkg_name, path):
     ''' a fallback implementation of pkg_resources_filename() '''
-    import os.path
     pkg_module = __import__(pkg_name)
+    pkg_name = pkg_name.split('.')
+    import os.path
+    for x in pkg_name[1:]:
+        pkg_module = getattr(pkg_module, x)
     pkg_dir = os.path.dirname(pkg_module.__file__)
     return os.path.join(pkg_dir, path)

@@ -26,10 +26,34 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-try:
-    from hwp5.storage.ole.olefileio import OleStorage as _OleStorage
-except Exception, e:
-    logger.exception(e)
-    raise Exception('No supported implementation found to access OLE compound binary files')
-else:
-    OleStorage = _OleStorage
+def get_implementation():
+    import sys
+    if 'java' in sys.platform:
+        from hwp5.storage.ole import jython_poifs
+        if jython_poifs.is_enabled():
+            logger.info('OleStorage implementation: jython_poifs')
+            return jython_poifs.OleStorage
+
+    from hwp5.storage.ole import uno_olesimplestorage
+    if uno_olesimplestorage.is_enabled():
+        logger.info('OleStorage implementation: uno_olesimplestorage')
+        return uno_olesimplestorage.OleStorage
+    from hwp5.storage.ole import olefileio
+    logger.info('OleStorage implementation: olefileio')
+    return olefileio.OleStorage
+
+
+class OleStorage(object):
+
+    def __init__(self, *args, **kwargs):
+        impl_class = get_implementation()
+        self.impl = impl_class(*args, **kwargs)
+
+    def __iter__(self):
+        return self.impl.__iter__()
+
+    def __getitem__(self, name):
+        return self.impl.__getitem__(name)
+
+    def __getattr__(self, name):
+        return getattr(self.impl, name)

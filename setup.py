@@ -16,9 +16,14 @@ import sys
 install_requires = []
 if 'java' not in sys.platform:
     install_requires.append('OleFileIO_PL == 0.23')
-install_requires.append('simplejson')
+
+try:
+    __import__('json')
+except ImportError:
+    install_requires.append('simplejson')
+
 install_requires.append('docopt >= 0.3')
-install_requires.append('hypua2jamo >= 0.1')
+install_requires.append('hypua2jamo >= 0.2')
 
 def read(filename):
     import os.path

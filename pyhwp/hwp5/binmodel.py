@@ -1918,7 +1918,8 @@ def parse_models_intern(context, records):
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
     from .dataio import dumpbytes
-    import simplejson  # TODO: simplejson is for python2.5+
+    from hwp5.importhelper import importjson
+    json = importjson()
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model
@@ -1927,7 +1928,7 @@ def model_to_json(model, *args, **kwargs):
         model['unparsed'] = list(dumpbytes(model['unparsed']))
     if 'binevents' in model:
         del model['binevents']
-    return simplejson.dumps(model, *args, **kwargs)
+    return json.dumps(model, *args, **kwargs)
 
 
 def chain_iterables(iterables):
