@@ -159,7 +159,8 @@ def external_transform(program, *options):
         p = subprocess.Popen(popen_args,
                              stdin=stdin,
                              stdout=stdout,
-                             stderr=stderr)
+                             stderr=stderr,
+                             universal_newlines=True)
 
         logger.info('program %s started', program_found)
 
