@@ -54,12 +54,25 @@ def soffice_subprocess(**kwargs):
 
     import subprocess
     p = subprocess.Popen(args)
-    logger.info('soffice has been started.')
+    pid = p.pid
+    logger.info('soffice(%s) has been started.', pid)
     try:
         yield p
     finally:
-        p.terminate()
-        logger.info('soffice has been terminated.')
+        import time
+        n = 0
+        p.poll()
+        while p.returncode is None:
+            n += 1
+            if n > 3:
+                p.kill()
+                logger.info('trying to kill soffice(%s)', pid)
+                return
+            p.terminate()
+            time.sleep(1)
+            p.poll()
+        logger.info('soffice(%s) has been terminated with exit code %d',
+                    pid, p.returncode)
 
 
 def connect_remote_context(uno_link, max_tries=10):
