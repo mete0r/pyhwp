@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
-#   pyhwp: hwp file format parser in python
+#   pyhwp : hwp file format parser in python
 #   Copyright (C) 2010 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
