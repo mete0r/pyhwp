@@ -128,6 +128,12 @@ def iter_package_files():
     for dirpath, dirnames, filenames in os.walk('pythonpath',
                                                 followlinks=True):
         for filename in filenames:
+            if filename.endswith('.pyc'):
+                continue
+            if filename.endswith('$py.class'):
+                continue
+            if filename.startswith('.'):
+                continue
             yield os.path.join(dirpath, filename)
 
 
