@@ -50,22 +50,10 @@ class TestRunnerJob(unohelper.Base, XJob):
             logger.info('extra_path: %s', ' '.join(extra_path))
             sys.path.extend(extra_path)
 
-        logconf = args.get('logging')
-        if logconf:
-            levels = dict(debug=logging.DEBUG,
-                          info=logging.INFO,
-                          warning=logging.WARNING,
-                          error=logging.ERROR,
-                          critical=logging.CRITICAL)
-            logconf = dict((nv.Name, nv.Value) for nv in logconf)
-            for name, conf in logconf.items():
-                _logger = logging.getLogger(name)
-                conf = dict((nv.Name, nv.Value) for nv in conf)
-                level = conf.get('level')
-                if level:
-                    level = levels.get(level.lower(), logging.INFO)
-                    _logger.setLevel(level)
-                _logger.addHandler(logging.StreamHandler(outstream))
+        logconf_path = args.get('logconf_path')
+        if logconf_path:
+            import logging.config
+            logging.config.fileConfig(logconf_path)
 
         from hwp5.storage.ole import uno_olesimplestorage
         uno_olesimplestorage.enable(self.context)

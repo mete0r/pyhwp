@@ -33,7 +33,7 @@ def dict_to_namedvalue(d):
     return tuple(nv)
 
 
-def test_remotely(soffice, discover_start_dir, extra_path, logconf=dict()):
+def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
     import sys
     import os
     import os.path
@@ -54,6 +54,9 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf=dict()):
 
     for path in sys.path:
         logger.info('sys.path: %s', path)
+
+    if logconf_path:
+        logconf_path = os.path.abspath(logconf_path)
 
     backend_path = sys.modules['oxt_tool'].__file__
     backend_path = os.path.dirname(backend_path)
@@ -84,7 +87,7 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf=dict()):
                     args = dict(outputstream=outputstream,
                                 pickled_testsuite=pickled_testsuite,
                                 extra_path=tuple(extra_path),
-                                logging=logconf)
+                                logconf_path=logconf_path)
                     args = dict_to_namedvalue(args)
                     result = backendjob.execute(args)
                     result = str(result)
@@ -221,17 +224,7 @@ class TestRunner(object):
             return
         self.__start_dir = options['start_dir']
         self.__extra_path = options['extra_path'].split()
-
-        self.__logconf = dict()
-        loggings = options.get('logging')
-        if loggings:
-            for line in loggings.split('\n'):
-                logger_name, line = line.split(':', 1)
-                conf = dict()
-                for item in line.split():
-                    name, value = item.split('=', 1)
-                    conf[name] = value
-                self.__logconf[logger_name] = conf
+        self.__logconf_path = options.get('logconf_path')
 
     def install(self):
         if self.__skip:
@@ -248,7 +241,7 @@ class TestRunner(object):
         arguments = arguments % (self.__soffice,
                                  self.__start_dir,
                                  self.__extra_path,
-                                 self.__logconf)
+                                 self.__logconf_path)
         if self.__python:
             python = self.__python
         else:
