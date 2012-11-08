@@ -4,10 +4,7 @@ import os
 
 logfmt = logging.Formatter((' backend %5d ' % os.getpid())
                            +'%(message)s')
-logchn = logging.StreamHandler()
-logchn.setFormatter(logfmt)
 logger = logging.getLogger('backend')
-logger.addHandler(logchn)
 logger.setLevel(logging.INFO)
 
 
@@ -38,15 +35,22 @@ class TestRunnerJob(unohelper.Base, XJob):
 
         cwd = os.getcwd()
         working_dir = args['working_dir']
-        logger.info('current dir: %s', cwd)
-        logger.info('working dir: %s', working_dir)
-        logger.info('sys.path:')
-        for x in sys.path:
-            logger.info('- %s', x)
-
         os.chdir(working_dir)
         try:
-            return self.run(args)
+            logstream = args['logstream']
+            logstream = FileFromStream(logstream)
+            loghandler = logging.StreamHandler(logstream)
+            loghandler.setFormatter(logfmt)
+            logger.addHandler(loghandler)
+            try:
+                logger.info('current dir: %s', cwd)
+                logger.info('working dir: %s', working_dir)
+                logger.info('sys.path:')
+                for x in sys.path:
+                    logger.info('- %s', x)
+                return self.run(args)
+            finally:
+                logger.removeHandler(loghandler)
         finally:
             os.chdir(cwd)
 
@@ -95,9 +99,10 @@ class FileFromStream(object):
     com.sun.star.io.XInputStream, com.sun.star.io.XOutputStream or
     com.sun.star.io.XSeekable
     '''
-    def __init__(self, stream):
+    def __init__(self, stream, encoding='utf-8'):
         import uno
         self.stream = stream
+        self.encoding = encoding
 
         if hasattr(stream, 'readBytes'):
             def read(size=None):
@@ -129,6 +134,8 @@ class FileFromStream(object):
 
         if hasattr(stream, 'writeBytes'):
             def write(s):
+                if isinstance(s, unicode):
+                    s = s.encode(self.encoding)
                 stream.writeBytes(uno.ByteSequence(s))
             self.write = write
 

@@ -87,7 +87,9 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
                     import cPickle
                     pickled_testsuite = cPickle.dumps(testsuite)
                     outputstream = OutputStreamToFileLike(sys.stderr)
+                    logstream = OutputStreamToFileLike(sys.stderr)
                     args = dict(outputstream=outputstream,
+                                logstream=logstream,
                                 pickled_testsuite=pickled_testsuite,
                                 extra_path=tuple(extra_path),
                                 logconf_path=logconf_path,
