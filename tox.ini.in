@@ -24,5 +24,6 @@ setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
 basepython=${lo:uno_python}
 commands=
 	python -c 'import uno, unohelper'
-	{toxinidir}/bin/oxt-test
+	{toxinidir}/bin/oxt-test {envtmpdir}
 deps=discover
+changedir={toxinidir}

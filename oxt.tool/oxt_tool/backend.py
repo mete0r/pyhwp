@@ -34,14 +34,24 @@ class TestRunnerJob(unohelper.Base, XJob):
 
     def execute(self, arguments):
         import sys
-        import cPickle
         args = dict((nv.Name, nv.Value) for nv in arguments)
 
-        logger.info('current dir: %s', os.getcwd())
+        cwd = os.getcwd()
+        working_dir = args['working_dir']
+        logger.info('current dir: %s', cwd)
+        logger.info('working dir: %s', working_dir)
         logger.info('sys.path:')
         for x in sys.path:
             logger.info('- %s', x)
 
+        os.chdir(working_dir)
+        try:
+            return self.run(args)
+        finally:
+            os.chdir(cwd)
+
+    def run(self, args):
+        import cPickle
         outstream = args.get('outputstream')
         outstream = FileFromStream(outstream)
 

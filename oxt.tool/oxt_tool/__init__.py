@@ -52,6 +52,9 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
     logger.addHandler(logchn)
     logger.setLevel(logging.INFO)
 
+    working_dir = sys.argv[1]
+    working_dir = os.path.abspath(working_dir)
+
     for path in sys.path:
         logger.info('sys.path: %s', path)
 
@@ -87,7 +90,8 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
                     args = dict(outputstream=outputstream,
                                 pickled_testsuite=pickled_testsuite,
                                 extra_path=tuple(extra_path),
-                                logconf_path=logconf_path)
+                                logconf_path=logconf_path,
+                                working_dir=working_dir)
                     args = dict_to_namedvalue(args)
                     result = backendjob.execute(args)
                     result = str(result)
