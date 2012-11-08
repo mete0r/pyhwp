@@ -273,7 +273,7 @@ class TestHwp5File(TestBase):
         os.mkdir(outpath)
         unpack(ExtraItemStorage(self.hwp5file), outpath)
 
-        self.assertTrue(os.path.exists('test_unpack/\x05HwpSummaryInformation'))
+        self.assertTrue(os.path.exists('test_unpack/_05HwpSummaryInformation'))
         self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.jpg'))
         self.assertTrue(os.path.exists('test_unpack/BinData/BIN0002.png'))
         self.assertTrue(os.path.exists('test_unpack/BinData/BIN0003.png'))

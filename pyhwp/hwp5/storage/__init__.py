@@ -125,6 +125,7 @@ def unpack(stg, outbase):
         else:
             f = item.open()
             try:
+                outpath = outpath.replace('\x05', '_05')
                 outfile = file(outpath, 'wb')
                 try:
                     outfile.write(f.read())

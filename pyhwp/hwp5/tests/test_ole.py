@@ -124,7 +124,7 @@ class TestOleStorage(TestBase):
         os.mkdir('5017')
         unpack(self.olestg, '5017')
 
-        self.assertTrue(os.path.exists('5017/\x05HwpSummaryInformation'))
+        self.assertTrue(os.path.exists('5017/_05HwpSummaryInformation'))
         self.assertTrue(os.path.exists('5017/BinData/BIN0002.jpg'))
         self.assertTrue(os.path.exists('5017/BinData/BIN0002.png'))
         self.assertTrue(os.path.exists('5017/BinData/BIN0003.png'))
