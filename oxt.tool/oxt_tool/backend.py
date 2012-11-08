@@ -37,6 +37,11 @@ class TestRunnerJob(unohelper.Base, XJob):
         import cPickle
         args = dict((nv.Name, nv.Value) for nv in arguments)
 
+        logger.info('current dir: %s', os.getcwd())
+        logger.info('sys.path:')
+        for x in sys.path:
+            logger.info('- %s', x)
+
         outstream = args.get('outputstream')
         outstream = FileFromStream(outstream)
 
