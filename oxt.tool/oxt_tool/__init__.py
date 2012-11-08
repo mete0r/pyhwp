@@ -26,8 +26,9 @@ def dict_to_namedvalue(d):
     for n, v in d.items():
         if isinstance(v, dict):
             v = dict_to_namedvalue(v)
-        item = uno.createUnoStruct('com.sun.star.beans.NamedValue',
-                                   Name=n, Value=v)
+        item = uno.createUnoStruct('com.sun.star.beans.NamedValue')
+        item.Name = n
+        item.Value = v
         nv.append(item)
     return tuple(nv)
 
@@ -76,20 +77,11 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf=dict()):
                     import cPickle
                     pickled_testsuite = cPickle.dumps(testsuite)
                     outputstream = OutputStreamToFileLike(sys.stderr)
-                    logconf = dict_to_namedvalue(logconf)
-                    op = uno.createUnoStruct('com.sun.star.beans.NamedValue',
-                                             Name='outputstream',
-                                             Value=outputstream)
-                    ts = uno.createUnoStruct('com.sun.star.beans.NamedValue',
-                                             Name='pickled_testsuite',
-                                             Value=pickled_testsuite)
-                    ep = uno.createUnoStruct('com.sun.star.beans.NamedValue',
-                                             Name='extra_path',
-                                             Value=tuple(extra_path))
-                    lc = uno.createUnoStruct('com.sun.star.beans.NamedValue',
-                                             Name='logging',
-                                             Value=logconf)
-                    args = op, ts, ep, lc
+                    args = dict(outputstream=outputstream,
+                                pickled_testsuite=pickled_testsuite,
+                                extra_path=tuple(extra_path),
+                                logging=logconf)
+                    args = dict_to_namedvalue(args)
                     result = backendjob.execute(args)
                     result = str(result)
                     result = cPickle.loads(result)
