@@ -40,6 +40,10 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf=dict()):
     import discover
     import unokit.remote
 
+    logger = logging.getLogger('unokit')
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel(logging.INFO)
+
     logfmt = logging.Formatter(('frontend %5d ' % os.getpid())
                                +'%(message)s')
     logchn = logging.StreamHandler()
