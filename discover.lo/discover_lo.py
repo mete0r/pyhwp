@@ -17,6 +17,8 @@ def wellknown_locations():
         if os.path.exists(program_files):
             for name in os.listdir(program_files):
                 yield os.path.join(program_files, name)
+    if sys.platform.startswith('linux'):
+        yield '/usr/lib/libreoffice'  # ubuntu
 
 
 def discover_lo(in_wellknown=True, in_path=True):
@@ -73,14 +75,24 @@ def contains_program(location):
         unopkg = executable_in_dir('unopkg', program_dir)
         if unopkg:
             installation['unopkg'] = unopkg
+
+        program_python = executable_in_dir('python', program_dir)
+        if program_python:
+            uno_python = python_import_uno(program_python)
+        else:
+            uno_python = python_import_uno(sys.executable)
+
+        if uno_python:
+            installation.update(get_uno_python(uno_python))
+
+        basis_link = os.path.join(location, 'basis-link')
+        if os.path.islink(basis_link):
+            location = os.path.realpath(basis_link)
+
         ure = find_ure(location)
         if ure:
             installation['ure'] = ure
-        python = executable_in_dir('python', program_dir)
-        if python:
-            uno_python = python_import_uno(python)
-            if uno_python:
-                installation.update(get_uno_python(uno_python))
+
         return installation
 
 
@@ -91,6 +103,7 @@ def find_ure(location):
         if os.path.isdir(ure):
             return ure
 
+    # win32
     ure = os.path.join(location, 'ure')
     if os.path.isdir(ure):
         return ure
