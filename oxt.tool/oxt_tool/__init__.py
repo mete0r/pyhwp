@@ -64,7 +64,7 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
     backend_path = sys.modules['oxt_tool'].__file__
     backend_path = os.path.dirname(backend_path)
     backend_path = os.path.join(backend_path, 'backend.py')
-    backend_implementation_name = 'backend.TestRunnerJob'
+    backend_name = 'backend.TestRunnerJob'
     discover_start_dir = os.path.abspath(discover_start_dir)
 
     testloader = discover.DiscoveringTestLoader()
@@ -72,34 +72,41 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
 
     with unokit.remote.new_remote_context(soffice=soffice) as context:
         logger.info('remote context created')
-        import uno
-        from unokit.services import css
-        from unokit.adapters import OutputStreamToFileLike
-        loader = css.loader.Python()
-        if loader:
-            backend_path = os.path.abspath(backend_path)
-            url = uno.systemPathToFileUrl(backend_path)
-
-            factory = loader.activate(backend_implementation_name, '', url, None)
-            if factory:
-                backendjob = factory.createInstanceWithContext(context)
-                if backendjob:
-                    import cPickle
-                    pickled_testsuite = cPickle.dumps(testsuite)
-                    outputstream = OutputStreamToFileLike(sys.stderr)
-                    logstream = OutputStreamToFileLike(sys.stderr)
-                    args = dict(outputstream=outputstream,
-                                logstream=logstream,
-                                pickled_testsuite=pickled_testsuite,
-                                extra_path=tuple(extra_path),
-                                logconf_path=logconf_path,
-                                working_dir=working_dir)
-                    args = dict_to_namedvalue(args)
-                    result = backendjob.execute(args)
-                    result = str(result)
-                    result = cPickle.loads(result)
-                    return 0 if result['successful'] else 1
+        factory = load_component(backend_path, backend_name)
+        if factory:
+            backendjob = factory.createInstanceWithContext(context)
+            if backendjob:
+                import cPickle
+                from unokit.adapters import OutputStreamToFileLike
+                pickled_testsuite = cPickle.dumps(testsuite)
+                outputstream = OutputStreamToFileLike(sys.stderr)
+                logstream = OutputStreamToFileLike(sys.stderr)
+                args = dict(outputstream=outputstream,
+                            logstream=logstream,
+                            pickled_testsuite=pickled_testsuite,
+                            extra_path=tuple(extra_path),
+                            logconf_path=logconf_path,
+                            working_dir=working_dir)
+                args = dict_to_namedvalue(args)
+                result = backendjob.execute(args)
+                result = str(result)
+                result = cPickle.loads(result)
+                return 0 if result['successful'] else 1
     return -1
+
+
+def load_component(component_path, component_name):
+    import os
+    import os.path
+    import uno
+    from unokit.services import css
+    loader = css.loader.Python()
+    if loader:
+        component_path = os.path.abspath(component_path)
+        component_url = uno.systemPathToFileUrl(component_path)
+
+        return loader.activate(component_name, '',
+                               component_url, None)
 
 
 def iter_package_files():
