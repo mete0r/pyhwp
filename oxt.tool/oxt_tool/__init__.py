@@ -33,7 +33,7 @@ def dict_to_namedvalue(d):
     return tuple(nv)
 
 
-def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
+def test_remotely(soffice, discover_dirs, extra_path, logconf_path):
     import sys
     import os
     import os.path
@@ -65,10 +65,16 @@ def test_remotely(soffice, discover_start_dir, extra_path, logconf_path):
     backend_path = os.path.dirname(backend_path)
     backend_path = os.path.join(backend_path, 'backend.py')
     backend_name = 'backend.TestRunnerJob'
-    discover_start_dir = os.path.abspath(discover_start_dir)
 
-    testloader = discover.DiscoveringTestLoader()
-    testsuite = testloader.discover(discover_start_dir)
+    tss = []
+    for d in discover_dirs:
+        d = os.path.abspath(d)
+        logger.info('discover tests: %s', d)
+        testloader = discover.DiscoveringTestLoader()
+        testsuite = testloader.discover(d)
+        tss.append(testsuite)
+    import unittest
+    testsuite = unittest.TestSuite(tss)
 
     with unokit.remote.new_remote_context(soffice=soffice) as context:
         logger.info('remote context created')
@@ -241,7 +247,7 @@ class TestRunner(object):
             self.__logger.info('soffice not found at: %s', self.__soffice)
             self.__logger.info('installation will be skipped')
             return
-        self.__start_dir = options['start_dir']
+        self.__discover = options['discover'].split()
         self.__extra_path = options['extra_path'].split()
         self.__logconf_path = options.get('logconf_path')
 
@@ -258,7 +264,7 @@ class TestRunner(object):
         entrypoints = [(self.__name, 'oxt_tool', 'test_remotely')]
         arguments = '%r, %r, %r, %r'
         arguments = arguments % (self.__soffice,
-                                 self.__start_dir,
+                                 self.__discover,
                                  self.__extra_path,
                                  self.__logconf_path)
         if self.__python:
