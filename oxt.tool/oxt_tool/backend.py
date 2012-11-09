@@ -92,6 +92,63 @@ class TestRunnerJob(unohelper.Base, XJob):
         return cPickle.dumps(result)
 
 
+@implementation('backend.ConsoleJob')
+class ConsoleJob(unohelper.Base, XJob):
+
+    def __init__(self, context):
+        self.context = context
+
+    def execute(self, arguments):
+        args = dict((nv.Name, nv.Value) for nv in arguments)
+
+        cwd = os.getcwd()
+        try:
+            inp = args['inp']
+            outstream = args['outstream']
+
+            outfile = FileFromStream(outstream)
+
+            import sys
+            orig = sys.stdout, sys.stderr
+            sys.stdout = sys.stderr = outfile
+            try:
+                console = Console(inp, outfile)
+                try:
+                    console.interact('LibreOffice Python Console (pid: %s)' %
+                                     os.getpid())
+                    return 0
+                except SystemExit, e:
+                    return e.code
+            finally:
+                sys.stdout, sys.stderr = orig
+        finally:
+            os.chdir(cwd)
+
+
+from code import InteractiveConsole
+class Console(InteractiveConsole):
+
+    def __init__(self, inp, outfile):
+        InteractiveConsole.__init__(self)
+        self.inp = inp
+        self.outfile = outfile
+
+    def write(self, data):
+        self.outfile.write(data)
+        self.outfile.flush()
+
+    def raw_input(self, prompt=''):
+        import uno
+        arg = uno.createUnoStruct('com.sun.star.beans.NamedValue')
+        arg.Name = 'prompt'
+        arg.Value = prompt
+        args = arg,
+        result = self.inp.execute(args)
+        if result is None:
+            raise EOFError()
+        return result
+
+
 class FileFromStream(object):
     ''' A file-like object based on XInputStream/XOuputStream/XSeekable
 

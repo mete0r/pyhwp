@@ -115,6 +115,53 @@ def load_component(component_path, component_name):
                                component_url, None)
 
 
+def console_in_proc(soffice='soffice'):
+    import os
+    import unohelper
+    from com.sun.star.task import XJob
+    import unokit.remote
+
+    logfmt = logging.Formatter(('frontend %5d ' % os.getpid())
+                               +'%(message)s')
+    logchn = logging.StreamHandler()
+    logchn.setFormatter(logfmt)
+    logger = logging.getLogger('frontend')
+    logger.addHandler(logchn)
+    logger.setLevel(logging.INFO)
+
+    class ConsoleInput(unohelper.Base, XJob):
+
+        def __init__(self, context):
+            self.context = context
+
+        def execute(self, arguments):
+            prompt, = arguments
+            try:
+                return raw_input(prompt.Value)
+            except EOFError:
+                return None
+
+    import sys
+    import os.path
+    backend_path = sys.modules['oxt_tool'].__file__
+    backend_path = os.path.dirname(backend_path)
+    backend_path = os.path.join(backend_path, 'backend.py')
+    backend_name = 'backend.ConsoleJob'
+
+    with unokit.remote.new_remote_context(soffice=soffice) as context:
+        logger.info('remote context created')
+        factory = load_component(backend_path, backend_name)
+        if factory:
+            backendjob = factory.createInstanceWithContext(context)
+            if backendjob:
+                from unokit.adapters import OutputStreamToFileLike
+                outstream = OutputStreamToFileLike(sys.stderr)
+                args = dict(inp=ConsoleInput(context),
+                            outstream=outstream)
+                args = dict_to_namedvalue(args)
+                backendjob.execute(args)
+
+
 def iter_package_files():
     import os
     import os.path
@@ -205,8 +252,12 @@ class Console(object):
             self.__logger.info('installation will be skipped')
             return
 
+        in_proc = options.get('in_proc', 'true').strip().lower()
+        in_proc = in_proc in ['true', 'yes', '1']
+
         self.__python = options.get('python', '').strip()
         self.__soffice = soffice
+        self.__in_proc = in_proc
         self.__skip = False
 
     def install(self):
@@ -219,7 +270,11 @@ class Console(object):
         import sys
         ws = [pkg_resources.get_distribution(dist)
               for dist in ['unokit', 'oxt.tool']]
-        entrypoints = [(self.__name, 'oxt_tool', 'console')]
+        if self.__in_proc:
+            func = 'console_in_proc'
+        else:
+            func = 'console'
+        entrypoints = [(self.__name, 'oxt_tool', func)]
         arguments = '%r' % self.__soffice
         if self.__python:
             python = self.__python
