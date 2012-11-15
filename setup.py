@@ -53,7 +53,6 @@ setup(
                                 'xsl/odt/*.xsl',
                                 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
         install_requires=install_requires,
-        extras_require=dict(test=['lxml']),
 
         entry_points = {
             'console_scripts': [
