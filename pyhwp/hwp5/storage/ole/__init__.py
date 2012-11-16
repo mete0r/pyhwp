@@ -29,10 +29,10 @@ def get_implementation():
         logger.info('OleStorage implementation: jython_poifs')
         return jython_poifs.OleStorage
 
-    from hwp5.storage.ole import uno_olesimplestorage
-    if uno_olesimplestorage.is_enabled():
-        logger.info('OleStorage implementation: uno_olesimplestorage')
-        return uno_olesimplestorage.OleStorage
+    from hwp5.plat import _uno
+    if _uno.is_enabled():
+        logger.info('OleStorage implementation: _uno')
+        return _uno.OleStorage
 
     from hwp5.plat import olefileio
     if olefileio.is_enabled():

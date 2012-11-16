@@ -69,8 +69,8 @@ class TestRunnerJob(unohelper.Base, XJob):
             import logging.config
             logging.config.fileConfig(logconf_path)
 
-        from hwp5.storage.ole import uno_olesimplestorage
-        uno_olesimplestorage.enable(self.context)
+        from hwp5.plat import _uno
+        _uno.enable()
 
         pickled_testsuite = args.get('pickled_testsuite')
         if not pickled_testsuite:
