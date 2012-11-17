@@ -23,27 +23,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_implementation():
-    from hwp5.plat import jython_poifs
-    if jython_poifs.is_enabled():
-        logger.info('OleStorage implementation: jython_poifs')
-        return jython_poifs.OleStorage
-
-    from hwp5.plat import _uno
-    if _uno.is_enabled():
-        logger.info('OleStorage implementation: _uno')
-        return _uno.OleStorage
-
-    from hwp5.plat import olefileio
-    if olefileio.is_enabled():
-        logger.info('OleStorage implementation: olefileio')
-        return olefileio.OleStorage
-
-
 class OleStorage(object):
 
     def __init__(self, *args, **kwargs):
-        impl_class = get_implementation()
+        from hwp5.plat import get_olestorage_class
+        impl_class = get_olestorage_class()
+        assert impl_class is not None, 'no OleStorage implementation available'
         self.impl = impl_class(*args, **kwargs)
 
     def __iter__(self):
