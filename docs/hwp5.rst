@@ -41,9 +41,9 @@ module :mod:`hwp5.tagids`
 .. automodule:: hwp5.tagids
    :members:
 
-module :mod:`hwp5.tools`
+module :mod:`hwp5.plat`
 ===========================
-.. automodule:: hwp5.tools
+.. automodule:: hwp5.plat
    :members:
 
 module :mod:`hwp5.externprogs`
