@@ -16,10 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
+from __future__ import with_statement
 import contextlib
 import logging
-from unokit.services import css
 
 
 logger = logging.getLogger(__name__)
@@ -78,6 +77,7 @@ def soffice_subprocess(**kwargs):
 def connect_remote_context(uno_link, max_tries=10):
     ''' Connect to the remote soffice instance and get the context. '''
 
+    from unokit.services import css
     resolver = css.bridge.UnoUrlResolver()
     uno_url = 'uno:'+uno_link+'StarOffice.ComponentContext'
     from com.sun.star.connection import NoConnectException
@@ -97,7 +97,7 @@ def connect_remote_context(uno_link, max_tries=10):
 
 
 @contextlib.contextmanager
-def new_remote_context(pipe='unokit', retry=10, make_current=True, **kwargs):
+def new_remote_context(pipe='oxt.tool', retry=10, make_current=True, **kwargs):
     ''' Create a remote soffice instance and get its context
 
     :param pipe: connection pipe name
@@ -135,3 +135,4 @@ class RemoteContextLayer:
     @classmethod
     def tearDown(cls):
         cls.context.__exit__(None, None, None)
+

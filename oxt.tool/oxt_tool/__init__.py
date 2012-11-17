@@ -5,10 +5,10 @@ import logging
 def console(soffice='soffice'):
     import uno
     import unokit.contexts
-    import unokit.remote
     import unokit.services
+    import oxt_tool.remote
 
-    with unokit.remote.new_remote_context(soffice=soffice) as context:
+    with oxt_tool.remote.new_remote_context(soffice=soffice) as context:
         desktop = unokit.services.css.frame.Desktop()
         def new_textdoc():
             return desktop.loadComponentFromURL('private:factory/swriter',
@@ -38,7 +38,7 @@ def test_remotely(soffice, discover_dirs, extra_path, logconf_path):
     import os
     import os.path
     import discover
-    import unokit.remote
+    import oxt_tool.remote
 
     logger = logging.getLogger('unokit')
     logger.addHandler(logging.StreamHandler())
@@ -76,7 +76,7 @@ def test_remotely(soffice, discover_dirs, extra_path, logconf_path):
     import unittest
     testsuite = unittest.TestSuite(tss)
 
-    with unokit.remote.new_remote_context(soffice=soffice) as context:
+    with oxt_tool.remote.new_remote_context(soffice=soffice) as context:
         logger.info('remote context created')
         factory = load_component(backend_path, backend_name)
         if factory:
@@ -119,7 +119,7 @@ def console_in_proc(soffice='soffice'):
     import os
     import unohelper
     from com.sun.star.task import XJob
-    import unokit.remote
+    import oxt_tool.remote
 
     logfmt = logging.Formatter(('frontend %5d ' % os.getpid())
                                +'%(message)s')
@@ -148,7 +148,7 @@ def console_in_proc(soffice='soffice'):
     backend_path = os.path.join(backend_path, 'backend.py')
     backend_name = 'backend.ConsoleJob'
 
-    with unokit.remote.new_remote_context(soffice=soffice) as context:
+    with oxt_tool.remote.new_remote_context(soffice=soffice) as context:
         logger.info('remote context created')
         factory = load_component(backend_path, backend_name)
         if factory:
