@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
@@ -31,97 +33,22 @@
   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
   xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"
   xmlns:css3t="http://www.w3.org/TR/css3-text/"
-  office:version="1.2"
-  grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl"
-  office:mimetype="application/vnd.oasis.opendocument.text">
+  >
   <xsl:import href="common.xsl" />
   <xsl:output method="xml" encoding="utf-8" indent="no" />
+
   <xsl:template match="/">
-    <office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
-                             xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
-                             xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-                             xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
-                             xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-                             xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
-                             xmlns:xlink="http://www.w3.org/1999/xlink"
-                             xmlns:dc="http://purl.org/dc/elements/1.1/"
-                             xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
-                             xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
-                             xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
-                             xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
-                             xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
-                             xmlns:math="http://www.w3.org/1998/Math/MathML"
-                             xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
-                             xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
-                             xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
-                             xmlns:ooo="http://openoffice.org/2004/office"
-                             xmlns:ooow="http://openoffice.org/2004/writer"
-                             xmlns:oooc="http://openoffice.org/2004/calc"
-                             xmlns:dom="http://www.w3.org/2001/xml-events"
-                             xmlns:xforms="http://www.w3.org/2002/xforms"
-                             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                             xmlns:rpt="http://openoffice.org/2005/report"
-                             xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"
-                             xmlns:xhtml="http://www.w3.org/1999/xhtml"
-                             xmlns:grddl="http://www.w3.org/2003/g/data-view#"
-                             xmlns:tableooo="http://openoffice.org/2009/table"
-                             xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
-                             xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"
-                             xmlns:css3t="http://www.w3.org/TR/css3-text/"
-                             office:version="1.2"
-                             grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
+    <xsl:apply-templates mode="office:document-content" select="." />
+  </xsl:template>
+
+  <xsl:template mode="office:document-content" match="/">
+    <office:document-content
+      office:version="1.2"
+      grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
       <office:scripts/>
       <office:font-face-decls/>
       <office:automatic-styles>
-        <xsl:for-each select="HwpDoc/BodyText/SectionDef/Paragraph">
-          <xsl:variable name="paragraph-id" select="@paragraph-id + 1"/>
-          <xsl:variable name="style-id" select="@style-id + 1" />
-          <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
-          <xsl:variable name="style-parashape-id" select="$style/@parashape-id + 1"/>
-          <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
-          <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
-          <xsl:variable name="parashape" select="$parashapes[number($parashape-id)]"/>
-          <xsl:if test="$style-parashape-id != $parashape-id or @new-page = '1'">
-            <xsl:element name="style:style">
-              <xsl:attribute name="style:family">paragraph</xsl:attribute>
-              <xsl:attribute name="style:class">text</xsl:attribute>
-              <xsl:attribute name="style:name">Paragraph-<xsl:value-of select="@paragraph-id + 1" /></xsl:attribute>
-              <xsl:attribute name="style:parent-style-name"><xsl:value-of select="translate($style/@local-name, ' ', '_')" /></xsl:attribute>
-              <xsl:if test="@new-section = '1'">
-                <xsl:attribute name="style:master-page-name">MasterPage-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
-              </xsl:if>
-              <xsl:element name="style:paragraph-properties">
-              <xsl:call-template name="parashape-to-paragraph-properties">
-                <xsl:with-param name="parashape" select="$parashape"/>
-              </xsl:call-template>
-                <xsl:if test="@new-page = '1'">
-                  <xsl:attribute name="fo:break-before">page</xsl:attribute>
-                </xsl:if>
-              </xsl:element>
-            </xsl:element>
-          </xsl:if>
-
-          <xsl:variable name="style-charshape-id" select="$style/@charshape-id + 1"/>
-          <xsl:for-each select="LineSeg">
-            <xsl:variable name="lineseg-pos" select="position()" />
-            <xsl:for-each select="Text">
-              <xsl:variable name="text-pos" select="position()" />
-              <xsl:variable name="charshape-id" select="@charshape-id + 1" />
-              <xsl:variable name="charshapes" select="/HwpDoc/DocInfo/IdMappings/CharShape" />
-              <xsl:variable name="charshape" select="$charshapes[number($charshape-id)]"/>
-              <xsl:if test="$style-charshape-id != $charshape-id">
-                <xsl:element name="style:style">
-                  <xsl:attribute name="style:family">text</xsl:attribute>
-                  <xsl:attribute name="style:name">p<xsl:value-of select="$paragraph-id" />-<xsl:value-of select="$lineseg-pos"/>-<xsl:value-of select="$text-pos"/></xsl:attribute>
-                  <xsl:call-template name="charshape-to-text-properties">
-                    <xsl:with-param name="charshape" select="$charshape"/>
-                  </xsl:call-template>
-                </xsl:element>
-              </xsl:if>
-            </xsl:for-each>
-          </xsl:for-each>
-        </xsl:for-each>
+        <xsl:apply-templates mode="office:automatic-styles" select="//Paragraph" />
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="tablecell-style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
@@ -140,6 +67,93 @@
         </office:text>
       </office:body>
     </office:document-content>
+  </xsl:template>
+
+  <xsl:template mode="office:automatic-styles" match="Paragraph">
+    <xsl:variable name="style-id" select="@style-id + 1" />
+    <xsl:variable name="style" select="//Style[$style-id]"/>
+
+    <xsl:apply-templates mode="style:style" select="." />
+
+    <xsl:variable name="paragraph-id" select="@paragraph-id + 1"/>
+    <xsl:for-each select="LineSeg">
+      <xsl:variable name="lineseg-pos" select="position()" />
+      <xsl:for-each select="Text">
+        <xsl:variable name="text-pos" select="position()" />
+        <xsl:variable name="style-name">
+          <xsl:text>p</xsl:text>
+          <xsl:value-of select="$paragraph-id" />
+          <xsl:text>-</xsl:text>
+          <xsl:value-of select="$lineseg-pos"/>
+          <xsl:text>-</xsl:text>
+          <xsl:value-of select="$text-pos"/>
+        </xsl:variable>
+        <xsl:apply-templates mode="style:style" select=".">
+          <xsl:with-param name="style-name" select="$style-name" />
+          <xsl:with-param name="style-charshape-id" select="$style/@charshape-id + 1" />
+        </xsl:apply-templates>
+      </xsl:for-each>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template mode="style:style" match="Text">
+    <xsl:param name="style-name" />
+    <xsl:param name="style-charshape-id" />
+
+    <xsl:variable name="charshape-id" select="@charshape-id + 1" />
+    <xsl:if test="$style-charshape-id != $charshape-id">
+      <xsl:element name="style:style">
+        <xsl:attribute name="style:family">text</xsl:attribute>
+        <xsl:attribute name="style:name">
+          <xsl:value-of select="$style-name" />
+        </xsl:attribute>
+        <xsl:apply-templates select="//CharShape[$charshape-id]" mode="style:text-properties" />
+      </xsl:element>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:style" match="Paragraph">
+    <xsl:variable name="paragraph-id" select="@paragraph-id + 1"/>
+    <xsl:variable name="style-id" select="@style-id + 1" />
+    <xsl:variable name="style" select="//Style[$style-id]"/>
+    <xsl:variable name="style-parashape-id" select="$style/@parashape-id + 1"/>
+    <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
+    <xsl:variable name="parashape" select="//ParaShape[$parashape-id]"/>
+    <xsl:if test="$style-parashape-id != $parashape-id or @new-page = '1'">
+      <xsl:element name="style:style">
+        <xsl:attribute name="style:family">paragraph</xsl:attribute>
+        <xsl:attribute name="style:class">text</xsl:attribute>
+        <xsl:attribute name="style:name">
+          <xsl:text>Paragraph-</xsl:text>
+          <xsl:value-of select="@paragraph-id + 1" />
+        </xsl:attribute>
+        <xsl:apply-templates mode="style:parent-style-name" select="$style" />
+        <xsl:if test="@new-section = '1'">
+          <xsl:apply-templates mode="style:master-page-name" select=".." />
+        </xsl:if>
+        <xsl:element name="style:paragraph-properties">
+          <xsl:call-template name="parashape-to-paragraph-properties">
+            <xsl:with-param name="parashape" select="$parashape"/>
+          </xsl:call-template>
+          <xsl:if test="@new-page = '1'">
+            <xsl:attribute name="fo:break-before">page</xsl:attribute>
+          </xsl:if>
+        </xsl:element>
+      </xsl:element>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:parent-style-name" match="Style">
+    <xsl:attribute name="style:parent-style-name">
+      <xsl:value-of select="translate(@local-name, ' ', '_')" />
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="style:master-page-name" match="SectionDef">
+    <xsl:attribute name="style:master-page-name">
+      <xsl:text>MasterPage-</xsl:text>
+      <xsl:value-of select="@section-id + 1"/>
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template match="SectionDef">

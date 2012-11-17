@@ -129,66 +129,146 @@
       </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="charshape-to-text-properties">
-    <xsl:param name="charshape"/>
-    <xsl:variable name="facenames" select="/HwpDoc/DocInfo/IdMappings/FaceName" />
-    <xsl:variable name="fontface" select="$charshape/FontFace"/>
-    <xsl:variable name="facename-en-id" select="$fontface/@en + 1"/>
-    <xsl:variable name="facename-en" select="$facenames[$facename-en-id]/@name"/>
-    <xsl:variable name="facename-ko-id" select="$fontface/@ko + 1"/>
-    <xsl:variable name="facename-ko" select="$facenames[$facename-ko-id]/@name"/>
+  <xsl:template mode="style:text-properties" match="CharShape">
     <xsl:element name="style:text-properties">
-      <xsl:attribute name="style:font-name"><xsl:value-of select="$facename-en"/></xsl:attribute>
-      <xsl:attribute name="style:font-name-asian"><xsl:value-of select="$facename-ko"/></xsl:attribute>
-      <xsl:attribute name="fo:font-size"><xsl:value-of select="$charshape/@basesize div 100"/>pt</xsl:attribute>
-      <xsl:attribute name="style:font-size-asian"><xsl:value-of select="$charshape/@basesize div 100"/>pt</xsl:attribute>
+
+      <xsl:apply-templates mode="style:font-name" select="FontFace" />
+      <xsl:apply-templates mode="style:font-name-asian" select="FontFace" />
+
+      <xsl:apply-templates mode="fo:font-size" select="." />
+      <xsl:apply-templates mode="style:font-size-asian" select="." />
+
       <!-- 15.4.25 Font Style -->
-      <xsl:if test="$charshape/@italic = 1">
-        <xsl:attribute name="fo:font-style">italic</xsl:attribute>
-        <xsl:attribute name="style:font-style-asian">italic</xsl:attribute>
-        <xsl:attribute name="style:font-style-complex">italic</xsl:attribute>
-      </xsl:if>
+      <xsl:apply-templates mode="fo:font-style" select="." />
+      <xsl:apply-templates mode="style:font-style-asian" select="." />
+      <xsl:apply-templates mode="style:font-style-complex" select="." />
+
       <!-- 15.4.28 Underlining Type -->
       <!-- 15.4.31 Underline Color -->
-      <xsl:choose>
-        <xsl:when test="$charshape/@underline = 'none'">
-          <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
-          <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
-          <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$charshape/@underline = 'underline'">
-          <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
-          <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
-          <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
-          <xsl:attribute name="style:text-underline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
-          <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
-          <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$charshape/@underline = 'unknown'">
-          <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
-          <xsl:attribute name="style:text-line-through-type">single</xsl:attribute>
-          <xsl:attribute name="style:text-line-through-style">solid</xsl:attribute>
-          <xsl:attribute name="style:text-line-through-width">auto</xsl:attribute>
-          <xsl:attribute name="style:text-line-through-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
-          <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$charshape/@underline = 'upperline'">
-          <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
-          <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
-          <xsl:attribute name="style:text-overline-type">single</xsl:attribute>
-          <xsl:attribute name="style:text-overline-style">solid</xsl:attribute>
-          <xsl:attribute name="style:text-overline-width">auto</xsl:attribute>
-          <xsl:attribute name="style:text-overline-color"><xsl:value-of select="$charshape/@underline-color"/></xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates mode="style:text-underline" select="." />
+      <xsl:apply-templates mode="style:text-overline" select="." />
+      <xsl:apply-templates mode="style:text-line-through" select="." />
       <!-- 15.4.32 Font Weight -->
-      <xsl:if test="$charshape/@bold = 1">
-        <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
-        <xsl:attribute name="style:font-weight-asian">bold</xsl:attribute>
-        <xsl:attribute name="style:font-weight-complex">bold</xsl:attribute>
-      </xsl:if>
+      <xsl:apply-templates mode="fo:font-weight" select="." />
+      <xsl:apply-templates mode="style:font-weight-asian" select="." />
+      <xsl:apply-templates mode="style:font-weight-complex" select="." />
     </xsl:element>
   </xsl:template>
+
+  <xsl:template mode="style:font-name" match="FontFace">
+    <xsl:variable name="facename-en-id" select="@en + 1"/>
+    <xsl:apply-templates mode="style:font-name" select="//FaceName[$facename-en-id]" />
+  </xsl:template>
+
+  <xsl:template mode="style:font-name" match="FaceName">
+    <xsl:attribute name="style:font-name"><xsl:value-of select="@name"/></xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="style:font-name-asian" match="FontFace">
+    <xsl:variable name="facename-ko-id" select="@ko + 1"/>
+    <xsl:apply-templates mode="style:font-name-asian" select="//FaceName[$facename-ko-id]" />
+  </xsl:template>
+
+  <xsl:template mode="style:font-name-asian" match="FaceName">
+    <xsl:attribute name="style:font-name-asian"><xsl:value-of select="@name"/></xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="fo:font-size" match="CharShape">
+    <xsl:attribute name="fo:font-size">
+      <xsl:value-of select="@basesize div 100"/>
+      <xsl:text>pt</xsl:text>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="style:font-size-asian" match="CharShape">
+    <xsl:attribute name="style:font-size-asian">
+      <xsl:value-of select="@basesize div 100"/>
+      <xsl:text>pt</xsl:text>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="fo:font-style" match="CharShape">
+    <xsl:if test="@italic = 1">
+      <xsl:attribute name="fo:font-style">italic</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:font-style-asian" match="CharShape">
+    <xsl:if test="@italic = 1">
+      <xsl:attribute name="style:font-style-asian">italic</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:font-style-complex" match="CharShape">
+    <xsl:if test="@italic = 1">
+      <xsl:attribute name="style:font-style-complex">italic</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="fo:font-weight" match="CharShape">
+    <xsl:if test="@bold = 1">
+      <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:font-weight-asian" match="CharShape">
+    <xsl:if test="@bold = 1">
+      <xsl:attribute name="style:font-weight-asian">bold</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:font-weight-complex" match="CharShape">
+    <xsl:if test="@bold = 1">
+      <xsl:attribute name="style:font-weight-complex">bold</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="style:text-underline" match="CharShape">
+    <xsl:choose>
+      <xsl:when test="@underline = 'underline'">
+        <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
+        <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
+        <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
+        <xsl:attribute name="style:text-underline-color">
+          <xsl:value-of select="@underline-color"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="style:text-underline-type">none</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="style:text-overline" match="CharShape">
+    <xsl:choose>
+      <xsl:when test="@underline = 'upperline'">
+        <xsl:attribute name="style:text-overline-type">single</xsl:attribute>
+        <xsl:attribute name="style:text-overline-style">solid</xsl:attribute>
+        <xsl:attribute name="style:text-overline-width">auto</xsl:attribute>
+        <xsl:attribute name="style:text-overline-color">
+          <xsl:value-of select="@underline-color"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="style:text-overline-type">none</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="style:text-line-through" match="CharShape">
+    <xsl:choose>
+      <xsl:when test="@underline = 'unknown'">
+        <xsl:attribute name="style:text-line-through-type">single</xsl:attribute>
+        <xsl:attribute name="style:text-line-through-style">solid</xsl:attribute>
+        <xsl:attribute name="style:text-line-through-width">auto</xsl:attribute>
+        <xsl:attribute name="style:text-line-through-color">
+          <xsl:value-of select="@underline-color"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="style:text-line-through-type">none</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </xsl:stylesheet>

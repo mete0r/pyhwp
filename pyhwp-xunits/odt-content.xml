@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xunit:stylesheet
+  xmlns:xunit="urn:xunit/xunit"
+  xmlns:context="urn:xunit/context"
+  xmlns="urn:xunit/expect"
+  href="odt/content.xsl"
+  >
+
+  issue #30 - no indent
+  <context:import href="issue30.xml">
+    <context:xslt>
+      <context:subtree select="//text:p">
+        # 첫번째 span의 다음에 new line 문자나 공백이 있으면 안된다.
+        TODO: assert span.tail is None
+        <true>count(*) = 3</true>
+        <context:subtree select="*[1]">
+          <elem>text:span</elem>
+        </context:subtree>
+        <context:subtree select="*[2]">
+          <elem>text:span</elem>
+        </context:subtree>
+        <context:subtree select="*[3]">
+          <elem>text:span</elem>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  #
+  # 글자 모양
+  #
+  <context:import href="charshape.xml">
+    <context:xslt>
+
+      # not specified
+      <empty>//style:style[@style:name='p1-1-1']</empty>
+
+      #
+      # 진하게, 기울임
+      #
+      <context:subtree select="//style:style[@style:name='p2-1-1']/style:text-properties">
+        <empty>fo:font-weight</empty>
+        <empty>style:font-weight-asian</empty>
+        <empty>style:font-weight-complex</empty>
+        <attr name="fo:font-style">italic</attr>
+        <attr name="style:font-style-asian">italic</attr>
+        <attr name="style:font-style-complex">italic</attr>
+      </context:subtree>
+      <context:subtree select="//style:style[@style:name='p2-1-2']/style:text-properties">
+        <attr name="fo:font-weight">bold</attr>
+        <attr name="style:font-weight-asian">bold</attr>
+        <attr name="style:font-weight-complex">bold</attr>
+        <empty>fo:font-style</empty>
+        <empty>style:font-style-asian</empty>
+        <empty>style:font-style-complex</empty>
+      </context:subtree>
+
+      #
+      # 밑줄
+      #
+      # underline: none
+      <context:subtree select="//style:style[@style:name='p3-1-1']/style:text-properties">
+        <attr name="style:text-underline-type">none</attr>
+        <empty>@style:text-underline-style</empty>
+        <empty>@style:text-underline-width</empty>
+        <empty>@style:text-underline-color</empty>
+        <attr name="style:text-line-through-type">none</attr>
+        <empty>@style:text-line-through-style</empty>
+        <empty>@style:text-line-through-width</empty>
+        <empty>@style:text-line-through-color</empty>
+        <attr name="style:text-overline-type">none</attr>
+        <empty>@style:text-overline-style</empty>
+        <empty>@style:text-overline-width</empty>
+        <empty>@style:text-overline-color</empty>
+      </context:subtree>
+
+      # underline: underline
+      <context:subtree select="//style:style[@style:name='p3-1-2']/style:text-properties">
+        <attr name="style:text-underline-type">single</attr>
+        <attr name="style:text-underline-style">solid</attr>
+        <attr name="style:text-underline-width">auto</attr>
+        <attr name="style:text-underline-color">#000000</attr>
+        <attr name="style:text-line-through-type">none</attr>
+        <empty>@style:text-line-through-style</empty>
+        <empty>@style:text-line-through-width</empty>
+        <empty>@style:text-line-through-color</empty>
+        <attr name="style:text-overline-type">none</attr>
+        <empty>@style:text-overline-style</empty>
+        <empty>@style:text-overline-width</empty>
+        <empty>@style:text-overline-color</empty>
+      </context:subtree>
+
+      # underline: unknown (TODO: should be linethrough)
+      <context:subtree select="//style:style[@style:name='p3-1-3']/style:text-properties">
+        <attr name="style:text-underline-type">none</attr>
+        <empty>@style:text-underline-style</empty>
+        <empty>@style:text-underline-width</empty>
+        <empty>@style:text-underline-color</empty>
+        <attr name="style:text-line-through-type">single</attr>
+        <attr name="style:text-line-through-style">solid</attr>
+        <attr name="style:text-line-through-width">auto</attr>
+        <attr name="style:text-line-through-color">#000000</attr>
+        <attr name="style:text-overline-type">none</attr>
+        <empty>@style:text-overline-style</empty>
+        <empty>@style:text-overline-width</empty>
+        <empty>@style:text-overline-color</empty>
+      </context:subtree>
+
+      # underline: upperline (TODO: should be overline)
+      <context:subtree select="//style:style[@style:name='p3-1-4']/style:text-properties">
+        <attr name="style:text-underline-type">none</attr>
+        <empty>@style:text-underline-style</empty>
+        <empty>@style:text-underline-width</empty>
+        <empty>@style:text-underline-color</empty>
+        <attr name="style:text-line-through-type">none</attr>
+        <empty>@style:text-line-through-style</empty>
+        <empty>@style:text-line-through-width</empty>
+        <empty>@style:text-line-through-color</empty>
+        <attr name="style:text-overline-type">single</attr>
+        <attr name="style:text-overline-style">solid</attr>
+        <attr name="style:text-overline-width">auto</attr>
+        <attr name="style:text-overline-color">#000000</attr>
+      </context:subtree>
+      #
+      # 글자 크기
+      #
+      # 대표크기 10pt
+      <context:subtree select="//style:style[@style:name='p4-1-2']/style:text-properties">
+        <attr name="fo:font-size">10pt</attr>
+        <attr name="style:font-size-asian">10pt</attr>
+        #assert '10pt' == xpath1(charshape, '@style:font-size-complex') # TODO
+      </context:subtree>
+
+      # ko=90%
+      <context:subtree select="//style:style[@style:name='p4-1-3']/style:text-properties">
+        <attr name="fo:font-size">10pt</attr>
+        #assert '9pt' == xpath1(charshape, '@style:font-size-asian') # TODO RelativeSize 반영
+        #assert '10pt' == xpath1(charshape, '@style:font-size-complex') # TODO
+      </context:subtree>
+
+      # en=80% TODO RelativeSizes 반영
+      <context:subtree select="//style:style[@style:name='p4-1-4']/style:text-properties">
+        #assert '8pt' == xpath1(charshape, '@fo:font-size') # TODO RelativeSize 반영
+        <attr name="style:font-size-asian">10pt</attr>
+        #assert '10pt' == xpath1(charshape, '@style:font-size-complex') # TODO
+      </context:subtree>
+
+      # other=70% TODO RelativeSizes 반영
+      <context:subtree select="//style:style[@style:name='p4-1-5']/style:text-properties">
+        <attr name="fo:font-size">10pt</attr>
+        <attr name="style:font-size-asian">10pt</attr>
+        #assert '10pt' == xpath1(charshape, '@style:font-size-complex') # TODO Relative Size 반영
+      </context:subtree>
+
+      #
+      # 폰트
+      #
+      # TODO: 영문, 외국어 폰트의 참조 방법을 찾아야. 현재 Courier New가 제대로 참조되지 않고 있다.
+      <context:subtree select="//style:style[@style:name='p5-1-2']/style:text-properties">
+        #assert u'바탕' == xpath1(charshape, '@style:font-name')
+        <attr name="style:font-name-asian">돋움</attr>
+        #assert u'바탕' == xpath1(charshape, '@style:font-name-complex') # TODO
+      </context:subtree>
+      <context:subtree select="//style:style[@style:name='p5-1-3']/style:text-properties">
+        #assert u'Courier New' == xpath1(charshape, '@style:font-name')
+        #assert u'바탕' == xpath1(charshape, '@style:font-name-asian')
+        #assert u'바탕' == xpath1(charshape, '@style:font-name-complex') # TODO
+      </context:subtree>
+      <context:subtree select="//style:style[@style:name='p5-1-4']/style:text-properties">
+        #assert u'바탕' == xpath1(charshape, '@style:font-name')
+        #assert u'바탕' == xpath1(charshape, '@style:font-name-asian')
+        #assert u'Lucida Sans Unicode' == xpath1(charshape, '@style:font-name-complex')
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  <context:import
+    href="parashape.xml">
+
+    <elem>HwpDoc</elem>
+    <true>name(.) = 'HwpDoc'</true>
+    <equals>
+      <tested>name(.)</tested>
+      <expected>'HwpDoc'</expected>
+    </equals>
+
+    <attr name="version">(5, 0, 1, 7)</attr>
+    <true>@version = '(5, 0, 1, 7)'</true>
+
+    <true>count(@nonexists) = 0</true>
+    <empty>@nonexists</empty>
+
+    <!-- paragraph -->
+    <context:xslt
+      select="//Paragraph[1]">
+      <elem>text:p</elem>
+      <attr name="text:style-name">Paragraph-1</attr>
+    </context:xslt>
+    <context:xslt
+      select="//Paragraph[1]"
+      mode="style:style">
+      <elem>style:style</elem>
+      <attr name="style:family">paragraph</attr>
+      <attr name="style:class">text</attr>
+      <attr name="style:name">Paragraph-1</attr>
+      <attr name="style:parent-style-name">바탕글</attr>
+      <attr name="style:master-page-name">MasterPage-1</attr>
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">11pt</attr>
+        <attr name="fo:margin-right">12pt</attr>
+        <attr name="fo:margin-top">13pt</attr>
+        <attr name="fo:margin-bottom">14pt</attr>
+        <empty>@fo:break-before</empty>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[2]"
+      >
+      <elem>text:p</elem>
+      <attr name="text:style-name">바탕글</attr>
+    </context:xslt>
+    <context:xslt
+      wrap="wrapper"
+      select="//Paragraph[2]"
+      mode="style:style">
+      이 문단의 스타일은 "바탕글" Style과 동일하므로, 이 문단에 특정한 style:style은 생성되지 않음
+      <true>count(style:style) = 0</true>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[3]">
+      <elem>text:p</elem>
+      <attr name="text:style-name">Paragraph-3</attr>
+    </context:xslt>
+    <context:xslt
+      select="//Paragraph[3]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-indent">10pt</attr>
+        <attr name="fo:margin-left">0pt</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[4]">
+      <elem>text:p</elem>
+      <attr name="text:style-name">Paragraph-4</attr>
+    </context:xslt>
+    <context:xslt
+      select="//Paragraph[4]"
+      mode="style:style">
+      <elem>style:style</elem>
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+      </context:subtree>
+    </context:xslt>
+
+    #
+    # fo:text-align
+    #
+    <context:xslt
+      select="//Paragraph[5]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">left</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[6]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">right</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[7]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">center</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[8]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">justify</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      select="//Paragraph[9]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">justify</attr>
+      </context:subtree>
+    </context:xslt>
+
+  </context:import>
+
+  <context:import href="linespacing.xml">
+
+    linespacing-type = ratio, 150%
+    <context:xslt
+      select="//Paragraph[3]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:line-height">150%</attr>
+        <empty>@style:vertical-align</empty>
+        <empty>@style:line-spacing</empty>
+      </context:subtree>
+    </context:xslt>
+
+    # linespacing-type = fixed, 15pt
+    <context:xslt
+      select="//Paragraph[5]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:line-height">15pt</attr>
+        <attr name="style:vertical-align">top</attr>
+        <empty>@style:line-spacing</empty>
+      </context:subtree>
+    </context:xslt>
+
+    # linespacing-type = spaceonly, 5pt
+    <context:xslt
+      select="//Paragraph[7]"
+      mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <empty>@fo:line-height</empty>
+        <empty>@style:vertical-align</empty>
+        <attr name="style:line-spacing">2.5pt</attr>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+
+  쪽 나누기 (Ctrl+Enter)
+
+  만약 Paragraph/@new-page = 1이면
+  @fo:break-before = 'page'
+  <context:import href="paragraph-split-page.xml">
+    <context:xslt
+      wrap="wrapper"
+      select="//Paragraph[1]"
+      mode="style:style">
+      <empty>style:style</empty>
+    </context:xslt>
+    <context:xslt
+      wrap="wrapper"
+      select="//Paragraph[2]"
+      mode="style:style">
+      <empty>style:style</empty>
+    </context:xslt>
+    <context:xslt select="//Paragraph[3]" mode="style:style">
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:break-before">page</attr>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  표
+  <context:import href="table.xml">
+    <context:xslt>
+      <context:subtree select="//table:table[1]">
+        <context:subtree select="table:table-column">
+          <attr name="table:number-columns-repeated">3</attr>
+        </context:subtree>
+        <context:subtree select="table:table-row[1]">
+          <context:subtree select="table:table-cell[1]">
+            <attr name="table:number-columns-spanned">1</attr>
+            <attr name="table:number-rows-spanned">1</attr>
+          </context:subtree>
+          <context:subtree select="table:table-cell[2]">
+            <attr name="table:number-columns-spanned">1</attr>
+            <attr name="table:number-rows-spanned">1</attr>
+          </context:subtree>
+          <context:subtree select="table:table-cell[3]">
+            <attr name="table:number-columns-spanned">1</attr>
+            <attr name="table:number-rows-spanned">2</attr>
+          </context:subtree>
+        </context:subtree>
+        <context:subtree select="table:table-row[2]">
+          <context:subtree select="table:table-cell[1]">
+            <attr name="table:number-columns-spanned">2</attr>
+            <attr name="table:number-rows-spanned">1</attr>
+          </context:subtree>
+          <empty>table:table-cell[2]</empty>
+          <empty>table:table-cell[3]</empty>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  그리기 객체 ShapeLine
+  <context:import href="shapeline.xml">
+    <context:xslt>
+      <context:subtree select="//draw:line[1]">
+        <attr name="svg:x1">32.98mm</attr>
+        <attr name="svg:y1">38.28mm</attr>
+        <attr name="svg:x2">40.39mm</attr>
+        <attr name="svg:y2">45.51mm</attr>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  그리기 객체 ShapeRectangle
+  <context:import href="shaperect.xml">
+    <context:xslt>
+      <context:subtree select="//draw:rect[2]">
+        <attr name="draw:style-name">Shape-2</attr>
+        <attr name="svg:x">39.69mm</attr>
+        <attr name="svg:y">73.55mm</attr>
+        <attr name="svg:width">71.26mm</attr>
+        <attr name="svg:height">12.17mm</attr>
+        <attr name="text:anchor-type">paragraph</attr>
+        <context:subtree select="text:p/text:span">
+          <text>글 상자</text>
+        </context:subtree>
+      </context:subtree>
+
+      # fill solid
+      # stroke none
+      <context:subtree select="//style:style[@style:name='Shape-1']">
+        <context:subtree select="style:graphic-properties">
+          <attr name="draw:fill">solid</attr>
+          <attr name="draw:fill-color">#66ccff</attr>
+          <attr name="draw:stroke">none</attr>
+          <attr name="svg:stroke-width">0.12mm</attr>
+          <attr name="svg:stroke-color">#000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      TODO: gradation fill
+      <context:subtree select="//style:style[@style:name='Shape-2']">
+        <context:subtree select="style:graphic-properties">
+          <attr name="draw:fill">none</attr>
+          <empty>@draw:fill-color</empty>
+          <attr name="draw:stroke">dash</attr>
+          <attr name="svg:stroke-width">0.12mm</attr>
+          <attr name="svg:stroke-color">#000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      # fill none
+      # stroke solid
+      <context:subtree select="//style:style[@style:name='Shape-3']">
+        <context:subtree select="style:graphic-properties">
+          <attr name="draw:fill">none</attr>
+          <empty>@draw:fill-color</empty>
+          <attr name="draw:stroke">dash</attr>
+          <attr name="svg:stroke-width">0.12mm</attr>
+          <attr name="svg:stroke-color">#000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      # TODO: hatched fill
+      <context:subtree select="//style:style[@style:name='Shape-4']">
+        <context:subtree select="style:graphic-properties">
+          <attr name="draw:fill">solid</attr>
+          <attr name="draw:fill-color">#ffffff</attr>
+          <attr name="draw:stroke">solid</attr>
+          <attr name="svg:stroke-width">0.12mm</attr>
+          <attr name="svg:stroke-color">#ff0033</attr>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  그림 객체 ShapePicture
+  <context:import href="sample-5017.xml">
+    <context:xslt>
+      <true>count(//draw:frame) = 2</true>
+      <context:subtree select="//text:p[@text:style-name='Paragraph-23']/draw:frame[1]">
+        <attr name="draw:style-name">Shape-1</attr>
+        <attr name="text:anchor-type">paragraph</attr>
+        <attr name="svg:x">111.73pt</attr>
+        <attr name="svg:y">4.9pt</attr>
+        <attr name="draw:z-index">2</attr>
+        <attr name="svg:width">57.68mm</attr>
+        <attr name="svg:height">34.61mm</attr>
+        <context:subtree select="draw:image">
+          <attr name="xlink:href">bindata/BIN0002.jpg</attr>
+        </context:subtree>
+      </context:subtree>
+      <context:subtree select="//text:p[@text:style-name='Paragraph-26']/draw:frame[1]">
+        <attr name="draw:style-name">Shape-2</attr>
+        <attr name="text:anchor-type">as-char</attr>
+        <empty>@svg:x</empty>
+        <empty>@svg:y</empty>
+        <attr name="draw:z-index">4</attr>
+        <attr name="svg:width">5.69mm</attr>
+        <attr name="svg:height">5.69mm</attr>
+        <context:subtree select="draw:image">
+          <attr name="xlink:href">bindata/BIN0003.png</attr>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  그림 객체 ShapePicture (scaled)
+  <context:import href="shapepict-scaled.xml">
+    <context:xslt>
+      <true>count(//draw:frame) = 2</true>
+      <context:wrap-subnodes select="//draw:frame">
+        <context:subtree select="draw:frame[1]">
+          <attr name="draw:style-name">Shape-1</attr>
+          <attr name="text:anchor-type">paragraph</attr>
+          <attr name="svg:x">0pt</attr>
+          <attr name="svg:y">0pt</attr>
+          <attr name="draw:z-index">0</attr>
+          <attr name="svg:width">20.07mm</attr>
+          <attr name="svg:height">12.04mm</attr>
+          <context:subtree select="draw:image">
+            <attr name="xlink:href">bindata/BIN0002.jpg</attr>
+          </context:subtree>
+        </context:subtree>
+        <context:subtree select="draw:frame[2]">
+          <attr name="draw:style-name">Shape-2</attr>
+          <attr name="svg:x">0pt</attr>
+          <attr name="svg:y">0pt</attr>
+          <attr name="draw:z-index">1</attr>
+          <attr name="svg:width">20.07mm</attr>
+          <attr name="svg:height">12.04mm</attr>
+          <context:subtree select="draw:image">
+            <attr name="xlink:href">bindata/BIN0002.jpg</attr>
+          </context:subtree>
+        </context:subtree>
+      </context:wrap-subnodes>
+    </context:xslt>
+  </context:import>
+
+  <context:import href="shapecontainer-2.xml">
+    <context:xslt>
+      <true>count(//draw:frame) = 1</true>
+      <context:subtree select="//draw:frame">
+        <attr name="draw:style-name">Shape-3</attr>
+        <empty>@text:anchor-type</empty>
+        <empty>@svg:x</empty>
+        <empty>@svg:y</empty>
+        <empty>@draw:z-index</empty> # TODO
+        <attr name="svg:width">161.92mm</attr>
+        <attr name="svg:height">22.23mm</attr>
+        <context:subtree select="draw:image">
+          <attr name="xlink:href">bindata/BIN0001.jpg</attr>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  <context:import href="aligns.xml">
+    <context:xslt>
+      # NOTE: svg:x/svg:y와 연계해서 위치를 지정할 수 있는 건
+      # from-left, from-top 뿐이므로, 다른 방향으로부터 지정된
+      # 값들은 기준 공간과 객체의 너비/높이를 사용하여
+      # from-left와 ftom-top의 값으로 변환되어야 함
+      # 이때 기준 공간은 horizontal/vertical-rel 값으로
+      # 정해짐. 이 테스트에서는 page-content로 고정되어 있으므로,
+      # 기준 공간은 종이의 여백을 제외한 텍스트 영역이 됨.
+
+      # NOTE: horizontal/vertical-pos를 center/right/middle/bottom
+      # 등으로 지정할 수 있는 특수한 경우들에 대한 처리가 되는지 확인한다
+      # 가령 halign=center, x=0 이라면 horizontal-pos를 center로
+      # 지정할 수 있다
+
+
+      # halign: left 0mm
+      <context:subtree select="//style:style[@style:name='Shape-1']/style:graphic-properties">
+        <attr name="style:horizontal-pos">from-left</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-1']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+
+      # halign: left 10mm
+      <context:subtree select="//style:style[@style:name='Shape-2']/style:graphic-properties">
+        <attr name="style:horizontal-pos">from-left</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-2']">
+        <attr name="svg:x">10mm</attr>
+      </context:subtree>
+
+      # halign: center 0mm
+      <context:subtree select="//style:style[@style:name='Shape-3']/style:graphic-properties">
+        <attr name="style:horizontal-pos">center</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-3']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+
+      # halign: center -10mm
+      <!--
+      <context:subtree select="//style:style[@style:name='Shape-4']/style:graphic-properties">
+        <attr name="style:horizontal-pos">center</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-4']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+      -->
+
+      # halign: right 0mm
+      <context:subtree select="//style:style[@style:name='Shape-5']/style:graphic-properties">
+        <attr name="style:horizontal-pos">right</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-5']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+
+      # halign: right 10mm
+      <!--
+      <context:subtree select="//style:style[@style:name='Shape-6']/style:graphic-properties">
+        <attr name="style:horizontal-pos">right</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-6']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+      -->
+
+      # halign: inside 0mm
+      <context:subtree select="//style:style[@style:name='Shape-7']/style:graphic-properties">
+        <attr name="style:horizontal-pos">from-inside</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-7']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+
+      # halign: inside 10mm
+      <!--
+      <context:subtree select="//style:style[@style:name='Shape-8']/style:graphic-properties">
+        <attr name="style:horizontal-pos">from-inside</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-8']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+      -->
+
+      # halign: outside 0mm
+      <context:subtree select="//style:style[@style:name='Shape-9']/style:graphic-properties">
+        <attr name="style:horizontal-pos">outside</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-9']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+
+      # halign: outside 10mm
+      <!--
+      <context:subtree select="//style:style[@style:name='Shape-10']/style:graphic-properties">
+        <attr name="style:horizontal-pos">outside</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-10']">
+        <attr name="svg:x">0mm</attr>
+      </context:subtree>
+      -->
+
+      # valign: top 0mm
+      <context:subtree select="//style:style[@style:name='Shape-11']/style:graphic-properties">
+        <attr name="style:vertical-pos">from-top</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-11']">
+        <attr name="svg:y">0mm</attr>
+      </context:subtree>
+
+      # valign: top 10mm
+      <context:subtree select="//style:style[@style:name='Shape-12']/style:graphic-properties">
+        <attr name="style:vertical-pos">from-top</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-12']">
+        <attr name="svg:y">10mm</attr>
+      </context:subtree>
+
+      # valign: center 0mm
+      <context:subtree select="//style:style[@style:name='Shape-13']/style:graphic-properties">
+        <attr name="style:vertical-pos">middle</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-13']">
+        <attr name="svg:y">0mm</attr>
+      </context:subtree>
+
+      # valign: center 10mm
+      <!--
+      <context:subtree select="//style:style[@style:name='Shape-14']/style:graphic-properties">
+        <attr name="style:vertical-pos">middle</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-14']">
+        <attr name="svg:y">10mm</attr>
+      </context:subtree>
+      -->
+
+      # valign: bottom 0mm
+      <context:subtree select="//style:style[@style:name='Shape-15']/style:graphic-properties">
+        <attr name="style:vertical-pos">bottom</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-15']">
+        <attr name="svg:y">0mm</attr>
+      </context:subtree>
+
+      # valign: bottom 10mm
+      <!--
+      <context:subtree select="//style:style[@style:name='Shape-16']/style:graphic-properties">
+        <attr name="style:vertical-pos">bottom</attr>
+      </context:subtree>
+      <context:subtree select="//draw:rect[@draw:style-name='Shape-16']">
+        <attr name="svg:y">10mm</attr>
+      </context:subtree>
+      -->
+    </context:xslt>
+  </context:import>
+
+</xunit:stylesheet>

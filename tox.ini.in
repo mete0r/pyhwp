@@ -7,7 +7,10 @@ envlist = py25,py26,py27,jy25,lo
 deps=nose
 commands=
 	{toxinidir}/bin/console {toxinidir}/misc/copylxml.py {envtmpdir}
+	python {toxinidir}/pyhwp-xunits/setup.py develop
 	nosetests {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/logging-nosetests.conf
+	hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures
+        {toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir=. --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits
 changedir={envtmpdir}
 
 [testenv:jy25]
@@ -16,7 +19,10 @@ basepython=${jython25:executable}
 deps=nose
 commands =
 	jython -c 'from org.apache.poi.poifs.filesystem import POIFSFileSystem'
+	jython {toxinidir}/pyhwp-xunits/setup.py develop
 	nosetests {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/logging-nosetests.conf
+	hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures
+        {toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir=. --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits
 
 [testenv:lo]
 setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin

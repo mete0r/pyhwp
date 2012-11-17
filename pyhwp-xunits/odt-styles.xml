@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xunit:stylesheet
+  xmlns:xunit="urn:xunit/xunit"
+  xmlns:context="urn:xunit/context"
+  xmlns="urn:xunit/expect"
+  href="odt/styles.xsl"
+  >
+  ''' PageDef 변환 테스트
+  
+      style:page-layout
+      style:master-page
+      @style:master-page-name
+      '''
+  <context:import href="pagedefs.xml">
+    <context:xslt>
+      <context:subtree select="//style:page-layout[1]">
+        <attr name="style:name">PageLayout-1</attr>
+        <context:subtree select="style:page-layout-properties">
+          <attr name="style:print-orientation">portrait</attr>
+          <attr name="fo:page-width">21cm</attr>
+          <attr name="fo:page-height">29.7cm</attr>
+          <attr name="fo:margin-left">3cm</attr>
+          <attr name="fo:margin-right">3cm</attr>
+          <attr name="fo:margin-top">2cm</attr>
+          <attr name="fo:margin-bottom">1.5cm</attr>
+        </context:subtree>
+      </context:subtree>
+      <context:subtree select="//style:page-layout[2]">
+        <attr name="style:name">PageLayout-2</attr>
+        <context:subtree select="style:page-layout-properties">
+          <attr name="style:print-orientation">landscape</attr>
+          <attr name="fo:page-width">29.7cm</attr>
+          <attr name="fo:page-height">21cm</attr>
+          # TODO: landscape가 되면, width/height처럼 margin들도 바뀌어야 하는 건 아닌가? 확인 필요
+          <attr name="fo:margin-left">3cm</attr>
+          <attr name="fo:margin-right">3cm</attr>
+          <attr name="fo:margin-top">2cm</attr>
+          <attr name="fo:margin-bottom">1.5cm</attr>
+        </context:subtree>
+      </context:subtree>
+      <context:subtree select="//style:master-page[1]">
+        <attr name="style:page-layout-name">PageLayout-1</attr>
+      </context:subtree>
+      <context:subtree select="//style:master-page[2]">
+        <attr name="style:page-layout-name">PageLayout-2</attr>
+      </context:subtree>
+    </context:xslt>
+    <context:xslt
+      href="odt/content.xsl"
+      select="//SectionDef[1]/Paragraph[1]"
+      mode="style:style">
+      <attr name="style:master-page-name">MasterPage-1</attr>
+    </context:xslt>
+    <context:xslt
+      href="odt/content.xsl"
+      select="//SectionDef[2]/Paragraph[1]"
+      mode="style:style">
+      <attr name="style:master-page-name">MasterPage-2</attr>
+    </context:xslt>
+  </context:import>
+</xunit:stylesheet>
