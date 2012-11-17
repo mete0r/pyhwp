@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from unokit.remote import RemoteContextLayer
 
 
 class TestBase(TestCase):
-
-    layer = RemoteContextLayer
 
     def get_fixture_path(self, filename):
         from hwp5.tests import get_fixture_path
