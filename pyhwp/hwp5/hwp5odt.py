@@ -40,6 +40,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    import os
     import sys
     from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
@@ -50,6 +51,16 @@ def main():
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
     init_logger(args)
+
+    if 'PYHWP_XSLTPROC' in os.environ:
+        from hwp5.plat import xsltproc
+        xsltproc.executable = os.environ['PYHWP_XSLTPROC']
+        xsltproc.enable()
+
+    if 'PYHWP_XMLLINT' in os.environ:
+        from hwp5.plat import xmllint
+        xmllint.executable = os.environ['PYHWP_XMLLINT']
+        xmllint.enable()
 
     xslt = plat.get_xslt()
     if xslt is None:
