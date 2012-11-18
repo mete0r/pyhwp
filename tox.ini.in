@@ -27,6 +27,7 @@ commands =
 setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
        UNO_PYTHONPATH=${lo:uno_pythonpath}
        LO_PROGRAM=${lo:program}
+       PYHWP_PLAT_UNO=1
 basepython=${lo:uno_python}
 commands=
 	{envpython} {toxinidir}/unokit/setup.py develop

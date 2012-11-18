@@ -26,6 +26,17 @@ enabled = False
 
 
 def is_enabled():
+    import os
+    if 'PYHWP_PLAT_UNO' in os.environ:
+        PYHWP_PLAT_UNO = os.environ['PYHWP_PLAT_UNO'].strip()
+        try:
+            forced = bool(int(PYHWP_PLAT_UNO))
+            logger.debug('%s: forced to be %s by PYHWP_PLAT_UNO', __name__,
+                         'enabled' if forced else 'disabled')
+            return forced
+        except:
+            logger.warning('PYHWP_PLAT_UNO=%s (invalid)', PYHWP_PLAT_UNO)
+    logger.debug('%s: is %s', __name__, 'enabled' if enabled else 'disabled')
     return enabled
 
 
