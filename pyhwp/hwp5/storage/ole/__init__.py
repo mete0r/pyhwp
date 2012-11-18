@@ -35,9 +35,11 @@ def get_implementation():
     if uno_olesimplestorage.is_enabled():
         logger.info('OleStorage implementation: uno_olesimplestorage')
         return uno_olesimplestorage.OleStorage
-    from hwp5.storage.ole import olefileio
-    logger.info('OleStorage implementation: olefileio')
-    return olefileio.OleStorage
+
+    from hwp5.plat import olefileio
+    if olefileio.is_enabled():
+        logger.info('OleStorage implementation: olefileio')
+        return olefileio.OleStorage
 
 
 class OleStorage(object):

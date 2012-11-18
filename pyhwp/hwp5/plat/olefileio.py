@@ -20,7 +20,14 @@
 from hwp5.utils import cached_property
 
 
-__import__('OleFileIO_PL')
+def is_enabled():
+    try:
+        import OleFileIO_PL
+    except Exception:
+        return False
+    else:
+        OleFileIO_PL
+        return True
 
 
 class OleStorageItem(object):
