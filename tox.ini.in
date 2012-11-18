@@ -32,4 +32,3 @@ commands=
 	python -c 'import uno, unohelper'
 	{toxinidir}/bin/oxt-test {envtmpdir}
 deps=discover
-changedir={toxinidir}
