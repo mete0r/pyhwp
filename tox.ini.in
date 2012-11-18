@@ -29,5 +29,9 @@ setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
        LO_PROGRAM=${lo:program}
 basepython=${lo:uno_python}
 commands=
-	{toxinidir}/bin/oxt-test {envtmpdir}
-deps=discover
+	{envpython} {toxinidir}/unokit/setup.py develop
+	{envpython} {toxinidir}/oxt.tool/setup.py develop
+	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
+	run-in-lo {envbindir}/nosetests {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/logging-nosetests.conf --with-xunit
+	run-in-lo {envbindir}/hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures
+	{toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir=. --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits
