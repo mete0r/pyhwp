@@ -31,9 +31,8 @@ Options::
     --loglevel=<level>  Set log level.
     --logfile=<file>    Set log file.
 '''
-
+from __future__ import with_statement
 import os, os.path
-from hwp5 import tools
 import logging
 
 
@@ -45,15 +44,25 @@ def main():
     from hwp5 import __version__ as version
     from hwp5.proc import rest_to_docopt
     from hwp5.proc import init_logger
+    from hwp5 import plat
     from hwp5.errors import InvalidHwp5FileError
     from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
     init_logger(args)
 
+    xslt = plat.get_xslt()
+    if xslt is None:
+        logger.error('no XSLT implementation is available.')
+        sys.exit(1)
+
+    rng = plat.get_relaxng()
+
+    convert = Converter(xslt, rng)
+
     from hwp5.dataio import ParseError
     try:
-        make(args)
+        make(convert, args)
     except ParseError, e:
         e.print_to_logger(logger)
     except InvalidHwp5FileError, e:
@@ -93,18 +102,6 @@ class ODTPackage(object):
 
         self.zf.close()
 
-def make_odtpkg(odtpkg, styles, content, additional_files):
-    from cStringIO import StringIO
-
-    rdf = StringIO()
-    manifest_rdf(rdf)
-    rdf.seek(0)
-    odtpkg.insert_stream(rdf, 'manifest.rdf', 'application/rdf+xml')
-    odtpkg.insert_stream(styles, 'styles.xml', 'text/xml')
-    odtpkg.insert_stream(content, 'content.xml', 'text/xml')
-    for additional in additional_files:
-        odtpkg.insert_stream(*additional)
-
 
 def hwp5_resources_filename(path):
     ''' get paths of 'hwp5' package resources '''
@@ -114,56 +111,98 @@ def hwp5_resources_filename(path):
 
 class Converter(object):
     def __init__(self, xslt, relaxng=None):
-        xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
-        xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
-        schema = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        schema = hwp5_resources_filename(schema)
+        self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
+        self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
+        rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+        self.rng_path = hwp5_resources_filename(rng_path)
 
-        self.xslt_styles = xslt(xsl_styles)
-        self.xslt_content = xslt(xsl_content)
+        self.xslt = xslt
+        self.relaxng = relaxng
 
-        if relaxng is not None:
-            self.relaxng_validate = relaxng(schema)
-        else:
-            self.relaxng_validate = None
+    def __call__(self, hwp5file, odtpkg, embedimage=False):
+        import os
 
-    def __call__(self, hwpfile, odtpkg, embedimage=False):
-        import tempfile
-        hwpxmlfile = tempfile.TemporaryFile()
+        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage)
         try:
-            hwpfile.xmlevents(embedbin=embedimage).dump(hwpxmlfile)
-
-            styles = tempfile.TemporaryFile()
-            hwpxmlfile.seek(0)
-            self.xslt_styles(hwpxmlfile, styles)
-            styles.seek(0)
-            if self.relaxng_validate:
-                self.relaxng_validate(styles)
-                styles.seek(0)
-
-            content = tempfile.TemporaryFile()
-            hwpxmlfile.seek(0)
-            self.xslt_content(hwpxmlfile, content)
-            content.seek(0)
-            if self.relaxng_validate:
-                self.relaxng_validate(content)
-                content.seek(0)
-
-            def additional_files():
-                if 'BinData' in hwpfile:
-                    bindata = hwpfile['BinData']
-                    for name in bindata:
-                        f = bindata[name].open()
-                        yield f, 'bindata/'+name, 'application/octet-stream'
-
-            make_odtpkg(odtpkg, styles, content, additional_files())
-
+            styles, content = self.make_styles_and_content(xhwp5_path)
         finally:
-            hwpxmlfile.close()
+            os.unlink(xhwp5_path)
 
-convert = Converter(tools.xslt, tools.relaxng)
+        try:
+            with file(styles) as f:
+                odtpkg.insert_stream(f, 'styles.xml', 'text/xml')
+            with file(content) as f:
+                odtpkg.insert_stream(f, 'content.xml', 'text/xml')
+        finally:
+            os.unlink(styles)
+            os.unlink(content)
 
-def make(args):
+        from cStringIO import StringIO
+        rdf = StringIO()
+        manifest_rdf(rdf)
+        rdf.seek(0)
+        odtpkg.insert_stream(rdf, 'manifest.rdf', 'application/rdf+xml')
+
+        for f, name, mimetype in self.additional_files(hwp5file):
+            odtpkg.insert_stream(f, name, mimetype)
+
+    def make_styles_and_content(self, xhwp5):
+        import os
+
+        styles = self.transform(self.xsl_styles, xhwp5)
+        try:
+            content = self.transform(self.xsl_content, xhwp5)
+            try:
+                return styles, content
+            except:
+                os.unlink(content)
+                raise
+        except:
+            os.unlink(styles)
+            raise
+
+    def make_xhwp5file(self, hwp5file, embedimage):
+        import os
+        import tempfile
+        fd, path = tempfile.mkstemp()
+        try:
+            f = os.fdopen(fd, 'w')
+            try:
+                hwp5file.xmlevents(embedbin=embedimage).dump(f)
+            finally:
+                f.close()
+        except:
+            os.unlink(path)
+            raise
+        else:
+            return path
+
+    def transform(self, xsl_path, xhwp5_path):
+        import os
+        import tempfile
+        fd, path = tempfile.mkstemp()
+        try:
+            os.close(fd)
+            self.xslt(xsl_path, xhwp5_path, path)
+            if self.relaxng is not None:
+                valid = self.relaxng(self.rng_path, path)
+                if not valid:
+                    raise Exception('validation against RelaxNG failed')
+        except:
+            os.unlink(path)
+            raise
+        else:
+            return path
+
+    def additional_files(self, hwp5file):
+        if 'BinData' in hwp5file:
+            bindata = hwp5file['BinData']
+            for name in bindata:
+                f = bindata[name].open()
+                yield f, 'bindata/'+name, 'application/octet-stream'
+
+
+def make(convert, args):
     hwpfilename = args['<hwp5file>']
     root = os.path.basename(hwpfilename)
     if root.lower().endswith('.hwp'):

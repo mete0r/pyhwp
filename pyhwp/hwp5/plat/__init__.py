@@ -16,26 +16,41 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 import logging
+from hwp5.plat import olefileio
+from hwp5.plat import _lxml
+from hwp5.plat import xsltproc
+from hwp5.plat import xmllint
+from hwp5.plat import javax_transform
+from hwp5.plat import jython_poifs
+from hwp5.plat import _uno
 
 
 logger = logging.getLogger(__name__)
 
 
-class OleStorage(object):
+def get_xslt():
+    if javax_transform.is_enabled():
+        return javax_transform.xslt
+    if _lxml.is_enabled():
+        return _lxml.xslt
+    if xsltproc.is_enabled():
+        return xsltproc.xslt
+    if _uno.is_enabled():
+        return _uno.xslt
 
-    def __init__(self, *args, **kwargs):
-        from hwp5.plat import get_olestorage_class
-        impl_class = get_olestorage_class()
-        assert impl_class is not None, 'no OleStorage implementation available'
-        self.impl = impl_class(*args, **kwargs)
 
-    def __iter__(self):
-        return self.impl.__iter__()
+def get_relaxng():
+    if _lxml.is_enabled():
+        return _lxml.relaxng
+    if xmllint.is_enabled():
+        return xmllint.relaxng
 
-    def __getitem__(self, name):
-        return self.impl.__getitem__(name)
 
-    def __getattr__(self, name):
-        return getattr(self.impl, name)
+def get_olestorage_class():
+    if jython_poifs.is_enabled():
+        return jython_poifs.OleStorage
+    if olefileio.is_enabled():
+        return olefileio.OleStorage
+    if _uno.is_enabled():
+        return _uno.OleStorage

@@ -16,26 +16,36 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
+from __future__ import with_statement
 import logging
 
 
 logger = logging.getLogger(__name__)
 
+executable = 'xsltproc'
+enabled = False
 
-class OleStorage(object):
 
-    def __init__(self, *args, **kwargs):
-        from hwp5.plat import get_olestorage_class
-        impl_class = get_olestorage_class()
-        assert impl_class is not None, 'no OleStorage implementation available'
-        self.impl = impl_class(*args, **kwargs)
+def is_enabled():
+    return enabled
 
-    def __iter__(self):
-        return self.impl.__iter__()
 
-    def __getitem__(self, name):
-        return self.impl.__getitem__(name)
+def enable():
+    global enabled
+    enabled = True
 
-    def __getattr__(self, name):
-        return getattr(self.impl, name)
+
+def disable():
+    global enabled
+    enabled = False
+
+
+def xslt(xsl_path, inp_path, out_path):
+   from subprocess import Popen
+   args = [executable, '-o', out_path, xsl_path, inp_path]
+   p = Popen(args)
+   p.wait()
+   if p.returncode == 0:
+       return dict()
+   else:
+       return dict(errors=[])

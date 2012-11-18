@@ -15,7 +15,23 @@ class TestPrecondition(TestCase):
 
 class TestConverter(TestCase):
 
+    @property
+    def odt_path(self):
+        return self.id() + '.odt'
+
+    @property
+    def convert(self):
+        from hwp5 import plat
+        from hwp5.hwp5odt import Converter
+
+        xslt = plat.get_xslt()
+        assert xslt is not None, 'no XSLT implementation is available'
+        relaxng = plat.get_relaxng()
+        return Converter(xslt, relaxng)
+
     def test_convert_bindata(self):
+        from hwp5.hwp5odt import ODTPackage
+
         hwp5file = example('sample-5017.hwp')
         try:
             f = hwp5file['BinData']['BIN0002.jpg'].open()
@@ -24,17 +40,16 @@ class TestConverter(TestCase):
             finally:
                 f.close()
 
-            from hwp5.hwp5odt import convert, ODTPackage
-            odtpkg = ODTPackage('sample-5017.odt')
+            odtpkg = ODTPackage(self.odt_path)
             try:
-                convert(hwp5file, odtpkg)
+                self.convert(hwp5file, odtpkg)
             finally:
                 odtpkg.close()
         finally:
             hwp5file.close()
 
         from zipfile import ZipFile
-        zf = ZipFile('sample-5017.odt')
+        zf = ZipFile(self.odt_path)
         data2 = zf.read('bindata/BIN0002.jpg')
 
         self.assertEquals(data1, data2)

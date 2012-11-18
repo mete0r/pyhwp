@@ -45,39 +45,32 @@ def main():
     make(args)
 
 def make(args):
+    from hwp5.plat import get_xslt
+    from hwp5.importhelper import pkg_resources_filename
+    from tempfile import mkstemp
+    from hwp5.xmlmodel import Hwp5File
+
     hwp5_filename = args['<hwp5file>']
-    from .xmlmodel import Hwp5File
+    rootname = os.path.basename(hwp5_filename)
+    if rootname.lower().endswith('.hwp'):
+        rootname = rootname[0:-4]
+    txt_path = rootname + '.txt'
+
+    xslt = get_xslt()
+    plaintext_xsl = pkg_resources_filename('hwp5', 'xsl/plaintext.xsl')
+
     hwp5file = Hwp5File(hwp5_filename)
     try:
-        xslt = xslt_plaintext()
-
-        rootname = os.path.basename(hwp5_filename)
-        if rootname.lower().endswith('.hwp'):
-            rootname = rootname[0:-4]
-
-        hwp5xml_filename = rootname+'.xml'
-        xmlfile = file(hwp5xml_filename, 'w')
+        xhwp5_fd, xhwp5_path = mkstemp()
         try:
-            hwp5file.xmlevents().dump(xmlfile)
-        finally:
-            xmlfile.close()
-
-        xmlfile = file(hwp5xml_filename, 'r')
-        try:
-            txtfile = file(rootname+'.txt', 'w')
+            xhwp5_file = os.fdopen(xhwp5_fd, 'w')
             try:
-                xslt(xmlfile, txtfile)
+                hwp5file.xmlevents().dump(xhwp5_file)
             finally:
-                txtfile.close()
-        finally:
-            xmlfile.close()
+                xhwp5_file.close()
 
-        os.unlink(hwp5xml_filename)
+            xslt(plaintext_xsl, xhwp5_path, txt_path)
+        finally:
+            os.unlink(xhwp5_path)
     finally:
         hwp5file.close()
-
-def xslt_plaintext():
-    from hwp5.tools import xslt
-    import pkg_resources
-    content_xsl = pkg_resources.resource_filename('hwp5', 'xsl/plaintext.xsl')
-    return xslt(content_xsl)
