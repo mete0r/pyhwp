@@ -57,6 +57,8 @@ def main():
         sys.exit(1)
 
     rng = plat.get_relaxng()
+    if rng is None:
+        logger.warning('no RelaxNG implementation is available.')
 
     convert = Converter(xslt, rng)
 
