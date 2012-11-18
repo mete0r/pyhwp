@@ -93,6 +93,92 @@ class TestRunnerJob(unohelper.Base, XJob):
         return cPickle.dumps(result)
 
 
+import contextlib
+
+
+@contextlib.contextmanager
+def sandbox(working_dir, **kwargs):
+    import os
+    import sys
+
+    backup = dict()
+    class NOTHING:
+        pass
+    if not hasattr(sys, 'argv'):
+        sys.argv = NOTHING
+
+    NAMES = ['path', 'argv', 'stdin', 'stdout', 'stderr']
+    for x in NAMES:
+        assert x in kwargs
+
+    backup['cwd'] = os.getcwd()
+    os.chdir(working_dir)
+    for x in NAMES:
+        backup[x] = getattr(sys, x)
+        setattr(sys, x, kwargs[x])
+
+    try:
+        yield
+    finally:
+        for x in NAMES:
+            setattr(sys, x, backup[x])
+        os.chdir(backup['cwd'])
+
+        if sys.argv is NOTHING:
+            del sys.argv
+
+
+@implementation('backend.RemoteRunJob')
+class RemoteRunJob(unohelper.Base, XJob):
+
+    def __init__(self, context):
+        self.context = context
+
+    def execute(self, arguments):
+        args = dict((nv.Name, nv.Value) for nv in arguments)
+
+        logpath = args.get('logfile')
+        if logpath is not None:
+            logfile = file(logpath, 'a')
+            loghandler = logging.StreamHandler(logfile)
+            logger.addHandler(loghandler)
+
+        import datetime
+        logger.info('-'*10 + (' start at %s' % datetime.datetime.now()) + '-'*10)
+        try:
+            return self.run(args)
+        finally:
+            logger.info('-'*10 + (' stop at %s' % datetime.datetime.now()) + '-'*10)
+            if logpath is not None:
+                logger.removeHandler(loghandler)
+
+    def run(self, args):
+        import cPickle
+
+        working_dir = args['working_dir']
+        path = cPickle.loads(str(args['path']))
+        argv = cPickle.loads(str(args['argv']))
+        stdin = FileFromStream(args['stdin'])
+        stdout = FileFromStream(args['stdout'])
+        stderr = FileFromStream(args['stderr'])
+
+        script = argv[0]
+        with sandbox(working_dir, path=path, argv=argv, stdin=stdin,
+                     stdout=stdout, stderr=stderr):
+            g = dict(__name__='__main__')
+            try:
+                execfile(script, g)
+            except SystemExit, e:
+                return e.code
+            except Exception, e:
+                logger.exception(e)
+                raise
+            except:
+                import traceback
+                logger.error('%s' % traceback.format_exc())
+                raise
+
+
 @implementation('backend.ConsoleJob')
 class ConsoleJob(unohelper.Base, XJob):
 

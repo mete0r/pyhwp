@@ -162,6 +162,112 @@ def console_in_proc(soffice='soffice'):
                 backendjob.execute(args)
 
 
+class LoEnviron(object):
+
+    def __init__(self, program_dir):
+        self.program_dir = program_dir
+
+    @property
+    def rc_ext(self):
+        import sys
+        if sys.platform == 'win32':
+            return '.ini'
+        else:
+            return 'rc'
+
+
+    @property
+    def fundamentalrc(self):
+        import os.path
+        filename = 'fundamental' + self.rc_ext
+        return os.path.join(self.program_dir, filename)
+
+
+    @property
+    def ure_bootstrap(self):
+        return 'vnd.sun.star.pathname:' + self.fundamentalrc
+
+
+def fixup_script_name(script_name):
+    import sys
+    if sys.platform == 'win32':
+        return script_name + '-script.py'
+    else:
+        return script_name
+
+
+def run_in_lo(soffice='soffice'):
+    import os
+    import sys
+    import os.path
+
+    uno_pythonpath = os.environ['UNO_PYTHONPATH'].split(os.pathsep)
+    sys.path.extend(uno_pythonpath)
+
+    loenv = LoEnviron(os.environ['LO_PROGRAM'])
+    os.environ['URE_BOOTSTRAP'] = loenv.ure_bootstrap
+
+    import oxt_tool.remote
+
+    logger = logging.getLogger('unokit')
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel(logging.INFO)
+
+    logfmt = logging.Formatter(('frontend %5d ' % os.getpid())
+                               +'%(message)s')
+    logchn = logging.StreamHandler()
+    logchn.setFormatter(logfmt)
+    logger = logging.getLogger('frontend')
+    logger.addHandler(logchn)
+    logger.setLevel(logging.INFO)
+
+    for path in sys.path:
+        logger.info('sys.path: %s', path)
+
+    working_dir = os.getcwd()
+    working_dir = os.path.abspath(working_dir)
+    argv = list(sys.argv[1:])
+
+    if argv[0].startswith('--logfile='):
+        logfile = argv[0][len('--logfile='):]
+        argv = argv[1:]
+    else:
+        logfile = None
+    argv[0] = os.path.abspath(argv[0])
+    argv[0] = fixup_script_name(argv[0])
+    print argv
+
+    backend_path = sys.modules['oxt_tool'].__file__
+    backend_path = os.path.dirname(backend_path)
+    backend_path = os.path.join(backend_path, 'backend.py')
+    backend_name = 'backend.RemoteRunJob'
+
+    with oxt_tool.remote.new_remote_context(soffice=soffice) as context:
+        logger.info('remote context created')
+        factory = load_component(backend_path, backend_name)
+        if factory:
+            backendjob = factory.createInstanceWithContext(context)
+            if backendjob:
+                import cPickle
+                from unokit.adapters import OutputStreamToFileLike
+                from unokit.adapters import InputStreamFromFileLike
+                stdin = InputStreamFromFileLike(sys.stdin)
+                stdout = OutputStreamToFileLike(sys.stdout)
+                stderr = OutputStreamToFileLike(sys.stderr)
+                path = cPickle.dumps(sys.path)
+                argv = cPickle.dumps(argv)
+                args = dict(logfile=logfile,
+                            working_dir=working_dir,
+                            path=path,
+                            argv=argv,
+                            stdin=stdin,
+                            stdout=stdout,
+                            stderr=stderr)
+                args = dict_to_namedvalue(args)
+                return backendjob.execute(args)
+    return -1
+
+
 def iter_package_files():
     import os
     import os.path

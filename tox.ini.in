@@ -25,9 +25,9 @@ commands =
 
 [testenv:lo]
 setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
-       PYTHONPATH=${lo:uno_pythonpath}
+       UNO_PYTHONPATH=${lo:uno_pythonpath}
+       LO_PROGRAM=${lo:program}
 basepython=${lo:uno_python}
 commands=
-	{envpython} -c 'import uno, unohelper'
 	{toxinidir}/bin/oxt-test {envtmpdir}
 deps=discover
