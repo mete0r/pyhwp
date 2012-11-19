@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import sys
 import os
@@ -270,3 +271,5 @@ uno를 사용하는 프로그램들 (desktop app/unopkg, 각종 unittest 프로�
 * unopkg: desktop/source/pkgchk/unopkg/
 
 '''
+
+logger.info('%s: end of file', __name__)
