@@ -6,12 +6,10 @@ from hwp5.tests.mixin_xslt import XsltTestMixin
 
 class TestPlatXsltProc(unittest.TestCase, XsltTestMixin):
     
+    xslt = None
+    xslt_compile = None
+
     def setUp(self):
         from hwp5.plat import xsltproc
-        xsltproc.enable()
-        self.xslt = xsltproc.xslt
-        self.xslt_compile = None
-
-    def tearDown(self):
-        from hwp5.plat import xsltproc
-        xsltproc.disable()
+        if xsltproc.is_enabled():
+            self.xslt = xsltproc.xslt
