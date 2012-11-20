@@ -37,11 +37,13 @@ def enable():
     g['uno'] = uno
     g['unohelper'] = unohelper
     g['enabled'] = True
+    logger.info('%s: enabled.', __name__)
 
 
 def disable():
     global enabled
     enabled = False
+    logger.info('%s: disabled.', __name__)
 
 
 def XSLTTransformer(context, stylesheet_url, source_url, source_url_base):
