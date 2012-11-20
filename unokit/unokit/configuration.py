@@ -32,7 +32,9 @@ def get_soffice_product_info():
     # see schema in libreoffice/officecfg/registry/schema/org/office/Setup.xcs
 
     version = tuple(int(x) for x in config.Product.ooSetupVersionAboutBox.split('.'))
-    version += (config.Product.ooSetupVersionAboutBoxSuffix,)
+    if hasattr(config.Product, 'ooSetupVersionAboutBoxSuffix'):
+        # seems for libreoffice >= 3.5 only
+        version += (config.Product.ooSetupVersionAboutBoxSuffix,)
     return dict(vendor=config.Product.ooVendor,
                 name=config.Product.ooName,
                 version=version,
