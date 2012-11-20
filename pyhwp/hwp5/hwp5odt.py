@@ -122,6 +122,14 @@ def hwp5_resources_filename(path):
     return pkg_resources_filename('hwp5', path)
 
 
+def unlink_or_warning(path):
+    try:
+        os.unlink(path)
+    except Exception, e:
+        logger.exception(e)
+        logger.warning('%s cannot be deleted', path)
+
+
 class Converter(object):
     def __init__(self, xslt, relaxng=None):
         self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
@@ -133,13 +141,11 @@ class Converter(object):
         self.relaxng = relaxng
 
     def __call__(self, hwp5file, odtpkg, embedimage=False):
-        import os
-
         xhwp5_path = self.make_xhwp5file(hwp5file, embedimage)
         try:
             styles, content = self.make_styles_and_content(xhwp5_path)
         finally:
-            os.unlink(xhwp5_path)
+            unlink_or_warning(xhwp5_path)
 
         try:
             with file(styles) as f:
@@ -147,8 +153,8 @@ class Converter(object):
             with file(content) as f:
                 odtpkg.insert_stream(f, 'content.xml', 'text/xml')
         finally:
-            os.unlink(styles)
-            os.unlink(content)
+            unlink_or_warning(styles)
+            unlink_or_warning(content)
 
         from cStringIO import StringIO
         rdf = StringIO()
@@ -160,18 +166,16 @@ class Converter(object):
             odtpkg.insert_stream(f, name, mimetype)
 
     def make_styles_and_content(self, xhwp5):
-        import os
-
         styles = self.transform(self.xsl_styles, xhwp5)
         try:
             content = self.transform(self.xsl_content, xhwp5)
             try:
                 return styles, content
             except:
-                os.unlink(content)
+                unlink_or_warning(content)
                 raise
         except:
-            os.unlink(styles)
+            unlink_or_warning(styles)
             raise
 
     def make_xhwp5file(self, hwp5file, embedimage):
@@ -185,7 +189,7 @@ class Converter(object):
             finally:
                 f.close()
         except:
-            os.unlink(path)
+            unlink_or_warning(path)
             raise
         else:
             return path
@@ -202,7 +206,7 @@ class Converter(object):
                 if not valid:
                     raise Exception('validation against RelaxNG failed')
         except:
-            os.unlink(path)
+            unlink_or_warning(path)
             raise
         else:
             return path
