@@ -8,7 +8,7 @@ deps=nose
      coverage
 commands=
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
-	{toxinidir}/bin/console {toxinidir}/misc/copylxml.py {envtmpdir}
+	{envpython} {toxinidir}/bin/install-lxml-{envname}.py {envtmpdir}
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
 	nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase --cover-xml --cover-xml-file={envtmpdir}/coverage.xml
 	hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
