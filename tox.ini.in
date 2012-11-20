@@ -10,7 +10,7 @@ commands=
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{toxinidir}/bin/console {toxinidir}/misc/copylxml.py {envtmpdir}
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
-	nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/logging-nosetests.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase --cover-xml --cover-xml-file={envtmpdir}/coverage.xml
+	nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase --cover-xml --cover-xml-file={envtmpdir}/coverage.xml
 	hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
         {toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits
 
@@ -22,7 +22,7 @@ commands =
 	{envpython} -c 'from org.apache.poi.poifs.filesystem import POIFSFileSystem'
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
         {toxinidir}/bin/coverage erase
-	{envbindir}/coverage run --source={toxinidir} --omit='parts/*',setup.py,bootstrap.py,versioneer.py {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/logging-nosetests.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
+	{envbindir}/coverage run --source={toxinidir} --omit='parts/*',setup.py,bootstrap.py,versioneer.py {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
         {toxinidir}/bin/coverage combine
         {toxinidir}/bin/coverage report
         {toxinidir}/bin/coverage xml -i -o {envtmpdir}/coverage.xml
@@ -40,7 +40,7 @@ commands=
 	{envpython} {toxinidir}/unokit/setup.py develop
 	{envpython} {toxinidir}/oxt.tool/setup.py develop
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
-	run-in-lo {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/logging-nosetests.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase
+	run-in-lo {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase
         {toxinidir}/bin/coverage combine
         {toxinidir}/bin/coverage report
         {toxinidir}/bin/coverage xml -i -o {envtmpdir}/coverage.xml --omit='/usr/*','parts/*'
