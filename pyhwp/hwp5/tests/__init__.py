@@ -4,8 +4,6 @@ def test_suite():
     tests = []
     from hwp5.tests import test_odtxsl as T
     tests.append(T)
-    from hwp5.tests import test_externprogs as T
-    tests.append(T)
     from hwp5.tests import test_xmlformat as T
     tests.append(T)
     from hwp5.tests import test_xmlmodel as T

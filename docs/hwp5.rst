@@ -46,11 +46,6 @@ module :mod:`hwp5.plat`
 .. automodule:: hwp5.plat
    :members:
 
-module :mod:`hwp5.externprogs`
-==============================
-.. automodule:: hwp5.externprogs
-   :members:
-
 module :mod:`hwp5.importhelper`
 ===============================
 .. automodule:: hwp5.importhelper

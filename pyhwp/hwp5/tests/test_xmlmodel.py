@@ -129,18 +129,17 @@ class TestHwp5File(TestBase):
         list(hwp5file.events(embedbin=True))
 
     def test_xmlevents_dump(self):
-        from hwp5.externprogs import xmllint
-        xmllint = xmllint('--format')
-
-        outfile = file(self.id() + '.xml', 'w')
+        outfile = file(self.id() + '.xml', 'w+')
         try:
-            out = xmllint(outfile=outfile)
-            try:
-                self.hwp5file.xmlevents().dump(out)
-            finally:
-                out.close()
+            self.hwp5file.xmlevents().dump(outfile)
+
+            outfile.seek(0)
+            from xml.etree import ElementTree
+            doc = ElementTree.parse(outfile)
         finally:
             outfile.close()
+
+        self.assertEquals('HwpDoc', doc.getroot().tag)
 
 
 from hwp5.xmlmodel import make_ranged_shapes, split_and_shape
