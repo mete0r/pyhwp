@@ -34,9 +34,7 @@ class TestSingletons(TestBase):
         pkginfo_prov = css.deployment.PackageInformationProvider
         self.assertTrue(pkginfo_prov is not None)
 
-        exts = list(pkginfo_prov.ExtensionList)
-        extids = list(extid for extid, extver in exts)
-        extid = 'com.sun.star.script.provider.ScriptProviderForPython'
-        self.assertTrue(extid in extids)
-        ext_loc = pkginfo_prov.getPackageLocation(extid)
-        self.assertTrue(ext_loc != '')
+        for ext_id, ext_ver in pkginfo_prov.ExtensionList:
+            ext_loc = pkginfo_prov.getPackageLocation(ext_id)
+            print ext_id, ext_ver, ext_loc
+            self.assertTrue(ext_loc != '')
