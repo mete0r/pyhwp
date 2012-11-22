@@ -172,7 +172,7 @@ LO_VARS = ('libreoffice'
 def log_discovered(installations):
     for installation in installations:
         msg = 'discovered:'
-        for name in LO_VARS:
+        for name in LO_VARS + ['through']:
             if name in installation:
                 msg += ' ' + name + '=' + installation[name]
         logger.info(msg)
