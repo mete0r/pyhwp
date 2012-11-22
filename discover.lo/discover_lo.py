@@ -111,7 +111,7 @@ def find_ure(location):
 
 def python_import_uno(python):
     import subprocess
-    cmd = [python, '-c', '"import uno, unohelper"']
+    cmd = [python, '-c', 'import uno, unohelper']
     ret = subprocess.call(cmd)
     if ret == 0:
         return python
