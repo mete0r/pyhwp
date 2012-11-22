@@ -4,6 +4,7 @@ import os
 import os.path
 import sys
 import logging
+import contextlib
 from discover_jre import executable_in_dir
 from discover_jre import expose_options
 
@@ -186,6 +187,18 @@ def log_discovered(installations):
         yield installation
 
 
+@contextlib.contextmanager
+def original_pythonpath():
+    ''' without buildout-modified environment variables
+    '''
+    if 'BUILDOUT_ORIGINAL_PYTHONPATH' in os.environ:
+        buildout_pythonpath = os.environ['PYTHONPATH']
+        os.environ['PYTHONPATH'] = os.environ.pop('BUILDOUT_ORIGINAL_PYTHONPATH')
+        yield
+        os.environ['BUILDOUT_ORIGINAL_PYTHONPATH'] = os.environ['PYTHONPATH']
+        os.environ['PYTHONPATH'] = buildout_pythonpath
+
+
 class Discover(object):
     ''' Discover a LibreOffice installation and provide its location.
     '''
@@ -207,7 +220,8 @@ class Discover(object):
         if 'location' in options:
             # if location is explicitly specified, it must contains java
             # executable.
-            discovered = contains_program(options['location'])
+            with original_pythonpath():
+                discovered = contains_program(options['location'])
             if discovered:
                 # LO found, no further operation required.
                 expose_options(options, LO_VARS, discovered,
@@ -223,9 +237,10 @@ class Discover(object):
         in_path = in_path in ('true', 'yes', '1')
 
         # location is not specified: try to discover a LO installation
-        discovered = discover_lo(in_wellknown, in_path)
-        discovered = log_discovered(discovered)
-        discovered = list(discovered)
+        with original_pythonpath():
+            discovered = discover_lo(in_wellknown, in_path)
+            discovered = log_discovered(discovered)
+            discovered = list(discovered)
 
         if discovered:
             discovered = discovered[0]
