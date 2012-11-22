@@ -35,6 +35,7 @@ def discover_in_wellknown_locations():
     for location in wellknown_locations():
         installation = contains_program(location)
         if installation:
+            installation['through'] = 'WELLKNOWN_LOCATION'
             yield installation
 
 
