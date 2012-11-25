@@ -67,7 +67,7 @@ setup(
         test_suite='hwp5.tests.test_suite',
 
         classifiers=[
-            'Development Status :: 3 - Alpha',
+            'Development Status :: 4 - Beta',
             'Intended Audience :: Developers',
             'License :: OSI Approved :: GNU Affero General Public License v3',
             'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
