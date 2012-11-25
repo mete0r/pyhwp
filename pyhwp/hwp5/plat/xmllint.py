@@ -23,10 +23,25 @@ import logging
 logger = logging.getLogger(__name__)
 
 executable = 'xmllint'
-enabled = False
+enabled = None
+
+
+def xmllint_reachable():
+   from subprocess import Popen
+   args = [executable, '--version']
+   try:
+       p = Popen(args)
+   except:
+       return False
+   else:
+       p.wait()
+       return True
 
 
 def is_enabled():
+    global enabled
+    if enabled is None:
+        enabled = xmllint_reachable()
     return enabled
 
 

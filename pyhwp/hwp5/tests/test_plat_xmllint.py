@@ -6,12 +6,10 @@ from hwp5.tests.mixin_relaxng import RelaxNGTestMixin
 
 class TestPlatXmlLint(unittest.TestCase, RelaxNGTestMixin):
 
+    relaxng = None
+    relaxng_compile = None
+
     def setUp(self):
         from hwp5.plat import xmllint
-        xmllint.enable()
-        self.relaxng = xmllint.relaxng
-        self.relaxng_compile = None
-
-    def tearDown(self):
-        from hwp5.plat import xmllint
-        xmllint.disable()
+        if xmllint.is_enabled():
+            self.relaxng = xmllint.relaxng

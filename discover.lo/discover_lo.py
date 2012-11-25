@@ -4,6 +4,7 @@ import os
 import os.path
 import sys
 import logging
+import contextlib
 from discover_jre import executable_in_dir
 from discover_jre import expose_options
 
@@ -16,9 +17,10 @@ def wellknown_locations():
         program_files = 'c:\\program files'
         if os.path.exists(program_files):
             for name in os.listdir(program_files):
-                yield os.path.join(program_files, name)
+                yield dict(location=os.path.join(program_files, name))
     if sys.platform.startswith('linux'):
-        yield '/usr/lib/libreoffice'  # ubuntu
+        yield dict(location='/usr/lib/libreoffice',
+                   uno_python='/usr/bin/python')  # Debian/Ubuntu
 
 
 def discover_lo(in_wellknown=True, in_path=True):
@@ -32,9 +34,15 @@ def discover_lo(in_wellknown=True, in_path=True):
 
 
 def discover_in_wellknown_locations():
-    for location in wellknown_locations():
-        installation = contains_program(location)
-        if installation:
+    for installation in wellknown_locations():
+        found = contains_program(installation['location'])
+        if found:
+            if 'uno_python' not in found and 'uno_python' in installation:
+                uno_python = python_import_uno(installation['uno_python'])
+                if uno_python:
+                    found.update(resolve_uno_components(uno_python))
+            installation.update(found)
+            installation['through'] = 'WELLKNOWN_LOCATION'
             yield installation
 
 
@@ -54,9 +62,12 @@ def discover_in_path():
                 if installation:
                     entry.update(installation)
 
-                uno_python = python_import_uno(sys.executable)
-                if uno_python:
-                    entry.update(get_uno_python(uno_python))
+                # Debian/Ubuntu case
+                if 'uno' not in entry:
+                    # try System python
+                    uno_python = python_import_uno(sys.executable)
+                    if uno_python:
+                        entry.update(resolve_uno_components(uno_python))
 
                 yield entry
 
@@ -79,11 +90,8 @@ def contains_program(location):
         program_python = executable_in_dir('python', program_dir)
         if program_python:
             uno_python = python_import_uno(program_python)
-        else:
-            uno_python = python_import_uno(sys.executable)
-
-        if uno_python:
-            installation.update(get_uno_python(uno_python))
+            if uno_python:
+                installation.update(resolve_uno_components(uno_python))
 
         basis_link = os.path.join(location, 'basis-link')
         if os.path.islink(basis_link):
@@ -111,13 +119,13 @@ def find_ure(location):
 
 def python_import_uno(python):
     import subprocess
-    cmd = [python, '-c', '"import uno, unohelper"']
+    cmd = [python, '-c', 'import uno, unohelper']
     ret = subprocess.call(cmd)
     if ret == 0:
         return python
 
 
-def get_uno_python(uno_python):
+def resolve_uno_components(uno_python):
     uno_python_core, modules = get_uno_locations(uno_python,
                                             ['uno', 'pyuno',
                                              'unohelper'])
@@ -172,11 +180,23 @@ LO_VARS = ('libreoffice'
 def log_discovered(installations):
     for installation in installations:
         msg = 'discovered:'
-        for name in LO_VARS:
+        for name in LO_VARS + ['through']:
             if name in installation:
                 msg += ' ' + name + '=' + installation[name]
         logger.info(msg)
         yield installation
+
+
+@contextlib.contextmanager
+def original_pythonpath():
+    ''' without buildout-modified environment variables
+    '''
+    if 'BUILDOUT_ORIGINAL_PYTHONPATH' in os.environ:
+        buildout_pythonpath = os.environ['PYTHONPATH']
+        os.environ['PYTHONPATH'] = os.environ.pop('BUILDOUT_ORIGINAL_PYTHONPATH')
+        yield
+        os.environ['BUILDOUT_ORIGINAL_PYTHONPATH'] = os.environ['PYTHONPATH']
+        os.environ['PYTHONPATH'] = buildout_pythonpath
 
 
 class Discover(object):
@@ -200,7 +220,8 @@ class Discover(object):
         if 'location' in options:
             # if location is explicitly specified, it must contains java
             # executable.
-            discovered = contains_program(options['location'])
+            with original_pythonpath():
+                discovered = contains_program(options['location'])
             if discovered:
                 # LO found, no further operation required.
                 expose_options(options, LO_VARS, discovered,
@@ -216,9 +237,10 @@ class Discover(object):
         in_path = in_path in ('true', 'yes', '1')
 
         # location is not specified: try to discover a LO installation
-        discovered = discover_lo(in_wellknown, in_path)
-        discovered = log_discovered(discovered)
-        discovered = list(discovered)
+        with original_pythonpath():
+            discovered = discover_lo(in_wellknown, in_path)
+            discovered = log_discovered(discovered)
+            discovered = list(discovered)
 
         if discovered:
             discovered = discovered[0]

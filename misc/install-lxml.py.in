@@ -1,0 +1,17 @@
+# -*- coding: utf-8 -*-
+
+def main():
+    import sys
+    import os.path
+    from subprocess import Popen
+    path = os.path.join('${buildout:directory}', 'misc',
+                        'symlink-or-copytree-or-pip-lxml.py')
+    src = '${lxml-location}'
+    dst = sys.argv[1]
+    args = [sys.executable, path, src, dst]
+    p = Popen(args)
+    p.wait()
+    raise SystemExit(p.returncode)
+
+if __name__ == '__main__':
+    main()

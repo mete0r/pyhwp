@@ -26,6 +26,17 @@ enabled = False
 
 
 def is_enabled():
+    import os
+    if 'PYHWP_PLAT_UNO' in os.environ:
+        PYHWP_PLAT_UNO = os.environ['PYHWP_PLAT_UNO'].strip()
+        try:
+            forced = bool(int(PYHWP_PLAT_UNO))
+            logger.debug('%s: forced to be %s by PYHWP_PLAT_UNO', __name__,
+                         'enabled' if forced else 'disabled')
+            return forced
+        except:
+            logger.warning('PYHWP_PLAT_UNO=%s (invalid)', PYHWP_PLAT_UNO)
+    logger.debug('%s: is %s', __name__, 'enabled' if enabled else 'disabled')
     return enabled
 
 
@@ -37,11 +48,13 @@ def enable():
     g['uno'] = uno
     g['unohelper'] = unohelper
     g['enabled'] = True
+    logger.info('%s: enabled.', __name__)
 
 
 def disable():
     global enabled
     enabled = False
+    logger.info('%s: disabled.', __name__)
 
 
 def XSLTTransformer(context, stylesheet_url, source_url, source_url_base):
@@ -50,8 +63,16 @@ def XSLTTransformer(context, stylesheet_url, source_url, source_url_base):
     args = (NamedValue('StylesheetURL', stylesheet_url),
             NamedValue('SourceURL', source_url),
             NamedValue('SourceBaseURL', source_url_base))
-    return css.comp.documentconversion.LibXSLTTransformer(context, *args)
-    #return css.comp.JAXTHelper(context, *args)
+    import os
+    select = os.environ.get('PYHWP_PLAT_UNO_XSLT', 'libxslt')
+    logger.debug('PYHWP_PLAT_UNO_XSLT = %s', select)
+    if select == 'jaxthelper':
+        logger.debug('%s.xslt: using css.comp.JAXTHelper', __name__)
+        return css.comp.JAXTHelper(context, *args)
+    else:
+        logger.debug('%s.xslt: using %s', __name__,
+                     'css.comp.documentconversion.LibXSLTTransformer')
+        return css.comp.documentconversion.LibXSLTTransformer(context, *args)
 
 
 class OneshotEvent(object):
