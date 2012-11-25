@@ -1,20 +1,17 @@
-OXTPKG=hwp5.oxt
+OXTPKG:=../dist/hwp5-$(shell git describe --dirty).oxt
 UNOPKG=unopkg
-SOFFICE=soffice
 
-SRC=description.xml components.py Types.xcu Filter.xcu META-INF/manifest.xml registration/COPYING.txt description/*.txt
-
-$(OXTPKG): $(SRC)
-	zip -9 -r $@ $(SRC) pythonpath
+$(OXTPKG):
+	../bin/oxt-build
 
 validate: $(OXTPKG)
-	$(UNOPKG) validate -v $(OXTPKG)
+	$(UNOPKG) validate -v hwp5.oxt
 
 install: $(OXTPKG)
 	$(UNOPKG) add -v -s $(OXTPKG)
 
 uninstall:
-	$(UNOPKG) remove -f $(OXTPKG)
+	$(UNOPKG) remove -f hwp5.oxt
 
 reinstall: uninstall install
 

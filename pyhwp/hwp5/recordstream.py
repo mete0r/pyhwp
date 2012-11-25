@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -24,6 +21,7 @@ from .dataio import UINT32, Eof
 from . import dataio
 from . import filestructure
 from .importhelper import importStringIO
+from hwp5.importhelper import importjson
 StringIO = importStringIO()
 
 
@@ -110,9 +108,9 @@ def link_records(records):
 def record_to_json(record, *args, **kwargs):
     ''' convert a record to json '''
     from .dataio import dumpbytes
-    import simplejson  # TODO: simplejson is for python2.5+
+    json = importjson()
     record['payload'] = list(dumpbytes(record['payload']))
-    return simplejson.dumps(record, *args, **kwargs)
+    return json.dumps(record, *args, **kwargs)
 
 
 def nth(iterable, n, default=None):

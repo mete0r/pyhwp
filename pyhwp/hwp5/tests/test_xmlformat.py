@@ -1,6 +1,5 @@
 from unittest import TestCase
-import sys, logging
-from xml.sax.saxutils import XMLGenerator
+import logging
 from hwp5.dataio import Struct
 from hwp5.dataio import INT32, BSTR
 from hwp5.xmlformat import element
@@ -8,8 +7,10 @@ from hwp5.xmlformat import element
 
 class TestHello(TestCase):
     def test_hello(self):
+        from hwp5.treeop import STARTEVENT
+        from hwp5.treeop import ENDEVENT
+
         context = dict(logging=logging)
-        xmlgen = XMLGenerator(sys.stdout, 'utf-8')
         class SomeStruct(Struct):
             @staticmethod
             def attributes():
@@ -19,25 +20,26 @@ class TestHello(TestCase):
             @staticmethod
             def attributes():
                 yield SomeStruct, 'somestruct'
-        result = element(context, xmlgen, (SomeStruct2, dict(somestruct=dict(a=1, b=u'b'))))
+        result = element(context, (SomeStruct2, dict(somestruct=dict(a=1, b=u'b'))))
         result = list(result)
         #for x in result: x[0](*x[1:])
         expected = [
-                (xmlgen.startElement, 'SomeStruct2', dict()),
-                (xmlgen.startElement, 'SomeStruct', {'attribute-name':'somestruct', 'a':'1', 'b':'b'}),
-                (xmlgen.endElement, 'SomeStruct'),
-                (xmlgen.endElement, 'SomeStruct2'),
+                (STARTEVENT, ('SomeStruct2', dict())),
+                (STARTEVENT, ('SomeStruct', {'attribute-name': 'somestruct',
+                                             'a': '1', 'b': 'b'})),
+                (ENDEVENT, 'SomeStruct'),
+                (ENDEVENT, 'SomeStruct2'),
                 ]
         self.assertEquals(expected, result)
 
-        result = element(context, xmlgen, (SomeStruct, dict(a=1, b=u'b', c=dict(foo=1))))
+        result = element(context, (SomeStruct, dict(a=1, b=u'b', c=dict(foo=1))))
         result = list(result)
         #for x in result: x[0](*x[1:])
         expected = [
-                (xmlgen.startElement, 'SomeStruct', dict(a='1', b='b')),
-                (xmlgen.startElement, 'dict', {'attribute-name':'c', 'foo':'1'}),
-                (xmlgen.endElement, 'dict'),
-                (xmlgen.endElement, 'SomeStruct')
+                (STARTEVENT, ('SomeStruct', dict(a='1', b='b'))),
+                (STARTEVENT, ('dict', {'attribute-name': 'c', 'foo': '1'})),
+                (ENDEVENT, 'dict'),
+                (ENDEVENT, 'SomeStruct')
                 ]
         self.assertEquals(expected, result)
 

@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -35,7 +32,9 @@ def get_soffice_product_info():
     # see schema in libreoffice/officecfg/registry/schema/org/office/Setup.xcs
 
     version = tuple(int(x) for x in config.Product.ooSetupVersionAboutBox.split('.'))
-    version += (config.Product.ooSetupVersionAboutBoxSuffix,)
+    if hasattr(config.Product, 'ooSetupVersionAboutBoxSuffix'):
+        # seems for libreoffice >= 3.5 only
+        version += (config.Product.ooSetupVersionAboutBoxSuffix,)
     return dict(vendor=config.Product.ooVendor,
                 name=config.Product.ooName,
                 version=version,

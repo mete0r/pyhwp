@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xunit:stylesheet
+  xmlns:xunit="urn:xunit/xunit"
+  xmlns:context="urn:xunit/context"
+  xmlns="urn:xunit/expect"
+  href="odt/common.xsl"
+  >
+
+  <context:import
+    href="charshape.xml">
+
+    <elem>HwpDoc</elem>
+    <true>name(.) = 'HwpDoc'</true>
+    <equals>
+      <tested>name(.)</tested>
+      <expected>'HwpDoc'</expected>
+    </equals>
+
+    <attr name="version">(5, 0, 1, 7)</attr>
+    <true>@version = '(5, 0, 1, 7)'</true>
+
+    <true>count(@nonexists) = 0</true>
+    <empty>@nonexists</empty>
+    <equals>
+      <tested>count(DocInfo/IdMappings/FaceName)</tested>
+      <expected>5</expected>
+    </equals>
+
+    <context:xslt
+      href="odt/styles.xsl"
+      select="//Style[@local-name='바탕글']">
+      <elem>style:style</elem>
+      <attr name="style:name">바탕글</attr>
+      <attr name="style:family">paragraph</attr>
+      <attr name="style:class">text</attr>
+      <context:subtree select="//style:paragraph-properties">
+      </context:subtree>
+      <context:subtree select="//style:text-properties">
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt
+      href="odt/styles.xsl"
+      select="//Style[@local-name='본문']">
+      <elem>style:style</elem>
+      <attr name="style:name">본문</attr>
+      <attr name="style:family">paragraph</attr>
+      <attr name="style:class">text</attr>
+      <context:subtree select="//style:paragraph-properties">
+        <attr name="fo:margin-left">15pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:subtree>
+      <context:subtree select="//style:text-properties">
+      </context:subtree>
+    </context:xslt>
+
+    <!-- FaceName to style:font-face -->
+    <context:xslt
+      href="odt/styles.xsl"
+      select="//FaceName[@name='굴림']">
+      <elem>style:font-face</elem>
+      <attr name="style:name">굴림</attr>
+      <attr name="svg:font-family">'굴림'</attr>
+      <attr name="style:font-family-generic">swiss</attr>
+      <attr name="style:font-pitch">variable</attr>
+    </context:xslt>
+
+    <!-- italic / not bold -->
+    <context:xslt
+      mode="style:text-properties"
+      select="//CharShape[7]">
+
+      <elem>style:text-properties</elem>
+      <attr name="fo:font-style">italic</attr>
+      <attr name="style:font-style-asian">italic</attr>
+      <attr name="style:font-style-complex">italic</attr>
+      <empty>@fo:font-weight</empty>
+      <empty>@style:font-weight-asian</empty>
+      <empty>@style:font-weight-complex</empty>
+    </context:xslt>
+
+    <!-- non-italic / bold -->
+    <context:xslt
+      mode="style:text-properties"
+      select="//CharShape[6]">
+
+      <elem>style:text-properties</elem>
+      <empty>@fo:font-style</empty>
+      <empty>@style:font-style-asian</empty>
+      <empty>@style:font-style-complex</empty>
+      <attr name="fo:font-weight">bold</attr>
+      <attr name="style:font-weight-asian">bold</attr>
+      <attr name="style:font-weight-complex">bold</attr>
+    </context:xslt>
+
+    <!-- underline = none -->
+    <context:xslt
+      mode="style:text-properties"
+      select="//CharShape[1]">
+
+      <elem>style:text-properties</elem>
+
+      <!-- style:text-underline-type은 'none'이고 -style, -width, -color는 없음 -->
+      <attr name="style:text-underline-type">none</attr>
+      <empty>@style:text-underline-style</empty>
+      <empty>@style:text-underline-width</empty>
+      <empty>@style:text-underline-color</empty>
+
+      <!-- style:text-line-through-type은 'none'이고 -style, -width, -color는 없음 -->
+      <attr name="style:text-line-through-type">none</attr>
+      <empty>@style:text-line-through-style</empty>
+      <empty>@style:text-line-through-width</empty>
+      <empty>@style:text-line-through-color</empty>
+
+      <!-- style:text-overline-type은 'none'이고 -style, -width, -color는 없음 -->
+      <attr name="style:text-overline-type">none</attr>
+      <empty>@style:text-overline-style</empty>
+      <empty>@style:text-overline-width</empty>
+      <empty>@style:text-overline-color</empty>
+    </context:xslt>
+
+
+    <!-- underline = underline -->
+    <context:xslt
+      mode="style:text-properties"
+      select="//CharShape[8]">
+
+      <elem>style:text-properties</elem>
+
+      <attr name="style:text-underline-type">single</attr>
+      <attr name="style:text-underline-style">solid</attr>
+      <attr name="style:text-underline-width">auto</attr>
+      <attr name="style:text-underline-color">#000000</attr>
+
+      <!-- style:text-line-through-type은 'none'이고 -style, -width, -color는 없음 -->
+      <attr name="style:text-line-through-type">none</attr>
+      <empty>@style:text-line-through-style</empty>
+      <empty>@style:text-line-through-width</empty>
+      <empty>@style:text-line-through-color</empty>
+
+      <!-- style:text-overline-type은 'none'이고 -style, -width, -color는 없음 -->
+      <attr name="style:text-overline-type">none</attr>
+      <empty>@style:text-overline-style</empty>
+      <empty>@style:text-overline-width</empty>
+      <empty>@style:text-overline-color</empty>
+    </context:xslt>
+
+
+    <!--
+    underline = unknown (TODO: should be linethrough)
+    -->
+    <context:wrap-subnodes
+      select="//CharShape[10]">
+
+      <context:xslt
+        wrap="wrapper"
+        mode="style:text-line-through">
+
+        <attr name="style:text-line-through-type">single</attr>
+        <attr name="style:text-line-through-style">solid</attr>
+        <attr name="style:text-line-through-width">auto</attr>
+        <attr name="style:text-line-through-color">#000000</attr>
+      </context:xslt>
+
+      <context:xslt
+        mode="style:text-properties">
+
+        <elem>style:text-properties</elem>
+        <attr name="style:text-underline-type">none</attr>
+        <empty>@style:text-underline-style</empty>
+        <empty>@style:text-underline-width</empty>
+        <empty>@style:text-underline-color</empty>
+        <attr name="style:text-line-through-type">single</attr>
+        <attr name="style:text-line-through-style">solid</attr>
+        <attr name="style:text-line-through-width">auto</attr>
+        <attr name="style:text-line-through-color">#000000</attr>
+        <attr name="style:text-overline-type">none</attr>
+        <empty>@style:text-overline-style</empty>
+        <empty>@style:text-overline-width</empty>
+        <empty>@style:text-overline-color</empty>
+      </context:xslt>
+    </context:wrap-subnodes>
+
+    <!--
+    underline = upperline
+    -->
+    <context:wrap-subnodes>
+      <xunit:select>//CharShape[9]</xunit:select>
+      <context:xslt
+        mode="style:text-properties">
+
+        <elem>style:text-properties</elem>
+        <attr name="style:text-underline-type">none</attr>
+        <empty>@style:text-underline-style</empty>
+        <empty>@style:text-underline-width</empty>
+        <empty>@style:text-underline-color</empty>
+        <attr name="style:text-line-through-type">none</attr>
+        <empty>@style:text-line-through-style</empty>
+        <empty>@style:text-line-through-width</empty>
+        <empty>@style:text-line-through-color</empty>
+        <attr name="style:text-overline-type">single</attr>
+        <attr name="style:text-overline-style">solid</attr>
+        <attr name="style:text-overline-width">auto</attr>
+        <attr name="style:text-overline-color">#000000</attr>
+      </context:xslt>
+    </context:wrap-subnodes>
+
+    <!--
+    font-size : 기준크기 10pt
+    -->
+    <context:subtree
+      select="//CharShape[13]">
+
+      <attr name="basesize">1000</attr>
+      <true>RelativeSize/@en = 100</true>
+      <true>RelativeSize/@ko = 100</true>
+      <true>RelativeSize/@other = 100</true>
+
+      <context:xslt
+        mode="style:text-properties">
+
+        <elem>style:text-properties</elem>
+        <attr name="fo:font-size">10pt</attr>
+        <attr name="style:font-size-asian">10pt</attr>
+        <!--<attr name="style:font-size-complex">10pt</attr>-->
+      </context:xslt>
+    </context:subtree>
+
+    <!--
+    font-size : 한글 (RelativeSize@ko) = 90%
+    -->
+    <context:subtree
+      select="//CharShape[12]">
+
+      <attr name="basesize">1000</attr>
+      <true>RelativeSize/@en = 100</true>
+      <true>RelativeSize/@ko = 90</true>
+      <true>RelativeSize/@other = 100</true>
+
+      <context:xslt
+        mode="style:text-properties">
+
+        <elem>style:text-properties</elem>
+        <attr name="fo:font-size">10pt</attr>
+        <!-- <attr name="style:font-size-asian">9pt</attr> -->
+        <!-- <attr name="style:font-size-complex">10pt</attr> -->
+      </context:xslt>
+    </context:subtree>
+
+    <!--
+    font-size : 영문 (RelativeSize@ko) = 80%
+    -->
+    <context:subtree
+      select="//CharShape[14]">
+
+      <attr name="basesize">1000</attr>
+      <true>RelativeSize/@en = 80</true>
+      <true>RelativeSize/@ko = 100</true>
+      <true>RelativeSize/@other = 100</true>
+
+      <context:xslt
+        mode="style:text-properties">
+
+        <elem>style:text-properties</elem>
+        <!-- <attr name="fo:font-size">8pt</attr> -->
+        <attr name="style:font-size-asian">10pt</attr>
+        <!-- <attr name="style:font-size-complex">10pt</attr> -->
+      </context:xslt>
+    </context:subtree>
+
+    <!--
+    font-size : 기타 (RelativeSize@other) = 70%
+    -->
+    <context:subtree
+      select="//CharShape[15]">
+
+      <attr name="basesize">1000</attr>
+      <true>RelativeSize/@en = '100'</true>
+      <true>RelativeSize/@ko = '100'</true>
+      <true>RelativeSize/@other = '70'</true>
+
+      <context:xslt
+        mode="style:text-properties">
+
+        <elem>style:text-properties</elem>
+        <attr name="fo:font-size">10pt</attr>
+        <attr name="style:font-size-asian">10pt</attr>
+        <!-- <attr name="style:font-size-complex">7pt</attr> -->
+      </context:xslt>
+    </context:subtree>
+
+    <!-- FontFace/@ko=1 -> FaceName[2] -->
+    <context:wrap-subnodes
+      wrap="wrapper"
+      select="//FaceName|//CharShape[16]">
+      <true>CharShape/FontFace/@ko + 1 = 2</true>
+      <true>FaceName[2]/@name = '돋움'</true>
+    </context:wrap-subnodes>
+    <context:xslt
+      wrap="wrapper"
+      mode="style:font-name-asian"
+      select="//FaceName[2]">
+      <attr name="style:font-name-asian">돋움</attr>
+    </context:xslt>
+    <context:xslt
+      wrap="wrapper"
+      mode="style:font-name-asian"
+      select="//CharShape[16]/FontFace">
+      <attr name="style:font-name-asian">돋움</attr>
+    </context:xslt>
+    <!--
+    <context:xslt
+      wrap="wrapper"
+      mode="style:font-name-asian"
+      select="//CharShape[16]">
+      <attr name="style:font-name-asian">돋움</attr>
+    </context:xslt>
+    -->
+    <context:xslt
+      select="//CharShape[16]"
+      mode="style:text-properties">
+
+      <elem>style:text-properties</elem>
+      <attr name="style:font-name-asian">돋움</attr>
+    </context:xslt>
+
+    <!--
+    TODO: 영문 및 complex 폰트 매칭
+    -->
+    <context:wrap-subnodes select="//IdMappings/@*|//FaceName|//FontFace" wrap="wrapper">
+      <xunit:dump />
+    </context:wrap-subnodes>
+    <xunit:dump select="//CharShape[11]/FontFace" />
+    <xunit:dump select="//Text[@charshape-id='10'][1]" />
+    <context:xslt
+      wrap="wrapper"
+      mode="style:font-name"
+      select="//CharShape[11]/FontFace">
+      <xunit:dump />
+      <!-- <attr name="style:font-name">Courier New</attr> -->
+    </context:xslt>
+
+    <context:xslt
+      select="//CharShape[11]"
+      mode="style:text-properties">
+
+      <elem>style:text-properties</elem>
+      <!-- <attr name="style:font-name">Courier New</attr> -->
+    </context:xslt>
+
+    <xunit:dump select="//Text[@charshape-id='16'][1]" />
+    <xunit:dump select="//CharShape[17]/FontFace" />
+    <context:xslt
+      select="//CharShape[17]"
+      mode="style:text-properties">
+
+      <elem>style:text-properties</elem>
+      <!-- <attr name="style:font-name-complex">Lucida Sans Unicode</attr> -->
+    </context:xslt>
+
+  </context:import>
+</xunit:stylesheet>

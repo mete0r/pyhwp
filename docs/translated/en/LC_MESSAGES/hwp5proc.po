@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-10 08:43\n"
+"POT-Creation-Date: 2012-10-06 19:42\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,98 +16,107 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../hwp5proc.rst:2
 # 8ae66890d3c34537b90c78f06ac868ef
+#: ../../hwp5proc.rst:2
 msgid "``hwp5proc``: HWPv5 processor"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:1
 # bed00d76e0724575a465d3780b90d7fd
+#: ../../../pyhwp/hwp5/proc/__init__.py:docstring of hwp5.proc:1
 msgid "Do various operations on HWPv5 files."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:3
 # cf8a544eee554bbcb012724d966509dc
+#: ../../../pyhwp/hwp5/proc/__init__.py:docstring of hwp5.proc:3
+#: ../../../pyhwp/hwp5/proc/version.py:docstring hwp5.proc.version:3
+#: ../../../pyhwp/hwp5/proc/header.py:docstring hwp5.proc.header:3
+#: ../../../pyhwp/hwp5/proc/summaryinfo.py:docstring hwp5.proc.summaryinfo:3
+#: ../../../pyhwp/hwp5/proc/ls.py:docstring hwp5.proc.ls:3
+#: ../../../pyhwp/hwp5/proc/cat.py:docstring hwp5.proc.cat:3
+#: ../../../pyhwp/hwp5/proc/unpack.py:docstring hwp5.proc.unpack:3
+#: ../../../pyhwp/hwp5/proc/records.py:docstring hwp5.proc.records:3
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:3
+#: ../../../pyhwp/hwp5/proc/find.py:docstring hwp5.proc.find:3
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:3
 msgid "Usage::"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:19
-# 71d2980c664e45d397af9734a5494c43
-msgid "Options::"
-msgstr ""
-
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:41
 # 3d0680517061451580552a8980218e48
-msgid "``hwp5proc version``"
+#: ../../hwp5proc.rst:7
+msgid "command: ``version``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:42
 # cad75aaf5f6a42ae8910807b46c6a1ef
+#: ../../../pyhwp/hwp5/proc/version.py:docstring of hwp5.proc.version:1
 msgid "Print HWP file format version of <hwp5file>."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:46
+# 71d2980c664e45d397af9734a5494c43
+#: ../../../pyhwp/hwp5/proc/version.py:docstring of hwp5.proc.version:8
+#: ../../../pyhwp/hwp5/proc/header.py:docstring hwp5.proc.header:8
+#: ../../../pyhwp/hwp5/proc/summaryinfo.py:docstring hwp5.proc.summaryinfo:8
+#: ../../../pyhwp/hwp5/proc/ls.py:docstring hwp5.proc.ls:10
+#: ../../../pyhwp/hwp5/proc/cat.py:docstring hwp5.proc.cat:10
+#: ../../../pyhwp/hwp5/proc/unpack.py:docstring hwp5.proc.unpack:10
+#: ../../../pyhwp/hwp5/proc/records.py:docstring hwp5.proc.records:14
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:14
+#: ../../../pyhwp/hwp5/proc/find.py:docstring hwp5.proc.find:11
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:10
+msgid "Options::"
+msgstr ""
+
 # 4c8936ae2aab43778971aa79502a721e
-msgid "``hwp5proc header``"
+#: ../../hwp5proc.rst:12
+msgid "command: ``header``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:47
-# 63b15ef0ee354277b5963fba9147a8f9
-msgid "Print FileHeader of <hwp5file>."
+# cad75aaf5f6a42ae8910807b46c6a1ef
+#: ../../../pyhwp/hwp5/proc/header.py:docstring of hwp5.proc.header:1
+msgid "Print HWP file header."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:51
-# dbe41a6cd1954ea3817730c5c0ee6bc4
-msgid "``hwp5proc summaryinfo``"
+# 5d77d4ca0f394422b709faccc50cfec9
+#: ../../hwp5proc.rst:17
+msgid "command: ``summaryinfo``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:52
 # f8011d33ac684c2b8378e18b9e3abedc
+#: ../../../pyhwp/hwp5/proc/summaryinfo.py:docstring of
+#: hwp5.proc.summaryinfo:1
 msgid "Print summary information of <hwp5file>."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:56
-# 524fb6fab0b74460bc07f13a91758e1b
-msgid "``hwp5proc ls``"
+# b7b04b5b3eb74f0eb111194985e01b0d
+#: ../../hwp5proc.rst:22
+msgid "command: ``ls``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:57
 # b44ddef0cd314f458485388b49c636ca
+#: ../../../pyhwp/hwp5/proc/ls.py:docstring of hwp5.proc.ls:1
 msgid "List streams in the <hwp5file>."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:59
 # 43a9eab8ec344cfdb4a33aa848da2a56
+#: ../../../pyhwp/hwp5/proc/ls.py:docstring of hwp5.proc.ls:22
 msgid "Example: List without virtual streams::"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:76
 # ecd90dc2d4094b3c8052a495648ff78f
+#: ../../../pyhwp/hwp5/proc/ls.py:docstring of hwp5.proc.ls:39
 msgid "Example: List virtual streams too::"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:105
-# 73fd490fa6be449c83549caabca17119
-msgid "``hwp5proc cat``"
+# 192f6f50cb544c27ad3479b914ef7222
+#: ../../hwp5proc.rst:27
+msgid "command: ``cat``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:107
 # 15eb8617d1d944949717d81ebb9456f1
-msgid "Extract out the specified stream in the <hwp5file> to the standard output."
+#: ../../../pyhwp/hwp5/proc/cat.py:docstring of hwp5.proc.cat:1
+msgid ""
+"Extract out the specified stream in the <hwp5file> to the standard output."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:109
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:135
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:140
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:150
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:154
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:158
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:163
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:173
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:177
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:181
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:208
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:216
 # dcb71948aa8f47e9b064023f21957a35
 # 71ecad71cb0f4fe9ba80cf55082e5f8a
 # ef37227f045746b8997f0c2eb30319cd
@@ -120,71 +129,91 @@ msgstr ""
 # 170f201e5a0c4a44abcb0dcea95905d9
 # 8329c429e5674eee8022ec39cceed432
 # cbf2341d2c7c4149bdc3f07da885e0ae
+#: ../../../pyhwp/hwp5/proc/cat.py:docstring of hwp5.proc.cat:22
+#: ../../../pyhwp/hwp5/proc/unpack.py:docstring hwp5.proc.unpack:22
+#: hwp5.proc.unpack:27 ../../../pyhwp/hwp5/proc/records.py:docstring
+#: hwp5.proc.records:36 hwp5.proc.records:40 hwp5.proc.records:48
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:35
+#: hwp5.proc.models:43 hwp5.proc.models:47 hwp5.proc.models:55
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:20 hwp5.proc.xml:28
 msgid "Example::"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:132
 # 8113891b61bb4b339c77d078336391f4
-msgid "``hwp5proc unpack``"
+#: ../../hwp5proc.rst:32
+msgid "command: ``unpack``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:133
-# 5c354689e91c40c69ad6d750bd240d1c
+# 8acb7c74c7c748c6b7874f5e33b25dac
+#: ../../../pyhwp/hwp5/proc/unpack.py:docstring of hwp5.proc.unpack:1
 msgid "Extract out streams in the specified <hwp5file> to a directory."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:147
-# 7e74224ead034d0b9062fc23bf97f150
-msgid "``hwp5proc records``"
+# 414f684ce5a540d0a5cd18ab8b2a5f24
+#: ../../hwp5proc.rst:37
+msgid "command: ``records``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:148
 # f521cdaf60f4451b88faab8a6235b5a4
-msgid "Print records in the specified <record-stream>."
+#: ../../../pyhwp/hwp5/proc/records.py:docstring of hwp5.proc.records:1
+msgid "Print the record structure."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:170
-# fa6bced7db4546ada729c887d0090fa9
-msgid "``hwp5proc models``"
+# 241ea6ff890d49db8d765402e0c7b6b5
+# 2a49fc3eff194012a083bf9bc0426d93
+#: ../../../pyhwp/hwp5/proc/records.py:docstring of hwp5.proc.records:44
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:51
+msgid ""
+"If neither <hwp5file> nor <record-stream> is specified, the record stream is "
+"read from the standard input with an assumption that the input is in the "
+"format version specified by -V option."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:171
+# a7dfeeb3a6464db18f930dc3747acc77
+#: ../../hwp5proc.rst:42
+msgid "command: ``models``"
+msgstr ""
+
 # 058aa45f4ec8463080526f955a7ff2fd
+#: ../../../pyhwp/hwp5/proc/models.py:docstring of hwp5.proc.models:1
 msgid "Print parsed binary models in the specified <record-stream>."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:189
-# c8abf693fd074f0782b2c51c7f5241cc
-msgid "``hwp5proc find``"
+# 7375606379a84a7688a05b9939f6b47d
+#: ../../hwp5proc.rst:47
+msgid "command: ``find``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:190
 # 8cdcfec208464d1a9dbafb8d0489fe4b
-msgid "Find models with specified predicates."
+#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:1
+msgid "Find record models with specified predicates."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:192
 # 78f39cd8bb2c46a89417b59931917868
+#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:24
 msgid "Example: Find paragraphs::"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:198
 # 9e23e53b35ca4aefb5e8c1ffa99d3d26
-msgid "Example: Find and dump records of HWPTAG_LIST_HEADER which is parsed incompletely::"
+#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:30
+msgid ""
+"Example: Find and dump records of ``HWPTAG_LIST_HEADER`` which is parsed "
+"incompletely::"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:205
-# c817e72500a6480a8e3a4593bd813591
-msgid "``hwp5proc xml``"
+# e531df3e57a1451a8fc331069f009f25
+#: ../../hwp5proc.rst:52
+msgid "command: ``xml``"
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:206
 # 36611ef624fe4bec815a5f8e03567251
-msgid "Transform <hwp5file> into an XML."
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:1
+msgid "Transform an HWPv5 file into an XML."
 msgstr ""
 
-#: ../../../pyhwp/hwp5/proc.py:docstring of hwp5.proc:213
 # d89687875f5d4135963346b8e2de3a53
-msgid "With ``--embedbin`` option, you can embed base64-encoded ``BinData/`` files in the output XML."
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:25
+msgid ""
+"With ``--embedbin`` option, you can embed base64-encoded ``BinData/*`` files "
+"in the output XML."
 msgstr ""
-

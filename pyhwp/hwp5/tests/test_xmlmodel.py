@@ -14,6 +14,42 @@ class TestBase(test_binmodel.TestBase):
     hwp5file = hwp5file_xml
 
 
+class TestXmlEvents(TestBase):
+
+    def test_dump_quoteattr_cr(self):
+        from hwp5.xmlmodel import XmlEvents
+        from hwp5.importhelper import importStringIO
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.binmodel import ControlChar
+        StringIO = importStringIO()
+        sio = StringIO()
+
+        context = dict()
+        attrs = dict(char='\r')
+        events = [(STARTEVENT, (ControlChar, attrs, context)),
+                  (ENDEVENT, (ControlChar, attrs, context))]
+        xmlevents = XmlEvents(iter(events))
+        xmlevents.dump(sio)
+
+        data = sio.getvalue()
+        self.assertTrue('&#13;' in data)
+
+    def test_bytechunks_quoteattr_cr(self):
+        from hwp5.xmlmodel import XmlEvents
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.binmodel import ControlChar
+
+        context = dict()
+        attrs = dict(char='\r')
+        item = (ControlChar, attrs, context)
+        modelevents = [(STARTEVENT, item),
+                       (ENDEVENT, item)]
+        xmlevents = XmlEvents(iter(modelevents))
+        xml = ''.join(xmlevents.bytechunks())
+
+        self.assertTrue('&#13;' in xml)
+
+
 class TestModelEventStream(TestBase):
 
     @cached_property
@@ -93,18 +129,17 @@ class TestHwp5File(TestBase):
         list(hwp5file.events(embedbin=True))
 
     def test_xmlevents_dump(self):
-        from hwp5.externprogs import xmllint
-        xmllint = xmllint('--format')
-
-        outfile = file(self.id() + '.xml', 'w')
+        outfile = file(self.id() + '.xml', 'w+')
         try:
-            out = xmllint(outfile=outfile)
-            try:
-                self.hwp5file.xmlevents().dump(out)
-            finally:
-                out.close()
+            self.hwp5file.xmlevents().dump(outfile)
+
+            outfile.seek(0)
+            from xml.etree import ElementTree
+            doc = ElementTree.parse(outfile)
         finally:
             outfile.close()
+
+        self.assertEquals('HwpDoc', doc.getroot().tag)
 
 
 from hwp5.xmlmodel import make_ranged_shapes, split_and_shape
@@ -199,9 +234,11 @@ class TestMatchFieldStartEnd(TestCase):
 
     def test_match_field_start_end(self):
         from hwp5 import binmodel, xmlmodel
+        from hwp5.tests import get_fixture_path
 
+        path = get_fixture_path('match-field-start-end.dat')
         import pickle
-        f = open('fixtures/match-field-start-end.dat', 'r')
+        f = open(path, 'r')
         try:
             records = pickle.load(f)
         finally:

@@ -115,3 +115,40 @@ class TestTreeEvents(TestCase):
         back = list(tree_events(*result))
         self.assertEquals(event_prefixed_items, back)
 
+
+class TestSubevents(TestCase):
+
+    def test_iter_subevents(self):
+        from hwp5.treeop import STARTEVENT, ENDEVENT
+        from hwp5.treeop import iter_subevents
+
+        events = iter([(STARTEVENT, 'a'), (ENDEVENT, 'a')])
+        events.next()
+        subevents = iter_subevents(events)
+        self.assertEquals([(ENDEVENT, 'a')], list(subevents))
+
+        events = iter([(STARTEVENT, 'a'),
+                       (STARTEVENT, 'b'),
+                       (None, 'c'),
+                       (ENDEVENT, 'b'),
+                       (ENDEVENT, 'a')])
+        events.next()
+        subevents = iter_subevents(events)
+        self.assertEquals([(STARTEVENT, 'b'),
+                           (None, 'c'),
+                           (ENDEVENT, 'b'),
+                           (ENDEVENT, 'a')], list(subevents))
+
+        events = iter([(STARTEVENT, 'a'),
+                       (None, 'c'),
+                       (ENDEVENT, 'a'),
+                       (STARTEVENT, 'b'),
+                       (None, 'd'),
+                       (ENDEVENT, 'b')])
+        events.next()
+        subevents = iter_subevents(events)
+        self.assertEquals([(None, 'c'),
+                           (ENDEVENT, 'a')], list(subevents))
+        self.assertEquals([(STARTEVENT, 'b'),
+                           (None, 'd'),
+                           (ENDEVENT, 'b')], list(events))

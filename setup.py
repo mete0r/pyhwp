@@ -12,6 +12,19 @@ versioneer.tag_prefix = ''
 versioneer.parentdir_prefix = 'pyhwp-'
 
 
+import sys
+install_requires = []
+if 'java' not in sys.platform:
+    install_requires.append('OleFileIO_PL == 0.23')
+
+try:
+    __import__('json')
+except ImportError:
+    install_requires.append('simplejson')
+
+install_requires.append('docopt >= 0.3')
+install_requires.append('hypua2jamo >= 0.2')
+
 def read(filename):
     import os.path
     filename = os.path.join(os.path.dirname(__file__), filename)
@@ -26,7 +39,7 @@ setup(
         name='pyhwp',
         version=versioneer.get_version(),
         cmdclass=versioneer.get_cmdclass(),
-        license='GNU Affero GPL v3',
+        license='GNU Affero GPL v3+',
         description = 'hwp file format parser',
         long_description=read('README'),
         author = 'mete0r',
@@ -34,11 +47,12 @@ setup(
         url='http://github.com/mete0r/pyhwp',
         packages = find_packages('pyhwp'),
         package_dir={'': 'pyhwp'},
-        package_data = dict(hwp5=['xsl/*.xsl', 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
-
-        install_requires=['OleFileIO_PL >=0.20', 'simplejson', 'docopt >= 0.3',
-                          'hypua2jamo >=0.1'],
-        extras_require=dict(test=['lxml']),
+        package_data=dict(hwp5=['README',
+                                'COPYING',
+                                'xsl/*.xsl',
+                                'xsl/odt/*.xsl',
+                                'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
+        install_requires=install_requires,
 
         entry_points = {
             'console_scripts': [
@@ -53,9 +67,10 @@ setup(
         test_suite='hwp5.tests.test_suite',
 
         classifiers=[
-            'Development Status :: 3 - Alpha',
+            'Development Status :: 4 - Beta',
             'Intended Audience :: Developers',
             'License :: OSI Approved :: GNU Affero General Public License v3',
+            'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
             'Operating System :: OS Independent',
             'Programming Language :: Python',
             'Topic :: Software Development :: Libraries :: Python Modules',

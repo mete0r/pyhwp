@@ -1,0 +1,57 @@
+[tox]
+toxworkdir={toxinidir}/parts/tox
+setupdir={toxinidir}
+envlist = py25,py26,py27,jy25,lo
+
+[testenv]
+deps=nose
+     coverage
+commands=
+	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
+	{envpython} {toxinidir}/bin/install-lxml-{envname}.py {envtmpdir}
+	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
+	nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase --cover-xml --cover-xml-file={envtmpdir}/coverage.xml
+	hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
+        {toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits
+
+[testenv:py25]
+basepython=${python25:executable}
+
+[testenv:py26]
+basepython=${python26:executable}
+
+[testenv:py27]
+basepython=${python27:executable}
+
+[testenv:jy25]
+setenv=JYTHONPATH=${java-poi:location}/poi-3.8-20120326.jar
+basepython=${jython25:executable}
+commands =
+	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
+	{envpython} -c 'from org.apache.poi.poifs.filesystem import POIFSFileSystem'
+	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
+        {toxinidir}/bin/coverage erase
+	{envbindir}/coverage run --source={toxinidir} --omit='parts/*',setup.py,bootstrap.py,versioneer.py {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
+        {toxinidir}/bin/coverage combine
+        {toxinidir}/bin/coverage report
+        {toxinidir}/bin/coverage xml -i -o {envtmpdir}/coverage.xml
+	hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
+        {toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits
+
+[testenv:lo]
+setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
+       UNO_PYTHONPATH=${lo:uno_pythonpath}
+       LO_PROGRAM=${lo:program}
+       PYHWP_PLAT_UNO=1
+basepython=${lo:uno_python}
+commands=
+	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
+	{envpython} {toxinidir}/unokit/setup.py develop
+	{envpython} {toxinidir}/oxt.tool/setup.py develop
+	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
+	run-in-lo {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase
+        {toxinidir}/bin/coverage combine
+        {toxinidir}/bin/coverage report
+        {toxinidir}/bin/coverage xml -i -o {envtmpdir}/coverage.xml --omit='/usr/*','parts/*'
+	run-in-lo {envbindir}/hwp5-xunits-prepare --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
+	{toxinidir}/bin/xunit --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/gen-xunits {toxinidir}/pyhwp-xunits

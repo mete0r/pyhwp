@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -364,7 +361,7 @@ def embed_bindata(event_prefixed_mac, bindata):
         (model, attributes, context) = item
         if event is STARTEVENT and model is BinData:
             if attributes['flags'].storage is BinData.StorageType.EMBEDDING:
-                name = ('BIN%04d' % attributes['bindata']['storage_id']
+                name = ('BIN%04X' % attributes['bindata']['storage_id']
                         + '.'
                         + attributes['bindata']['ext'])
                 bin_stream = bindata[name].open()
@@ -393,20 +390,14 @@ def wrap_modelevents(wrapper_model, modelevents):
     yield ENDEVENT, wrapper_model
 
 
-class ModelEventHandler(object):
-    def startModel(self, model, attributes, **kwargs):
-        raise NotImplementedError
-    def endModel(self, model):
-        raise NotImplementedError
-
-
-def dispatch_model_events(handler, events):
-    from .treeop import STARTEVENT, ENDEVENT
-    for event, (model, attributes, context) in events:
-        if event == STARTEVENT:
-            handler.startModel(model, attributes, **context)
-        elif event == ENDEVENT:
-            handler.endModel(model)
+def modelevents_to_xmlevents(modelevents):
+    from hwp5.xmlformat import startelement
+    for event, (model, attributes, context) in modelevents:
+        if event is STARTEVENT:
+            for x in startelement(context, (model, attributes)):
+                yield x
+        elif event is ENDEVENT:
+            yield ENDEVENT, model.__name__
 
 
 class XmlEvents(object):
@@ -414,12 +405,21 @@ class XmlEvents(object):
     def __init__(self, events):
         self.events = events
 
+    def bytechunks(self, **kwargs):
+        from hwp5.xmlformat import xmlevents_to_bytechunks
+        encoding = kwargs.get('xml_encoding', 'utf-8')
+        xmlevents = modelevents_to_xmlevents(self.events)
+        bytechunks = xmlevents_to_bytechunks(xmlevents, encoding)
+        yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
+        for chunk in bytechunks:
+            yield chunk
+
     def dump(self, outfile, **kwargs):
-        from hwp5.xmlformat import XmlFormat
-        oformat = XmlFormat(outfile)
-        oformat.startDocument()
-        dispatch_model_events(oformat, self.events)
-        oformat.endDocument()
+        bytechunks = self.bytechunks(**kwargs)
+        for chunk in bytechunks:
+            outfile.write(chunk)
+        if hasattr(outfile, 'flush'):
+            outfile.flush()
 
     def open(self, **kwargs):
         import os

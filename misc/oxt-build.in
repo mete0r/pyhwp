@@ -1,0 +1,9 @@
+#!/bin/sh
+DIST_DIR=${buildout:directory}/dist
+SRC_DIR=${buildout:directory}/oxt
+BIN_DIR=${buildout:directory}/bin
+VERSION=`git describe --dirty`
+
+[ ! -e $DIST_DIR ] && mkdir $DIST_DIR
+$BIN_DIR/oxt-make $DIST_DIR/hwp5-$VERSION.oxt $SRC_DIR
+ln -sf $DIST_DIR/hwp5-$VERSION.oxt $DIST_DIR/hwp5.oxt

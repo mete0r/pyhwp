@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -999,21 +996,20 @@ class ControlChar(object):
                 char = unichr(ord(data[i]))
                 size = cls.kinds[char].size
                 return i, i + (size * 2)
-        data_len = len(data)
-        return data_len, data_len
+            data_len = len(data)
+            return data_len, data_len
     find = classmethod(find)
 
-    def decode_bytes(cls, bytes):
+    def decode(cls, bytes):
         code = UINT16.decode(bytes[0:2])
         ch = unichr(code)
         if cls.kinds[ch].size == 8:
             bytes = bytes[2:2+12]
             if ch == ControlChar.TAB:
-                s = StringIO(bytes)
-                param = dict(width=UINT32.read(s),
-                             unknown0=UINT8.read(s),
-                             unknown1=UINT8.read(s),
-                             unknown2=s.read())
+                param = dict(width=UINT32.decode(bytes[0:4]),
+                             unknown0=UINT8.decode(bytes[4:5]),
+                             unknown1=UINT8.decode(bytes[5:6]),
+                             unknown2=bytes[6:])
                 return dict(code=code, param=param)
             else:
                 chid = CHID.decode(bytes[0:4])
@@ -1021,7 +1017,7 @@ class ControlChar(object):
                 return dict(code=code, chid=chid, param=param)
         else:
             return dict(code=code)
-    decode_bytes = classmethod(decode_bytes)
+    decode = classmethod(decode)
 
     def get_kind_by_code(cls, code):
         ch = unichr(code)
@@ -1043,7 +1039,7 @@ class Text(object):
 class ParaTextChunks(list):
     __metaclass__ = CompoundType
 
-    def read(cls, f, context):
+    def read(cls, f):
         bytes = f.read()
         return [x for x in cls.parse_chunks(bytes)]
     read = classmethod(read)
@@ -1058,7 +1054,7 @@ class ParaTextChunks(list):
                 text = decode_utf16le_with_hypua(bytes[idx:ctrlpos])
                 yield (idx / 2, ctrlpos / 2), text
             if ctrlpos < ctrlpos_end:
-                cch = ControlChar.decode_bytes(bytes[ctrlpos:ctrlpos_end])
+                cch = ControlChar.decode(bytes[ctrlpos:ctrlpos_end])
                 yield (ctrlpos / 2, ctrlpos_end / 2), cch
             idx = ctrlpos_end
     parse_chunks = staticmethod(parse_chunks)
@@ -1885,60 +1881,7 @@ def init_record_parsing_context(base, record):
     return dict(base, record=record, stream=StringIO(record['payload']))
 
 
-def parse_model(context, model):
-    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
-
-    # HWPTAG로 모델 결정
-    model['type'] = tag_models.get(model['tagid'], RecordModel)
-    model['content'] = dict()
-
-    # 1차 파싱
-    read_members(model['type'], model['content'], context)
-
-    # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
-    extension_types = getattr(model['type'], 'extension_types', None)
-    if extension_types:
-        key = model['type'].get_extension_key(context, model)
-        extension = extension_types.get(key)
-        if extension is not None:
-            # 예: Control -> TableControl로 바뀌는 경우,
-            # Control의 member들은 이미 읽은 상태이고
-            # CommonControl, TableControl에서 각각 정의한
-            # 멤버들을 읽어들여야 함
-            read_members_up_to(extension, model['type'],
-                               model['content'], context)
-            model['type'] = extension
-
-    if 'parent' not in context:
-        return
-
-    parent = context['parent']
-    parent_context, parent_model = parent
-    parent_type = parent_model.get('type')
-    parent_content = parent_model.get('content')
-
-    on_child = getattr(parent_type, 'on_child', None)
-    if on_child:
-        on_child(parent_content, parent_context, (context, model))
-
-    logger.debug('pass2: %s, %s', model['type'], model['content'])
-
-
-def read_members(model_type, content, context):
-    from hwp5.dataio import read_struct_members_defined
-    stream = context['stream']
-    members = read_struct_members_defined(model_type, stream, context)
-    members = ((m['name'], m['value']) for m in members)
-    content.update(members)
-
-
-def read_members_up_to(model_type, up_to_type, content, context):
-    from hwp5.dataio import read_struct_members_up_to
-    stream = context['stream']
-    members = read_struct_members_up_to(model_type, up_to_type, stream, context)
-    members = ((m['name'], m['value']) for m in members)
-    content.update(members)
-
+from hwp5.bintype import parse_model
 
 def parse_models_with_parent(context_models):
     from .treeop import prefix_ancestors_from_level
@@ -1972,14 +1915,17 @@ def parse_models_intern(context, records):
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
     from .dataio import dumpbytes
-    import simplejson  # TODO: simplejson is for python2.5+
+    from hwp5.importhelper import importjson
+    json = importjson()
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model
     record['payload'] = list(dumpbytes(record['payload']))
     if 'unparsed' in model:
         model['unparsed'] = list(dumpbytes(model['unparsed']))
-    return simplejson.dumps(model, *args, **kwargs)
+    if 'binevents' in model:
+        del model['binevents']
+    return json.dumps(model, *args, **kwargs)
 
 
 def chain_iterables(iterables):

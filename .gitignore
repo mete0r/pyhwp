@@ -4,6 +4,7 @@ parts
 develop-eggs
 .installed.cfg
 *.pyc
+*$py.class
 pylint.out
 pyhwp/build
 pyhwp/dist
@@ -23,3 +24,9 @@ docs/.build
 MANIFEST
 *.mo
 *.po~
+releases
+downloads
+venv
+sdist.log
+test-cli.log
+tox.ini

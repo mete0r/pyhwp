@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -137,28 +134,36 @@ class XSLTListener(unohelper.Base, XStreamListener):
         self.event.signal()
 
 
-def xslt_with_libreoffice(stylesheet_path):
+def xslt_with_libreoffice(xsl_path, inp_path, out_path):
     import os.path
-    stylesheet_url = uno.systemPathToFileUrl(os.path.realpath(stylesheet_path))
-    def transform(inp, out):
-        transformer = XSLTTransformer(stylesheet_url, '', '')
-        transformer.InputStream = InputStreamFromFileLike(inp, dontclose=True)
-        transformer.OutputStream = OutputStreamToFileLike(out, dontclose=True)
+    xsl_path = os.path.abspath(xsl_path)
+    xsl_name = os.path.basename(xsl_path)
+    xsl_url = uno.systemPathToFileUrl(xsl_path)
 
-        listener = XSLTListener()
-        transformer.addListener(listener)
+    inp_path = os.path.abspath(inp_path)
+    inp_file = file(inp_path)
+    inp_strm = InputStreamFromFileLike(inp_file, dontclose=True)
 
-        transformer.start()
-        import os.path
-        xsl_name = os.path.basename(stylesheet_path)
-        logger.info('xslt.soffice(%s) start', xsl_name)
-        try:
-            listener.event.wait()
-        finally:
-            logger.info('xslt.soffice(%s) end', xsl_name)
+    out_path = os.path.abspath(out_path)
+    out_file = file(out_path, 'w')
+    out_strm = OutputStreamToFileLike(out_file, dontclose=True)
 
-        transformer.removeListener(listener)
-    return transform
+    transformer = XSLTTransformer(xsl_url, '', '')
+    transformer.InputStream = inp_strm
+    transformer.OutputStream = out_strm
+
+    listener = XSLTListener()
+    transformer.addListener(listener)
+
+    transformer.start()
+    logger.info('xslt.soffice(%s) start', xsl_name)
+    try:
+        listener.event.wait()
+    finally:
+        logger.info('xslt.soffice(%s) end', xsl_name)
+
+    transformer.removeListener(listener)
+    return dict()
 
 
 def load_hwp5file_into_doc(hwp5file, doc, statusindicator=None):
@@ -180,13 +185,13 @@ def convert_hwp5file_into_odtpkg(hwp5file):
     odtpkg = ODTPackage(zf)
     try:
         from hwp5.hwp5odt import Converter
-        import hwp5.tools
+        import hwp5.plat
 
         if haveXSLTTransformer():
             xslt = xslt_with_libreoffice
         else:
             # we use default xslt
-            xslt = hwp5.tools.xslt
+            xslt = hwp5.plat.get_xslt()
 
         # convert without RelaxNG validation
         convert = Converter(xslt)

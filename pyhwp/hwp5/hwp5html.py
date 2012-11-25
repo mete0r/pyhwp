@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -78,52 +75,43 @@ def generate_htmldir(hwp5file, base_dir):
 
 
 def generate_htmldir_files(hwp5file, base_dir):
-    from tempfile import TemporaryFile
+    import os
+    from tempfile import mkstemp
+    from hwp5.plat import get_xslt
 
-    hwp5_xml = TemporaryFile()
+    xslt = get_xslt()
+    fd, path = mkstemp()
     try:
-        hwp5file.xmlevents(embedbin=False).dump(hwp5_xml)
+        xhwp5 = os.fdopen(fd, 'w')
+        try:
+            hwp5file.xmlevents(embedbin=False).dump(xhwp5)
+        finally:
+            xhwp5.close()
 
-        hwp5_xml.seek(0)
         html_path = os.path.join(base_dir, 'index.html')
-        generate_html_file(hwp5_xml, html_path)
+        generate_html_file(xslt, path, html_path)
 
-        hwp5_xml.seek(0)
         css_path = os.path.join(base_dir, 'styles.css')
-        generate_css_file(hwp5_xml, css_path)
+        generate_css_file(xslt, path, css_path)
     finally:
-        hwp5_xml.close()
+        os.unlink(path)
 
     bindata_dir = os.path.join(base_dir, 'bindata')
     extract_bindata_dir(hwp5file, bindata_dir)
 
 
-def generate_css_file(hwp5_xml, css_path):
+def generate_css_file(xslt, xhwp5_path, css_path):
     from hwp5.hwp5odt import hwp5_resources_filename
-    from hwp5.tools import xslt
 
     css_xsl = hwp5_resources_filename('xsl/hwp5css.xsl')
-
-    css_file = file(css_path, 'w')
-    try:
-        transform = xslt(css_xsl)
-        transform(hwp5_xml, css_file)
-    finally:
-        css_file.close()
+    xslt(css_xsl, xhwp5_path, css_path)
 
 
-def generate_html_file(hwp5_xml, html_path):
+def generate_html_file(xslt, xhwp5_path, html_path):
     from hwp5.hwp5odt import hwp5_resources_filename
-    from hwp5.tools import xslt
 
     html_xsl = hwp5_resources_filename('xsl/hwp5html.xsl')
-
-    html_file = file(html_path, 'w')
-    try:
-        transform = xslt(html_xsl)
-        transform(hwp5_xml, html_file)
-    finally:
-        html_file.close()
+    xslt(html_xsl, xhwp5_path, html_path)
 
 
 def extract_bindata_dir(hwp5file, bindata_dir):

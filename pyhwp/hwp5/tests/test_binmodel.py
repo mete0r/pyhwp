@@ -6,6 +6,7 @@ from hwp5.tests import test_recordstream
 from hwp5.recordstream import Record, read_records
 from hwp5.utils import cached_property
 from hwp5.binmodel import RecordModel
+from hwp5.importhelper import importjson
 
 
 def TestContext(**ctx):
@@ -153,7 +154,7 @@ class ParaCharShapeTest(TestBase):
         context['parent'] = parent_context, parent_model
         model = record
         parse_model(context, model)
-        self.assertEquals(dict(charshapes=((0, 7), (19, 8), (23, 7), (24, 9), (26, 7))),
+        self.assertEquals(dict(charshapes=[(0, 7), (19, 8), (23, 7), (24, 9), (26, 7)]),
                           model['content'])
 
 
@@ -414,7 +415,8 @@ class ShapeComponentTest(TestBase):
     def test_colorpattern_gradation(self):
         import pickle
         from hwp5.binmodel import parse_models
-        f = open('fixtures/5005-shapecomponent-with-colorpattern-and-gradation.dat', 'r')
+        f = self.open_fixture('5005-shapecomponent-with-colorpattern-and-gradation.dat',
+                              'r')
         try:
             records = pickle.load(f)
         finally:
@@ -441,7 +443,8 @@ class ShapeComponentTest(TestBase):
     def test_colorpattern_gradation_5017(self):
         from hwp5.recordstream import read_records
         from hwp5.binmodel import parse_models
-        f = open('fixtures/5017-shapecomponent-with-colorpattern-and-gradation.bin', 'r')
+        f = self.open_fixture('5017-shapecomponent-with-colorpattern-and-gradation.bin',
+                              'rb')
         try:
             records = list(read_records(f))
         finally:
@@ -549,7 +552,7 @@ class TableBodyTest(TestCase):
         self.assertEquals(2, model_content['cols'])
         self.assertEquals(2, model_content['rows'])
         self.assertEquals(1, model_content['borderfill_id'])
-        self.assertEquals((2, 2), model_content['rowcols'])
+        self.assertEquals([2, 2], model_content['rowcols'])
         self.assertEquals(0, model_content['cellspacing'])
         self.assertEquals([], model_content['validZones'])
 
@@ -678,14 +681,19 @@ class TestControlType(TestCase):
 
 class TestControlChar(TestBase):
 
-    def test_decode_bytes(self):
+    def test_decode(self):
         from hwp5.binmodel import ControlChar
         paratext_record = self.hwp5file.bodytext.section(0).record(1)
         payload = paratext_record['payload']
-        controlchar = ControlChar.decode_bytes(payload[0:16])
+        controlchar = ControlChar.decode(payload[0:16])
         self.assertEquals(dict(code=ord(ControlChar.SECTION_COLUMN_DEF),
                                chid='secd',
                                param='\x00' * 8), controlchar)
+
+    def test_find(self):
+        from hwp5.binmodel import ControlChar
+        bytes = '\x41\x00'
+        self.assertEquals((2, 2), ControlChar.find(bytes, 0))
 
     def test_tab(self):
         from hwp5.binmodel import ParaText, ControlChar
@@ -751,7 +759,7 @@ class TestFootnoteShape(TestBase):
 
     def test_footnote_shape(self):
         import pickle
-        f = open('fixtures/5000-footnote-shape.dat', 'r')
+        f = self.open_fixture('5000-footnote-shape.dat', 'r')
         try:
             records = pickle.load(f)
         finally:
@@ -768,7 +776,7 @@ class TestFootnoteShape(TestBase):
 class TestControlData(TestBase):
     def test_parse(self):
         import pickle
-        f = open('fixtures/5006-controldata.record', 'r')
+        f = self.open_fixture('5006-controldata.record', 'r')
         try:
             record = pickle.load(f)
         finally:
@@ -789,7 +797,7 @@ class TestModelJson(TestBase):
         model = self.hwp5file.docinfo.model(0)
         json = model_to_json(model)
 
-        import simplejson
+        simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
@@ -804,7 +812,7 @@ class TestModelJson(TestBase):
         model = self.hwp5file.bodytext.section(0).model(1)
         json = model_to_json(model)
 
-        import simplejson
+        simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals('ParaText', jsonobject['type'])
         self.assertEquals([[0, 8], dict(code=2, param='\x00' * 8, chid='secd')],
@@ -817,7 +825,7 @@ class TestModelJson(TestBase):
                      unparsed='\xff\xfe\xfd\xfc')
         json = model_to_json(model)
 
-        import simplejson
+        simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
 
@@ -825,7 +833,7 @@ class TestModelJson(TestBase):
         models_json = self.hwp5file.bodytext.section(0).models_json()
         gen = models_json.generate()
 
-        import simplejson
+        simplejson = importjson()
         json_array = simplejson.loads(''.join(gen))
         self.assertEquals(128, len(json_array))
 
@@ -860,7 +868,7 @@ class TestModelStream(TestBase):
         self.assertEquals(10, model['seqno'])
 
     def test_models_json_open(self):
-        import simplejson
+        simplejson = importjson()
         f = self.docinfo.models_json().open()
         try:
             self.assertEquals(67, len(simplejson.load(f)))

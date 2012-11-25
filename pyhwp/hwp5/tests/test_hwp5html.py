@@ -17,21 +17,31 @@ class TestBase(test_xmlmodel.TestBase):
 
 class HtmlConvTest(TestBase):
 
+    @property
+    def xslt(self):
+        from hwp5.plat import get_xslt
+        return get_xslt()
+
+    @property
+    def xhwp5_path(self):
+        return self.id() + '.xhwp5'
+
+    def create_xhwp5(self):
+        xhwp5_path = self.xhwp5_path
+        xhwp5_file = file(xhwp5_path, 'w')
+        try:
+            self.hwp5file.xmlevents(embedbin=False).dump(xhwp5_file)
+        finally:
+            xhwp5_file.close()
+        return xhwp5_path
+
     def test_generate_css_file(self):
         base_dir = self.make_base_dir()
-        hwp5file = self.hwp5file
         css_path = os.path.join(base_dir, 'styles.css')
 
-        from tempfile import TemporaryFile
-        hwp5_xml = TemporaryFile()
-        try:
-            hwp5file.xmlevents(embedbin=False).dump(hwp5_xml)
-            hwp5_xml.seek(0)
-
-            from hwp5.hwp5html import generate_css_file
-            generate_css_file(hwp5_xml, css_path)
-        finally:
-            hwp5_xml.close()
+        xhwp5_path = self.create_xhwp5()
+        from hwp5.hwp5html import generate_css_file
+        generate_css_file(self.xslt, xhwp5_path, css_path)
 
         self.assertTrue(os.path.exists(css_path))
         #with file(css_path) as f:
@@ -39,19 +49,11 @@ class HtmlConvTest(TestBase):
 
     def test_generate_html_file(self):
         base_dir = self.make_base_dir()
-        hwp5file = self.hwp5file
         html_path = os.path.join(base_dir, 'index.html')
 
-        from tempfile import TemporaryFile
-        hwp5_xml = TemporaryFile()
-        try:
-            hwp5file.xmlevents(embedbin=False).dump(hwp5_xml)
-            hwp5_xml.seek(0)
-
-            from hwp5.hwp5html import generate_html_file
-            generate_html_file(hwp5_xml, html_path)
-        finally:
-            hwp5_xml.close()
+        xhwp5_path = self.create_xhwp5()
+        from hwp5.hwp5html import generate_html_file
+        generate_html_file(self.xslt, xhwp5_path, html_path)
 
         self.assertTrue(os.path.exists(html_path))
         #with file(html_path) as f:

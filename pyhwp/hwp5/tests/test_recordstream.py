@@ -3,6 +3,7 @@
 from hwp5.tests import test_filestructure
 from hwp5 import recordstream as RS
 from hwp5.utils import cached_property
+from hwp5.importhelper import importjson
 
 class TestBase(test_filestructure.TestBase):
 
@@ -132,7 +133,7 @@ class TestHwp5File(TestBase):
 class TestJson(TestBase):
     def test_record_to_json(self):
         from hwp5.recordstream import record_to_json
-        import simplejson
+        simplejson = importjson()
         record = self.hwp5file.docinfo.records().next()
         json = record_to_json(record)
         jsonobject = simplejson.loads(json)
@@ -146,7 +147,7 @@ class TestJson(TestBase):
         self.assertEquals('HWPTAG_DOCUMENT_PROPERTIES', jsonobject['tagname'])
 
     def test_generate_simplejson_dumps(self):
-        import simplejson
+        simplejson = importjson()
         records_json = self.hwp5file.docinfo.records_json()
         json = ''.join(records_json.generate())
 

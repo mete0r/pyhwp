@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-#                   GNU AFFERO GENERAL PUBLIC LICENSE
-#                      Version 3, 19 November 2007
-#
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -41,6 +38,14 @@ filename = os.environ.get('PYHWP_LOGFILE')
 if filename:
     logger.addHandler(logging.FileHandler(filename))
 del filename
+
+
+import sys
+logger.info('sys.executable = %s', sys.executable)
+logger.info('sys.version = %s', sys.version)
+logger.info('sys.path:')
+for path in sys.path:
+    logger.info('- %s', path)
 
 
 try:
@@ -182,7 +187,8 @@ try:
         def test_detect(self):
             context = uno.getComponentContext()
 
-            f = file('fixtures/sample-5017.hwp', 'r')
+            from hwp5.tests import open_fixture
+            f = open_fixture('sample-5017.hwp', 'rb')
             stream = InputStreamFromFileLike(f)
             mediadesc = dict_to_propseq(dict(InputStream=stream))
 
@@ -195,7 +201,8 @@ try:
 
         def test_filter(self):
             context = uno.getComponentContext()
-            f = file('fixtures/sample-5017.hwp', 'r')
+            from hwp5.tests import open_fixture
+            f = open_fixture('sample-5017.hwp', 'rb')
             stream = InputStreamFromFileLike(f)
             mediadesc = dict_to_propseq(dict(InputStream=stream))
 
