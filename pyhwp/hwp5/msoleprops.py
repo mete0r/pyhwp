@@ -26,7 +26,7 @@ from hwp5.dataio import UINT32
 import logging
 
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 vt_types = dict()
