@@ -518,8 +518,8 @@ def dump_events(events):
                 yield level, item
 
     def item_to_dict(events):
-         for ev, item in events:
-             yield ev, dict(item)
+        for ev, item in events:
+            yield ev, dict(item)
 
     def type_to_string(events):
         for ev, item in events:
@@ -538,7 +538,7 @@ def dump_events(events):
     for level, item in prefix_level(events):
         if level > 0:
             if level > 1:
-                print '  '*(level-2)+' ',
+                print '  ' * (level - 2) + ' ',
             print '-',
         print item
 
@@ -556,6 +556,7 @@ def main():
     pprint(typedef_events)
 
     context = {}
+
     def resolve_values(events):
         from hwp5.dataio import FlagsType
         for ev, item in events:

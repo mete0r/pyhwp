@@ -19,13 +19,15 @@
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
 from .treeop import tree_events, tree_events_multi
-from .binmodel import FaceName, CharShape, SectionDef, ListHeader, Paragraph, Text
+from .binmodel import (FaceName, CharShape, SectionDef, ListHeader, Paragraph,
+                       Text)
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
 from . import binmodel
 
 import logging
 logger = logging.getLogger(__name__)
+
 
 def give_elements_unique_id(event_prefixed_mac):
     paragraph_id = 0
@@ -48,6 +50,7 @@ def give_elements_unique_id(event_prefixed_mac):
                 attributes['shape_id'] = shape_id
                 shape_id += 1
         yield event, item
+
 
 def remove_redundant_facenames(event_prefixed_mac):
     ''' remove redundant FaceNames '''
@@ -76,6 +79,7 @@ def remove_redundant_facenames(event_prefixed_mac):
                 attributes['font_face'] = fface2
             yield event, item
 
+
 def make_ranged_shapes(shapes):
     last = None
     for item in shapes:
@@ -83,6 +87,7 @@ def make_ranged_shapes(shapes):
             yield (last[0], item[0]), last[1]
         last = item
     yield (item[0], 0x7fffffff), item[1]
+
 
 def split_and_shape(chunks, ranged_shapes):
     (chunk_start, chunk_end), chunk_attr, chunk = chunks.next()
@@ -106,8 +111,10 @@ def split_and_shape(chunks, ranged_shapes):
             #         vvvv
             #         ..----
             if shape_end < chunk_end:           # (2)
-                prev = (chunk_start, shape_end), chunk[:shape_end-chunk_start]
-                next = (shape_end, chunk_end), chunk[shape_end-chunk_start:]
+                prev = ((chunk_start, shape_end),
+                        chunk[:shape_end - chunk_start])
+                next = ((shape_end, chunk_end),
+                        chunk[shape_end - chunk_start:])
                 (chunk_start, chunk_end), chunk = prev
             else:
                 next = None
@@ -121,24 +128,28 @@ def split_and_shape(chunks, ranged_shapes):
 
             (chunk_start, chunk_end), chunk_attr, chunk = chunks.next()
 
+
 def line_segmented(chunks, ranged_linesegs):
     prev_lineseg = None
     line = None
-    for (chunk_start, chunk_end), (lineseg, chunk_attr), chunk in split_and_shape(chunks, ranged_linesegs):
+    for ((chunk_start, chunk_end),
+         (lineseg, chunk_attr),
+         chunk) in split_and_shape(chunks, ranged_linesegs):
         if lineseg is not prev_lineseg:
             if line is not None:
                 yield prev_lineseg, line
             line = []
-        line.append( ((chunk_start, chunk_end), chunk_attr, chunk) )
+        line.append(((chunk_start, chunk_end), chunk_attr, chunk))
         prev_lineseg = lineseg
     if line is not None:
         yield prev_lineseg, line
+
 
 def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
     ''' lineseg/charshaped text chunks '''
     from .binmodel import ParaText, ParaLineSeg, ParaCharShape
 
-    stack = [] # stack of ancestor Paragraphs
+    stack = []  # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
         model, attributes, context = item
         if model is Paragraph:
@@ -150,7 +161,9 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 paracharshape = stack[-1].get(ParaCharShape)
                 paralineseg = stack[-1].get(ParaLineSeg)
                 if paratext is None:
-                    paratext = ParaText, dict(chunks=[((0,0),'')]), dict(context)
+                    paratext = (ParaText,
+                                dict(chunks=[((0, 0), '')]),
+                                dict(context))
                 for x in merge_paragraph_text_charshape_lineseg(paratext,
                                                                 paracharshape,
                                                                 paralineseg):
@@ -165,13 +178,15 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
         else:
             yield event, (model, attributes, context)
 
+
 def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
                                            paralineseg):
     from .binmodel import LineSeg
 
     paratext_model, paratext_attributes, paratext_context = paratext
 
-    chunks = ((range, None, chunk) for range, chunk in paratext_attributes['chunks'])
+    chunks = ((range, None, chunk)
+              for range, chunk in paratext_attributes['chunks'])
     charshapes = paracharshape[1]['charshapes']
     shaped_chunks = split_and_shape(chunks, make_ranged_shapes(charshapes))
 
@@ -188,7 +203,8 @@ def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
         paralineseg_context = dict()
     linesegs = ((lineseg['chpos'], lineseg)
                 for lineseg in paralineseg_content['linesegs'])
-    lined_shaped_chunks = line_segmented(shaped_chunks, make_ranged_shapes(linesegs))
+    lined_shaped_chunks = line_segmented(shaped_chunks,
+                                         make_ranged_shapes(linesegs))
     for lineseg_content, shaped_chunks in lined_shaped_chunks:
         lineseg = (LineSeg, lineseg_content, paralineseg_context)
         chunk_events = range_shaped_textchunk_events(paratext_context,
@@ -196,11 +212,14 @@ def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
         for x in wrap_modelevents(lineseg, chunk_events):
             yield x
 
+
 def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
     from .binmodel import ControlChar
     for (startpos, endpos), (shape, none), chunk in range_shaped_textchunks:
         if isinstance(chunk, basestring):
-            textitem = (Text, dict(text=chunk, charshape_id=shape), paratext_context)
+            textitem = (Text,
+                        dict(text=chunk, charshape_id=shape),
+                        paratext_context)
             yield STARTEVENT, textitem
             yield ENDEVENT, textitem
         elif isinstance(chunk, dict):
@@ -208,8 +227,11 @@ def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
             uch = unichr(code)
             name = ControlChar.get_name_by_code(code)
             kind = ControlChar.kinds[uch]
-            chunk_attributes = dict(name=name, code=code, kind=kind, charshape_id=shape)
-            if code in (0x9, 0xa, 0xd): # http://www.w3.org/TR/xml/#NT-Char
+            chunk_attributes = dict(name=name,
+                                    code=code,
+                                    kind=kind,
+                                    charshape_id=shape)
+            if code in (0x9, 0xa, 0xd):  # http://www.w3.org/TR/xml/#NT-Char
                 chunk_attributes['char'] = uch
             ctrlch = (ControlChar, chunk_attributes, paratext_context)
             yield STARTEVENT, ctrlch
@@ -240,11 +262,12 @@ def wrap_section(event_prefixed_mac, sect_id=None):
                 starting_buffer.append((event, item))
     yield ENDEVENT, sectiondef
 
+
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''
     from .binmodel import ControlChar, Control
     if stack is None:
-        stack = [] # stack of ancestor Paragraphs
+        stack = []  # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
         model, attributes, context = item
         if model is Paragraph:
@@ -259,7 +282,8 @@ def make_extended_controls_inline(event_prefixed_mac, stack=None):
                 if attributes['kind'] is ControlChar.EXTENDED:
                     control_subtree = stack[-1].get(Control).pop(0)
                     tev = tree_events(*control_subtree)
-                    yield tev.next() # to evade the Control/STARTEVENT trigger in parse_models_pass3()
+                    yield tev.next()  # to evade the Control/STARTEVENT trigger
+                                      # in parse_models_pass3()
                     for k in make_extended_controls_inline(tev, stack):
                         yield k
                 else:
@@ -267,11 +291,14 @@ def make_extended_controls_inline(event_prefixed_mac, stack=None):
                     yield ENDEVENT, item
         elif issubclass(model, Control) and event == STARTEVENT:
             control_subtree = build_subtree(event_prefixed_mac)
-            stack[-1].setdefault(Control, []).append( control_subtree )
+            stack[-1].setdefault(Control, []).append(control_subtree)
         else:
             yield event, item
 
-def make_paragraphs_children_of_listheader(event_prefixed_mac, parentmodel=ListHeader, childmodel=Paragraph):
+
+def make_paragraphs_children_of_listheader(event_prefixed_mac,
+                                           parentmodel=ListHeader,
+                                           childmodel=Paragraph):
     ''' make paragraphs children of the listheader '''
     stack = []
     level = 0
@@ -279,8 +306,11 @@ def make_paragraphs_children_of_listheader(event_prefixed_mac, parentmodel=ListH
         model, attributes, context = item
         if event is STARTEVENT:
             level += 1
-        if len(stack) > 0 and ((event is STARTEVENT and stack[-1][0] == level and model is not childmodel) or
-                               (event is ENDEVENT and stack[-1][0]-1 == level)):
+        if len(stack) > 0 and ((event is STARTEVENT
+                                and stack[-1][0] == level
+                                and model is not childmodel) or
+                               (event is ENDEVENT
+                                and stack[-1][0] - 1 == level)):
             lh_level, lh_item = stack.pop()
             yield ENDEVENT, lh_item
 
@@ -295,6 +325,7 @@ def make_paragraphs_children_of_listheader(event_prefixed_mac, parentmodel=ListH
 
         if event is ENDEVENT:
             level -= 1
+
 
 def match_field_start_end(event_prefixed_mac):
     from .binmodel import Field, ControlChar
@@ -316,7 +347,11 @@ def match_field_start_end(event_prefixed_mac):
         else:
             yield event, item
 
-class TableRow: pass
+
+class TableRow:
+    pass
+
+
 def restructure_tablebody(event_prefixed_mac):
     from collections import deque
     stack = []
@@ -330,7 +365,7 @@ def restructure_tablebody(event_prefixed_mac):
                         rowcols.append(3)
                     else:
                         rowcols.append(1)
-                        for i in range(0, cols-2):
+                        for i in range(0, cols - 2):
                             rowcols.append(0)
                         rowcols.append(2)
                 stack.append((context, rowcols))
@@ -381,6 +416,7 @@ def prefix_binmodels_with_event(context, models):
                        (model['type'], model['content'], context))
                       for model in models)
     return prefix_event(level_prefixed)
+
 
 def wrap_modelevents(wrapper_model, modelevents):
     from .treeop import STARTEVENT, ENDEVENT
@@ -497,7 +533,8 @@ class Sections(binmodel.Sections, XmlEventsMixin):
             events = section.events(**kwargs)
             bodytext_events.append(events)
 
-        class BodyText(object): pass
+        class BodyText(object):
+            pass
         from itertools import chain
         bodytext_events = chain(*bodytext_events)
         bodytext = BodyText, dict(), dict()
@@ -507,7 +544,6 @@ class Sections(binmodel.Sections, XmlEventsMixin):
         d = super(Sections, self).other_formats()
         d['.xml'] = self.xmlevents().open
         return d
-
 
 
 class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
@@ -524,7 +560,8 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
         events = chain(self.docinfo.events(**kwargs),
                        self.bodytext.events(**kwargs))
 
-        class HwpDoc(object): pass
+        class HwpDoc(object):
+            pass
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()
         events = wrap_modelevents(hwpdoc, events)
 

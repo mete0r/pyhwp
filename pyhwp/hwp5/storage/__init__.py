@@ -29,6 +29,7 @@ def is_stream(item):
 class ItemWrapper(object):
     def __init__(self, wrapped):
         self.wrapped = wrapped
+
     def __getattr__(self, name):
         return getattr(self.wrapped, name)
 
@@ -36,6 +37,7 @@ class ItemWrapper(object):
 class StorageWrapper(ItemWrapper):
     def __iter__(self):
         return iter(self.wrapped)
+
     def __getitem__(self, name):
         return self.wrapped[name]
 
@@ -102,7 +104,7 @@ def iter_storage_leafs(stg, basepath=''):
         path = basepath + name
         item = stg[name]
         if is_storage(item):
-            for x in iter_storage_leafs(item, path+'/'):
+            for x in iter_storage_leafs(item, path + '/'):
                 yield x
         else:
             yield path
@@ -114,7 +116,8 @@ def unpack(stg, outbase):
         stg: an instance of Storage
         outbase: path to a directory in filesystem (should not end with '/')
     '''
-    import os, os.path
+    import os
+    import os.path
     for name in stg:
         outpath = os.path.join(outbase, name)
         item = stg[name]
@@ -146,6 +149,7 @@ def open_storage_item(stg, path):
         item = item[name]
     return item
 
+
 def printstorage(stg, basepath=''):
     names = list(stg)
     names.sort()
@@ -153,6 +157,6 @@ def printstorage(stg, basepath=''):
         path = basepath + name
         item = stg[name]
         if is_storage(item):
-            printstorage(item, path+'/')
+            printstorage(item, path + '/')
         elif is_stream(item):
             print path.encode('string_escape')

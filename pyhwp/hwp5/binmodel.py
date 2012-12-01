@@ -155,18 +155,19 @@ class BinData(RecordModel):
     CompressionType = Enum(STORAGE_DEFAULT=0, YES=1, NO=2)
     AccessState = Enum(NEVER=0, OK=1, FAILED=2, FAILED_IGNORED=3)
     Flags = Flags(INT16,
-            0, 3, StorageType, 'storage',
-            4, 5, CompressionType, 'compression',
-            16, 17, AccessState, 'access')
+                  0, 3, StorageType, 'storage',
+                  4, 5, CompressionType, 'compression',
+                  16, 17, AccessState, 'access')
 
     def attributes(cls):
         from hwp5.dataio import SelectiveType
         from hwp5.dataio import ref_member_flag
         yield cls.Flags, 'flags'
-        yield SelectiveType(ref_member_flag('flags', 'storage'),
-                            {cls.StorageType.LINK: BinDataLink,
-                             cls.StorageType.EMBEDDING: BinDataEmbedding,
-                             cls.StorageType.STORAGE: BinDataStorage}), 'bindata'
+        yield (SelectiveType(ref_member_flag('flags', 'storage'),
+                             {cls.StorageType.LINK: BinDataLink,
+                              cls.StorageType.EMBEDDING: BinDataEmbedding,
+                              cls.StorageType.STORAGE: BinDataStorage}),
+               'bindata')
     attributes = classmethod(attributes)
 
 
@@ -195,10 +196,9 @@ class Panose1(Struct):
 class FaceName(RecordModel):
     tagid = HWPTAG_FACE_NAME
     Flags = Flags(BYTE,
-        5, 'default',
-        6, 'metric',
-        7, 'alternate',
-        )
+                  5, 'default',
+                  6, 'metric',
+                  7, 'alternate')
 
     def attributes(cls):
         yield cls.Flags, 'has'
@@ -304,7 +304,7 @@ class FillColorPattern(Fill):
     PatternTypeEnum = Enum(NONE=255, HORIZONTAL=0, VERTICAL=1, BACKSLASH=2,
                            SLASH=3, GRID=4, CROSS=5)
     PatternTypeFlags = Flags(INT32,
-            0, 7, PatternTypeEnum, 'pattern_type')
+                             0, 7, PatternTypeEnum, 'pattern_type')
 
     def attributes(cls):
         yield COLORREF, 'background_color',
@@ -385,17 +385,17 @@ class CharShape(RecordModel):
 
     Underline = Enum(NONE=0, UNDERLINE=1, UNKNOWN=2, UPPERLINE=3)
     Flags = Flags(UINT32,
-            0, 'italic',
-            1, 'bold',
-            2, 3, Underline, 'underline',
-            4, 7, 'underline_style',
-            8, 10, 'outline',
-            11, 13, 'shadow')
+                  0, 'italic',
+                  1, 'bold',
+                  2, 3, Underline, 'underline',
+                  4, 7, 'underline_style',
+                  8, 10, 'outline',
+                  11, 13, 'shadow')
 
     def attributes(cls):
         yield LanguageStruct('FontFace', WORD), 'font_face',
-        yield LanguageStruct('LetterWidthExpansion', UINT8),\
-                'letter_width_expansion'
+        yield (LanguageStruct('LetterWidthExpansion', UINT8),
+               'letter_width_expansion')
         yield LanguageStruct('LetterSpacing', INT8), 'letter_spacing'
         yield LanguageStruct('RelativeSize', INT8), 'relative_size'
         yield LanguageStruct('Position', INT8), 'position'
@@ -432,11 +432,10 @@ class Numbering(RecordModel):
     Align = Enum(LEFT=0, CENTER=1, RIGHT=2)
     DistanceType = Enum(RATIO=0, VALUE=1)
     Flags = Flags(UINT32,
-        0, 1, Align, 'paragraph_align',
-        2, 'auto_width',
-        3, 'auto_dedent',
-        4, DistanceType, 'distance_to_body_type',
-        )
+                  0, 1, Align, 'paragraph_align',
+                  2, 'auto_width',
+                  3, 'auto_dedent',
+                  4, DistanceType, 'distance_to_body_type')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -461,33 +460,32 @@ class ParaShape(RecordModel):
     LineBreakHangul = Enum(WORD=0, CHAR=1)
     HeadShape = Enum(NONE=0, OUTLINE=1, NUMBER=2, BULLET=3)
     Flags = Flags(UINT32,
-            0, 1, LineSpacingType, 'linespacing_type',
-            2, 4, Align, 'align',
-            5, 6, LineBreakAlphabet, 'linebreak_alphabet',
-            7, LineBreakHangul, 'linebreak_hangul',
-            8, 'use_paper_grid',
-            9, 15, 'minimum_space',  # 공백 최소값
-            16, 'protect_single_line',  # 외톨이줄 보호
-            17, 'with_next_paragraph',  # 다음 문단과 함께
-            18, 'protect',  # 문단 보호
-            19, 'start_new_page',  # 문단 앞에서 항상 쪽 나눔
-            20, 21, VAlign, 'valign',
-            22, 'lineheight_along_fontsize',  # 글꼴에 어울리는 줄 높이
-            23, 24, HeadShape, 'head_shape',  # 문단 머리 모양
-            25, 27, 'level',  # 문단 수준
-            28, 'linked_border',  # 문단 테두리 연결 여부
-            29, 'ignore_margin',  # 문단 여백 무시
-            30, 'tail_shape',  # 문단 꼬리 모양
-            )
+                  0, 1, LineSpacingType, 'linespacing_type',
+                  2, 4, Align, 'align',
+                  5, 6, LineBreakAlphabet, 'linebreak_alphabet',
+                  7, LineBreakHangul, 'linebreak_hangul',
+                  8, 'use_paper_grid',
+                  9, 15, 'minimum_space',  # 공백 최소값
+                  16, 'protect_single_line',  # 외톨이줄 보호
+                  17, 'with_next_paragraph',  # 다음 문단과 함께
+                  18, 'protect',  # 문단 보호
+                  19, 'start_new_page',  # 문단 앞에서 항상 쪽 나눔
+                  20, 21, VAlign, 'valign',
+                  22, 'lineheight_along_fontsize',  # 글꼴에 어울리는 줄 높이
+                  23, 24, HeadShape, 'head_shape',  # 문단 머리 모양
+                  25, 27, 'level',  # 문단 수준
+                  28, 'linked_border',  # 문단 테두리 연결 여부
+                  29, 'ignore_margin',  # 문단 여백 무시
+                  30, 'tail_shape')  # 문단 꼬리 모양
+
     Flags2 = dataio.Flags(UINT32,
-            0, 1, 'in_single_line',
-            2, 3, 'reserved',
-            4, 'autospace_alphabet',
-            5, 'autospace_number',
-            )
+                          0, 1, 'in_single_line',
+                          2, 3, 'reserved',
+                          4, 'autospace_alphabet',
+                          5, 'autospace_number')
+
     Flags3 = dataio.Flags(UINT32,
-            0, 4, LineSpacingType, 'linespacing_type3'
-            )
+                          0, 4, LineSpacingType, 'linespacing_type3')
 
     def attributes(cls):
         yield cls.Flags, 'parashapeflags',
@@ -537,8 +535,7 @@ class CompatibleDocument(RecordModel):
     tagid = HWPTAG_COMPATIBLE_DOCUMENT
     Target = Enum(DEFAULT=0, HWP2007=1, MSWORD=2)
     Flags = dataio.Flags(UINT32,
-            0, 1, 'target',
-            )
+                         0, 1, 'target')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -656,21 +653,21 @@ class CommonControl(Control):
     NumberCategory = Enum(NONE=0, FIGURE=1, TABLE=2, EQUATION=3)
 
     CommonControlFlags = dataio.Flags(UINT32,
-            0, 'inline',
-            2, 'affect_line_spacing',
-            3, 4, VRelTo, 'vrelto',
-            5, 7, VAlign, 'valign',
-            8, 9, HRelTo, 'hrelto',
-            10, 12, HAlign, 'halign',
-            13, 'restrict_in_page',
-            14, 'overlap_others',
-            15, 17, WidthRelTo, 'width_relto',
-            18, 19, HeightRelTo, 'height_relto',
-            20, 'protect_size_when_vrelto_paragraph',
-            21, 23, Flow, 'flow',
-            24, 25, TextSide, 'text_side',
-            26, 27, NumberCategory, 'number_category'
-            )
+                                      0, 'inline',
+                                      2, 'affect_line_spacing',
+                                      3, 4, VRelTo, 'vrelto',
+                                      5, 7, VAlign, 'valign',
+                                      8, 9, HRelTo, 'hrelto',
+                                      10, 12, HAlign, 'halign',
+                                      13, 'restrict_in_page',
+                                      14, 'overlap_others',
+                                      15, 17, WidthRelTo, 'width_relto',
+                                      18, 19, HeightRelTo, 'height_relto',
+                                      20, 'protect_size_when_vrelto_paragraph',
+                                      21, 23, Flow, 'flow',
+                                      24, 25, TextSide, 'text_side',
+                                      26, 27, NumberCategory, 'number_category'
+                                      )
 
     MARGIN_LEFT = 0
     MARGIN_RIGHT = 1
@@ -724,10 +721,9 @@ class ListHeader(RecordModel):
 
     VAlign = Enum(TOP=0, MIDDLE=1, BOTTOM=2)
     Flags = Flags(UINT32,
-        0, 2, 'textdirection',
-        3, 4, 'linebreak',
-        5, 6, VAlign, 'valign',
-        )
+                  0, 2, 'textdirection',
+                  3, 4, 'linebreak',
+                  5, 6, VAlign, 'valign')
 
     def attributes(cls):
         yield UINT16, 'paragraphs',
@@ -750,9 +746,8 @@ class PageDef(RecordModel):
     Orientation = Enum(PORTRAIT=0, LANDSCAPE=1)
     BookBinding = Enum(LEFT=0, RIGHT=1, TOP=2, BOTTOM=3)
     Flags = Flags(UINT32,
-                0, Orientation, 'orientation',
-                1, 2, BookBinding, 'bookbinding'
-                )
+                  0, Orientation, 'orientation',
+                  1, 2, BookBinding, 'bookbinding')
 
     def attributes(cls):
         yield HWPUNIT, 'width',
@@ -806,8 +801,7 @@ class PageDef(RecordModel):
 
 class FootnoteShape(RecordModel):
     tagid = HWPTAG_FOOTNOTE_SHAPE
-    Flags = Flags(UINT32,
-        )
+    Flags = Flags(UINT32)
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -831,11 +825,10 @@ class PageBorderFill(RecordModel):
     RelativeTo = Enum(BODY=0, PAPER=1)
     FillArea = Enum(PAPER=0, PAGE=1, BORDER=2)
     Flags = Flags(UINT32,
-        0, RelativeTo, 'relative_to',
-        1, 'include_header',
-        2, 'include_footer',
-        3, 4, FillArea, 'fill',
-        )
+                  0, RelativeTo, 'relative_to',
+                  1, 'include_header',
+                  2, 'include_footer',
+                  3, 4, FillArea, 'fill')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -850,9 +843,8 @@ class TableCaption(ListHeader):
 
     Position = Enum(LEFT=0, RIGHT=1, TOP=2, BOTTOM=3)
     Flags = Flags(UINT32,
-                0, 1, Position, 'position',
-                2, 'include_margin',
-                )
+                  0, 1, Position, 'position',
+                  2, 'include_margin')
 
     def attributes(cls):
         yield cls.Flags, 'flags',
@@ -883,9 +875,8 @@ class TableBody(RecordModel):
     tagid = HWPTAG_TABLE
     Split = Enum(NONE=0, BY_CELL=1, SPLIT=2)
     Flags = Flags(UINT32,
-                0, 1, Split, 'split_page',
-                2, 'repeat_header',
-                )
+                  0, 1, Split, 'split_page',
+                  2, 'repeat_header')
     ZoneInfo = ARRAY(UINT16, 5)
 
     def attributes(cls):
@@ -909,20 +900,17 @@ class Paragraph(RecordModel):
     tagid = HWPTAG_PARA_HEADER
 
     SplitFlags = Flags(BYTE,
-            0, 'new_section',
-            1, 'new_columnsdef',
-            2, 'new_page',
-            3, 'new_column',
-            )
+                       0, 'new_section',
+                       1, 'new_columnsdef',
+                       2, 'new_page',
+                       3, 'new_column')
     ControlMask = Flags(UINT32,
-            2, 'unknown1',
-            11, 'control',
-            21, 'new_number',
-            )
+                        2, 'unknown1',
+                        11, 'control',
+                        21, 'new_number')
     Flags = Flags(UINT32,
-            31, 'unknown',
-            0, 30, 'chars',
-            )
+                  31, 'unknown',
+                  0, 30, 'chars')
 
     def attributes(cls):
         yield cls.Flags, 'text',
@@ -946,35 +934,33 @@ class ControlChar(object):
 
     class EXTENDED(object):
         size = 8
-    chars = {
-            0x00: ('NULL', CHAR),
-            0x01: ('CTLCHR01', EXTENDED),
-            0x02: ('SECTION_COLUMN_DEF', EXTENDED),
-            0x03: ('FIELD_START', EXTENDED),
-            0x04: ('FIELD_END', INLINE),
-            0x05: ('CTLCHR05', INLINE),
-            0x06: ('CTLCHR06', INLINE),
-            0x07: ('CTLCHR07', INLINE),
-            0x08: ('TITLE_MARK', INLINE),
-            0x09: ('TAB', INLINE),
-            0x0a: ('LINE_BREAK', CHAR),
-            0x0b: ('DRAWING_TABLE_OBJECT', EXTENDED),
-            0x0c: ('CTLCHR0C', EXTENDED),
-            0x0d: ('PARAGRAPH_BREAK', CHAR),
-            0x0e: ('CTLCHR0E', EXTENDED),
-            0x0f: ('HIDDEN_EXPLANATION', EXTENDED),
-            0x10: ('HEADER_FOOTER', EXTENDED),
-            0x11: ('FOOT_END_NOTE', EXTENDED),
-            0x12: ('AUTO_NUMBER', EXTENDED),
-            0x13: ('CTLCHR13', INLINE),
-            0x14: ('CTLCHR14', INLINE),
-            0x15: ('PAGE_CTLCHR', EXTENDED),
-            0x16: ('BOOKMARK', EXTENDED),
-            0x17: ('CTLCHR17', EXTENDED),
-            0x18: ('HYPHEN', CHAR),
-            0x1e: ('NONBREAK_SPACE', CHAR),
-            0x1f: ('FIXWIDTH_SPACE', CHAR),
-    }
+    chars = {0x00: ('NULL', CHAR),
+             0x01: ('CTLCHR01', EXTENDED),
+             0x02: ('SECTION_COLUMN_DEF', EXTENDED),
+             0x03: ('FIELD_START', EXTENDED),
+             0x04: ('FIELD_END', INLINE),
+             0x05: ('CTLCHR05', INLINE),
+             0x06: ('CTLCHR06', INLINE),
+             0x07: ('CTLCHR07', INLINE),
+             0x08: ('TITLE_MARK', INLINE),
+             0x09: ('TAB', INLINE),
+             0x0a: ('LINE_BREAK', CHAR),
+             0x0b: ('DRAWING_TABLE_OBJECT', EXTENDED),
+             0x0c: ('CTLCHR0C', EXTENDED),
+             0x0d: ('PARAGRAPH_BREAK', CHAR),
+             0x0e: ('CTLCHR0E', EXTENDED),
+             0x0f: ('HIDDEN_EXPLANATION', EXTENDED),
+             0x10: ('HEADER_FOOTER', EXTENDED),
+             0x11: ('FOOT_END_NOTE', EXTENDED),
+             0x12: ('AUTO_NUMBER', EXTENDED),
+             0x13: ('CTLCHR13', INLINE),
+             0x14: ('CTLCHR14', INLINE),
+             0x15: ('PAGE_CTLCHR', EXTENDED),
+             0x16: ('BOOKMARK', EXTENDED),
+             0x17: ('CTLCHR17', EXTENDED),
+             0x18: ('HYPHEN', CHAR),
+             0x1e: ('NONBREAK_SPACE', CHAR),
+             0x1f: ('FIXWIDTH_SPACE', CHAR)}
     names = dict((unichr(code), name) for code, (name, kind) in chars.items())
     kinds = dict((unichr(code), kind) for code, (name, kind) in chars.items())
 
@@ -1004,7 +990,7 @@ class ControlChar(object):
         code = UINT16.decode(bytes[0:2])
         ch = unichr(code)
         if cls.kinds[ch].size == 8:
-            bytes = bytes[2:2+12]
+            bytes = bytes[2:2 + 12]
             if ch == ControlChar.TAB:
                 param = dict(width=UINT32.decode(bytes[0:4]),
                              unknown0=UINT8.decode(bytes[4:5]),
@@ -1080,10 +1066,11 @@ class ParaCharShapeList(list):
     def decode(payload, context=None):
         import struct
         fmt = 'II'
-        unitsize = struct.calcsize('<'+fmt)
+        unitsize = struct.calcsize('<' + fmt)
         unitcount = len(payload) / unitsize
-        values = struct.unpack('<'+(fmt*unitcount), payload)
-        return list(tuple(values[i*2:i*2+2]) for i in range(0, unitcount))
+        values = struct.unpack('<' + (fmt * unitcount), payload)
+        return list(tuple(values[i * 2:i * 2 + 2])
+                    for i in range(0, unitcount))
     decode = staticmethod(decode)
 
 
@@ -1100,7 +1087,7 @@ class ParaCharShape(RecordModel):
 
 class LineSeg(Struct):
     Flags = Flags(UINT16,
-            4, 'indented')
+                  4, 'indented')
 
     def attributes(cls):
         yield INT32, 'chpos',
@@ -1129,11 +1116,12 @@ class ParaLineSegList(list):
         from itertools import izip
         import struct
         unitfmt = 'iiiiiiiiHH'
-        unitsize = struct.calcsize('<'+unitfmt)
+        unitsize = struct.calcsize('<' + unitfmt)
         unitcount = len(payload) / unitsize
-        values = struct.unpack('<'+unitfmt*unitcount, payload)
-        names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below', 'x', 'width', 'a8', 'flags']
-        x = list(dict(izip(names, tuple(values[i*10:i*10+10])))
+        values = struct.unpack('<' + unitfmt * unitcount, payload)
+        names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below',
+                 'x', 'width', 'a8', 'flags']
+        x = list(dict(izip(names, tuple(values[i * 10:i * 10 + 10])))
                  for i in range(0, unitcount))
         for d in x:
             d['flags'] = LineSeg.Flags(d['flags'])
@@ -1206,14 +1194,14 @@ class BorderLine(Struct):
     ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal',
                      'abitlarge', 'large', 'larger', 'largest')
     Flags = Flags(UINT32,
-            0, 5, Border.StrokeEnum, 'stroke',
-            6, 9, LineEnd, 'line_end',
-            10, 15, ArrowShape, 'arrow_start',
-            16, 21, ArrowShape, 'arrow_end',
-            22, 25, ArrowSize, 'arrow_start_size',
-            26, 29, ArrowSize, 'arrow_end_size',
-            30, 'arrow_start_fill',
-            31, 'arrow_end_fill')
+                  0, 5, Border.StrokeEnum, 'stroke',
+                  6, 9, LineEnd, 'line_end',
+                  10, 15, ArrowShape, 'arrow_start',
+                  16, 21, ArrowShape, 'arrow_end',
+                  22, 25, ArrowSize, 'arrow_start_size',
+                  26, 29, ArrowSize, 'arrow_end_size',
+                  30, 'arrow_start_fill',
+                  31, 'arrow_end_fill')
 
     def attributes(cls):
         yield COLORREF, 'color'
@@ -1226,13 +1214,11 @@ class ShapeComponent(RecordModel):
     ''' 4.2.9.2 그리기 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT
     FillFlags = Flags(UINT16,
-            8, 'fill_colorpattern',
-            9, 'fill_image',
-            10, 'fill_gradation',
-            )
+                      8, 'fill_colorpattern',
+                      9, 'fill_image',
+                      10, 'fill_gradation')
     Flags = Flags(UINT32,
-            0, 'flip'
-            )
+                  0, 'flip')
 
     def attributes(cls):
         from hwp5.dataio import X_ARRAY
@@ -1531,11 +1517,10 @@ class ColumnsDef(Control):
     Kind = Enum('normal', 'distribute', 'parallel')
     Direction = Enum('l2r', 'r2l', 'both')
     Flags = Flags(UINT16,
-            0, 1, Kind, 'kind',
-            2, 9, 'count',
-            10, 11, Direction, 'direction',
-            12, 'same_widths',
-            )
+                  0, 1, Kind, 'kind',
+                  2, 9, 'count',
+                  10, 11, Direction, 'direction',
+                  12, 'same_widths')
 
     def attributes(cls):
         from hwp5.dataio import X_ARRAY
@@ -1559,8 +1544,7 @@ class HeaderFooter(Control):
     ''' 4.2.10.3. 머리말/꼬리말 '''
     Places = Enum(BOTH_PAGES=0, EVEN_PAGE=1, ODD_PAGE=2)
     Flags = Flags(UINT32,
-        0, 1, Places, 'places'
-    )
+                  0, 1, Places, 'places')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -1613,10 +1597,9 @@ class EndNote(Note):
 class NumberingControl(Control):
     Kind = Enum(PAGE=0, FOOTNOTE=1, ENDNOTE=2, PICTURE=3, TABLE=4, EQUATION=5)
     Flags = Flags(UINT32,
-            0, 3, Kind, 'kind',
-            4, 11, 'footnoteshape',
-            12, 'superscript',
-            )
+                  0, 3, Kind, 'kind',
+                  4, 11, 'footnoteshape',
+                  12, 'superscript')
 
     def attributes(cls):
         yield cls.Flags, 'flags',
@@ -1652,13 +1635,12 @@ class PageHide(Control):
     ''' 4.2.10.7 감추기 '''
     chid = CHID.PGHD
     Flags = Flags(UINT32,
-            0, 'header',
-            1, 'footer',
-            2, 'basepage',
-            3, 'pageborder',
-            4, 'pagefill',
-            5, 'pagenumber'
-            )
+                  0, 'header',
+                  1, 'footer',
+                  2, 'basepage',
+                  3, 'pageborder',
+                  4, 'pagefill',
+                  5, 'pagenumber')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -1670,8 +1652,7 @@ class PageOddEven(Control):
     chid = CHID.PGCT
     OddEven = Enum(BOTH_PAGES=0, EVEN_PAGE=1, ODD_PAGE=2)
     Flags = Flags(UINT32,
-        0, 1, OddEven, 'pages'
-        )
+                  0, 1, OddEven, 'pages')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -1682,14 +1663,13 @@ class PageNumberPosition(Control):
     ''' 4.2.10.9. 쪽 번호 위치 '''
     chid = CHID.PGNP
     Position = Enum(NONE=0,
-            TOP_LEFT=1, TOP_CENTER=2, TOP_RIGHT=3,
-            BOTTOM_LEFT=4, BOTTOM_CENTER=5, BOTTOM_RIGHT=6,
-            OUTSIDE_TOP=7, OUTSIDE_BOTTOM=8,
-            INSIDE_TOP=9, INSIDE_BOTTOM=10)
+                    TOP_LEFT=1, TOP_CENTER=2, TOP_RIGHT=3,
+                    BOTTOM_LEFT=4, BOTTOM_CENTER=5, BOTTOM_RIGHT=6,
+                    OUTSIDE_TOP=7, OUTSIDE_BOTTOM=8,
+                    INSIDE_TOP=9, INSIDE_BOTTOM=10)
     Flags = Flags(UINT32,
-        0, 7, 'shape',
-        8, 11, Position, 'position',
-        )
+                  0, 7, 'shape',
+                  8, 11, Position, 'position')
 
     def attributes(cls):
         yield cls.Flags, 'flags'
@@ -1780,10 +1760,9 @@ class Field(Control):
     ''' 4.2.10.15 필드 시작 '''
 
     Flags = Flags(UINT32,
-            0, 'editableInReadOnly',
-            11, 14, 'visitedType',
-            15, 'modified',
-            )
+                  0, 'editableInReadOnly',
+                  11, 14, 'visitedType',
+                  15, 'modified')
 
     def attributes(cls):
         yield cls.Flags, 'flags',
@@ -1882,6 +1861,7 @@ def init_record_parsing_context(base, record):
 
 
 from hwp5.bintype import parse_model
+
 
 def parse_models_with_parent(context_models):
     from .treeop import prefix_ancestors_from_level

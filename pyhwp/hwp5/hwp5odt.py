@@ -32,7 +32,8 @@ Options::
     --logfile=<file>    Set log file.
 '''
 from __future__ import with_statement
-import os, os.path
+import os
+import os.path
 import logging
 
 
@@ -216,7 +217,7 @@ class Converter(object):
             bindata = hwp5file['BinData']
             for name in bindata:
                 f = bindata[name].open()
-                yield f, 'bindata/'+name, 'application/octet-stream'
+                yield f, 'bindata/' + name, 'application/octet-stream'
 
 
 def make(convert, args):
@@ -229,7 +230,7 @@ def make(convert, args):
     hwpfile = Hwp5File(hwpfilename)
 
     try:
-        odtpkg = ODTPackage(root+'.odt')
+        odtpkg = ODTPackage(root + '.odt')
         try:
             convert(hwpfile, odtpkg, args['--embed-image'])
         finally:
@@ -248,31 +249,35 @@ def manifest_xml(f, files):
     xml.startPrefixMapping(prefix, uri)
 
     def startElement(name, attrs):
-        attrs = dict( ((uri, n), v) for n, v in attrs.iteritems() )
-        xml.startElementNS( (uri, name), prefix+':'+name, attrs)
+        attrs = dict(((uri, n), v) for n, v in attrs.iteritems())
+        xml.startElementNS((uri, name), prefix + ':' + name, attrs)
+
     def endElement(name):
-        xml.endElementNS( (uri, name), prefix+':'+name)
+        xml.endElementNS((uri, name), prefix + ':' + name)
 
     def file_entry(full_path, media_type, **kwargs):
         attrs = {'media-type': media_type, 'full-path': full_path}
-        attrs.update(dict((n.replace('_', '-'), v) for n, v in kwargs.iteritems()))
+        attrs.update(dict((n.replace('_', '-'), v)
+                          for n, v in kwargs.iteritems()))
         startElement('file-entry', attrs)
         endElement('file-entry')
 
-    startElement( 'manifest', dict(version='1.2') )
+    startElement('manifest', dict(version='1.2'))
     file_entry('/', 'application/vnd.oasis.opendocument.text', version='1.2')
     for e in files:
         e = dict(e)
         full_path = e.pop('full_path')
         media_type = e.pop('media_type', 'application/octet-stream')
         file_entry(full_path, media_type)
-    endElement( 'manifest' )
+    endElement('manifest')
 
     xml.endPrefixMapping(prefix)
     xml.endDocument()
 
+
 def manifest_rdf(f):
     f.write('''<?xml version="1.0" encoding="utf-8"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><ns1:Document xmlns:ns1="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" rdf:about=""><ns1:hasPart rdf:resource="content.xml"/><ns1:hasPart rdf:resource="styles.xml"/></ns1:Document><ns2:ContentFile xmlns:ns2="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" rdf:about="content.xml"/><ns3:StylesFile xmlns:ns3="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" rdf:about="styles.xml"/></rdf:RDF>''')
+
 
 def mimetype(f):
     f.write('application/vnd.oasis.opendocument.text')

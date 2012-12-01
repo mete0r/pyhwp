@@ -17,8 +17,10 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 class STARTEVENT: pass
 class ENDEVENT: pass
+
 
 def prefix_event(level_prefixed_items, root_item=None):
     ''' convert iterable of (level, item) into iterable of (event, item)
@@ -35,7 +37,8 @@ def prefix_event(level_prefixed_items, root_item=None):
         while level + 1 < len(stack):
             yield ENDEVENT, stack.pop()
         while len(stack) < level + 1:
-            raise Exception('invalid level: %d, %d, %s'%(level, len(stack)-1, item))
+            raise Exception('invalid level: %d, %d, %s' %
+                            (level, len(stack) - 1, item))
         assert(len(stack) == level + 1)
 
         stack.append(item)
@@ -43,6 +46,7 @@ def prefix_event(level_prefixed_items, root_item=None):
 
     while 1 < len(stack):
         yield ENDEVENT, stack.pop()
+
 
 def prefix_ancestors(event_prefixed_items, root_item=None):
     ''' convert iterable of (event, item) into iterable of (ancestors, item)
@@ -53,7 +57,8 @@ def prefix_ancestors(event_prefixed_items, root_item=None):
             yield stack, item
             stack.append(item)
         elif event is ENDEVENT:
-            parent = stack.pop()
+            stack.pop()
+
 
 def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
     ''' convert iterable of (level, item) into iterable of (ancestors, item)
@@ -73,11 +78,13 @@ def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
         while level + 1 < len(stack):
             stack.pop()
         while len(stack) < level + 1:
-            raise Exception('invalid level: %d, %d, %s'%(level, len(stack)-1, item))
+            raise Exception('invalid level: %d, %d, %s' %
+                            (level, len(stack) - 1, item))
         assert(len(stack) == level + 1)
 
         yield stack, item
         stack.append(item)
+
 
 def build_subtree(event_prefixed_items):
     ''' build a tree from (event, item) stream
@@ -133,10 +140,10 @@ def tree_events(rootitem, childs):
         yield k
     yield ENDEVENT, rootitem
 
+
 def tree_events_multi(trees):
     ''' generate tuples of (event, item) from trees
     '''
     for rootitem, childs in trees:
         for k in tree_events(rootitem, childs):
             yield k
-

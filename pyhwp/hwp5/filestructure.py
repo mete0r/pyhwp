@@ -33,12 +33,13 @@ logger = logging.getLogger(__name__)
 StringIO = importStringIO()
 
 
-HWP5_SIGNATURE = 'HWP Document File'+('\x00'*15)
+HWP5_SIGNATURE = 'HWP Document File' + ('\x00' * 15)
 
 
 class BYTES(type):
     def __new__(mcs, size):
-        return type.__new__(mcs, 'BYTES(%d)' % size, (str,), dict(fixed_size=size))
+        return type.__new__(mcs, 'BYTES(%d)' % size, (str,),
+                            dict(fixed_size=size))
 
 
 class VERSION(object):
@@ -52,19 +53,18 @@ class VERSION(object):
 
 class FileHeader(Struct):
     Flags = Flags(UINT32,
-        0, 'compressed',
-        1, 'password',
-        2, 'distributable',
-        3, 'script',
-        4, 'drm',
-        5, 'xmltemplate_storage',
-        6, 'history',
-        7, 'cert_signed',
-        8, 'cert_encrypted',
-        9, 'cert_signature_extra',
-        10, 'cert_drm',
-        11, 'ccl',
-        )
+                  0, 'compressed',
+                  1, 'password',
+                  2, 'distributable',
+                  3, 'script',
+                  4, 'drm',
+                  5, 'xmltemplate_storage',
+                  6, 'history',
+                  7, 'cert_signed',
+                  8, 'cert_encrypted',
+                  9, 'cert_signature_extra',
+                  10, 'cert_drm',
+                  11, 'ccl')
 
     def attributes(cls):
         yield BYTES(32), 'signature'
@@ -489,6 +489,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
     def open_text(self):
         out = StringIO()
+
         def uuid_from_bytes_tuple(t):
             from uuid import UUID
             return UUID(bytes_le=''.join(chr(x) for x in t))

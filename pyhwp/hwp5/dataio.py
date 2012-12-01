@@ -29,8 +29,11 @@ logger = logging.getLogger(__name__)
 class Eof(Exception):
     def __init__(self, *args):
         self.args = args
+
+
 class OutOfData(Exception):
     pass
+
 
 def readn(f, size):
     data = f.read(size)
@@ -72,6 +75,7 @@ class PrimitiveType(type):
 
         if 'fixed_size' in attrs and 'read' not in attrs:
             fixed_size = attrs['fixed_size']
+
             def read(cls, f):
                 s = readn(f, fixed_size)
                 decode = getattr(cls, 'decode', None)
@@ -105,7 +109,7 @@ HWPUNIT16 = Primitive('HWPUNIT16', int, '<h')
 inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
 hwp2inch = lambda x: x / 7200.0
 hwp2mm = lambda x: inch2mm(hwp2inch(x))
-hwp2pt = lambda x: int( (x/100.0)*10 + 0.5)/10.0
+hwp2pt = lambda x: int((x / 100.0) * 10 + 0.5) / 10.0
 
 
 def decode_uint16le_array_default(bytes):
@@ -141,7 +145,7 @@ class BSTR(unicode):
         size = UINT16.read(f)
         if size == 0:
             return u''
-        data = readn(f, 2*size)
+        data = readn(f, 2 * size)
         return decode_utf16le_with_hypua(data)
     read = staticmethod(read)
 
@@ -176,7 +180,8 @@ class BitGroupDescriptor(object):
         valuetype = self.valuetype
         lsb = self.lsb
         msb = self.msb
-        return valuetype(int(instance >> lsb) & int( (2**(msb+1-lsb)) - 1))
+        return valuetype(int(instance >> lsb) &
+                         int((2 ** (msb + 1 - lsb)) - 1))
 
 
 class FlagsType(type):
@@ -184,7 +189,8 @@ class FlagsType(type):
         basetype = attrs.pop('basetype')
         bases = (basetype.basetype,)
 
-        bitgroups = dict((k, BitGroupDescriptor(v)) for k, v in attrs.iteritems())
+        bitgroups = dict((k, BitGroupDescriptor(v))
+                         for k, v in attrs.iteritems())
 
         attrs = dict(bitgroups)
         attrs['__name__'] = name
@@ -221,37 +227,41 @@ def _parse_flags_args(args):
                 idx, lsb = args.next()
             except StopIteration:
                 break
-            assert isinstance(lsb, int), '#%d arg is expected to be a int: %s'%(idx, repr(lsb))
+            assert isinstance(lsb, int), ('#%d arg is expected to be'
+                                          'a int: %s' % (idx, repr(lsb)))
 
             # msb (default: lsb)
             idx, x = args.next()
             if isinstance(x, int):
                 msb = x
             elif isinstance(x, (type, basestring)):
-                args.send(x) # pushback
+                args.send(x)  # pushback
                 msb = lsb
             else:
-                assert False, '#%d arg is unexpected type: %s'%(idx, repr(x))
+                assert False, '#%d arg is unexpected type: %s' % (idx, repr(x))
 
             # type (default: int)
             idx, x = args.next()
-            assert not isinstance(x, int), '#%d args is expected to be a type or name: %s'%(idx, repr(x))
+            assert not isinstance(x, int), ('#%d args is expected to be a type'
+                                            'or name: %s' % (idx, repr(x)))
             if isinstance(x, type):
                 t = x
             elif isinstance(x, basestring):
-                args.send(x) # pushback
+                args.send(x)  # pushback
                 t = int
             else:
-                assert False, '#%d arg is unexpected type: %s'%(idx, repr(x))
+                assert False, '#%d arg is unexpected type: %s' % (idx, repr(x))
 
             # name
             idx, name = args.next()
-            assert isinstance(name, basestring), '#%d args is expected to be a name: %s'%(idx, repr(name))
+            assert isinstance(name, basestring), ('#%d args is expected to be '
+                                                  'a name: %s' % (idx,
+                                                                  repr(name)))
 
             yield name, (lsb, msb, t)
 
     except StopIteration:
-        assert False, '#%d arg is expected'%(idx+1)
+        assert False, '#%d arg is expected' % (idx + 1)
 
 
 def Flags(basetype, *args):
@@ -261,6 +271,8 @@ def Flags(basetype, *args):
 
 
 enum_type_instances = set()
+
+
 class EnumType(type):
     def __new__(mcs, enum_type_name, bases, attrs):
         items = attrs.pop('items')
@@ -271,6 +283,7 @@ class EnumType(type):
         names_by_instance = dict()
         instances_by_name = dict()
         instances_by_value = dict()
+
         def __new__(cls, value, name=None):
             if isinstance(value, cls):
                 return value
@@ -309,13 +322,14 @@ class EnumType(type):
                 return names_by_instance.get(instance)
 
         attrs['name'] = NameDescriptor()
+
         def __repr__(self):
             enum_name = type(self).__name__
             item_name = self.name
             if item_name is not None:
-                return enum_name+'.'+item_name
+                return enum_name + '.' + item_name
             else:
-                return '%s(%d)'%(enum_name, self)
+                return '%s(%d)' % (enum_name, self)
         attrs['__repr__'] = __repr__
 
         cls = type.__new__(mcs, enum_type_name, bases, attrs)
@@ -473,16 +487,17 @@ class ParseError(Exception):
                     offset_end = member.get('offset_end', 1)
                     name = member['name']
                     value = member['value']
-                    logger.error('    %06x:%06x: %s = %s', offset, offset_end-1, name,
-                                  value)
+                    logger.error('    %06x:%06x: %s = %s',
+                                 offset, offset_end - 1, name, value)
                 logger.error('    %06x:      : %s', c['offset'], c['member'])
                 pass
             else:
-                logger.error('  %s%s', ' '*level, c)
+                logger.error('  %s%s', ' ' * level, c)
 
 
 def typed_struct_attributes(struct, attributes, context):
     attributes = dict(attributes)
+
     def popvalue(member):
         name = member['name']
         if name in attributes:
@@ -560,38 +575,44 @@ def dumpbytes(data, crust=False):
         yield '\t 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F'
     while len(data) > 16:
         if crust:
-            line = '%05x0: '%offsbase
+            line = '%05x0: ' % offsbase
         else:
             line = ''
-        line += ' '.join(['%02x'%ord(ch) for ch in data[0:16]]) 
+        line += ' '.join(['%02x' % ord(ch) for ch in data[0:16]])
         yield line
         data = data[16:]
         offsbase += 1
 
     if crust:
-        line = '%05x0: '%offsbase
+        line = '%05x0: ' % offsbase
     else:
         line = ''
-    line += ' '.join(['%02x'%ord(ch) for ch in data]) 
+    line += ' '.join(['%02x' % ord(ch) for ch in data])
     yield line
+
 
 def hexdump(data, crust=False):
     return '\n'.join([line for line in dumpbytes(data, crust)])
+
 
 class IndentedOutput:
     def __init__(self, base, level):
         self.base = base
         self.level = level
+
     def write(self, x):
         for line in x.split('\n'):
             if len(line) > 0:
-                self.base.write('\t'*self.level)
+                self.base.write('\t' * self.level)
                 self.base.write(line)
                 self.base.write('\n')
+
+
 class Printer:
     def __init__(self, baseout):
         self.baseout = baseout
+
     def prints(self, *args):
         for x in args:
-            self.baseout.write( str(x) + ' ')
+            self.baseout.write(str(x) + ' ')
         self.baseout.write('\n')

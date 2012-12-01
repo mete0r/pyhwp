@@ -27,15 +27,15 @@ enabled = None
 
 
 def xslt_reachable():
-   from subprocess import Popen
-   args = [executable, '--version']
-   try:
-       p = Popen(args)
-   except:
-       return False
-   else:
-       p.wait()
-       return True
+    from subprocess import Popen
+    args = [executable, '--version']
+    try:
+        p = Popen(args)
+    except:
+        return False
+    else:
+        p.wait()
+        return True
 
 
 def is_enabled():
@@ -56,11 +56,11 @@ def disable():
 
 
 def xslt(xsl_path, inp_path, out_path):
-   from subprocess import Popen
-   args = [executable, '-o', out_path, xsl_path, inp_path]
-   p = Popen(args)
-   p.wait()
-   if p.returncode == 0:
-       return dict()
-   else:
-       return dict(errors=[])
+    from subprocess import Popen
+    args = [executable, '-o', out_path, xsl_path, inp_path]
+    p = Popen(args)
+    p.wait()
+    if p.returncode == 0:
+        return dict()
+    else:
+        return dict(errors=[])

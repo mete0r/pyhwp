@@ -17,6 +17,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 def open_url(context, url):
     ''' open InputStream from a URL.
 
@@ -34,16 +35,19 @@ def open_url(context, url):
 
     import unohelper
     from com.sun.star.io import XActiveDataSink
+
     class DataSink(unohelper.Base, XActiveDataSink):
         def setInputStream(self, stream):
             self.stream = stream
+
         def getInputStream(self):
             return self.stream
+
     datasink = DataSink()
 
     from com.sun.star.ucb import Command, OpenCommandArgument2
     openargs = OpenCommandArgument2()
-    openargs.Mode = 2 # OpenMode.DOCUMENT
+    openargs.Mode = 2  # OpenMode.DOCUMENT
     openargs.Priority = 32768
     openargs.Sink = datasink
 
