@@ -197,6 +197,8 @@ def original_pythonpath():
         yield
         os.environ['BUILDOUT_ORIGINAL_PYTHONPATH'] = os.environ['PYTHONPATH']
         os.environ['PYTHONPATH'] = buildout_pythonpath
+    else:
+        yield
 
 
 class Discover(object):
