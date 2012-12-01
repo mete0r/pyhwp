@@ -5,11 +5,11 @@ from unittest import TestCase
 class TestBase(TestCase):
 
     def get_fixture_path(self, filename):
-        from hwp5.tests import get_fixture_path
+        from hwp5.tests.fixtures import get_fixture_path
         return get_fixture_path(filename)
 
     def open_fixture(self, filename, *args, **kwargs):
-        from hwp5.tests import open_fixture
+        from hwp5.tests.fixtures import open_fixture
         return open_fixture(filename, *args, **kwargs)
 
 

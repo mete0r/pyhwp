@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 import unittest
-from hwp5.tests.mixin_xslt import XsltTestMixin
+from mixin_xslt import XsltTestMixin
 
 
 class TestPlatJavaxTransform(unittest.TestCase, XsltTestMixin):

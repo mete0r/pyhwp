@@ -2,7 +2,7 @@
 import os
 import os.path
 import shutil
-from hwp5.tests import test_xmlmodel
+import test_xmlmodel
 
 
 class TestBase(test_xmlmodel.TestBase):

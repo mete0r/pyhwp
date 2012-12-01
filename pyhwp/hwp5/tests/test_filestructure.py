@@ -2,7 +2,7 @@
 from unittest import TestCase
 from hwp5 import filestructure as FS
 from hwp5.utils import cached_property
-from hwp5.tests import test_ole
+import test_ole
 
 class TestBase(test_ole.TestBase):
 
