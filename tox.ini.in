@@ -7,6 +7,7 @@ envlist = py25,py26,py27,jy25,lo
 deps=nose
      coverage
 commands=
+	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{envpython} {toxinidir}/bin/install-lxml-{envname}.py {envtmpdir}
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
@@ -27,6 +28,7 @@ basepython=${python27:executable}
 setenv=JYTHONPATH=${java-poi:location}/poi-3.8-20120326.jar
 basepython=${jython25:executable}
 commands =
+	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{envpython} -c 'from org.apache.poi.poifs.filesystem import POIFSFileSystem'
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
@@ -45,6 +47,7 @@ setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
        PYHWP_PLAT_UNO=1
 basepython=${lo:uno_python}
 commands=
+	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{envpython} {toxinidir}/unokit/setup.py develop
 	{envpython} {toxinidir}/tools/oxt.tool/setup.py develop
