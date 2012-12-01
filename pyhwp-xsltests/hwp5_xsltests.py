@@ -4,7 +4,7 @@ import os.path
 import logging
 
 
-logger = logging.getLogger('hwp5.xunits')
+logger = logging.getLogger('hwp5.xsltests')
 
 
 def find_hwp5files(dir):
@@ -30,7 +30,7 @@ def prepare():
     args = docopt(doc, version='0.0')
 
     logging.getLogger().addHandler(logging.StreamHandler())
-    logging.getLogger('hwp5.xunits').setLevel(logging.INFO)
+    logging.getLogger('hwp5.xsltests').setLevel(logging.INFO)
 
     if args['--fixtures-dir']:
         fixture_dir = args['--fixtures-dir']

@@ -49,8 +49,8 @@ def pretty_print(elem):
 doc = ''' XUnit test
 
 Usage:
-    xunit [--styles-dir=<dir>] [--import-dir=<dir>] [--gen-dir=<dir>] <files>...
-    xunit --help
+    xsltest [--styles-dir=<dir>] [--import-dir=<dir>] [--gen-dir=<dir>] <files>...
+    xsltest --help
 
 Options:
     -h --help               Show this screen
@@ -119,10 +119,10 @@ def generate_testsuite_py(filename, context_tests):
 
 def generate_testsuite_source(context_tests):
     yield '# -*- coding: utf-8 -*-'
-    yield 'import xunit'
+    yield 'import %s' % __name__
     yield ''
     yield ''
-    yield 'class Test(xunit.TestCase):'
+    yield 'class Test(%s.TestCase):' % __name__
     yield ''
     for context_test in context_tests:
         for line in context_test.generate_testcase_py(None):
@@ -478,7 +478,7 @@ class ContextTransform(object):
         return cls(params)
 
     def gen_instantiate(self):
-        return 'xunit.%s(%r)' % (type(self).__name__, self.__dict__)
+        return '%s.%s(%r)' % (__name__, type(self).__name__, self.__dict__)
 
 
 @context_handler(CONTEXT, 'hwp5-to-xml')
