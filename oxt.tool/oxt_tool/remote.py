@@ -80,6 +80,7 @@ def connect_remote_context(uno_link, max_tries=10):
     from unokit.services import css
     resolver = css.bridge.UnoUrlResolver()
     uno_url = 'uno:'+uno_link+'StarOffice.ComponentContext'
+    logger.info('uno_url: %s', uno_url)
     from com.sun.star.connection import NoConnectException
     while True:
         max_tries -= 1
@@ -89,7 +90,7 @@ def connect_remote_context(uno_link, max_tries=10):
         except NoConnectException, e:
             if max_tries <= 0:
                 raise
-            logging.info('%s - retrying', type(e).__name__)
+            logger.info('%s - retrying', type(e).__name__)
 
             import time
             time.sleep(1)
@@ -97,7 +98,7 @@ def connect_remote_context(uno_link, max_tries=10):
 
 
 @contextlib.contextmanager
-def new_remote_context(pipe='oxt.tool', retry=10, make_current=True, **kwargs):
+def new_remote_context(pipe='oxt.tool', retry=3, make_current=True, **kwargs):
     ''' Create a remote soffice instance and get its context
 
     :param pipe: connection pipe name
@@ -112,17 +113,27 @@ def new_remote_context(pipe='oxt.tool', retry=10, make_current=True, **kwargs):
     logger.debug('uno_link: %s', uno_link)
 
     kwargs['accept'] = uno_link
-    with soffice_subprocess(**kwargs):
-        context = connect_remote_context(uno_link, retry)
-        if make_current:
-            import unokit.contexts
-            unokit.contexts.push(context)
+    while retry >= 0:
+        with soffice_subprocess(**kwargs):
+            import time
+            time.sleep(1)
             try:
+                context = connect_remote_context(uno_link, max_tries=10)
+            except Exception, e:
+                logger.exception(e)
+                retry -= 1
+                continue
+
+            if make_current:
+                import unokit.contexts
+                unokit.contexts.push(context)
+                try:
+                    yield context
+                finally:
+                    unokit.contexts.pop()
+            else:
                 yield context
-            finally:
-                unokit.contexts.pop()
-        else:
-            yield context
+            return
 
 
 class RemoteContextLayer:

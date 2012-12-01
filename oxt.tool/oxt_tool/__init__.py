@@ -213,6 +213,10 @@ def run_in_lo(soffice='soffice'):
     logger.addHandler(logging.StreamHandler())
     logger.setLevel(logging.INFO)
 
+    logger = logging.getLogger('oxt_tool')
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel(logging.INFO)
+
     logfmt = logging.Formatter(('frontend %5d ' % os.getpid())
                                +'%(message)s')
     logchn = logging.StreamHandler()
