@@ -13,6 +13,8 @@ if __name__ == '__main__':
         execfile('bootstrap.py')
     if os.system(buildout):
         raise SystemExit(1)
+    if os.path.exists('MANIFEST'):
+        os.unlink('MANIFEST')
     if os.system(tox):
         raise SystemExit(1)
 
