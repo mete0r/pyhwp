@@ -51,6 +51,10 @@ if not has_broken_dash_S and 'site' in sys.modules:
     args = sys.argv[:]
     args[0:0] = [sys.executable, '-S']
     args = map(quote, args)
+    if sys.platform == 'win32':
+        p = subprocess.Popen(args)
+        p.wait()
+        raise SystemExit(p.returncode)
     os.execv(sys.executable, args)
 # Now we are running with -S.  We'll get the clean sys.path, import site
 # because distutils will do it later, and then reset the path and clean

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import sys
 
 if __name__ == '__main__':
     import os
     import os.path
     buildout = os.path.join('bin', 'buildout')
     tox = os.path.join('bin', 'tox')
+    if sys.platform == 'win32':
+        buildout += '.exe'
+        tox += '.exe'
     if not os.path.exists(buildout):
         execfile('bootstrap.py')
     if os.system(buildout):
