@@ -47,7 +47,7 @@ basepython=${lo:uno_python}
 commands=
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{envpython} {toxinidir}/unokit/setup.py develop
-	{envpython} {toxinidir}/oxt.tool/setup.py develop
+	{envpython} {toxinidir}/tools/oxt.tool/setup.py develop
 	{envpython} {toxinidir}/pyhwp-xunits/setup.py develop
 	run-in-lo {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase
         {toxinidir}/bin/coverage combine
