@@ -41,7 +41,7 @@ commands =
         {toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/xsltests {toxinidir}/pyhwp-xsltests
 
 [testenv:lo]
-setenv=PATH={env:PATH}${lo:pathsep}${lo:program}${lo:pathsep}${lo:ure}/bin
+setenv=PATH={env:PATH}${constants:pathsep}${lo:program}${constants:pathsep}${lo:ure}${constants:sep}bin
        UNO_PYTHONPATH=${lo:uno_pythonpath}
        LO_PROGRAM=${lo:program}
        PYHWP_PLAT_UNO=1
