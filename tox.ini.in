@@ -52,9 +52,9 @@ commands=
 	{envpython} {toxinidir}/unokit/setup.py develop
 	{envpython} {toxinidir}/tools/oxt.tool/setup.py develop
 	{envpython} {toxinidir}/pyhwp-xsltests/setup.py develop
-	run-in-lo {envbindir}/nosetests -v -w {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase
+	run-in-lo {envbindir}/nosetests${constants:script_py_suffix} -v -w {envtmpdir} {toxinidir}/pyhwp {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package={toxinidir} --cover-erase
         {toxinidir}/bin/coverage combine
         {toxinidir}/bin/coverage report
         {toxinidir}/bin/coverage xml -i -o {envtmpdir}/coverage.xml --omit='/usr/*','parts/*'
-	run-in-lo {envbindir}/prepare-hwp5-xsltests --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
+	run-in-lo {envbindir}/prepare-hwp5-xsltests${constants:script_py_suffix} --fixtures-dir={toxinidir}/pyhwp/hwp5/tests/fixtures --out-dir={envtmpdir}
 	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/xsltests {toxinidir}/pyhwp-xsltests
