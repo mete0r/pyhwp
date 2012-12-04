@@ -11,8 +11,8 @@ commands=
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{envpython} {toxinidir}/bin/install-lxml-{envname}.py {envtmpdir}
 	{envbindir}/coverage run -p --source=hwp5,hwp5_tests {envbindir}/nosetests${constants:script_py_suffix} -v -w {envtmpdir} {toxinidir}/pyhwp-tests --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
-	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}
-        {toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/xsltests {toxinidir}/pyhwp-xsltests
+	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
+	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
 
 [testenv:py25]
 basepython=${python25:executable}
@@ -35,8 +35,8 @@ commands =
 # 따라서 --source 대신 -L을 주어 모든 파일에 대해 coverage 결과를 얻은 후,
 # coverage xml에서 필터링한다.
 	{envbindir}/coverage run -p -L {envbindir}/nosetests${constants:script_py_suffix} -v -w {envtmpdir} {toxinidir}/pyhwp-tests --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
-	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}
-        {toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/xsltests {toxinidir}/pyhwp-xsltests
+	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
+        {toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
 
 [testenv:lo]
 setenv=PATH={env:PATH}${constants:pathsep}${lo:program}${constants:pathsep}${lo:ure}${constants:sep}bin
@@ -50,5 +50,5 @@ commands=
 	{envpython} {toxinidir}/unokit/setup.py develop
 	{envpython} {toxinidir}/tools/oxt.tool/setup.py develop
 	run-in-lo {envbindir}/nosetests${constants:script_py_suffix} -v -w {envtmpdir} {toxinidir}/pyhwp-tests {toxinidir}/unokit {toxinidir}/pyhwp_uno --logging-conf={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml --with-coverage --cover-package=hwp5,hwp5_tests,hwp5_uno,unokit --cover-tests
-	run-in-lo {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}
-	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir} --gen-dir={envtmpdir}/xsltests {toxinidir}/pyhwp-xsltests
+	run-in-lo {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
+	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
