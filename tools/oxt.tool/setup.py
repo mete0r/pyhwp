@@ -18,6 +18,10 @@ try:
                   'oxt-manifest-ls = oxt_tool.manifest:ls_main',
                   'oxt-manifest-add = oxt_tool.manifest:add_main',
                   'oxt-manifest-rm = oxt_tool.manifest:rm_main',
+                  'oxt-desc-init = oxt_tool.description:init_main',
+                  'oxt-desc-show = oxt_tool.description:show_main',
+                  'oxt-desc-version = oxt_tool.description:version_main',
+                  'oxt-desc-ls = oxt_tool.description:ls_main',
               ],
               'zc.buildout': [
                   'installer = oxt_tool:Installer'
