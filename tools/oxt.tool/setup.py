@@ -5,7 +5,7 @@ os.chdir(os.path.dirname(__file__))
 try:
     from setuptools import setup, find_packages
     setup(name='oxt.tool',
-          install_requires=['unokit', 'discover'],
+          install_requires=['docopt', 'unokit', 'discover'],
           packages=find_packages(),
           entry_points = {
               'console_scripts': [
@@ -14,6 +14,10 @@ try:
                   'oxt-storage-ls = oxt_tool.storage:ls_main',
                   'oxt-storage-put = oxt_tool.storage:put_main',
                   'oxt-storage-get = oxt_tool.storage:get_main',
+                  'oxt-manifest-init = oxt_tool.manifest:init_main',
+                  'oxt-manifest-ls = oxt_tool.manifest:ls_main',
+                  'oxt-manifest-add = oxt_tool.manifest:add_main',
+                  'oxt-manifest-rm = oxt_tool.manifest:rm_main',
               ],
               'zc.buildout': [
                   'installer = oxt_tool:Installer'
