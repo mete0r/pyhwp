@@ -22,6 +22,10 @@ try:
                   'oxt-desc-show = oxt_tool.description:show_main',
                   'oxt-desc-version = oxt_tool.description:version_main',
                   'oxt-desc-ls = oxt_tool.description:ls_main',
+                  'oxt-pkg-init = oxt_tool.package:init_main',
+                  'oxt-pkg-show = oxt_tool.package:show_main',
+                  'oxt-pkg-build = oxt_tool.package:build_main',
+                  'oxt-pkg-check = oxt_tool.package:check_main',
               ],
               'zc.buildout': [
                   'installer = oxt_tool:Installer'
