@@ -3,7 +3,13 @@ DIST_DIR=${buildout:directory}/dist
 SRC_DIR=${buildout:directory}/oxt
 BIN_DIR=${buildout:directory}/bin
 VERSION=`git describe --dirty`
+OUTPUT=$DIST_DIR/hwp5-$VERSION.oxt
 
 [ ! -e $DIST_DIR ] && mkdir $DIST_DIR
-$BIN_DIR/oxt-make $DIST_DIR/hwp5-$VERSION.oxt $SRC_DIR
-ln -sf $DIST_DIR/hwp5-$VERSION.oxt $DIST_DIR/hwp5.oxt
+cp $SRC_DIR/description.xml description.xml
+$BIN_DIR/oxt-desc-version description.xml $VERSION
+$BIN_DIR/oxt-pkg-build -d description.xml -o $OUTPUT $SRC_DIR pythonpath -E '*.pyc:*.class:*/docopt*:*/OleFileIO*:'
+$BIN_DIR/oxt-pkg-check $OUTPUT || exit 1
+$BIN_DIR/oxt-pkg-show $OUTPUT
+ln -sf $OUTPUT $DIST_DIR/hwp5.oxt
+rm -f description.xml
