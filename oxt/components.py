@@ -187,7 +187,7 @@ try:
         def test_detect(self):
             context = uno.getComponentContext()
 
-            from hwp5.tests import open_fixture
+            from hwp5.tests.fixtures import open_fixture
             f = open_fixture('sample-5017.hwp', 'rb')
             stream = InputStreamFromFileLike(f)
             mediadesc = dict_to_propseq(dict(InputStream=stream))
@@ -201,7 +201,7 @@ try:
 
         def test_filter(self):
             context = uno.getComponentContext()
-            from hwp5.tests import open_fixture
+            from hwp5.tests.fixtures import open_fixture
             f = open_fixture('sample-5017.hwp', 'rb')
             stream = InputStreamFromFileLike(f)
             mediadesc = dict_to_propseq(dict(InputStream=stream))

@@ -188,14 +188,6 @@ class LoEnviron(object):
         return 'vnd.sun.star.pathname:' + self.fundamentalrc
 
 
-def fixup_script_name(script_name):
-    import sys
-    if sys.platform == 'win32':
-        return script_name + '-script.py'
-    else:
-        return script_name
-
-
 def run_in_lo(soffice='soffice'):
     import os
     import sys
@@ -238,7 +230,6 @@ def run_in_lo(soffice='soffice'):
     else:
         logfile = None
     argv[0] = os.path.abspath(argv[0])
-    argv[0] = fixup_script_name(argv[0])
     print argv
 
     backend_path = sys.modules['oxt_tool'].__file__

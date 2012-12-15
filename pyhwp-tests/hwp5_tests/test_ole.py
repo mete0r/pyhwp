@@ -8,11 +8,11 @@ class TestBase(TestCase):
     hwp5file_name = 'sample-5017.hwp'
 
     def get_fixture_file(self, filename):
-        from hwp5.tests import get_fixture_path
+        from fixtures import get_fixture_path
         return get_fixture_path(filename)
 
     def open_fixture(self, filename, *args, **kwargs):
-        from hwp5.tests import open_fixture
+        from fixtures import open_fixture
         return open_fixture(filename, *args, **kwargs)
 
     @property

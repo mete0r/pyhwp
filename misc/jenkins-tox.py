@@ -15,8 +15,19 @@ if __name__ == '__main__':
         raise SystemExit(1)
     if os.path.exists('MANIFEST'):
         os.unlink('MANIFEST')
+
+    coverage = os.path.join('bin', 'coverage')
+    os.system(coverage + ' erase')
+
     if os.system(tox):
         raise SystemExit(1)
+
+    os.system(coverage + ' combine')
+    os.system(coverage + ' xml -i -o coverage-original.xml --include="*hwp5*","*unokit*"')
+    os.system(' '.join([sys.executable,
+                        os.path.join('misc', 'fix-coverage.py'),
+                        'coverage-original.xml',
+                        'coverage.xml']))
 
     from subprocess import Popen
     pep8out = file('pep8.out', 'w')

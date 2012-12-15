@@ -11,7 +11,7 @@ class OleStorageTestMixin(object):
     OleStorage = None
 
     def get_fixture_file(self, filename):
-        from hwp5.tests import get_fixture_path
+        from fixtures import get_fixture_path
         return get_fixture_path(filename)
 
     @property

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from hwp5.tests import test_binmodel
+import test_binmodel
 from hwp5.utils import cached_property
 
 
@@ -234,7 +234,7 @@ class TestMatchFieldStartEnd(TestCase):
 
     def test_match_field_start_end(self):
         from hwp5 import binmodel, xmlmodel
-        from hwp5.tests import get_fixture_path
+        from fixtures import get_fixture_path
 
         path = get_fixture_path('match-field-start-end.dat')
         import pickle

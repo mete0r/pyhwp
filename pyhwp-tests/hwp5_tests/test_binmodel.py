@@ -2,7 +2,7 @@
 from unittest import TestCase
 from StringIO import StringIO
 
-from hwp5.tests import test_recordstream
+import test_recordstream
 from hwp5.recordstream import Record, read_records
 from hwp5.utils import cached_property
 from hwp5.binmodel import RecordModel

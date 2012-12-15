@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 import unittest
-from hwp5.tests.mixin_xslt import XsltTestMixin
-from hwp5.tests.mixin_relaxng import RelaxNGTestMixin
+from mixin_xslt import XsltTestMixin
+from mixin_relaxng import RelaxNGTestMixin
 
 
 class TestPlatLxml(unittest.TestCase, XsltTestMixin, RelaxNGTestMixin):

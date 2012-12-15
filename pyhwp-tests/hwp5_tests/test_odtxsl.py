@@ -2,7 +2,7 @@
 from unittest import TestCase
 
 def example(filename):
-    from hwp5.tests import get_fixture_path
+    from fixtures import get_fixture_path
     from hwp5.xmlmodel import Hwp5File
     path = get_fixture_path(filename)
     return Hwp5File(path)

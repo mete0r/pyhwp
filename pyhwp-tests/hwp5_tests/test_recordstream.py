@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from hwp5.tests import test_filestructure
+import test_filestructure
 from hwp5 import recordstream as RS
 from hwp5.utils import cached_property
 from hwp5.importhelper import importjson
