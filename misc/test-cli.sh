@@ -6,7 +6,7 @@ set -e
 # exit on uninitialized variable
 set -u
 
-SAMPLES_DIR=pyhwp/hwp5/tests/fixtures
+SAMPLES_DIR=pyhwp-tests/hwp5_tests/fixtures
 SAMPLE=$SAMPLES_DIR/sample-5017.hwp
 
 hwp5proc | head -n 1 | grep 'Do various'

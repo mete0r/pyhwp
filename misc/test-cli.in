@@ -1,2 +1,3 @@
 #!/bin/sh
-. ${buildout:directory}/misc/test-cli
+PATH=${buildout:bin-directory}:$PATH
+. ${buildout:directory}/misc/test-cli.sh
