@@ -109,10 +109,10 @@ def main(args):
 
             for model in models:
                 if all(condition(model) for condition in conditions):
-                    print '{0}:{1}({2}): {3}'.format(model['filename'],
-                                                     model['stream'],
-                                                     model['seqno'],
-                                                     model['type'].__name__)
+                    print '%s:%s(%s): %s' % (model['filename'],
+                                             model['stream'],
+                                             model['seqno'],
+                                             model['type'].__name__)
                     if args['--dump']:
                         from hwp5.binmodel import model_to_json
                         print model_to_json(model, sort_keys=True, indent=2)
