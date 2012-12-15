@@ -14,8 +14,8 @@ def main():
         logger.warning('skipping test-cli')
         return 0
 
-    d = os.path.dirname(__file__)
-    shscript = os.path.join(d, 'test-cli.sh')
+    d = 'pyhwp-tests'
+    shscript = os.path.join(d, 'hwp5_cli_tests.sh')
 
     cmd = ['/bin/sh', shscript]
     cmd = ' '.join(cmd)
