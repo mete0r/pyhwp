@@ -6,6 +6,7 @@ if (setuptools_python == null) {
 runtime = Runtime.getRuntime()
 
 def shellexec(cmd) {
+    println "executing " + cmd
     proc = runtime.exec(cmd)
     stdout = proc.getInputStream()
     stderr = proc.getErrorStream()
