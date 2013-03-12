@@ -25,7 +25,7 @@ basepython=${python26:executable}
 basepython=${python27:executable}
 
 [testenv:jy25]
-setenv=JYTHONPATH=${java-poi:location}/poi-3.8-20120326.jar
+setenv=JYTHONPATH=${java-poi:location}/${java-poi-package:jar}
 basepython=${jython25:executable}
 commands =
 	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
