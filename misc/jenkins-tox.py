@@ -9,7 +9,9 @@ if __name__ == '__main__':
     if sys.platform == 'win32':
         buildout += '.exe'
         tox += '.exe'
-    if not os.path.exists(buildout):
+    force_exec_bootstrap = ('EXEC_BOOTSTRAP_PY' in os.environ and
+                            os.environ['EXEC_BOOTSTRAP_PY'] == 'true')
+    if not os.path.exists(buildout) or force_exec_bootstrap:
         execfile('bootstrap.py')
     if os.system(buildout):
         raise SystemExit(1)
