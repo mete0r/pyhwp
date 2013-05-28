@@ -15,6 +15,7 @@
 
   <dependencies>
     <OpenOffice.org-minimal-version value="3.3"/>
+    <OpenOffice.org-maximal-version value="3.6"/>
   </dependencies>
 
   <registration>
