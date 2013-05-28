@@ -17,6 +17,7 @@ commands=
 
 [testenv:py25]
 basepython=${python25:executable}
+setenv=PIP_INSECURE=1
 
 [testenv:py26]
 basepython=${python26:executable}
@@ -26,6 +27,7 @@ basepython=${python27:executable}
 
 [testenv:jy25]
 setenv=JYTHONPATH=${java-poi:location}/${java-poi-package:jar}
+       PIP_INSECURE=1
 basepython=${jython25:executable}
 commands =
 	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
