@@ -115,6 +115,8 @@ def generate_html_file(xslt, xhwp5_path, html_path):
 
 
 def extract_bindata_dir(hwp5file, bindata_dir):
+    if 'BinData' not in hwp5file:
+        return
     bindata_stg = hwp5file['BinData']
     if not os.path.exists(bindata_dir):
         os.mkdir(bindata_dir)

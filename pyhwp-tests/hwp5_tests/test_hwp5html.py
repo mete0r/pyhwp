@@ -73,3 +73,14 @@ class HtmlConvTest(TestBase):
         from hwp5.storage.fs import FileSystemStorage
         self.assertEquals(set(bindata_stg),
                           set(FileSystemStorage(bindata_dir)))
+
+    def test_extract_bindata_dir_without_bindata(self):
+        self.hwp5file_name = 'charshape.hwp'
+        base_dir = self.make_base_dir()
+        hwp5file = self.hwp5file
+
+        bindata_dir = os.path.join(base_dir, 'bindata')
+
+        from hwp5.hwp5html import extract_bindata_dir
+        extract_bindata_dir(hwp5file, bindata_dir)
+        self.assertFalse(os.path.exists(bindata_dir))
