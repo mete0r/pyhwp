@@ -20,7 +20,7 @@
 
 Usage::
 
-    hwp5proc <command> [options] [<args>...]
+    hwp5proc <command> [<args>...]
     hwp5proc [--version]
     hwp5proc [--help]
     hwp5proc [--help-commands]
@@ -32,6 +32,8 @@ Usage::
 '''
 import sys
 import logging
+
+from docopt import docopt
 
 
 logger = logging.getLogger(__name__)
@@ -98,35 +100,6 @@ subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
                'records', 'models', 'find', 'xml', 'rawunz']
 
 
-def docopt(doc, version, argv=sys.argv[1:], help=True, **kwargs):
-    ''' docopt stub implementation
-    '''
-    if len(argv) == 0:
-        cmd = '--help'
-    else:
-        cmd = argv[0]
-
-    if cmd == '-h':
-        cmd = '--help'
-
-    if cmd == '--help' and help:
-        print doc
-        sys.exit(1)
-
-    if cmd == '--version':
-        print version
-        sys.exit(0)
-
-    args = dict()
-    args['<command>'] = cmd
-    args['--help-commands'] = False
-
-    if cmd == '--help-commands':
-        args['<command>'] = None
-        args['--help-commands'] = True
-    return args
-
-
 import hwp5
 version = '''hwp5proc (pyhwp) %s
 Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>
@@ -149,7 +122,7 @@ def main():
     doc = __doc__
     doc = rest_to_docopt(doc)
 
-    args = docopt(doc, version=version, help=False)
+    args = docopt(doc, version=version, help=False, options_first=True)
 
     if args['--help-commands']:
         print doc,
@@ -161,9 +134,7 @@ def main():
         print(doc.strip())
         return 1
 
-    i = sys.argv.index(command)
-    argv = sys.argv[i:]
-
+    argv = [command] + args['<args>']
     mod = __import__('hwp5.proc.'+command, fromlist=['main'])
     return mod.main(argv)
 

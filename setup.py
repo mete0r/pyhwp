@@ -22,7 +22,7 @@ try:
 except ImportError:
     install_requires.append('simplejson')
 
-install_requires.append('docopt >= 0.3')
+install_requires.append('docopt >= 0.6')
 install_requires.append('hypua2jamo >= 0.2')
 
 def read(filename):
