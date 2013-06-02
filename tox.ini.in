@@ -1,7 +1,7 @@
 [tox]
 toxworkdir={toxinidir}/parts/tox
 setupdir={toxinidir}
-envlist = py25,py26,py27,jy25
+envlist = py25,py26,py27,jython
 
 [testenv]
 deps=nose
@@ -16,19 +16,11 @@ commands=
 	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
 
 [testenv:py25]
-basepython=${python25:executable}
 setenv=PIP_INSECURE=1
 
-[testenv:py26]
-basepython=${python26:executable}
-
-[testenv:py27]
-basepython=${python27:executable}
-
-[testenv:jy25]
+[testenv:jython]
 setenv=JYTHONPATH=${java-poi:location}/${java-poi-package:jar}
        PIP_INSECURE=1
-basepython=${jython25:executable}
 commands =
 	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
