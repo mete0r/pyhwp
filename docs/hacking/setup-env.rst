@@ -38,20 +38,9 @@ environment. If you want to learn more about it, see `buildout
   Note that this requirement will be removed in the future. See `Issue #101
   <https://github.com/mete0r/pyhwp/issues/101>`_.
 
-* (optional) `tox <http://tox.testrun.org>`_ or `setuptools <http://pypi.python.org/pypi/setuptools>`_
+* (optional) `tox <http://tox.testrun.org>`_
 
-  If you want to run full-blown tests, install tox_ yourself or at least
-  setuptools_ in the base python. In later case, tox_ will be automatically
-  installed into the :file:`bin/` directory in later steps.
-
-* (optional) an Java Runtime Environment
-
-  If you want to play around pyhwp_ in `Jython <http://www.jython.org>`_, you
-  should've installed an JRE (Java Runtime Environment). For now `OpenJDK
-  <http://openjdk.java.net>`_ 1.6 seems to work. Then Jython_ will be
-  automatically installed in later steps.
-
-* (optional) `LibreOffice <http://www.libreoffice.org>`_
+  If you want to run full-blown tests, install tox_.
 
 2. Clone the source repository
 ------------------------------

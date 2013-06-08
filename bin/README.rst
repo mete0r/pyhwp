@@ -17,5 +17,3 @@ Development helper scripts (incomplete):
    (Re)generate the development environment.
 :program:`test-core`
    Run a quick unit test.
-:program:`tox`
-   Run a full-blown test suites.

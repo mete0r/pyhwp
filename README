@@ -27,7 +27,7 @@ Requirements
 ------------
 
 - CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2
-- `setuptools <http://pypi.python.org/pypi/setuptools>`_
+- `setuptools <http://pypi.python.org/pypi/setuptools>`_ or `distribute <https://pypi.python.org/pypi/distribute>`_
 
 Documentation & Development
 ---------------------------

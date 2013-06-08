@@ -11,4 +11,3 @@ Contents:
    setup-env
    directory-layout
    hack-n-test
-   jenkins/index
