@@ -463,9 +463,13 @@ class XmlEvents(object):
         r = os.fdopen(r, 'r')
         w = os.fdopen(w, 'w')
 
+        def dump_and_close(outfile):
+            self.dump(outfile, **kwargs)
+            outfile.close()
+
         import threading
-        t = threading.Thread(target=self.dump,
-                             args=(w,), kwargs=kwargs)
+        t = threading.Thread(target=dump_and_close,
+                             args=(w,))
         t.daemon = True
         t.start()
         return r
