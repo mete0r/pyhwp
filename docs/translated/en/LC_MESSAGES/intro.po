@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-30 16:19\n"
+"POT-Creation-Date: 2013-06-09 02:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,14 +65,16 @@ msgstr ""
 msgid "Requirements"
 msgstr ""
 
-# 20db36e8a82d4f669f57dfcd0caf4eaf
+# db6d63914fb2413d92e5701b694e2b22
 #: ../../intro.rst:29
-msgid "CPython 2.5, 2.6 or 2.7 or Jython 2.5.3"
+msgid "CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2"
 msgstr ""
 
-# f5c5c37ffad44b18b683875012eafbeb
+# 9704adf9ff8146fca6dbd17b330dbeff
 #: ../../intro.rst:30
-msgid "`setuptools <http://pypi.python.org/pypi/setuptools>`_"
+msgid ""
+"`setuptools <http://pypi.python.org/pypi/setuptools>`_ or `distribute "
+"<https://pypi.python.org/pypi/distribute>`_"
 msgstr ""
 
 # 070821d20ddc4c6cb15fa70632bf6523
