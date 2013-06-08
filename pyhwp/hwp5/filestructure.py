@@ -38,8 +38,9 @@ HWP5_SIGNATURE = 'HWP Document File' + ('\x00' * 15)
 
 class BYTES(type):
     def __new__(mcs, size):
+        decode = staticmethod(lambda bytes, *args, **kwargs: bytes)
         return type.__new__(mcs, 'BYTES(%d)' % size, (str,),
-                            dict(fixed_size=size))
+                            dict(fixed_size=size, decode=decode))
 
 
 class VERSION(object):

@@ -1,7 +1,7 @@
 [tox]
 toxworkdir={toxinidir}/parts/tox
 setupdir={toxinidir}
-envlist = py25,py26,py27,jython
+envlist = py25,py26,py27,jython,pypy
 
 [testenv]
 deps=nose
