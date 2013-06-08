@@ -15,6 +15,7 @@ oxt/pyhwp.oxt
 oxt/pythonpath
 .coverage*
 coverage.xml
+coverage-original.xml
 *.egg-info
 deb_dist
 pep8.out
@@ -30,3 +31,4 @@ venv
 sdist.log
 test-cli.log
 tox.ini
+*.log

@@ -3,15 +3,25 @@
 def main():
     import sys
     import os.path
+    from subprocess import check_call
     from subprocess import Popen
-    path = os.path.join('${buildout:directory}', 'misc',
-                        'symlink-or-copytree-or-pip-lxml.py')
-    src = '${lxml-location}'
-    dst = sys.argv[1]
-    args = [sys.executable, path, src, dst]
-    p = Popen(args)
-    p.wait()
-    raise SystemExit(p.returncode)
+    import shutil
+
+    if sys.platform == 'win32':
+        src = '${lxml-location}'
+        dst = sys.argv[1]
+        src_path = os.path.join(src, 'lxml')
+        dst_path = os.path.join(dst, 'lxml')
+        print('lxml src: %s' % src_path)
+        print('lxml dst: %s' % dst_path)
+        if os.path.exists(src_path):
+            print('lxml: copytree-ing...')
+            shutil.copytree(src_path, dst_path)
+        else:
+            print('lxml: not found. skipping...')
+        sys.exit(0)
+    else:
+        check_call(['pip', 'install', 'lxml'])
 
 if __name__ == '__main__':
     main()

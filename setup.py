@@ -14,7 +14,7 @@ versioneer.parentdir_prefix = 'pyhwp-'
 
 import sys
 install_requires = []
-if 'java' not in sys.platform:
+if 'java' not in sys.platform and sys.version < '3':
     install_requires.append('OleFileIO_PL == 0.23')
 
 try:
@@ -22,13 +22,13 @@ try:
 except ImportError:
     install_requires.append('simplejson')
 
-install_requires.append('docopt >= 0.3')
+install_requires.append('docopt >= 0.6')
 install_requires.append('hypua2jamo >= 0.2')
 
 def read(filename):
     import os.path
     filename = os.path.join(os.path.dirname(__file__), filename)
-    f = file(filename, 'r')
+    f = open(filename, 'r')
     try:
         return f.read()
     finally:
@@ -45,6 +45,7 @@ setup(
         author = 'mete0r',
         author_email = 'mete0r@sarangbang.or.kr',
         url='http://github.com/mete0r/pyhwp',
+        keywords='hwp',
         packages = find_packages('pyhwp'),
         package_dir={'': 'pyhwp'},
         package_data=dict(hwp5=['README',
@@ -63,8 +64,7 @@ setup(
                 'hwp5html = hwp5.hwp5html:main',
                 ]
             },
-
-        test_suite='hwp5.tests.test_suite',
+        zip_safe=False,
 
         classifiers=[
             'Development Status :: 4 - Beta',
@@ -73,6 +73,12 @@ setup(
             'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
             'Operating System :: OS Independent',
             'Programming Language :: Python',
+            'Programming Language :: Python :: 2.5',
+            'Programming Language :: Python :: 2.6',
+            'Programming Language :: Python :: 2.7',
+            'Programming Language :: Python :: Implementation :: CPython',
+            'Programming Language :: Python :: Implementation :: Jython',
+            'Programming Language :: Python :: Implementation :: PyPy',
             'Topic :: Software Development :: Libraries :: Python Modules',
             'Topic :: Text Processing',
             'Topic :: Text Processing :: Filters',

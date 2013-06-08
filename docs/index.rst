@@ -14,6 +14,7 @@ Contents:
    intro
    hwp5proc
    converters
+   hacking/index
 
 
 

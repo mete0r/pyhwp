@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -109,10 +109,10 @@ def main(args):
 
             for model in models:
                 if all(condition(model) for condition in conditions):
-                    print '{0}:{1}({2}): {3}'.format(model['filename'],
-                                                     model['stream'],
-                                                     model['seqno'],
-                                                     model['type'].__name__)
+                    print '%s:%s(%s): %s' % (model['filename'],
+                                             model['stream'],
+                                             model['seqno'],
+                                             model['type'].__name__)
                     if args['--dump']:
                         from hwp5.binmodel import model_to_json
                         print model_to_json(model, sort_keys=True, indent=2)

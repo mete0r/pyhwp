@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -115,6 +115,8 @@ def generate_html_file(xslt, xhwp5_path, html_path):
 
 
 def extract_bindata_dir(hwp5file, bindata_dir):
+    if 'BinData' not in hwp5file:
+        return
     bindata_stg = hwp5file['BinData']
     if not os.path.exists(bindata_dir):
         os.mkdir(bindata_dir)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -27,15 +27,15 @@ enabled = None
 
 
 def xmllint_reachable():
-   from subprocess import Popen
-   args = [executable, '--version']
-   try:
-       p = Popen(args)
-   except:
-       return False
-   else:
-       p.wait()
-       return True
+    from subprocess import Popen
+    args = [executable, '--version']
+    try:
+        p = Popen(args)
+    except:
+        return False
+    else:
+        p.wait()
+        return True
 
 
 def is_enabled():
@@ -56,8 +56,8 @@ def disable():
 
 
 def relaxng(rng_path, inp_path):
-   from subprocess import Popen
-   args = [executable, '--noout', '--relaxng', rng_path, inp_path]
-   p = Popen(args)
-   p.wait()
-   return p.returncode == 0
+    from subprocess import Popen
+    args = [executable, '--noout', '--relaxng', rng_path, inp_path]
+    p = Popen(args)
+    p.wait()
+    return p.returncode == 0

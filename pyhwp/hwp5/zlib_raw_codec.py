@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -17,26 +17,31 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import codecs
-import zlib # this codec needs the optional zlib module !
+import zlib  # this codec needs the optional zlib module !
 
 _wbits = -15
 
-def zlib_raw_encode(input,errors='strict'):
+
+def zlib_raw_encode(input, errors='strict'):
     assert errors == 'strict'
     output = zlib.compress(input)[2:-4]
     return (output, len(input))
 
-def zlib_raw_decode(input,errors='strict'):
+
+def zlib_raw_decode(input, errors='strict'):
     assert errors == 'strict'
     output = zlib.decompress(input, _wbits)
     return (output, len(input))
+
 
 class Codec(codecs.Codec):
 
     def encode(self, input, errors='strict'):
         return zlib_raw_encode(input, errors)
+
     def decode(self, input, errors='strict'):
         return zlib_raw_decode(input, errors)
+
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
     def __init__(self, errors='strict'):
@@ -57,6 +62,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
     def reset(self):
         self.compressobj = zlib.compressobj()
 
+
 class IncrementalDecoder(codecs.IncrementalDecoder):
     def __init__(self, errors='strict'):
         assert errors == 'strict'
@@ -76,13 +82,16 @@ class IncrementalDecoder(codecs.IncrementalDecoder):
     def reset(self):
         self.decompressobj = zlib.decompressobj(_wbits)
 
+
 class StreamWriter(object):
     def __init__(self, stream, errors='strict'):
         assert errors == 'strict'
         self.stream = stream
         self.encoder = IncrementalEncoder(errors)
+
     def write(self, data):
         raise NotImplementedError
+
 
 class StreamReader(object):
     def __init__(self, stream, errors='strict'):
@@ -91,6 +100,7 @@ class StreamReader(object):
         self.decoder = IncrementalDecoder(errors)
         self.buffer = ''
         self.offset = 0
+
     def read(self, size=-1):
         if size < 0:
             c = self.stream.read()
@@ -116,6 +126,7 @@ class StreamReader(object):
             c = self.stream.read(8196)
             final = len(c) < 8196 or len(c)
             self.buffer += self.decoder.decode(c, final)
+
     def tell(self):
         return self.offset
 

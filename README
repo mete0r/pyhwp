@@ -26,8 +26,8 @@ from `github <https://github.com/mete0r/pyhwp>`_::
 Requirements
 ------------
 
-- CPython 2.5, 2.6 or 2.7 or Jython 2.5.3
-- `setuptools <http://pypi.python.org/pypi/setuptools>`_
+- CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2
+- `setuptools <http://pypi.python.org/pypi/setuptools>`_ or `distribute <https://pypi.python.org/pypi/distribute>`_
 
 Documentation & Development
 ---------------------------
@@ -41,7 +41,7 @@ Documentation & Development
 Contributors
 ------------
 
-Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_
+Maintainer: `mete0r <https://github.com/mete0r>`_
 
 License
 -------

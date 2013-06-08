@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-08 03:21\n"
+"POT-Creation-Date: 2013-06-09 02:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,38 +65,25 @@ msgstr ""
 msgid "Requirements"
 msgstr ""
 
-# f760bb102652464aa8ec21e593f486bb
+# db6d63914fb2413d92e5701b694e2b22
 #: ../../intro.rst:29
-msgid "Python 2.5, 2.6 or 2.7"
+msgid "CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2"
 msgstr ""
 
-# c0237c498d384683b8f3b478c5165513
+# 9704adf9ff8146fca6dbd17b330dbeff
 #: ../../intro.rst:30
-msgid "`simplejson <http://pypi.python.org/pypi/simplejson>`_"
-msgstr ""
-
-# 276d7456e63749adb1dc60f80396088f
-#: ../../intro.rst:31
-msgid "`OleFileIO_PL <http://pypi.python.org/pypi/OleFileIO_PL>`_ >= 0.20"
-msgstr ""
-
-# 4c51035029f840bf8a52929b89569b1f
-#: ../../intro.rst:32
-msgid "`docopt <http://pypi.python.org/pypi/docopt>`_ >= 0.3"
-msgstr ""
-
-# d14212bca57f46b393c6d83098bf2691
-#: ../../intro.rst:33
-msgid "`hypua2jamo <http://pypi.python.org/pypi/hypua2jamo>`_ >= 0.1"
+msgid ""
+"`setuptools <http://pypi.python.org/pypi/setuptools>`_ or `distribute "
+"<https://pypi.python.org/pypi/distribute>`_"
 msgstr ""
 
 # 070821d20ddc4c6cb15fa70632bf6523
-#: ../../intro.rst:36
+#: ../../intro.rst:33
 msgid "Documentation & Development"
 msgstr ""
 
 # 8228a1248e8b4f6fb82be453d4ef4135
-#: ../../intro.rst:38
+#: ../../intro.rst:35
 msgid ""
 "Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/"
 "pyhwp>`_ [`한국/조선어 <http://packages.python.org/pyhwp/ko>`_] [`develop "
@@ -103,60 +91,60 @@ msgid ""
 msgstr ""
 
 # 85285a15a8574742b5e7e57d5ce9c7bb
-#: ../../intro.rst:39
+#: ../../intro.rst:36
 msgid ""
 "Distribution: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/"
 "pypi/pyhwp>`_"
 msgstr ""
 
 # e638ce10db3e4e07ae412b24bf350d53
-#: ../../intro.rst:40
+#: ../../intro.rst:37
 msgid ""
 "Development: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/"
 "pyhwp>`_"
 msgstr ""
 
 # f0f93a1ed81747dc9c7a3c631b971e86
-#: ../../intro.rst:41
+#: ../../intro.rst:38
 msgid ""
 "Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/"
 "mete0r/pyhwp/issues>`_"
 msgstr ""
 
 # 317c633c180a4bda8045e2a5b1e757cf
-#: ../../intro.rst:42
+#: ../../intro.rst:39
 msgid "Feedbacks & contributions are welcome!"
 msgstr ""
 
 # b200736b60a04a8480b72cb24a513db0
-#: ../../intro.rst:45
+#: ../../intro.rst:42
 msgid "Contributors"
 msgstr ""
 
 # 38b9e22103b4432eaf4fdf9f452bc3e3
-#: ../../intro.rst:47
+#: ../../intro.rst:44
 msgid "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
 msgstr ""
 
 # 3968cb8206a14f398a248eed814ad9aa
-#: ../../intro.rst:50
+#: ../../intro.rst:47
 msgid "License"
 msgstr ""
 
 # 02c7962826ee4ccd81c428723a8d8d5a
-#: ../../intro.rst:52
+#: ../../intro.rst:49
 msgid "Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>"
 msgstr ""
 
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
-#: ../../intro.rst:56
+#: ../../intro.rst:53
 msgid ""
-"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-"
-"3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
+"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/"
+"agpl-3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
 msgstr ""
 
 # 164415d866774a9e9e7ad1008447cf74
-#: ../../intro.rst:59
+#: ../../intro.rst:56
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU Affero General Public License as published by the "
@@ -165,7 +153,7 @@ msgid ""
 msgstr ""
 
 # 6cc8ef94865e4196898a83b1b80dd2e5
-#: ../../intro.rst:64
+#: ../../intro.rst:61
 msgid ""
 "This program is distributed in the hope that it will be useful, but WITHOUT "
 "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
@@ -174,19 +162,19 @@ msgid ""
 msgstr ""
 
 # d54697f2f7dc44869d43637b7e5dcb68
-#: ../../intro.rst:69
+#: ../../intro.rst:66
 msgid ""
 "You should have received a copy of the GNU Affero General Public License "
 "along with this program.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
 # c3270c668ef7418e951ef0bc8ac17fdd
-#: ../../intro.rst:73
+#: ../../intro.rst:70
 msgid "Disclosure"
 msgstr ""
 
 # df57575778df4329940de5a8a2999e73
-#: ../../intro.rst:75
+#: ../../intro.rst:72
 msgid ""
 "This program has been developed in accordance with a public document named "
 "\"HWP Binary Specification 1.1\" published by `Hancom Inc. <http://www."

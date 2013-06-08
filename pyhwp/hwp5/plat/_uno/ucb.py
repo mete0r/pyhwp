@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010,2011,2012 mete0r@sarangbang.or.kr
+#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 
 def open_url(context, url):
     ''' open InputStream from a URL.
@@ -34,16 +35,19 @@ def open_url(context, url):
 
     import unohelper
     from com.sun.star.io import XActiveDataSink
+
     class DataSink(unohelper.Base, XActiveDataSink):
         def setInputStream(self, stream):
             self.stream = stream
+
         def getInputStream(self):
             return self.stream
+
     datasink = DataSink()
 
     from com.sun.star.ucb import Command, OpenCommandArgument2
     openargs = OpenCommandArgument2()
-    openargs.Mode = 2 # OpenMode.DOCUMENT
+    openargs.Mode = 2  # OpenMode.DOCUMENT
     openargs.Priority = 32768
     openargs.Sink = datasink
 
