@@ -14,7 +14,7 @@ versioneer.parentdir_prefix = 'pyhwp-'
 
 import sys
 install_requires = []
-if 'java' not in sys.platform:
+if 'java' not in sys.platform and sys.version < '3':
     install_requires.append('OleFileIO_PL == 0.23')
 
 try:
@@ -28,7 +28,7 @@ install_requires.append('hypua2jamo >= 0.2')
 def read(filename):
     import os.path
     filename = os.path.join(os.path.dirname(__file__), filename)
-    f = file(filename, 'r')
+    f = open(filename, 'r')
     try:
         return f.read()
     finally:

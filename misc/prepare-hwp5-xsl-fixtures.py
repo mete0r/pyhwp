@@ -2,6 +2,7 @@
 from __future__ import with_statement
 import os.path
 import logging
+import sys
 
 
 logger = logging.getLogger('hwp5.xsltests')
@@ -57,10 +58,10 @@ def main():
             hwp5file = Hwp5File(path)
             with file(out_path, 'w') as f:
                 hwp5file.xmlevents(**opts).dump(f)
-        except Exception, e:
+        except Exception:
+            e = sys.exc_info()[1]
             logger.exception(e)
 
 
 if __name__ == '__main__':
-    import sys
     sys.exit(main())

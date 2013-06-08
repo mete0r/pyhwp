@@ -3,6 +3,7 @@ from __future__ import with_statement
 import logging
 import os
 import os.path
+import sys
 from discover_python import expose_options
 from discover_python import log_discovered
 
@@ -33,7 +34,8 @@ except ImportError:
 
 try:
     dist = get_distribution('lxml')
-except Exception, e:
+except Exception:
+    e = sys.exc_info()[1]
     sys.stderr.write(repr(e))
     sys.stderr.write(os.linesep)
     raise SystemExit(1)
@@ -59,7 +61,8 @@ def discover_lxml(executable):
                 del env[k]
         try:
             p = Popen(args, stdout=PIPE, env=env)
-        except Exception, e:
+        except Exception:
+            e = sys.exc_info()[1]
             logger.exception(e)
             return
         else:

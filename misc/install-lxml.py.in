@@ -12,13 +12,13 @@ def main():
         dst = sys.argv[1]
         src_path = os.path.join(src, 'lxml')
         dst_path = os.path.join(dst, 'lxml')
-        print 'lxml src:', src_path
-        print 'lxml dst:', dst_path
+        print('lxml src: %s' % src_path)
+        print('lxml dst: %s' % dst_path)
         if os.path.exists(src_path):
-            print 'lxml: copytree-ing...'
+            print('lxml: copytree-ing...')
             shutil.copytree(src_path, dst_path)
         else:
-            print 'lxml: not found. skipping...'
+            print('lxml: not found. skipping...')
         sys.exit(0)
     else:
         check_call(['pip', 'install', 'lxml'])
