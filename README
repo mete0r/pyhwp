@@ -26,7 +26,7 @@ from `github <https://github.com/mete0r/pyhwp>`_::
 Requirements
 ------------
 
-- CPython 2.5, 2.6 or 2.7 or Jython 2.5.3
+- CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2
 - `setuptools <http://pypi.python.org/pypi/setuptools>`_
 
 Documentation & Development
