@@ -317,11 +317,18 @@ class FillImage(Fill):
     attributes = staticmethod(attributes)
 
 
+class Coord32(Struct):
+    def attributes():
+        yield UINT32, 'x'
+        yield UINT32, 'y'
+    attributes = staticmethod(attributes)
+
+
 class FillGradation(Fill):
     def attributes():
         yield BYTE,   'type',
         yield UINT32, 'shear',
-        yield ARRAY(UINT32, 2), 'center'
+        yield Coord32, 'center',
         yield UINT32, 'blur',
         yield N_ARRAY(UINT32, COLORREF), 'colors',
     attributes = staticmethod(attributes)
