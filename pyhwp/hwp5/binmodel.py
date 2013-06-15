@@ -888,13 +888,22 @@ class TableCell(ListHeader):
     attributes = staticmethod(attributes)
 
 
+class ZoneInfo(Struct):
+    def attributes():
+        yield UINT16, 'starting_column'
+        yield UINT16, 'starting_row'
+        yield UINT16, 'end_column'
+        yield UINT16, 'end_row'
+        yield UINT16, 'borderfill_id'
+    attributes = staticmethod(attributes)
+
+
 class TableBody(RecordModel):
     tagid = HWPTAG_TABLE
     Split = Enum(NONE=0, BY_CELL=1, SPLIT=2)
     Flags = Flags(UINT32,
                   0, 1, Split, 'split_page',
                   2, 'repeat_header')
-    ZoneInfo = ARRAY(UINT16, 5)
 
     def attributes(cls):
         from hwp5.dataio import X_ARRAY
@@ -907,7 +916,7 @@ class TableBody(RecordModel):
         yield dict(type=X_ARRAY(UINT16, ref_member('rows')),
                    name='rowcols')
         yield UINT16, 'borderfill_id'
-        yield dict(type=N_ARRAY(UINT16, cls.ZoneInfo),
+        yield dict(type=N_ARRAY(UINT16, ZoneInfo),
                    name='validZones',
                    version=(5, 0, 0, 7))
     attributes = classmethod(attributes)
