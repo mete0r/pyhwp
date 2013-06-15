@@ -103,25 +103,22 @@ class IdMappings(RecordModel):
     tagid = HWPTAG_ID_MAPPINGS
 
     def attributes():
-        yield UINT16, 'bindata',
-        yield UINT16, 'ko_fonts',
-        yield UINT16, 'en_fonts',
-        yield UINT16, 'cn_fonts',
-        yield UINT16, 'jp_fonts',
-        yield UINT16, 'other_fonts',
-        yield UINT16, 'symbol_fonts',
-        yield UINT16, 'user_fonts',
-        yield UINT16, 'borderfills',
-        yield UINT16, 'charshapes',
-        yield UINT16, 'tabdefs',
-        yield UINT16, 'numberings',
-        yield UINT16, 'bullets',
-        yield UINT16, 'parashapes',
-        yield UINT16, 'styles',
-        yield UINT16, 'memoshapes',
-        yield dict(type=ARRAY(UINT32, 8),
-                   name='unknown',
-                   version=(5, 0, 1, 7))  # SPEC
+        yield UINT32, 'bindata',
+        yield UINT32, 'ko_fonts',
+        yield UINT32, 'en_fonts',
+        yield UINT32, 'cn_fonts',
+        yield UINT32, 'jp_fonts',
+        yield UINT32, 'other_fonts',
+        yield UINT32, 'symbol_fonts',
+        yield UINT32, 'user_fonts',
+        yield UINT32, 'borderfills',
+        yield UINT32, 'charshapes',
+        yield UINT32, 'tabdefs',
+        yield UINT32, 'numberings',
+        yield UINT32, 'bullets',
+        yield UINT32, 'parashapes',
+        yield UINT32, 'styles',
+        yield UINT32, 'memoshapes',
     attributes = staticmethod(attributes)
 
 
