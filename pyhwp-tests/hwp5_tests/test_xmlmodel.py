@@ -2,6 +2,7 @@
 from unittest import TestCase
 import test_binmodel
 from hwp5.utils import cached_property
+from hwp5.treeop import STARTEVENT
 
 
 class TestBase(test_binmodel.TestBase):
@@ -127,6 +128,13 @@ class TestHwp5File(TestBase):
         hwp5file = self.hwp5file
         self.assertTrue('BinData' not in hwp5file)
         list(hwp5file.events(embedbin=True))
+
+    def test_xmlevents(self):
+        events = iter(self.hwp5file.xmlevents())
+        ev = events.next()
+        self.assertEquals((STARTEVENT,
+                           ('HwpDoc', dict(version='5.0.1.7'))), ev)
+        list(events)
 
     def test_xmlevents_dump(self):
         outfile = file(self.id() + '.xml', 'w+')
