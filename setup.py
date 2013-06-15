@@ -11,7 +11,7 @@ if version < '2.2.3':
 import sys
 install_requires = []
 if 'java' not in sys.platform and sys.version < '3':
-    install_requires.append('OleFileIO_PL == 0.23')
+    install_requires.append('OleFileIO_PL >= 0.23')
 
 try:
     __import__('json')
