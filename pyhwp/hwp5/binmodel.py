@@ -193,7 +193,9 @@ class Panose1(Struct):
 
 class FaceName(RecordModel):
     tagid = HWPTAG_FACE_NAME
+    FontFileType = Enum(UNKNOWN=0, TTF=1, HFT=2)
     Flags = Flags(BYTE,
+                  0, 1, FontFileType, 'font_file_type',
                   5, 'default',
                   6, 'metric',
                   7, 'alternate')

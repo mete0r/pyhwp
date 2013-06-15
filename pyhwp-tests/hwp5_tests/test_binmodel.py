@@ -65,6 +65,33 @@ class TestBase(test_recordstream.TestBase):
     hwp5file = hwp5file_bin
 
 
+class FaceNameTest(TestBase):
+    hwp5file_name = 'facename.hwp'
+
+    def test_font_file_type(self):
+        from hwp5.binmodel import FaceName
+
+        docinfo = self.hwp5file.docinfo
+        facenames = (model for model in docinfo.models()
+                     if model['type'] is FaceName)
+        facenames = list(facenames)
+
+        facename = facenames[0]['content']
+        self.assertEquals(u'굴림', facename['name'])
+        self.assertEquals(FaceName.FontFileType.TTF,
+                          facename['has'].font_file_type)
+
+        facename = facenames[3]['content']
+        self.assertEquals(u'휴먼명조', facename['name'])
+        self.assertEquals(FaceName.FontFileType.HFT,
+                          facename['has'].font_file_type)
+
+        facename = facenames[4]['content']
+        self.assertEquals(u'한양신명조', facename['name'])
+        self.assertEquals(FaceName.FontFileType.HFT,
+                          facename['has'].font_file_type)
+
+
 class BorderFillTest(TestBase):
     hwp5file_name = 'borderfill.hwp'
 
