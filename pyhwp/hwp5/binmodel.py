@@ -26,6 +26,7 @@ from .dataio import (PrimitiveType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
                      UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
                      SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
+from .dataio import HexBytes
 from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_BIN_DATA, HWPTAG_FACE_NAME, HWPTAG_BORDER_FILL,
                      HWPTAG_CHAR_SHAPE, HWPTAG_TAB_DEF, HWPTAG_NUMBERING,
@@ -1321,9 +1322,9 @@ class ShapeComponent(RecordModel):
                    condition=chid_is_rect_and_fill_gradation)
 
         # TODO: 아래 두 필드: chid == $rec일 때만인지 확인 필요
-        yield dict(type=ARRAY(BYTE, 5), name='unknown2',
+        yield dict(type=HexBytes(5), name='unknown2',
                    condition=chid_is_rect, version=(5, 0, 2, 4))
-        yield dict(type=ARRAY(INT32, 4), name='unknown3',
+        yield dict(type=HexBytes(16), name='unknown3',
                    condition=chid_is_rect, version=(5, 0, 2, 4))
 
         def chid_is_line(context, values):
@@ -1537,7 +1538,7 @@ class SectionDefData(ControlData):
     parent_model_type = SectionDef
 
     def attributes():
-        yield ARRAY(BYTE, 280), 'unknown'
+        yield HexBytes(280), 'unknown'
     attributes = staticmethod(attributes)
 
 
