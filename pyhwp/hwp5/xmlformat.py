@@ -50,7 +50,10 @@ def xmlattrval(value):
 
 def expanded_xmlattribute((name, (t, value))):
     if isinstance(t, FlagsType):
-        yield name, hex(int(value))
+        fmt = '%0'
+        fmt += '%d' % (t.basetype.fixed_size * 2)
+        fmt += 'X'
+        yield name, fmt % int(value)
         for k, v in t.dictvalue(t(value)).iteritems():
             yield k, xmlattrval(v)
     elif t is Margin:
