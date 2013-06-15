@@ -330,13 +330,19 @@ class FillGradation(Fill):
 class BorderFill(RecordModel):
     tagid = HWPTAG_BORDER_FILL
 
+    BorderFlags = Flags(UINT16,
+                        0, 'effect_3d',
+                        1, 'effect_shadow',
+                        2, 4, 'slash',
+                        5, 6, 'backslash')
+
     FillFlags = Flags(UINT32,
                       0, 'colorpattern',
                       1, 'image',
                       2, 'gradation')
 
     def attributes(cls):
-        yield UINT16, 'attr'
+        yield cls.BorderFlags, 'borderflags'
         yield Border, 'left',
         yield Border, 'right',
         yield Border, 'top',
