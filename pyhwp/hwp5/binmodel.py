@@ -152,7 +152,7 @@ class BinData(RecordModel):
     StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
     CompressionType = Enum(STORAGE_DEFAULT=0, YES=1, NO=2)
     AccessState = Enum(NEVER=0, OK=1, FAILED=2, FAILED_IGNORED=3)
-    Flags = Flags(INT16,
+    Flags = Flags(UINT16,
                   0, 3, StorageType, 'storage',
                   4, 5, CompressionType, 'compression',
                   16, 17, AccessState, 'access')
