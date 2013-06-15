@@ -137,6 +137,39 @@ class BorderFillTest(TestBase):
                           borderfill.get('fill_image'))
 
 
+class StyleTest(TestBase):
+    hwp5file_name = 'charstyle.hwp'
+
+    def test_charstyle(self):
+        from hwp5.binmodel import Style
+
+        docinfo = self.hwp5file.docinfo
+        styles = (model for model in docinfo.models()
+                  if model['type'] is Style)
+        styles = list(styles)
+
+        style = styles[0]['content']
+        self.assertEquals(dict(name='Normal',
+                               unknown=0,
+                               parashape_id=0,
+                               charshape_id=1,
+                               next_style_id=0,
+                               lang_id=1042,
+                               flags=0,
+                               local_name=u'바탕글'),
+                          style)
+        charstyle = styles[13]['content']
+        self.assertEquals(dict(name='',
+                               unknown=0,
+                               parashape_id=0,
+                               charshape_id=1,
+                               next_style_id=0,
+                               lang_id=1042,
+                               flags=1,
+                               local_name=u'글자스타일'),
+                          charstyle)
+
+
 class ParaCharShapeTest(TestBase):
 
     @property

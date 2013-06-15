@@ -529,16 +529,20 @@ class ParaShape(RecordModel):
 class Style(RecordModel):
     tagid = HWPTAG_STYLE
 
-    def attributes():
+    Kind = Enum(PARAGRAPH=0, CHAR=1)
+    Flags = Flags(BYTE,
+                  0, 2, Kind, 'kind')
+
+    def attributes(cls):
         yield BSTR, 'local_name',
         yield BSTR, 'name',
-        yield BYTE, 'attr',
+        yield cls.Flags, 'flags',
         yield BYTE, 'next_style_id',
         yield INT16, 'lang_id',
         yield UINT16, 'parashape_id',
         yield UINT16, 'charshape_id',
         yield dict(type=UINT16, name='unknown', version=(5, 0, 0, 5))  # SPEC
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class DocData(RecordModel):
