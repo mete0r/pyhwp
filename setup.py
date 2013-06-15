@@ -1,15 +1,11 @@
+# -*- coding: utf-8 -*-
+from __future__ import with_statement
+import os.path
 from sys import version
 if version < '2.2.3':
     from distutils.dist import DistributionMetadata as DistMeta
     DistMeta.classifiers = None
     DistMeta.download_url = None
-
-
-import versioneer
-versioneer.versionfile_source = 'pyhwp/hwp5/_version.py'
-versioneer.versionfile_build = 'hwp5/_version.py'
-versioneer.tag_prefix = ''
-versioneer.parentdir_prefix = 'pyhwp-'
 
 
 import sys
@@ -37,8 +33,7 @@ def read(filename):
 from setuptools import setup, find_packages
 setup(
         name='pyhwp',
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
+        version=read('VERSION.txt'),
         license='GNU Affero GPL v3+',
         description = 'hwp file format parser',
         long_description=read('README'),

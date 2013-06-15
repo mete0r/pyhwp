@@ -1,7 +1,8 @@
 include COPYING
 include pyhwp/hwp5/COPYING
 include pyhwp/hwp5/README
+include pyhwp/hwp5/VERSION.txt
 include pyhwp/hwp5/xsl/*.xsl
 include pyhwp/hwp5/xsl/odt/*
 include pyhwp/hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
-include versioneer.py
+include VERSION.txt
