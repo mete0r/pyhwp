@@ -1516,7 +1516,8 @@ class SectionDef(Control):
     def attributes():
         yield UINT32, 'attr',
         yield HWPUNIT16, 'columnspacing',
-        yield ARRAY(HWPUNIT16, 2), 'grid',
+        yield HWPUNIT16, 'grid_vertical',
+        yield HWPUNIT16, 'grid_horizontal',
         yield HWPUNIT, 'defaultTabStops',
         yield UINT16, 'numbering_shape_id',
         yield UINT16, 'starting_pagenum',
