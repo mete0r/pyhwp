@@ -175,14 +175,16 @@
 
   <xsl:template mode="fo:font-size" match="CharShape">
     <xsl:attribute name="fo:font-size">
-      <xsl:value-of select="@basesize div 100"/>
+      <!-- @en 값이 western language를 대표 -->
+      <xsl:value-of select="@basesize * RelativeSize/@en div 100 div 100"/>
       <xsl:text>pt</xsl:text>
     </xsl:attribute>
   </xsl:template>
 
   <xsl:template mode="style:font-size-asian" match="CharShape">
     <xsl:attribute name="style:font-size-asian">
-      <xsl:value-of select="@basesize div 100"/>
+      <!-- @ko 값이 asian language를 대표 -->
+      <xsl:value-of select="@basesize * RelativeSize/@ko div 100 div 100"/>
       <xsl:text>pt</xsl:text>
     </xsl:attribute>
   </xsl:template>
