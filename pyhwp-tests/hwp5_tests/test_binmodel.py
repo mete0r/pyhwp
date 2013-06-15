@@ -79,17 +79,17 @@ class FaceNameTest(TestBase):
         facename = facenames[0]['content']
         self.assertEquals(u'굴림', facename['name'])
         self.assertEquals(FaceName.FontFileType.TTF,
-                          facename['has'].font_file_type)
+                          facename['flags'].font_file_type)
 
         facename = facenames[3]['content']
         self.assertEquals(u'휴먼명조', facename['name'])
         self.assertEquals(FaceName.FontFileType.HFT,
-                          facename['has'].font_file_type)
+                          facename['flags'].font_file_type)
 
         facename = facenames[4]['content']
         self.assertEquals(u'한양신명조', facename['name'])
         self.assertEquals(FaceName.FontFileType.HFT,
-                          facename['has'].font_file_type)
+                          facename['flags'].font_file_type)
 
 
 class BorderFillTest(TestBase):

@@ -201,20 +201,20 @@ class FaceName(RecordModel):
                   7, 'alternate')
 
     def attributes(cls):
-        yield cls.Flags, 'has'
+        yield cls.Flags, 'flags'
         yield BSTR, 'name'
 
         def has_alternate(context, values):
-            ''' has.alternate == 1 '''
-            return values['has'].alternate
+            ''' flags.alternate == 1 '''
+            return values['flags'].alternate
 
         def has_metric(context, values):
-            ''' has.metric == 1 '''
-            return values['has'].metric
+            ''' flags.metric == 1 '''
+            return values['flags'].metric
 
         def has_default(context, values):
-            ''' has.default == 1 '''
-            return values['has'].default
+            ''' flags.default == 1 '''
+            return values['flags'].default
 
         yield dict(type=AlternateFont, name='alternate_font',
                    condition=has_alternate)
