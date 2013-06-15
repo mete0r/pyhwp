@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-09 02:31\n"
+"POT-Creation-Date: 2013-06-10 12:20\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,11 +82,11 @@ msgstr ""
 msgid "Documentation & Development"
 msgstr ""
 
-# 8228a1248e8b4f6fb82be453d4ef4135
+# f1aaad2952f54b7b9649f8a60173486c
 #: ../../intro.rst:35
 msgid ""
-"Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/"
-"pyhwp>`_ [`한국/조선어 <http://packages.python.org/pyhwp/ko>`_] [`develop "
+"Documentation: `http://pythonhosted.org/pyhwp/ <http://pythonhosted.org/"
+"pyhwp/>`_ [`한국/조선어 <http://pythonhosted.org/pyhwp/ko/>`_] [`develop "
 "branch <http://pyhwp.readthedocs.org>`_]"
 msgstr ""
 
@@ -121,9 +121,9 @@ msgstr ""
 msgid "Contributors"
 msgstr ""
 
-# 38b9e22103b4432eaf4fdf9f452bc3e3
+# 242f97c427344df39bad7d586d5e60c0
 #: ../../intro.rst:44
-msgid "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
+msgid "Maintainer: `mete0r <https://github.com/mete0r>`_"
 msgstr ""
 
 # 3968cb8206a14f398a248eed814ad9aa
