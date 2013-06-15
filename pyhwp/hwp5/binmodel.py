@@ -223,7 +223,7 @@ class Panose1(Struct):
                    'ducking_large')
 
     def attributes():
-        yield BYTE, 'family_kind',
+        yield BYTE, 'family_type',
         yield BYTE, 'serif_style',
         yield BYTE, 'weight',
         yield BYTE, 'proportion',
@@ -232,7 +232,7 @@ class Panose1(Struct):
         yield BYTE, 'arm_style',
         yield BYTE, 'letterform',
         yield BYTE, 'midline',
-        yield BYTE, 'xheight',
+        yield BYTE, 'x_height',
     attributes = staticmethod(attributes)
 
 
