@@ -225,7 +225,7 @@
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">10pt</attr>
         <attr name="style:font-size-asian">10pt</attr>
-        <!--<attr name="style:font-size-complex">10pt</attr>-->
+        <attr name="style:font-size-complex">10pt</attr>
       </context:xslt>
     </context:subtree>
 
@@ -246,7 +246,7 @@
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">10pt</attr>
         <attr name="style:font-size-asian">9pt</attr>
-        <!-- <attr name="style:font-size-complex">10pt</attr> -->
+        <attr name="style:font-size-complex">10pt</attr>
       </context:xslt>
     </context:subtree>
 
@@ -267,7 +267,7 @@
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">8pt</attr>
         <attr name="style:font-size-asian">10pt</attr>
-        <!-- <attr name="style:font-size-complex">10pt</attr> -->
+        <attr name="style:font-size-complex">10pt</attr>
       </context:xslt>
     </context:subtree>
 
@@ -288,7 +288,7 @@
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">10pt</attr>
         <attr name="style:font-size-asian">10pt</attr>
-        <!-- <attr name="style:font-size-complex">7pt</attr> -->
+        <attr name="style:font-size-complex">7pt</attr>
       </context:xslt>
     </context:subtree>
 

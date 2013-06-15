@@ -137,6 +137,7 @@
 
       <xsl:apply-templates mode="fo:font-size" select="." />
       <xsl:apply-templates mode="style:font-size-asian" select="." />
+      <xsl:apply-templates mode="style:font-size-complex" select="." />
 
       <!-- 15.4.25 Font Style -->
       <xsl:apply-templates mode="fo:font-style" select="." />
@@ -185,6 +186,14 @@
     <xsl:attribute name="style:font-size-asian">
       <!-- @ko 값이 asian language를 대표 -->
       <xsl:value-of select="@basesize * RelativeSize/@ko div 100 div 100"/>
+      <xsl:text>pt</xsl:text>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="style:font-size-complex" match="CharShape">
+    <xsl:attribute name="style:font-size-complex">
+      <!-- @otheer 값이 complex language를 대표 -->
+      <xsl:value-of select="@basesize * RelativeSize/@other div 100 div 100"/>
       <xsl:text>pt</xsl:text>
     </xsl:attribute>
   </xsl:template>
