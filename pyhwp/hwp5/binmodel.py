@@ -1348,7 +1348,8 @@ class ShapeLine(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
 
     def attributes():
-        yield ARRAY(Coord, 2), 'coords'
+        yield Coord, 'p0'
+        yield Coord, 'p1'
         yield UINT16, 'attr'
     attributes = staticmethod(attributes)
 
