@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-10 12:20\n"
+"POT-Creation-Date: 2013-06-11 10:20\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,9 +91,9 @@ msgid ""
 "pyhwp/>`_ [`한국/조선어 <http://pythonhosted.org/pyhwp/ko/>`_] [`develop "
 "branch <http://pyhwp.readthedocs.org>`_]"
 msgstr ""
-"문서화: `http://pythonhosted.org/pyhwp/ko <http://pythonhosted.org/"
-"pyhwp/ko>`_ [`English <http://pythonhosted.org/pyhwp>`_] [`개발 branch "
-"<http://pyhwp.readthedocs.org>`_]"
+"문서화: `http://pythonhosted.org/pyhwp/ko <http://pythonhosted.org/pyhwp/"
+"ko>`_ [`English <http://pythonhosted.org/pyhwp>`_] [`개발 branch <http://"
+"pyhwp.readthedocs.org>`_]"
 
 # 0d7548139cea4b37bb2298584800bffc
 #: ../../intro.rst:36
@@ -141,9 +141,9 @@ msgstr "Maintainer: `mete0r <https://github.com/mete0r>`_"
 msgid "License"
 msgstr "사용허가"
 
-# 02c7962826ee4ccd81c428723a8d8d5a
+# 6b81aa25dcb44a61b43041661de3a8cd
 #: ../../intro.rst:49
-msgid "Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>"
+msgid "Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>"
 msgstr ""
 
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
