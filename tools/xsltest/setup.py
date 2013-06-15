@@ -11,6 +11,7 @@ setup(name='xsltest',
       install_requires=['pyhwp', 'docopt'],
       entry_points={
           'console_scripts': [
-              'xsltest = xsltest:main'
+              'xsltest = xsltest:main',
+              'xmltool = xsltest.xmltool:main'
           ]
       })
