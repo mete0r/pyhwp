@@ -1359,7 +1359,10 @@ class ShapeRectangle(RecordModel):
 
     def attributes():
         yield BYTE, 'round',
-        yield ARRAY(Coord, 4), 'coords',
+        yield Coord, 'p0'
+        yield Coord, 'p1'
+        yield Coord, 'p2'
+        yield Coord, 'p3'
     attributes = staticmethod(attributes)
 
 
