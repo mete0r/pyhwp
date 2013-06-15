@@ -300,7 +300,7 @@ class FillColorPattern(Fill):
     ''' 표 23 채우기 정보 '''
     PatternTypeEnum = Enum(NONE=255, HORIZONTAL=0, VERTICAL=1, BACKSLASH=2,
                            SLASH=3, GRID=4, CROSS=5)
-    PatternTypeFlags = Flags(INT32,
+    PatternTypeFlags = Flags(UINT32,
                              0, 7, PatternTypeEnum, 'pattern_type')
 
     def attributes(cls):
