@@ -390,6 +390,13 @@ def LanguageStruct(name, basetype):
                                             attributes=attributes))
 
 
+class ShadowSpace(Struct):
+    def attributes():
+        yield INT8, 'x'
+        yield INT8, 'y'
+    attributes = staticmethod(attributes)
+
+
 class CharShape(RecordModel):
     tagid = HWPTAG_CHAR_SHAPE
 
@@ -411,7 +418,7 @@ class CharShape(RecordModel):
         yield LanguageStruct('Position', INT8), 'position'
         yield INT32, 'basesize',
         yield cls.Flags, 'charshapeflags',
-        yield ARRAY(INT8, 2), 'shadow_space'
+        yield ShadowSpace, 'shadow_space'
         yield COLORREF, 'text_color',
         yield COLORREF, 'underline_color',
         yield COLORREF, 'shade_color',
