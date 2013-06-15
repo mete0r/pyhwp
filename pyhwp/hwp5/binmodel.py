@@ -177,6 +177,51 @@ class AlternateFont(Struct):
 
 
 class Panose1(Struct):
+
+    FamilyType = Enum('any', 'no_fit', 'text_display', 'script', 'decorative',
+                      'pictorial')
+
+    SerifStyle = Enum('any', 'no_fit', 'cove', 'obtuse_cove', 'square_cove',
+                      'obtuse_square_cove', 'square', 'thin', 'bone',
+                      'exaggerated', 'triangle', 'normal_sans', 'obtuse_sans',
+                      'perp_sans', 'flared', 'rounded')
+
+    Weight = Enum('any', 'no_fit', 'very_light', 'light', 'thin', 'book',
+                  'medium', 'demi', 'bold', 'heavy', 'black', 'nord')
+
+    Proportion = Enum('any', 'no_fit', 'old_style', 'modern', 'even_width',
+                      'expanded', 'condensed', 'very_expanded',
+                      'very_condensed', 'monospaced')
+
+    Contrast = Enum('any', 'no_fit', 'none', 'very_low', 'low', 'medium_low',
+                    'medium', 'medium_high', 'high', 'very_high')
+
+    StrokeVariation = Enum('any', 'no_fit', 'gradual_diag', 'gradual_tran',
+                           'gradual_vert', 'gradual_horz', 'rapid_vert',
+                           'rapid_horz', 'instant_vert')
+
+    ArmStyle = Enum('any', 'no_fit', 'straight_horz', 'straight_wedge',
+                    'straight_vert', 'straight_single_serif',
+                    'straight_double_serif', 'bent_horz', 'bent_wedge',
+                    'bent_vert', 'bent_single_serif', 'bent_double_serif')
+
+    Letterform = Enum('any', 'no_fit', 'normal_contact', 'normal_weighted',
+                      'normal_boxed', 'normal_flattened', 'normal_rounded',
+                      'normal_off_center', 'normal_square', 'oblique_contact',
+                      'oblique_weighted', 'oblique_boxed', 'oblique_flattened',
+                      'oblique_rounded', 'oblique_off_center',
+                      'oblique_square')
+
+    Midline = Enum('any', 'no_fit', 'standard_trimmed', 'standard_pointed',
+                   'standard_serifed', 'high_trimmed', 'high_pointed',
+                   'high_serifed', 'constant_trimmed', 'constant_pointed',
+                   'constant_serifed', 'low_trimmed', 'low_pointed',
+                   'low_serifed')
+
+    XHeight = Enum('any', 'no_fit', 'constant_small', 'constant_std',
+                   'constant_large', 'ducking_small', 'ducking_std',
+                   'ducking_large')
+
     def attributes():
         yield BYTE, 'family_kind',
         yield BYTE, 'serif_style',
