@@ -1518,8 +1518,22 @@ class SectionDef(Control):
     ''' 4.2.10.1. 구역 정의 '''
     chid = CHID.SECD
 
-    def attributes():
-        yield UINT32, 'attr',
+    Flags = Flags(UINT32,
+                  0, 'hide_header',
+                  1, 'hide_footer',
+                  2, 'hide_page',
+                  3, 'hide_border',
+                  4, 'hide_background',
+                  5, 'hide_pagenumber',
+                  8, 'show_border_on_first_page_only',
+                  9, 'show_background_on_first_page_only',
+                  16, 18, 'text_direction',
+                  19, 'hide_blank_line',
+                  20, 21, 'pagenum_on_split_section',
+                  22, 'squared_manuscript_paper')
+
+    def attributes(cls):
+        yield cls.Flags, 'flags',
         yield HWPUNIT16, 'columnspacing',
         yield HWPUNIT16, 'grid_vertical',
         yield HWPUNIT16, 'grid_horizontal',
@@ -1531,7 +1545,7 @@ class SectionDef(Control):
         yield UINT16, 'starting_equationnum',
         yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
         yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class SectionDefData(ControlData):
