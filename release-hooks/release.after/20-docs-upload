@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+echo 'Do you wish to upload the documentation to http://pythonhosted.org/pyhwp?'
+select yn in 'Yes' 'No'; do
+    case $yn in
+	Yes ) break;;
+	No ) exit;;
+    esac
+done
+
+echo '* docs: Uploading to http://pythonhosted.org/pyhwp...'
+bin/docs-upload
+echo '* docs: Check documentations at http://pythonhosted.org/pyhwp.'

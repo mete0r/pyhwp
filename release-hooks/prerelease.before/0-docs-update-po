@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+echo '* docs: Updating PO files...'
+bin/docs-update-po
+echo '* docs: Check if there are translations to update in PO files.'
