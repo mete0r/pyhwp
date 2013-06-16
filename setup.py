@@ -33,7 +33,7 @@ def read(filename):
 from setuptools import setup, find_packages
 setup(
         name='pyhwp',
-        version=read('VERSION.txt'),
+        version=read('VERSION.txt').strip(),
         license='GNU Affero GPL v3+',
         description = 'hwp file format parser',
         long_description=read('README'),
