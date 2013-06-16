@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# exit if any statement returns non-true return value
+set -e
+
+# exit on uninitialized variable
+set -u
+
+bin/test-sdist
+bin/test-upload
