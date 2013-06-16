@@ -45,6 +45,7 @@ setup(
         package_dir={'': 'pyhwp'},
         package_data=dict(hwp5=['README',
                                 'COPYING',
+                                'VERSION.txt',
                                 'xsl/*.xsl',
                                 'xsl/odt/*.xsl',
                                 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
