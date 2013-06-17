@@ -4,8 +4,10 @@ CHANGES
 0.1b3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Fix IdMappings (#125)
+- hwp5proc records: new option '--raw-payload'
+- hwp5proc xml: FlagsType as xsd:hexBinary
+- Various binary/xml models changes
 
 0.1b2 (2013-06-08)
 ------------------
