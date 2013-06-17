@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-11 10:20\n"
+"POT-Creation-Date: 2013-06-18 00:14\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
 
 # 229d7f6cb6e94b80b3ed276154632ea7
 #: ../../intro.rst:2
@@ -149,8 +149,8 @@ msgstr ""
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
 #: ../../intro.rst:53
 msgid ""
-"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/"
-"agpl-3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
+"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-"
+"3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
 msgstr ""
 
 # 164415d866774a9e9e7ad1008447cf74
