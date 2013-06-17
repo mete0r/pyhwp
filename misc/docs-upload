@@ -8,14 +8,10 @@ set -u
 
 HTML_BASE=${buildout:directory}/docs/.build/html
 BUILD_DIR=${buildout:directory}/build
-EN_DIR=$HTML_BASE/en
-KO_DIR=$HTML_BASE/ko
-
-mkdir -p $BUILD_DIR
-rm -rf $BUILD_DIR/docs
-
-cp -r $EN_DIR $BUILD_DIR/docs	# en becomes docs/
-cp -r $KO_DIR $BUILD_DIR/docs/	# ko becomes docs/ko
 
 cd ${buildout:directory}
+
+[ -d $BUILD_DIR/docs/en ]
+[ -d $BUILD_DIR/docs/ko ]
+
 python setup.py upload_docs --upload-dir=$BUILD_DIR/docs

@@ -9,6 +9,9 @@ set -u
 SRC_DIR=${buildout:directory}/docs
 PO_BASE=${buildout:directory}/docs/translated
 HTML_BASE=${buildout:directory}/docs/.build/html
+BUILD_DIR=${buildout:directory}/build
+
+cd ${buildout:directory}
 
 for LANG in ko en; do
 for FILE in index intro hwp5proc converters; do
@@ -24,3 +27,12 @@ echo $OUT_DIR
 rm -rf $OUT_DIR
 ${buildout:directory}/bin/sphinx-build -b html -Dlanguage=$LANG $SRC_DIR $OUT_DIR
 done
+
+EN_DIR=$HTML_BASE/en
+KO_DIR=$HTML_BASE/ko
+
+mkdir -p $BUILD_DIR
+rm -rf $BUILD_DIR/docs
+
+cp -r $EN_DIR $BUILD_DIR/docs	# en becomes docs/
+cp -r $KO_DIR $BUILD_DIR/docs/	# ko becomes docs/ko
