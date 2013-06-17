@@ -32,7 +32,7 @@ Requirements
 Documentation & Development
 ---------------------------
 
-- Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/pyhwp>`_ [`한국/조선어 <http://packages.python.org/pyhwp/ko>`_] [`develop branch <http://pyhwp.readthedocs.org>`_]
+- Documentation: `http://pythonhosted.org/pyhwp/ <http://pythonhosted.org/pyhwp/>`_ [`한국/조선어 <http://pythonhosted.org/pyhwp/ko/>`_] [`develop branch <http://pyhwp.readthedocs.org>`_]
 - Distribution: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/pypi/pyhwp>`_
 - Development: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_
 - Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/mete0r/pyhwp/issues>`_
@@ -46,7 +46,7 @@ Maintainer: `mete0r <https://github.com/mete0r>`_
 License
 -------
 
-Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>
+Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
 
 .. image:: http://www.gnu.org/graphics/agplv3-155x51.png
 

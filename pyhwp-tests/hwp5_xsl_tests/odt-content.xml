@@ -184,8 +184,8 @@
       <expected>'HwpDoc'</expected>
     </equals>
 
-    <attr name="version">(5, 0, 1, 7)</attr>
-    <true>@version = '(5, 0, 1, 7)'</true>
+    <attr name="version">5.0.1.7</attr>
+    <true>@version = '5.0.1.7'</true>
 
     <true>count(@nonexists) = 0</true>
     <empty>@nonexists</empty>

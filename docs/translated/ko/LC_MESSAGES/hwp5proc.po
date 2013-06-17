@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-30 16:19\n"
+"POT-Creation-Date: 2013-06-18 00:14\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
 
 # 8ae66890d3c34537b90c78f06ac868ef
 #: ../../hwp5proc.rst:2
@@ -133,7 +133,7 @@ msgstr "<hwp5file>의 지정된 스트림을 표준출력으로 출력한다."
 #: ../../../pyhwp/hwp5/proc/cat.py:docstring of hwp5.proc.cat:22
 #: ../../../pyhwp/hwp5/proc/unpack.py:docstring hwp5.proc.unpack:22
 #: hwp5.proc.unpack:27 ../../../pyhwp/hwp5/proc/records.py:docstring
-#: hwp5.proc.records:36 hwp5.proc.records:40 hwp5.proc.records:48
+#: hwp5.proc.records:37 hwp5.proc.records:41 hwp5.proc.records:49
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:35
 #: hwp5.proc.models:43 hwp5.proc.models:47 hwp5.proc.models:55
 #: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:20 hwp5.proc.xml:28
@@ -162,7 +162,7 @@ msgstr "레코드 구조를 출력한다."
 
 # 241ea6ff890d49db8d765402e0c7b6b5
 # 2a49fc3eff194012a083bf9bc0426d93
-#: ../../../pyhwp/hwp5/proc/records.py:docstring of hwp5.proc.records:44
+#: ../../../pyhwp/hwp5/proc/records.py:docstring of hwp5.proc.records:45
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:51
 msgid ""
 "If neither <hwp5file> nor <record-stream> is specified, the record stream is "

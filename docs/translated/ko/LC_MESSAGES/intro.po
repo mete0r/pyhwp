@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-09 02:31\n"
+"POT-Creation-Date: 2013-06-18 00:14\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
 
 # 229d7f6cb6e94b80b3ed276154632ea7
 #: ../../intro.rst:2
@@ -87,13 +87,13 @@ msgstr "문서화 및 개발"
 # 8228a1248e8b4f6fb82be453d4ef4135
 #: ../../intro.rst:35
 msgid ""
-"Documentation: `http://packages.python.org/pyhwp <http://packages.python.org/"
-"pyhwp>`_ [`한국/조선어 <http://packages.python.org/pyhwp/ko>`_] [`develop "
+"Documentation: `http://pythonhosted.org/pyhwp/ <http://pythonhosted.org/"
+"pyhwp/>`_ [`한국/조선어 <http://pythonhosted.org/pyhwp/ko/>`_] [`develop "
 "branch <http://pyhwp.readthedocs.org>`_]"
 msgstr ""
-"문서화: `http://packages.python.org/pyhwp/ko <http://packages.python.org/"
-"pyhwp/ko>`_ [`English <http://packages.python.org/pyhwp>`_] [`개발 branch "
-"<http://pyhwp.readthedocs.org>`_]"
+"문서화: `http://pythonhosted.org/pyhwp/ko <http://pythonhosted.org/pyhwp/"
+"ko>`_ [`English <http://pythonhosted.org/pyhwp>`_] [`개발 branch <http://"
+"pyhwp.readthedocs.org>`_]"
 
 # 0d7548139cea4b37bb2298584800bffc
 #: ../../intro.rst:36
@@ -133,24 +133,24 @@ msgstr "기여한 이들"
 
 # 38b9e22103b4432eaf4fdf9f452bc3e3
 #: ../../intro.rst:44
-msgid "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
-msgstr "Maintainer: `@mete0r_kr <https://twitter.com/#!/mete0r_kr>`_"
+msgid "Maintainer: `mete0r <https://github.com/mete0r>`_"
+msgstr "Maintainer: `mete0r <https://github.com/mete0r>`_"
 
 # 3968cb8206a14f398a248eed814ad9aa
 #: ../../intro.rst:47
 msgid "License"
 msgstr "사용허가"
 
-# 02c7962826ee4ccd81c428723a8d8d5a
+# 6b81aa25dcb44a61b43041661de3a8cd
 #: ../../intro.rst:49
-msgid "Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>"
+msgid "Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>"
 msgstr ""
 
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
 #: ../../intro.rst:53
 msgid ""
-"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/"
-"agpl-3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
+"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-"
+"3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
 msgstr ""
 
 # 164415d866774a9e9e7ad1008447cf74

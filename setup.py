@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import with_statement
+import os.path
 from sys import version
 if version < '2.2.3':
     from distutils.dist import DistributionMetadata as DistMeta
@@ -5,17 +8,10 @@ if version < '2.2.3':
     DistMeta.download_url = None
 
 
-import versioneer
-versioneer.versionfile_source = 'pyhwp/hwp5/_version.py'
-versioneer.versionfile_build = 'hwp5/_version.py'
-versioneer.tag_prefix = ''
-versioneer.parentdir_prefix = 'pyhwp-'
-
-
 import sys
 install_requires = []
 if 'java' not in sys.platform and sys.version < '3':
-    install_requires.append('OleFileIO_PL == 0.23')
+    install_requires.append('OleFileIO_PL >= 0.23')
 
 try:
     __import__('json')
@@ -37,8 +33,7 @@ def read(filename):
 from setuptools import setup, find_packages
 setup(
         name='pyhwp',
-        version=versioneer.get_version(),
-        cmdclass=versioneer.get_cmdclass(),
+        version=read('VERSION.txt').strip(),
         license='GNU Affero GPL v3+',
         description = 'hwp file format parser',
         long_description=read('README'),
@@ -50,6 +45,7 @@ setup(
         package_dir={'': 'pyhwp'},
         package_data=dict(hwp5=['README',
                                 'COPYING',
+                                'VERSION.txt',
                                 'xsl/*.xsl',
                                 'xsl/odt/*.xsl',
                                 'odf-relaxng/OpenDocument-v1.2-os-*.rng']),

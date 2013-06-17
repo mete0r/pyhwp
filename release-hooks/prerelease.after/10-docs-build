@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+echo '* docs: Building documentation...'
+bin/docs-build
+echo '* docs: Check documentations in build/docs/.'

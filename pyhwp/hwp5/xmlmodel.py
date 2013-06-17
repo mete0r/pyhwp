@@ -23,6 +23,8 @@ from .binmodel import (FaceName, CharShape, SectionDef, ListHeader, Paragraph,
                        Text)
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
+from .dataio import Struct
+from .filestructure import VERSION
 from . import binmodel
 
 import logging
@@ -441,11 +443,13 @@ class XmlEvents(object):
     def __init__(self, events):
         self.events = events
 
+    def __iter__(self):
+        return modelevents_to_xmlevents(self.events)
+
     def bytechunks(self, **kwargs):
         from hwp5.xmlformat import xmlevents_to_bytechunks
         encoding = kwargs.get('xml_encoding', 'utf-8')
-        xmlevents = modelevents_to_xmlevents(self.events)
-        bytechunks = xmlevents_to_bytechunks(xmlevents, encoding)
+        bytechunks = xmlevents_to_bytechunks(self, encoding)
         yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
         for chunk in bytechunks:
             yield chunk
@@ -550,6 +554,13 @@ class Sections(binmodel.Sections, XmlEventsMixin):
         return d
 
 
+class HwpDoc(Struct):
+
+    def attributes():
+        yield VERSION, 'version'
+    attributes = staticmethod(attributes)
+
+
 class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
 
     docinfo_class = DocInfo
@@ -564,8 +575,6 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
         events = chain(self.docinfo.events(**kwargs),
                        self.bodytext.events(**kwargs))
 
-        class HwpDoc(object):
-            pass
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()
         events = wrap_modelevents(hwpdoc, events)
 

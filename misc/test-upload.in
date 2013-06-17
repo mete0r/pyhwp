@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# exit if any statement returns non-true return value
+set -e
+
+# exit on uninitialized variable
+set -u
+
+cd ${buildout:directory}
+
+VERSION=`cat VERSION.txt`
+python setup.py sdist upload -r https://testpypi.python.org/pypi | tee upload.log
+tail -n 1 upload.log | grep 200
+
+rm -rf testpypi
+virtualenv testpypi
+set +u
+. testpypi/bin/activate
+set -u
+pip install --download=testpypi --no-deps --index-url https://testpypi.python.org/simple/ pyhwp==$VERSION
+pip install --extra-index-url https://testpypi.python.org/simple/ pyhwp==$VERSION
+hwp5proc --version | head -n 1 | grep "$VERSION$"

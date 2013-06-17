@@ -15,7 +15,12 @@
 #
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from __future__ import with_statement
+import os.path
 
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
+try:
+    with open(os.path.join(os.path.dirname(__file__), 'VERSION.txt')) as f:
+        __version__ = f.read().strip()
+    del f
+except Exception:
+    __version__ = '0.0-unknown'

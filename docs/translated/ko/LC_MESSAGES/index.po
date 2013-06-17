@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-30 16:19\n"
+"POT-Creation-Date: 2013-06-18 00:14\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
 
 # e67bfb841934418fb9aa8d6803ae6f61
 #: ../../index.rst:7
@@ -28,21 +28,21 @@ msgid "Contents:"
 msgstr "목차"
 
 # c7b2c8ef52e84e3294e7003ff9087ee0
-#: ../../index.rst:22
+#: ../../index.rst:23
 msgid "Indices and tables"
 msgstr "색인과 목록"
 
 # 8caf5884bb214dacaf993c38e939ca98
-#: ../../index.rst:24
+#: ../../index.rst:25
 msgid ":ref:`genindex`"
 msgstr ""
 
 # 7d2787c7551040dd8500264c58449cc9
-#: ../../index.rst:25
+#: ../../index.rst:26
 msgid ":ref:`modindex`"
 msgstr ""
 
 # a3f0175d485c4314b9d7204608644b95
-#: ../../index.rst:26
+#: ../../index.rst:27
 msgid ":ref:`search`"
 msgstr ""

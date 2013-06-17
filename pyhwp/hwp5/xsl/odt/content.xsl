@@ -751,8 +751,8 @@
       <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="svg:x"><xsl:value-of select="round($x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y"><xsl:value-of select="round($y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <xsl:variable name="width" select="ShapeRectangle/Array/Coord[2]/@x - ShapeRectangle/Array/Coord[1]/@x"/>
-      <xsl:variable name="height" select="ShapeRectangle/Array/Coord[3]/@y - ShapeRectangle/Array/Coord[2]/@y"/>
+      <xsl:variable name="width" select="ShapeRectangle/Coord[2]/@x - ShapeRectangle/Coord[1]/@x"/>
+      <xsl:variable name="height" select="ShapeRectangle/Coord[3]/@y - ShapeRectangle/Coord[2]/@y"/>
       <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
 

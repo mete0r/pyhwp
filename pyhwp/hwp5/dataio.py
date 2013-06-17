@@ -112,6 +112,14 @@ hwp2mm = lambda x: inch2mm(hwp2inch(x))
 hwp2pt = lambda x: int((x / 100.0) * 10 + 0.5) / 10.0
 
 
+class HexBytes(type):
+    def __new__(mcs, size):
+        from binascii import b2a_hex
+        decode = staticmethod(b2a_hex)
+        return type.__new__(mcs, 'HexBytes(%d)' % size, (str,),
+                            dict(fixed_size=size, decode=decode))
+
+
 def decode_uint16le_array_default(bytes):
     from array import array
     codes = array('H', bytes)

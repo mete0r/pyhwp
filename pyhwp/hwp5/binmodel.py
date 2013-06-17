@@ -26,6 +26,7 @@ from .dataio import (PrimitiveType,
                      StructType, Struct, Flags, Enum, BYTE, WORD, UINT32,
                      UINT16, INT32, INT16, UINT8, INT8, DOUBLE, ARRAY, N_ARRAY,
                      SHWPUNIT, HWPUNIT16, HWPUNIT, BSTR, WCHAR)
+from .dataio import HexBytes
 from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_BIN_DATA, HWPTAG_FACE_NAME, HWPTAG_BORDER_FILL,
                      HWPTAG_CHAR_SHAPE, HWPTAG_TAB_DEF, HWPTAG_NUMBERING,
@@ -103,25 +104,22 @@ class IdMappings(RecordModel):
     tagid = HWPTAG_ID_MAPPINGS
 
     def attributes():
-        yield UINT16, 'bindata',
-        yield UINT16, 'ko_fonts',
-        yield UINT16, 'en_fonts',
-        yield UINT16, 'cn_fonts',
-        yield UINT16, 'jp_fonts',
-        yield UINT16, 'other_fonts',
-        yield UINT16, 'symbol_fonts',
-        yield UINT16, 'user_fonts',
-        yield UINT16, 'borderfills',
-        yield UINT16, 'charshapes',
-        yield UINT16, 'tabdefs',
-        yield UINT16, 'numberings',
-        yield UINT16, 'bullets',
-        yield UINT16, 'parashapes',
-        yield UINT16, 'styles',
-        yield UINT16, 'memoshapes',
-        yield dict(type=ARRAY(UINT32, 8),
-                   name='unknown',
-                   version=(5, 0, 1, 7))  # SPEC
+        yield UINT32, 'bindata',
+        yield UINT32, 'ko_fonts',
+        yield UINT32, 'en_fonts',
+        yield UINT32, 'cn_fonts',
+        yield UINT32, 'jp_fonts',
+        yield UINT32, 'other_fonts',
+        yield UINT32, 'symbol_fonts',
+        yield UINT32, 'user_fonts',
+        yield UINT32, 'borderfills',
+        yield UINT32, 'charshapes',
+        yield UINT32, 'tabdefs',
+        yield UINT32, 'numberings',
+        yield UINT32, 'bullets',
+        yield UINT32, 'parashapes',
+        yield UINT32, 'styles',
+        yield UINT32, 'memoshapes',
     attributes = staticmethod(attributes)
 
 
@@ -154,7 +152,7 @@ class BinData(RecordModel):
     StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
     CompressionType = Enum(STORAGE_DEFAULT=0, YES=1, NO=2)
     AccessState = Enum(NEVER=0, OK=1, FAILED=2, FAILED_IGNORED=3)
-    Flags = Flags(INT16,
+    Flags = Flags(UINT16,
                   0, 3, StorageType, 'storage',
                   4, 5, CompressionType, 'compression',
                   16, 17, AccessState, 'access')
@@ -179,8 +177,53 @@ class AlternateFont(Struct):
 
 
 class Panose1(Struct):
+
+    FamilyType = Enum('any', 'no_fit', 'text_display', 'script', 'decorative',
+                      'pictorial')
+
+    SerifStyle = Enum('any', 'no_fit', 'cove', 'obtuse_cove', 'square_cove',
+                      'obtuse_square_cove', 'square', 'thin', 'bone',
+                      'exaggerated', 'triangle', 'normal_sans', 'obtuse_sans',
+                      'perp_sans', 'flared', 'rounded')
+
+    Weight = Enum('any', 'no_fit', 'very_light', 'light', 'thin', 'book',
+                  'medium', 'demi', 'bold', 'heavy', 'black', 'nord')
+
+    Proportion = Enum('any', 'no_fit', 'old_style', 'modern', 'even_width',
+                      'expanded', 'condensed', 'very_expanded',
+                      'very_condensed', 'monospaced')
+
+    Contrast = Enum('any', 'no_fit', 'none', 'very_low', 'low', 'medium_low',
+                    'medium', 'medium_high', 'high', 'very_high')
+
+    StrokeVariation = Enum('any', 'no_fit', 'gradual_diag', 'gradual_tran',
+                           'gradual_vert', 'gradual_horz', 'rapid_vert',
+                           'rapid_horz', 'instant_vert')
+
+    ArmStyle = Enum('any', 'no_fit', 'straight_horz', 'straight_wedge',
+                    'straight_vert', 'straight_single_serif',
+                    'straight_double_serif', 'bent_horz', 'bent_wedge',
+                    'bent_vert', 'bent_single_serif', 'bent_double_serif')
+
+    Letterform = Enum('any', 'no_fit', 'normal_contact', 'normal_weighted',
+                      'normal_boxed', 'normal_flattened', 'normal_rounded',
+                      'normal_off_center', 'normal_square', 'oblique_contact',
+                      'oblique_weighted', 'oblique_boxed', 'oblique_flattened',
+                      'oblique_rounded', 'oblique_off_center',
+                      'oblique_square')
+
+    Midline = Enum('any', 'no_fit', 'standard_trimmed', 'standard_pointed',
+                   'standard_serifed', 'high_trimmed', 'high_pointed',
+                   'high_serifed', 'constant_trimmed', 'constant_pointed',
+                   'constant_serifed', 'low_trimmed', 'low_pointed',
+                   'low_serifed')
+
+    XHeight = Enum('any', 'no_fit', 'constant_small', 'constant_std',
+                   'constant_large', 'ducking_small', 'ducking_std',
+                   'ducking_large')
+
     def attributes():
-        yield BYTE, 'family_kind',
+        yield BYTE, 'family_type',
         yield BYTE, 'serif_style',
         yield BYTE, 'weight',
         yield BYTE, 'proportion',
@@ -189,32 +232,34 @@ class Panose1(Struct):
         yield BYTE, 'arm_style',
         yield BYTE, 'letterform',
         yield BYTE, 'midline',
-        yield BYTE, 'xheight',
+        yield BYTE, 'x_height',
     attributes = staticmethod(attributes)
 
 
 class FaceName(RecordModel):
     tagid = HWPTAG_FACE_NAME
+    FontFileType = Enum(UNKNOWN=0, TTF=1, HFT=2)
     Flags = Flags(BYTE,
+                  0, 1, FontFileType, 'font_file_type',
                   5, 'default',
                   6, 'metric',
                   7, 'alternate')
 
     def attributes(cls):
-        yield cls.Flags, 'has'
+        yield cls.Flags, 'flags'
         yield BSTR, 'name'
 
         def has_alternate(context, values):
-            ''' has.alternate == 1 '''
-            return values['has'].alternate
+            ''' flags.alternate == 1 '''
+            return values['flags'].alternate
 
         def has_metric(context, values):
-            ''' has.metric == 1 '''
-            return values['has'].metric
+            ''' flags.metric == 1 '''
+            return values['flags'].metric
 
         def has_default(context, values):
-            ''' has.default == 1 '''
-            return values['has'].default
+            ''' flags.default == 1 '''
+            return values['flags'].default
 
         yield dict(type=AlternateFont, name='alternate_font',
                    condition=has_alternate)
@@ -303,7 +348,7 @@ class FillColorPattern(Fill):
     ''' 표 23 채우기 정보 '''
     PatternTypeEnum = Enum(NONE=255, HORIZONTAL=0, VERTICAL=1, BACKSLASH=2,
                            SLASH=3, GRID=4, CROSS=5)
-    PatternTypeFlags = Flags(INT32,
+    PatternTypeFlags = Flags(UINT32,
                              0, 7, PatternTypeEnum, 'pattern_type')
 
     def attributes(cls):
@@ -320,11 +365,18 @@ class FillImage(Fill):
     attributes = staticmethod(attributes)
 
 
+class Coord32(Struct):
+    def attributes():
+        yield UINT32, 'x'
+        yield UINT32, 'y'
+    attributes = staticmethod(attributes)
+
+
 class FillGradation(Fill):
     def attributes():
         yield BYTE,   'type',
         yield UINT32, 'shear',
-        yield ARRAY(UINT32, 2), 'center'
+        yield Coord32, 'center',
         yield UINT32, 'blur',
         yield N_ARRAY(UINT32, COLORREF), 'colors',
     attributes = staticmethod(attributes)
@@ -333,13 +385,19 @@ class FillGradation(Fill):
 class BorderFill(RecordModel):
     tagid = HWPTAG_BORDER_FILL
 
+    BorderFlags = Flags(UINT16,
+                        0, 'effect_3d',
+                        1, 'effect_shadow',
+                        2, 4, 'slash',
+                        5, 6, 'backslash')
+
     FillFlags = Flags(UINT32,
                       0, 'colorpattern',
                       1, 'image',
                       2, 'gradation')
 
     def attributes(cls):
-        yield UINT16, 'attr'
+        yield cls.BorderFlags, 'borderflags'
         yield Border, 'left',
         yield Border, 'right',
         yield Border, 'top',
@@ -380,6 +438,13 @@ def LanguageStruct(name, basetype):
                                             attributes=attributes))
 
 
+class ShadowSpace(Struct):
+    def attributes():
+        yield INT8, 'x'
+        yield INT8, 'y'
+    attributes = staticmethod(attributes)
+
+
 class CharShape(RecordModel):
     tagid = HWPTAG_CHAR_SHAPE
 
@@ -401,7 +466,7 @@ class CharShape(RecordModel):
         yield LanguageStruct('Position', INT8), 'position'
         yield INT32, 'basesize',
         yield cls.Flags, 'charshapeflags',
-        yield ARRAY(INT8, 2), 'shadow_space'
+        yield ShadowSpace, 'shadow_space'
         yield COLORREF, 'text_color',
         yield COLORREF, 'underline_color',
         yield COLORREF, 'shade_color',
@@ -511,16 +576,20 @@ class ParaShape(RecordModel):
 class Style(RecordModel):
     tagid = HWPTAG_STYLE
 
-    def attributes():
+    Kind = Enum(PARAGRAPH=0, CHAR=1)
+    Flags = Flags(BYTE,
+                  0, 2, Kind, 'kind')
+
+    def attributes(cls):
         yield BSTR, 'local_name',
         yield BSTR, 'name',
-        yield BYTE, 'attr',
+        yield cls.Flags, 'flags',
         yield BYTE, 'next_style_id',
         yield INT16, 'lang_id',
         yield UINT16, 'parashape_id',
         yield UINT16, 'charshape_id',
         yield dict(type=UINT16, name='unknown', version=(5, 0, 0, 5))  # SPEC
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class DocData(RecordModel):
@@ -871,13 +940,22 @@ class TableCell(ListHeader):
     attributes = staticmethod(attributes)
 
 
+class ZoneInfo(Struct):
+    def attributes():
+        yield UINT16, 'starting_column'
+        yield UINT16, 'starting_row'
+        yield UINT16, 'end_column'
+        yield UINT16, 'end_row'
+        yield UINT16, 'borderfill_id'
+    attributes = staticmethod(attributes)
+
+
 class TableBody(RecordModel):
     tagid = HWPTAG_TABLE
     Split = Enum(NONE=0, BY_CELL=1, SPLIT=2)
     Flags = Flags(UINT32,
                   0, 1, Split, 'split_page',
                   2, 'repeat_header')
-    ZoneInfo = ARRAY(UINT16, 5)
 
     def attributes(cls):
         from hwp5.dataio import X_ARRAY
@@ -890,7 +968,7 @@ class TableBody(RecordModel):
         yield dict(type=X_ARRAY(UINT16, ref_member('rows')),
                    name='rowcols')
         yield UINT16, 'borderfill_id'
-        yield dict(type=N_ARRAY(UINT16, cls.ZoneInfo),
+        yield dict(type=N_ARRAY(UINT16, ZoneInfo),
                    name='validZones',
                    version=(5, 0, 0, 7))
     attributes = classmethod(attributes)
@@ -1295,9 +1373,9 @@ class ShapeComponent(RecordModel):
                    condition=chid_is_rect_and_fill_gradation)
 
         # TODO: 아래 두 필드: chid == $rec일 때만인지 확인 필요
-        yield dict(type=ARRAY(BYTE, 5), name='unknown2',
+        yield dict(type=HexBytes(5), name='unknown2',
                    condition=chid_is_rect, version=(5, 0, 2, 4))
-        yield dict(type=ARRAY(INT32, 4), name='unknown3',
+        yield dict(type=HexBytes(16), name='unknown3',
                    condition=chid_is_rect, version=(5, 0, 2, 4))
 
         def chid_is_line(context, values):
@@ -1322,7 +1400,8 @@ class ShapeLine(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
 
     def attributes():
-        yield ARRAY(Coord, 2), 'coords'
+        yield Coord, 'p0'
+        yield Coord, 'p1'
         yield UINT16, 'attr'
     attributes = staticmethod(attributes)
 
@@ -1332,7 +1411,10 @@ class ShapeRectangle(RecordModel):
 
     def attributes():
         yield BYTE, 'round',
-        yield ARRAY(Coord, 4), 'coords',
+        yield Coord, 'p0'
+        yield Coord, 'p1'
+        yield Coord, 'p2'
+        yield Coord, 'p3'
     attributes = staticmethod(attributes)
 
 
@@ -1487,10 +1569,25 @@ class SectionDef(Control):
     ''' 4.2.10.1. 구역 정의 '''
     chid = CHID.SECD
 
-    def attributes():
-        yield UINT32, 'attr',
+    Flags = Flags(UINT32,
+                  0, 'hide_header',
+                  1, 'hide_footer',
+                  2, 'hide_page',
+                  3, 'hide_border',
+                  4, 'hide_background',
+                  5, 'hide_pagenumber',
+                  8, 'show_border_on_first_page_only',
+                  9, 'show_background_on_first_page_only',
+                  16, 18, 'text_direction',
+                  19, 'hide_blank_line',
+                  20, 21, 'pagenum_on_split_section',
+                  22, 'squared_manuscript_paper')
+
+    def attributes(cls):
+        yield cls.Flags, 'flags',
         yield HWPUNIT16, 'columnspacing',
-        yield ARRAY(HWPUNIT16, 2), 'grid',
+        yield HWPUNIT16, 'grid_vertical',
+        yield HWPUNIT16, 'grid_horizontal',
         yield HWPUNIT, 'defaultTabStops',
         yield UINT16, 'numbering_shape_id',
         yield UINT16, 'starting_pagenum',
@@ -1499,14 +1596,14 @@ class SectionDef(Control):
         yield UINT16, 'starting_equationnum',
         yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
         yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
-    attributes = staticmethod(attributes)
+    attributes = classmethod(attributes)
 
 
 class SectionDefData(ControlData):
     parent_model_type = SectionDef
 
     def attributes():
-        yield ARRAY(BYTE, 280), 'unknown'
+        yield HexBytes(280), 'unknown'
     attributes = staticmethod(attributes)
 
 

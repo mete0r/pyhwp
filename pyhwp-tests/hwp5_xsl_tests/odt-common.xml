@@ -16,8 +16,8 @@
       <expected>'HwpDoc'</expected>
     </equals>
 
-    <attr name="version">(5, 0, 1, 7)</attr>
-    <true>@version = '(5, 0, 1, 7)'</true>
+    <attr name="version">5.0.1.7</attr>
+    <true>@version = '5.0.1.7'</true>
 
     <true>count(@nonexists) = 0</true>
     <empty>@nonexists</empty>
@@ -225,7 +225,7 @@
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">10pt</attr>
         <attr name="style:font-size-asian">10pt</attr>
-        <!--<attr name="style:font-size-complex">10pt</attr>-->
+        <attr name="style:font-size-complex">10pt</attr>
       </context:xslt>
     </context:subtree>
 
@@ -245,13 +245,13 @@
 
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">10pt</attr>
-        <!-- <attr name="style:font-size-asian">9pt</attr> -->
-        <!-- <attr name="style:font-size-complex">10pt</attr> -->
+        <attr name="style:font-size-asian">9pt</attr>
+        <attr name="style:font-size-complex">10pt</attr>
       </context:xslt>
     </context:subtree>
 
     <!--
-    font-size : 영문 (RelativeSize@ko) = 80%
+    font-size : 영문 (RelativeSize@en) = 80%
     -->
     <context:subtree
       select="//CharShape[14]">
@@ -265,9 +265,9 @@
         mode="style:text-properties">
 
         <elem>style:text-properties</elem>
-        <!-- <attr name="fo:font-size">8pt</attr> -->
+        <attr name="fo:font-size">8pt</attr>
         <attr name="style:font-size-asian">10pt</attr>
-        <!-- <attr name="style:font-size-complex">10pt</attr> -->
+        <attr name="style:font-size-complex">10pt</attr>
       </context:xslt>
     </context:subtree>
 
@@ -288,7 +288,7 @@
         <elem>style:text-properties</elem>
         <attr name="fo:font-size">10pt</attr>
         <attr name="style:font-size-asian">10pt</attr>
-        <!-- <attr name="style:font-size-complex">7pt</attr> -->
+        <attr name="style:font-size-complex">7pt</attr>
       </context:xslt>
     </context:subtree>
 

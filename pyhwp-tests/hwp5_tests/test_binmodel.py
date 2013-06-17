@@ -65,6 +65,33 @@ class TestBase(test_recordstream.TestBase):
     hwp5file = hwp5file_bin
 
 
+class FaceNameTest(TestBase):
+    hwp5file_name = 'facename.hwp'
+
+    def test_font_file_type(self):
+        from hwp5.binmodel import FaceName
+
+        docinfo = self.hwp5file.docinfo
+        facenames = (model for model in docinfo.models()
+                     if model['type'] is FaceName)
+        facenames = list(facenames)
+
+        facename = facenames[0]['content']
+        self.assertEquals(u'굴림', facename['name'])
+        self.assertEquals(FaceName.FontFileType.TTF,
+                          facename['flags'].font_file_type)
+
+        facename = facenames[3]['content']
+        self.assertEquals(u'휴먼명조', facename['name'])
+        self.assertEquals(FaceName.FontFileType.HFT,
+                          facename['flags'].font_file_type)
+
+        facename = facenames[4]['content']
+        self.assertEquals(u'한양신명조', facename['name'])
+        self.assertEquals(FaceName.FontFileType.HFT,
+                          facename['flags'].font_file_type)
+
+
 class BorderFillTest(TestBase):
     hwp5file_name = 'borderfill.hwp'
 
@@ -95,7 +122,7 @@ class BorderFillTest(TestBase):
         self.assertEquals(1, borderfill['fillflags'])
         self.assertEquals(dict(background_color=0xff7f3f,
                                pattern_color=0,
-                               pattern_type_flags=-1),
+                               pattern_type_flags=0xffffffff),
                           borderfill['fill_colorpattern'])
         self.assertEquals(None, borderfill.get('fill_gradation'))
         self.assertEquals(None, borderfill.get('fill_image'))
@@ -103,7 +130,7 @@ class BorderFillTest(TestBase):
         borderfill = tablecells[2]['borderfill']
         self.assertEquals(4, borderfill['fillflags'])
         self.assertEquals(None, borderfill.get('fill_colorpattern'))
-        self.assertEquals(dict(blur=40, center=(0, 0),
+        self.assertEquals(dict(blur=40, center=dict(x=0, y=0),
                                colors=[0xff7f3f, 0],
                                shear=90, type=1),
                           borderfill['fill_gradation'])
@@ -120,7 +147,7 @@ class BorderFillTest(TestBase):
         self.assertEquals(3, borderfill['fillflags'])
         self.assertEquals(dict(background_color=0xff7f3f,
                                pattern_color=0,
-                               pattern_type_flags=-1),
+                               pattern_type_flags=0xffffffff),
                           borderfill['fill_colorpattern'])
         self.assertEquals(None, borderfill.get('fill_gradation'))
         self.assertEquals(dict(flags=5, storage_id=1),
@@ -129,12 +156,45 @@ class BorderFillTest(TestBase):
         borderfill = tablecells[5]['borderfill']
         self.assertEquals(6, borderfill['fillflags'])
         self.assertEquals(None, borderfill.get('fill_colorpattern'))
-        self.assertEquals(dict(blur=40, center=(0, 0),
+        self.assertEquals(dict(blur=40, center=dict(x=0, y=0),
                                colors=[0xff7f3f, 0],
                                shear=90, type=1),
                           borderfill['fill_gradation'])
         self.assertEquals(dict(flags=5, storage_id=1),
                           borderfill.get('fill_image'))
+
+
+class StyleTest(TestBase):
+    hwp5file_name = 'charstyle.hwp'
+
+    def test_charstyle(self):
+        from hwp5.binmodel import Style
+
+        docinfo = self.hwp5file.docinfo
+        styles = (model for model in docinfo.models()
+                  if model['type'] is Style)
+        styles = list(styles)
+
+        style = styles[0]['content']
+        self.assertEquals(dict(name='Normal',
+                               unknown=0,
+                               parashape_id=0,
+                               charshape_id=1,
+                               next_style_id=0,
+                               lang_id=1042,
+                               flags=0,
+                               local_name=u'바탕글'),
+                          style)
+        charstyle = styles[13]['content']
+        self.assertEquals(dict(name='',
+                               unknown=0,
+                               parashape_id=0,
+                               charshape_id=1,
+                               next_style_id=0,
+                               lang_id=1042,
+                               flags=1,
+                               local_name=u'글자스타일'),
+                          charstyle)
 
 
 class ParaCharShapeTest(TestBase):
@@ -363,7 +423,7 @@ class ShapeComponentTest(TestBase):
         self.assertFalse(shapecomp['fill_flags'].fill_image)
         self.assertEquals(dict(background_color=0xff7f3f,
                                pattern_color=0,
-                               pattern_type_flags=-1),
+                               pattern_type_flags=0xffffffff),
                           shapecomp['fill_colorpattern'])
         self.assertEquals(None, shapecomp.get('fill_gradation'))
         self.assertEquals(None, shapecomp.get('fill_image'))
@@ -374,7 +434,7 @@ class ShapeComponentTest(TestBase):
         self.assertFalse(shapecomp['fill_flags'].fill_image)
         self.assertEquals(None, shapecomp.get('fill_colorpattern'))
         self.assertEquals(dict(type=1, shear=90,
-                              center=(0, 0),
+                              center=dict(x=0, y=0),
                               colors=[0xff7f3f, 0],
                               blur=50), shapecomp['fill_gradation'])
         self.assertEquals(None, shapecomp.get('fill_image'))
@@ -394,7 +454,7 @@ class ShapeComponentTest(TestBase):
         self.assertTrue(shapecomp['fill_flags'].fill_image)
         self.assertEquals(dict(background_color=0xff7f3f,
                                pattern_color=0,
-                               pattern_type_flags=-1),
+                               pattern_type_flags=0xffffffff),
                           shapecomp['fill_colorpattern'])
         self.assertEquals(None, shapecomp.get('fill_gradation'))
         self.assertEquals(dict(flags=5, storage_id=1),
@@ -406,7 +466,7 @@ class ShapeComponentTest(TestBase):
         self.assertTrue(shapecomp['fill_flags'].fill_image)
         self.assertEquals(None, shapecomp.get('fill_colorpattern'))
         self.assertEquals(dict(type=1, shear=90,
-                              center=(0, 0),
+                              center=dict(x=0, y=0),
                               colors=[0xff7f3f, 0],
                               blur=50), shapecomp['fill_gradation'])
         self.assertEquals(dict(flags=5, storage_id=1),
@@ -430,10 +490,10 @@ class ShapeComponentTest(TestBase):
         gradation = models[-1]['content']['fill_gradation']
         self.assertEquals(32768, colorpattern['background_color'])
         self.assertEquals(0, colorpattern['pattern_color'])
-        self.assertEquals(-1, colorpattern['pattern_type_flags'])
+        self.assertEquals(0xffffffff, colorpattern['pattern_type_flags'])
 
         self.assertEquals(50, gradation['blur'])
-        self.assertEquals((0, 100), gradation['center'])
+        self.assertEquals(dict(x=0, y=100), gradation['center'])
         self.assertEquals([64512, 13171936], gradation['colors'])
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
@@ -458,10 +518,10 @@ class ShapeComponentTest(TestBase):
         gradation = models[-1]['content']['fill_gradation']
         self.assertEquals(32768, colorpattern['background_color'])
         self.assertEquals(0, colorpattern['pattern_color'])
-        self.assertEquals(-1, colorpattern['pattern_type_flags'])
+        self.assertEquals(0xffffffff, colorpattern['pattern_type_flags'])
 
         self.assertEquals(50, gradation['blur'])
-        self.assertEquals((0, 100), gradation['center'])
+        self.assertEquals(dict(x=0, y=100), gradation['center'])
         self.assertEquals([64512, 13171936], gradation['colors'])
         self.assertEquals(180, gradation['shear'])
         self.assertEquals(1, gradation['type'])
