@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# exit if any statement returns non-true return value
+set -e
+
+# exit on uninitialized variable
+set -u
+
+cd ${buildout:directory}
+
+VERSION=`cat VERSION.txt`
+
+mkdir -p releases
+rm -rf releases/$VERSION
+virtualenv releases/$VERSION
+set +u
+. releases/$VERSION/bin/activate
+set -u
+pip install pyhwp==$VERSION
+hwp5proc --version | head -n 1 | grep "$VERSION$"
