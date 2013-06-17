@@ -33,3 +33,4 @@ test-cli.log
 tox.ini
 *.log
 .*.sw?
+testpypi
