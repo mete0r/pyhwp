@@ -791,6 +791,34 @@
     </context:xslt>
   </context:import>
 
+  <context:import href="sample-5017.xml">
+    <context:xslt mode="office:automatic-styles" select="/HwpDoc/BodyText">
+      <elem>office:automatic-styles</elem>
+      <equals>
+        <tested>count(style:style[@style:family='paragraph'])</tested>
+        <expected>8</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='text'])</tested>
+        <expected>8</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table'])</tested>
+        <expected>3</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table-cell'])</tested>
+        <expected>9</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='graphic'])</tested>
+        <expected>2</expected>
+      </equals>
+      <context:wrap-subnodes select="style:style[@style:family='paragraph']">
+      </context:wrap-subnodes>
+    </context:xslt>
+  </context:import>
+
   <context:import href="parashape.xml">
 
     <context:xslt mode="style:style" select="//Paragraph[1]">

@@ -47,12 +47,7 @@
       grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
       <office:scripts/>
       <office:font-face-decls/>
-      <office:automatic-styles>
-        <xsl:apply-templates mode="office:automatic-styles" select="//Paragraph" />
-	<xsl:apply-templates mode="style:style" select="HwpDoc/BodyText/SectionDef//TableControl" />
-	<xsl:apply-templates mode="tablecell-style" select="HwpDoc/BodyText/SectionDef//TableControl" />
-	<xsl:apply-templates mode="style:style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
-      </office:automatic-styles>
+      <xsl:apply-templates mode="office:automatic-styles" select="HwpDoc/BodyText" />
       <office:body>
         <office:text>
           <text:sequence-decls>
@@ -67,6 +62,15 @@
         </office:text>
       </office:body>
     </office:document-content>
+  </xsl:template>
+
+  <xsl:template mode="office:automatic-styles" match="BodyText">
+    <office:automatic-styles>
+      <xsl:apply-templates mode="office:automatic-styles" select="//Paragraph" />
+      <xsl:apply-templates mode="style:style" select="SectionDef//TableControl" />
+      <xsl:apply-templates mode="tablecell-style" select="SectionDef//TableControl" />
+      <xsl:apply-templates mode="style:style" select="SectionDef//ShapeComponent" />
+    </office:automatic-styles>
   </xsl:template>
 
   <xsl:template mode="office:automatic-styles" match="Paragraph">
