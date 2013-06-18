@@ -240,23 +240,34 @@
       <xsl:variable name="rowidx" select="position()" />
       <xsl:for-each select="TableCell">
 	<xsl:variable name="colidx" select="position()" />
-	<xsl:element name="style:style">
-	  <xsl:attribute name="style:name">Table-<xsl:value-of select="$table-id"/>-<xsl:value-of select="$rowidx" />-<xsl:value-of select="$colidx" /></xsl:attribute>
-	  <xsl:attribute name="style:family">table-cell</xsl:attribute>
-	  <xsl:element name="style:table-cell-properties">
-	    <xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	    <xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	    <xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	    <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	    <xsl:variable name="bfid" select="@borderfill-id" />
-	    <xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
-	      <xsl:apply-templates mode="fo-border" select="." />
-	      <xsl:apply-templates mode="fo-background" select="." />
-	    </xsl:for-each>
-	  </xsl:element>
-	</xsl:element>
+	<xsl:apply-templates mode="style:style" select=".">
+	  <xsl:with-param name="table-id" select="$table-id" />
+	  <xsl:with-param name="rowidx" select="$rowidx" />
+	  <xsl:with-param name="colidx" select="$colidx" />
+	</xsl:apply-templates>
       </xsl:for-each>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template mode="style:style" match="TableCell">
+    <xsl:param name="table-id" />
+    <xsl:param name="rowidx" />
+    <xsl:param name="colidx" />
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">Table-<xsl:value-of select="$table-id"/>-<xsl:value-of select="$rowidx" />-<xsl:value-of select="$colidx" /></xsl:attribute>
+      <xsl:attribute name="style:family">table-cell</xsl:attribute>
+      <xsl:element name="style:table-cell-properties">
+	<xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	<xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	<xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	<xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+	<xsl:variable name="bfid" select="@borderfill-id" />
+	<xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
+	  <xsl:apply-templates mode="fo-border" select="." />
+	  <xsl:apply-templates mode="fo-background" select="." />
+	</xsl:for-each>
+      </xsl:element>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template mode="fo-border" match="BorderFill">

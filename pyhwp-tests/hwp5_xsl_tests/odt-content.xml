@@ -806,5 +806,26 @@
         </context:subtree>
       </context:subtree>
     </context:xslt>
+
+    <context:xslt mode="style:style" select="//TableCell[1]"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:with-param name="table-id" select="1" />
+      <xsl:with-param name="rowidx" select="2" />
+      <xsl:with-param name="colidx" select="3" />
+      <elem>style:style</elem>
+      <attr name="style:name">Table-1-2-3</attr>
+      <attr name="style:family">table-cell</attr>
+      <context:subtree select="style:table-cell-properties">
+        <attr name="fo:padding-left">1mm</attr>
+        <attr name="fo:padding-right">1mm</attr>
+        <attr name="fo:padding-top">1mm</attr>
+        <attr name="fo:padding-bottom">1mm</attr>
+        <attr name="fo:border-left">0.12mm solid #000000</attr>
+        <attr name="fo:border-right">0.12mm solid #000000</attr>
+        <attr name="fo:border-top">0.12mm solid #000000</attr>
+        <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+      </context:subtree>
+    </context:xslt>
+
   </context:import>
 </xunit:stylesheet>
