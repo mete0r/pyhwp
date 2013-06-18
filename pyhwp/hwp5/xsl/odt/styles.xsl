@@ -267,9 +267,7 @@
     <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
     <xsl:variable name="parashape" select="$parashapes[number($parashapeid)]"/>
     <xsl:element name="style:paragraph-properties">
-      <xsl:call-template name="parashape-to-paragraph-properties">
-        <xsl:with-param name="parashape" select="$parashape"/>
-      </xsl:call-template>
+      <xsl:apply-templates mode="style-paragraph-properties-common" select="$parashape" />
     </xsl:element>
   </xsl:template>
 

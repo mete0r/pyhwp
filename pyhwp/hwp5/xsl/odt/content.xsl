@@ -203,9 +203,7 @@
     <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
     <xsl:variable name="parashape" select="//ParaShape[$parashape-id]"/>
     <xsl:element name="style:paragraph-properties">
-      <xsl:call-template name="parashape-to-paragraph-properties">
-	<xsl:with-param name="parashape" select="$parashape"/>
-      </xsl:call-template>
+      <xsl:apply-templates mode="style-paragraph-properties-common" select="$parashape" />
       <xsl:if test="@new-page = '1'">
 	<xsl:attribute name="fo:break-before">page</xsl:attribute>
       </xsl:if>
