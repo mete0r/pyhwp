@@ -34,3 +34,4 @@ tox.ini
 *.log
 .*.sw?
 testpypi
+test-xsl
