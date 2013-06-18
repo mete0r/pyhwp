@@ -591,8 +591,12 @@ class context_xslt(ContextTransform):
         wrap = elem.get('wrap')
         mode = elem.get('mode')
         select = elem.get('select')
+        params = elem.xpath('xsl:with-param', namespaces=dict(xsl=XSL_URI))
+        params = list(dict(name=param.get('name'),
+                           select=param.get('select'))
+                      for param in params)
         return dict(stylesheet_path=stylesheet_path,
-                    wrap=wrap, mode=mode, select=select)
+                    wrap=wrap, mode=mode, select=select, params=params)
 
     def __call__(self, parent_context):
         context = parent_context
@@ -651,6 +655,8 @@ class context_xslt(ContextTransform):
                 apply_templates.set('select', select)
             #print lxml.etree.tostring(xsl, pretty_print=True)
 
+            for param in self.params:
+                SubElement(apply_templates, XSL+'with-param', param)
         transform = lxml.etree.XSLT(xsl)
 
         context_doc = lxml.etree.ElementTree(deepcopy(context))
