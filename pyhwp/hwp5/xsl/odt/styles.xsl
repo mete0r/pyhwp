@@ -31,10 +31,7 @@
   xmlns:tableooo="http://openoffice.org/2009/table"
   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
   xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"
-  xmlns:css3t="http://www.w3.org/TR/css3-text/"
-  office:version="1.2"
-  grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl"
-  office:mimetype="application/vnd.oasis.opendocument.text">
+  xmlns:css3t="http://www.w3.org/TR/css3-text/">
   <xsl:import href="common.xsl" />
   <xsl:output method="xml" encoding="utf-8" indent="yes" />
   <xsl:template match="/">
