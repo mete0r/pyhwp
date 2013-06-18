@@ -744,5 +744,67 @@
         <attr name="table:border-model">collapsing</attr>
       </context:subtree>
     </context:xslt>
+
+    <context:xslt mode="tablecell-style" select="//TableControl[1]" wrap="tablecell-styles">
+      <context:subtree select="style:style[1]">
+        <attr name="style:name">Table-1-1-1</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="style:style[2]">
+        <attr name="style:name">Table-1-1-2</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="style:style[3]">
+        <attr name="style:name">Table-1-1-3</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="style:style[4]">
+        <attr name="style:name">Table-1-2-1</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
   </context:import>
 </xunit:stylesheet>
