@@ -13,7 +13,7 @@ class TestPrecondition(TestCase):
         assert example('linespacing.hwp') is not None
 
 
-class TestConverter(TestCase):
+class TestODTPackageConverter(TestCase):
 
     @property
     def odt_path(self):
@@ -22,12 +22,12 @@ class TestConverter(TestCase):
     @property
     def convert(self):
         from hwp5 import plat
-        from hwp5.hwp5odt import Converter
+        from hwp5.hwp5odt import ODTPackageConverter
 
         xslt = plat.get_xslt()
         assert xslt is not None, 'no XSLT implementation is available'
         relaxng = plat.get_relaxng()
-        return Converter(xslt, relaxng)
+        return ODTPackageConverter(xslt, relaxng)
 
     def test_convert_bindata(self):
         from hwp5.hwp5odt import ODTPackage

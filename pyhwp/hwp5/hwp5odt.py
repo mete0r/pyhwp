@@ -72,7 +72,7 @@ def main():
     if rng is None:
         logger.warning('no RelaxNG implementation is available.')
 
-    convert = Converter(xslt, rng)
+    convert = ODTPackageConverter(xslt, rng)
 
     from hwp5.dataio import ParseError
     try:
@@ -131,7 +131,7 @@ def unlink_or_warning(path):
         logger.warning('%s cannot be deleted', path)
 
 
-class Converter(object):
+class ODTPackageConverter(object):
     def __init__(self, xslt, relaxng=None):
         self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
         self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
