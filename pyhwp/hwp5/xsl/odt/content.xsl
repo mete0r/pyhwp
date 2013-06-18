@@ -66,14 +66,14 @@
 
   <xsl:template mode="office:automatic-styles" match="BodyText">
     <office:automatic-styles>
-      <xsl:apply-templates mode="office:automatic-styles" select="//Paragraph" />
+      <xsl:apply-templates mode="style-style-for-paragraph-and-text" select="//Paragraph" />
       <xsl:apply-templates mode="style:style" select="SectionDef//TableControl" />
       <xsl:apply-templates mode="tablecell-style" select="SectionDef//TableControl" />
       <xsl:apply-templates mode="style:style" select="SectionDef//ShapeComponent" />
     </office:automatic-styles>
   </xsl:template>
 
-  <xsl:template mode="office:automatic-styles" match="Paragraph">
+  <xsl:template mode="style-style-for-paragraph-and-text" match="Paragraph">
     <xsl:variable name="style-id" select="@style-id + 1" />
     <xsl:variable name="style" select="//Style[$style-id]"/>
 
