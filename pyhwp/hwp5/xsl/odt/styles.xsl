@@ -46,31 +46,7 @@
       <xsl:apply-templates mode="office:font-face-decls" select="DocInfo" />
       <xsl:apply-templates mode="office:styles" select="DocInfo" />
       <office:automatic-styles>
-        <xsl:for-each select="/HwpDoc/BodyText/SectionDef/PageDef">
-          <xsl:element name="style:page-layout">
-            <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
-            <xsl:element name="style:page-layout-properties">
-              <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
-              <xsl:choose>
-                <xsl:when test="@orientation = 'portrait'">
-                  <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-                  <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-                </xsl:when>
-                <xsl:when test="@orientation = 'landscape'">
-                  <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-                  <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-                </xsl:when>
-              </xsl:choose>
-              <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(number(@top-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(number(@left-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(number(@right-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(number(@bottom-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
-            </xsl:element>
-            <style:header-style/>
-            <style:footer-style/>
-          </xsl:element>
-        </xsl:for-each>
+        <xsl:apply-templates mode="style:page-layout" select="BodyText/SectionDef" />
       </office:automatic-styles>
       <xsl:apply-templates mode="office:master-styles" select="." />
     </office:document-styles>
@@ -246,6 +222,45 @@
       <xsl:variable name="charshape" select="$charshapes[number($charshapeid)]"/>
       <xsl:apply-templates mode="style:paragraph-properties" select="." />
       <xsl:apply-templates select="$charshape" mode="style:text-properties" />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="style:page-layout" match="SectionDef">
+    <xsl:element name="style:page-layout">
+      <!--
+      16.5 http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#element-style_page-layout
+
+      Attributes:
+        style:name 19.498.2
+        style:page-usage 19.505.
+      Elements:
+        <style:footer-style> 16.7
+        <style:header-style> 16.6
+        <style:page-layout-properties> 17.2
+      -->
+      <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="@section-id + 1"/></xsl:attribute>
+      <xsl:for-each select="PageDef">
+        <xsl:element name="style:page-layout-properties">
+          <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
+          <xsl:choose>
+            <xsl:when test="@orientation = 'portrait'">
+              <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+            </xsl:when>
+            <xsl:when test="@orientation = 'landscape'">
+              <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+              <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+            </xsl:when>
+          </xsl:choose>
+          <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(number(@top-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+          <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(number(@left-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+          <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(number(@right-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+          <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(number(@bottom-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+          <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+        </xsl:element>
+      </xsl:for-each>
+      <style:header-style/>
+      <style:footer-style/>
     </xsl:element>
   </xsl:template>
 

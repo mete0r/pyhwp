@@ -75,6 +75,10 @@
         <expected>1</expected>
       </equals>
       <equals>
+        <tested>count(office:automatic-styles/style:page-layout)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
         <tested>count(office:master-styles)</tested>
         <expected>1</expected>
       </equals>
@@ -118,6 +122,23 @@
       </equals>
     </context:xslt>
       
+    <context:xslt mode="style:page-layout" select="HwpDoc/BodyText/SectionDef[1]">
+      <elem>style:page-layout</elem>
+      <attr name="style:name">PageLayout-1</attr>
+      <equals>
+        <tested>count(style:page-layout-properties)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(style:header-style)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(style:footer-style)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
     <context:xslt mode="style:paragraph-properties" select="//Style[1]">
       <attr name="fo:text-align">justify</attr>
       <attr name="fo:text-indent">0pt</attr>
