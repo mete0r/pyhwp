@@ -109,6 +109,14 @@
         <expected>0</expected>
       </equals>
     </context:xslt>
+
+    <context:xslt mode="office:master-styles" select="HwpDoc">
+      <elem>office:master-styles</elem>
+      <equals>
+        <tested>count(style:master-page)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
       
     <context:xslt mode="style:paragraph-properties" select="//Style[1]">
       <attr name="fo:text-align">justify</attr>

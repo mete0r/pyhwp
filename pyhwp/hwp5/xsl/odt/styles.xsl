@@ -72,14 +72,7 @@
           </xsl:element>
         </xsl:for-each>
       </office:automatic-styles>
-      <office:master-styles>
-        <xsl:for-each select="/HwpDoc/BodyText/SectionDef/PageDef">
-          <xsl:element name="style:master-page">
-            <xsl:attribute name="style:name">MasterPage-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
-            <xsl:attribute name="style:page-layout-name">PageLayout-<xsl:value-of select="../@section-id + 1"/></xsl:attribute>
-          </xsl:element>
-        </xsl:for-each>
-      </office:master-styles>
+      <xsl:apply-templates mode="office:master-styles" select="." />
     </office:document-styles>
   </xsl:template>
 
@@ -198,6 +191,25 @@
 
       <xsl:apply-templates mode="style:style" select="IdMappings/Style" />
     </office:styles>
+  </xsl:template>
+
+  <xsl:template mode="office:master-styles" match="HwpDoc">
+    <!--
+    3.15.4 http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#element-office_master-styles
+
+    Elements:
+      <draw:layer-set> 10.2.2
+      <style:handout-master> 10.2.1
+      <style:master-page> 16.9.
+    -->
+    <office:master-styles>
+      <xsl:for-each select="BodyText/SectionDef">
+        <xsl:element name="style:master-page">
+          <xsl:attribute name="style:name">MasterPage-<xsl:value-of select="@section-id + 1"/></xsl:attribute>
+          <xsl:attribute name="style:page-layout-name">PageLayout-<xsl:value-of select="@section-id + 1"/></xsl:attribute>
+        </xsl:element>
+      </xsl:for-each>
+    </office:master-styles>
   </xsl:template>
 
   <xsl:template mode="style:font-face" match="FaceName">
