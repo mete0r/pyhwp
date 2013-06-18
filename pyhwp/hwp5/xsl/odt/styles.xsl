@@ -223,7 +223,7 @@
       <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
       <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
 
-      <xsl:apply-templates select="IdMappings/Style" />
+      <xsl:apply-templates mode="style:style" select="IdMappings/Style" />
     </office:styles>
   </xsl:template>
 
@@ -245,7 +245,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="Style">
+  <xsl:template mode="style:style" match="Style">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name"><xsl:value-of select="translate(@local-name, ' ', '_')" /></xsl:attribute>
       <!--

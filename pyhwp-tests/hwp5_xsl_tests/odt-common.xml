@@ -231,6 +231,7 @@
 
     <context:xslt
       href="odt/styles.xsl"
+      mode="style:style"
       select="//Style[@local-name='바탕글']">
       <elem>style:style</elem>
       <attr name="style:name">바탕글</attr>
@@ -244,6 +245,7 @@
 
     <context:xslt
       href="odt/styles.xsl"
+      mode="style:style"
       select="//Style[@local-name='본문']">
       <elem>style:style</elem>
       <attr name="style:name">본문</attr>
