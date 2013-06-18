@@ -237,6 +237,23 @@ class ODTPackageConverter(ODTConverter):
                 yield f, 'bindata/' + name, 'application/octet-stream'
 
 
+class ODTSingleDocumentConverter(ODTConverter):
+
+    dest_ext = 'fodt'
+
+    def __init__(self, xslt, relaxng=None, embedimage=False):
+        ODTConverter.__init__(self, xslt, relaxng)
+        self.xsl_document = hwp5_resources_filename('xsl/odt/document.xsl')
+        self.embedimage = embedimage
+
+    def convert_to(self, hwp5file, output_path):
+        xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
+        try:
+            self.transform_to(self.xsl_document, xhwp5_path, output_path)
+        finally:
+            unlink_or_warning(xhwp5_path)
+
+
 def make(convert, args):
     hwpfilename = args['<hwp5file>']
     root = os.path.basename(hwpfilename)
