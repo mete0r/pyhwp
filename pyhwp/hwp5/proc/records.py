@@ -24,7 +24,7 @@ Usage::
                      [--treegroup=<treegroup> | --range=<range>]
                      [--loglevel=<loglevel>] [--logfile=<logfile>]
                      <hwp5file> <record-stream>
-    hwp5proc records [--simple | --json | --raw | --raw-header]
+    hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
                      [--treegroup=<treegroup> | --range=<range>]
                      [--loglevel=<loglevel>] [--logfile=<logfile>]
     hwp5proc records --help
