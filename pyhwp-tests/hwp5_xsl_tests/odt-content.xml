@@ -917,4 +917,30 @@
     </context:xslt>
 
   </context:import>
+
+  <context:import href="sample-5017.xml">
+    <context:xslt mode="fo:background-color" select="//BorderFill[1]" wrap="wrap">
+      <empty>fo:background-color</empty>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[2]" wrap="wrap">
+      <attr name="fo:background-color">#ffffff</attr>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[3]" wrap="wrap">
+      <empty>fo:background-color</empty>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[4]" wrap="wrap">
+      <empty>fo:background-color</empty>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[5]" wrap="wrap">
+      <attr name="fo:background-color">#99ccff</attr>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[6]" wrap="wrap">
+      <!-- TODO: gradation
+      <FillGradation colors="[4144959, 8355711]" type="2" attribute-name="fill_gradation" shear="0" blur="50">
+        <Coord32 y="0" x="100" attribute-name="center"/>
+      </FillGradation>
+      -->
+      <empty>fo:background-color</empty>
+    </context:xslt>
+  </context:import>
 </xunit:stylesheet>

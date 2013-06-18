@@ -312,9 +312,60 @@
       <xsl:variable name="bfid" select="@borderfill-id" />
       <xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
 	<xsl:apply-templates mode="fo-border" select="." />
-	<xsl:apply-templates mode="fo-background" select="." />
+	<xsl:apply-templates mode="fo:background-color" select="." />
+	<xsl:apply-templates mode="style:background-image" select="." />
       </xsl:for-each>
     </xsl:element>
+  </xsl:template>
+
+  <!--
+  20.175 fo:background-color
+  http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#property-fo_background-color
+  -->
+  <xsl:template mode="fo:background-color" match="BorderFill">
+    <!--
+    The values of the fo:background-color attribute are transparent or a value of type color 18.3.9.
+    -->
+
+    <xsl:for-each select="FillColorPattern">
+      <xsl:attribute name="fo:background-color"><xsl:value-of select="@background-color"/></xsl:attribute>
+    </xsl:for-each>
+  </xsl:template>
+
+  <!--
+  17.3 style:background-image
+  http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#element-style_background-image
+  -->
+  <xsl:template mode="style:background-image" match="BorderFill">
+    <!--
+    Attributes:
+      draw:opacity 19.202
+      style:filter-name 19.477
+      style:position 19.508.2
+      style:repeat 19.511
+      xlink:actuate 19.909
+      xlink:href 19.910.28
+      xlink:show 19.911
+      xlink:type 19.913.
+    Elements:
+      <office:binary-data> 10.4.5.
+    -->
+    <xsl:for-each select="FillColorPattern">
+	<!-- generate image with @pattern-type and @pattern-color
+	<xsl:choose>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'vertical'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'backslash'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'slash'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'grid'"/>
+	  <xsl:when test="FillColorPattern/@pattern-type = 'cross'"/>
+	  <xsl:otherwise/>
+	</xsl:choose>
+	-->
+    </xsl:for-each>
+    <xsl:for-each select="FillImage">
+      <!-- TODO -->
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template mode="fo-border" match="BorderFill">
@@ -358,26 +409,6 @@
 
   <xsl:template mode="fo-border-style-value" match="Border">
     <xsl:value-of select="@stroke-type" />
-  </xsl:template>
-
-  <xsl:template mode="fo-background" match="BorderFill">
-    <xsl:for-each select="FillColorPattern">
-      <xsl:attribute name="fo:background-color"><xsl:value-of select="@background-color"/></xsl:attribute>
-	<!--
-	<xsl:choose>
-	  <xsl:when test="FillColorPattern/@pattern-type = 'horizontal'"/>
-	  <xsl:when test="FillColorPattern/@pattern-type = 'vertical'"/>
-	  <xsl:when test="FillColorPattern/@pattern-type = 'backslash'"/>
-	  <xsl:when test="FillColorPattern/@pattern-type = 'slash'"/>
-	  <xsl:when test="FillColorPattern/@pattern-type = 'grid'"/>
-	  <xsl:when test="FillColorPattern/@pattern-type = 'cross'"/>
-	  <xsl:otherwise/>
-	</xsl:choose>
-	-->
-    </xsl:for-each>
-    <!--
-    <xsl:attribute name="draw:fill">gradient</xsl:attribute>
-    -->
   </xsl:template>
 
   <xsl:template mode="style:style" match="TableControl">
