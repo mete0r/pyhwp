@@ -158,17 +158,19 @@ class ConverterBase(object):
         fd, path = tempfile.mkstemp()
         try:
             os.close(fd)
-            self.xslt(xsl_path, xhwp5_path, path)
-            if self.validator is not None:
-                valid = self.validator(path)
-                if not valid:
-                    raise Exception('validation failed')
+            self.transform_to(xsl_path, xhwp5_path, path)
         except:
             unlink_or_warning(path)
             raise
         else:
             return path
 
+    def transform_to(self, xsl_path, xhwp5_path, output_path):
+        self.xslt(xsl_path, xhwp5_path, output_path)
+        if self.validator is not None:
+            valid = self.validator(output_path)
+            if not valid:
+                raise Exception('validation failed')
 
 
 class ODTConverter(ConverterBase):
