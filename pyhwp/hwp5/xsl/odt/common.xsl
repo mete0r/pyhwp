@@ -37,6 +37,27 @@
   office:mimetype="application/vnd.oasis.opendocument.text">
   <xsl:output method="xml" encoding="utf-8" indent="yes" />
 
+  <xsl:template mode="office:document" match="HwpDoc">
+    <office:document
+      office:version="1.2"
+      office:mimetype="application/vnd.oasis.opendocument.text"
+      grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
+      <office:scripts/>
+      <xsl:apply-templates mode="office:font-face-decls" select="DocInfo" />
+      <xsl:apply-templates mode="office:styles" select="DocInfo" />
+      <office:automatic-styles>
+        <xsl:apply-templates mode="style:page-layout" select="BodyText/SectionDef" />
+        <xsl:apply-templates mode="style-style-for-paragraph-and-text" select="//Paragraph" />
+        <xsl:apply-templates mode="style:style" select="//TableControl" />
+        <xsl:apply-templates mode="style-style-for-table-cells" select="//TableControl" />
+        <xsl:apply-templates mode="style:style" select="//ShapeComponent" />
+      </office:automatic-styles>
+      <xsl:apply-templates mode="office:master-styles" select="." />
+
+      <xsl:apply-templates mode="office:body" select="BodyText" />
+    </office:document>
+  </xsl:template>
+
   <xsl:template mode="office:font-face-decls" match="DocInfo">
     <office:font-face-decls>
       <style:font-face style:name="serif" svg:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable"/>
