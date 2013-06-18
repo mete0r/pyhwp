@@ -255,17 +255,22 @@
       <xsl:attribute name="style:family">paragraph</xsl:attribute>
       <xsl:attribute name="style:class">text</xsl:attribute>
       <xsl:variable name="charshapeid" select="@charshape-id + 1"/>
-      <xsl:variable name="parashapeid" select="@parashape-id + 1"/>
       <xsl:variable name="charshapes" select="/HwpDoc/DocInfo/IdMappings/CharShape" />
-      <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
       <xsl:variable name="charshape" select="$charshapes[number($charshapeid)]"/>
-      <xsl:variable name="parashape" select="$parashapes[number($parashapeid)]"/>
-      <xsl:element name="style:paragraph-properties">
-      <xsl:call-template name="parashape-to-paragraph-properties">
-        <xsl:with-param name="parashape" select="$parashape"/>
-      </xsl:call-template>
-      </xsl:element>
+      <xsl:apply-templates mode="style:paragraph-properties" select="." />
       <xsl:apply-templates select="$charshape" mode="style:text-properties" />
     </xsl:element>
   </xsl:template>
+
+  <xsl:template mode="style:paragraph-properties" match="Style">
+    <xsl:variable name="parashapeid" select="@parashape-id + 1"/>
+    <xsl:variable name="parashapes" select="/HwpDoc/DocInfo/IdMappings/ParaShape" />
+    <xsl:variable name="parashape" select="$parashapes[number($parashapeid)]"/>
+    <xsl:element name="style:paragraph-properties">
+      <xsl:call-template name="parashape-to-paragraph-properties">
+        <xsl:with-param name="parashape" select="$parashape"/>
+      </xsl:call-template>
+    </xsl:element>
+  </xsl:template>
+
 </xsl:stylesheet>

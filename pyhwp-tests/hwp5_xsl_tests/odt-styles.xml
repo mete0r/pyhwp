@@ -58,4 +58,16 @@
       <attr name="style:master-page-name">MasterPage-2</attr>
     </context:xslt>
   </context:import>
+
+  <context:import href="sample-5017.xml">
+    <context:xslt mode="style:paragraph-properties" select="//Style[1]">
+      <attr name="fo:text-align">justify</attr>
+      <attr name="fo:text-indent">0pt</attr>
+      <attr name="fo:margin-left">0pt</attr>
+      <attr name="fo:margin-right">0pt</attr>
+      <attr name="fo:margin-top">0pt</attr>
+      <attr name="fo:margin-bottom">0pt</attr>
+      <attr name="fo:line-height">160%</attr>
+    </context:xslt>
+  </context:import>
 </xunit:stylesheet>
