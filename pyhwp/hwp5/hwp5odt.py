@@ -171,7 +171,7 @@ class ConverterBase(object):
 
 
 
-class ODTPackageConverter(ConverterBase):
+class ODTConverter(ConverterBase):
     def __init__(self, xslt, relaxng=None):
         rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
         rng_path = hwp5_resources_filename(rng_path)
@@ -181,6 +181,11 @@ class ODTPackageConverter(ConverterBase):
             validate = lambda path: True
         ConverterBase.__init__(self, xslt, validate)
 
+
+class ODTPackageConverter(ODTConverter):
+
+    def __init__(self, xslt, relaxng=None):
+        ODTConverter.__init__(self, xslt, relaxng)
         self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
         self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
 
