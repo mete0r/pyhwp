@@ -72,7 +72,7 @@ def main():
     if rng is None:
         logger.warning('no RelaxNG implementation is available.')
 
-    convert = ODTPackageConverter(xslt, rng)
+    convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
 
     from hwp5.dataio import ParseError
     try:
@@ -186,13 +186,14 @@ class ODTConverter(ConverterBase):
 
 class ODTPackageConverter(ODTConverter):
 
-    def __init__(self, xslt, relaxng=None):
+    def __init__(self, xslt, relaxng=None, embedimage=False):
         ODTConverter.__init__(self, xslt, relaxng)
         self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
         self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
+        self.embedimage = embedimage
 
-    def __call__(self, hwp5file, odtpkg, embedimage=False):
-        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage)
+    def __call__(self, hwp5file, odtpkg):
+        xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
         try:
             styles, content = self.make_styles_and_content(xhwp5_path)
         finally:
@@ -266,7 +267,7 @@ def make(convert, args):
     try:
         odtpkg = ODTPackage(root + '.odt')
         try:
-            convert(hwpfile, odtpkg, args['--embed-image'])
+            convert(hwpfile, odtpkg)
         finally:
             odtpkg.close()
     finally:
