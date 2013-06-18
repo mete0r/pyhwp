@@ -131,15 +131,58 @@ def unlink_or_warning(path):
         logger.warning('%s cannot be deleted', path)
 
 
-class ODTPackageConverter(object):
+class ConverterBase(object):
+    def __init__(self, xslt, validator):
+        self.xslt = xslt
+        self.validator = validator
+
+    def make_xhwp5file(self, hwp5file, embedimage):
+        import os
+        import tempfile
+        fd, path = tempfile.mkstemp()
+        try:
+            f = os.fdopen(fd, 'w')
+            try:
+                hwp5file.xmlevents(embedbin=embedimage).dump(f)
+            finally:
+                f.close()
+        except:
+            unlink_or_warning(path)
+            raise
+        else:
+            return path
+
+    def transform(self, xsl_path, xhwp5_path):
+        import os
+        import tempfile
+        fd, path = tempfile.mkstemp()
+        try:
+            os.close(fd)
+            self.xslt(xsl_path, xhwp5_path, path)
+            if self.validator is not None:
+                valid = self.validator(path)
+                if not valid:
+                    raise Exception('validation failed')
+        except:
+            unlink_or_warning(path)
+            raise
+        else:
+            return path
+
+
+
+class ODTPackageConverter(ConverterBase):
     def __init__(self, xslt, relaxng=None):
+        rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+        rng_path = hwp5_resources_filename(rng_path)
+        if relaxng:
+            validate = lambda path: relaxng(rng_path, path)
+        else:
+            validate = lambda path: True
+        ConverterBase.__init__(self, xslt, validate)
+
         self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
         self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
-        rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        self.rng_path = hwp5_resources_filename(rng_path)
-
-        self.xslt = xslt
-        self.relaxng = relaxng
 
     def __call__(self, hwp5file, odtpkg, embedimage=False):
         xhwp5_path = self.make_xhwp5file(hwp5file, embedimage)
@@ -178,39 +221,6 @@ class ODTPackageConverter(object):
         except:
             unlink_or_warning(styles)
             raise
-
-    def make_xhwp5file(self, hwp5file, embedimage):
-        import os
-        import tempfile
-        fd, path = tempfile.mkstemp()
-        try:
-            f = os.fdopen(fd, 'w')
-            try:
-                hwp5file.xmlevents(embedbin=embedimage).dump(f)
-            finally:
-                f.close()
-        except:
-            unlink_or_warning(path)
-            raise
-        else:
-            return path
-
-    def transform(self, xsl_path, xhwp5_path):
-        import os
-        import tempfile
-        fd, path = tempfile.mkstemp()
-        try:
-            os.close(fd)
-            self.xslt(xsl_path, xhwp5_path, path)
-            if self.relaxng is not None:
-                valid = self.relaxng(self.rng_path, path)
-                if not valid:
-                    raise Exception('validation against RelaxNG failed')
-        except:
-            unlink_or_warning(path)
-            raise
-        else:
-            return path
 
     def additional_files(self, hwp5file):
         if 'BinData' in hwp5file:
