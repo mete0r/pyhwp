@@ -245,7 +245,8 @@ class TestCase(unittest.TestCase):
                     name, expected)
         logger.debug(' '*7+'- xmlns:%s = %s', prefix, qname.namespace)
         logger.debug(' '*7+'- value: %r', value)
-        assert expected == value, 'source: %d' % sourceline
+        assert expected == value, ('source: %d, expected:%r actual:%r' %
+                                   (sourceline, expected, value))
 
     def expect_empty(self, xpath_expr):
         sourceline = self.sourceline
