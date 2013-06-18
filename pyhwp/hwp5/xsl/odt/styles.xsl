@@ -239,28 +239,89 @@
         <style:page-layout-properties> 17.2
       -->
       <xsl:attribute name="style:name">PageLayout-<xsl:value-of select="@section-id + 1"/></xsl:attribute>
-      <xsl:for-each select="PageDef">
-        <xsl:element name="style:page-layout-properties">
-          <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
-          <xsl:choose>
-            <xsl:when test="@orientation = 'portrait'">
-              <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-            </xsl:when>
-            <xsl:when test="@orientation = 'landscape'">
-              <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-              <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-            </xsl:when>
-          </xsl:choose>
-          <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(number(@top-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-          <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(number(@left-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-          <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(number(@right-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-          <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(number(@bottom-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
-          <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
-        </xsl:element>
-      </xsl:for-each>
+      <xsl:apply-templates mode="style:page-layout-properties" select="PageDef" />
       <style:header-style/>
       <style:footer-style/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="style:page-layout-properties" match="PageDef">
+    <xsl:element name="style:page-layout-properties">
+      <!--
+      17.2 http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#element-style_page-layout-properties
+
+      Attributes:
+        fo:background-color 20.175
+        fo:border 20.176.2
+        fo:border-bottom 20.176.3
+        fo:border-left 20.176.4
+        fo:border-right 20.176.5
+        fo:border-top 20.176.6
+        fo:margin 20.198
+        fo:margin-bottom 20.199
+        fo:margin-left 20.200
+        fo:margin-right 20.201
+        fo:margin-top 20.202
+        fo:padding 20.210
+        fo:padding-bottom 20.211
+        fo:padding-left 20.212
+        fo:padding-right 20.213
+        fo:padding-top 20.214
+        fo:page-height 20.208
+        fo:page-width 20.209
+        style:border-line-width 20.241
+        style:border-line-width-bottom 20.242
+        style:border-line-width-left 20.243
+        style:border-line-width-right 20.244
+        style:border-line-width-top 20.245
+        style:first-page-number 20.258
+        style:footnote-max-height 20.288
+        style:layout-grid-base-height 20.296
+        style:layout-grid-base-width 20.297
+        style:layout-grid-color 20.298
+        style:layout-grid-display 20.299
+        style:layout-grid-lines 20.300
+        style:layout-grid-mode 20.301
+        style:layout-grid-print 20.302
+        style:layout-grid-ruby-below 20.303
+        style:layout-grid-ruby-height 20.304
+        style:layout-grid-snap-to 20.305
+        style:layout-grid-standard-mode 20.306
+        style:num-format 20.314
+        style:num-letter-sync 20.315
+        style:num-prefix 20.316
+        style:num-suffix 20.317
+        style:paper-tray-name 20.321
+        style:print 20.322
+        style:print-orientation 20.325
+        style:print-page-order 20.324
+        style:register-truth-ref-style-name 20.329
+        style:scale-to 20.344
+        style:scale-to-pages 20.345
+        style:shadow 20.349
+        style:table-centering 20.353
+        style:writing-mode 20.394.3
+      Elements:
+        <style:background-image> 17.3
+        <style:columns> 17.12
+        <style:footnote-sep> 17.4.
+      -->
+      <xsl:attribute name="style:print-orientation"><xsl:value-of select="@orientation"/></xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="@orientation = 'portrait'">
+          <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+          <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@orientation = 'landscape'">
+          <xsl:attribute name="fo:page-width"><xsl:value-of select="round(number(@height) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+          <xsl:attribute name="fo:page-height"><xsl:value-of select="round(number(@width) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:attribute name="fo:margin-top"><xsl:value-of select="round(number(@top-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+      <xsl:attribute name="fo:margin-left"><xsl:value-of select="round(number(@left-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+      <xsl:attribute name="fo:margin-right"><xsl:value-of select="round(number(@right-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+      <xsl:attribute name="fo:margin-bottom"><xsl:value-of select="round(number(@bottom-offset) div 7200 * 2.54 * 100) div 100"/>cm</xsl:attribute>
+      <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
     </xsl:element>
   </xsl:template>
 

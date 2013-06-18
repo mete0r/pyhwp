@@ -139,6 +139,21 @@
       </equals>
     </context:xslt>
 
+    <context:xslt mode="style:page-layout-properties" select="HwpDoc/BodyText/SectionDef/PageDef[1]">
+      <elem>style:page-layout-properties</elem>
+      <attr name="style:print-orientation">portrait</attr>
+      <attr name="fo:page-width">21cm</attr>
+      <attr name="fo:page-height">29.7cm</attr>
+      <attr name="fo:margin-left">3cm</attr>
+      <attr name="fo:margin-right">3cm</attr>
+      <attr name="fo:margin-top">2cm</attr>
+      <attr name="fo:margin-bottom">1.5cm</attr>
+      <equals>
+        <tested>count(style:footnote-sep)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
     <context:xslt mode="style:paragraph-properties" select="//Style[1]">
       <attr name="fo:text-align">justify</attr>
       <attr name="fo:text-indent">0pt</attr>
