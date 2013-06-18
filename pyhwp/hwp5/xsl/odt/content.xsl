@@ -49,7 +49,7 @@
       <office:font-face-decls/>
       <office:automatic-styles>
         <xsl:apply-templates mode="office:automatic-styles" select="//Paragraph" />
-	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//TableControl" />
+	<xsl:apply-templates mode="style:style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="tablecell-style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="style:style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
       </office:automatic-styles>
@@ -322,7 +322,7 @@
     -->
   </xsl:template>
 
-  <xsl:template mode="style" match="TableControl">
+  <xsl:template mode="style:style" match="TableControl">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">Table-<xsl:value-of select="@table-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">table</xsl:attribute>
