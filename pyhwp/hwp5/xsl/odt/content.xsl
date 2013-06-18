@@ -38,17 +38,17 @@
   <xsl:output method="xml" encoding="utf-8" indent="no" />
 
   <xsl:template match="/">
-    <xsl:apply-templates mode="office:document-content" select="." />
+    <xsl:apply-templates mode="office:document-content" select="HwpDoc" />
   </xsl:template>
 
-  <xsl:template mode="office:document-content" match="/">
+  <xsl:template mode="office:document-content" match="HwpDoc">
     <office:document-content
       office:version="1.2"
       grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
       <office:scripts/>
       <office:font-face-decls/>
-      <xsl:apply-templates mode="office:automatic-styles" select="HwpDoc/BodyText" />
-      <xsl:apply-templates mode="office:body" select="HwpDoc/BodyText" />
+      <xsl:apply-templates mode="office:automatic-styles" select="BodyText" />
+      <xsl:apply-templates mode="office:body" select="BodyText" />
     </office:document-content>
   </xsl:template>
 
