@@ -40,11 +40,7 @@ class TestODTPackageConverter(TestCase):
             finally:
                 f.close()
 
-            odtpkg = ODTPackage(self.odt_path)
-            try:
-                self.convert(hwp5file, odtpkg)
-            finally:
-                odtpkg.close()
+            self.convert.convert_to(hwp5file, self.odt_path)
         finally:
             hwp5file.close()
 

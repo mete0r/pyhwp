@@ -192,6 +192,13 @@ class ODTPackageConverter(ODTConverter):
         self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
         self.embedimage = embedimage
 
+    def convert_to(self, hwp5file, odtpkg_path):
+        odtpkg = ODTPackage(odtpkg_path)
+        try:
+            self(hwp5file, odtpkg)
+        finally:
+            odtpkg.close()
+
     def __call__(self, hwp5file, odtpkg):
         xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
         try:
@@ -265,11 +272,7 @@ def make(convert, args):
     hwpfile = Hwp5File(hwpfilename)
 
     try:
-        odtpkg = ODTPackage(root + '.odt')
-        try:
-            convert(hwpfile, odtpkg)
-        finally:
-            odtpkg.close()
+        convert.convert_to(hwpfile, root + '.odt')
     finally:
         hwpfile.close()
 
