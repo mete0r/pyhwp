@@ -74,9 +74,15 @@ def main():
 
     convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
 
+    hwpfilename = args['<hwp5file>']
+    root = os.path.basename(hwpfilename)
+    if root.lower().endswith('.hwp'):
+        root = root[0:-4]
+    dest_path = root + '.' + convert.dest_ext
+
     from hwp5.dataio import ParseError
     try:
-        make(convert, args)
+        convert.convert(hwpfilename, dest_path)
     except ParseError, e:
         e.print_to_logger(logger)
     except InvalidHwp5FileError, e:
@@ -183,8 +189,18 @@ class ODTConverter(ConverterBase):
             validate = lambda path: True
         ConverterBase.__init__(self, xslt, validate)
 
+    def convert(self, hwpfilename, dest_path):
+        from .xmlmodel import Hwp5File
+        hwpfile = Hwp5File(hwpfilename)
+        try:
+            self.convert_to(hwpfile, dest_path)
+        finally:
+            hwpfile.close()
+
 
 class ODTPackageConverter(ODTConverter):
+
+    dest_ext = 'odt'
 
     def __init__(self, xslt, relaxng=None, embedimage=False):
         ODTConverter.__init__(self, xslt, relaxng)
@@ -260,21 +276,6 @@ class ODTSingleDocumentConverter(ODTConverter):
             self.transform_to(self.xsl_document, xhwp5_path, output_path)
         finally:
             unlink_or_warning(xhwp5_path)
-
-
-def make(convert, args):
-    hwpfilename = args['<hwp5file>']
-    root = os.path.basename(hwpfilename)
-    if root.lower().endswith('.hwp'):
-        root = root[0:-4]
-
-    from .xmlmodel import Hwp5File
-    hwpfile = Hwp5File(hwpfilename)
-
-    try:
-        convert.convert_to(hwpfile, root + '.odt')
-    finally:
-        hwpfile.close()
 
 
 def manifest_xml(f, files):
