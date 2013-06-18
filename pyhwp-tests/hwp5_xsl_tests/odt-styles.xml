@@ -60,6 +60,26 @@
   </context:import>
 
   <context:import href="sample-5017.xml">
+    <context:xslt>
+      <elem>office:document-styles</elem>
+      <equals>
+        <tested>count(office:font-face-decls)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:styles)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:automatic-styles)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:master-styles)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
     <context:xslt mode="office:font-face-decls" select="HwpDoc/DocInfo">
       <equals>
         <tested>count(style:font-face)</tested>
