@@ -791,6 +791,26 @@
     </context:xslt>
   </context:import>
 
+  <context:import href="parashape.xml">
+
+    <context:xslt mode="style:paragraph-properties" select="//Paragraph[1]">
+      <elem>style:paragraph-properties</elem>
+      <attr name="fo:text-align">justify</attr>
+      <attr name="fo:text-indent">0pt</attr>
+      <attr name="fo:margin-left">11pt</attr>
+      <attr name="fo:margin-right">12pt</attr>
+      <attr name="fo:margin-top">13pt</attr>
+      <attr name="fo:margin-bottom">14pt</attr>
+      <empty>@fo:break-before</empty>
+    </context:xslt>
+  </context:import>
+
+  <context:import href="paragraph-split-page.xml">
+    <context:xslt mode="style:paragraph-properties" select="//Paragraph[3]">
+      <attr name="fo:break-before">page</attr>
+    </context:xslt>
+  </context:import>
+
   <context:import href="shaperect.xml">
     <context:xslt mode="style:style" select="//ShapeComponent[1]">
       <elem>style:style</elem>
