@@ -827,5 +827,17 @@
       </context:subtree>
     </context:xslt>
 
+    <context:xslt mode="style:table-cell-properties" select="//TableCell[1]">
+      <elem>style:table-cell-properties</elem>
+      <attr name="fo:padding-left">1mm</attr>
+      <attr name="fo:padding-right">1mm</attr>
+      <attr name="fo:padding-top">1mm</attr>
+      <attr name="fo:padding-bottom">1mm</attr>
+      <attr name="fo:border-left">0.12mm solid #000000</attr>
+      <attr name="fo:border-right">0.12mm solid #000000</attr>
+      <attr name="fo:border-top">0.12mm solid #000000</attr>
+      <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+    </context:xslt>
+
   </context:import>
 </xunit:stylesheet>

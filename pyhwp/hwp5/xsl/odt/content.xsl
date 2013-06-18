@@ -256,17 +256,64 @@
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">Table-<xsl:value-of select="$table-id"/>-<xsl:value-of select="$rowidx" />-<xsl:value-of select="$colidx" /></xsl:attribute>
       <xsl:attribute name="style:family">table-cell</xsl:attribute>
-      <xsl:element name="style:table-cell-properties">
-	<xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	<xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	<xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	<xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-	<xsl:variable name="bfid" select="@borderfill-id" />
-	<xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
-	  <xsl:apply-templates mode="fo-border" select="." />
-	  <xsl:apply-templates mode="fo-background" select="." />
-	</xsl:for-each>
-      </xsl:element>
+      <xsl:apply-templates mode="style:table-cell-properties" select="." />
+    </xsl:element>
+  </xsl:template>
+
+  <!--
+  17.18 style:table-cell-properties
+  http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#element-style_table-cell-properties
+  -->
+  <xsl:template mode="style:table-cell-properties" match="TableCell">
+    <xsl:element name="style:table-cell-properties">
+      <!--
+      Attributes:
+	fo:background-color 20.175
+	fo:border 20.176.2
+	fo:border-bottom 20.176.3
+	fo:border-left 20.176.4
+	fo:border-right 20.176.5
+	fo:border-top 20.176.6
+	fo:padding 20.210
+	fo:padding-bottom 20.211
+	fo:padding-left 20.212
+	fo:padding-right 20.213
+	fo:padding-top 20.214
+	fo:wrap-option 20.223
+	style:border-line-width 20.241
+	style:border-line-width-bottom 20.242
+	style:border-line-width-left 20.243
+	style:border-line-width-right 20.244
+	style:border-line-width-top 20.245
+	style:cell-protect 20.246
+	style:decimal-places 20.250
+	style:diagonal-bl-tr 20.251
+	style:diagonal-bl-tr-widths 20.252
+	style:diagonal-tl-br 20.253
+	style:diagonal-tl-br-widths 20.254
+	style:direction 20.255
+	style:glyph-orientation-vertical 20.289
+	style:print-content 20.323.3
+	style:repeat-content 20.334
+	style:rotation-align 20.338
+	style:rotation-angle 20.339
+	style:shadow 20.349
+	style:shrink-to-fit 20.350
+	style:text-align-source 20.354
+	style:vertical-align 20.386.2
+	style:writing-mode 20.394.6.
+      Elements:
+	style:background-image 17.3.
+      -->
+      <xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:variable name="bfid" select="@borderfill-id" />
+      <xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
+	<xsl:apply-templates mode="fo-border" select="." />
+	<xsl:apply-templates mode="fo-background" select="." />
+      </xsl:for-each>
     </xsl:element>
   </xsl:template>
 
