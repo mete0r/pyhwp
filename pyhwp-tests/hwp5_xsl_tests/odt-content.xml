@@ -893,7 +893,7 @@
       </context:subtree>
     </context:xslt>
 
-    <context:xslt mode="tablecell-style" select="//TableControl[1]" wrap="tablecell-styles">
+    <context:xslt mode="style-style-for-table-cells" select="//TableControl[1]" wrap="wrap">
       <context:subtree select="style:style[1]">
         <attr name="style:name">Table-1-1-1</attr>
         <attr name="style:family">table-cell</attr>

@@ -68,7 +68,7 @@
     <office:automatic-styles>
       <xsl:apply-templates mode="style-style-for-paragraph-and-text" select="//Paragraph" />
       <xsl:apply-templates mode="style:style" select="SectionDef//TableControl" />
-      <xsl:apply-templates mode="tablecell-style" select="SectionDef//TableControl" />
+      <xsl:apply-templates mode="style-style-for-table-cells" select="SectionDef//TableControl" />
       <xsl:apply-templates mode="style:style" select="SectionDef//ShapeComponent" />
     </office:automatic-styles>
   </xsl:template>
@@ -305,7 +305,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template mode="tablecell-style" match="TableControl">
+  <xsl:template mode="style-style-for-table-cells" match="TableControl">
     <xsl:variable name="table-id" select="@table-id + 1" />
     <xsl:for-each select="TableBody/TableRow">
       <xsl:variable name="rowidx" select="position()" />
