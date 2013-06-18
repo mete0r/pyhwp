@@ -21,6 +21,8 @@
 Usage::
 
     hwp5odt [options] [--embed-image] <hwp5file>
+    hwp5odt [options] --styles <hwp5file>
+    hwp5odt [options] --content [--embed-image] <hwp5file>
     hwp5odt [options] --document [--no-embed-image] <hwp5file>
     hwp5odt -h | --help
     hwp5odt --version
@@ -33,6 +35,8 @@ Options::
     --logfile=<file>    Set log file.
 
     --document          Produce single OpenDocument XML file (.fodt)
+    --styles            Produce *.styles.xml
+    --content           Produce *.content.xml
 '''
 from __future__ import with_statement
 import os
@@ -77,6 +81,10 @@ def main():
 
     if args['--document']:
         convert = ODTSingleDocumentConverter(xslt, rng, not args['--no-embed-image'])
+    elif args['--styles']:
+        convert = ODTStylesConverter(xslt, rng)
+    elif args['--content']:
+        convert = ODTContentConverter(xslt, rng, args['--embed-image'])
     else:
         convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
 
@@ -202,6 +210,39 @@ class ODTConverter(ConverterBase):
             self.convert_to(hwpfile, dest_path)
         finally:
             hwpfile.close()
+
+
+class ODTStylesConverter(ODTConverter):
+
+    dest_ext = 'styles.xml'
+
+    def __init__(self, xslt, relaxng=None):
+        ODTConverter.__init__(self, xslt, relaxng)
+        self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
+
+    def convert_to(self, hwp5file, output_path):
+        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage=False)
+        try:
+            self.transform_to(self.xsl_styles, xhwp5_path, output_path)
+        finally:
+            unlink_or_warning(xhwp5_path)
+
+
+class ODTContentConverter(ODTConverter):
+
+    dest_ext = 'content.xml'
+
+    def __init__(self, xslt, relaxng=None, embedimage=False):
+        ODTConverter.__init__(self, xslt, relaxng)
+        self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
+        self.embedimage = embedimage
+
+    def convert_to(self, hwp5file, output_path):
+        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage=self.embedimage)
+        try:
+            self.transform_to(self.xsl_content, xhwp5_path, output_path)
+        finally:
+            unlink_or_warning(xhwp5_path)
 
 
 class ODTPackageConverter(ODTConverter):
