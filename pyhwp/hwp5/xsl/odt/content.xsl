@@ -48,19 +48,7 @@
       <office:scripts/>
       <office:font-face-decls/>
       <xsl:apply-templates mode="office:automatic-styles" select="HwpDoc/BodyText" />
-      <office:body>
-        <office:text>
-          <text:sequence-decls>
-            <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
-            <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
-            <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
-            <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
-          </text:sequence-decls>
-          <xsl:for-each select="HwpDoc/BodyText">
-              <xsl:apply-templates />
-          </xsl:for-each>
-        </office:text>
-      </office:body>
+      <xsl:apply-templates mode="office:body" select="HwpDoc/BodyText" />
     </office:document-content>
   </xsl:template>
 
@@ -71,6 +59,20 @@
       <xsl:apply-templates mode="style-style-for-table-cells" select="SectionDef//TableControl" />
       <xsl:apply-templates mode="style:style" select="SectionDef//ShapeComponent" />
     </office:automatic-styles>
+  </xsl:template>
+
+  <xsl:template mode="office:body" match="BodyText">
+    <office:body>
+      <office:text>
+	<text:sequence-decls>
+	  <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+	  <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+	  <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+	  <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+	</text:sequence-decls>
+	<xsl:apply-templates select="SectionDef" />
+      </office:text>
+    </office:body>
   </xsl:template>
 
   <xsl:template mode="style-style-for-paragraph-and-text" match="Paragraph">

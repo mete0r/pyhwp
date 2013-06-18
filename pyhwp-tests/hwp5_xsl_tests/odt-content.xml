@@ -792,6 +792,29 @@
   </context:import>
 
   <context:import href="sample-5017.xml">
+
+    <context:xslt mode="office:document-content" select=".">
+      <elem>office:document-content</elem>
+      <attr name="office:version">1.2</attr>
+      <attr name="grddl:transformation">http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl</attr>
+      <equals>
+        <tested>count(office:scripts)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:font-face-decls)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:automatic-styles)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:body)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
     <context:xslt mode="office:automatic-styles" select="/HwpDoc/BodyText">
       <elem>office:automatic-styles</elem>
       <equals>
@@ -817,6 +840,19 @@
       <context:wrap-subnodes select="style:style[@style:family='paragraph']">
       </context:wrap-subnodes>
     </context:xslt>
+
+    <context:xslt mode="office:body" select="HwpDoc/BodyText">
+      <elem>office:body</elem>
+      <equals>
+        <tested>count(office:text)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:text/text:p)</tested>
+        <expected>14</expected>
+      </equals>
+    </context:xslt>
+
   </context:import>
 
   <context:import href="parashape.xml">
