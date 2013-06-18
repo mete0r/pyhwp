@@ -265,6 +265,7 @@
     <!-- FaceName to style:font-face -->
     <context:xslt
       href="odt/styles.xsl"
+      mode="style:font-face"
       select="//FaceName[@name='굴림']">
       <elem>style:font-face</elem>
       <attr name="style:name">굴림</attr>

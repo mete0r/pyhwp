@@ -119,7 +119,7 @@
       <style:font-face style:name="명조" svg:font-family="'은 바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
       <style:font-face style:name="고딕" svg:font-family="'은 돋움'" style:font-family-generic="swiss" style:font-pitch="variable"/>
       <style:font-face style:name="Lohit Hindi" svg:font-family="'Lohit Hindi'" style:font-family-generic="system" style:font-pitch="variable"/>
-      <xsl:apply-templates select="IdMappings/FaceName" />
+      <xsl:apply-templates mode="style:font-face" select="IdMappings/FaceName" />
     </office:font-face-decls>
   </xsl:template>
 
@@ -229,7 +229,7 @@
     </office:styles>
   </xsl:template>
 
-  <xsl:template match="FaceName">
+  <xsl:template mode="style:font-face" match="FaceName">
     <xsl:element name="style:font-face">
       <xsl:attribute name="style:name"><xsl:value-of select="@name"/></xsl:attribute>
       <xsl:attribute name="svg:font-family">'<xsl:value-of select="@name"/>'</xsl:attribute>
