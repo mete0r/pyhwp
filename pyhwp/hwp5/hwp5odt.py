@@ -21,6 +21,7 @@
 Usage::
 
     hwp5odt [options] [--embed-image] <hwp5file>
+    hwp5odt [options] --document [--no-embed-image] <hwp5file>
     hwp5odt -h | --help
     hwp5odt --version
 
@@ -30,6 +31,8 @@ Options::
     --version           Show version
     --loglevel=<level>  Set log level.
     --logfile=<file>    Set log file.
+
+    --document          Produce single OpenDocument XML file (.fodt)
 '''
 from __future__ import with_statement
 import os
@@ -72,7 +75,10 @@ def main():
     if rng is None:
         logger.warning('no RelaxNG implementation is available.')
 
-    convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
+    if args['--document']:
+        convert = ODTSingleDocumentConverter(xslt, rng, not args['--no-embed-image'])
+    else:
+        convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
 
     hwpfilename = args['<hwp5file>']
     root = os.path.basename(hwpfilename)
