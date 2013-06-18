@@ -23,7 +23,8 @@ EXPECT = '{%s}' % EXPECT_URI
 CONTEXT_URI = 'urn:xunit/context'
 CONTEXT = '{%s}' % CONTEXT_URI
 
-XSL = '{http://www.w3.org/1999/XSL/Transform}'
+XSL_URI = 'http://www.w3.org/1999/XSL/Transform'
+XSL = '{%s}' % XSL_URI
 
 NAMESPACES = {
     'xunit': XUNIT_URI,
@@ -632,10 +633,16 @@ class context_xslt(ContextTransform):
 
             if mode:
                 mode_prefix, mode_qname = interpret_as_qname(mode, stylesheet_nsmap)
+                if mode_prefix:
+                    mode = mode_prefix + ':' + mode_qname.localname
+                    nsmap = {mode_prefix: mode_qname.namespace}
+                else:
+                    mode = mode_qname.localname
+                    nsmap = {}
                 apply_templates = SubElement(root_template,
                                              XSL+'apply-templates',
-                                             nsmap={mode_prefix: mode_qname.namespace},
-                                             mode=mode_prefix+':'+mode_qname.localname)
+                                             nsmap=nsmap,
+                                             mode=mode)
             else:
                 apply_templates = SubElement(root_template,
                                              XSL+'apply-templates')
