@@ -60,6 +60,13 @@
   </context:import>
 
   <context:import href="sample-5017.xml">
+    <context:xslt mode="office:font-face-decls" select="HwpDoc/DocInfo">
+      <equals>
+        <tested>count(style:font-face)</tested>
+        <expected>7</expected>
+      </equals>
+    </context:xslt>
+
     <context:xslt mode="office:styles" select="HwpDoc/DocInfo">
       <equals>
         <tested>count(style:style[@style:family='paragraph'])</tested>

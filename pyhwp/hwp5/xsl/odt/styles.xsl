@@ -72,16 +72,7 @@
                      xmlns:css3t="http://www.w3.org/TR/css3-text/"
                      office:version="1.2"
                      grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
-      <office:font-face-decls>
-        <style:font-face style:name="serif" svg:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable"/>
-        <style:font-face style:name="sans-serif" svg:font-family="'Arial'" style:font-family-generic="swiss" style:font-pitch="variable"/>
-        <style:font-face style:name="명조" svg:font-family="'은 바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
-        <style:font-face style:name="고딕" svg:font-family="'은 돋움'" style:font-family-generic="swiss" style:font-pitch="variable"/>
-        <style:font-face style:name="Lohit Hindi" svg:font-family="'Lohit Hindi'" style:font-family-generic="system" style:font-pitch="variable"/>
-        <xsl:for-each select="HwpDoc/DocInfo">
-          <xsl:apply-templates select="IdMappings/FaceName" />
-        </xsl:for-each>
-      </office:font-face-decls>
+      <xsl:apply-templates mode="office:font-face-decls" select="HwpDoc/DocInfo" />
       <xsl:apply-templates mode="office:styles" select="HwpDoc/DocInfo" />
       <office:automatic-styles>
         <xsl:for-each select="/HwpDoc/BodyText/SectionDef/PageDef">
@@ -119,6 +110,17 @@
         </xsl:for-each>
       </office:master-styles>
     </office:document-styles>
+  </xsl:template>
+
+  <xsl:template mode="office:font-face-decls" match="DocInfo">
+    <office:font-face-decls>
+      <style:font-face style:name="serif" svg:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable"/>
+      <style:font-face style:name="sans-serif" svg:font-family="'Arial'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+      <style:font-face style:name="명조" svg:font-family="'은 바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
+      <style:font-face style:name="고딕" svg:font-family="'은 돋움'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+      <style:font-face style:name="Lohit Hindi" svg:font-family="'Lohit Hindi'" style:font-family-generic="system" style:font-pitch="variable"/>
+      <xsl:apply-templates select="IdMappings/FaceName" />
+    </office:font-face-decls>
   </xsl:template>
 
   <xsl:template mode="office:styles" match="DocInfo">
