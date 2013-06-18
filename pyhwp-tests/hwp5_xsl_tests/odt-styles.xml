@@ -60,6 +60,29 @@
   </context:import>
 
   <context:import href="sample-5017.xml">
+    <context:xslt mode="office:styles" select="HwpDoc/DocInfo">
+      <equals>
+        <tested>count(style:style[@style:family='paragraph'])</tested>
+        <expected>21</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='text'])</tested>
+        <expected>0</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table'])</tested>
+        <expected>0</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table-cell'])</tested>
+        <expected>0</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='graphics'])</tested>
+        <expected>0</expected>
+      </equals>
+    </context:xslt>
+      
     <context:xslt mode="style:paragraph-properties" select="//Style[1]">
       <attr name="fo:text-align">justify</attr>
       <attr name="fo:text-indent">0pt</attr>
