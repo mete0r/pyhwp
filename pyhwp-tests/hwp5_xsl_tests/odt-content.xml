@@ -793,6 +793,29 @@
 
   <context:import href="parashape.xml">
 
+    <context:xslt mode="style:style" select="//Paragraph[1]">
+      <elem>style:style</elem>
+      <attr name="style:family">paragraph</attr>
+      <attr name="style:class">text</attr>
+      <attr name="style:name">Paragraph-1</attr>
+      <attr name="style:parent-style-name">바탕글</attr>
+      <attr name="style:master-page-name">MasterPage-1</attr>
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">11pt</attr>
+        <attr name="fo:margin-right">12pt</attr>
+        <attr name="fo:margin-top">13pt</attr>
+        <attr name="fo:margin-bottom">14pt</attr>
+        <empty>@fo:break-before</empty>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt mode="style:style" select="//Paragraph[2]" wrap="wrapper">
+      이 문단의 스타일은 "바탕글" Style과 동일하므로, 이 문단에 특정한 style:style은 생성되지 않음
+      <empty>style:style</empty>
+    </context:xslt>
+
     <context:xslt mode="style:paragraph-properties" select="//Paragraph[1]">
       <elem>style:paragraph-properties</elem>
       <attr name="fo:text-align">justify</attr>
