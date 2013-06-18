@@ -428,6 +428,8 @@
       # fill solid
       # stroke none
       <context:subtree select="//style:style[@style:name='Shape-1']">
+        <attr name="style:name">Shape-1</attr>
+        <attr name="style:family">graphic</attr>
         <context:subtree select="style:graphic-properties">
           <attr name="draw:fill">solid</attr>
           <attr name="draw:fill-color">#66ccff</attr>
@@ -712,4 +714,18 @@
     </context:xslt>
   </context:import>
 
+  <context:import href="shaperect.xml">
+    <context:xslt mode="style:style" select="//ShapeComponent[1]">
+      <elem>style:style</elem>
+      <attr name="style:name">Shape-1</attr>
+      <attr name="style:family">graphic</attr>
+      <context:subtree select="style:graphic-properties">
+        <attr name="draw:fill">solid</attr>
+        <attr name="draw:fill-color">#66ccff</attr>
+        <attr name="draw:stroke">none</attr>
+        <attr name="svg:stroke-width">0.12mm</attr>
+        <attr name="svg:stroke-color">#000000</attr>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
 </xunit:stylesheet>

@@ -51,7 +51,7 @@
         <xsl:apply-templates mode="office:automatic-styles" select="//Paragraph" />
 	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//TableControl" />
 	<xsl:apply-templates mode="tablecell-style" select="HwpDoc/BodyText/SectionDef//TableControl" />
-	<xsl:apply-templates mode="style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
+	<xsl:apply-templates mode="style:style" select="HwpDoc/BodyText/SectionDef//ShapeComponent" />
       </office:automatic-styles>
       <office:body>
         <office:text>
@@ -573,7 +573,7 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="ShapeComponent" mode="style">
+  <xsl:template match="ShapeComponent" mode="style:style">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
       <xsl:attribute name="style:family">graphic</xsl:attribute>
