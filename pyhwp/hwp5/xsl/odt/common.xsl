@@ -1389,8 +1389,8 @@
     <xsl:param name="x" />
     <xsl:param name="y" />
     <xsl:element name="draw:g">
-      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
+      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:apply-templates select="ShapeComponent">
 	<xsl:with-param name="x" select="$x" />
 	<xsl:with-param name="y" select="$y" />
@@ -1474,7 +1474,6 @@
       <xsl:attribute name="svg:x"><xsl:value-of select="@x div 100"/>pt</xsl:attribute>
       <xsl:attribute name="svg:y"><xsl:value-of select="@y div 100"/>pt</xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates mode="text-anchor-type" select="." />
     <!-- common-draw-z-index-attlist -->
     <xsl:attribute name="draw:z-index"><xsl:value-of select="@z-order"/></xsl:attribute>
     <!-- 15.27.1 Frame Widths -->
@@ -1489,6 +1488,7 @@
 	<xsl:attribute name="svg:height"><xsl:value-of select="round(ShapeComponent/@initial-height div 7200 * 2.54 * 10 * 100) div 100"/>mm</xsl:attribute>
       </xsl:when>
     </xsl:choose>
+    <xsl:apply-templates mode="text-anchor-type" select="." />
   </xsl:template>
 
   <xsl:template match="ShapeComponent[@chid='$rec']">
@@ -1497,13 +1497,13 @@
 
     <xsl:element name="draw:rect">
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
-      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="svg:x"><xsl:value-of select="round($x div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y"><xsl:value-of select="round($y div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:variable name="width" select="ShapeRectangle/Coord[2]/@x - ShapeRectangle/Coord[1]/@x"/>
       <xsl:variable name="height" select="ShapeRectangle/Coord[3]/@y - ShapeRectangle/Coord[2]/@y"/>
       <xsl:attribute name="svg:width"><xsl:value-of select="round($width div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:height"><xsl:value-of select="round($height div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
+      <xsl:apply-templates mode="text-anchor-type" select=".." />
 
       <xsl:apply-templates mode="draw-transform" select=".">
 	<xsl:with-param name="x" select="$x" />
@@ -1530,8 +1530,8 @@
       <xsl:attribute name="svg:y1"><xsl:value-of select="round($y1 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:x2"><xsl:value-of select="round($x2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
       <xsl:attribute name="svg:y2"><xsl:value-of select="round($y2 div 7200 * 25.4 * 100) div 100"/>mm</xsl:attribute>
-      <xsl:apply-templates mode="text-anchor-type" select=".." />
       <xsl:attribute name="draw:style-name">Shape-<xsl:value-of select="@shape-id + 1"/></xsl:attribute>
+      <xsl:apply-templates mode="text-anchor-type" select=".." />
     </xsl:element>
   </xsl:template>
 
