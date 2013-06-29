@@ -1,4 +1,4 @@
-BUILDOUT_DIR := ${realpath ../..}
+BUILDOUT_DIR := ${realpath ../../..}
 JXML_DIR := ${realpath ..}
 JXML_BIN_DIR:=$(JXML_DIR)/bin
 JXML_LXML_DIR := ${JXML_DIR}/lxml
