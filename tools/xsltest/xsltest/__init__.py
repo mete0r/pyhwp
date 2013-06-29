@@ -120,6 +120,7 @@ def generate_testsuite_py(filename, context_tests):
 
 def generate_testsuite_source(context_tests):
     yield '# -*- coding: utf-8 -*-'
+    yield 'import unittest'
     yield 'import %s' % __name__
     yield ''
     yield ''
@@ -128,6 +129,10 @@ def generate_testsuite_source(context_tests):
     for context_test in context_tests:
         for line in context_test.generate_testcase_py(None):
             yield ' ' * 4 + line
+    yield ''
+    yield ''
+    yield 'if __name__ == "__main__":'
+    yield '    unittest.main()'
 
 
 class ExpectHandler(object):
