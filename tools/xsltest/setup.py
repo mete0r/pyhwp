@@ -12,6 +12,8 @@ setup(name='xsltest',
       entry_points={
           'console_scripts': [
               'xsltest = xsltest:main',
+              'xsltest-gen = xsltest:main_gen',
+              'xsltest-run = xsltest:main_run',
               'xmltool = xsltest.xmltool:main'
           ]
       })
