@@ -1,6 +1,7 @@
 # -*- coding: utf-8
 from __future__ import with_statement
 
+from contextlib import contextmanager
 import logging
 from itertools import imap
 from itertools import ifilter
@@ -43,6 +44,159 @@ fac.setNamespaceAware(True)
 builder = fac.newDocumentBuilder()
 transformfac = TransformerFactory.newInstance()
 xpathfac = XPathFactory.newInstance()
+
+
+class XSLTCoverage(object):
+
+    def __init__(self):
+        self.traces = dict()
+
+    def trace(self, systemId, startline, endline):
+        files = self.traces
+        lines = files.setdefault(systemId, dict())
+        lines[startline] = lines.get(startline, 0) + 1
+        lines[endline] = lines.get(endline, 0) + 1
+
+    def writeto(self, f):
+        trace_root = Element('coverage')
+        packages = SubElement(trace_root, 'packages')
+        package_attrib = {'name': '', 'branch-rate': '0', 'complexity': '0',
+                          'line-rate': '0'}
+        package = SubElement(packages, 'package', package_attrib)
+        classes = SubElement(package, 'classes')
+
+        for filename in sorted(self.traces):
+            if not filename:
+                continue
+            if filename.startswith('file://'):
+                fn = filename[len('file://'):]
+            else:
+                fn = filename
+            class_attrib = dict()
+            class_attrib['filename'] = fn
+            class_attrib['branch-rate'] = '0'
+            class_attrib['complexity'] = '0'
+            class_attrib['line-rate'] = '0'
+            class_attrib['name'] = os.path.basename(fn)
+            clas = SubElement(classes, 'class', class_attrib)
+            methods = SubElement(clas, 'methods')
+            linesElem = SubElement(clas, 'lines')
+            lines = self.traces[filename]
+            for lineno in sorted(lines):
+                count = lines[lineno]
+                lineElem = SubElement(linesElem, 'line',
+                                      dict(number=str(lineno),
+                                           hits=str(count)))
+        s = tostring(trace_root, encoding='utf-8', xml_declaration=True)
+        f.write(s)
+        f.write('\n')
+
+    def read_from(self, filename):
+        tree = parse(filename)
+        coverage = tree.getroot()
+        assert coverage.tag == 'coverage'
+        packages = coverage[0]
+        assert packages.tag == 'packages'
+        for package in packages:
+            if package.tag != 'package':
+                continue
+            classes = package[0]
+            assert classes.tag == 'classes'
+            for clas in classes:
+                if clas.tag != 'class':
+                    continue
+                filename = clas.get('filename')
+                trace = self.traces.setdefault(filename, dict())
+                for lines in clas:
+                    if lines.tag != 'lines':
+                        continue
+                    for line in lines:
+                        if line.tag != 'line':
+                            continue
+                        lineno = int(line.get('number'))
+                        hits = int(line.get('hits'))
+                        trace[lineno] = trace.get(lineno, 0) + hits
+
+
+xsltcoverage_trace = None
+
+
+@contextmanager
+def xsltcoverage(output=None):
+    xsltcoverage = XSLTCoverage()
+    globals()['xsltcoverage_trace'] = xsltcoverage
+    yield xsltcoverage
+    globals()['xsltcoverage_trace'] = None
+    if output is not None:
+        if isinstance(output, basestring):
+            with open(output, 'w') as f:
+                xsltcoverage.writeto(f)
+        elif hasattr(output, 'write'):
+            xsltcoverage.writeto(output)
+
+
+def instrument_xalan_transformer_factory(transformfac):
+    from javax.xml.transform import Templates
+    try:
+        from org.apache.xalan.processor import TransformerFactoryImpl
+        from org.apache.xalan.transformer import TransformerImpl
+        from org.apache.xalan.trace import TraceListenerEx2
+    except ImportError:
+        logger.warning('Xalan-J is not found: '
+                       'check your CLASSPATH. '
+                       'there will be no coverage data')
+        return transformfac
+    if not isinstance(transformfac, TransformerFactoryImpl):
+        logger.warning('TransformerFactory implementation is not Xalan-J: '
+                       'check system property of '
+                       'javax.xml.transform.TransformerFactory. '
+                       'there will be no coverage data')
+        return transformfac
+    if xsltcoverage_trace is None:
+        return transformfac
+
+    class XalanTraceListener(TraceListenerEx2):
+
+        def trace(self, ev):
+            stylenode = ev.m_styleNode
+            systemId = stylenode.getSystemId()
+            startline = stylenode.getLineNumber()
+            endline = stylenode.getEndLineNumber()
+
+            xsltcoverage_trace.trace(systemId, startline, endline)
+
+    traceListener = XalanTraceListener()
+
+    class XalanTransformerInstrumentImpl(TransformerFactoryImpl):
+
+        def newTemplates(self, source):
+            templates = TransformerFactoryImpl.newTemplates(self, source)
+            return XalanTemplates(templates, source)
+
+        def newTransformer(self, source=None):
+            impl = TransformerFactoryImpl.newTransformer(self, source)
+            # add listener
+            tracemanager = impl.getTraceManager()
+            tracemanager.addTraceListener(traceListener)
+            return impl
+
+    class XalanTemplates(Templates):
+
+        def __init__(self, t, s):
+            self.templates = t
+            self.source = s
+
+        def newTransformer(self):
+            transformer = self.templates.newTransformer()
+            # add listener
+            tracemanager = transformer.getTraceManager()
+            tracemanager.addTraceListener(traceListener)
+            return transformer
+
+        def getOutputProperties(self):
+            return self.templates.getOutputProperties()
+
+    return XalanTransformerInstrumentImpl()
 
 
 XML_URI = 'http://www.w3.org/XML/1998/namespace'
@@ -765,6 +919,7 @@ class XSLT(object):
         #print tostring(xsl_tree)
         fac = TransformerFactory.newInstance()
         fac.setURIResolver(self.uri_resolver)
+        fac = instrument_xalan_transformer_factory(fac)
         self.transformer = fac.newTransformer(self.xsl_source)
 
     def __call__(self, _input, profile_run=False, **kw):
