@@ -19,8 +19,8 @@ XALAN_J_JYTHON = ${XALAN_J_ENVSET} ${JXML_BIN_DIR}/jython ${XALAN_J_SYS_PROPS}
 DEFAULT_JYTHON = ${JXML_BIN_DIR}/jython
 JXML_ENVSET = JYTHONPATH=${JXML_DIR}:${JXML_LXML_DIR}
 
-.PHONY: test-jaxp test-jaxp-xalan test-python test-jython test-jython-xalan test-xsl test-xsl-xalan
-all: test-jaxp test-jaxp-xalan test-python test-jython test-jython-xalan test-xsl test-xsl-xalan
+.PHONY: test-jaxp test-jaxp-xalan test-python test-jython test-jython-xalan test-xsl test-xsl-xalan test-jxml-cov-test test-jxml-annotate
+all: test-jaxp test-jaxp-xalan test-python test-jython test-jython-xalan test-xsl test-xsl-xalan test-jxml-cov-test test-jxml-annotate
 
 test-python:
 	python test_lxml.py
@@ -37,6 +37,11 @@ test-jaxp:
 	${DEFAULT_JYTHON} test_jaxp.py
 test-jaxp-xalan:
 	${XALAN_J_JYTHON} test_jaxp.py
+
+test-jxml-cov-test:
+	${XALAN_J_ENVSET} ${JXML_BIN_DIR}/jxml-cov-test coverage.xml ${BUILDOUT_DIR}/test-xsl/gen/*.py
+test-jxml-annotate: test-jxml-cov-test
+	${JXML_BIN_DIR}/jxml-annotate --color=yes coverage.xml > coverage.color.txt
 
 
 
