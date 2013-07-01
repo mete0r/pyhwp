@@ -35,3 +35,4 @@ tox.ini
 .*.sw?
 testpypi
 test-xsl
+xsltcoverage.xml
