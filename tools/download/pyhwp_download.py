@@ -4,6 +4,7 @@ import urlparse
 import os.path
 import logging
 from binascii import a2b_hex
+from binascii import b2a_hex
 from hashlib import md5
 
 import requests

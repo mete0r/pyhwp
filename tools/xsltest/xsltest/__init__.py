@@ -81,6 +81,74 @@ def main():
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.StreamHandler())
 
+    test_files = generate_test_py_files_from_args(args)
+    tests = load_tests_from_files(test_files)
+    ts = unittest.TestSuite(tests)
+    result = unittest.TextTestRunner().run(ts)
+    return 0 if result.wasSuccessful() else 1
+
+
+def main_gen():
+    doc = ''' generate xsl test files
+
+Usage:
+    xsltest-gen [--styles-dir=<dir>] [--import-dir=<dir>] [--gen-dir=<dir>] <files>...
+    xsltest-gen --help
+
+Options:
+    -h --help               Show this screen
+       --styles-dir=<dir>   Set XSL stylesheet directory
+       --import-dir=<dir>   Set context:import directory
+       --gen-dir=<dir>      Set a directory where .py files to be generated
+
+    <files>...          XUnit files
+'''
+
+    from docopt import docopt
+    args = docopt(doc, version='0.0')
+
+    logger.setLevel(logging.INFO)
+    logger.addHandler(logging.StreamHandler())
+
+    for py_file in generate_test_py_files_from_args(args):
+        print py_file
+    return 0
+
+
+def main_run():
+    doc = ''' run test files
+
+Usage:
+    xsltest-run <files>...
+    xsltest-run --help
+
+Options:
+    -h --help               Show this screen
+
+    <files>...          test files
+'''
+    from docopt import docopt
+
+    args = docopt(doc, version='0.0')
+
+    logger.setLevel(logging.INFO)
+    logger.addHandler(logging.StreamHandler())
+
+    test_files = args['<files>']
+    tests = load_tests_from_files(test_files)
+    ts = unittest.TestSuite(tests)
+    result = unittest.TextTestRunner().run(ts)
+    return 0 if result.wasSuccessful() else 1
+
+
+def load_tests_from_files(py_files):
+    for py_file in py_files:
+        d = dict()
+        execfile(py_file, d)
+        yield unittest.TestLoader().loadTestsFromTestCase(d['Test'])
+
+
+def generate_test_py_files_from_args(args):
     cur_dir = os.getcwd()
     xunit_files = args['<files>']
     styles_dir = args['--styles-dir']
@@ -92,23 +160,9 @@ def main():
         if not os.path.exists(gen_dir):
             os.makedirs(gen_dir)
 
-    py_files = list()
-
     proc = Processor(cur_dir, styles_dir=styles_dir, import_dir=import_dir)
     for xunit_path in expand_files(xunit_files):
-        xunit_py = proc.generate_testsuite_from_path(xunit_path, gen_dir)
-        py_files.append(xunit_py)
-
-    tests = list()
-    for xunit_py in py_files:
-        d = dict()
-        execfile(xunit_py, d)
-        ts = unittest.TestLoader().loadTestsFromTestCase(d['Test'])
-        tests.append(ts)
-
-    ts = unittest.TestSuite(tests)
-    result = unittest.TextTestRunner().run(ts)
-    return 0 if result.wasSuccessful() else 1
+        yield proc.generate_testsuite_from_path(xunit_path, gen_dir)
 
 
 def generate_testsuite_py(filename, context_tests):
@@ -120,6 +174,7 @@ def generate_testsuite_py(filename, context_tests):
 
 def generate_testsuite_source(context_tests):
     yield '# -*- coding: utf-8 -*-'
+    yield 'import unittest'
     yield 'import %s' % __name__
     yield ''
     yield ''
@@ -128,6 +183,10 @@ def generate_testsuite_source(context_tests):
     for context_test in context_tests:
         for line in context_test.generate_testcase_py(None):
             yield ' ' * 4 + line
+    yield ''
+    yield ''
+    yield 'if __name__ == "__main__":'
+    yield '    unittest.main()'
 
 
 class ExpectHandler(object):
