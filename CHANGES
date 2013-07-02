@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-0.1b4 (unreleased)
+0.1b4 (2013-07-03)
 ------------------
 
 - hwp5proc records: new option '--raw-header'
