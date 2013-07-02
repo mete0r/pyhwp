@@ -4,8 +4,10 @@ CHANGES
 0.1b4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- hwp5proc records: new option '--raw-header'
+- hwp5odt: new '--document' option produces single ODT XML files (*.fodt)
+- hwp5odt: new '--styles', '--content' option produces styles/content XML files
+- ODT XSL files restructured
 
 0.1b3 (2013-06-18)
 ------------------
