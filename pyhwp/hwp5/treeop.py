@@ -89,23 +89,21 @@ def prefix_ancestors_from_level(level_prefixed_items, root_item=None):
 def build_subtree(event_prefixed_items):
     ''' build a tree from (event, item) stream
 
+        Example Scenario::
 
-        Example Scenario
-        ----------------
-
-        ...
-        (STARTEVENT, rootitem)          # should be consumed by the caller
-        --- call build_subtree() ---
-        (STARTEVENT, child1)            # consumed by build_subtree()
-        (STARTEVENT, grandchild)        # (same)
-        (ENDEVENT, grandchild)          # (same)
-        (ENDEVENT, child1)              # (same)
-        (STARTEVENT, child2)            # (same)
-        (ENDEVENT, child2)              # (same)
-        (ENDEVENT, rootitem)            # same, buildsubtree() returns
-        --- build_subtree() returns ---
-        (STARTEVENT, another_root)
-        ...
+           ...
+           (STARTEVENT, rootitem)          # should be consumed by the caller
+           --- call build_subtree() ---
+           (STARTEVENT, child1)            # consumed by build_subtree()
+           (STARTEVENT, grandchild)        # (same)
+           (ENDEVENT, grandchild)          # (same)
+           (ENDEVENT, child1)              # (same)
+           (STARTEVENT, child2)            # (same)
+           (ENDEVENT, child2)              # (same)
+           (ENDEVENT, rootitem)            # same, buildsubtree() returns
+           --- build_subtree() returns ---
+           (STARTEVENT, another_root)
+           ...
 
         result will be (rootitem, [(child1, [(grandchild, [])]),
                                    (child2, [])])

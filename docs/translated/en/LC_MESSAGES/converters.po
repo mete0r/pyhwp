@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-18 00:14\n"
+"POT-Creation-Date: 2013-07-03 07:37\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,7 @@ msgstr ""
 # 8e52e64968d9457da967a7f1b5826470
 # b650b764f0bc40d68cf0b3cff9bec9fc
 # ea68666462574d1da0411b50c9aaa33b
-#: ../../../pyhwp/hwp5/hwp5odt.py:docstring of hwp5.hwp5odt:9
+#: ../../../pyhwp/hwp5/hwp5odt.py:docstring of hwp5.hwp5odt:12
 #: ../../../pyhwp/hwp5/hwp5html.py:docstring hwp5.hwp5html:9
 #: ../../../pyhwp/hwp5/hwp5txt.py:docstring hwp5.hwp5txt:9
 msgid "Options::"

@@ -38,7 +38,7 @@ Options::
        --simple             Print records as simple tree
        --json               Print records as json
        --raw                Print records as is
-       --raw-header         Print records headers only
+       --raw-header         Print record headers as is
        --raw-payload        Print record payloads as is
 
        --range=<range>      Print records specified in the <range>.
