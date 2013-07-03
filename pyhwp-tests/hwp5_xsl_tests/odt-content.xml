@@ -398,6 +398,83 @@
     </context:xslt>
   </context:import>
 
+  테이블/셀 스타일
+  <context:import href="sample-5017.xml">
+    <context:xslt>
+
+      <context:subtree select="//style:style[@style:name='Table-1']">
+        <attr name="style:name">Table-1</attr>
+        <attr name="style:family">table</attr>
+        <context:subtree select="style:table-properties">
+          <attr name="style:width">142.71mm</attr>
+          <attr name="table:align">margins</attr>
+          <attr name="table:border-model">collapsing</attr>
+          <attr name="fo:margin-left">1mm</attr>
+          <attr name="fo:margin-right">1mm</attr>
+          <attr name="fo:margin-top">1mm</attr>
+          <attr name="fo:margin-bottom">1mm</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="//style:style[@style:name='Table-1-1-1']">
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="//style:style[@style:name='Table-1-1-2']">
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.4mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="//style:style[@style:name='Table-1-2-1']">
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.4mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="//style:style[@style:name='Table-1-2-2']">
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.4mm solid #000000</attr>
+          <attr name="fo:border-right">0.4mm solid #000000</attr>
+          <attr name="fo:border-top">0.4mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.4mm solid #000000</attr>
+          <attr name="fo:background-color">#99ccff</attr>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
   그리기 객체 ShapeLine
   <context:import href="shapeline.xml">
     <context:xslt>
@@ -428,6 +505,8 @@
       # fill solid
       # stroke none
       <context:subtree select="//style:style[@style:name='Shape-1']">
+        <attr name="style:name">Shape-1</attr>
+        <attr name="style:family">graphic</attr>
         <context:subtree select="style:graphic-properties">
           <attr name="draw:fill">solid</attr>
           <attr name="draw:fill-color">#66ccff</attr>
@@ -712,4 +791,263 @@
     </context:xslt>
   </context:import>
 
+  <context:import href="sample-5017.xml">
+
+    <context:xslt mode="office:document-content" select="/HwpDoc">
+      <elem>office:document-content</elem>
+      <attr name="office:version">1.2</attr>
+      <attr name="grddl:transformation">http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl</attr>
+      <equals>
+        <tested>count(office:scripts)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:font-face-decls)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:automatic-styles)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:body)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
+    <context:xslt mode="office:automatic-styles" select="/HwpDoc/BodyText">
+      <elem>office:automatic-styles</elem>
+      <equals>
+        <tested>count(style:style[@style:family='paragraph'])</tested>
+        <expected>8</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='text'])</tested>
+        <expected>8</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table'])</tested>
+        <expected>3</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table-cell'])</tested>
+        <expected>9</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='graphic'])</tested>
+        <expected>2</expected>
+      </equals>
+      <context:wrap-subnodes select="style:style[@style:family='paragraph']">
+      </context:wrap-subnodes>
+    </context:xslt>
+
+    <context:xslt mode="office:body" select="HwpDoc/BodyText">
+      <elem>office:body</elem>
+      <equals>
+        <tested>count(office:text)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:text/text:p)</tested>
+        <expected>14</expected>
+      </equals>
+    </context:xslt>
+
+  </context:import>
+
+  <context:import href="parashape.xml">
+
+    <context:xslt mode="style:style" select="//Paragraph[1]">
+      <elem>style:style</elem>
+      <attr name="style:family">paragraph</attr>
+      <attr name="style:class">text</attr>
+      <attr name="style:name">Paragraph-1</attr>
+      <attr name="style:parent-style-name">바탕글</attr>
+      <attr name="style:master-page-name">MasterPage-1</attr>
+      <context:subtree select="style:paragraph-properties">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">11pt</attr>
+        <attr name="fo:margin-right">12pt</attr>
+        <attr name="fo:margin-top">13pt</attr>
+        <attr name="fo:margin-bottom">14pt</attr>
+        <empty>@fo:break-before</empty>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt mode="style:style" select="//Paragraph[2]" wrap="wrapper">
+      이 문단의 스타일은 "바탕글" Style과 동일하므로, 이 문단에 특정한 style:style은 생성되지 않음
+      <empty>style:style</empty>
+    </context:xslt>
+
+    <context:xslt mode="style:paragraph-properties" select="//Paragraph[1]">
+      <elem>style:paragraph-properties</elem>
+      <attr name="fo:text-align">justify</attr>
+      <attr name="fo:text-indent">0pt</attr>
+      <attr name="fo:margin-left">11pt</attr>
+      <attr name="fo:margin-right">12pt</attr>
+      <attr name="fo:margin-top">13pt</attr>
+      <attr name="fo:margin-bottom">14pt</attr>
+      <empty>@fo:break-before</empty>
+    </context:xslt>
+  </context:import>
+
+  <context:import href="paragraph-split-page.xml">
+    <context:xslt mode="style:paragraph-properties" select="//Paragraph[3]">
+      <attr name="fo:break-before">page</attr>
+    </context:xslt>
+  </context:import>
+
+  <context:import href="shaperect.xml">
+    <context:xslt mode="style:style" select="(//ShapeComponent)[1]">
+      <elem>style:style</elem>
+      <attr name="style:name">Shape-1</attr>
+      <attr name="style:family">graphic</attr>
+      <context:subtree select="style:graphic-properties">
+        <attr name="draw:fill">solid</attr>
+        <attr name="draw:fill-color">#66ccff</attr>
+        <attr name="draw:stroke">none</attr>
+        <attr name="svg:stroke-width">0.12mm</attr>
+        <attr name="svg:stroke-color">#000000</attr>
+      </context:subtree>
+    </context:xslt>
+  </context:import>
+
+  <context:import href="table.xml">
+    <context:xslt mode="style:style" select="//TableControl[1]">
+      <elem>style:style</elem>
+      <attr name="style:name">Table-1</attr>
+      <attr name="style:family">table</attr>
+      <context:subtree select="style:table-properties">
+        <attr name="style:width">39.99mm</attr>
+        <attr name="table:align">margins</attr>
+        <attr name="fo:margin-left">1mm</attr>
+        <attr name="fo:margin-right">1mm</attr>
+        <attr name="fo:margin-top">1mm</attr>
+        <attr name="fo:margin-bottom">1mm</attr>
+        <attr name="table:border-model">collapsing</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt mode="style-style-for-table-cells" select="//TableControl[1]" wrap="wrap">
+      <context:subtree select="style:style[1]">
+        <attr name="style:name">Table-1-1-1</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="style:style[2]">
+        <attr name="style:name">Table-1-1-2</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="style:style[3]">
+        <attr name="style:name">Table-1-1-3</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+
+      <context:subtree select="style:style[4]">
+        <attr name="style:name">Table-1-2-1</attr>
+        <attr name="style:family">table-cell</attr>
+        <context:subtree select="style:table-cell-properties">
+          <attr name="fo:padding-left">1mm</attr>
+          <attr name="fo:padding-right">1mm</attr>
+          <attr name="fo:padding-top">1mm</attr>
+          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:border-left">0.12mm solid #000000</attr>
+          <attr name="fo:border-right">0.12mm solid #000000</attr>
+          <attr name="fo:border-top">0.12mm solid #000000</attr>
+          <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+        </context:subtree>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt mode="style:style" select="(//TableCell)[1]"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:with-param name="table-id" select="1" />
+      <xsl:with-param name="rowidx" select="2" />
+      <xsl:with-param name="colidx" select="3" />
+      <elem>style:style</elem>
+      <attr name="style:name">Table-1-2-3</attr>
+      <attr name="style:family">table-cell</attr>
+      <context:subtree select="style:table-cell-properties">
+        <attr name="fo:padding-left">1mm</attr>
+        <attr name="fo:padding-right">1mm</attr>
+        <attr name="fo:padding-top">1mm</attr>
+        <attr name="fo:padding-bottom">1mm</attr>
+        <attr name="fo:border-left">0.12mm solid #000000</attr>
+        <attr name="fo:border-right">0.12mm solid #000000</attr>
+        <attr name="fo:border-top">0.12mm solid #000000</attr>
+        <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+      </context:subtree>
+    </context:xslt>
+
+    <context:xslt mode="style:table-cell-properties" select="(//TableCell)[1]">
+      <elem>style:table-cell-properties</elem>
+      <attr name="fo:padding-left">1mm</attr>
+      <attr name="fo:padding-right">1mm</attr>
+      <attr name="fo:padding-top">1mm</attr>
+      <attr name="fo:padding-bottom">1mm</attr>
+      <attr name="fo:border-left">0.12mm solid #000000</attr>
+      <attr name="fo:border-right">0.12mm solid #000000</attr>
+      <attr name="fo:border-top">0.12mm solid #000000</attr>
+      <attr name="fo:border-bottom">0.12mm solid #000000</attr>
+    </context:xslt>
+
+  </context:import>
+
+  <context:import href="sample-5017.xml">
+    <context:xslt mode="fo:background-color" select="//BorderFill[1]" wrap="wrap">
+      <empty>fo:background-color</empty>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[2]" wrap="wrap">
+      <attr name="fo:background-color">#ffffff</attr>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[3]" wrap="wrap">
+      <empty>fo:background-color</empty>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[4]" wrap="wrap">
+      <empty>fo:background-color</empty>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[5]" wrap="wrap">
+      <attr name="fo:background-color">#99ccff</attr>
+    </context:xslt>
+    <context:xslt mode="fo:background-color" select="//BorderFill[6]" wrap="wrap">
+      <!-- TODO: gradation
+      <FillGradation colors="[4144959, 8355711]" type="2" attribute-name="fill_gradation" shear="0" blur="50">
+        <Coord32 y="0" x="100" attribute-name="center"/>
+      </FillGradation>
+      -->
+      <empty>fo:background-color</empty>
+    </context:xslt>
+  </context:import>
 </xunit:stylesheet>

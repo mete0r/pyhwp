@@ -20,11 +20,11 @@
 
 Usage::
 
-    hwp5proc records [--simple | --json | --raw | --raw-payload]
+    hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
                      [--treegroup=<treegroup> | --range=<range>]
                      [--loglevel=<loglevel>] [--logfile=<logfile>]
                      <hwp5file> <record-stream>
-    hwp5proc records [--simple | --json | --raw]
+    hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
                      [--treegroup=<treegroup> | --range=<range>]
                      [--loglevel=<loglevel>] [--logfile=<logfile>]
     hwp5proc records --help
@@ -38,6 +38,7 @@ Options::
        --simple             Print records as simple tree
        --json               Print records as json
        --raw                Print records as is
+       --raw-header         Print record headers as is
        --raw-payload        Print record payloads as is
 
        --range=<range>      Print records specified in the <range>.
@@ -106,6 +107,11 @@ def main(args):
         from hwp5.recordstream import dump_record
         for record in stream.records(**opts):
             dump_record(sys.stdout, record)
+    elif args['--raw-header']:
+        from hwp5.recordstream import encode_record_header
+        for record in stream.records(**opts):
+            hdr = encode_record_header(record)
+            sys.stdout.write(hdr)
     elif args['--raw-payload']:
         from hwp5.recordstream import dump_record
         for record in stream.records(**opts):

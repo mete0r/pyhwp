@@ -58,4 +58,110 @@
       <attr name="style:master-page-name">MasterPage-2</attr>
     </context:xslt>
   </context:import>
+
+  <context:import href="sample-5017.xml">
+    <context:xslt>
+      <elem>office:document-styles</elem>
+      <equals>
+        <tested>count(office:font-face-decls)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:styles)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:automatic-styles)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:automatic-styles/style:page-layout)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(office:master-styles)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
+    <context:xslt mode="office:font-face-decls" select="HwpDoc/DocInfo">
+      <equals>
+        <tested>count(style:font-face)</tested>
+        <expected>7</expected>
+      </equals>
+    </context:xslt>
+
+    <context:xslt mode="office:styles" select="HwpDoc/DocInfo">
+      <equals>
+        <tested>count(style:style[@style:family='paragraph'])</tested>
+        <expected>21</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='text'])</tested>
+        <expected>0</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table'])</tested>
+        <expected>0</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='table-cell'])</tested>
+        <expected>0</expected>
+      </equals>
+      <equals>
+        <tested>count(style:style[@style:family='graphics'])</tested>
+        <expected>0</expected>
+      </equals>
+    </context:xslt>
+
+    <context:xslt mode="office:master-styles" select="HwpDoc">
+      <elem>office:master-styles</elem>
+      <equals>
+        <tested>count(style:master-page)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+      
+    <context:xslt mode="style:page-layout" select="HwpDoc/BodyText/SectionDef[1]">
+      <elem>style:page-layout</elem>
+      <attr name="style:name">PageLayout-1</attr>
+      <equals>
+        <tested>count(style:page-layout-properties)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(style:header-style)</tested>
+        <expected>1</expected>
+      </equals>
+      <equals>
+        <tested>count(style:footer-style)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
+    <context:xslt mode="style:page-layout-properties" select="HwpDoc/BodyText/SectionDef/PageDef[1]">
+      <elem>style:page-layout-properties</elem>
+      <attr name="style:print-orientation">portrait</attr>
+      <attr name="fo:page-width">21cm</attr>
+      <attr name="fo:page-height">29.7cm</attr>
+      <attr name="fo:margin-left">3cm</attr>
+      <attr name="fo:margin-right">3cm</attr>
+      <attr name="fo:margin-top">2cm</attr>
+      <attr name="fo:margin-bottom">1.5cm</attr>
+      <equals>
+        <tested>count(style:footnote-sep)</tested>
+        <expected>1</expected>
+      </equals>
+    </context:xslt>
+
+    <context:xslt mode="style:paragraph-properties" select="//Style[1]">
+      <attr name="fo:text-align">justify</attr>
+      <attr name="fo:text-indent">0pt</attr>
+      <attr name="fo:margin-left">0pt</attr>
+      <attr name="fo:margin-right">0pt</attr>
+      <attr name="fo:margin-top">0pt</attr>
+      <attr name="fo:margin-bottom">0pt</attr>
+      <attr name="fo:line-height">160%</attr>
+    </context:xslt>
+  </context:import>
 </xunit:stylesheet>

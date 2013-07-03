@@ -26,8 +26,212 @@
       <expected>5</expected>
     </equals>
 
+    <context:import href="parashape.xml">
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[1]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">-13.1pt</attr>
+        <attr name="fo:margin-left">13.1pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">130%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[2]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">0pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[3]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">0pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[4]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">15pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[5]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[6]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">20pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[7]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">30pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[8]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">40pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[9]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">50pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[10]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">60pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[11]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">70pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[12]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">0pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">150%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[13]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">10pt</attr>
+        <attr name="fo:margin-left">0pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[14]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[15]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">0pt</attr>
+        <attr name="fo:margin-left">11pt</attr>
+        <attr name="fo:margin-right">12pt</attr>
+        <attr name="fo:margin-top">13pt</attr>
+        <attr name="fo:margin-bottom">14pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[16]" wrap="wrap">
+        <attr name="fo:text-align">left</attr>
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[17]" wrap="wrap">
+        <attr name="fo:text-align">right</attr>
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[18]" wrap="wrap">
+        <attr name="fo:text-align">center</attr>
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[19]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+
+      <context:xslt mode="style-paragraph-properties-common" select="//ParaShape[20]" wrap="wrap">
+        <attr name="fo:text-align">justify</attr>
+        <attr name="fo:text-indent">-10pt</attr>
+        <attr name="fo:margin-left">10pt</attr>
+        <attr name="fo:margin-right">0pt</attr>
+        <attr name="fo:margin-top">0pt</attr>
+        <attr name="fo:margin-bottom">0pt</attr>
+        <attr name="fo:line-height">160%</attr>
+      </context:xslt>
+    </context:import>
+
     <context:xslt
       href="odt/styles.xsl"
+      mode="style:style"
       select="//Style[@local-name='바탕글']">
       <elem>style:style</elem>
       <attr name="style:name">바탕글</attr>
@@ -41,6 +245,7 @@
 
     <context:xslt
       href="odt/styles.xsl"
+      mode="style:style"
       select="//Style[@local-name='본문']">
       <elem>style:style</elem>
       <attr name="style:name">본문</attr>
@@ -60,6 +265,7 @@
     <!-- FaceName to style:font-face -->
     <context:xslt
       href="odt/styles.xsl"
+      mode="style:font-face"
       select="//FaceName[@name='굴림']">
       <elem>style:font-face</elem>
       <attr name="style:name">굴림</attr>

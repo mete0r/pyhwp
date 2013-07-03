@@ -44,3 +44,4 @@ def main():
     result = execute(xmldoc.getroot())
     result = etree.tostring(result, xml_declaration=True, encoding='utf-8')
     sys.stdout.write(result)
+    sys.stdout.flush()

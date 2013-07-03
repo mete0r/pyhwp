@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
@@ -31,22 +32,13 @@
   xmlns:tableooo="http://openoffice.org/2009/table"
   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
   xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"
-  xmlns:css3t="http://www.w3.org/TR/css3-text/">
+  xmlns:css3t="http://www.w3.org/TR/css3-text/"
+  >
   <xsl:import href="common.xsl" />
-  <xsl:output method="xml" encoding="utf-8" indent="yes" />
-  <xsl:template match="/">
-    <xsl:apply-templates mode="office:document-styles" select="/HwpDoc" />
-  </xsl:template>
+  <xsl:output method="xml" encoding="utf-8" indent="no" />
 
-  <xsl:template mode="office:document-styles" match="HwpDoc">
-    <office:document-styles office:version="1.2" grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl">
-      <xsl:apply-templates mode="office:font-face-decls" select="DocInfo" />
-      <xsl:apply-templates mode="office:styles" select="DocInfo" />
-      <office:automatic-styles>
-        <xsl:apply-templates mode="style:page-layout" select="BodyText/SectionDef" />
-      </office:automatic-styles>
-      <xsl:apply-templates mode="office:master-styles" select="." />
-    </office:document-styles>
+  <xsl:template match="/">
+    <xsl:apply-templates mode="office:document" select="HwpDoc" />
   </xsl:template>
 
 </xsl:stylesheet>

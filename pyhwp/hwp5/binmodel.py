@@ -1949,9 +1949,9 @@ def init_record_parsing_context(base, record):
         - context['record'] = record
         - context['stream'] = record payload stream
 
-        `base': the base context, which will be shallow-copied into the new one
-        `record': to be parsed
-        returns new context
+        :param base: the base context to be shallow-copied into the new one
+        :param record: to be parsed
+        :returns: new context
     '''
 
     return dict(base, record=record, stream=StringIO(record['payload']))

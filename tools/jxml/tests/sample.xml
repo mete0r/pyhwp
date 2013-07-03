@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:document xmlns:x="http://example.tld" version="1.0">
+  <x:paragraph>text<x:span>foo</x:span></x:paragraph>tail<z:object xmlns:z="http://z.example.tld" a="1" x:b="2" z:c="3" />
+  <x:third />
+</x:document>
