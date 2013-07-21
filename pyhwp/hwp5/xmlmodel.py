@@ -355,6 +355,9 @@ class TableRow:
 
 
 def restructure_tablebody(event_prefixed_mac):
+    ROW_OPEN = 1
+    ROW_CLOSE = 2
+
     from collections import deque
     stack = []
     for event, item in event_prefixed_mac:
@@ -364,12 +367,12 @@ def restructure_tablebody(event_prefixed_mac):
                 rowcols = deque()
                 for cols in attributes.pop('rowcols'):
                     if cols == 1:
-                        rowcols.append(3)
+                        rowcols.append(ROW_OPEN | ROW_CLOSE)
                     else:
-                        rowcols.append(1)
+                        rowcols.append(ROW_OPEN)
                         for i in range(0, cols - 2):
                             rowcols.append(0)
-                        rowcols.append(2)
+                        rowcols.append(ROW_CLOSE)
                 stack.append((context, rowcols))
                 yield event, item
             else:
@@ -380,12 +383,12 @@ def restructure_tablebody(event_prefixed_mac):
             row_context = dict(table_context)
             if event is STARTEVENT:
                 how = rowcols[0]
-                if how & 1:
+                if how & ROW_OPEN:
                     yield STARTEVENT, (TableRow, dict(), row_context)
             yield event, item
             if event is ENDEVENT:
                 how = rowcols.popleft()
-                if how & 2:
+                if how & ROW_CLOSE:
                     yield ENDEVENT, (TableRow, dict(), row_context)
         else:
             yield event, item
