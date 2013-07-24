@@ -251,11 +251,11 @@ def wrap_section(event_prefixed_mac, sect_id=None):
         else:
             model, attributes, context = item
             if model is SectionDef and event is STARTEVENT:
-                sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
+                sectiondef, sectdef_child = build_subtree(event_prefixed_mac)
                 if sect_id is not None:
                     attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
-                for k in tree_events_multi(sectiondef_childs):
+                for k in tree_events_multi(sectdef_child):
                     yield k
                 for evented_item in starting_buffer:
                     yield evented_item
