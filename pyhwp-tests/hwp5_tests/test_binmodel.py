@@ -513,7 +513,8 @@ class ShapeComponentTest(TestBase):
         import pickle
         from hwp5.binmodel import parse_models
         fixturename = '5005-shapecomponent-with-colorpattern-and-gradation.dat'
-        f = self.open_fixture(fixturename, 'rb')
+        # TODO: regenerate fixture with rb
+        f = self.open_fixture(fixturename, 'r')
         try:
             records = pickle.load(f)
         finally:
