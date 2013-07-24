@@ -31,7 +31,8 @@ class TestRecordParsing(TestCase):
 
 class BinEmbeddedTest(TestCase):
     ctx = TestContext()
-    stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00\x6a\x00\x70\x00\x67\x00')
+    stream = StringIO('\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00'
+                      '\x6a\x00\x70\x00\x67\x00')
 
     def testParse(self):
         from hwp5.binmodel import BinData
@@ -43,7 +44,8 @@ class BinEmbeddedTest(TestCase):
         parse_model(context, model)
 
         self.assertTrue(BinData, model['type'])
-        self.assertEquals(BinData.StorageType.EMBEDDING, BinData.Flags(model['content']['flags']).storage)
+        self.assertEquals(BinData.StorageType.EMBEDDING,
+                          BinData.Flags(model['content']['flags']).storage)
         self.assertEquals(2, model['content']['bindata']['storage_id'])
         self.assertEquals('jpg', model['content']['bindata']['ext'])
 
@@ -54,6 +56,7 @@ class LanguageStructTest(TestCase):
         from hwp5.dataio import WORD
         FontFace = LanguageStruct('FontFace', WORD)
         self.assertTrue('attributes' in FontFace.__dict__)
+
 
 class TestBase(test_recordstream.TestBase):
 
@@ -90,6 +93,84 @@ class FaceNameTest(TestBase):
         self.assertEquals(u'한양신명조', facename['name'])
         self.assertEquals(FaceName.FontFileType.HFT,
                           facename['flags'].font_file_type)
+
+
+class CharShapeTest(TestBase):
+    hwp5file_name = 'facename2.hwp'
+
+    def test_face_name_reference(self):
+        from hwp5.binmodel import IdMappings
+        from hwp5.binmodel import FaceName
+        from hwp5.binmodel import CharShape
+        from hwp5.binmodel import Style
+
+        docinfo = self.hwp5file.docinfo
+        idmappings = list(m for m in docinfo.models()
+                          if m['type'] is IdMappings)[0]
+        styles = list(m for m in docinfo.models()
+                      if m['type'] is Style)
+        facenames = list(m for m in docinfo.models()
+                         if m['type'] is FaceName)
+        charshapes = list(m for m in docinfo.models()
+                          if m['type'] is CharShape)
+
+#        print ''
+#        print '=== FaceName ==='
+#        for fid, facename in enumerate(facenames):
+#            print fid, facename['content']['name']
+#
+        languages = 'ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'
+        facenames_by_lang = dict()
+        offsets = dict()
+        offset = 0
+        for lang in languages:
+            n_fonts = idmappings['content'][lang + '_fonts']
+            offsets[lang] = offset
+            facenames_by_lang[lang] = facenames[offset:offset + n_fonts]
+            offset += n_fonts
+
+#        for lang in languages:
+#            print lang
+#            for fn in facenames_by_lang[lang]:
+#                print '-', fn['content']['name']
+#
+        def style_charshape(style):
+            charshape_id = style['content']['charshape_id']
+            return charshapes[charshape_id]
+
+        def charshape_facenames(charshape):
+            result = dict()
+            for lang, f in charshape['content']['font_face'].items():
+                result[lang] = facenames_by_lang[lang][f]
+            return result
+
+        def style_lang_facename(style, lang):
+            charshape = style_charshape(style)
+            facenames = charshape_facenames(charshape)
+            return facenames[lang]
+
+        def style_lang_facename_name(style, lang):
+            facename = style_lang_facename(style, lang)
+            return facename['content']['name']
+
+#        for sid, style in enumerate(styles):
+#            print '---', 'Style', sid, style['content']['local_name'], '---'
+#            charshape = style_charshape(style)
+#            font_face = charshape['content']['font_face']
+#            face_name = charshape_facenames(charshape)
+#            for lang in languages:
+#                print lang, font_face[lang],
+#                print face_name[lang]['content']['name']
+
+        self.assertEquals(u'바탕', style_lang_facename_name(styles[0], 'ko'))
+        self.assertEquals(u'한컴돋움', style_lang_facename_name(styles[1], 'ko'))
+        self.assertEquals(u'Times New Roman',
+                          style_lang_facename_name(styles[2], 'en'))
+        self.assertEquals(u'Arial', style_lang_facename_name(styles[3], 'en'))
+        self.assertEquals(u'해서 약자', style_lang_facename_name(styles[4], 'cn'))
+        self.assertEquals(u'해서 간자', style_lang_facename_name(styles[5], 'cn'))
+        self.assertEquals(u'명조', style_lang_facename_name(styles[6], 'jp'))
+        self.assertEquals(u'고딕', style_lang_facename_name(styles[7], 'jp'))
 
 
 class BorderFillTest(TestBase):
@@ -214,7 +295,8 @@ class ParaCharShapeTest(TestBase):
         context['parent'] = parent_context, parent_model
         model = record
         parse_model(context, model)
-        self.assertEquals(dict(charshapes=[(0, 7), (19, 8), (23, 7), (24, 9), (26, 7)]),
+        self.assertEquals(dict(charshapes=[(0, 7), (19, 8), (23, 7), (24, 9),
+                                           (26, 7)]),
                           model['content'])
 
 
@@ -222,7 +304,10 @@ class TableTest(TestBase):
 
     @property
     def stream(self):
-        return StringIO('G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00\x00\x00')
+        return StringIO('G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00'
+                        '\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00'
+                        '\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00'
+                        '\x00\x00')
 
     @cached_property
     def tablecontrol_record(self):
@@ -269,7 +354,8 @@ class TableTest(TestBase):
         context = init_record_parsing_context(testcontext, record)
 
         tablebody_record = self.tablebody_record
-        child_context = init_record_parsing_context(testcontext, tablebody_record)
+        child_context = init_record_parsing_context(testcontext,
+                                                    tablebody_record)
         child_model = dict(type=TableBody, content=dict())
         child = (child_context, child_model)
 
@@ -434,9 +520,9 @@ class ShapeComponentTest(TestBase):
         self.assertFalse(shapecomp['fill_flags'].fill_image)
         self.assertEquals(None, shapecomp.get('fill_colorpattern'))
         self.assertEquals(dict(type=1, shear=90,
-                              center=dict(x=0, y=0),
-                              colors=[0xff7f3f, 0],
-                              blur=50), shapecomp['fill_gradation'])
+                               center=dict(x=0, y=0),
+                               colors=[0xff7f3f, 0],
+                               blur=50), shapecomp['fill_gradation'])
         self.assertEquals(None, shapecomp.get('fill_image'))
 
         shapecomp = shapecomps.pop(0)['content']
@@ -466,23 +552,23 @@ class ShapeComponentTest(TestBase):
         self.assertTrue(shapecomp['fill_flags'].fill_image)
         self.assertEquals(None, shapecomp.get('fill_colorpattern'))
         self.assertEquals(dict(type=1, shear=90,
-                              center=dict(x=0, y=0),
-                              colors=[0xff7f3f, 0],
-                              blur=50), shapecomp['fill_gradation'])
+                               center=dict(x=0, y=0),
+                               colors=[0xff7f3f, 0],
+                               blur=50), shapecomp['fill_gradation'])
         self.assertEquals(dict(flags=5, storage_id=1),
                           shapecomp['fill_image'])
 
     def test_colorpattern_gradation(self):
         import pickle
         from hwp5.binmodel import parse_models
-        f = self.open_fixture('5005-shapecomponent-with-colorpattern-and-gradation.dat',
-                              'r')
+        fixturename = '5005-shapecomponent-with-colorpattern-and-gradation.dat'
+        f = self.open_fixture(fixturename, 'rb')
         try:
             records = pickle.load(f)
         finally:
             f.close()
 
-        context = dict(version=(5,0,0,5))
+        context = dict(version=(5, 0, 0, 5))
         models = parse_models(context, records)
         models = list(models)
         self.assertEquals(1280, models[-1]['content']['fill_flags'])
@@ -503,14 +589,14 @@ class ShapeComponentTest(TestBase):
     def test_colorpattern_gradation_5017(self):
         from hwp5.recordstream import read_records
         from hwp5.binmodel import parse_models
-        f = self.open_fixture('5017-shapecomponent-with-colorpattern-and-gradation.bin',
-                              'rb')
+        fixturename = '5017-shapecomponent-with-colorpattern-and-gradation.bin'
+        f = self.open_fixture(fixturename, 'rb')
         try:
             records = list(read_records(f))
         finally:
             f.close()
 
-        context = dict(version=(5,0,1,7))
+        context = dict(version=(5, 0, 1, 7))
         models = parse_models(context, records)
         models = list(models)
         self.assertEquals(1280, models[-1]['content']['fill_flags'])
@@ -570,7 +656,9 @@ class HeaderFooterTest(TestBase):
 
 class ListHeaderTest(TestCase):
     ctx = TestContext()
-    record_bytes = 'H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00'
+    record_bytes = ('H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00'
+                    '\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00'
+                    '\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00')
     stream = StringIO(record_bytes)
 
     def testParse(self):
@@ -591,7 +679,9 @@ class ListHeaderTest(TestCase):
 
 class TableBodyTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
-    stream = StringIO('M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00')
+    stream = StringIO('M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00'
+                      '\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01'
+                      '\x00\x00\x00')
 
     def test_parse_model(self):
         from hwp5.binmodel import TableBody
@@ -650,7 +740,10 @@ class Pass2Test(TestCase):
 
 class LineSegTest(TestCase):
     def testDecode(self):
-        data = '00000000481e0000e8030000e80300005203000058020000dc0500003ca00000000006003300000088240000e8030000e80300005203000058020000dc0500003ca000000000060067000000c82a0000e8030000e80300005203000058020000dc0500003ca0000000000600'
+        data = ('00000000481e0000e8030000e80300005203000058020000dc0500003ca00'
+                '000000006003300000088240000e8030000e80300005203000058020000dc'
+                '0500003ca000000000060067000000c82a0000e8030000e80300005203000'
+                '058020000dc0500003ca0000000000600')
         import binascii
         data = binascii.a2b_hex(data)
         from hwp5.binmodel import ParaLineSegList
@@ -662,7 +755,16 @@ class LineSegTest(TestCase):
 
 class TableCaptionCellTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
-    records_bytes = 'G\x04\xc0\x02 lbt\x10#*(\x00\x00\x00\x00\x00\x00\x00\x00\x06\x9e\x00\x00\x04\n\x00\x00\x03\x00\x00\x00\x1b\x01R\x037\x02n\x04\n^\xc0V\x00\x00\x00\x00H\x08`\x01\x02\x00\x00\x00\x00\x00\x00\x00\x03\x00\x00\x008!\x00\x00R\x03\x06\x9e\x00\x00M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01\x00\x00\x00H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00'
+    records_bytes = ('G\x04\xc0\x02 lbt\x10#*(\x00\x00\x00\x00\x00\x00\x00\x00'
+                     '\x06\x9e\x00\x00\x04\n\x00\x00\x03\x00\x00\x00\x1b\x01R'
+                     '\x037\x02n\x04\n^\xc0V\x00\x00\x00\x00H\x08`\x01\x02\x00'
+                     '\x00\x00\x00\x00\x00\x00\x03\x00\x00\x008!\x00\x00R\x03'
+                     '\x06\x9e\x00\x00M\x08\xa0\x01\x06\x00\x00\x04\x02\x00'
+                     '\x02\x00\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00'
+                     '\x02\x00\x01\x00\x00\x00H\x08`\x02\x01\x00\x00\x00 \x00'
+                     '\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x03O\x00\x00'
+                     '\x1a\x01\x00\x00\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x01\x00'
+                     '\x03O\x00\x00')
 
     def testParsePass1(self):
         from hwp5.binmodel import TableCaption, TableCell
@@ -777,7 +879,7 @@ class TestControlChar(TestBase):
         tabs = list(paratext_tab_params(paratexts.pop(0)))
         self.assertEquals([(4000, 1)] * 3,
                           list((tab['width'], tab['unknown1'])
-                              for tab in tabs))
+                               for tab in tabs))
 
         tabs = list(paratext_tab_params(paratexts.pop(0)))
         self.assertEquals([(2000, 1), (1360, 1), (1360, 1)],
@@ -825,7 +927,7 @@ class TestFootnoteShape(TestBase):
         finally:
             f.close()
 
-        context = dict(version=(5,0,0,0))
+        context = dict(version=(5, 0, 0, 0))
         from hwp5.binmodel import parse_models
         models = parse_models(context, records)
         models = list(models)
@@ -875,8 +977,9 @@ class TestModelJson(TestBase):
         simplejson = importjson()
         jsonobject = simplejson.loads(json)
         self.assertEquals('ParaText', jsonobject['type'])
-        self.assertEquals([[0, 8], dict(code=2, param='\x00' * 8, chid='secd')],
-                         jsonobject['content']['chunks'][0])
+        self.assertEquals([[0, 8],
+                           dict(code=2, param='\x00' * 8, chid='secd')],
+                          jsonobject['content']['chunks'][0])
 
     def test_model_to_json_with_unparsed(self):
         from hwp5.binmodel import model_to_json
