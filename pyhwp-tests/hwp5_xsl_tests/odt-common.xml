@@ -23,7 +23,7 @@
     <empty>@nonexists</empty>
     <equals>
       <tested>count(DocInfo/IdMappings/FaceName)</tested>
-      <expected>5</expected>
+      <expected>17</expected>
     </equals>
 
     <context:import href="parashape.xml">

@@ -54,34 +54,6 @@ def give_elements_unique_id(event_prefixed_mac):
         yield event, item
 
 
-def remove_redundant_facenames(event_prefixed_mac):
-    ''' remove redundant FaceNames '''
-    facenames = []
-    removed_facenames = dict()
-    facename_idx = 0
-    for event, item in event_prefixed_mac:
-        (model, attributes, context) = item
-        if event == STARTEVENT and model == FaceName:
-            if not attributes in facenames:
-                facenames.append(attributes)
-                yield event, item
-            else:
-                # suck this out from the event stream
-                build_subtree(event_prefixed_mac)
-                removed_facenames[facename_idx] = facenames.index(attributes)
-            facename_idx += 1
-        else:
-            if event == STARTEVENT and model == CharShape:
-                fface = attributes['font_face']
-                fface2 = dict()
-                for k, v in fface.iteritems():
-                    if v in removed_facenames:
-                        v = removed_facenames[v]
-                    fface2[k] = v
-                attributes['font_face'] = fface2
-            yield event, item
-
-
 def make_ranged_shapes(shapes):
     last = None
     for item in shapes:
@@ -251,11 +223,11 @@ def wrap_section(event_prefixed_mac, sect_id=None):
         else:
             model, attributes, context = item
             if model is SectionDef and event is STARTEVENT:
-                sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
+                sectiondef, sectdef_child = build_subtree(event_prefixed_mac)
                 if sect_id is not None:
                     attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
-                for k in tree_events_multi(sectiondef_childs):
+                for k in tree_events_multi(sectdef_child):
                     yield k
                 for evented_item in starting_buffer:
                     yield evented_item
@@ -511,7 +483,7 @@ class DocInfo(ModelEventStream):
         if 'embedbin' in kwargs:
             events = embed_bindata(events, kwargs['embedbin'])
         events = wrap_modelevents(docinfo, events)
-        return remove_redundant_facenames(events)
+        return events
 
 
 class Section(ModelEventStream):
