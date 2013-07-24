@@ -74,7 +74,7 @@ class TestDocInfo(TestBase):
 
     def test_events(self):
         events = list(self.docinfo.events())
-        self.assertEquals(112, len(events))
+        self.assertEquals(136, len(events))
         #print len(events)
 
         # without embedbin, no <text> is embedded
