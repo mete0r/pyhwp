@@ -16,6 +16,8 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from datetime import datetime
+from datetime import timedelta
 import logging
 
 from hwp5.dataio import Struct
@@ -193,5 +195,10 @@ def read_vt_value(vt_type, context, f):
         lword = read_type(UINT32, context, f)
         hword = read_type(UINT32, context, f)
         value = hword << 32 | lword
+        value = FILETIME_to_datetime(value)
         logger.debug('value: %s', value)
         return value
+
+
+def FILETIME_to_datetime(value):
+    return datetime(1601, 1, 1, 0, 0, 0) + timedelta(microseconds=value / 10)
