@@ -95,72 +95,23 @@ class FaceNameTest(TestBase):
                           facename['flags'].font_file_type)
 
 
-class CharShapeTest(TestBase):
+class DocInfoTest(TestBase):
     hwp5file_name = 'facename2.hwp'
 
-    def test_face_name_reference(self):
-        from hwp5.binmodel import IdMappings
-        from hwp5.binmodel import FaceName
-        from hwp5.binmodel import CharShape
+    def test_charshape_lang_facename(self):
         from hwp5.binmodel import Style
 
         docinfo = self.hwp5file.docinfo
-        idmappings = list(m for m in docinfo.models()
-                          if m['type'] is IdMappings)[0]
         styles = list(m for m in docinfo.models()
                       if m['type'] is Style)
-        facenames = list(m for m in docinfo.models()
-                         if m['type'] is FaceName)
-        charshapes = list(m for m in docinfo.models()
-                          if m['type'] is CharShape)
-
-#        print ''
-#        print '=== FaceName ==='
-#        for fid, facename in enumerate(facenames):
-#            print fid, facename['content']['name']
-#
-        languages = 'ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'
-        facenames_by_lang = dict()
-        offsets = dict()
-        offset = 0
-        for lang in languages:
-            n_fonts = idmappings['content'][lang + '_fonts']
-            offsets[lang] = offset
-            facenames_by_lang[lang] = facenames[offset:offset + n_fonts]
-            offset += n_fonts
-
-#        for lang in languages:
-#            print lang
-#            for fn in facenames_by_lang[lang]:
-#                print '-', fn['content']['name']
-#
-        def style_charshape(style):
-            charshape_id = style['content']['charshape_id']
-            return charshapes[charshape_id]
-
-        def charshape_facenames(charshape):
-            result = dict()
-            for lang, f in charshape['content']['font_face'].items():
-                result[lang] = facenames_by_lang[lang][f]
-            return result
 
         def style_lang_facename(style, lang):
-            charshape = style_charshape(style)
-            facenames = charshape_facenames(charshape)
-            return facenames[lang]
+            charshape_id = style['content']['charshape_id']
+            return docinfo.charshape_lang_facename(charshape_id, lang)
 
         def style_lang_facename_name(style, lang):
             facename = style_lang_facename(style, lang)
             return facename['content']['name']
-
-#        for sid, style in enumerate(styles):
-#            print '---', 'Style', sid, style['content']['local_name'], '---'
-#            charshape = style_charshape(style)
-#            font_face = charshape['content']['font_face']
-#            face_name = charshape_facenames(charshape)
-#            for lang in languages:
-#                print lang, font_face[lang],
-#                print face_name[lang]['content']['name']
 
         self.assertEquals(u'바탕', style_lang_facename_name(styles[0], 'ko'))
         self.assertEquals(u'한컴돋움', style_lang_facename_name(styles[1], 'ko'))
