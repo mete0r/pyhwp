@@ -2,6 +2,7 @@
 from __future__ import with_statement
 from unittest import TestCase
 
+
 def example(filename):
     from fixtures import get_fixture_path
     from hwp5.xmlmodel import Hwp5File
@@ -31,8 +32,6 @@ class TestODTPackageConverter(TestCase):
         return ODTPackageConverter(xslt, relaxng)
 
     def test_convert_bindata(self):
-        from hwp5.hwp5odt import ODTPackage
-
         hwp5file = example('sample-5017.hwp')
         try:
             f = hwp5file['BinData']['BIN0002.jpg'].open()
