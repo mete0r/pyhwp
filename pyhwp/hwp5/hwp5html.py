@@ -32,7 +32,7 @@ Options::
     --logfile=<file>    Set log file.
 '''
 
-import os, os.path
+import os.path
 import logging
 
 
