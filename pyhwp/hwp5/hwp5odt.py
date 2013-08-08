@@ -198,18 +198,12 @@ class ConverterBase(object):
             hwp5file.xmlevents(embedbin=embedimage).dump(f)
             yield path
 
+    @contextmanager
     def transform(self, xsl_path, xhwp5_path):
-        import os
-        import tempfile
-        fd, path = tempfile.mkstemp()
-        try:
-            os.close(fd)
+        with mkstemp_open(prefix='xslt-') as (path, f):
+            f.close()
             self.transform_to(xsl_path, xhwp5_path, path)
-        except:
-            unlink_or_warning(path)
-            raise
-        else:
-            return path
+            yield path
 
     def transform_to(self, xsl_path, xhwp5_path, output_path):
         self.xslt(xsl_path, xhwp5_path, output_path)
@@ -278,22 +272,16 @@ class ODTPackageConverter(ODTConverter):
     def convert_to(self, hwp5file, odtpkg_path):
         odtpkg = ODTPackage(odtpkg_path)
         try:
-            self(hwp5file, odtpkg)
+            self.build_odtpkg_streams(hwp5file, odtpkg)
         finally:
             odtpkg.close()
 
-    def __call__(self, hwp5file, odtpkg):
+    def build_odtpkg_streams(self, hwp5file, odtpkg):
         with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
-            styles, content = self.make_styles_and_content(xhwp5_path)
-
-        try:
-            with file(styles) as f:
+            with self.make_styles(xhwp5_path) as f:
                 odtpkg.insert_stream(f, 'styles.xml', 'text/xml')
-            with file(content) as f:
+            with self.make_content(xhwp5_path) as f:
                 odtpkg.insert_stream(f, 'content.xml', 'text/xml')
-        finally:
-            unlink_or_warning(styles)
-            unlink_or_warning(content)
 
         from cStringIO import StringIO
         rdf = StringIO()
@@ -304,18 +292,17 @@ class ODTPackageConverter(ODTConverter):
         for f, name, mimetype in self.additional_files(hwp5file):
             odtpkg.insert_stream(f, name, mimetype)
 
-    def make_styles_and_content(self, xhwp5):
-        styles = self.transform(self.xsl_styles, xhwp5)
-        try:
-            content = self.transform(self.xsl_content, xhwp5)
-            try:
-                return styles, content
-            except:
-                unlink_or_warning(content)
-                raise
-        except:
-            unlink_or_warning(styles)
-            raise
+    @contextmanager
+    def make_styles(self, xhwp5):
+        with self.transform(self.xsl_styles, xhwp5) as path:
+            with open(path) as f:
+                yield f
+
+    @contextmanager
+    def make_content(self, xhwp5):
+        with self.transform(self.xsl_content, xhwp5) as path:
+            with open(path) as f:
+                yield f
 
     def additional_files(self, hwp5file):
         if 'BinData' in hwp5file:
