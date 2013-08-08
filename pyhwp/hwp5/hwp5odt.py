@@ -43,6 +43,8 @@ import os
 import os.path
 import logging
 import sys
+import tempfile
+from contextlib import contextmanager
 
 from docopt import docopt
 
@@ -161,26 +163,40 @@ def unlink_or_warning(path):
         logger.warning('%s cannot be deleted', path)
 
 
+@contextmanager
+def mkstemp_open(*args, **kwargs):
+
+    if (kwargs.get('text', False) or (len(args) >= 4 and args[3])):
+        text = True
+    else:
+        text = False
+
+    mode = 'w+' if text else 'wb+'
+    fd, path = tempfile.mkstemp(*args, **kwargs)
+    try:
+        f = os.fdopen(fd, mode)
+        try:
+            yield path, f
+        finally:
+            try:
+                f.close()
+            except Exception:
+                pass
+    finally:
+        unlink_or_warning(path)
+
+
 class ConverterBase(object):
     def __init__(self, xslt, validator):
         self.xslt = xslt
         self.validator = validator
 
+    @contextmanager
     def make_xhwp5file(self, hwp5file, embedimage):
-        import os
-        import tempfile
-        fd, path = tempfile.mkstemp()
-        try:
-            f = os.fdopen(fd, 'w')
-            try:
-                hwp5file.xmlevents(embedbin=embedimage).dump(f)
-            finally:
-                f.close()
-        except:
-            unlink_or_warning(path)
-            raise
-        else:
-            return path
+        with mkstemp_open(prefix='hwp5-', suffix='.xml',
+                          text=True) as (path, f):
+            hwp5file.xmlevents(embedbin=embedimage).dump(f)
+            yield path
 
     def transform(self, xsl_path, xhwp5_path):
         import os
@@ -231,11 +247,8 @@ class ODTStylesConverter(ODTConverter):
         self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
 
     def convert_to(self, hwp5file, output_path):
-        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage=False)
-        try:
+        with self.make_xhwp5file(hwp5file, embedimage=False) as xhwp5_path:
             self.transform_to(self.xsl_styles, xhwp5_path, output_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
 
 class ODTContentConverter(ODTConverter):
@@ -248,11 +261,8 @@ class ODTContentConverter(ODTConverter):
         self.embedimage = embedimage
 
     def convert_to(self, hwp5file, output_path):
-        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage=self.embedimage)
-        try:
+        with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
             self.transform_to(self.xsl_content, xhwp5_path, output_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
 
 class ODTPackageConverter(ODTConverter):
@@ -273,11 +283,8 @@ class ODTPackageConverter(ODTConverter):
             odtpkg.close()
 
     def __call__(self, hwp5file, odtpkg):
-        xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
-        try:
+        with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
             styles, content = self.make_styles_and_content(xhwp5_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
         try:
             with file(styles) as f:
@@ -328,11 +335,8 @@ class ODTSingleDocumentConverter(ODTConverter):
         self.embedimage = embedimage
 
     def convert_to(self, hwp5file, output_path):
-        xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
-        try:
+        with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
             self.transform_to(self.xsl_document, xhwp5_path, output_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
 
 def manifest_xml(f, files):
