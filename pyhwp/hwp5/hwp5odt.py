@@ -76,7 +76,8 @@ def main():
 
     from hwp5.dataio import ParseError
     try:
-        convert.convert(hwpfilename, dest_path)
+        with convert.prepare():
+            convert.convert(hwpfilename, dest_path)
     except ParseError, e:
         e.print_to_logger(logger)
     except InvalidHwp5FileError, e:
@@ -155,6 +156,11 @@ def hwp5_resources_filename(path):
     return pkg_resources_filename('hwp5', path)
 
 
+@contextmanager
+def hwp5_resources_path(path):
+    yield pkg_resources_filename('hwp5', path)
+
+
 def unlink_or_warning(path):
     try:
         os.unlink(path)
@@ -214,14 +220,22 @@ class ConverterBase(object):
 
 
 class ODTConverter(ConverterBase):
+
+    rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+
     def __init__(self, xslt, relaxng=None):
-        rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        rng_path = hwp5_resources_filename(rng_path)
-        if relaxng:
-            validate = lambda path: relaxng(rng_path, path)
+        self.relaxng = relaxng
+        ConverterBase.__init__(self, xslt, None)
+
+    @contextmanager
+    def prepare(self):
+        if self.relaxng:
+            with hwp5_resources_path(self.rng_path) as rng_path:
+                self.validator = lambda path: self.relaxng(rng_path, path)
+                yield
+                self.validator = None
         else:
-            validate = lambda path: True
-        ConverterBase.__init__(self, xslt, validate)
+            yield
 
     def convert(self, hwpfilename, dest_path):
         from .xmlmodel import Hwp5File
@@ -235,10 +249,15 @@ class ODTConverter(ConverterBase):
 class ODTStylesConverter(ODTConverter):
 
     dest_ext = 'styles.xml'
+    styles_xsl_path = 'xsl/odt/styles.xsl'
 
-    def __init__(self, xslt, relaxng=None):
-        ODTConverter.__init__(self, xslt, relaxng)
-        self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
+    @contextmanager
+    def prepare(self):
+        with ODTConverter.prepare(self):
+            with hwp5_resources_path(self.styles_xsl_path) as path:
+                self.xsl_styles = path
+                yield
+                del self.xsl_styles
 
     def convert_to(self, hwp5file, output_path):
         with self.make_xhwp5file(hwp5file, embedimage=False) as xhwp5_path:
@@ -248,11 +267,19 @@ class ODTStylesConverter(ODTConverter):
 class ODTContentConverter(ODTConverter):
 
     dest_ext = 'content.xml'
+    content_xsl_path = 'xsl/odt/content.xsl'
 
     def __init__(self, xslt, relaxng=None, embedimage=False):
         ODTConverter.__init__(self, xslt, relaxng)
-        self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
         self.embedimage = embedimage
+
+    @contextmanager
+    def prepare(self):
+        with ODTConverter.prepare(self):
+            with hwp5_resources_path(self.content_xsl_path) as path:
+                self.xsl_content = path
+                yield
+                del self.xsl_content
 
     def convert_to(self, hwp5file, output_path):
         with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
@@ -262,12 +289,23 @@ class ODTContentConverter(ODTConverter):
 class ODTPackageConverter(ODTConverter):
 
     dest_ext = 'odt'
+    styles_xsl_path = 'xsl/odt/styles.xsl'
+    content_xsl_path = 'xsl/odt/content.xsl'
 
     def __init__(self, xslt, relaxng=None, embedimage=False):
         ODTConverter.__init__(self, xslt, relaxng)
-        self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
-        self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
         self.embedimage = embedimage
+
+    @contextmanager
+    def prepare(self):
+        with ODTConverter.prepare(self):
+            with hwp5_resources_path(self.content_xsl_path) as path:
+                self.xsl_content = path
+                with hwp5_resources_path(self.styles_xsl_path) as path:
+                    self.xsl_styles = path
+                    yield
+                    del self.xsl_styles
+                del self.xsl_content
 
     def convert_to(self, hwp5file, odtpkg_path):
         odtpkg = ODTPackage(odtpkg_path)

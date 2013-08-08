@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import with_statement
 from unittest import TestCase
 
 def example(filename):
@@ -40,7 +41,9 @@ class TestODTPackageConverter(TestCase):
             finally:
                 f.close()
 
-            self.convert.convert_to(hwp5file, self.odt_path)
+            convert = self.convert
+            with convert.prepare():
+                convert.convert_to(hwp5file, self.odt_path)
         finally:
             hwp5file.close()
 
