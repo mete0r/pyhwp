@@ -31,10 +31,14 @@ Options::
     --loglevel=<level>  Set log level.
     --logfile=<file>    Set log file.
 '''
-
+from __future__ import with_statement
+from contextlib import contextmanager
 import os.path
 import logging
+import shutil
 
+from hwp5.importhelper import pkg_resources_filename
+from hwp5.hwp5odt import mkstemp_open
 
 logger = logging.getLogger(__name__)
 
@@ -101,17 +105,13 @@ def generate_htmldir_files(hwp5file, base_dir):
 
 
 def generate_css_file(xslt, xhwp5_path, css_path):
-    from hwp5.hwp5odt import hwp5_resources_filename
-
-    css_xsl = hwp5_resources_filename('xsl/hwp5css.xsl')
-    xslt(css_xsl, xhwp5_path, css_path)
+    with hwp5_resources_path('xsl/hwp5css.xsl') as css_xsl:
+        xslt(css_xsl, xhwp5_path, css_path)
 
 
 def generate_html_file(xslt, xhwp5_path, html_path):
-    from hwp5.hwp5odt import hwp5_resources_filename
-
-    html_xsl = hwp5_resources_filename('xsl/hwp5html.xsl')
-    xslt(html_xsl, xhwp5_path, html_path)
+    with hwp5_resources_path('xsl/hwp5html.xsl') as html_xsl:
+        xslt(html_xsl, xhwp5_path, html_path)
 
 
 def extract_bindata_dir(hwp5file, bindata_dir):
@@ -123,3 +123,23 @@ def extract_bindata_dir(hwp5file, bindata_dir):
 
     from hwp5.storage import unpack
     unpack(bindata_stg, bindata_dir)
+
+
+@contextmanager
+def hwp5_resources_path(res_path):
+    try:
+        path = pkg_resources_filename('hwp5', res_path)
+    except Exception:
+        logger.info('%s: pkg_resources_filename failed; using resource_stream',
+                    res_path)
+        with mkstemp_open() as (path, g):
+            import pkg_resources
+            f = pkg_resources.resource_stream('hwp5', res_path)
+            try:
+                shutil.copyfileobj(f, g)
+                g.close()
+                yield path
+            finally:
+                f.close()
+    else:
+        yield path
