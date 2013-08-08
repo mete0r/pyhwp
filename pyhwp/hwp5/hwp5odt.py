@@ -42,51 +42,29 @@ from __future__ import with_statement
 import os
 import os.path
 import logging
+import sys
+
+from docopt import docopt
+
+from hwp5 import plat
+from hwp5 import __version__ as version
+from hwp5.proc import rest_to_docopt
+from hwp5.proc import init_logger
+from hwp5.errors import InvalidHwp5FileError
+from hwp5.importhelper import pkg_resources_filename
 
 
 logger = logging.getLogger(__name__)
 
 
 def main():
-    import os
-    import sys
-    from hwp5 import __version__ as version
-    from hwp5.proc import rest_to_docopt
-    from hwp5.proc import init_logger
-    from hwp5 import plat
-    from hwp5.errors import InvalidHwp5FileError
-    from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
     init_logger(args)
 
-    if 'PYHWP_XSLTPROC' in os.environ:
-        from hwp5.plat import xsltproc
-        xsltproc.executable = os.environ['PYHWP_XSLTPROC']
-        xsltproc.enable()
+    init_with_environ()
 
-    if 'PYHWP_XMLLINT' in os.environ:
-        from hwp5.plat import xmllint
-        xmllint.executable = os.environ['PYHWP_XMLLINT']
-        xmllint.enable()
-
-    xslt = plat.get_xslt()
-    if xslt is None:
-        logger.error('no XSLT implementation is available.')
-        sys.exit(1)
-
-    rng = plat.get_relaxng()
-    if rng is None:
-        logger.warning('no RelaxNG implementation is available.')
-
-    if args['--document']:
-        convert = ODTSingleDocumentConverter(xslt, rng, not args['--no-embed-image'])
-    elif args['--styles']:
-        convert = ODTStylesConverter(xslt, rng)
-    elif args['--content']:
-        convert = ODTContentConverter(xslt, rng, args['--embed-image'])
-    else:
-        convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
+    convert = make_converter(args)
 
     hwpfilename = args['<hwp5file>']
     root = os.path.basename(hwpfilename)
@@ -102,6 +80,39 @@ def main():
     except InvalidHwp5FileError, e:
         logger.error('%s', e)
         sys.exit(1)
+
+
+def init_with_environ():
+    if 'PYHWP_XSLTPROC' in os.environ:
+        from hwp5.plat import xsltproc
+        xsltproc.executable = os.environ['PYHWP_XSLTPROC']
+        xsltproc.enable()
+
+    if 'PYHWP_XMLLINT' in os.environ:
+        from hwp5.plat import xmllint
+        xmllint.executable = os.environ['PYHWP_XMLLINT']
+        xmllint.enable()
+
+
+def make_converter(args):
+    xslt = plat.get_xslt()
+    if xslt is None:
+        logger.error('no XSLT implementation is available.')
+        sys.exit(1)
+
+    rng = plat.get_relaxng()
+    if rng is None:
+        logger.warning('no RelaxNG implementation is available.')
+
+    if args['--document']:
+        return ODTSingleDocumentConverter(xslt, rng,
+                                          not args['--no-embed-image'])
+    elif args['--styles']:
+        return ODTStylesConverter(xslt, rng)
+    elif args['--content']:
+        return ODTContentConverter(xslt, rng, args['--embed-image'])
+    else:
+        return ODTPackageConverter(xslt, rng, args['--embed-image'])
 
 
 class ODTPackage(object):
@@ -139,7 +150,6 @@ class ODTPackage(object):
 
 def hwp5_resources_filename(path):
     ''' get paths of 'hwp5' package resources '''
-    from importhelper import pkg_resources_filename
     return pkg_resources_filename('hwp5', path)
 
 
@@ -362,7 +372,18 @@ def manifest_xml(f, files):
 
 
 def manifest_rdf(f):
-    f.write('''<?xml version="1.0" encoding="utf-8"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><ns1:Document xmlns:ns1="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" rdf:about=""><ns1:hasPart rdf:resource="content.xml"/><ns1:hasPart rdf:resource="styles.xml"/></ns1:Document><ns2:ContentFile xmlns:ns2="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" rdf:about="content.xml"/><ns3:StylesFile xmlns:ns3="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" rdf:about="styles.xml"/></rdf:RDF>''')
+    f.write('''<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#"
+    xmlns:odf="http://docs.oasis-open.org/ns/office/1.2/meta/odf#">
+    <pkg:Document rdf:about="">
+        <pkg:hasPart rdf:resource="content.xml"/>
+        <pkg:hasPart rdf:resource="styles.xml"/>
+    </pkg:Document>
+    <odf:ContentFile rdf:about="content.xml"/>
+    <odf:StylesFile rdf:about="styles.xml"/>
+</rdf:RDF>''')
 
 
 def mimetype(f):
