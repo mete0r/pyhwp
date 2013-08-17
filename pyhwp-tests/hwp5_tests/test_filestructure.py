@@ -244,6 +244,21 @@ class TestHwp5File(TestBase):
         hwp5file = Hwp5File(self.olestg)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
+    def test_init_should_accept_fs(self):
+        from hwp5.filestructure import Hwp5File
+        from hwp5.storage import unpack
+        from hwp5.storage.fs import FileSystemStorage
+        outpath = 'test_init_should_accept_fs'
+        if os.path.exists(outpath):
+            shutil.rmtree(outpath)
+        os.mkdir(outpath)
+        unpack(self.olestg, outpath)
+        fs = FileSystemStorage(outpath)
+        hwp5file = Hwp5File(fs)
+        fileheader = hwp5file['FileHeader']
+        self.assertTrue(fileheader is not None)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
+
     def test_fileheader(self):
         fileheader = self.hwp5file.header
         self.assertEquals((5, 0, 1, 7), fileheader.version)
