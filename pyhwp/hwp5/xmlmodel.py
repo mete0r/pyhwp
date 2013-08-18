@@ -421,11 +421,12 @@ class XmlEvents(object):
     def __iter__(self):
         return modelevents_to_xmlevents(self.events)
 
-    def bytechunks(self, **kwargs):
+    def bytechunks(self, xml_declaration=True, **kwargs):
         from hwp5.xmlformat import xmlevents_to_bytechunks
         encoding = kwargs.get('xml_encoding', 'utf-8')
+        if xml_declaration:
+            yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
         bytechunks = xmlevents_to_bytechunks(self, encoding)
-        yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
         for chunk in bytechunks:
             yield chunk
 
