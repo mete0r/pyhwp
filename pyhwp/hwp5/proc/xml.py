@@ -21,6 +21,8 @@
 Usage::
 
     hwp5proc xml [--embedbin]
+                 [--xml-stylesheet=<xsl-url>]
+                 [--xslt-params=<xslt-params>]
                  [--loglevel=<loglevel>] [--logfile=<logfile>]
                  <hwp5file>
     hwp5proc xml --help
@@ -34,6 +36,9 @@ Options::
        --embedbin           Embed BinData/* streams in the output XML.
 
     <hwp5file>              HWPv5 files (*.hwp)
+    <xsl-url>               url for <?xml-stylesheet?> Processing Instruction.
+    <xslt-params>           <?xslt-param?> processing instructions.
+                            Format: <name>:<value>[,<name>:<value>...]
 
 Example::
 
@@ -62,5 +67,30 @@ def main(args):
     opts = dict()
     opts['embedbin'] = args['--embedbin']
 
+    xml_declaration = True
+
+    if args['--xml-stylesheet'] or args['--xslt-params']:
+        xml_stylesheet = args['--xml-stylesheet']
+        xslt_params = args['--xslt-params']
+        xslt_params = list(parse_xslt_params(xslt_params))
+
+        xml_declaration = False
+        sys.stdout.write('<?xml version="1.0" encoding="utf-8"?>\n')
+
+        for name, value in xslt_params:
+            sys.stdout.write('<?xslt-param name="%s" select="\'%s\'"?>\n' %
+                             (name, value))
+        if xml_stylesheet:
+            sys.stdout.write('<?xml-stylesheet type="text/xsl" href="%s"?>\n' %
+                             xml_stylesheet)
+
     hwp5file = Hwp5File(args['<hwp5file>'])
-    hwp5file.xmlevents(**opts).dump(sys.stdout)
+    hwp5file.xmlevents(**opts).dump(sys.stdout,
+                                    xml_declaration=xml_declaration)
+
+
+def parse_xslt_params(s):
+    if s:
+        for token in s.split(','):
+            name, value = token.split(':', 1)
+            yield name, value
