@@ -42,10 +42,10 @@
         </xsl:for-each>
         <xsl:for-each select="BorderFill">
             .borderfill-<xsl:number value="position()" /> {
-                border-top: <xsl:apply-templates name="border" select="Border[@attribute-name='top']" mode="cssborder"/>;
-                border-right: <xsl:apply-templates name="border" select="Border[@attribute-name='right']" mode="cssborder"/>;
-                border-bottom: <xsl:apply-templates name="border" select="Border[@attribute-name='bottom']" mode="cssborder"/>;
-                border-left: <xsl:apply-templates name="border" select="Border[@attribute-name='left']" mode="cssborder"/>;
+                border-top: <xsl:apply-templates select="Border[@attribute-name='top']" mode="cssborder"/>;
+                border-right: <xsl:apply-templates select="Border[@attribute-name='right']" mode="cssborder"/>;
+                border-bottom: <xsl:apply-templates select="Border[@attribute-name='bottom']" mode="cssborder"/>;
+                border-left: <xsl:apply-templates select="Border[@attribute-name='left']" mode="cssborder"/>;
             }
         </xsl:for-each>
     </xsl:template>
