@@ -92,7 +92,7 @@ def generate_htmldir_files(hwp5file, base_dir):
         finally:
             xhwp5.close()
 
-        html_path = os.path.join(base_dir, 'index.html')
+        html_path = os.path.join(base_dir, 'index.xhtml')
         generate_html_file(xslt, path, html_path)
 
         css_path = os.path.join(base_dir, 'styles.css')
