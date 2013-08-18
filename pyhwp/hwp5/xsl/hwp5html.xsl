@@ -49,15 +49,26 @@
 
   <xsl:template match="BodyText" mode="body">
     <xsl:element name="body">
-      <xsl:apply-templates />
+      <xsl:apply-templates select="SectionDef" mode="div-section" />
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="Paragraph">
+  <xsl:template match="SectionDef" mode="div-section">
+    <xsl:element name="div">
+      <xsl:attribute name="class">Section</xsl:attribute>
+      <xsl:for-each select="Paragraph">
+        <xsl:apply-templates select="." mode="p"/>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="Paragraph" mode="p">
     <xsl:element name="p">
       <xsl:variable name="styleid" select="@style-id"/>
       <xsl:attribute name="class"><xsl:value-of select="translate(/HwpDoc/DocInfo/IdMappings/Style[number($styleid)+1]/@name, ' ', '-')" /> parashape-<xsl:value-of select="@parashape-id"/></xsl:attribute>
-      <xsl:apply-templates />
+      <xsl:for-each select="LineSeg">
+        <xsl:apply-templates />
+      </xsl:for-each>
     </xsl:element>
   </xsl:template>
 
