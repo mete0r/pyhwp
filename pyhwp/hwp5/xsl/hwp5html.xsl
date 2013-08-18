@@ -120,12 +120,30 @@
   </xsl:template>
 
   <xsl:template match="BinDataEmbedding" mode="img-src">
+    <xsl:choose>
+      <xsl:when test="@inline = 'true'">
+        <xsl:apply-templates select="." mode="img-src-datauri" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="." mode="img-src-external" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="BinDataEmbedding" mode="img-src-external">
     <xsl:variable name="binpath" select="'bindata/'"/>
     <xsl:attribute name="src">
       <xsl:value-of select="$binpath"/>
       <xsl:value-of select="@storage-id"/>
       <xsl:text>.</xsl:text>
       <xsl:value-of select="@ext"/>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template match="BinDataEmbedding" mode="img-src-datauri">
+    <xsl:attribute name="src">
+      <xsl:text>data:;base64,</xsl:text>
+      <xsl:value-of select="text()" />
     </xsl:attribute>
   </xsl:template>
 
