@@ -23,6 +23,7 @@ Usage::
     hwp5proc xml [--embedbin]
                  [--xml-stylesheet=<xsl-url>]
                  [--xslt-params=<xslt-params>]
+                 [--output=<file>]
                  [--loglevel=<loglevel>] [--logfile=<logfile>]
                  <hwp5file>
     hwp5proc xml --help
@@ -34,6 +35,7 @@ Options::
        --logfile=<file>     Set log file.
 
        --embedbin           Embed BinData/* streams in the output XML.
+       --output=<file>      Output filename.
 
     <hwp5file>              HWPv5 files (*.hwp)
     <xsl-url>               url for <?xml-stylesheet?> Processing Instruction.
@@ -67,26 +69,32 @@ def main(args):
     opts = dict()
     opts['embedbin'] = args['--embedbin']
 
+    if args['--output']:
+        output = open(args['--output'], 'w')
+    else:
+        output = sys.stdout
+
     xml_declaration = True
 
-    if args['--xml-stylesheet'] or args['--xslt-params']:
-        xml_stylesheet = args['--xml-stylesheet']
-        xslt_params = args['--xslt-params']
-        xslt_params = list(parse_xslt_params(xslt_params))
+    with output:
+        if args['--xml-stylesheet'] or args['--xslt-params']:
+            xml_stylesheet = args['--xml-stylesheet']
+            xslt_params = args['--xslt-params']
+            xslt_params = list(parse_xslt_params(xslt_params))
 
-        xml_declaration = False
-        sys.stdout.write('<?xml version="1.0" encoding="utf-8"?>\n')
+            xml_declaration = False
+            output.write('<?xml version="1.0" encoding="utf-8"?>\n')
 
-        for name, value in xslt_params:
-            sys.stdout.write('<?xslt-param name="%s" select="\'%s\'"?>\n' %
+            for name, value in xslt_params:
+                output.write('<?xslt-param name="%s" select="\'%s\'"?>\n' %
                              (name, value))
-        if xml_stylesheet:
-            sys.stdout.write('<?xml-stylesheet type="text/xsl" href="%s"?>\n' %
+            if xml_stylesheet:
+                output.write('<?xml-stylesheet type="text/xsl" href="%s"?>\n' %
                              xml_stylesheet)
 
-    hwp5file = Hwp5File(args['<hwp5file>'])
-    hwp5file.xmlevents(**opts).dump(sys.stdout,
-                                    xml_declaration=xml_declaration)
+        hwp5file = Hwp5File(args['<hwp5file>'])
+        hwp5file.xmlevents(**opts).dump(output,
+                                        xml_declaration=xml_declaration)
 
 
 def parse_xslt_params(s):
