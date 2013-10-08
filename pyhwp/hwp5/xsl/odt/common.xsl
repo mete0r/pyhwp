@@ -211,13 +211,13 @@
 
   <xsl:template mode="style:style" match="Style">
     <xsl:element name="style:style">
-      <xsl:attribute name="style:name"><xsl:value-of select="translate(@local-name, ' ', '_')" /></xsl:attribute>
+      <xsl:attribute name="style:name"><xsl:value-of select="translate(translate(@local-name, ' ', '_'), '/', '-')" /></xsl:attribute>
       <!--
       <xsl:attribute name="style:parent-style-name"/>
       -->
       <xsl:variable name="styles" select="/HwpDoc/DocInfo/IdMappings/Style" />
       <xsl:variable name="next-style-id" select="@next-style-id + 1"/>
-      <xsl:attribute name="style:next-style-name"><xsl:value-of select="translate($styles[$next-style-id]/@local-name, ' ', '_')" /></xsl:attribute>
+      <xsl:attribute name="style:next-style-name"><xsl:value-of select="translate(translate($styles[$next-style-id]/@local-name, ' ', '_'), '/', '-')" /></xsl:attribute>
       <xsl:attribute name="style:family">paragraph</xsl:attribute>
       <xsl:attribute name="style:class">text</xsl:attribute>
       <xsl:variable name="charshapeid" select="@charshape-id + 1"/>
@@ -802,7 +802,7 @@
 
   <xsl:template mode="style:parent-style-name" match="Style">
     <xsl:attribute name="style:parent-style-name">
-      <xsl:value-of select="translate(@local-name, ' ', '_')" />
+      <xsl:value-of select="translate(translate(@local-name, ' ', '_'), '/', '-')" />
     </xsl:attribute>
   </xsl:template>
 
