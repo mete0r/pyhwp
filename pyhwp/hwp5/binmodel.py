@@ -579,7 +579,7 @@ class Style(RecordModel):
 
     Kind = Enum(PARAGRAPH=0, CHAR=1)
     Flags = Flags(BYTE,
-                  0, 2, Kind, 'kind')
+                  0, 1, Kind, 'kind')
 
     def attributes(cls):
         yield BSTR, 'local_name',
