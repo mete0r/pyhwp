@@ -120,8 +120,8 @@ class IdMappings(RecordModel):
         yield UINT32, 'bullets',
         yield UINT32, 'parashapes',
         yield UINT32, 'styles',
-        # TODO: memoshapes does not exist at least 5.0.0.0
-        yield dict(type=UINT32, name='memoshapes', version=(5, 0, 0, 1))
+        # TODO: memoshapes does not exist at least 5.0.1.6
+        yield dict(type=UINT32, name='memoshapes', version=(5, 0, 1, 7))
     attributes = staticmethod(attributes)
 
 
