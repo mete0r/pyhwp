@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-03 07:37\n"
+"POT-Creation-Date: 2013-10-29 04:47\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko\n"
 
 # 8ae66890d3c34537b90c78f06ac868ef
 #: ../../hwp5proc.rst:2
@@ -25,7 +25,7 @@ msgstr "``hwp5proc``: HWPv5 처리기"
 # bed00d76e0724575a465d3780b90d7fd
 #: ../../../pyhwp/hwp5/proc/__init__.py:docstring of hwp5.proc:1
 msgid "Do various operations on HWPv5 files."
-msgstr "HWPv5 파일들에 여러가지 작업을 수행한다."
+msgstr "HWPv5 파일에 여러가지 작업을 수행한다."
 
 # cf8a544eee554bbcb012724d966509dc
 #: ../../../pyhwp/hwp5/proc/__init__.py:docstring of hwp5.proc:3
@@ -50,7 +50,7 @@ msgstr "명령: ``version``"
 # cad75aaf5f6a42ae8910807b46c6a1ef
 #: ../../../pyhwp/hwp5/proc/version.py:docstring of hwp5.proc.version:1
 msgid "Print HWP file format version of <hwp5file>."
-msgstr "<hwp5file>의 HWP 파일 포맷 버젼을 출력한다."
+msgstr "<hwp5file>의 HWP 파일 포맷 버전을 출력한다."
 
 # 71d2980c664e45d397af9734a5494c43
 #: ../../../pyhwp/hwp5/proc/version.py:docstring of hwp5.proc.version:8
@@ -62,7 +62,7 @@ msgstr "<hwp5file>의 HWP 파일 포맷 버젼을 출력한다."
 #: ../../../pyhwp/hwp5/proc/records.py:docstring hwp5.proc.records:14
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:14
 #: ../../../pyhwp/hwp5/proc/find.py:docstring hwp5.proc.find:11
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:10
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:12
 msgid "Options::"
 msgstr "옵션::"
 
@@ -136,7 +136,7 @@ msgstr "<hwp5file>의 지정된 스트림을 표준출력으로 출력한다."
 #: hwp5.proc.records:38 hwp5.proc.records:42 hwp5.proc.records:50
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:35
 #: hwp5.proc.models:43 hwp5.proc.models:47 hwp5.proc.models:55
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:20 hwp5.proc.xml:28
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:24 hwp5.proc.xml:32
 msgid "Example::"
 msgstr "예::"
 
@@ -148,7 +148,7 @@ msgstr "명령: ``unpack``"
 # 5c354689e91c40c69ad6d750bd240d1c
 #: ../../../pyhwp/hwp5/proc/unpack.py:docstring of hwp5.proc.unpack:1
 msgid "Extract out streams in the specified <hwp5file> to a directory."
-msgstr "<hwpfile>의 스트림들을 디렉토리로 풀어낸다."
+msgstr "<hwpfile>의 스트림들을 디렉터리로 풀어낸다."
 
 # 414f684ce5a540d0a5cd18ab8b2a5f24
 #: ../../hwp5proc.rst:37
@@ -170,7 +170,7 @@ msgid ""
 "format version specified by -V option."
 msgstr ""
 "<hwp5file>과 <record-stream>이 주어지지 않으면, 레코드 스트림을 표준 출력에서"
-"읽어들인다. 이 때 입력의 포맷 버젼은 -V 옵션으로 주어진 값인 것으로 가정한다."
+"읽어들인다. 이 때 입력의 포맷 버전은 -V 옵션으로 주어진 값인 것으로 가정한다."
 
 # a7dfeeb3a6464db18f930dc3747acc77
 #: ../../hwp5proc.rst:42
@@ -195,7 +195,7 @@ msgstr "지정된 조건을 만족하는 레코드 모델들을 찾는다."
 # 78f39cd8bb2c46a89417b59931917868
 #: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:24
 msgid "Example: Find paragraphs::"
-msgstr "예: 문단 검색::"
+msgstr "예: 문단 찾기::"
 
 # 9e23e53b35ca4aefb5e8c1ffa99d3d26
 #: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:30
@@ -216,7 +216,7 @@ msgid "Transform an HWPv5 file into an XML."
 msgstr "HWPv5 파일을 XML로 변환한다."
 
 # d89687875f5d4135963346b8e2de3a53
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:25
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:29
 msgid ""
 "With ``--embedbin`` option, you can embed base64-encoded ``BinData/*`` files "
 "in the output XML."

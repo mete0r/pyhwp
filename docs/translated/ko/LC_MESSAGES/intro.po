@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-18 00:14\n"
+"POT-Creation-Date: 2013-10-29 04:47\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko\n"
 
 # 229d7f6cb6e94b80b3ed276154632ea7
 #: ../../intro.rst:2
@@ -55,37 +55,38 @@ msgstr "설치"
 msgid "from `pypi <http://pypi.python.org/pypi/pyhwp>`_::"
 msgstr "`pypi <http://pypi.python.org/pypi/pyhwp>`_ 에서::"
 
-# ab2b026ca97f43ac8001e6dba8286ce8
-#: ../../intro.rst:19
-msgid "from `github <https://github.com/mete0r/pyhwp>`_::"
-msgstr "`github <https://github.com/mete0r/pyhwp>`_ 에서::"
+# cf88c69e47e54e098dc3f6e7223bee14
+#: ../../intro.rst:20
+msgid "Or"
+msgstr "혹은"
+
+# fb2d9f873f6549ce862d46eb64f4a5e2
+#: ../../intro.rst:22
+msgid "pip install --user pyhwp  # Install pyhwp into user's home directory"
+msgstr "pip install --user pyhwp  # 사용자의 홈디렉터리에 설치"
 
 # da4c2f33f39048e9a72ad43807cd7e37
-#: ../../intro.rst:27
+#: ../../intro.rst:25
 msgid "Requirements"
-msgstr "필요한 것들"
+msgstr "필요한 것"
 
 # db6d63914fb2413d92e5701b694e2b22
-#: ../../intro.rst:29
+#: ../../intro.rst:27
 msgid "CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2"
 msgstr "CPython 2.5, 2.6, 2.7, Jython 2.5.3 혹은 PyPy 2.0.2"
 
 # 0d7548139cea4b37bb2298584800bffc
-#: ../../intro.rst:30
-msgid ""
-"`setuptools <http://pypi.python.org/pypi/setuptools>`_ or `distribute "
-"<https://pypi.python.org/pypi/distribute>`_"
-msgstr ""
-"`setuptools <http://pypi.python.org/pypi/setuptools>`_ 혹은 `distribute "
-"<https://pypi.python.org/pypi/distribute>`_"
+#: ../../intro.rst:28
+msgid "`setuptools <http://pypi.python.org/pypi/setuptools>`_"
+msgstr "`"
 
 # 070821d20ddc4c6cb15fa70632bf6523
-#: ../../intro.rst:33
+#: ../../intro.rst:31
 msgid "Documentation & Development"
 msgstr "문서화 및 개발"
 
 # 8228a1248e8b4f6fb82be453d4ef4135
-#: ../../intro.rst:35
+#: ../../intro.rst:33
 msgid ""
 "Documentation: `http://pythonhosted.org/pyhwp/ <http://pythonhosted.org/"
 "pyhwp/>`_ [`한국/조선어 <http://pythonhosted.org/pyhwp/ko/>`_] [`develop "
@@ -96,7 +97,7 @@ msgstr ""
 "pyhwp.readthedocs.org>`_]"
 
 # 0d7548139cea4b37bb2298584800bffc
-#: ../../intro.rst:36
+#: ../../intro.rst:34
 msgid ""
 "Distribution: `http://pypi.python.org/pypi/pyhwp <http://pypi.python.org/"
 "pypi/pyhwp>`_"
@@ -105,7 +106,7 @@ msgstr ""
 "pyhwp>`_"
 
 # f0f93a1ed81747dc9c7a3c631b971e86
-#: ../../intro.rst:37
+#: ../../intro.rst:35
 msgid ""
 "Development: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/"
 "pyhwp>`_"
@@ -113,7 +114,7 @@ msgstr ""
 "개발: `https://github.com/mete0r/pyhwp <https://github.com/mete0r/pyhwp>`_"
 
 # f0f93a1ed81747dc9c7a3c631b971e86
-#: ../../intro.rst:38
+#: ../../intro.rst:36
 msgid ""
 "Issue tracker: `https://github.com/mete0r/pyhwp/issues <https://github.com/"
 "mete0r/pyhwp/issues>`_"
@@ -122,39 +123,39 @@ msgstr ""
 "mete0r/pyhwp/issues>`_"
 
 # 317c633c180a4bda8045e2a5b1e757cf
-#: ../../intro.rst:39
+#: ../../intro.rst:37
 msgid "Feedbacks & contributions are welcome!"
 msgstr "피드백이나 기여 환영합니다."
 
 # b200736b60a04a8480b72cb24a513db0
-#: ../../intro.rst:42
+#: ../../intro.rst:40
 msgid "Contributors"
 msgstr "기여한 이들"
 
 # 38b9e22103b4432eaf4fdf9f452bc3e3
-#: ../../intro.rst:44
+#: ../../intro.rst:42
 msgid "Maintainer: `mete0r <https://github.com/mete0r>`_"
 msgstr "Maintainer: `mete0r <https://github.com/mete0r>`_"
 
 # 3968cb8206a14f398a248eed814ad9aa
-#: ../../intro.rst:47
+#: ../../intro.rst:45
 msgid "License"
 msgstr "사용허가"
 
 # 6b81aa25dcb44a61b43041661de3a8cd
-#: ../../intro.rst:49
+#: ../../intro.rst:47
 msgid "Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>"
 msgstr ""
 
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c
-#: ../../intro.rst:53
+#: ../../intro.rst:51
 msgid ""
-"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/agpl-"
-"3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
+"`GNU Affero General Public License v3.0 <http://www.gnu.org/licenses/"
+"agpl-3.0.html>`_ `(text version) <http://www.gnu.org/licenses/agpl-3.0.txt>`_"
 msgstr ""
 
 # 164415d866774a9e9e7ad1008447cf74
-#: ../../intro.rst:56
+#: ../../intro.rst:54
 msgid ""
 "This program is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU Affero General Public License as published by the "
@@ -163,7 +164,7 @@ msgid ""
 msgstr ""
 
 # 6cc8ef94865e4196898a83b1b80dd2e5
-#: ../../intro.rst:61
+#: ../../intro.rst:59
 msgid ""
 "This program is distributed in the hope that it will be useful, but WITHOUT "
 "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
@@ -172,19 +173,19 @@ msgid ""
 msgstr ""
 
 # d54697f2f7dc44869d43637b7e5dcb68
-#: ../../intro.rst:66
+#: ../../intro.rst:64
 msgid ""
 "You should have received a copy of the GNU Affero General Public License "
 "along with this program.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
 # c3270c668ef7418e951ef0bc8ac17fdd
-#: ../../intro.rst:70
+#: ../../intro.rst:68
 msgid "Disclosure"
 msgstr "공개"
 
 # df57575778df4329940de5a8a2999e73
-#: ../../intro.rst:72
+#: ../../intro.rst:70
 msgid ""
 "This program has been developed in accordance with a public document named "
 "\"HWP Binary Specification 1.1\" published by `Hancom Inc. <http://www."
