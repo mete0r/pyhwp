@@ -17,7 +17,7 @@ from `pypi <http://pypi.python.org/pypi/pyhwp>`_::
    virtualenv pyhwp
    pyhwp/bin/pip install pyhwp  # Install pyhwp into a virtualenv directory
 
-Or
+Or::
 
    pip install --user pyhwp  # Install pyhwp into user's home directory
 

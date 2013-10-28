@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-29 04:47\n"
+"POT-Creation-Date: 2013-10-29 05:22\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,14 +55,9 @@ msgstr ""
 msgid "from `pypi <http://pypi.python.org/pypi/pyhwp>`_::"
 msgstr ""
 
-# cf88c69e47e54e098dc3f6e7223bee14
+# 33cd4af4dc6f496bbea8284505308c83
 #: ../../intro.rst:20
-msgid "Or"
-msgstr ""
-
-# fb2d9f873f6549ce862d46eb64f4a5e2
-#: ../../intro.rst:22
-msgid "pip install --user pyhwp  # Install pyhwp into user's home directory"
+msgid "Or::"
 msgstr ""
 
 # da4c2f33f39048e9a72ad43807cd7e37
