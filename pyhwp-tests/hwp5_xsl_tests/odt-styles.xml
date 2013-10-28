@@ -87,7 +87,7 @@
     <context:xslt mode="office:font-face-decls" select="HwpDoc/DocInfo">
       <equals>
         <tested>count(style:font-face)</tested>
-        <expected>7</expected>
+        <expected>19</expected>
       </equals>
     </context:xslt>
 

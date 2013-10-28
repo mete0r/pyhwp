@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from __future__ import with_statement
 from unittest import TestCase
+
 
 def example(filename):
     from fixtures import get_fixture_path
@@ -30,8 +32,6 @@ class TestODTPackageConverter(TestCase):
         return ODTPackageConverter(xslt, relaxng)
 
     def test_convert_bindata(self):
-        from hwp5.hwp5odt import ODTPackage
-
         hwp5file = example('sample-5017.hwp')
         try:
             f = hwp5file['BinData']['BIN0002.jpg'].open()
@@ -40,7 +40,9 @@ class TestODTPackageConverter(TestCase):
             finally:
                 f.close()
 
-            self.convert.convert_to(hwp5file, self.odt_path)
+            convert = self.convert
+            with convert.prepare():
+                convert.convert_to(hwp5file, self.odt_path)
         finally:
             hwp5file.close()
 

@@ -21,6 +21,8 @@
 Usage::
 
     hwp5proc xml [--embedbin]
+                 [--no-xml-decl]
+                 [--output=<file>]
                  [--loglevel=<loglevel>] [--logfile=<logfile>]
                  <hwp5file>
     hwp5proc xml --help
@@ -32,6 +34,8 @@ Options::
        --logfile=<file>     Set log file.
 
        --embedbin           Embed BinData/* streams in the output XML.
+       --no-xml-decl        Don't output <?xml ... ?> XML declaration.
+       --output=<file>      Output filename.
 
     <hwp5file>              HWPv5 files (*.hwp)
 
@@ -62,5 +66,17 @@ def main(args):
     opts = dict()
     opts['embedbin'] = args['--embedbin']
 
-    hwp5file = Hwp5File(args['<hwp5file>'])
-    hwp5file.xmlevents(**opts).dump(sys.stdout)
+    if args['--output']:
+        output = open(args['--output'], 'w')
+    else:
+        output = sys.stdout
+
+    if args['--no-xml-decl']:
+        xml_declaration = False
+    else:
+        xml_declaration = True
+
+    with output:
+        hwp5file = Hwp5File(args['<hwp5file>'])
+        hwp5file.xmlevents(**opts).dump(output,
+                                        xml_declaration=xml_declaration)

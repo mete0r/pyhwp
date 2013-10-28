@@ -75,6 +75,8 @@ hwp5proc xml 2>&1 | head -n 1 | grep 'Usage:'
 hwp5proc xml --help | head -n 1 | grep 'Transform'
 hwp5proc xml $SAMPLE | xmllint --format - | grep 'BinDataEmbedding' | grep 'inline' | wc -l | grep '^0$'
 hwp5proc xml --embedbin $SAMPLE | xmllint --format - | grep 'BinDataEmbedding' | grep 'inline' | wc -l | grep '^2$'
+hwp5proc xml $SAMPLE | head -n 1 | grep '[<][?]xml'
+hwp5proc xml --no-xml-decl $SAMPLE | head -n 1 | grep -v '[<][?]xml'
 
 hwp5odt 2>&1 | head -n 1 | grep 'Usage:'
 hwp5odt --help | head -n 1 | grep 'HWPv5 to ODT converter'

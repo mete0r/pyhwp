@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
+import os.path
+import shutil
+
 from hwp5 import filestructure as FS
 from hwp5.utils import cached_property
 import test_ole
+
 
 class TestBase(test_ole.TestBase):
 
@@ -240,9 +244,24 @@ class TestHwp5File(TestBase):
         hwp5file = Hwp5File(self.olestg)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
+    def test_init_should_accept_fs(self):
+        from hwp5.filestructure import Hwp5File
+        from hwp5.storage import unpack
+        from hwp5.storage.fs import FileSystemStorage
+        outpath = 'test_init_should_accept_fs'
+        if os.path.exists(outpath):
+            shutil.rmtree(outpath)
+        os.mkdir(outpath)
+        unpack(self.olestg, outpath)
+        fs = FileSystemStorage(outpath)
+        hwp5file = Hwp5File(fs)
+        fileheader = hwp5file['FileHeader']
+        self.assertTrue(fileheader is not None)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
+
     def test_fileheader(self):
         fileheader = self.hwp5file.header
-        self.assertEquals((5,0,1,7), fileheader.version)
+        self.assertEquals((5, 0, 1, 7), fileheader.version)
         self.assertTrue(fileheader.flags.compressed)
 
     def test_getitem_storage_classes(self):
@@ -267,7 +286,6 @@ class TestHwp5File(TestBase):
         from hwp5.storage import ExtraItemStorage
         from hwp5.storage import unpack
         outpath = 'test_unpack'
-        import os, os.path, shutil
         if os.path.exists(outpath):
             shutil.rmtree(outpath)
         os.mkdir(outpath)
@@ -305,7 +323,8 @@ class TestHwp5File(TestBase):
             docinfo.close()
 
         import zlib
-        self.assertEquals(zlib.decompress(self.olestg['DocInfo'].open().read(), -15), data)
+        docinfo = self.olestg['DocInfo']
+        self.assertEquals(zlib.decompress(docinfo.open().read(), -15), data)
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
@@ -352,6 +371,8 @@ class TestGeneratorReader(TestCase):
 
 
 from hwp5.utils import cached_property
+
+
 class TestUncompress(TestCase):
 
     @cached_property
@@ -370,9 +391,9 @@ class TestUncompress(TestCase):
         from hwp5.filestructure import ZLibIncrementalDecoder
         dec = ZLibIncrementalDecoder(wbits=-15)
         data = dec.decode(compressed_data[2:2048])
-        data += dec.decode(compressed_data[2048:2048+1024])
-        data += dec.decode(compressed_data[2048+1024:2048+1024+4096])
-        data += dec.decode(compressed_data[2048+1024+4096:], True)
+        data += dec.decode(compressed_data[2048:2048 + 1024])
+        data += dec.decode(compressed_data[2048 + 1024:2048 + 1024 + 4096])
+        data += dec.decode(compressed_data[2048 + 1024 + 4096:], True)
 
         self.assertEquals(self.original_data, data)
 

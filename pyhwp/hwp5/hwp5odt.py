@@ -42,24 +42,50 @@ from __future__ import with_statement
 import os
 import os.path
 import logging
+import sys
+import tempfile
+from contextlib import contextmanager
+
+from docopt import docopt
+
+from hwp5 import plat
+from hwp5 import __version__ as version
+from hwp5.proc import rest_to_docopt
+from hwp5.proc import init_logger
+from hwp5.errors import InvalidHwp5FileError
+from hwp5.importhelper import pkg_resources_filename
 
 
 logger = logging.getLogger(__name__)
 
 
 def main():
-    import os
-    import sys
-    from hwp5 import __version__ as version
-    from hwp5.proc import rest_to_docopt
-    from hwp5.proc import init_logger
-    from hwp5 import plat
-    from hwp5.errors import InvalidHwp5FileError
-    from docopt import docopt
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
     init_logger(args)
 
+    init_with_environ()
+
+    convert = make_converter(args)
+
+    hwpfilename = args['<hwp5file>']
+    root = os.path.basename(hwpfilename)
+    if root.lower().endswith('.hwp'):
+        root = root[0:-4]
+    dest_path = root + '.' + convert.dest_ext
+
+    from hwp5.dataio import ParseError
+    try:
+        with convert.prepare():
+            convert.convert(hwpfilename, dest_path)
+    except ParseError, e:
+        e.print_to_logger(logger)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        sys.exit(1)
+
+
+def init_with_environ():
     if 'PYHWP_XSLTPROC' in os.environ:
         from hwp5.plat import xsltproc
         xsltproc.executable = os.environ['PYHWP_XSLTPROC']
@@ -70,6 +96,8 @@ def main():
         xmllint.executable = os.environ['PYHWP_XMLLINT']
         xmllint.enable()
 
+
+def make_converter(args):
     xslt = plat.get_xslt()
     if xslt is None:
         logger.error('no XSLT implementation is available.')
@@ -80,28 +108,14 @@ def main():
         logger.warning('no RelaxNG implementation is available.')
 
     if args['--document']:
-        convert = ODTSingleDocumentConverter(xslt, rng, not args['--no-embed-image'])
+        return ODTSingleDocumentConverter(xslt, rng,
+                                          not args['--no-embed-image'])
     elif args['--styles']:
-        convert = ODTStylesConverter(xslt, rng)
+        return ODTStylesConverter(xslt, rng)
     elif args['--content']:
-        convert = ODTContentConverter(xslt, rng, args['--embed-image'])
+        return ODTContentConverter(xslt, rng, args['--embed-image'])
     else:
-        convert = ODTPackageConverter(xslt, rng, args['--embed-image'])
-
-    hwpfilename = args['<hwp5file>']
-    root = os.path.basename(hwpfilename)
-    if root.lower().endswith('.hwp'):
-        root = root[0:-4]
-    dest_path = root + '.' + convert.dest_ext
-
-    from hwp5.dataio import ParseError
-    try:
-        convert.convert(hwpfilename, dest_path)
-    except ParseError, e:
-        e.print_to_logger(logger)
-    except InvalidHwp5FileError, e:
-        logger.error('%s', e)
-        sys.exit(1)
+        return ODTPackageConverter(xslt, rng, args['--embed-image'])
 
 
 class ODTPackage(object):
@@ -139,8 +153,12 @@ class ODTPackage(object):
 
 def hwp5_resources_filename(path):
     ''' get paths of 'hwp5' package resources '''
-    from importhelper import pkg_resources_filename
     return pkg_resources_filename('hwp5', path)
+
+
+@contextmanager
+def hwp5_resources_path(path):
+    yield pkg_resources_filename('hwp5', path)
 
 
 def unlink_or_warning(path):
@@ -151,39 +169,47 @@ def unlink_or_warning(path):
         logger.warning('%s cannot be deleted', path)
 
 
+@contextmanager
+def mkstemp_open(*args, **kwargs):
+
+    if (kwargs.get('text', False) or (len(args) >= 4 and args[3])):
+        text = True
+    else:
+        text = False
+
+    mode = 'w+' if text else 'wb+'
+    fd, path = tempfile.mkstemp(*args, **kwargs)
+    try:
+        f = os.fdopen(fd, mode)
+        try:
+            yield path, f
+        finally:
+            try:
+                f.close()
+            except Exception:
+                pass
+    finally:
+        unlink_or_warning(path)
+
+
 class ConverterBase(object):
     def __init__(self, xslt, validator):
         self.xslt = xslt
         self.validator = validator
 
+    @contextmanager
     def make_xhwp5file(self, hwp5file, embedimage):
-        import os
-        import tempfile
-        fd, path = tempfile.mkstemp()
-        try:
-            f = os.fdopen(fd, 'w')
-            try:
-                hwp5file.xmlevents(embedbin=embedimage).dump(f)
-            finally:
-                f.close()
-        except:
-            unlink_or_warning(path)
-            raise
-        else:
-            return path
+        with mkstemp_open(prefix='hwp5-', suffix='.xml',
+                          text=True) as (path, f):
+            hwp5file.xmlevents(embedbin=embedimage).dump(f)
+            yield path
 
+    @contextmanager
     def transform(self, xsl_path, xhwp5_path):
-        import os
-        import tempfile
-        fd, path = tempfile.mkstemp()
-        try:
-            os.close(fd)
+        with mkstemp_open(prefix='xslt-') as (path, f):
+            f.close()
             self.transform_to(xsl_path, xhwp5_path, path)
-        except:
-            unlink_or_warning(path)
-            raise
-        else:
-            return path
+            yield path
 
     def transform_to(self, xsl_path, xhwp5_path, output_path):
         self.xslt(xsl_path, xhwp5_path, output_path)
@@ -194,14 +220,22 @@ class ConverterBase(object):
 
 
 class ODTConverter(ConverterBase):
+
+    rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
+
     def __init__(self, xslt, relaxng=None):
-        rng_path = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
-        rng_path = hwp5_resources_filename(rng_path)
-        if relaxng:
-            validate = lambda path: relaxng(rng_path, path)
+        self.relaxng = relaxng
+        ConverterBase.__init__(self, xslt, None)
+
+    @contextmanager
+    def prepare(self):
+        if self.relaxng:
+            with hwp5_resources_path(self.rng_path) as rng_path:
+                self.validator = lambda path: self.relaxng(rng_path, path)
+                yield
+                self.validator = None
         else:
-            validate = lambda path: True
-        ConverterBase.__init__(self, xslt, validate)
+            yield
 
     def convert(self, hwpfilename, dest_path):
         from .xmlmodel import Hwp5File
@@ -215,68 +249,77 @@ class ODTConverter(ConverterBase):
 class ODTStylesConverter(ODTConverter):
 
     dest_ext = 'styles.xml'
+    styles_xsl_path = 'xsl/odt/styles.xsl'
 
-    def __init__(self, xslt, relaxng=None):
-        ODTConverter.__init__(self, xslt, relaxng)
-        self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
+    @contextmanager
+    def prepare(self):
+        with ODTConverter.prepare(self):
+            with hwp5_resources_path(self.styles_xsl_path) as path:
+                self.xsl_styles = path
+                yield
+                del self.xsl_styles
 
     def convert_to(self, hwp5file, output_path):
-        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage=False)
-        try:
+        with self.make_xhwp5file(hwp5file, embedimage=False) as xhwp5_path:
             self.transform_to(self.xsl_styles, xhwp5_path, output_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
 
 class ODTContentConverter(ODTConverter):
 
     dest_ext = 'content.xml'
+    content_xsl_path = 'xsl/odt/content.xsl'
 
     def __init__(self, xslt, relaxng=None, embedimage=False):
         ODTConverter.__init__(self, xslt, relaxng)
-        self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
         self.embedimage = embedimage
 
+    @contextmanager
+    def prepare(self):
+        with ODTConverter.prepare(self):
+            with hwp5_resources_path(self.content_xsl_path) as path:
+                self.xsl_content = path
+                yield
+                del self.xsl_content
+
     def convert_to(self, hwp5file, output_path):
-        xhwp5_path = self.make_xhwp5file(hwp5file, embedimage=self.embedimage)
-        try:
+        with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
             self.transform_to(self.xsl_content, xhwp5_path, output_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
 
 class ODTPackageConverter(ODTConverter):
 
     dest_ext = 'odt'
+    styles_xsl_path = 'xsl/odt/styles.xsl'
+    content_xsl_path = 'xsl/odt/content.xsl'
 
     def __init__(self, xslt, relaxng=None, embedimage=False):
         ODTConverter.__init__(self, xslt, relaxng)
-        self.xsl_styles = hwp5_resources_filename('xsl/odt/styles.xsl')
-        self.xsl_content = hwp5_resources_filename('xsl/odt/content.xsl')
         self.embedimage = embedimage
+
+    @contextmanager
+    def prepare(self):
+        with ODTConverter.prepare(self):
+            with hwp5_resources_path(self.content_xsl_path) as path:
+                self.xsl_content = path
+                with hwp5_resources_path(self.styles_xsl_path) as path:
+                    self.xsl_styles = path
+                    yield
+                    del self.xsl_styles
+                del self.xsl_content
 
     def convert_to(self, hwp5file, odtpkg_path):
         odtpkg = ODTPackage(odtpkg_path)
         try:
-            self(hwp5file, odtpkg)
+            self.build_odtpkg_streams(hwp5file, odtpkg)
         finally:
             odtpkg.close()
 
-    def __call__(self, hwp5file, odtpkg):
-        xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
-        try:
-            styles, content = self.make_styles_and_content(xhwp5_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
-
-        try:
-            with file(styles) as f:
+    def build_odtpkg_streams(self, hwp5file, odtpkg):
+        with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
+            with self.make_styles(xhwp5_path) as f:
                 odtpkg.insert_stream(f, 'styles.xml', 'text/xml')
-            with file(content) as f:
+            with self.make_content(xhwp5_path) as f:
                 odtpkg.insert_stream(f, 'content.xml', 'text/xml')
-        finally:
-            unlink_or_warning(styles)
-            unlink_or_warning(content)
 
         from cStringIO import StringIO
         rdf = StringIO()
@@ -287,18 +330,17 @@ class ODTPackageConverter(ODTConverter):
         for f, name, mimetype in self.additional_files(hwp5file):
             odtpkg.insert_stream(f, name, mimetype)
 
-    def make_styles_and_content(self, xhwp5):
-        styles = self.transform(self.xsl_styles, xhwp5)
-        try:
-            content = self.transform(self.xsl_content, xhwp5)
-            try:
-                return styles, content
-            except:
-                unlink_or_warning(content)
-                raise
-        except:
-            unlink_or_warning(styles)
-            raise
+    @contextmanager
+    def make_styles(self, xhwp5):
+        with self.transform(self.xsl_styles, xhwp5) as path:
+            with open(path) as f:
+                yield f
+
+    @contextmanager
+    def make_content(self, xhwp5):
+        with self.transform(self.xsl_content, xhwp5) as path:
+            with open(path) as f:
+                yield f
 
     def additional_files(self, hwp5file):
         if 'BinData' in hwp5file:
@@ -318,11 +360,8 @@ class ODTSingleDocumentConverter(ODTConverter):
         self.embedimage = embedimage
 
     def convert_to(self, hwp5file, output_path):
-        xhwp5_path = self.make_xhwp5file(hwp5file, self.embedimage)
-        try:
+        with self.make_xhwp5file(hwp5file, self.embedimage) as xhwp5_path:
             self.transform_to(self.xsl_document, xhwp5_path, output_path)
-        finally:
-            unlink_or_warning(xhwp5_path)
 
 
 def manifest_xml(f, files):
@@ -362,7 +401,18 @@ def manifest_xml(f, files):
 
 
 def manifest_rdf(f):
-    f.write('''<?xml version="1.0" encoding="utf-8"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><ns1:Document xmlns:ns1="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" rdf:about=""><ns1:hasPart rdf:resource="content.xml"/><ns1:hasPart rdf:resource="styles.xml"/></ns1:Document><ns2:ContentFile xmlns:ns2="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" rdf:about="content.xml"/><ns3:StylesFile xmlns:ns3="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" rdf:about="styles.xml"/></rdf:RDF>''')
+    f.write('''<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#"
+    xmlns:odf="http://docs.oasis-open.org/ns/office/1.2/meta/odf#">
+    <pkg:Document rdf:about="">
+        <pkg:hasPart rdf:resource="content.xml"/>
+        <pkg:hasPart rdf:resource="styles.xml"/>
+    </pkg:Document>
+    <odf:ContentFile rdf:about="content.xml"/>
+    <odf:StylesFile rdf:about="styles.xml"/>
+</rdf:RDF>''')
 
 
 def mimetype(f):

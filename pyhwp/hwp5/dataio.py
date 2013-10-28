@@ -302,6 +302,8 @@ class EnumType(type):
                 else:
                     logger.warning('undefined %s value: %s',
                                    cls.__name__, value)
+                    logger.warning('defined name/values: %s',
+                                   str(instances_by_name))
                     return int.__new__(cls, value)
 
             if len(populate_state) == 0:

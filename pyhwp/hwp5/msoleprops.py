@@ -16,6 +16,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from datetime import datetime
+from datetime import timedelta
+import logging
+
 from hwp5.dataio import Struct
 from hwp5.dataio import Flags
 from hwp5.dataio import N_ARRAY
@@ -23,7 +27,9 @@ from hwp5.dataio import ARRAY
 from hwp5.dataio import BYTE
 from hwp5.dataio import UINT16
 from hwp5.dataio import UINT32
-import logging
+from hwp5.dataio import INT32
+from hwp5.dataio import BSTR
+from hwp5.bintype import read_type
 
 
 logger = logging.getLogger(__name__)
@@ -108,6 +114,7 @@ class MSOLEProperty(Struct):
     TypeFlags = Flags(UINT32,
                       0, 16, 'code',
                       17, 'is_vector')
+
     def attributes(cls):
         yield cls.TypeFlags, 'type'
     attributes = classmethod(attributes)
@@ -115,7 +122,6 @@ class MSOLEProperty(Struct):
 
 class MSOLEPropertySet(object):
     def read(f, context):
-        from hwp5.bintype import read_type
         propset_header = read_type(MSOLEPropertySetHeader, context, f)
         common_prop_names = {
             0: 'Dictionary',
@@ -135,7 +141,8 @@ class MSOLEPropertySet(object):
         }
         for section_desc in propset_header['sections']:
             f.seek(section_desc['offset'])
-            section_header = read_type(MSOLEPropertySetSectionHeader, context, f)
+            section_header = read_type(MSOLEPropertySetSectionHeader,
+                                       context, f)
             section_desc['properties'] = section_properties = dict()
             prop_names = dict(common_prop_names)
             for prop_desc in section_header['properties']:
@@ -167,24 +174,31 @@ class MSOLEPropertySet(object):
                         vt_code = prop['type'].code
                         vt_type = vt_types[vt_code]
                         logger.debug('type: %s', vt_type)
-                        if vt_type == VT_I4:
-                            from hwp5.dataio import INT32
-                            value = read_type(INT32, context, f)
-                            logger.debug('value: %s', value)
+                        value = read_vt_value(vt_type, context, f)
+                        if value is not None:
                             prop['value'] = value
-                        elif vt_type == VT_LPWSTR:
-                            from hwp5.dataio import BSTR
-                            value = read_type(BSTR, context, f)
-                            logger.debug('value: %s', value)
-                            prop['value'] = value
-                        elif vt_type == VT_FILETIME:
-                            from hwp5.dataio import UINT32
-                            lword = read_type(UINT32, context, f)
-                            hword = read_type(UINT32, context, f)
-                            value = hword << 32 | lword
-                            logger.debug('value: %s', value)
-                            prop['value'] = value
-
 
         return propset_header
     read = staticmethod(read)
+
+
+def read_vt_value(vt_type, context, f):
+    if vt_type == VT_I4:
+        value = read_type(INT32, context, f)
+        logger.debug('value: %s', value)
+        return value
+    elif vt_type == VT_LPWSTR:
+        value = read_type(BSTR, context, f)
+        logger.debug('value: %s', value)
+        return value
+    elif vt_type == VT_FILETIME:
+        lword = read_type(UINT32, context, f)
+        hword = read_type(UINT32, context, f)
+        value = hword << 32 | lword
+        value = FILETIME_to_datetime(value)
+        logger.debug('value: %s', value)
+        return value
+
+
+def FILETIME_to_datetime(value):
+    return datetime(1601, 1, 1, 0, 0, 0) + timedelta(microseconds=value / 10)

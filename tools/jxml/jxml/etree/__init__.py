@@ -957,7 +957,12 @@ class XSLT(object):
             self.transformer.transform(doc_source, result)
             bytes = outputstream.toByteArray()
             inputstream = ByteArrayInputStream(bytes)
-            dom_doc = builder.parse(inputstream)
+            try:
+                dom_doc = builder.parse(inputstream)
+            except:
+                import sys
+                sys.stderr.write(bytes.tostring())
+                raise
             result_tree = _ElementTree(dom_doc)
             return result_tree
 

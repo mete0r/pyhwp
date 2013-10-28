@@ -51,6 +51,7 @@ from .tagids import (tagnames, HWPTAG_DOCUMENT_PROPERTIES, HWPTAG_ID_MAPPINGS,
                      HWPTAG_FORBIDDEN_CHAR)
 from .importhelper import importStringIO
 from . import dataio
+from hwp5.recordstream import nth
 
 
 StringIO = importStringIO()
@@ -119,7 +120,8 @@ class IdMappings(RecordModel):
         yield UINT32, 'bullets',
         yield UINT32, 'parashapes',
         yield UINT32, 'styles',
-        yield UINT32, 'memoshapes',
+        # TODO: memoshapes does not exist at least 5.0.1.6
+        yield dict(type=UINT32, name='memoshapes', version=(5, 0, 1, 7))
     attributes = staticmethod(attributes)
 
 
@@ -578,7 +580,7 @@ class Style(RecordModel):
 
     Kind = Enum(PARAGRAPH=0, CHAR=1)
     Flags = Flags(BYTE,
-                  0, 2, Kind, 'kind')
+                  0, 1, Kind, 'kind')
 
     def attributes(cls):
         yield BSTR, 'local_name',
@@ -2041,7 +2043,6 @@ class ModelStream(recordstream.RecordStream):
             yield parse_models(kwargs, records)
 
     def model(self, idx):
-        from .recordstream import nth
         return nth(self.models(), idx)
 
     def models_json(self, **kwargs):
@@ -2055,6 +2056,41 @@ class ModelStream(recordstream.RecordStream):
         return d
 
 
+class DocInfo(ModelStream):
+
+    @property
+    def idmappings(self):
+        for model in self.models():
+            if model['type'] is IdMappings:
+                return model
+
+    @property
+    def facenames_by_lang(self):
+        facenames = list(m for m in self.models()
+                         if m['type'] is FaceName)
+        languages = 'ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'
+        facenames_by_lang = dict()
+        offset = 0
+        for lang in languages:
+            n_fonts = self.idmappings['content'][lang + '_fonts']
+            facenames_by_lang[lang] = facenames[offset:offset + n_fonts]
+            offset += n_fonts
+        return facenames_by_lang
+
+    @property
+    def charshapes(self):
+        return (m for m in self.models()
+                if m['type'] is CharShape)
+
+    def get_charshape(self, charshape_id):
+        return nth(self.charshapes, charshape_id)
+
+    def charshape_lang_facename(self, charshape_id, lang):
+        charshape = self.get_charshape(charshape_id)
+        lang_facename_offset = charshape['content']['font_face'][lang]
+        return self.facenames_by_lang[lang][lang_facename_offset]
+
+
 class Sections(recordstream.Sections):
 
     section_class = ModelStream
@@ -2062,7 +2098,7 @@ class Sections(recordstream.Sections):
 
 class Hwp5File(recordstream.Hwp5File):
 
-    docinfo_class = ModelStream
+    docinfo_class = DocInfo
     bodytext_class = Sections
 
 

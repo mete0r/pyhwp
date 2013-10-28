@@ -2,7 +2,6 @@
 from unittest import TestCase
 import test_binmodel
 from hwp5.utils import cached_property
-from hwp5.treeop import STARTEVENT
 
 
 class TestBase(test_binmodel.TestBase):
@@ -75,7 +74,7 @@ class TestDocInfo(TestBase):
 
     def test_events(self):
         events = list(self.docinfo.events())
-        self.assertEquals(112, len(events))
+        self.assertEquals(136, len(events))
         #print len(events)
 
         # without embedbin, no <text> is embedded
@@ -87,7 +86,8 @@ class TestDocInfo(TestBase):
         events = list(self.docinfo.events(embedbin=bindata))
         self.assertTrue('<text>' in events[4][1][1]['bindata'])
         self.assertEquals(bindata['BIN0002.jpg'].open().read(),
-                          base64.b64decode(events[4][1][1]['bindata']['<text>']))
+                          base64.b64decode(events[4][1][1]
+                                           ['bindata']['<text>']))
 
 
 class TestSection(TestBase):
@@ -124,12 +124,13 @@ class TestHwp5File(TestBase):
 
     def test_events_embedbin_without_bindata(self):
         # see issue 76: https://github.com/mete0r/pyhwp/issues/76
-        self.hwp5file_name = 'parashape.hwp' # an hwp5file without BinData
+        self.hwp5file_name = 'parashape.hwp'  # an hwp5file without BinData
         hwp5file = self.hwp5file
         self.assertTrue('BinData' not in hwp5file)
         list(hwp5file.events(embedbin=True))
 
     def test_xmlevents(self):
+        from hwp5.treeop import STARTEVENT
         events = iter(self.hwp5file.xmlevents())
         ev = events.next()
         self.assertEquals((STARTEVENT,
@@ -203,9 +204,11 @@ class TestLineSeg(TestCase):
         linesegs = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
         lines = line_segmented(iter(chunks), make_ranged_shapes(linesegs))
         lines = list(lines)
-        self.assertEquals([('A', [((0, 3), None, 'aaa'), ((3, 4), None, 'b')]),
+        self.assertEquals([('A', [((0, 3), None, 'aaa'),
+                                  ((3, 4), None, 'b')]),
                            ('B', [((4, 6), None, 'bb')]),
-                           ('C', [((6, 9), None, 'ccc'), ((9, 10), None, 'd')]),
+                           ('C', [((6, 9), None, 'ccc'),
+                                  ((9, 10), None, 'd')]),
                            ('D', [((10, 12), None, 'dd')])], lines)
 
 

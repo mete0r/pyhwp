@@ -54,34 +54,6 @@ def give_elements_unique_id(event_prefixed_mac):
         yield event, item
 
 
-def remove_redundant_facenames(event_prefixed_mac):
-    ''' remove redundant FaceNames '''
-    facenames = []
-    removed_facenames = dict()
-    facename_idx = 0
-    for event, item in event_prefixed_mac:
-        (model, attributes, context) = item
-        if event == STARTEVENT and model == FaceName:
-            if not attributes in facenames:
-                facenames.append(attributes)
-                yield event, item
-            else:
-                # suck this out from the event stream
-                build_subtree(event_prefixed_mac)
-                removed_facenames[facename_idx] = facenames.index(attributes)
-            facename_idx += 1
-        else:
-            if event == STARTEVENT and model == CharShape:
-                fface = attributes['font_face']
-                fface2 = dict()
-                for k, v in fface.iteritems():
-                    if v in removed_facenames:
-                        v = removed_facenames[v]
-                    fface2[k] = v
-                attributes['font_face'] = fface2
-            yield event, item
-
-
 def make_ranged_shapes(shapes):
     last = None
     for item in shapes:
@@ -251,11 +223,11 @@ def wrap_section(event_prefixed_mac, sect_id=None):
         else:
             model, attributes, context = item
             if model is SectionDef and event is STARTEVENT:
-                sectiondef, sectiondef_childs = build_subtree(event_prefixed_mac)
+                sectiondef, sectdef_child = build_subtree(event_prefixed_mac)
                 if sect_id is not None:
                     attributes['section_id'] = sect_id
                 yield STARTEVENT, sectiondef
-                for k in tree_events_multi(sectiondef_childs):
+                for k in tree_events_multi(sectdef_child):
                     yield k
                 for evented_item in starting_buffer:
                     yield evented_item
@@ -355,6 +327,9 @@ class TableRow:
 
 
 def restructure_tablebody(event_prefixed_mac):
+    ROW_OPEN = 1
+    ROW_CLOSE = 2
+
     from collections import deque
     stack = []
     for event, item in event_prefixed_mac:
@@ -364,12 +339,12 @@ def restructure_tablebody(event_prefixed_mac):
                 rowcols = deque()
                 for cols in attributes.pop('rowcols'):
                     if cols == 1:
-                        rowcols.append(3)
+                        rowcols.append(ROW_OPEN | ROW_CLOSE)
                     else:
-                        rowcols.append(1)
+                        rowcols.append(ROW_OPEN)
                         for i in range(0, cols - 2):
                             rowcols.append(0)
-                        rowcols.append(2)
+                        rowcols.append(ROW_CLOSE)
                 stack.append((context, rowcols))
                 yield event, item
             else:
@@ -380,12 +355,12 @@ def restructure_tablebody(event_prefixed_mac):
             row_context = dict(table_context)
             if event is STARTEVENT:
                 how = rowcols[0]
-                if how & 1:
+                if how & ROW_OPEN:
                     yield STARTEVENT, (TableRow, dict(), row_context)
             yield event, item
             if event is ENDEVENT:
                 how = rowcols.popleft()
-                if how & 2:
+                if how & ROW_CLOSE:
                     yield ENDEVENT, (TableRow, dict(), row_context)
         else:
             yield event, item
@@ -446,11 +421,12 @@ class XmlEvents(object):
     def __iter__(self):
         return modelevents_to_xmlevents(self.events)
 
-    def bytechunks(self, **kwargs):
+    def bytechunks(self, xml_declaration=True, **kwargs):
         from hwp5.xmlformat import xmlevents_to_bytechunks
         encoding = kwargs.get('xml_encoding', 'utf-8')
+        if xml_declaration:
+            yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
         bytechunks = xmlevents_to_bytechunks(self, encoding)
-        yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
         for chunk in bytechunks:
             yield chunk
 
@@ -508,7 +484,7 @@ class DocInfo(ModelEventStream):
         if 'embedbin' in kwargs:
             events = embed_bindata(events, kwargs['embedbin'])
         events = wrap_modelevents(docinfo, events)
-        return remove_redundant_facenames(events)
+        return events
 
 
 class Section(ModelEventStream):
