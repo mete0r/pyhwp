@@ -14,20 +14,18 @@ Installation
 
 from `pypi <http://pypi.python.org/pypi/pyhwp>`_::
 
-   pip install pyhwp
+   virtualenv pyhwp
+   pyhwp/bin/pip install pyhwp  # Install pyhwp into a virtualenv directory
 
-from `github <https://github.com/mete0r/pyhwp>`_::
+Or
 
-   git clone git://github.com/mete0r/pyhwp.git
-   cd pyhwp
-   python bootstrap.py
-   bin/buildout
+   pip install --user pyhwp  # Install pyhwp into user's home directory
 
 Requirements
 ------------
 
 - CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2
-- `setuptools <http://pypi.python.org/pypi/setuptools>`_ or `distribute <https://pypi.python.org/pypi/distribute>`_
+- `setuptools <http://pypi.python.org/pypi/setuptools>`_
 
 Documentation & Development
 ---------------------------
