@@ -4,8 +4,11 @@ CHANGES
 0.1b5 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- close #134
+- hwp5html generates .xhtml instead of .html
+- hwp5proc: new '--no-xml-decl' option
+- hwp5odt: fix to not use '/' in resulting style names
+- hwp5proc: IdMappings.memoshape only if version > 5.0.1.6
 
 0.1b4 (2013-07-03)
 ------------------
