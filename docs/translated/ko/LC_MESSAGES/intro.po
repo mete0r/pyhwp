@@ -73,7 +73,7 @@ msgstr "CPython 2.5, 2.6, 2.7, Jython 2.5.3 혹은 PyPy 2.0.2"
 # 0d7548139cea4b37bb2298584800bffc
 #: ../../intro.rst:28
 msgid "`setuptools <http://pypi.python.org/pypi/setuptools>`_"
-msgstr "`"
+msgstr ""
 
 # 070821d20ddc4c6cb15fa70632bf6523
 #: ../../intro.rst:31
