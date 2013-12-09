@@ -934,11 +934,11 @@ class TableCell(ListHeader):
         yield UINT16, 'row',
         yield UINT16, 'colspan',
         yield UINT16, 'rowspan',
-        yield HWPUNIT, 'width',
-        yield HWPUNIT, 'height',
+        yield SHWPUNIT, 'width',
+        yield SHWPUNIT, 'height',
         yield Margin, 'padding',
         yield UINT16, 'borderfill_id',
-        yield HWPUNIT, 'unknown_width',
+        yield SHWPUNIT, 'unknown_width',
     attributes = staticmethod(attributes)
 
 
