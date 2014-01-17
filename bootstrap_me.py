@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    role = len(sys.argv) > 1 and sys.argv[1] or 'tester'
+    role = len(sys.argv) > 1 and sys.argv[1] or 'developer'
 
     this_dir = os.path.dirname(__file__)
     dst_path = os.path.join(this_dir, 'buildout.cfg')
