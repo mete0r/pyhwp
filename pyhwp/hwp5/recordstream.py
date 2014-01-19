@@ -33,7 +33,7 @@ def Record(tagid, level, payload, size=None, seqno=None):
     if size is None:
         size = len(payload)
     d = dict(tagid=tagid, tagname=tagname(tagid), level=level,
-                size=size, payload=payload)
+             size=size, payload=payload)
     if seqno is not None:
         d['seqno'] = seqno
     return d

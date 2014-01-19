@@ -114,6 +114,7 @@ class XSLT(object):
             out_stream = OutputStreamToFileLike(out_file, dontclose=True)
 
             from com.sun.star.io import XStreamListener
+
             class XSLTListener(unohelper.Base, XStreamListener):
                 def __init__(self):
                     self.event = OneshotEvent()
@@ -196,7 +197,8 @@ class OleStorage(object):
                 self.oless.getElementNames()
             except:
                 from hwp5.errors import InvalidOleStorageError
-                raise InvalidOleStorageError('Not a valid OLE2 Compound Binary File.')
+                errormsg = 'Not a valid OLE2 Compound Binary File.'
+                raise InvalidOleStorageError(errormsg)
         else:
             # TODO assert stg is an instance of OLESimpleStorage
             self.oless = stg

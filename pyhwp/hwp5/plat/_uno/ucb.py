@@ -25,7 +25,8 @@ def open_url(context, url):
     :returns: an instance of InputStream
     '''
 
-    # see http://wiki.openoffice.org/wiki/Documentation/DevGuide/UCB/Using_the_UCB_API
+    # see http://wiki.openoffice.org
+    #     /wiki/Documentation/DevGuide/UCB/Using_the_UCB_API
 
     from hwp5.plat._uno.services import css
     css = css.bind(context)

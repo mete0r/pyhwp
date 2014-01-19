@@ -16,7 +16,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-class NIL: pass
+
+
+class NIL:
+    pass
+
+
 class cached_property(object):
 
     def __init__(self, func):

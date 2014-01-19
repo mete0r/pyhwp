@@ -557,8 +557,8 @@ class StructType(CompoundType):
                     try:
                         value = getvalue(member)
                     except ParseError, e:
-                        e.parse_stack_traces.append(dict(model=cls,
-                                                         member=member['name']))
+                        tracepoint = dict(model=cls, member=member['name'])
+                        e.parse_stack_traces.append(tracepoint)
                         raise
                     values[member['name']] = member['value'] = value
                     yield member

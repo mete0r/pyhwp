@@ -31,7 +31,8 @@ Options::
     --loglevel=<level>  Set log level.
     --logfile=<file>    Set log file.
 '''
-import os, os.path
+import os.path
+
 
 def main():
     from hwp5 import __version__ as version
@@ -43,6 +44,7 @@ def main():
     init_logger(args)
 
     make(args)
+
 
 def make(args):
     from hwp5.plat import get_xslt

@@ -17,6 +17,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 def is_enabled():
     try:
         from org.apache.poi.poifs.filesystem import POIFSFileSystem

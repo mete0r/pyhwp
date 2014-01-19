@@ -116,6 +116,7 @@ def main(args):
                     if args['--dump']:
                         from hwp5.binmodel import model_to_json
                         print model_to_json(model, sort_keys=True, indent=2)
+
                         def print_log(fmt, *args):
                             print fmt % args
                         from hwp5.bintype import log_events

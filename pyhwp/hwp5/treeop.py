@@ -18,8 +18,12 @@
 #
 
 
-class STARTEVENT: pass
-class ENDEVENT: pass
+class STARTEVENT:
+    pass
+
+
+class ENDEVENT:
+    pass
 
 
 def prefix_event(level_prefixed_items, root_item=None):

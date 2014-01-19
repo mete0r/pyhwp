@@ -19,8 +19,10 @@
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
 from .treeop import tree_events, tree_events_multi
-from .binmodel import (FaceName, CharShape, SectionDef, ListHeader, Paragraph,
-                       Text)
+from .binmodel import SectionDef
+from .binmodel import ListHeader
+from .binmodel import Paragraph
+from .binmodel import Text
 from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
 from .binmodel import TableBody, TableCell
 from .dataio import Struct
@@ -496,7 +498,8 @@ class Section(ModelEventStream):
         events = make_extended_controls_inline(events)
         events = match_field_start_end(events)
         events = make_paragraphs_children_of_listheader(events)
-        events = make_paragraphs_children_of_listheader(events, TableBody, TableCell)
+        events = make_paragraphs_children_of_listheader(events, TableBody,
+                                                        TableCell)
         events = restructure_tablebody(events)
 
         section_idx = kwargs.get('section_idx')

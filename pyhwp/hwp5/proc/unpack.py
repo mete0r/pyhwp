@@ -55,7 +55,7 @@ from hwp5.proc import entrypoint
 def main(args):
     from hwp5 import storage
     from hwp5.proc import open_hwpfile
-    import os, os.path
+    import os.path
 
     filename = args['<hwp5file>']
     hwp5file = open_hwpfile(args)

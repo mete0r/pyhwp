@@ -65,7 +65,8 @@ class OleStorage(OleStorageItem):
             from OleFileIO_PL import isOleFile
             if not isOleFile(olefile):
                 from hwp5.errors import InvalidOleStorageError
-                raise InvalidOleStorageError('Not an OLE2 Compound Binary File.')
+                errormsg = 'Not an OLE2 Compound Binary File.'
+                raise InvalidOleStorageError(errormsg)
             from OleFileIO_PL import OleFileIO
             olefile = OleFileIO(olefile)
         OleStorageItem.__init__(self, olefile, path, parent)

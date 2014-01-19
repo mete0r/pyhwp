@@ -30,7 +30,6 @@ Usage::
        --help-commands  Show available commands.
 
 '''
-import sys
 import logging
 
 from docopt import docopt
@@ -43,6 +42,7 @@ def rest_to_docopt(doc):
     ''' ReST to docopt conversion
     '''
     return doc.replace('::\n\n', ':\n').replace('``', '')
+
 
 def init_logger(args):
     import os
@@ -118,6 +118,7 @@ help_commands = '''Available <command> values:
 
 See 'hwp5proc <command> --help' for more information on a specific command.'''
 
+
 def main():
     doc = __doc__
     doc = rest_to_docopt(doc)
@@ -135,7 +136,7 @@ def main():
         return 1
 
     argv = [command] + args['<args>']
-    mod = __import__('hwp5.proc.'+command, fromlist=['main'])
+    mod = __import__('hwp5.proc.' + command, fromlist=['main'])
     return mod.main(argv)
 
 

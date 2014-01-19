@@ -67,7 +67,8 @@ version specified by -V option.
 
 Example::
 
-    $ hwp5proc records --raw samples/sample-5017.hwp DocInfo --range=0-2 > tmp.rec
+    $ hwp5proc records --raw samples/sample-5017.hwp DocInfo --range=0-2 \
+> tmp.rec
     $ hwp5proc records < tmp.rec
 
 '''
@@ -102,7 +103,7 @@ def main(args):
     if args['--simple']:
         for record in stream.records(**opts):
             print '%04d' % record['seqno'],
-            print '  '*record['level'], record['tagname']
+            print '  ' * record['level'], record['tagname']
     elif args['--raw']:
         from hwp5.recordstream import dump_record
         for record in stream.records(**opts):
@@ -113,7 +114,6 @@ def main(args):
             hdr = encode_record_header(record)
             sys.stdout.write(hdr)
     elif args['--raw-payload']:
-        from hwp5.recordstream import dump_record
         for record in stream.records(**opts):
             sys.stdout.write(record['payload'])
     else:

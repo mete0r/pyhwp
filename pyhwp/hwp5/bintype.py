@@ -312,9 +312,10 @@ def collect_values(events):
                     if isinstance(stack[-1]['type'], StructType):
                         # reduce a struct member into struct value
                         stack[-1]['value'][item['name']] = item['value']
-                    elif isinstance(stack[-1]['type'], (X_ARRAY,
-                                                        VariableLengthArrayType,
-                                                        FixedArrayType)):
+                    elif isinstance(stack[-1]['type'],
+                                    (X_ARRAY,
+                                     VariableLengthArrayType,
+                                     FixedArrayType)):
                         stack[-1]['value'].append(item['value'])
                     elif isinstance(stack[-1]['type'], FlagsType):
                         stack[-1]['value'] = stack[-1]['type'](item['value'])

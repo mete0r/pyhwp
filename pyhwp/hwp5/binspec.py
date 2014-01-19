@@ -106,7 +106,8 @@ def define_x_array_type(t):
 
 
 def define_selective_type(t):
-    elem = ET.Element('SelectiveType', dict(selector=t.selector_reference.__doc__))
+    elem = ET.Element('SelectiveType',
+                      dict(selector=t.selector_reference.__doc__))
     for k, v in t.selections.items():
         sel = ET.SubElement(elem, 'selection',
                             dict(when=make_condition_value(k)))
