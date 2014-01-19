@@ -1,7 +1,7 @@
 [tox]
 toxworkdir={toxinidir}/parts/tox
 setupdir={toxinidir}
-envlist = py25,py26,py27,jython,pypy
+envlist = py26,py27,pypy
 
 [testenv]
 deps=nose
@@ -14,9 +14,6 @@ commands=
 	{envpython} {toxinidir}/misc/test-cli.py
 	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
 	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
-
-[testenv:py25]
-setenv=PIP_INSECURE=1
 
 [testenv:jython]
 setenv=JYTHONPATH=${buildout:parts-directory}/java-poi/poi-3.9-20121203.jar
