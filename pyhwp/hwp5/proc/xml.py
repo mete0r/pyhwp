@@ -53,6 +53,7 @@ Example::
     $ xmllint --format sample-5017.xml
 
 '''
+from __future__ import with_statement
 from hwp5.proc import entrypoint
 
 
