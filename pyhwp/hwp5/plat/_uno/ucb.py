@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -25,7 +25,8 @@ def open_url(context, url):
     :returns: an instance of InputStream
     '''
 
-    # see http://wiki.openoffice.org/wiki/Documentation/DevGuide/UCB/Using_the_UCB_API
+    # see http://wiki.openoffice.org
+    #     /wiki/Documentation/DevGuide/UCB/Using_the_UCB_API
 
     from hwp5.plat._uno.services import css
     css = css.bind(context)

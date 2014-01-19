@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -75,7 +75,8 @@ class FileHeader(Struct):
     attributes = classmethod(attributes)
 
 
-def recode(backend_stream, backend_encoding, frontend_encoding, errors='strict'):
+def recode(backend_stream, backend_encoding, frontend_encoding,
+           errors='strict'):
     import codecs
     enc = codecs.getencoder(frontend_encoding)
     dec = codecs.getdecoder(frontend_encoding)
@@ -282,7 +283,8 @@ class Hwp5FileBase(ItemConversionStorage):
                 raise InvalidHwp5FileError('Not an OLE2 Compound Binary File.')
 
         if not storage_is_hwp5file(stg):
-            raise InvalidHwp5FileError('Not an HWP Document format v5 storage.')
+            errormsg = 'Not an HWP Document format v5 storage.'
+            raise InvalidHwp5FileError(errormsg)
 
         ItemConversionStorage.__init__(self, stg)
 

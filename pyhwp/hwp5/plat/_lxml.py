@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -46,7 +46,7 @@ def xslt(xsl_path, inp_path, out_path):
 def xslt_compile(xsl_path):
     ''' Compile XSL Transform function.
     :param xsl_path: stylesheet path
-    :returns: a transform function 
+    :returns: a transform function
     '''
     from lxml import etree
 
@@ -54,6 +54,7 @@ def xslt_compile(xsl_path):
         xsl_doc = etree.parse(xsl_file)
 
     xslt = etree.XSLT(xsl_doc)
+
     def transform(inp_path, out_path):
         ''' Transform XML with %r.
 

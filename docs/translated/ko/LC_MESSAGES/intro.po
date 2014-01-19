@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-29 05:22\n"
+"POT-Creation-Date: 2014-01-19 23:11+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,9 +137,9 @@ msgstr "Maintainer: `mete0r <https://github.com/mete0r>`_"
 msgid "License"
 msgstr "사용허가"
 
-# 6b81aa25dcb44a61b43041661de3a8cd
+# d64dabb371984d2ba250f37e220aa39a
 #: ../../intro.rst:47
-msgid "Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>"
+msgid "Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>"
 msgstr ""
 
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c

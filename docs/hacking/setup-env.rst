@@ -54,6 +54,7 @@ environment. If you want to learn more about it, see `buildout
 
 Bootstrap buildout_ environment::
 
+   $ python bootstrap_me.py
    $ python bootstrap.py  # bootstrap the buildout environment
 
 Now there will be generated a :command:`buildout` executable in the :file:`bin/`

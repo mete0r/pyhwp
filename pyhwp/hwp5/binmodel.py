@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -934,11 +934,11 @@ class TableCell(ListHeader):
         yield UINT16, 'row',
         yield UINT16, 'colspan',
         yield UINT16, 'rowspan',
-        yield HWPUNIT, 'width',
-        yield HWPUNIT, 'height',
+        yield SHWPUNIT, 'width',
+        yield SHWPUNIT, 'height',
         yield Margin, 'padding',
         yield UINT16, 'borderfill_id',
-        yield HWPUNIT, 'unknown_width',
+        yield SHWPUNIT, 'unknown_width',
     attributes = staticmethod(attributes)
 
 

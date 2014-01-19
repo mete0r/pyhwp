@@ -211,13 +211,21 @@
 
   <xsl:template mode="style:style" match="Style">
     <xsl:element name="style:style">
-      <xsl:attribute name="style:name"><xsl:value-of select="translate(translate(@local-name, ' ', '_'), '/', '-')" /></xsl:attribute>
+      <xsl:attribute name="style:name">
+        <xsl:call-template name="make-ncname">
+          <xsl:with-param name="str" select="@local-name" />
+        </xsl:call-template>
+      </xsl:attribute>
       <!--
       <xsl:attribute name="style:parent-style-name"/>
       -->
       <xsl:variable name="styles" select="/HwpDoc/DocInfo/IdMappings/Style" />
       <xsl:variable name="next-style-id" select="@next-style-id + 1"/>
-      <xsl:attribute name="style:next-style-name"><xsl:value-of select="translate(translate($styles[$next-style-id]/@local-name, ' ', '_'), '/', '-')" /></xsl:attribute>
+      <xsl:attribute name="style:next-style-name">
+        <xsl:call-template name="make-ncname">
+          <xsl:with-param name="str" select="$styles[$next-style-id]/@local-name" />
+        </xsl:call-template>
+      </xsl:attribute>
       <xsl:attribute name="style:family">paragraph</xsl:attribute>
       <xsl:attribute name="style:class">text</xsl:attribute>
       <xsl:variable name="charshapeid" select="@charshape-id + 1"/>
@@ -226,6 +234,16 @@
       <xsl:apply-templates mode="style:paragraph-properties" select="." />
       <xsl:apply-templates select="$charshape" mode="style:text-properties" />
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="make-ncname">
+    <!-- see #140 -->
+    <!-- see http://www.w3.org/TR/REC-xml-names/#NT-NCName -->
+    <!-- see http://stackoverflow.com/questions/1631396/what-is-an-xsncname-type-and-when-should-it-be-used -->
+    <xsl:param name="str" />
+    <xsl:variable name="prohibited"> !&quot;#$%&amp;&apos;()*+,/:;&lt;=&gt;?@[\]^`{|}~</xsl:variable>
+    <xsl:variable name="replace">------------------------------</xsl:variable>
+    <xsl:value-of select="translate($str, $prohibited, $replace)" />
   </xsl:template>
 
   <xsl:template mode="style:page-layout" match="SectionDef">

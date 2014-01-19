@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -31,7 +31,8 @@ Options::
     --loglevel=<level>  Set log level.
     --logfile=<file>    Set log file.
 '''
-import os, os.path
+import os.path
+
 
 def main():
     from hwp5 import __version__ as version
@@ -43,6 +44,7 @@ def main():
     init_logger(args)
 
     make(args)
+
 
 def make(args):
     from hwp5.plat import get_xslt

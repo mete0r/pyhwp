@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -114,6 +114,7 @@ class XSLT(object):
             out_stream = OutputStreamToFileLike(out_file, dontclose=True)
 
             from com.sun.star.io import XStreamListener
+
             class XSLTListener(unohelper.Base, XStreamListener):
                 def __init__(self):
                     self.event = OneshotEvent()
@@ -196,7 +197,8 @@ class OleStorage(object):
                 self.oless.getElementNames()
             except:
                 from hwp5.errors import InvalidOleStorageError
-                raise InvalidOleStorageError('Not a valid OLE2 Compound Binary File.')
+                errormsg = 'Not a valid OLE2 Compound Binary File.'
+                raise InvalidOleStorageError(errormsg)
         else:
             # TODO assert stg is an instance of OLESimpleStorage
             self.oless = stg

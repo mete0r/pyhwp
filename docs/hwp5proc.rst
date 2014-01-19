@@ -48,7 +48,7 @@ command: ``find``
 
 .. automodule:: hwp5.proc.find
 
-command: ``xml``
-----------------
+command: ``xml`` (*Experimental*)
+---------------------------------
 
 .. automodule:: hwp5.proc.xml

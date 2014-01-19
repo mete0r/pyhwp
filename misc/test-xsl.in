@@ -15,4 +15,6 @@ mkdir -p $GEN_DIR
 
 ${buildout:bin-directory}/console ${buildout:directory}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir=${buildout:directory}/pyhwp-tests/hwp5_tests/fixtures --out-dir=$IMPORT_DIR
 ${buildout:bin-directory}/xsltest --styles-dir=${buildout:directory}/pyhwp/hwp5/xsl --import-dir=$IMPORT_DIR --gen-dir=$GEN_DIR ${buildout:directory}/pyhwp-tests/hwp5_xsl_tests
-CLASSPATH=${jxml:xalan-j-jars} ${jxml:location}/bin/jxml-cov-test xsltcoverage.xml ${buildout:directory}/test-xsl/gen/*.py
+
+test_xsl_cov="${buildout:bin-directory}/test-xsl-cov"
+[ ! -e "$test_xsl_cov" ] || "$test_xsl_cov" xsltcoverage.xml ${buildout:directory}/test-xsl/gen/*.py

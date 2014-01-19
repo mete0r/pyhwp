@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -129,9 +129,11 @@ def startelement(context, (model, attributes)):
     from hwp5.dataio import StructType
     if isinstance(model, StructType):
         typed_attributes = ((v['name'], (v['type'], v['value']))
-                            for v in typed_struct_attributes(model, attributes, context))
+                            for v in typed_struct_attributes(model, attributes,
+                                                             context))
     else:
-        typed_attributes = ((k, (type(v), v)) for k, v in attributes.iteritems())
+        typed_attributes = ((k, (type(v), v))
+                            for k, v in attributes.iteritems())
 
     typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
 

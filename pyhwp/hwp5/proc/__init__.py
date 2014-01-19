@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -30,7 +30,6 @@ Usage::
        --help-commands  Show available commands.
 
 '''
-import sys
 import logging
 
 from docopt import docopt
@@ -43,6 +42,7 @@ def rest_to_docopt(doc):
     ''' ReST to docopt conversion
     '''
     return doc.replace('::\n\n', ':\n').replace('``', '')
+
 
 def init_logger(args):
     import os
@@ -118,6 +118,7 @@ help_commands = '''Available <command> values:
 
 See 'hwp5proc <command> --help' for more information on a specific command.'''
 
+
 def main():
     doc = __doc__
     doc = rest_to_docopt(doc)
@@ -135,7 +136,7 @@ def main():
         return 1
 
     argv = [command] + args['<args>']
-    mod = __import__('hwp5.proc.'+command, fromlist=['main'])
+    mod = __import__('hwp5.proc.' + command, fromlist=['main'])
     return mod.main(argv)
 
 

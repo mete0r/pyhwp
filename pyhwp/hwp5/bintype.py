@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2013 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -312,9 +312,10 @@ def collect_values(events):
                     if isinstance(stack[-1]['type'], StructType):
                         # reduce a struct member into struct value
                         stack[-1]['value'][item['name']] = item['value']
-                    elif isinstance(stack[-1]['type'], (X_ARRAY,
-                                                        VariableLengthArrayType,
-                                                        FixedArrayType)):
+                    elif isinstance(stack[-1]['type'],
+                                    (X_ARRAY,
+                                     VariableLengthArrayType,
+                                     FixedArrayType)):
                         stack[-1]['value'].append(item['value'])
                     elif isinstance(stack[-1]['type'], FlagsType):
                         stack[-1]['value'] = stack[-1]['type'](item['value'])
