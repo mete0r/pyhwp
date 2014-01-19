@@ -18,6 +18,11 @@
 #
 ''' Transform an HWPv5 file into an XML.
 
+.. note::
+
+   This command is experimental. Its output format is subject to change at any
+   time.
+
 Usage::
 
     hwp5proc xml [--embedbin]

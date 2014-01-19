@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-29 04:47\n"
+"POT-Creation-Date: 2014-01-19 23:41+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: mete0r <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr "HWPv5 파일에 여러가지 작업을 수행한다."
 #: ../../../pyhwp/hwp5/proc/records.py:docstring hwp5.proc.records:3
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:3
 #: ../../../pyhwp/hwp5/proc/find.py:docstring hwp5.proc.find:3
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:3
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:8
 msgid "Usage::"
 msgstr "사용법::"
 
@@ -62,7 +62,7 @@ msgstr "<hwp5file>의 HWP 파일 포맷 버전을 출력한다."
 #: ../../../pyhwp/hwp5/proc/records.py:docstring hwp5.proc.records:14
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:14
 #: ../../../pyhwp/hwp5/proc/find.py:docstring hwp5.proc.find:11
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:12
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:17
 msgid "Options::"
 msgstr "옵션::"
 
@@ -136,7 +136,7 @@ msgstr "<hwp5file>의 지정된 스트림을 표준출력으로 출력한다."
 #: hwp5.proc.records:38 hwp5.proc.records:42 hwp5.proc.records:50
 #: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:35
 #: hwp5.proc.models:43 hwp5.proc.models:47 hwp5.proc.models:55
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:24 hwp5.proc.xml:32
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:29 hwp5.proc.xml:37
 msgid "Example::"
 msgstr "예::"
 
@@ -207,16 +207,23 @@ msgstr ""
 
 # e531df3e57a1451a8fc331069f009f25
 #: ../../hwp5proc.rst:52
-msgid "command: ``xml``"
-msgstr "명령: ``xml``"
+msgid "command: ``xml`` (*Experimental*)"
+msgstr "명령: ``xml`` (*실험적*)"
 
 # 36611ef624fe4bec815a5f8e03567251
 #: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:1
 msgid "Transform an HWPv5 file into an XML."
 msgstr "HWPv5 파일을 XML로 변환한다."
 
+# 412afcfa0f324982801d3cfacaf69b86
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:5
+msgid ""
+"This command is experimental. Its output format is subject to change at any "
+"time."
+msgstr "이 명령은 실험적입니다. 출력 형식은 언제든 바뀔 수 있습니다."
+
 # d89687875f5d4135963346b8e2de3a53
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:29
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:34
 msgid ""
 "With ``--embedbin`` option, you can embed base64-encoded ``BinData/*`` files "
 "in the output XML."
