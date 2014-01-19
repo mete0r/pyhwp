@@ -4,8 +4,10 @@ CHANGES
 0.1b6 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- binmodel: change type of TableCell dimensions to signed integer
+- hwp5odt: fix NCName for style:name (close #140)
+- hwp5proc: fix with-statement in 'xml' command for Python 2.5
+- hwp5proc: mark 'xml' command experimental
 
 0.1b5 (2013-10-29)
 ------------------
