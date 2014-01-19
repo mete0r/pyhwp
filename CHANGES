@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-0.1b6 (unreleased)
+0.1b6 (2014-01-20)
 ------------------
 
 - binmodel: change type of TableCell dimensions to signed integer
