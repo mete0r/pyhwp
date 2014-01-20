@@ -6,8 +6,16 @@ set -e
 # exit on uninitialized variable
 set -u
 
+error() {
+    echo $*;
+    exit 1
+}
+
 SAMPLES_DIR=pyhwp-tests/hwp5_tests/fixtures
 SAMPLE=$SAMPLES_DIR/sample-5017.hwp
+
+[ -e "$SAMPLES_DIR" ] || error "$SAMPLES_DIR is not found"
+[ -e "$SAMPLE" ] || error "$SAMPLE is not found"
 
 echo '--------------------------------------'
 echo '* Testing hwp5proc ---help / --version'
@@ -55,6 +63,7 @@ hwp5proc cat 2>&1 | head -n 1 | grep 'Usage:'
 hwp5proc cat --help | head -n 1 | grep 'Extract out the specified stream'
 hwp5proc cat $SAMPLE BinData/BIN0002.jpg | file - | grep 'JPEG image data'
 hwp5proc cat --vstreams $SAMPLE FileHeader.txt | grep 'HWP Document File'
+hwp5proc cat $SAMPLE BodyText/Section0 | wc -c | grep '^4770$' || error 'Its output size should be 4770 bytes.'
 
 echo '-------------------------'
 echo '* Testing hwp5proc unpack'
