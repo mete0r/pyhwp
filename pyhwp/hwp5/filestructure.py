@@ -320,6 +320,11 @@ class Hwp5DistDocStream(VersionSensitiveItem):
     def head_stream(self):
         return StringIO(self.head())
 
+    def head_sha1(self):
+        from hwp5.distdoc import decode_head_to_sha1
+        payload = self.head()
+        return decode_head_to_sha1(payload)
+
     def tail(self):
         item = self.open()
         from .recordstream import read_record
@@ -332,6 +337,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
 
     def other_formats(self):
         return {'.head.record': self.head_record_stream,
+                '.head.sha1': lambda: StringIO(self.head_sha1()),
                 '.head': self.head_stream,
                 '.tail': self.tail_stream}
 
