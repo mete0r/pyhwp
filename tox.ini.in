@@ -15,20 +15,3 @@ commands=
 	{envpython} {toxinidir}/misc/test-cli.py
 	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
 	{toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
-
-[testenv:jython]
-setenv=JYTHONPATH=${buildout:parts-directory}/java-poi/poi-3.9-20121203.jar
-       PIP_INSECURE=1
-commands =
-        ${buildout:bin-directory}/pyhwp-download http://archive.apache.org/dist/poi/release/bin/poi-bin-3.9-20121203.tar.gz ${buildout:parts-directory} 09c4dfd63317bb9eb37fe12d6febea74
-        ${buildout:bin-directory}/pyhwp-unpack ${buildout:parts-directory}/poi-bin-3.9-20121203.tar.gz ${buildout:parts-directory}/java-poi
-	{envpython} {toxinidir}/misc/cleanup-pyc.py {toxinidir}/pyhwp {toxinidir}/pyhwp_uno {toxinidir}/unokit
-	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
-	{envpython} -c 'from org.apache.poi.poifs.filesystem import POIFSFileSystem'
-# WORKAROUND: 현재 jython 2.5.3, coverage 3.5.3에서 coverage run 실행 시
-# --source=hwp5,hwp5_tests 옵션을 주면 이상하게도 hwp5_tests의 결과만 저장된다.
-# 따라서 --source 대신 -L을 주어 모든 파일에 대해 coverage 결과를 얻은 후,
-# coverage xml에서 필터링한다.
-	{envbindir}/coverage run -p -L {envbindir}/nosetests${constants:script_py_suffix} -v -w {envtmpdir} {toxinidir}/pyhwp-tests --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
-	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
-        {toxinidir}/bin/xsltest --styles-dir={toxinidir}/pyhwp/hwp5/xsl --import-dir={envtmpdir}/hwp5_xsl_fixtures --gen-dir={envtmpdir}/hwp5_xsl_tests {toxinidir}/pyhwp-tests/hwp5_xsl_tests
