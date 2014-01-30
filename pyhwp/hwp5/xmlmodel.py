@@ -547,8 +547,9 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
             kwargs['embedbin'] = self['BinData']
         else:
             kwargs.pop('embedbin', None)
+
         events = chain(self.docinfo.events(**kwargs),
-                       self.bodytext.events(**kwargs))
+                       self.text.events(**kwargs))
 
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()
         events = wrap_modelevents(hwpdoc, events)

@@ -21,6 +21,7 @@ except ImportError:
 install_requires.append('docopt >= 0.6')
 install_requires.append('hypua2jamo >= 0.2')
 
+
 def read(filename):
     import os.path
     filename = os.path.join(os.path.dirname(__file__), filename)

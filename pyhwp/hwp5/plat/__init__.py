@@ -54,3 +54,16 @@ def get_olestorage_class():
         return olefileio.OleStorage
     if _uno.is_enabled():
         return _uno.OleStorage
+
+
+def get_aes128ecb_decrypt():
+    try:
+        from Crypto.Cipher import AES
+    except ImportError:
+        raise NotImplementedError('aes128ecb_decrypt')
+
+    def decrypt(key, ciphertext):
+        cipher = AES.new(key, AES.MODE_ECB)
+        return cipher.decrypt(ciphertext)
+
+    return decrypt

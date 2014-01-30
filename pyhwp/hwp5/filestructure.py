@@ -302,8 +302,13 @@ class Hwp5FileBase(ItemConversionStorage):
 
 class Hwp5DistDocStream(VersionSensitiveItem):
 
+    def open(self):
+        from hwp5.distdoc import decode
+        encodedstream = self.wrapped.open()
+        return decode(encodedstream)
+
     def head_record(self):
-        item = self.open()
+        item = self.wrapped.open()
         from .recordstream import read_record
         return read_record(item, 0)
 
@@ -320,20 +325,31 @@ class Hwp5DistDocStream(VersionSensitiveItem):
     def head_stream(self):
         return StringIO(self.head())
 
+    def head_sha1(self):
+        from hwp5.distdoc import decode_head_to_sha1
+        payload = self.head()
+        return decode_head_to_sha1(payload)
+
+    def head_key(self):
+        from hwp5.distdoc import decode_head_to_key
+        payload = self.head()
+        return decode_head_to_key(payload)
+
     def tail(self):
-        item = self.open()
+        item = self.wrapped.open()
         from .recordstream import read_record
         read_record(item, 0)
         assert 4 + 256 == item.tell()
         return item.read()
 
+    def tail_decrypted(self):
+        from hwp5.distdoc import decrypt_tail
+        key = self.head_key()
+        tail = self.tail()
+        return decrypt_tail(key, tail)
+
     def tail_stream(self):
         return StringIO(self.tail())
-
-    def other_formats(self):
-        return {'.head.record': self.head_record_stream,
-                '.head': self.head_stream,
-                '.tail': self.tail_stream}
 
 
 class Hwp5DistDocStorage(ItemConversionStorage):
@@ -355,13 +371,12 @@ class Hwp5Compression(ItemConversionStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     def resolve_conversion_for(self, name):
-        if name in ('BinData', 'BodyText'):
+        if name in ('BinData', 'BodyText', 'ViewText'):
             return CompressedStorage
         elif name == 'DocInfo':
             return CompressedStream
         elif name == 'Scripts':
-            if not self.header.flags.distributable:
-                return CompressedStorage
+            return CompressedStorage
 
 
 class PreviewText(object):
@@ -547,6 +562,8 @@ class Hwp5File(ItemConversionStorage):
             return self.with_version(self.docinfo_class)
         if name == 'BodyText':
             return self.with_version(self.bodytext_class)
+        if name == 'ViewText':
+            return self.with_version(self.bodytext_class)
         if name == 'PrvText':
             return PreviewText
         if name == '\005HwpSummaryInformation':
@@ -579,3 +596,10 @@ class Hwp5File(ItemConversionStorage):
     @cached_property
     def viewtext(self):
         return self['ViewText']
+
+    @property
+    def text(self):
+        if self.header.flags.distributable:
+            return self.viewtext
+        else:
+            return self.bodytext
