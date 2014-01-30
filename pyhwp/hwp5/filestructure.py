@@ -351,15 +351,6 @@ class Hwp5DistDocStream(VersionSensitiveItem):
     def tail_stream(self):
         return StringIO(self.tail())
 
-    def other_formats(self):
-        return {'.distdoc': self.wrapped.open,
-                '.head.record': self.head_record_stream,
-                '.head.sha1': lambda: StringIO(self.head_sha1()),
-                '.head.key128': lambda: StringIO(self.head_key()),
-                '.head': self.head_stream,
-                '.tail.decrypted': lambda: StringIO(self.tail_decrypted()),
-                '.tail': self.tail_stream}
-
 
 class Hwp5DistDocStorage(ItemConversionStorage):
 
@@ -380,13 +371,12 @@ class Hwp5Compression(ItemConversionStorage):
     ''' handle compressed streams in HWPv5 files '''
 
     def resolve_conversion_for(self, name):
-        if name in ('BinData', 'BodyText'):
+        if name in ('BinData', 'BodyText', 'ViewText'):
             return CompressedStorage
         elif name == 'DocInfo':
             return CompressedStream
         elif name == 'Scripts':
-            if not self.header.flags.distributable:
-                return CompressedStorage
+            return CompressedStorage
 
 
 class PreviewText(object):
@@ -571,6 +561,8 @@ class Hwp5File(ItemConversionStorage):
         if name == 'DocInfo':
             return self.with_version(self.docinfo_class)
         if name == 'BodyText':
+            return self.with_version(self.bodytext_class)
+        if name == 'ViewText':
             return self.with_version(self.bodytext_class)
         if name == 'PrvText':
             return PreviewText
