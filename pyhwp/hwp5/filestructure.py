@@ -596,3 +596,10 @@ class Hwp5File(ItemConversionStorage):
     @cached_property
     def viewtext(self):
         return self['ViewText']
+
+    @property
+    def text(self):
+        if self.header.flags.distributable:
+            return self.viewtext
+        else:
+            return self.bodytext
