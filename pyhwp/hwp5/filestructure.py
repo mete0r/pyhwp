@@ -303,7 +303,7 @@ class Hwp5FileBase(ItemConversionStorage):
 class Hwp5DistDocStream(VersionSensitiveItem):
 
     def head_record(self):
-        item = self.open()
+        item = self.wrapped.open()
         from .recordstream import read_record
         return read_record(item, 0)
 
@@ -331,7 +331,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         return decode_head_to_key(payload)
 
     def tail(self):
-        item = self.open()
+        item = self.wrapped.open()
         from .recordstream import read_record
         read_record(item, 0)
         assert 4 + 256 == item.tell()
@@ -347,7 +347,8 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         return StringIO(self.tail())
 
     def other_formats(self):
-        return {'.head.record': self.head_record_stream,
+        return {'.distdoc': self.wrapped.open,
+                '.head.record': self.head_record_stream,
                 '.head.sha1': lambda: StringIO(self.head_sha1()),
                 '.head.key128': lambda: StringIO(self.head_key()),
                 '.head': self.head_stream,
