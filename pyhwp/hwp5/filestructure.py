@@ -325,6 +325,11 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         payload = self.head()
         return decode_head_to_sha1(payload)
 
+    def head_key(self):
+        from hwp5.distdoc import decode_head_to_key
+        payload = self.head()
+        return decode_head_to_key(payload)
+
     def tail(self):
         item = self.open()
         from .recordstream import read_record
@@ -332,13 +337,21 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         assert 4 + 256 == item.tell()
         return item.read()
 
+    def tail_decrypted(self):
+        from hwp5.distdoc import decrypt_tail
+        key = self.head_key()
+        tail = self.tail()
+        return decrypt_tail(key, tail)
+
     def tail_stream(self):
         return StringIO(self.tail())
 
     def other_formats(self):
         return {'.head.record': self.head_record_stream,
                 '.head.sha1': lambda: StringIO(self.head_sha1()),
+                '.head.key128': lambda: StringIO(self.head_key()),
                 '.head': self.head_stream,
+                '.tail.decrypted': lambda: StringIO(self.tail_decrypted()),
                 '.tail': self.tail_stream}
 
 

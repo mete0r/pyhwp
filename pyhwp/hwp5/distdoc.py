@@ -23,6 +23,10 @@ See https://groups.google.com/forum/#!topic/hwp-foss/d2KL2ypR89Q
 '''
 import logging
 
+from hwp5.importhelper import importStringIO
+from hwp5.plat import get_aes128ecb_decrypt
+
+StringIO = importStringIO()
 
 logger = logging.getLogger(__name__)
 
@@ -69,3 +73,13 @@ def decode_head_to_sha1(record_payload):
 
     ucs16le = decoded[sha1offset:sha1offset + 80]
     return ucs16le
+
+
+def decode_head_to_key(record_payload):
+    sha1ucs16le = decode_head_to_sha1(record_payload)
+    return sha1ucs16le[:16]
+
+
+def decrypt_tail(key, encrypted_tail):
+    decrypt = get_aes128ecb_decrypt()
+    return decrypt(key, encrypted_tail)
