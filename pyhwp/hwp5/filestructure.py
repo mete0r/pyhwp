@@ -302,6 +302,11 @@ class Hwp5FileBase(ItemConversionStorage):
 
 class Hwp5DistDocStream(VersionSensitiveItem):
 
+    def open(self):
+        from hwp5.distdoc import decode
+        encodedstream = self.wrapped.open()
+        return decode(encodedstream)
+
     def head_record(self):
         item = self.wrapped.open()
         from .recordstream import read_record

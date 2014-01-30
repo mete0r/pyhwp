@@ -10,6 +10,7 @@ from hwp5.distdoc import decode_head_to_key
 from hwp5.distdoc import decrypt_tail
 from hwp5.recordstream import read_record
 from hwp5.tagids import HWPTAG_PARA_HEADER
+import hwp5.distdoc
 
 from hwp5_tests.test_filestructure import TestBase
 
@@ -56,3 +57,19 @@ class TestHwp5DistDocFunctions(TestBase):
         self.assertEquals(22, record['size'])
 
         self.assertEquals(390, len(uncompressed))
+
+    def test_distdoc_decode(self):
+        section = self.section
+
+        try:
+            stream = hwp5.distdoc.decode(section.wrapped.open())
+        except NotImplementedError, e:
+            if e.message == 'aes128ecb_decrypt':
+                # skip this test
+                return
+            raise
+        stream = hwp5.filestructure.uncompress(stream)
+        record = read_record(stream, 0)
+        self.assertEquals(0, record['level'])
+        self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
+        self.assertEquals(22, record['size'])
