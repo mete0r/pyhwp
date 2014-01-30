@@ -9,8 +9,9 @@ commands=
 	{envpython} {toxinidir}/misc/mkdir.py {envtmpdir}
 	{envbindir}/pip install -f {toxinidir}/wheelhouse wheel
 	{envbindir}/pip wheel -f {toxinidir}/wheelhouse --use-wheel --wheel-dir={toxinidir}/wheelhouse wheel nose coverage
-	{envbindir}/pip wheel -f {toxinidir}/wheelhouse --use-wheel --wheel-dir={toxinidir}/wheelhouse lxml  # TODO: win32
-	{envbindir}/pip install -f {toxinidir}/wheelhouse lxml nose coverage
+	{envbindir}/pip wheel -f {toxinidir}/wheelhouse --use-wheel --wheel-dir={toxinidir}/wheelhouse 'lxml<3.3.0'  # TODO: win32
+	{envbindir}/pip install -f {toxinidir}/wheelhouse 'lxml<3.3.0'
+	{envbindir}/pip install -f {toxinidir}/wheelhouse nose coverage
 	{envbindir}/coverage run -p --source=hwp5,hwp5_tests {envbindir}/nosetests${constants:script_py_suffix} -v -w {envtmpdir} {toxinidir}/pyhwp-tests --logging-config={toxinidir}/etc/testlog.conf --with-xunit --xunit-file={envtmpdir}/nosetests.xml
 	{envpython} {toxinidir}/misc/test-cli.py
 	{envpython} {toxinidir}/misc/prepare-hwp5-xsl-fixtures.py --fixtures-dir={toxinidir}/pyhwp-tests/hwp5_tests/fixtures --out-dir={envtmpdir}/hwp5_xsl_fixtures
