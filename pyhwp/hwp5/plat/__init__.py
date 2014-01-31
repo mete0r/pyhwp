@@ -54,3 +54,41 @@ def get_olestorage_class():
         return olefileio.OleStorage
     if _uno.is_enabled():
         return _uno.OleStorage
+
+
+def get_aes128ecb_decrypt():
+    try:
+        return get_aes128ecb_decrypt_pycrypto()
+    except Exception:
+        pass
+
+    try:
+        return get_aes128ecb_decrypt_javax()
+    except Exception:
+        pass
+
+    raise NotImplementedError('aes128ecb_decrypt')
+
+
+def get_aes128ecb_decrypt_pycrypto():
+    from Crypto.Cipher import AES
+
+    def decrypt(key, ciphertext):
+        cipher = AES.new(key, AES.MODE_ECB)
+        return cipher.decrypt(ciphertext)
+
+    return decrypt
+
+
+def get_aes128ecb_decrypt_javax():
+    from javax.crypto import Cipher
+    from javax.crypto.spec import SecretKeySpec
+
+    def decrypt(key, ciphertext):
+        secretkey = SecretKeySpec(key, 'AES')
+        cipher = Cipher.getInstance('AES/ECB/NoPadding')
+        cipher.init(Cipher.DECRYPT_MODE, secretkey)
+        decrypted = cipher.doFinal(ciphertext)
+        return decrypted.tostring()
+
+    return decrypt

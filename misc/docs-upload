@@ -14,4 +14,4 @@ cd ${buildout:directory}
 [ -d $BUILD_DIR/docs/ ] || (echo $BUILD_DIR/docs/ missing; exit 1)
 [ -d $BUILD_DIR/docs/ko/ ] || (echo $BUILD_DIR/docs/ko/ missing; exit 1)
 
-python setup.py upload_docs --upload-dir=$BUILD_DIR/docs
+python setup.py upload_docs -r https://pypi.python.org/pypi --upload-dir=$BUILD_DIR/docs

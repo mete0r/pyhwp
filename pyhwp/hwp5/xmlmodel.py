@@ -16,6 +16,8 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from tempfile import TemporaryFile
+
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
 from .treeop import tree_events, tree_events_multi
@@ -440,21 +442,15 @@ class XmlEvents(object):
             outfile.flush()
 
     def open(self, **kwargs):
-        import os
-        r, w = os.pipe()
-        r = os.fdopen(r, 'r')
-        w = os.fdopen(w, 'w')
+        tmpfile = TemporaryFile()
+        try:
+            self.dump(tmpfile, **kwargs)
+        except:
+            tmpfile.close()
+            raise
 
-        def dump_and_close(outfile):
-            self.dump(outfile, **kwargs)
-            outfile.close()
-
-        import threading
-        t = threading.Thread(target=dump_and_close,
-                             args=(w,))
-        t.daemon = True
-        t.start()
-        return r
+        tmpfile.seek(0)
+        return tmpfile
 
 
 class XmlEventsMixin(object):
@@ -551,8 +547,9 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
             kwargs['embedbin'] = self['BinData']
         else:
             kwargs.pop('embedbin', None)
+
         events = chain(self.docinfo.events(**kwargs),
-                       self.bodytext.events(**kwargs))
+                       self.text.events(**kwargs))
 
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()
         events = wrap_modelevents(hwpdoc, events)
