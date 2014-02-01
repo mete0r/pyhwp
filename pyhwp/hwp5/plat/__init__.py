@@ -24,6 +24,7 @@ from hwp5.plat import xmllint
 from hwp5.plat import javax_transform
 from hwp5.plat import jython_poifs
 from hwp5.plat import _uno
+from hwp5.plat import gir_gsf
 
 
 logger = logging.getLogger(__name__)
@@ -54,6 +55,8 @@ def get_olestorage_class():
         return olefileio.OleStorage
     if _uno.is_enabled():
         return _uno.OleStorage
+    if gir_gsf.is_enabled():
+        return gir_gsf.OleStorage
 
 
 def get_aes128ecb_decrypt():
