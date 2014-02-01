@@ -121,6 +121,27 @@ class OleStorageTestMixin(object):
         bin0002 = bindata['BIN0002.jpg']
         self.assertTrue(hasattr(bin0002, 'open'))
 
+    def test_stream_open(self):
+        if self.OleStorage is None:
+            logger.warning('%s: skipped', self.id())
+            return
+        olestg = self.olestg
+
+        fileheader = olestg['FileHeader']
+        self.assertTrue(hasattr(fileheader, 'open'))
+
+        stream1 = fileheader.open()
+        stream2 = fileheader.open()
+
+        x = stream1.read(4)
+        self.assertEquals(4, len(x))
+        self.assertEquals(4, stream1.tell())
+
+        self.assertEquals(0, stream2.tell())
+
+        stream1.seek(0)
+        self.assertEquals(0, stream1.tell())
+
     def test_iter_storage_leafs(self):
         if self.OleStorage is None:
             logger.warning('%s: skipped', self.id())
