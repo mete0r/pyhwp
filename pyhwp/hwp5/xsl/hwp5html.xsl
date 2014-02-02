@@ -15,30 +15,37 @@
 
   <xsl:template match="HwpDoc" mode="html">
     <xsl:element name="html">
-      <xsl:apply-templates select="DocInfo" mode="head" />
+      <xsl:element name="head">
+        <xsl:element name="meta">
+          <xsl:attribute name="http-equiv">content-type</xsl:attribute>
+          <xsl:attribute name="content">text/html; charset=utf-8</xsl:attribute>
+        </xsl:element>
+        <xsl:apply-templates select="HwpSummaryInfo" mode="head" />
+        <xsl:apply-templates select="DocInfo" mode="head" />
+      </xsl:element>
       <xsl:apply-templates select="BodyText" mode="body" />
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="DocInfo" mode="head">
-    <xsl:element name="head">
-      <xsl:element name="meta">
-        <xsl:attribute name="http-equiv">content-type</xsl:attribute>
-        <xsl:attribute name="content">text/html; charset=utf-8</xsl:attribute>
-      </xsl:element>
-      <xsl:choose>
-        <xsl:when test="$embed-styles-css = '1'">
-          <xsl:apply-templates select="IdMappings" mode="style" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:element name="link">
-            <xsl:attribute name="rel">stylesheet</xsl:attribute>
-            <xsl:attribute name="href">styles.css</xsl:attribute>
-            <xsl:attribute name="type">text/css</xsl:attribute>
-          </xsl:element>
-        </xsl:otherwise>
-      </xsl:choose>
+  <xsl:template match="HwpSummaryInfo" mode="head">
+    <xsl:element name="title">
+      <xsl:value-of select="Property[@name='PIDSI_TITLE']/@value" />
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="DocInfo" mode="head">
+    <xsl:choose>
+      <xsl:when test="$embed-styles-css = '1'">
+        <xsl:apply-templates select="IdMappings" mode="style" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="link">
+          <xsl:attribute name="rel">stylesheet</xsl:attribute>
+          <xsl:attribute name="href">styles.css</xsl:attribute>
+          <xsl:attribute name="type">text/css</xsl:attribute>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="IdMappings" mode="style">
