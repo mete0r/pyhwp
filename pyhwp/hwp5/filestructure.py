@@ -610,13 +610,14 @@ class Hwp5File(ItemConversionStorage):
         if name == 'PrvText':
             return PreviewText
         if name == '\005HwpSummaryInformation':
-            return self.with_version(HwpSummaryInfo)
+            return self.with_version(self.summaryinfo_class)
 
     def with_version(self, f):
         def wrapped(item):
             return f(item, self.header.version)
         return wrapped
 
+    summaryinfo_class = HwpSummaryInfo
     docinfo_class = VersionSensitiveItem
     bodytext_class = Sections
 

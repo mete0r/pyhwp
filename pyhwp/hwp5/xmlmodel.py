@@ -30,6 +30,7 @@ from .binmodel import TableBody, TableCell
 from .dataio import Struct
 from .filestructure import VERSION
 from . import binmodel
+from hwp5 import filestructure
 
 import logging
 logger = logging.getLogger(__name__)
@@ -474,6 +475,42 @@ class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
         return d
 
 
+class HwpSummaryInfo(filestructure.HwpSummaryInfo, XmlEventsMixin):
+
+    class Property(Struct):
+        pass
+
+    def events(self, **context):
+        content = dict(byteorder='%x' % self.byteorder,
+                       format=str(self.format),
+                       osversion=str(self.osversion),
+                       os=str(self.os),
+                       clsid=str(self.clsid))
+
+        summaryinfo = HwpSummaryInfo, content, context
+
+        events = prefix_binmodels_with_event(context, self.propertyset)
+        events = wrap_modelevents(summaryinfo, events)
+        for x in events:
+            yield x
+
+    @property
+    def propertyset(self):
+        propertyset = filestructure.HwpSummaryInfo.propertyset.__get__(self)
+        for prop_id, prop in propertyset.items():
+            name = prop.get('name')
+            value = prop.get('value')
+
+            content = dict(id=prop_id)
+            if name:
+                content['name'] = name
+            if value:
+                content['value'] = unicode(value)
+            yield dict(level=0,
+                       type=self.Property,
+                       content=content)
+
+
 class DocInfo(ModelEventStream):
 
     def events(self, **kwargs):
@@ -538,6 +575,7 @@ class HwpDoc(Struct):
 
 class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
 
+    summaryinfo_class = HwpSummaryInfo
     docinfo_class = DocInfo
     bodytext_class = Sections
 
@@ -548,7 +586,8 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
         else:
             kwargs.pop('embedbin', None)
 
-        events = chain(self.docinfo.events(**kwargs),
+        events = chain(self.summaryinfo.events(**kwargs),
+                       self.docinfo.events(**kwargs),
                        self.text.events(**kwargs))
 
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()
