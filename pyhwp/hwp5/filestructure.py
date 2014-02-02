@@ -505,26 +505,69 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
     value = cached_property(to_dict)
 
+    @property
+    def byteorder(self):
+        return self.value['byteorder']
+
+    @property
+    def format(self):
+        return self.value['format']
+
+    @property
+    def os(self):
+        return self.value['os']
+
+    @property
+    def osversion(self):
+        return self.value['osversion']
+
+    @property
+    def clsid(self):
+        return self.value['clsid']
+
+    @property
+    def sections(self):
+        for section in self.value['sections']:
+            formatid = section['formatid']
+            properties = section['properties']
+            yield formatid, properties
+
+    UNKNOWN_FMTID = '9fa2b660-1061-11d4-b4c6-006097c09d8c'
+
+    @property
+    def propertyset(self):
+        from uuid import UUID
+        for formatid, properties in self.sections:
+            if formatid == UUID(self.UNKNOWN_FMTID):
+                return properties
+
+    @property
+    def plaintext_lines(self):
+
+        os_names = {
+            0: 'win16',
+            1: 'macos',
+            2: 'win32'
+        }
+
+        yield 'byteorder: 0x%x' % self.byteorder
+        yield 'clsid: %s' % self.clsid
+        yield 'format: %d' % self.format
+        yield 'os: %s %s' % (self.os, os_names.get(self.os, ''))
+        yield 'osversion: %d' % self.osversion
+
+        for formatid, properties in self.sections:
+            yield ('-- Section %s --' % formatid)
+            for prop_id, prop in properties.items():
+                prop_name = prop.get('name') or prop_id
+                prop_value = prop.get('value')
+                prop_str = u'%s: %s' % (prop_name, prop_value)
+                yield prop_str.encode('utf-8')
+
     def open_text(self):
         out = StringIO()
-
-        def uuid_from_bytes_tuple(t):
-            from uuid import UUID
-            return UUID(bytes_le=''.join(chr(x) for x in t))
-
-        print >> out, 'byteorder: 0x%x' % self.value['byteorder']
-        print >> out, 'clsid: %s' % uuid_from_bytes_tuple(self.value['clsid'])
-        print >> out, 'format: %d' % self.value['format']
-        print >> out, 'os: %d' % self.value['os']
-        print >> out, 'osversion: %d' % self.value['osversion']
-
-        for section in self.value['sections']:
-            formatid = uuid_from_bytes_tuple(section['formatid'])
-            print >> out, ('-- Section %s --' % formatid)
-            for prop in section['properties'].values():
-                prop_str = u'%s: %s' % (prop['name'], prop.get('value'))
-                print >> out, prop_str.encode('utf-8')
-
+        for line in self.plaintext_lines:
+            out.write(line + '\n')
         out.seek(0)
         return out
 
