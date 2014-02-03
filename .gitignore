@@ -38,3 +38,4 @@ testpypi
 test-xsl
 xsltcoverage.xml
 wheelhouse
+/*.egg

@@ -16,7 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import with_statement
-from setuptools import setup, find_packages
 import sys
 
 
@@ -43,6 +42,11 @@ def read(filename):
         f.close()
 
 
+import ez_setup
+ez_setup.use_setuptools()
+
+from setuptools import setup
+from setuptools import find_packages
 setup(name='pyhwp',
       version=read('VERSION.txt').strip(),
       license='GNU Affero GPL v3+',
