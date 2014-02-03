@@ -17,80 +17,177 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import with_statement
 import sys
+import os.path
+import textwrap
 
 
-install_requires = []
-if 'java' not in sys.platform and sys.version < '3':
-    install_requires.append('OleFileIO_PL >= 0.23')
+def setupdir(f):
+    ''' Decorate f to run inside the directory where setup.py resides.
+    '''
+    setup_dir = os.path.dirname(os.path.abspath(__file__))
 
-try:
-    __import__('json')
-except ImportError:
-    install_requires.append('simplejson')
+    def wrapped(*args, **kwargs):
+        old_dir = os.path.abspath(os.curdir)
+        try:
+            os.chdir(setup_dir)
+            return f(*args, **kwargs)
+        finally:
+            os.chdir(old_dir)
 
-install_requires.append('docopt >= 0.6')
-install_requires.append('hypua2jamo >= 0.2')
+    return wrapped
 
 
-def read(filename):
-    import os.path
-    filename = os.path.join(os.path.dirname(__file__), filename)
-    f = open(filename, 'r')
+@setupdir
+def import_setuptools():
     try:
+        import setuptools
+        return setuptools
+    except ImportError:
+        pass
+
+    import ez_setup
+    ez_setup.use_setuptools()
+    import setuptools
+    return setuptools
+
+
+metadata = {
+
+    # basic information
+
+    'name': 'pyhwp',
+    '@version': 'VERSION.txt',
+    'description': 'hwp file format parser',
+    '@long_description': 'README',
+
+    # authorative
+
+    'author': 'mete0r',
+    'author_email': 'mete0r@sarangbang.or.kr',
+    'license': 'GNU Affero General Public License v3 or later (AGPLv3+)',
+    'url': 'https://github.com/mete0r/pyhwp',
+
+    # classifying
+
+    '@classifiers': '''
+        Development Status :: 4 - Beta
+        Intended Audience :: Developers
+        License :: OSI Approved :: GNU Affero General Public License v3\
+ or later (AGPLv3+)
+        Operating System :: OS Independent
+        Programming Language :: Python
+        Programming Language :: Python :: 2.5
+        Programming Language :: Python :: 2.6
+        Programming Language :: Python :: 2.7
+        Programming Language :: Python :: Implementation :: CPython
+        Programming Language :: Python :: Implementation :: Jython
+        Programming Language :: Python :: Implementation :: PyPy
+        Topic :: Software Development :: Libraries :: Python Modules
+        Topic :: Text Processing
+        Topic :: Text Processing :: Filters''',
+    'keywords': 'hwp',
+
+    # packaging
+
+    '@setup_requires': '',
+
+    '@packages': 'pyhwp',
+    'package_dir': {
+        '': 'pyhwp'
+    },
+    'package_data': {
+        'hwp5': [
+            'README',
+            'COPYING',
+            'VERSION.txt',
+            'xsl/*.xsl',
+            'xsl/odt/*.xsl',
+            'odf-relaxng/OpenDocument-v1.2-os-*.rng'
+        ]
+    },
+
+    # installation
+
+    'zip_safe': False,
+    'entry_points': {
+        'console_scripts': [
+            'hwp5spec=hwp5.binspec:main',
+            'hwp5proc=hwp5.proc:main',
+            'hwp5odt=hwp5.hwp5odt:main',
+            'hwp5txt=hwp5.hwp5txt:main',
+            'hwp5html=hwp5.hwp5html:main',
+        ]
+    },
+    '@install_requires': ''
+}
+
+
+@setupdir
+def preprocess_metadata():
+
+    if '@version' in metadata:
+        version = metadata.pop('@version')
+        version = readfile(version)
+        version = version.strip()
+        metadata['version'] = version
+
+    if '@long_description' in metadata:
+        long_description = metadata.pop('@long_description')
+        long_description = readfile(long_description)
+        metadata['long_description'] = long_description
+
+    if '@classifiers' in metadata:
+        classifiers = metadata.pop('@classifiers')
+        classifiers = textwrap.dedent(classifiers)
+        classifiers = classifiers.strip()
+        classifiers = classifiers.split('\n')
+        metadata['classifiers'] = classifiers
+
+    if '@setup_requires' in metadata:
+        setup_requires = metadata.pop('@setup_requires')
+        setup_requires = []
+        if sys.version_info >= (2, 6):
+            setup_requires += ['wheel']
+        metadata['setup_requires'] = setup_requires
+
+    if '@packages' in metadata:
+        setuptools = import_setuptools()
+        find_packages = setuptools.find_packages
+        packages = metadata.pop('@packages')
+        packages = find_packages(packages)
+        metadata['packages'] = packages
+
+    if '@install_requires' in metadata:
+        install_requires = metadata.pop('@install_requires')
+        install_requires = []
+
+        if 'java' not in sys.platform and sys.version < '3':
+            install_requires.append('OleFileIO_PL >= 0.23')
+
+        try:
+            __import__('json')
+        except ImportError:
+            install_requires.append('simplejson')
+
+        install_requires.append('docopt >= 0.6')
+        install_requires.append('hypua2jamo >= 0.2')
+        metadata['install_requires'] = install_requires
+
+
+@setupdir
+def readfile(filename):
+    with file(filename) as f:
         return f.read()
-    finally:
-        f.close()
 
 
-import ez_setup
-ez_setup.use_setuptools()
+preprocess_metadata()
 
-from setuptools import setup
-from setuptools import find_packages
-setup(name='pyhwp',
-      version=read('VERSION.txt').strip(),
-      license='GNU Affero GPL v3+',
-      description='hwp file format parser',
-      long_description=read('README'),
-      author='mete0r',
-      author_email='mete0r@sarangbang.or.kr',
-      url='http://github.com/mete0r/pyhwp',
-      keywords='hwp',
-      packages=find_packages('pyhwp'),
-      package_dir={'': 'pyhwp'},
-      package_data=dict(hwp5=['README',
-                              'COPYING',
-                              'VERSION.txt',
-                              'xsl/*.xsl',
-                              'xsl/odt/*.xsl',
-                              'odf-relaxng/OpenDocument-v1.2-os-*.rng']),
-      install_requires=install_requires,
 
-      entry_points={
-          'console_scripts': [
-              'hwp5spec=hwp5.binspec:main',
-              'hwp5proc=hwp5.proc:main',
-              'hwp5odt=hwp5.hwp5odt:main',
-              'hwp5txt=hwp5.hwp5txt:main',
-              'hwp5html=hwp5.hwp5html:main',
-          ]
-      },
-      zip_safe=False,
+@setupdir
+def main():
+    setuptools = import_setuptools()
+    setuptools.setup(**metadata)
 
-      classifiers=[
-          'Development Status :: 4 - Beta',
-          'Intended Audience :: Developers',
-          'License :: OSI Approved :: GNU Affero General Public License v3',
-          'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
-          'Operating System :: OS Independent',
-          'Programming Language :: Python',
-          'Programming Language :: Python :: 2.5',
-          'Programming Language :: Python :: 2.6',
-          'Programming Language :: Python :: 2.7',
-          'Programming Language :: Python :: Implementation :: CPython',
-          'Programming Language :: Python :: Implementation :: Jython',
-          'Programming Language :: Python :: Implementation :: PyPy',
-          'Topic :: Software Development :: Libraries :: Python Modules',
-          'Topic :: Text Processing',
-          'Topic :: Text Processing :: Filters',
-      ])
+
+if __name__ == '__main__':
+    main()
