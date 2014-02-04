@@ -9,3 +9,4 @@ include pyhwp/hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
 include VERSION.txt
 include CHANGES
 include classifiers.txt
+include requirement.txt

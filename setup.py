@@ -104,10 +104,8 @@ _metadata = {
             'hwp5html=hwp5.hwp5html:main',
         ]
     },
-    'install_requires': [
-        'hypua2jamo >= 0.2',
-        'docopt >= 0.6',
-    ]
+
+    '@requires': 'requirement.txt',
 }
 
 
@@ -166,6 +164,15 @@ def preprocess_metadata(template_metadata):
         classifiers = sorted(classifiers)
         metadata['classifiers'] = classifiers
 
+    if '@requires' in metadata:
+        requires = metadata.pop('@requires')
+        requires = readfile(requires)
+        requires = requires.strip()
+        requires = requires.split('\n')
+        requires = requires_from_requirements(requires)
+        requires = list(requires)
+        metadata['requires'] = requires
+
     # TODO:
     # insert/replace 'Development Status' classifier along with alpha/beta tag
     # in version?
@@ -181,6 +188,12 @@ def preprocess_metadata(template_metadata):
     return metadata
 
 
+def requires_from_requirements(requirements):
+    for req in requirements:
+        name, op, version = req.split(' ')
+        yield name, op, version
+
+
 metadata = preprocess_metadata(_metadata)
 export_metadata(metadata, 'setup-static.json')
 
@@ -193,6 +206,16 @@ def prepare_runtime_metadata(metadata):
         setup_requires = metadata.get('setup_requires', [])
         setup_requires += ['wheel']
         metadata['setup_requires'] = setup_requires
+
+    if 'requires' in metadata:
+        requires = metadata['requires']
+        metadata['requires'] = list(('%s(%s%s)' % req)
+                                    for req in requires)
+
+        install_requires = metadata.get('install_requires', [])
+        install_requires += list(('%s %s %s') % req
+                                 for req in requires)
+        metadata['install_requires'] = install_requires
 
     if 'java' not in sys.platform and sys.version < '3':
         install_requires = metadata.get('install_requires', [])
