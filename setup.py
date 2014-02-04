@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import with_statement
+from copy import deepcopy
 import sys
 import os.path
 import textwrap
@@ -51,7 +52,7 @@ def import_setuptools():
     return setuptools
 
 
-metadata = {
+_metadata = {
 
     # basic information
 
@@ -85,16 +86,15 @@ metadata = {
         Topic :: Software Development :: Libraries :: Python Modules
         Topic :: Text Processing
         Topic :: Text Processing :: Filters''',
+
     'keywords': 'hwp',
 
     # packaging
 
-    '@setup_requires': '',
+    'setup_requires': [],
 
-    '@packages': 'pyhwp',
-    'package_dir': {
-        '': 'pyhwp'
-    },
+    '@root_package': 'pyhwp',
+
     'package_data': {
         'hwp5': [
             'README',
@@ -109,6 +109,7 @@ metadata = {
     # installation
 
     'zip_safe': False,
+
     'entry_points': {
         'console_scripts': [
             'hwp5spec=hwp5.binspec:main',
@@ -118,12 +119,35 @@ metadata = {
             'hwp5html=hwp5.hwp5html:main',
         ]
     },
-    '@install_requires': ''
+    'install_requires': [
+        'hypua2jamo >= 0.2',
+        'docopt >= 0.6',
+    ]
 }
 
 
 @setupdir
-def preprocess_metadata():
+def readfile(filename):
+    with file(filename) as f:
+        return f.read()
+
+
+@setupdir
+def preprocess_metadata(template_metadata):
+
+    metadata = deepcopy(template_metadata)
+
+    if '@root_package' in metadata:
+        setuptools = import_setuptools()
+        find_packages = setuptools.find_packages
+
+        root_dir = metadata.pop('@root_package')
+        packages = find_packages(root_dir)
+        metadata['packages'] = packages
+
+        package_dir = metadata.get('package_dir', {})
+        package_dir[''] = root_dir
+        metadata['package_dir'] = package_dir
 
     if '@version' in metadata:
         version = metadata.pop('@version')
@@ -143,50 +167,43 @@ def preprocess_metadata():
         classifiers = classifiers.split('\n')
         metadata['classifiers'] = classifiers
 
-    if '@setup_requires' in metadata:
-        setup_requires = metadata.pop('@setup_requires')
-        setup_requires = []
-        if sys.version_info >= (2, 6):
-            setup_requires += ['wheel']
+    return metadata
+
+
+metadata = preprocess_metadata(_metadata)
+
+
+def prepare_runtime_metadata(metadata):
+
+    metadata = deepcopy(metadata)
+
+    if sys.version_info >= (2, 6):
+        setup_requires = metadata.get('setup_requires', [])
+        setup_requires += ['wheel']
         metadata['setup_requires'] = setup_requires
 
-    if '@packages' in metadata:
-        setuptools = import_setuptools()
-        find_packages = setuptools.find_packages
-        packages = metadata.pop('@packages')
-        packages = find_packages(packages)
-        metadata['packages'] = packages
-
-    if '@install_requires' in metadata:
-        install_requires = metadata.pop('@install_requires')
-        install_requires = []
-
-        if 'java' not in sys.platform and sys.version < '3':
-            install_requires.append('OleFileIO_PL >= 0.23')
-
-        try:
-            __import__('json')
-        except ImportError:
-            install_requires.append('simplejson')
-
-        install_requires.append('docopt >= 0.6')
-        install_requires.append('hypua2jamo >= 0.2')
+    if 'java' not in sys.platform and sys.version < '3':
+        install_requires = metadata.get('install_requires', [])
+        install_requires.append('OleFileIO_PL >= 0.23')
         metadata['install_requires'] = install_requires
 
+    try:
+        __import__('json')
+    except ImportError:
+        install_requires = metadata.get('install_requires', [])
+        install_requires.append('simplejson')
+        metadata['install_requires'] = install_requires
 
-@setupdir
-def readfile(filename):
-    with file(filename) as f:
-        return f.read()
+    return metadata
 
 
-preprocess_metadata()
+runtime_metadata = prepare_runtime_metadata(metadata)
 
 
 @setupdir
 def main():
     setuptools = import_setuptools()
-    setuptools.setup(**metadata)
+    setuptools.setup(**runtime_metadata)
 
 
 if __name__ == '__main__':
