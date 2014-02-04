@@ -52,6 +52,7 @@ def import_setuptools():
     return setuptools
 
 
+# TODO: load from setup.json
 _metadata = {
 
     # basic information
@@ -179,6 +180,18 @@ def preprocess_metadata(template_metadata):
         classifiers = classifiers.strip()
         classifiers = classifiers.split('\n')
         metadata['classifiers'] = classifiers
+
+    # TODO:
+    # insert/replace 'Development Status' classifier along with alpha/beta tag
+    # in version?
+
+    # TODO:
+    # check License classifiers?
+    # sync License classifiers and license field?
+
+    # TODO:
+    # Make os/python version/implementation classifier to reflect CI result
+    # automatically?
 
     return metadata
 
