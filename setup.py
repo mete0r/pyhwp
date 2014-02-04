@@ -133,6 +133,19 @@ def readfile(filename):
 
 
 @setupdir
+def export_metadata(metadata, filename):
+    try:
+        import json
+    except ImportError:
+        return
+    with file(filename, 'w') as f:
+        json.dump(metadata, f, indent=2, sort_keys=True)
+
+
+export_metadata(_metadata, 'setup.json')
+
+
+@setupdir
 def preprocess_metadata(template_metadata):
 
     metadata = deepcopy(template_metadata)
@@ -171,6 +184,7 @@ def preprocess_metadata(template_metadata):
 
 
 metadata = preprocess_metadata(_metadata)
+export_metadata(metadata, 'setup-static.json')
 
 
 def prepare_runtime_metadata(metadata):
@@ -198,6 +212,7 @@ def prepare_runtime_metadata(metadata):
 
 
 runtime_metadata = prepare_runtime_metadata(metadata)
+export_metadata(runtime_metadata, 'setup-runtime.json')
 
 
 @setupdir
