@@ -19,7 +19,6 @@ from __future__ import with_statement
 from copy import deepcopy
 import sys
 import os.path
-import textwrap
 
 
 def setupdir(f):
@@ -71,22 +70,7 @@ _metadata = {
 
     # classifying
 
-    '@classifiers': '''
-        Development Status :: 4 - Beta
-        Intended Audience :: Developers
-        License :: OSI Approved :: GNU Affero General Public License v3\
- or later (AGPLv3+)
-        Operating System :: OS Independent
-        Programming Language :: Python
-        Programming Language :: Python :: 2.5
-        Programming Language :: Python :: 2.6
-        Programming Language :: Python :: 2.7
-        Programming Language :: Python :: Implementation :: CPython
-        Programming Language :: Python :: Implementation :: Jython
-        Programming Language :: Python :: Implementation :: PyPy
-        Topic :: Software Development :: Libraries :: Python Modules
-        Topic :: Text Processing
-        Topic :: Text Processing :: Filters''',
+    '@classifiers': 'classifiers.txt',
 
     'keywords': 'hwp',
 
@@ -176,9 +160,10 @@ def preprocess_metadata(template_metadata):
 
     if '@classifiers' in metadata:
         classifiers = metadata.pop('@classifiers')
-        classifiers = textwrap.dedent(classifiers)
+        classifiers = readfile(classifiers)
         classifiers = classifiers.strip()
         classifiers = classifiers.split('\n')
+        classifiers = sorted(classifiers)
         metadata['classifiers'] = classifiers
 
     # TODO:
