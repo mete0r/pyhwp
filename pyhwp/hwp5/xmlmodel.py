@@ -489,13 +489,13 @@ class HwpSummaryInfo(filestructure.HwpSummaryInfo, XmlEventsMixin):
 
         summaryinfo = HwpSummaryInfo, content, context
 
-        events = prefix_binmodels_with_event(context, self.propertyset)
+        events = prefix_binmodels_with_event(context, self.properties)
         events = wrap_modelevents(summaryinfo, events)
         for x in events:
             yield x
 
     @property
-    def propertyset(self):
+    def properties(self):
         propertyset = filestructure.HwpSummaryInfo.propertyset.__get__(self)
         for prop_id, prop in propertyset.items():
             name = prop.get('name')
