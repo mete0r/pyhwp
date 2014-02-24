@@ -451,60 +451,6 @@ def read_type(type, context, stream, binevents=None):
     return item['value']
 
 
-def parse_model(context, model):
-    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
-
-    from hwp5.binmodel import tag_models
-    from hwp5.binmodel import RecordModel
-
-    stream = context['stream']
-
-    # HWPTAG로 모델 결정
-    model['type'] = tag_models.get(model['tagid'], RecordModel)
-    model['binevents'] = model_events = list()
-
-    # 1차 파싱
-    model['content'] = read_type(model['type'], context, stream, model_events)
-
-    # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
-    extension_types = getattr(model['type'], 'extension_types', None)
-    if extension_types:
-        key = model['type'].get_extension_key(context, model)
-        extension = extension_types.get(key)
-        if extension is not None:
-            # 예: Control -> TableControl로 바뀌는 경우,
-            # Control의 member들은 이미 읽은 상태이고
-            # CommonControl, TableControl에서 각각 정의한
-            # 멤버들을 읽어들여야 함
-            for cls in get_extension_mro(extension, model['type']):
-                content = read_type(cls, context, stream, model_events)
-                model['content'].update(content)
-            model['type'] = extension
-
-    if 'parent' in context:
-        parent = context['parent']
-        parent_context, parent_model = parent
-        parent_type = parent_model.get('type')
-        parent_content = parent_model.get('content')
-
-        on_child = getattr(parent_type, 'on_child', None)
-        if on_child:
-            on_child(parent_content, parent_context, (context, model))
-
-    logger.debug('model: %s', model['type'].__name__)
-    logger.debug('%s', model['content'])
-
-
-def get_extension_mro(cls, up_to_cls=None):
-    import inspect
-    from itertools import takewhile
-    mro = inspect.getmro(cls)
-    mro = takewhile(lambda cls: cls is not up_to_cls, mro)
-    mro = list(cls for cls in mro if 'attributes' in cls.__dict__)
-    mro = reversed(mro)
-    return mro
-
-
 def dump_events(events):
     def prefix_level(event_prefixed_items):
         from hwp5.treeop import STARTEVENT, ENDEVENT
