@@ -21,4 +21,5 @@ from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
 
 
 class DistributeDocData(RecordModel):
+    ''' 4.1.13. 배포용 문서 데이터 '''
     tagid = HWPTAG_DISTRIBUTE_DOC_DATA

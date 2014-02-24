@@ -47,6 +47,7 @@ class ParaTextChunks(list):
 
 
 class ParaText(RecordModel):
+    ''' 4.2.2. 문단의 텍스트 '''
     tagid = HWPTAG_PARA_TEXT
 
     def attributes():

@@ -24,11 +24,15 @@ from hwp5.dataio import UINT32
 
 
 class CompatibleDocument(RecordModel):
+    ''' 4.1.14. 호환 문서 '''
     tagid = HWPTAG_COMPATIBLE_DOCUMENT
+
+    # 표 50 대상 프로그램
     Target = Enum(DEFAULT=0, HWP2007=1, MSWORD=2)
     Flags = Flags(UINT32,
                   0, 1, 'target')
 
     def attributes(cls):
+        ''' 표 49 호환 문서 '''
         yield cls.Flags, 'flags'
     attributes = classmethod(attributes)

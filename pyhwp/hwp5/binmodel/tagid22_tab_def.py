@@ -22,6 +22,8 @@ from hwp5.dataio import UINT32
 
 
 class TabDef(RecordModel):
+    ''' 4.1.7. 탭 정의 '''
+
     tagid = HWPTAG_TAB_DEF
 
     def attributes():

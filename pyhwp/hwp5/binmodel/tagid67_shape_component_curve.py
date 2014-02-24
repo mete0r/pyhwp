@@ -24,9 +24,12 @@ from hwp5.binmodel._shared import Coord
 
 
 class ShapeCurve(RecordModel):
+    ''' 4.2.9.2.7. 곡선 개체 '''
+
     tagid = HWPTAG_SHAPE_COMPONENT_CURVE
 
     def attributes(cls):
+        ''' 표 98 곡선 개체 속성 '''
         yield N_ARRAY(UINT16, Coord), 'points'
         # TODO: segment type
     attributes = classmethod(attributes)

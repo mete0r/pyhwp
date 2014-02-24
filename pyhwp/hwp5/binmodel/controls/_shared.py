@@ -37,6 +37,8 @@ class ControlType(RecordModelType):
 
 
 class Control(RecordModel):
+    ''' 4.2.6. 컨트롤 헤더 '''
+
     __metaclass__ = ControlType
     tagid = HWPTAG_CTRL_HEADER
 

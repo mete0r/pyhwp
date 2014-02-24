@@ -27,9 +27,11 @@ from hwp5.binmodel._shared import ref_parent_member
 
 
 class ParaCharShape(RecordModel):
+    ''' 4.2.3. 문단의 글자 모양 '''
     tagid = HWPTAG_PARA_CHAR_SHAPE
 
     def attributes():
+        ''' 표 56 문단의 글자 모양 '''
         yield dict(name='charshapes',
                    type=X_ARRAY(ARRAY(UINT32, 2),
                                 ref_parent_member('charshapes')))

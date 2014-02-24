@@ -27,13 +27,16 @@ from hwp5.dataio import UINT16
 
 
 class Style(RecordModel):
+    ''' 4.1.11. 스타일 '''
     tagid = HWPTAG_STYLE
 
+    # 표 43 스타일 종류
     Kind = Enum(PARAGRAPH=0, CHAR=1)
     Flags = Flags(BYTE,
                   0, 1, Kind, 'kind')
 
     def attributes(cls):
+        ''' 표 42 스타일 '''
         yield BSTR, 'local_name',
         yield BSTR, 'name',
         yield cls.Flags, 'flags',

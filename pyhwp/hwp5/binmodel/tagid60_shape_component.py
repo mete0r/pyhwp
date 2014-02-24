@@ -41,7 +41,9 @@ from hwp5.binmodel.controls.gshape_object_control import GShapeObjectControl
 
 
 class Matrix(Struct):
-    ''' 2D Transform Matrix
+    ''' 표 80 matrix 정보
+
+    2D Transform Matrix
 
     [a c e][x]
     [b d f][y]
@@ -65,7 +67,7 @@ class ScaleRotationMatrix(Struct):
 
 
 class ShapeComponent(RecordModel):
-    ''' 4.2.9.2 그리기 개체 '''
+    ''' 4.2.9.2.1. 개체 요소 '''
     tagid = HWPTAG_SHAPE_COMPONENT
     FillFlags = Flags(UINT16,
                       8, 'fill_colorpattern',
@@ -75,6 +77,7 @@ class ShapeComponent(RecordModel):
                   0, 'flip')
 
     def attributes(cls):
+        ''' 표 78 개체 요소 속성 '''
 
         def parent_must_be_gso(context, values):
             ''' parent record type is GShapeObjectControl '''
@@ -98,11 +101,17 @@ class ShapeComponent(RecordModel):
         yield cls.Flags, 'flags'
         yield WORD, 'angle'
         yield Coord, 'rotation_center'
+
+        ''' 표 79 Rendering 정보 '''
         yield WORD, 'scalerotations_count'
         yield Matrix, 'translation'
         yield dict(type=X_ARRAY(ScaleRotationMatrix,
                                 ref_member('scalerotations_count')),
                    name='scalerotations')
+
+        #
+        # Container
+        #
 
         def chid_is_container(context, values):
             ''' chid == CHID.CONTAINER '''
@@ -110,6 +119,10 @@ class ShapeComponent(RecordModel):
         yield dict(type=N_ARRAY(WORD, CHID),
                    name='controls',
                    condition=chid_is_container)
+
+        #
+        # Rectangle
+        #
 
         def chid_is_rect(context, values):
             ''' chid == CHID.RECT '''
@@ -130,7 +143,10 @@ class ShapeComponent(RecordModel):
             return (values['chid'] == CHID.RECT and
                     values['fill_flags'].fill_gradation)
 
+        ''' 표 81 테두리 선 정보 '''
         yield dict(type=BorderLine, name='border', condition=chid_is_rect)
+        ''' 표 83 Outline style '''
+        # TODO: Outline ???
         yield dict(type=cls.FillFlags, name='fill_flags',
                    condition=chid_is_rect)
         yield dict(type=UINT16, name='unknown', condition=chid_is_rect)
@@ -151,6 +167,10 @@ class ShapeComponent(RecordModel):
                    condition=chid_is_rect, version=(5, 0, 2, 4))
         yield dict(type=HexBytes(16), name='unknown3',
                    condition=chid_is_rect, version=(5, 0, 2, 4))
+
+        #
+        # Line
+        #
 
         def chid_is_line(context, values):
             ''' chid == CHID.LINE '''

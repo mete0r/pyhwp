@@ -30,6 +30,8 @@ from hwp5.dataio import HWPUNIT16
 class ParaShape(RecordModel):
     ''' 4.1.10. 문단 모양 '''
     tagid = HWPTAG_PARA_SHAPE
+
+    # 표 39 문단 모양 속성1
     LineSpacingType = Enum(RATIO=0, FIXED=1, SPACEONLY=2, MINIMUM=3)
     Align = Enum(BOTH=0, LEFT=1, RIGHT=2, CENTER=3, DISTRIBUTE=4,
                  DISTRIBUTE_SPACE=5)
@@ -56,17 +58,21 @@ class ParaShape(RecordModel):
                    29, 'ignore_margin',  # 문단 여백 무시
                    30, 'tail_shape')  # 문단 꼬리 모양
 
+    # 표 40 문단 모양 속성2
     Flags2 = Flags(UINT32,
                    0, 1, 'in_single_line',
                    2, 3, 'reserved',
                    4, 'autospace_alphabet',
                    5, 'autospace_number')
 
+    # 표 41 줄 간격 종류
     Flags3 = Flags(UINT32,
                    0, 4, LineSpacingType, 'linespacing_type3')
+
     Flags = Flags1
 
     def attributes(cls):
+        ''' 표 38 문단 모양 '''
         yield cls.Flags, 'parashapeflags',
         yield INT32,  'doubled_margin_left',   # 1/7200 * 2 # DIFFSPEC
         yield INT32,  'doubled_margin_right',  # 1/7200 * 2

@@ -36,6 +36,8 @@ class ControlDataType(RecordModelType):
 
 
 class ControlData(RecordModel):
+    ''' 4.2.8. 컨트롤 임의의 데이터 '''
+
     __metaclass__ = ControlDataType
     tagid = HWPTAG_CTRL_DATA
 

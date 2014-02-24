@@ -28,6 +28,8 @@ from hwp5.binmodel._shared import Margin
 
 
 class CommonControl(Control):
+
+    # 표 65 개체 공통 속성의 속성
     Flow = Enum(FLOAT=0, BLOCK=1, BACK=2, FRONT=3)
     TextSide = Enum(BOTH=0, LEFT=1, RIGHT=2, LARGER=3)
     VRelTo = Enum(PAPER=0, PAGE=1, PARAGRAPH=2)
@@ -60,6 +62,7 @@ class CommonControl(Control):
     MARGIN_BOTTOM = 3
 
     def attributes(cls):
+        ''' 표 64 개체 공통 속성 '''
         yield cls.CommonControlFlags, 'flags',
         yield SHWPUNIT, 'y',    # DIFFSPEC
         yield SHWPUNIT, 'x',    # DIFFSPEC

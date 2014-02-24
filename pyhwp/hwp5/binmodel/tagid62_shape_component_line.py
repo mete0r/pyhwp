@@ -23,9 +23,11 @@ from hwp5.binmodel._shared import Coord
 
 
 class ShapeLine(RecordModel):
+    ''' 4.2.9.2.2. 선 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_LINE
 
     def attributes():
+        ''' 표 87 선 개체 속성 '''
         yield Coord, 'p0'
         yield Coord, 'p1'
         yield UINT16, 'attr'

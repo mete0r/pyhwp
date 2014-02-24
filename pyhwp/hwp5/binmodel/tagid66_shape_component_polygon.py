@@ -24,8 +24,10 @@ from hwp5.binmodel._shared import Coord
 
 
 class ShapePolygon(RecordModel):
+    ''' 4.2.9.2.5. 다각형 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_POLYGON
 
     def attributes(cls):
+        ''' 표 94 다각형 개체 속성 '''
         yield N_ARRAY(UINT16, Coord), 'points'
     attributes = classmethod(attributes)

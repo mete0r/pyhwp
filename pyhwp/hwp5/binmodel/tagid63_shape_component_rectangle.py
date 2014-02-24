@@ -23,9 +23,11 @@ from hwp5.binmodel._shared import Coord
 
 
 class ShapeRectangle(RecordModel):
+    ''' 4.2.9.2.3. 사각형 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_RECTANGLE
 
     def attributes():
+        ''' 표 89 사각형 개체 속성 '''
         yield BYTE, 'round',
         yield Coord, 'p0'
         yield Coord, 'p1'

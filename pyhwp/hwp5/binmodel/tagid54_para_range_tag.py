@@ -40,6 +40,8 @@ class RangeTag(Struct):
 
 
 class ParaRangeTag(RecordModel):
+    ''' 4.2.5. 문단의 영역 태그 '''
+
     tagid = HWPTAG_PARA_RANGE_TAG
 
     @staticmethod

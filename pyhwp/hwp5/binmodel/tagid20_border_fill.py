@@ -29,20 +29,25 @@ from hwp5.binmodel._shared import FillImage
 
 
 class BorderFill(RecordModel):
+    ''' 4.1.5. 테두리/배경 '''
+
     tagid = HWPTAG_BORDER_FILL
 
+    # 표 19 테두리/배경 속성
     BorderFlags = Flags(UINT16,
                         0, 'effect_3d',
                         1, 'effect_shadow',
                         2, 4, 'slash',
                         5, 6, 'backslash')
 
+    # 표 23 채우기 정보
     FillFlags = Flags(UINT32,
                       0, 'colorpattern',
                       1, 'image',
                       2, 'gradation')
 
     def attributes(cls):
+        ''' 표 18 테두리/배경 속성 '''
         yield cls.BorderFlags, 'borderflags'
         yield Border, 'left',
         yield Border, 'right',

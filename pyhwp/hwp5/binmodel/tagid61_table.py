@@ -24,12 +24,15 @@ from hwp5.dataio import UINT32
 from hwp5.dataio import UINT16
 from hwp5.dataio import HWPUNIT16
 from hwp5.dataio import N_ARRAY
+from hwp5.dataio import X_ARRAY
+from hwp5.dataio import ref_member
 from hwp5.dataio import Struct
 from hwp5.binmodel._shared import Margin
 
 
 class ZoneInfo(Struct):
     def attributes():
+        ''' 표 73 영역 속성 '''
         yield UINT16, 'starting_column'
         yield UINT16, 'starting_row'
         yield UINT16, 'end_column'
@@ -39,20 +42,25 @@ class ZoneInfo(Struct):
 
 
 class TableBody(RecordModel):
+    ''' 4.2.9.1. 표 개체 '''
     tagid = HWPTAG_TABLE
+
+    # 표 71 표 속성의 속성
     Split = Enum(NONE=0, BY_CELL=1, SPLIT=2)
     Flags = Flags(UINT32,
                   0, 1, Split, 'split_page',
                   2, 'repeat_header')
 
     def attributes(cls):
-        from hwp5.dataio import X_ARRAY
-        from hwp5.dataio import ref_member
+        ''' 표 70 표 개체 속성 '''
         yield cls.Flags, 'flags'
         yield UINT16, 'rows'
         yield UINT16, 'cols'
         yield HWPUNIT16, 'cellspacing'
+
+        # 표 72 안쪽 여백 정보
         yield Margin, 'padding'
+
         yield dict(type=X_ARRAY(UINT16, ref_member('rows')),
                    name='rowcols')
         yield UINT16, 'borderfill_id'

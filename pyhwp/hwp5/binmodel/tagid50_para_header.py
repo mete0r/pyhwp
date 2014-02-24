@@ -25,8 +25,11 @@ from hwp5.dataio import UINT16
 
 
 class Paragraph(RecordModel):
+    ''' 4.2.1. 문단 헤더 '''
+
     tagid = HWPTAG_PARA_HEADER
 
+    # 표 54 단 나누기 종류
     SplitFlags = Flags(BYTE,
                        0, 'new_section',
                        1, 'new_columnsdef',
@@ -41,6 +44,7 @@ class Paragraph(RecordModel):
                   0, 30, 'chars')
 
     def attributes(cls):
+        ''' 표 53 문단 헤더 '''
         yield cls.Flags, 'text',
         yield cls.ControlMask, 'controlmask',
         yield UINT16, 'parashape_id',

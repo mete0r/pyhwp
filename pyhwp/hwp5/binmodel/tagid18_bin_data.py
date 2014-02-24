@@ -23,6 +23,8 @@ from hwp5.dataio import Flags
 from hwp5.dataio import UINT16
 from hwp5.dataio import Struct
 from hwp5.dataio import BSTR
+from hwp5.dataio import SelectiveType
+from hwp5.dataio import ref_member_flag
 from hwp5.binmodel._shared import BinStorageId
 
 
@@ -47,7 +49,11 @@ class BinDataStorage(Struct):
 
 
 class BinData(RecordModel):
+    ''' 4.1.3. 바이너리 데이터 '''
+
     tagid = HWPTAG_BIN_DATA
+
+    # 표 13 바이너리 데이터 속성
     StorageType = Enum(LINK=0, EMBEDDING=1, STORAGE=2)
     CompressionType = Enum(STORAGE_DEFAULT=0, YES=1, NO=2)
     AccessState = Enum(NEVER=0, OK=1, FAILED=2, FAILED_IGNORED=3)
@@ -57,8 +63,7 @@ class BinData(RecordModel):
                   16, 17, AccessState, 'access')
 
     def attributes(cls):
-        from hwp5.dataio import SelectiveType
-        from hwp5.dataio import ref_member_flag
+        ''' 표 12 바이너리 데이터 '''
         yield cls.Flags, 'flags'
         yield (SelectiveType(ref_member_flag('flags', 'storage'),
                              {cls.StorageType.LINK: BinDataLink,

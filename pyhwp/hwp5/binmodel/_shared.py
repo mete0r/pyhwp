@@ -142,13 +142,15 @@ class Border(Struct):
 
 
 class BorderLine(Struct):
-    ''' 표 81. 테두리 선 정보 '''
+    ''' 표 81 테두리 선 정보 '''
 
     LineEnd = Enum('round', 'flat')
     ArrowShape = Enum('none', 'arrow', 'arrow2', 'diamond', 'circle', 'rect',
                       'diamondfilled', 'disc', 'rectfilled')
     ArrowSize = Enum('smallest', 'smaller', 'small', 'abitsmall', 'normal',
                      'abitlarge', 'large', 'larger', 'largest')
+
+    ''' 표 82 테두리 선 정보 속성 '''
     Flags = Flags(UINT32,
                   0, 5, Border.StrokeEnum, 'stroke',
                   6, 9, LineEnd, 'line_end',

@@ -23,9 +23,12 @@ from hwp5.dataio import UINT32
 
 
 class DocumentProperties(RecordModel):
+    ''' 4.1.1. 문서 속성 '''
+
     tagid = HWPTAG_DOCUMENT_PROPERTIES
 
     def attributes():
+        ''' 표 9 문서 속성 '''
         yield UINT16, 'section_count',
         yield UINT16, 'page_startnum',
         yield UINT16, 'footnote_startnum',

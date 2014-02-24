@@ -25,6 +25,7 @@ from hwp5.dataio import UINT16
 from hwp5.dataio import Flags
 from hwp5.dataio import SHWPUNIT
 from hwp5.dataio import INT32
+from hwp5.dataio import X_ARRAY
 
 
 class LineSeg(Struct):
@@ -46,10 +47,12 @@ class LineSeg(Struct):
 
 
 class ParaLineSeg(RecordModel):
+    ''' 4.2.4. 문단의 레이아웃 '''
+
     tagid = HWPTAG_PARA_LINE_SEG
 
     def attributes(cls):
-        from hwp5.dataio import X_ARRAY
+        ''' 표 57 문단의 레이아웃 '''
         yield dict(name='linesegs',
                    type=X_ARRAY(LineSeg, ref_parent_member('linesegs')))
     attributes = classmethod(attributes)

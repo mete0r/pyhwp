@@ -21,4 +21,7 @@ from hwp5.tagids import HWPTAG_DOC_DATA
 
 
 class DocData(RecordModel):
+    ''' 4.1.12. 문서 임의의 데이터 '''
     tagid = HWPTAG_DOC_DATA
+
+    # TODO

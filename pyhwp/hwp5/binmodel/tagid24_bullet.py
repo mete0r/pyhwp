@@ -21,4 +21,8 @@ from hwp5.tagids import HWPTAG_BULLET
 
 
 class Bullet(RecordModel):
+    ''' 4.1.9. 글머리표 '''
+
     tagid = HWPTAG_BULLET
+
+    # TODO

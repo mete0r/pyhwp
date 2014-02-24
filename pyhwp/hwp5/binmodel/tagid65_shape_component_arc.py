@@ -22,10 +22,12 @@ from hwp5.binmodel._shared import Coord
 
 
 class ShapeArc(RecordModel):
+    ''' 4.2.9.2.6. 호 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_ARC
 
     def attributes(cls):
-        #yield ShapeEllipse.Flags, 'flags' # SPEC
+        ''' 표 96 호 개체 속성 '''
+        #yield ShapeEllipse.Flags, 'flags' # SPEC TODO
         yield Coord, 'center'
         yield Coord, 'axis1'
         yield Coord, 'axis2'

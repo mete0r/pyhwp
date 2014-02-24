@@ -42,11 +42,12 @@ class NumberingLevel(Struct):
 
     @classmethod
     def attributes(cls):
+        ''' 표 34 문단 머리 정보 '''
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'width_correction'
         yield HWPUNIT16, 'distance_to_body'
         yield INT32, 'charshape_id'
-        yield BSTR, 'numbering_format'
+        yield BSTR, 'numbering_format'  # see 표 36 문단 번호 형식
 
 
 class Numbering(RecordModel):
@@ -58,6 +59,7 @@ class Numbering(RecordModel):
     Flags = NumberingLevel.Flags
 
     def attributes(cls):
+        ''' 표 33 문단 번호 '''
         yield ARRAY(NumberingLevel, 7), 'levels'
         yield UINT16, 'starting_number'
     attributes = classmethod(attributes)

@@ -24,10 +24,17 @@ from hwp5.binmodel._shared import Coord
 
 
 class ShapeEllipse(RecordModel):
+    ''' 4.2.9.2.4. 타원 개체 '''
     tagid = HWPTAG_SHAPE_COMPONENT_ELLIPSE
-    Flags = Flags(UINT32)  # TODO
+
+    ''' 표 92 타원/호 개체 속성 '''
+    Flags = Flags(UINT32,
+                  0, 'arc_recalc_required',
+                  1, 'arc',
+                  2, 9, 'arc_kind')
 
     def attributes(cls):
+        ''' 표 91 타원 개체 속성 '''
         yield cls.Flags, 'flags'
         yield Coord, 'center'
         yield Coord, 'axis1'

@@ -31,6 +31,7 @@ from hwp5.binmodel._shared import COLORREF
 
 
 def LanguageStruct(name, basetype):
+    ''' 표 29 글꼴에 대한 언어 '''
     def attributes():
         for lang in ('ko', 'en', 'cn', 'jp', 'other', 'symbol', 'user'):
             yield basetype, lang
@@ -47,8 +48,11 @@ class ShadowSpace(Struct):
 
 
 class CharShape(RecordModel):
+    ''' 4.1.6. 글자 모양 '''
+
     tagid = HWPTAG_CHAR_SHAPE
 
+    # 표 30 글자 모양 속성
     Underline = Enum(NONE=0, UNDERLINE=1, UNKNOWN=2, UPPERLINE=3)
     Flags = Flags(UINT32,
                   0, 'italic',
@@ -59,6 +63,7 @@ class CharShape(RecordModel):
                   11, 13, 'shadow')
 
     def attributes(cls):
+        ''' 표 28 글자 모양 '''
         yield LanguageStruct('FontFace', WORD), 'font_face',
         yield (LanguageStruct('LetterWidthExpansion', UINT8),
                'letter_width_expansion')

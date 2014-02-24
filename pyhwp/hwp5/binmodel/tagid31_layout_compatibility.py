@@ -22,9 +22,11 @@ from hwp5.dataio import UINT32
 
 
 class LayoutCompatibility(RecordModel):
+    ''' 4.1.15. 레이아웃 호환성 '''
     tagid = HWPTAG_LAYOUT_COMPATIBILITY
 
     def attributes():
+        ''' 표 51 레이아웃 호환성 '''
         yield UINT32, 'char',
         yield UINT32, 'paragraph',
         yield UINT32, 'section',

@@ -33,6 +33,7 @@ class AlternateFont(Struct):
 
 
 class Panose1(Struct):
+    ''' 표 17 글꼴 유형 정보 '''
 
     FamilyType = Enum('any', 'no_fit', 'text_display', 'script', 'decorative',
                       'pictorial')
@@ -93,8 +94,14 @@ class Panose1(Struct):
 
 
 class FaceName(RecordModel):
+    ''' 4.1.4. 글꼴 '''
+
     tagid = HWPTAG_FACE_NAME
+
+    # 표 16 대체 글꼴 유형
     FontFileType = Enum(UNKNOWN=0, TTF=1, HFT=2)
+
+    # 표 15 글꼴 속성
     Flags = Flags(BYTE,
                   0, 1, FontFileType, 'font_file_type',
                   5, 'default',
@@ -102,6 +109,7 @@ class FaceName(RecordModel):
                   7, 'alternate')
 
     def attributes(cls):
+        ''' 표 14 글꼴 '''
         yield cls.Flags, 'flags'
         yield BSTR, 'name'
 

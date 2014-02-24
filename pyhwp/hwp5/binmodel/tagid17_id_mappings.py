@@ -22,9 +22,12 @@ from hwp5.dataio import UINT32
 
 
 class IdMappings(RecordModel):
+    ''' 4.1.2. 아이디 매핑 헤더 '''
+
     tagid = HWPTAG_ID_MAPPINGS
 
     def attributes():
+        ''' 표 10 아이디 매핑 헤더 '''
         yield UINT32, 'bindata',
         yield UINT32, 'ko_fonts',
         yield UINT32, 'en_fonts',

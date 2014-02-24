@@ -51,6 +51,8 @@ class ListHeaderType(RecordModelType):
 
 
 class ListHeader(RecordModel):
+    ''' 4.2.7. 문단 리스트 헤더 '''
+
     __metaclass__ = ListHeaderType
     tagid = HWPTAG_LIST_HEADER
 
@@ -61,6 +63,7 @@ class ListHeader(RecordModel):
                   5, 6, VAlign, 'valign')
 
     def attributes(cls):
+        ''' 표 60 문단 리스트 헤더 '''
         yield UINT16, 'paragraphs',
         yield UINT16, 'unknown1',
         yield cls.Flags, 'listflags',
@@ -78,15 +81,18 @@ class ListHeader(RecordModel):
 
 
 class TableCaption(ListHeader):
+    ''' 표 66 캡션 리스트 '''
     parent_model_type = TableControl
     before_tablebody = False
 
+    # 표 68 캡션 속성
     Position = Enum(LEFT=0, RIGHT=1, TOP=2, BOTTOM=3)
     Flags = Flags(UINT32,
                   0, 1, Position, 'position',
                   2, 'include_margin')
 
     def attributes(cls):
+        ''' 표 67 캡션 '''
         yield cls.Flags, 'flags',
         yield HWPUNIT, 'width',
         yield HWPUNIT16, 'separation',  # 캡션과 틀 사이 간격
@@ -99,6 +105,7 @@ class TableCell(ListHeader):
     before_tablebody = True
 
     def attributes():
+        ''' 표 75 셀 속성 '''
         yield UINT16, 'col',
         yield UINT16, 'row',
         yield UINT16, 'colspan',
