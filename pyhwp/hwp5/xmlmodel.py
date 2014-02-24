@@ -262,29 +262,43 @@ def make_extended_controls_inline(event_prefixed_mac, stack=None):
     for event, item in event_prefixed_mac:
         model, attributes, context = item
         if model is Paragraph:
-            if event == STARTEVENT:
-                stack.append(dict())
-                yield STARTEVENT, item
-            else:
-                yield ENDEVENT, item
-                stack.pop()
+            for x in meci_paragraph(event, stack, item):
+                yield x
         elif model is ControlChar:
-            if event is STARTEVENT:
-                if attributes['kind'] is ControlChar.EXTENDED:
-                    control_subtree = stack[-1].get(Control).pop(0)
-                    tev = tree_events(*control_subtree)
-                    yield tev.next()  # to evade the Control/STARTEVENT trigger
-                                      # in parse_models_pass3()
-                    for k in make_extended_controls_inline(tev, stack):
-                        yield k
-                else:
-                    yield STARTEVENT, item
-                    yield ENDEVENT, item
+            for x in meci_controlchar(event, stack, item, attributes):
+                yield x
         elif issubclass(model, Control) and event == STARTEVENT:
             control_subtree = build_subtree(event_prefixed_mac)
-            stack[-1].setdefault(Control, []).append(control_subtree)
+            paragraph = stack[-1]
+            paragraph_controls = paragraph.setdefault(Control, [])
+            paragraph_controls.append(control_subtree)
         else:
             yield event, item
+
+
+def meci_paragraph(event, stack, item):
+    if event == STARTEVENT:
+        stack.append(dict())
+        yield STARTEVENT, item
+    else:
+        yield ENDEVENT, item
+        stack.pop()
+
+
+def meci_controlchar(event, stack, item, attributes):
+    if event is STARTEVENT:
+        if attributes['kind'] is ControlChar.EXTENDED:
+            paragraph = stack[-1]
+            paragraph_controls = paragraph.get(Control)
+            control_subtree = paragraph_controls.pop(0)
+            tev = tree_events(*control_subtree)
+            yield tev.next()  # to evade the Control/STARTEVENT trigger
+                              # in parse_models_pass3()
+            for k in make_extended_controls_inline(tev, stack):
+                yield k
+        else:
+            yield STARTEVENT, item
+            yield ENDEVENT, item
 
 
 def make_paragraphs_children_of_listheader(event_prefixed_mac,
@@ -342,43 +356,56 @@ class TableRow:
     pass
 
 
-def restructure_tablebody(event_prefixed_mac):
-    ROW_OPEN = 1
-    ROW_CLOSE = 2
+ROW_OPEN = 1
+ROW_CLOSE = 2
 
+
+def restructure_tablebody(event_prefixed_mac):
+    ''' Group table columns in each rows and wrap them with TableRow. '''
     stack = []
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if model is TableBody:
-            if event is STARTEVENT:
-                rowcols = deque()
-                for cols in attributes.pop('rowcols'):
-                    if cols == 1:
-                        rowcols.append(ROW_OPEN | ROW_CLOSE)
-                    else:
-                        rowcols.append(ROW_OPEN)
-                        for i in range(0, cols - 2):
-                            rowcols.append(0)
-                        rowcols.append(ROW_CLOSE)
-                stack.append((context, rowcols))
-                yield event, item
-            else:
-                yield event, item
-                stack.pop()
+            for x in rstbody_tablebody(event, stack, item, attributes,
+                                       context):
+                yield x
         elif model is TableCell:
-            table_context, rowcols = stack[-1]
-            row_context = dict(table_context)
-            if event is STARTEVENT:
-                how = rowcols[0]
-                if how & ROW_OPEN:
-                    yield STARTEVENT, (TableRow, dict(), row_context)
-            yield event, item
-            if event is ENDEVENT:
-                how = rowcols.popleft()
-                if how & ROW_CLOSE:
-                    yield ENDEVENT, (TableRow, dict(), row_context)
+            for x in rstbody_tablecell(event, stack, item):
+                yield x
         else:
             yield event, item
+
+
+def rstbody_tablebody(event, stack, item, attributes, context):
+    if event is STARTEVENT:
+        rowcols = deque()
+        for cols in attributes.pop('rowcols'):
+            if cols == 1:
+                rowcols.append(ROW_OPEN | ROW_CLOSE)
+            else:
+                rowcols.append(ROW_OPEN)
+                for i in range(0, cols - 2):
+                    rowcols.append(0)
+                rowcols.append(ROW_CLOSE)
+        stack.append((context, rowcols))
+        yield event, item
+    else:
+        yield event, item
+        stack.pop()
+
+
+def rstbody_tablecell(event, stack, item):
+    table_context, rowcols = stack[-1]
+    row_context = dict(table_context)
+    if event is STARTEVENT:
+        how = rowcols[0]
+        if how & ROW_OPEN:
+            yield STARTEVENT, (TableRow, dict(), row_context)
+    yield event, item
+    if event is ENDEVENT:
+        how = rowcols.popleft()
+        if how & ROW_CLOSE:
+            yield ENDEVENT, (TableRow, dict(), row_context)
 
 
 def embed_bindata(event_prefixed_mac, bindata):
