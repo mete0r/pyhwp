@@ -21,16 +21,19 @@ from tempfile import TemporaryFile
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import build_subtree
 from .treeop import tree_events, tree_events_multi
-from .binmodel import SectionDef
-from .binmodel import ListHeader
-from .binmodel import Paragraph
-from .binmodel import Text
-from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
-from .binmodel import TableBody, TableCell
 from .dataio import Struct
 from .filestructure import VERSION
 from . import binmodel
 from hwp5 import filestructure
+from hwp5.binmodel.controls import SectionDef
+from hwp5.binmodel.controls import TableControl
+from hwp5.binmodel.controls import GShapeObjectControl
+from hwp5.binmodel import ListHeader
+from hwp5.binmodel import Paragraph
+from hwp5.binmodel import Text
+from hwp5.binmodel import ShapeComponent
+from hwp5.binmodel import TableBody
+from hwp5.binmodel import TableCell
 
 import logging
 logger = logging.getLogger(__name__)
