@@ -19,7 +19,9 @@
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_SHAPE_COMPONENT_PICTURE
 from hwp5.dataio import Struct
+from hwp5.dataio import Flags
 from hwp5.dataio import SHWPUNIT
+from hwp5.dataio import UINT32
 from hwp5.dataio import UINT16
 from hwp5.dataio import INT8
 from hwp5.dataio import BYTE
@@ -29,12 +31,24 @@ from hwp5.binmodel._shared import BorderLine
 
 
 class PictureInfo(Struct):
+    ''' 표 27 그림 정보 '''
     def attributes():
         yield INT8, 'brightness',
         yield INT8, 'contrast',
         yield BYTE, 'effect',
         yield UINT16, 'bindata_id',
     attributes = staticmethod(attributes)
+
+
+class PictureEffect(Struct):
+    ''' 표 103 그림 효과 속성 '''
+
+    Flags = Flags(UINT32)
+
+    @classmethod
+    def attributes(cls):
+        yield cls.Flags, 'flags'
+        # TODO
 
 
 # HWPML에서의 이름 사용
@@ -66,13 +80,19 @@ class ShapePicture(RecordModel):
     tagid = HWPTAG_SHAPE_COMPONENT_PICTURE
 
     def attributes():
+        ''' 표 102 그림 개체 속성 '''
         yield BorderLine, 'border'
         yield ImageRect, 'rect',
         yield ImageClip, 'clip',
         yield Margin, 'padding',
         yield PictureInfo, 'picture',
-        # DIFFSPEC
-            # BYTE, 'transparency',
-            # UINT32, 'instanceId',
-            # PictureEffect, 'effect',
+        yield dict(type=BYTE, name='border_transparency', version=(5, 0, 2, 2))
+        yield dict(type=UINT32, name='instance_id', version=(5, 0, 2, 5))
+
+        # TODO: this choke on 5.0.3.3 d6dfac424525298119de54410c3b22d74aa85511
+        # Strangely, its ok on 5.0.3.3 83a0ea1f9da368ff9f0b45f72e9306b776edf38a
+        # and other 5.0.3.0, 5.0.3.2 and 5.0.3.4 files.
+        yield dict(type=PictureEffect, name='picture_effect',
+                   version=(5, 0, 3, 4))
+
     attributes = staticmethod(attributes)
