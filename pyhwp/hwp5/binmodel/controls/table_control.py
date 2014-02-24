@@ -27,5 +27,6 @@ class TableControl(CommonControl):
     def on_child(cls, attributes, context, child):
         child_context, child_model = child
         if child_model['type'] is TableBody:
-            context['table_body'] = True
+            # referenced in ListHeader parsing
+            context['seen_table_body'] = True
     on_child = classmethod(on_child)

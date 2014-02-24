@@ -310,10 +310,11 @@ class TableTest(TestBase):
         child_model = dict(type=TableBody, content=dict())
         child = (child_context, child_model)
 
-        self.assertFalse(context.get('table_body'))
+        self.assertFalse(context.get('seen_table_body'))
         TableControl.on_child(dict(), context, child)
-        # 'table_body' in table record context should have been changed to True
-        self.assertTrue(context['table_body'])
+        # 'seen_table_body' in table record context should have been changed
+        # to True
+        self.assertTrue(context['seen_table_body'])
         # model and attributes should not have been changed
         self.assertEquals(dict(), child_model['content'])
 
@@ -326,7 +327,7 @@ class TableTest(TestBase):
         model = record
         parse_model(context, model)
 
-        context['table_body'] = True
+        context['seen_table_body'] = True
 
         child_record = self.tablecell_record
         child_context = init_record_parsing_context(testcontext, child_record)
@@ -359,7 +360,7 @@ class TableTest(TestBase):
         model = record
         parse_model(context, model)
 
-        context['table_body'] = False
+        context['seen_table_body'] = False
 
         child_record = self.tablecaption_record
         child_context = init_record_parsing_context(testcontext, child_record)

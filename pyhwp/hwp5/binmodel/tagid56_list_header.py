@@ -72,7 +72,8 @@ class ListHeader(RecordModel):
         ''' (parent model type, after TableBody) '''
         if 'parent' in context:
             context, model = context['parent']
-            return model['type'], context.get('table_body', False)
+            seen_table_body = context.get('seen_table_body', False)
+            return model['type'], seen_table_body
     get_extension_key = staticmethod(get_extension_key)
 
 
