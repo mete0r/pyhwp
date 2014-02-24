@@ -42,39 +42,39 @@ class Field(Control):
 
 
 class FieldUnknown(Field):
-    chid = '%unk'
+    chid = CHID.FIELD_UNK
 
 
 class FieldDate(Field):
-    chid = CHID.DTE
+    chid = CHID.FIELD_DTE
 
 
 class FieldDocDate(Field):
-    chid = '%ddt'
+    chid = CHID.FIELD_DDT
 
 
 class FieldPath(Field):
-    chid = '%pat'
+    chid = CHID.FIELD_PAT
 
 
 class FieldBookmark(Field):
-    chid = '%bmk'
+    chid = CHID.FIELD_BMK
 
 
 class FieldMailMerge(Field):
-    chid = '%mmg'
+    chid = CHID.FIELD_MMG
 
 
 class FieldCrossRef(Field):
-    chid = '%xrf'
+    chid = CHID.FIELD_XRF
 
 
 class FieldFormula(Field):
-    chid = '%fmu'
+    chid = CHID.FIELD_FMU
 
 
 class FieldClickHere(Field):
-    chid = '%clk'
+    chid = CHID.FIELD_CLK
 
 
 class FieldClickHereData(ControlData):
@@ -82,27 +82,100 @@ class FieldClickHereData(ControlData):
 
 
 class FieldSummary(Field):
-    chid = '%smr'
+    chid = CHID.FIELD_SMR
 
 
 class FieldUserInfo(Field):
-    chid = '%usr'
+    chid = CHID.FIELD_USR
 
 
 class FieldHyperLink(Field):
-    chid = CHID.HLK
+    chid = CHID.FIELD_HLK
 
     def geturl(self):
         s = self.command.split(';')
         return s[0].replace('\\:', ':')
 
 
-# TODO: FieldRevisionXXX
+class FieldRevisionSign(Field):
+    chid = CHID.FIELD_REVISION_SIGN
+
+
+class FieldRevisionDelete(Field):
+    chid = CHID.FIELD_REVISION_DELETE
+
+
+class FieldRevisionAttach(Field):
+    chid = CHID.FIELD_REVISION_ATTACH
+
+
+class FieldRevisionClipping(Field):
+    chid = CHID.FIELD_REVISION_CLIPPING
+
+
+class FieldRevisionSawtooth(Field):
+    chid = CHID.FIELD_REVISION_SAWTOOTH
+
+
+class FieldRevisionThinking(Field):
+    chid = CHID.FIELD_REVISION_THINKING
+
+
+class FieldRevisionPraise(Field):
+    chid = CHID.FIELD_REVISION_PRAISE
+
+
+class FieldRevisionLine(Field):
+    chid = CHID.FIELD_REVISION_LINE
+
+
+class FieldRevisionSimpleChange(Field):
+    chid = CHID.FIELD_REVISION_SIMPLECHANGE
+
+
+class FieldRevisionHyperlink(Field):
+    chid = CHID.FIELD_REVISION_HYPERLINK
+
+
+class FieldRevisionLineAttach(Field):
+    chid = CHID.FIELD_REVISION_LINEATTACH
+
+
+class FieldRevisionLineLink(Field):
+    chid = CHID.FIELD_REVISION_LINELINK
+
+
+class FieldRevisionLineTransfer(Field):
+    chid = CHID.FIELD_REVISION_LINETRANSFER
+
+
+class FieldRevisionRightMove(Field):
+    chid = CHID.FIELD_REVISION_RIGHTMOVE
+
+
+class FieldRevisionLeftMove(Field):
+    chid = CHID.FIELD_REVISION_LEFTMOVE
+
+
+class FieldRevisionTransfer(Field):
+    chid = CHID.FIELD_REVISION_TRANSFER
+
+
+class FieldRevisionSimpleInsert(Field):
+    chid = CHID.FIELD_REVISION_SIMPLEINSERT
+
+
+class FieldRevisionSplit(Field):
+    chid = CHID.FIELD_REVISION_SPLIT
+
+
+class FieldRevisionChange(Field):
+    chid = CHID.FIELD_REVISION_CHANGE
 
 
 class FieldMemo(Field):
-    chid = '%%me'
+    chid = CHID.FIELD_MEMO
 
 
 class FieldPrivateInfoSecurity(Field):
-    chid = '%cpr'
+    chid = CHID.FIELD_PRIVATE_INFO_SECURITY
