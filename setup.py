@@ -219,7 +219,11 @@ def prepare_runtime_metadata(metadata):
 
     if 'java' not in sys.platform and sys.version < '3':
         install_requires = metadata.get('install_requires', [])
-        install_requires.append('OleFileIO_PL >= 0.23')
+        olefileio = 'OleFileIO_PL >= 0.23'
+        if sys.version_info < (2, 6):
+            # OleFileIO_PL 0.30 has dropped Python 2.5 support
+            olefileio += ', < 0.30'
+        install_requires.append(olefileio)
         metadata['install_requires'] = install_requires
 
     try:
