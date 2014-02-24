@@ -16,26 +16,39 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from collections import deque
+from itertools import chain
 from tempfile import TemporaryFile
+import base64
+import logging
 
-from .treeop import STARTEVENT, ENDEVENT
-from .treeop import build_subtree
-from .treeop import tree_events, tree_events_multi
-from .dataio import Struct
-from .filestructure import VERSION
-from . import binmodel
+from hwp5.treeop import STARTEVENT, ENDEVENT
+from hwp5.treeop import prefix_event
+from hwp5.treeop import build_subtree
+from hwp5.treeop import tree_events
+from hwp5.treeop import tree_events_multi
+from hwp5.dataio import Struct
+from hwp5.filestructure import VERSION
+from hwp5 import binmodel
 from hwp5 import filestructure
 from hwp5.binmodel.controls import SectionDef
 from hwp5.binmodel.controls import TableControl
 from hwp5.binmodel.controls import GShapeObjectControl
+from hwp5.binmodel import BinData
 from hwp5.binmodel import ListHeader
 from hwp5.binmodel import Paragraph
 from hwp5.binmodel import Text
 from hwp5.binmodel import ShapeComponent
 from hwp5.binmodel import TableBody
 from hwp5.binmodel import TableCell
+from hwp5.binmodel import ParaText
+from hwp5.binmodel import ParaLineSeg
+from hwp5.binmodel import ParaCharShape
+from hwp5.binmodel import LineSeg
+from hwp5.binmodel import Field
+from hwp5.binmodel import ControlChar
+from hwp5.binmodel import Control
 
-import logging
 logger = logging.getLogger(__name__)
 
 
@@ -129,7 +142,6 @@ def line_segmented(chunks, ranged_linesegs):
 
 def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
     ''' lineseg/charshaped text chunks '''
-    from .binmodel import ParaText, ParaLineSeg, ParaCharShape
 
     stack = []  # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
@@ -163,7 +175,6 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
 
 def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
                                            paralineseg):
-    from .binmodel import LineSeg
 
     paratext_model, paratext_attributes, paratext_context = paratext
 
@@ -196,7 +207,6 @@ def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
 
 
 def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
-    from .binmodel import ControlChar
     for (startpos, endpos), (shape, none), chunk in range_shaped_textchunks:
         if isinstance(chunk, basestring):
             textitem = (Text,
@@ -247,7 +257,6 @@ def wrap_section(event_prefixed_mac, sect_id=None):
 
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''
-    from .binmodel import ControlChar, Control
     if stack is None:
         stack = []  # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
@@ -310,7 +319,6 @@ def make_paragraphs_children_of_listheader(event_prefixed_mac,
 
 
 def match_field_start_end(event_prefixed_mac):
-    from .binmodel import Field, ControlChar
     stack = []
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
@@ -338,7 +346,6 @@ def restructure_tablebody(event_prefixed_mac):
     ROW_OPEN = 1
     ROW_CLOSE = 2
 
-    from collections import deque
     stack = []
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
@@ -375,8 +382,6 @@ def restructure_tablebody(event_prefixed_mac):
 
 
 def embed_bindata(event_prefixed_mac, bindata):
-    from hwp5.binmodel import BinData
-    import base64
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if event is STARTEVENT and model is BinData:
@@ -396,7 +401,6 @@ def embed_bindata(event_prefixed_mac, bindata):
 
 
 def prefix_binmodels_with_event(context, models):
-    from .treeop import prefix_event
     level_prefixed = ((model['level'],
                        (model['type'], model['content'], context))
                       for model in models)
@@ -404,7 +408,6 @@ def prefix_binmodels_with_event(context, models):
 
 
 def wrap_modelevents(wrapper_model, modelevents):
-    from .treeop import STARTEVENT, ENDEVENT
     yield STARTEVENT, wrapper_model
     for mev in modelevents:
         yield mev
@@ -558,7 +561,6 @@ class Sections(binmodel.Sections, XmlEventsMixin):
 
         class BodyText(object):
             pass
-        from itertools import chain
         bodytext_events = chain(*bodytext_events)
         bodytext = BodyText, dict(), dict()
         return wrap_modelevents(bodytext, bodytext_events)
@@ -583,7 +585,6 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
     bodytext_class = Sections
 
     def events(self, **kwargs):
-        from itertools import chain
         if 'embedbin' in kwargs and kwargs['embedbin'] and 'BinData' in self:
             kwargs['embedbin'] = self['BinData']
         else:
