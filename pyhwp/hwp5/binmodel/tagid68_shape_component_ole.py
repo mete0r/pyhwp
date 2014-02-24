@@ -18,8 +18,29 @@
 #
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_SHAPE_COMPONENT_OLE
+from hwp5.dataio import Flags
+from hwp5.dataio import UINT32
+from hwp5.dataio import INT32
+from hwp5.binmodel._shared import BinStorageId
+from hwp5.binmodel._shared import BorderLine
 
 
 class ShapeOLE(RecordModel):
+    ''' 4.2.9.5 OLE 개체 '''
+
     tagid = HWPTAG_SHAPE_COMPONENT_OLE
-    # TODO
+
+    Flags = Flags(UINT32,
+                  0, 7, 'dvaspect',
+                  8, 'moniker',
+                  9, 15, 'baseline')  # 0 means defaut (85%)
+                                      # 1 means 0%
+                                      # 101 means 100%
+
+    @classmethod
+    def attributes(cls):
+        yield cls.Flags, 'flags'
+        yield INT32, 'extent_x'
+        yield INT32, 'extent_y'
+        yield BinStorageId, 'storage_id'
+        yield BorderLine, 'border'
