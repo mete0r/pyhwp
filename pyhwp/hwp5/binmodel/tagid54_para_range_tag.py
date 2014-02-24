@@ -19,14 +19,30 @@
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_PARA_RANGE_TAG
 from hwp5.dataio import UINT32
+from hwp5.dataio import Flags
+from hwp5.dataio import Struct
+from hwp5.dataio import X_ARRAY
+from hwp5.binmodel._shared import ref_parent_member
+
+
+class RangeTag(Struct):
+    ''' 표 58 문단의 영역 태그 '''
+
+    Tag = Flags(UINT32,
+                0, 23, 'data',
+                24, 31, 'kind')
+
+    @classmethod
+    def attributes(cls):
+        yield UINT32, 'start'
+        yield UINT32, 'end'
+        yield cls.Tag, 'tag'
 
 
 class ParaRangeTag(RecordModel):
     tagid = HWPTAG_PARA_RANGE_TAG
 
+    @staticmethod
     def attributes():
-        yield UINT32, 'start'
-        yield UINT32, 'end'
-        yield UINT32, 'tag'
-        # TODO: SPEC
-    attributes = staticmethod(attributes)
+        yield dict(name='range_tags',
+                   type=X_ARRAY(RangeTag, ref_parent_member('rangetags')))

@@ -45,6 +45,7 @@ from hwp5.binmodel import ParaText
 from hwp5.binmodel import ParaLineSeg
 from hwp5.binmodel import ParaCharShape
 from hwp5.binmodel import LineSeg
+from hwp5.binmodel import ParaRangeTag
 from hwp5.binmodel import Field
 from hwp5.binmodel import ControlChar
 from hwp5.binmodel import Control
@@ -154,6 +155,8 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 paratext = stack[-1].get(ParaText)
                 paracharshape = stack[-1].get(ParaCharShape)
                 paralineseg = stack[-1].get(ParaLineSeg)
+                # TODO: RangeTags are not used for now
+                #pararangetag = stack[-1].get(ParaRangeTag)
                 if paratext is None:
                     paratext = (ParaText,
                                 dict(chunks=[((0, 0), '')]),
@@ -165,8 +168,7 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
 
                 yield ENDEVENT, (model, attributes, context)
                 stack.pop()
-        #elif model in (ParaText, ParaCharShape):
-        elif model in (ParaText, ParaCharShape, ParaLineSeg):
+        elif model in (ParaText, ParaCharShape, ParaLineSeg, ParaRangeTag):
             if event == STARTEVENT:
                 stack[-1][model] = model, attributes, context
         else:
