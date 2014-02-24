@@ -18,8 +18,28 @@
 #
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_CTRL_EQEDIT
+from hwp5.dataio import UINT32
+from hwp5.dataio import Enum
+from hwp5.dataio import Flags
 
 
 class EqEdit(RecordModel):
+    ''' 4.2.9.3. 한글 스크립트 수식 (한글 97 방식 수식) '''
     tagid = HWPTAG_CTRL_EQEDIT
-    # TODO
+
+    ScriptScope = Enum(CHAR=0, LINE=1)
+    Flags = Flags(UINT32,
+                  0, ScriptScope, 'script_scope')
+
+    @classmethod
+    def attributes(cls):
+        ''' 표 100 수식 개체 속성 '''
+
+        # TODO: followings are not tested against real files
+        if False:
+            yield
+        #yield cls.Flags, 'flags'
+        #yield BSTR, 'script'
+        #yield HWPUNIT, 'font_size'
+        #yield COLORREF, 'color'
+        #yield INT16, 'baseline'
