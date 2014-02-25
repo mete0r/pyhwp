@@ -18,6 +18,7 @@
 #
 from collections import deque
 from itertools import chain
+from pprint import pformat
 from tempfile import TemporaryFile
 import base64
 import logging
@@ -446,11 +447,20 @@ def wrap_modelevents(wrapper_model, modelevents):
 def modelevents_to_xmlevents(modelevents):
     from hwp5.xmlformat import startelement
     for event, (model, attributes, context) in modelevents:
-        if event is STARTEVENT:
-            for x in startelement(context, (model, attributes)):
-                yield x
-        elif event is ENDEVENT:
-            yield ENDEVENT, model.__name__
+        try:
+            if event is STARTEVENT:
+                for x in startelement(context, (model, attributes)):
+                    yield x
+            elif event is ENDEVENT:
+                yield ENDEVENT, model.__name__
+        except:
+            logger.error('model: %s', pformat({
+                'event': event,
+                'model': model,
+                'attributes': attributes,
+                'context': context
+            }))
+            raise
 
 
 class XmlEvents(object):
