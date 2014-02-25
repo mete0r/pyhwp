@@ -23,7 +23,7 @@ Usage::
     hwp5proc find [--model=<model-name> | --tag=<hwptag>]
                   [--incomplete] [--dump]
                   [--loglevel=<loglevel>] [--logfile=<logfile>]
-                  <hwp5files>...
+                  (--from-stdin | <hwp5files>...)
     hwp5proc find --help
 
 Options::
@@ -31,6 +31,8 @@ Options::
     -h --help               Show this screen
        --loglevel=<level>   Set log level.
        --logfile=<file>     Set log file.
+
+       --from-stdin         get filenames fro stdin
 
        --model=<model-name> filter with record model name
        --tag=<hwptag>       filter with record HWPTAG
@@ -53,8 +55,10 @@ incompletely::
 '''
 from __future__ import with_statement
 from itertools import ifilter
+from itertools import imap
 from functools import partial
 from hwp5.proc import entrypoint
+import sys
 
 
 @entrypoint(__doc__)
@@ -62,7 +66,7 @@ def main(args):
 
     from hwp5.dataio import ParseError
 
-    filenames = args['<hwp5files>']
+    filenames = filenames_from_args(args)
 
     conditions = list(conditions_from_args(args))
     conditions_match = lambda m: all(condition(m) for condition in conditions)
@@ -80,6 +84,16 @@ def main(args):
             from hwp5.proc import logger
             logger.error('---- On processing %s:', filename)
             e.print_to_logger(logger)
+
+
+def filenames_from_args(args):
+    if args['--from-stdin']:
+        return filenames_from_stdin(args)
+    return args['<hwp5files>']
+
+
+def filenames_from_stdin(args):
+    return imap(lambda line: line[:-1], sys.stdin)
 
 
 def conditions_from_args(args):

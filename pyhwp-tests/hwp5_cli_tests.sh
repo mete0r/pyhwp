@@ -109,6 +109,7 @@ hwp5proc find --tag=HWPTAG_PARA_HEADER $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/p
 hwp5proc find --tag=66 $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
 hwp5proc find --incomplete $SAMPLES_DIR/tabdef.hwp | grep 'TabDef'
 hwp5proc find --incomplete --dump $SAMPLES_DIR/tabdef.hwp | grep 'STARTEVENT: TabDef'
+echo "$SAMPLE" | hwp5proc find --from-stdin | wc -l | grep '^195$'
 
 echo '----------------------'
 echo '* Testing hwp5proc xml'
