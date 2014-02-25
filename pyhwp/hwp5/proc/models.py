@@ -20,12 +20,12 @@
 
 Usage::
 
-    hwp5proc models [--simple | --json]
-                    [--treegroup=<treegroup>]
+    hwp5proc models [--simple | --json | --format=<format>]
+                    [--treegroup=<treegroup> | --seqno=<seqno>]
                     [--loglevel=<loglevel>] [--logfile=<logfile>]
                     <hwp5file> <record-stream>
-    hwp5proc models [--simple | --json]
-                    [--treegroup=<treegroup>]
+    hwp5proc models [--simple | --json | --format=<format>]
+                    [--treegroup=<treegroup> | --seqno=<seqno>]
                     [--loglevel=<loglevel>] [--logfile=<logfile>] -V <version>
     hwp5proc models --help
 
@@ -37,14 +37,16 @@ Options::
 
        --simple             Print records as simple tree
        --json               Print records as json
+       --format=<format>    Print records as formatted
 
        --treegroup=<treegroup>
                             Print records in the <treegroup>.
                             <treegroup> specifies the N-th subtree of the
                             record structure.
+       --seqno=<seqno>      Print a model of <seqno>-th record
 
-    -V <version>, --formatversion=<version>
-                            Specifies HWPv5 format version
+    -V <version>, --file-format-version=<version>
+                            Specifies HWPv5 file format version
 
     <hwp5file>              HWPv5 files (*.hwp)
     <record-stream>         Record-structured internal streams.
@@ -61,10 +63,13 @@ Example::
 Example::
 
     $ hwp5proc models --simple samples/sample-5017.hwp bodytext/0
+    $ hwp5proc models --format='%(level)s %(tagname)s\\n' \\
+            samples/sample-5017.hwp bodytext/0
 
 Example::
 
     $ hwp5proc models --simple --treegroup=1 samples/sample-5017.hwp bodytext/0
+    $ hwp5proc models --simple --seqno=4 samples/sample-5017.hwp bodytext/0
 
 If neither <hwp5file> nor <record-stream> is specified, the record stream is
 read from the standard input with an assumption that the input is in the format
@@ -76,37 +81,96 @@ Example::
     $ hwp5proc models -V 5.0.1.7 < Section0.bin
 
 '''
+from itertools import islice
+import sys
+
 from hwp5.proc import entrypoint
 
 
 @entrypoint(__doc__)
 def main(args):
-    import sys
+    stream = stream_from_args(args)
+
+    models_from_stream = models_from_args(args)
+    models = models_from_stream(stream)
+
+    print_models = print_models_from_args(args)
+    print_models(models)
+
+
+def stream_from_args(args):
     filename = args['<hwp5file>']
     if filename:
         from hwp5.binmodel import Hwp5File
         from hwp5.proc import parse_recordstream_name
         streamname = args['<record-stream>']
         hwpfile = Hwp5File(filename)
-        stream = parse_recordstream_name(hwpfile, streamname)
+        return parse_recordstream_name(hwpfile, streamname)
     else:
-        version = args['--formatversion'] or '5.0.0.0'
+        version = args['--file-format-version'] or '5.0.0.0'
         version = version.split('.')
         version = tuple(int(x) for x in version)
 
         from hwp5.storage import Open2Stream
         from hwp5.binmodel import ModelStream
-        stream = ModelStream(Open2Stream(lambda: sys.stdin), version)
+        return ModelStream(Open2Stream(lambda: sys.stdin), version)
 
-    opts = dict()
 
-    treegroup = args['--treegroup']
-    if treegroup is not None:
-        opts['treegroup'] = int(treegroup)
+def models_from_args(args):
+
+    if args['--treegroup']:
+        treegroup = int(args['--treegroup'])
+        return lambda stream: stream.models(treegroup=treegroup)
+
+    if args['--seqno']:
+        seqno = int(args['--seqno'])
+        return lambda stream: islice(stream.models(),
+                                     seqno, seqno + 1)
+
+    return lambda stream: stream.models()
+
+
+def print_models_from_args(args):
 
     if args['--simple']:
-        for model in stream.models(**opts):
-            print '%04d' % model['seqno'],
-            print ' '*model['level']+model['type'].__name__
-    else:
-        stream.models_json(**opts).dump(sys.stdout)
+        return print_models_with_print_model(print_model_simple)
+
+    if args['--format']:
+        fmt = args['--format']
+        fmt = fmt.decode('string_escape')
+        print_model = print_model_with_format(fmt)
+        return print_models_with_print_model(print_model)
+
+    return print_models_json
+
+
+def print_models_json(models):
+    from hwp5.binmodel import model_to_json
+    from hwp5.utils import generate_json_array
+    jsonobjects = (model_to_json(model, sort_keys=True, indent=2)
+                   for model in models)
+    for s in generate_json_array(jsonobjects):
+        sys.stdout.write(s)
+
+
+def print_models_with_print_model(print_model):
+    def models_printer(models):
+        for model in models:
+            print_model(model)
+    return models_printer
+
+
+def print_model_simple(model):
+    print '%04d' % model['seqno'],
+    print ' ' * model['level'] + model['type'].__name__
+
+
+def print_model_with_format(fmt):
+    def print_model(model):
+        model = transform_model_formattable(model)
+        sys.stdout.write(fmt % model)
+    return print_model
+
+
+def transform_model_formattable(model):
+    return dict(model, type=model['type'].__name__)
