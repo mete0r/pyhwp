@@ -340,19 +340,45 @@ def match_field_start_end(event_prefixed_mac):
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if issubclass(model, Field):
-            if event is STARTEVENT:
-                stack.append(item)
-                yield event, item
-            else:
-                pass
+            for x in mfse_field(event, stack, item):
+                yield x
+        elif model is LineSeg:
+            for x in mfse_lineseg(event, stack, item):
+                yield x
         elif model is ControlChar and attributes['name'] == 'FIELD_END':
-            if event is ENDEVENT:
-                if len(stack) > 0:
-                    yield event, stack.pop()
-                else:
-                    logger.warning('unmatched field end')
+            for x in mfse_field_end(event, stack, item):
+                yield x
         else:
             yield event, item
+
+
+def mfse_field(event, stack, item):
+    if event is STARTEVENT:
+        stack.append(item)
+        yield event, item
+    else:
+        pass
+
+
+def mfse_lineseg(event, stack, item):
+    if event is ENDEVENT:
+        # fields still not closed; temporarily close them
+        for field_item in reversed(stack):
+            yield ENDEVENT, field_item
+        yield event, item
+    elif event is STARTEVENT:
+        yield event, item
+        # fields temporarily closed; open them again
+        for field_item in stack:
+            yield STARTEVENT, field_item
+
+
+def mfse_field_end(event, stack, item):
+    if event is ENDEVENT:
+        if len(stack) > 0:
+            yield event, stack.pop()
+        else:
+            logger.warning('unmatched field end')
 
 
 class TableRow:
