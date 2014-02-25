@@ -110,6 +110,14 @@ hwp5proc find --tag=66 $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | w
 hwp5proc find --incomplete $SAMPLES_DIR/tabdef.hwp | grep 'TabDef'
 hwp5proc find --incomplete --dump $SAMPLES_DIR/tabdef.hwp | grep 'STARTEVENT: TabDef'
 echo "$SAMPLE" | hwp5proc find --from-stdin | wc -l | grep '^195$'
+hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $1}' | grep "^$SAMPLE$"
+hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $2}' | grep "^DocInfo$"
+hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $3}' | grep "^0$"
+hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $4}' | grep "^HWPTAG_DOCUMENT_PROPERTIES$"
+hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $5}' | grep "^DocumentProperties$"
+hwp5proc find --format='%(stream)s' "$SAMPLE" 2> /dev/null | head -n 1 | grep '^DocInfo$'
+hwp5proc find --format='%(size)s' "$SAMPLE" 2> /dev/null | head -n 1 | grep '^26$'
+hwp5proc find --format='%(payload)s' "$SAMPLE" 2> /dev/null | head -n 1 | head -c -1 | wc -c | grep '^26$'
 
 echo '----------------------'
 echo '* Testing hwp5proc xml'

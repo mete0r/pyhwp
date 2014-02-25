@@ -21,7 +21,7 @@
 Usage::
 
     hwp5proc find [--model=<model-name> | --tag=<hwptag>]
-                  [--incomplete] [--dump]
+                  [--incomplete] [--dump] [--format=<format>]
                   [--loglevel=<loglevel>] [--logfile=<logfile>]
                   (--from-stdin | <hwp5files>...)
     hwp5proc find --help
@@ -37,6 +37,9 @@ Options::
        --model=<model-name> filter with record model name
        --tag=<hwptag>       filter with record HWPTAG
        --incomplete         filter with incompletely parsed content
+
+       --format=<format>    record output format
+                            %(filename)s %(stream)s %(seqno)s %(type)s
        --dump               dump record
 
     <hwp5files>...          HWPv5 files (*.hwp)
@@ -144,12 +147,18 @@ def flat_models(hwp5file, **kwargs):
 
 
 def printer_from_args(args):
+
+    if args['--format']:
+        fmt = args['--format']
+    else:
+        fmt = '%(filename)s %(stream)s %(seqno)s %(tagname)s %(type)s'
+
+    dump = args['--dump']
+
     def print_model(model):
-        print '%s:%s(%s): %s' % (model['filename'],
-                                 model['stream'],
-                                 model['seqno'],
-                                 model['type'].__name__)
-        if args['--dump']:
+        printable_model = dict(model, type=model['type'].__name__)
+        print fmt % printable_model
+        if dump:
             from hwp5.binmodel import model_to_json
             print model_to_json(model, sort_keys=True, indent=2)
 
