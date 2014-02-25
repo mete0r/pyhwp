@@ -262,6 +262,39 @@ class TestMatchFieldStartEnd(TestCase):
         events = xmlmodel.match_field_start_end(events)
         events = list(events)
 
+    def test_issue144_fields_crossing_lineseg_boundary(self):
+        from hwp5 import xmlmodel
+        from hwp5 import treeop
+        from fixtures import get_fixture_path
+        from pprint import pprint
+        pprint
+
+        name = 'issue144-fields-crossing-lineseg-boundary.hwp'
+        path = get_fixture_path(name)
+        hwp5file = xmlmodel.Hwp5File(path)
+        xmlevents = hwp5file.bodytext.xmlevents()
+        #pprint(list(enumerate(xmlevents)))
+
+        stack_fields = []
+        for ev, model in xmlevents:
+
+            if ev is treeop.STARTEVENT:
+                tag = model[0]
+            else:
+                tag = model
+
+            if tag.startswith('Field'):
+                if ev is treeop.STARTEVENT:
+                    stack_fields.append(model)
+                else:
+                    stack_fields.pop()
+            elif tag == 'LineSeg':
+                # NO CROSSING
+                if ev is treeop.STARTEVENT:
+                    assert len(stack_fields) == 0
+                else:
+                    assert len(stack_fields) == 0
+
 
 class TestEmbedBinData(TestBase):
 
