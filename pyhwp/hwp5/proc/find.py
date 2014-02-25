@@ -51,20 +51,45 @@ incompletely::
     $ hwp5proc find --tag=HWPTAG_LIST_HEADER --incomplete --dump samples/*.hwp
 
 '''
+from __future__ import with_statement
+from itertools import ifilter
+from functools import partial
 from hwp5.proc import entrypoint
 
 
 @entrypoint(__doc__)
 def main(args):
-    filenames = args['<hwp5files>']
-    from hwp5.dataio import ParseError
-    from hwp5.binmodel import Hwp5File
 
-    conditions = []
+    from hwp5.dataio import ParseError
+
+    filenames = args['<hwp5files>']
+
+    conditions = list(conditions_from_args(args))
+    conditions_match = lambda m: all(condition(m) for condition in conditions)
+    filter_conditions = partial(ifilter, conditions_match)
+
+    print_model = printer_from_args(args)
+
+    for filename in filenames:
+        try:
+            models = hwp5file_models(filename)
+            models = filter_conditions(models)
+            for model in models:
+                print_model(model)
+        except ParseError, e:
+            from hwp5.proc import logger
+            logger.error('---- On processing %s:', filename)
+            e.print_to_logger(logger)
+
+
+def conditions_from_args(args):
+
+    from hwp5.tagids import tagnames
+
     if args['--model']:
         def with_model_name(model):
             return args['--model'] == model['type'].__name__
-        conditions.append(with_model_name)
+        yield with_model_name
 
     if args['--tag']:
         tag = args['--tag']
@@ -73,55 +98,49 @@ def main(args):
         except ValueError:
             pass
         else:
-            from hwp5.tagids import tagnames
             tag = tagnames[tag]
 
         def with_tag(model):
             return model['tagname'] == tag
-        conditions.append(with_tag)
+        yield with_tag
 
     if args['--incomplete']:
         def with_incomplete(model):
             return 'unparsed' in model
-        conditions.append(with_incomplete)
+        yield with_incomplete
 
-    def flat_models(hwp5file, **kwargs):
-        for model in hwp5file.docinfo.models(**kwargs):
-            model['stream'] = 'DocInfo'
+
+def hwp5file_models(filename):
+    from hwp5.binmodel import Hwp5File
+    hwp5file = Hwp5File(filename)
+    for model in flat_models(hwp5file):
+        model['filename'] = filename
+        yield model
+
+
+def flat_models(hwp5file, **kwargs):
+    for model in hwp5file.docinfo.models(**kwargs):
+        model['stream'] = 'DocInfo'
+        yield model
+
+    for section in hwp5file.bodytext:
+        for model in hwp5file.bodytext[section].models(**kwargs):
+            model['stream'] = 'BodyText/' + section
             yield model
 
-        for section in hwp5file.bodytext:
-            for model in hwp5file.bodytext[section].models(**kwargs):
-                model['stream'] = 'BodyText/'+section
-                yield model
 
-    for filename in filenames:
-        try:
-            hwp5file = Hwp5File(filename)
+def printer_from_args(args):
+    def print_model(model):
+        print '%s:%s(%s): %s' % (model['filename'],
+                                 model['stream'],
+                                 model['seqno'],
+                                 model['type'].__name__)
+        if args['--dump']:
+            from hwp5.binmodel import model_to_json
+            print model_to_json(model, sort_keys=True, indent=2)
 
-            def with_filename(models):
-                for model in models:
-                    model['filename'] = filename
-                    yield model
-
-            models = flat_models(hwp5file)
-            models = with_filename(models)
-
-            for model in models:
-                if all(condition(model) for condition in conditions):
-                    print '%s:%s(%s): %s' % (model['filename'],
-                                             model['stream'],
-                                             model['seqno'],
-                                             model['type'].__name__)
-                    if args['--dump']:
-                        from hwp5.binmodel import model_to_json
-                        print model_to_json(model, sort_keys=True, indent=2)
-
-                        def print_log(fmt, *args):
-                            print fmt % args
-                        from hwp5.bintype import log_events
-                        list(log_events(model['binevents'], print_log))
-        except ParseError, e:
-            from hwp5.proc import logger
-            logger.error('---- On processing %s:', filename)
-            e.print_to_logger(logger)
+            def print_log(fmt, *args):
+                print fmt % args
+            from hwp5.bintype import log_events
+            list(log_events(model['binevents'], print_log))
+    return print_model
