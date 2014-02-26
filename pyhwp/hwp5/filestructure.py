@@ -476,7 +476,7 @@ class HwpFileHeader(object):
 
     def open_text(self):
         d = FileHeader.Flags.dictvalue(self.value['flags'])
-        d['signature'] = self.value['signature']
+        d['signature'] = self.value['signature'][:len('HWP Document File')]
         d['version'] = '%d.%d.%d.%d' % self.value['version']
         out = StringIO()
         for k, v in sorted(d.items()):
