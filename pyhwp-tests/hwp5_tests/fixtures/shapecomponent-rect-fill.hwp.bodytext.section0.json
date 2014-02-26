@@ -1,0 +1,1780 @@
+[
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2052, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 3, 
+    "style_id": 0, 
+    "text": 25
+  }, 
+  "level": 0, 
+  "payload": [
+    "19 00 00 00 04 08 00 00 01 00 00 03 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 0, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "secd", 
+          "code": 2, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          16
+        ], 
+        {
+          "chid": "cold", 
+          "code": 2, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          16, 
+          24
+        ], 
+        {
+          "chid": "gso ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          24, 
+          25
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "02 00 64 63 65 73 00 00 00 00 00 00 00 00 02 00", 
+    "02 00 64 6c 6f 63 00 00 00 00 00 00 00 00 02 00", 
+    "0b 00 20 6f 73 67 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 1, 
+  "size": 50, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 2, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 3, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "secd", 
+    "columnspacing": 1134, 
+    "defaultTabStops": 8000, 
+    "flags": 0, 
+    "grid_horizontal": 0, 
+    "grid_vertical": 0, 
+    "numbering_shape_id": 1, 
+    "starting_equationnum": 0, 
+    "starting_pagenum": 0, 
+    "starting_picturenum": 0, 
+    "starting_tablenum": 0, 
+    "unknown1": 0, 
+    "unknown2": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "64 63 65 73 00 00 00 00 6e 04 00 00 00 00 40 1f", 
+    "00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00"
+  ], 
+  "seqno": 4, 
+  "size": 36, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "SectionDef"
+},
+{
+  "content": {
+    "attr": 0, 
+    "bookbinding_offset": 0, 
+    "bottom_offset": 4252, 
+    "footer_offset": 4252, 
+    "header_offset": 4252, 
+    "height": 84188, 
+    "left_offset": 8504, 
+    "right_offset": 8504, 
+    "top_offset": 5668, 
+    "width": 59528
+  }, 
+  "level": 2, 
+  "payload": [
+    "88 e8 00 00 dc 48 01 00 38 21 00 00 38 21 00 00", 
+    "24 16 00 00 9c 10 00 00 9c 10 00 00 9c 10 00 00", 
+    "00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 5, 
+  "size": 40, 
+  "tagid": 73, 
+  "tagname": "HWPTAG_PAGE_DEF", 
+  "type": "PageDef"
+},
+{
+  "content": {
+    "flags": 0, 
+    "notes_spacing": 283, 
+    "prefix": 0, 
+    "splitter_color": 0, 
+    "splitter_length": -1, 
+    "splitter_margin_bottom": 567, 
+    "splitter_margin_top": 850, 
+    "splitter_stroke_type": 1, 
+    "splitter_unknown": -1, 
+    "splitter_width": 1, 
+    "starting_number": 1, 
+    "suffix": 41, 
+    "usersymbol": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 29 00 01 00 ff ff ff ff", 
+    "52 03 37 02 1b 01 01 01 00 00 00 00"
+  ], 
+  "seqno": 6, 
+  "size": 28, 
+  "tagid": 74, 
+  "tagname": "HWPTAG_FOOTNOTE_SHAPE", 
+  "type": "FootnoteShape"
+},
+{
+  "content": {
+    "flags": 0, 
+    "notes_spacing": 0, 
+    "prefix": 0, 
+    "splitter_color": 0, 
+    "splitter_length": 12280, 
+    "splitter_margin_bottom": 567, 
+    "splitter_margin_top": 850, 
+    "splitter_stroke_type": 1, 
+    "splitter_unknown": 224, 
+    "splitter_width": 1, 
+    "starting_number": 1, 
+    "suffix": 41, 
+    "usersymbol": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 29 00 01 00 f8 2f e0 00", 
+    "52 03 37 02 00 00 01 01 00 00 00 00"
+  ], 
+  "seqno": 7, 
+  "size": 28, 
+  "tagid": 74, 
+  "tagname": "HWPTAG_FOOTNOTE_SHAPE", 
+  "type": "FootnoteShape"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 8, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 9, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 10, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "attr2": 0, 
+    "chid": "cold", 
+    "flags": 4100, 
+    "spacing": 0, 
+    "splitter": {
+      "color": 0, 
+      "stroke_flags": 0, 
+      "width_flags": 0
+    }
+  }, 
+  "level": 1, 
+  "payload": [
+    "64 6c 6f 63 04 10 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 11, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "ColumnsDef"
+},
+{
+  "content": {
+    "chid": "gso ", 
+    "description": "", 
+    "flags": 74072328, 
+    "height": 2855, 
+    "instance_id": 2085489276, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 2980, 
+    "x": 0, 
+    "y": 94, 
+    "z_order": 1
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6f 73 67 08 41 6a 04 5e 00 00 00 00 00 00 00", 
+    "a4 0b 00 00 27 0b 00 00 01 00 00 00 00 00 00 00", 
+    "00 00 00 00 7c 0a 4e 7c 00 00 00 00"
+  ], 
+  "seqno": 12, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "GShapeObjectControl"
+},
+{
+  "content": {
+    "angle": 0, 
+    "border": {
+      "color": 0, 
+      "flags": 3506438209, 
+      "width": 33
+    }, 
+    "chid": "$rec", 
+    "chid0": "$rec", 
+    "fill_flags": 0, 
+    "fill_shape": 0, 
+    "flags": 0, 
+    "height": 2855, 
+    "initial_height": 2855, 
+    "initial_width": 2980, 
+    "level_in_group": 0, 
+    "local_version": 1, 
+    "rotation_center": {
+      "x": 1490, 
+      "y": 1427
+    }, 
+    "scalerotations": [
+      {
+        "rotator": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }, 
+        "scaler": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }
+      }
+    ], 
+    "scalerotations_count": 1, 
+    "translation": {
+      "a": 1.0, 
+      "b": 0.0, 
+      "c": 0.0, 
+      "d": 1.0, 
+      "e": 0.0, 
+      "f": 0.0
+    }, 
+    "unknown": 0, 
+    "unknown1": 0, 
+    "width": 2980, 
+    "x_in_group": 0, 
+    "y_in_group": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "63 65 72 24 63 65 72 24 00 00 00 00 00 00 00 00", 
+    "00 00 01 00 a4 0b 00 00 27 0b 00 00 a4 0b 00 00", 
+    "27 0b 00 00 00 00 00 00 00 00 d2 05 00 00 93 05", 
+    "00 00 01 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 21 00 00 00 41 00 00 d1", 
+    "00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 13, 
+  "size": 217, 
+  "tagid": 76, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT", 
+  "type": "ShapeComponent"
+},
+{
+  "content": {
+    "p0": {
+      "x": 0, 
+      "y": 0
+    }, 
+    "p1": {
+      "x": 2980, 
+      "y": 0
+    }, 
+    "p2": {
+      "x": 2980, 
+      "y": 2855
+    }, 
+    "p3": {
+      "x": 0, 
+      "y": 2855
+    }, 
+    "round": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 00 a4 0b 00 00 00 00 00", 
+    "00 a4 0b 00 00 27 0b 00 00 00 00 00 00 27 0b 00", 
+    "00"
+  ], 
+  "seqno": 14, 
+  "size": 33, 
+  "tagid": 79, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT_RECTANGLE", 
+  "type": "ShapeRectangle"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 01 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 15, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "gso ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6f 73 67 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 16, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 17, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 40 06 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 18, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "gso ", 
+    "description": "", 
+    "flags": 74072328, 
+    "height": 2855, 
+    "instance_id": 2085489277, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 2980, 
+    "x": 1417, 
+    "y": 1511, 
+    "z_order": 2
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6f 73 67 08 41 6a 04 e7 05 00 00 89 05 00 00", 
+    "a4 0b 00 00 27 0b 00 00 02 00 00 00 00 00 00 00", 
+    "00 00 00 00 7d 0a 4e 7c 00 00 00 00"
+  ], 
+  "seqno": 19, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "GShapeObjectControl"
+},
+{
+  "content": {
+    "angle": 0, 
+    "border": {
+      "color": 0, 
+      "flags": 3506438209, 
+      "width": 33
+    }, 
+    "chid": "$rec", 
+    "chid0": "$rec", 
+    "fill_colorpattern": {
+      "background_color": 16744255, 
+      "pattern_color": 0, 
+      "pattern_type_flags": 4294967295
+    }, 
+    "fill_flags": 256, 
+    "fill_shape": 0, 
+    "flags": 0, 
+    "height": 2855, 
+    "initial_height": 2855, 
+    "initial_width": 2980, 
+    "level_in_group": 0, 
+    "local_version": 1, 
+    "rotation_center": {
+      "x": 1490, 
+      "y": 1427
+    }, 
+    "scalerotations": [
+      {
+        "rotator": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }, 
+        "scaler": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }
+      }
+    ], 
+    "scalerotations_count": 1, 
+    "translation": {
+      "a": 1.0, 
+      "b": 0.0, 
+      "c": 0.0, 
+      "d": 1.0, 
+      "e": 0.0, 
+      "f": 0.0
+    }, 
+    "unknown": 0, 
+    "unknown1": 0, 
+    "width": 2980, 
+    "x_in_group": 0, 
+    "y_in_group": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "63 65 72 24 63 65 72 24 00 00 00 00 00 00 00 00", 
+    "00 00 01 00 a4 0b 00 00 27 0b 00 00 a4 0b 00 00", 
+    "27 0b 00 00 00 00 00 00 00 00 d2 05 00 00 93 05", 
+    "00 00 01 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 21 00 00 00 41 00 00 d1", 
+    "00 01 00 00 00 3f 7f ff 00 00 00 00 00 ff ff ff", 
+    "ff 00 00 00 00"
+  ], 
+  "seqno": 20, 
+  "size": 229, 
+  "tagid": 76, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT", 
+  "type": "ShapeComponent"
+},
+{
+  "content": {
+    "p0": {
+      "x": 0, 
+      "y": 0
+    }, 
+    "p1": {
+      "x": 2980, 
+      "y": 0
+    }, 
+    "p2": {
+      "x": 2980, 
+      "y": 2855
+    }, 
+    "p3": {
+      "x": 0, 
+      "y": 2855
+    }, 
+    "round": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 00 a4 0b 00 00 00 00 00", 
+    "00 a4 0b 00 00 27 0b 00 00 00 00 00 00 27 0b 00", 
+    "00"
+  ], 
+  "seqno": 21, 
+  "size": 33, 
+  "tagid": 79, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT_RECTANGLE", 
+  "type": "ShapeRectangle"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 01 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 22, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "gso ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6f 73 67 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 23, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 24, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 3200
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 80 0c 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 25, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "gso ", 
+    "description": "", 
+    "flags": 74072328, 
+    "height": 2855, 
+    "instance_id": 2085489278, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 2980, 
+    "x": 2834, 
+    "y": 2928, 
+    "z_order": 3
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6f 73 67 08 41 6a 04 70 0b 00 00 12 0b 00 00", 
+    "a4 0b 00 00 27 0b 00 00 03 00 00 00 00 00 00 00", 
+    "00 00 00 00 7e 0a 4e 7c 00 00 00 00"
+  ], 
+  "seqno": 26, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "GShapeObjectControl"
+},
+{
+  "content": {
+    "angle": 0, 
+    "border": {
+      "color": 0, 
+      "flags": 3506438209, 
+      "width": 33
+    }, 
+    "chid": "$rec", 
+    "chid0": "$rec", 
+    "fill_blur_center": 50, 
+    "fill_flags": 1024, 
+    "fill_gradation": {
+      "blur": 50, 
+      "center": {
+        "x": 0, 
+        "y": 0
+      }, 
+      "colors": [
+        16744255, 
+        0
+      ], 
+      "shear": 90, 
+      "type": 1
+    }, 
+    "fill_shape": 1, 
+    "flags": 0, 
+    "height": 2855, 
+    "initial_height": 2855, 
+    "initial_width": 2980, 
+    "level_in_group": 0, 
+    "local_version": 1, 
+    "rotation_center": {
+      "x": 1490, 
+      "y": 1427
+    }, 
+    "scalerotations": [
+      {
+        "rotator": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }, 
+        "scaler": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }
+      }
+    ], 
+    "scalerotations_count": 1, 
+    "translation": {
+      "a": 1.0, 
+      "b": 0.0, 
+      "c": 0.0, 
+      "d": 1.0, 
+      "e": 0.0, 
+      "f": 0.0
+    }, 
+    "unknown": 0, 
+    "unknown1": 0, 
+    "width": 2980, 
+    "x_in_group": 0, 
+    "y_in_group": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "63 65 72 24 63 65 72 24 00 00 00 00 00 00 00 00", 
+    "00 00 01 00 a4 0b 00 00 27 0b 00 00 a4 0b 00 00", 
+    "27 0b 00 00 00 00 00 00 00 00 d2 05 00 00 93 05", 
+    "00 00 01 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 21 00 00 00 41 00 00 d1", 
+    "00 04 00 00 00 01 5a 00 00 00 00 00 00 00 00 00", 
+    "00 00 32 00 00 00 02 00 00 00 3f 7f ff 00 00 00", 
+    "00 00 01 00 00 00 32"
+  ], 
+  "seqno": 27, 
+  "size": 247, 
+  "tagid": 76, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT", 
+  "type": "ShapeComponent"
+},
+{
+  "content": {
+    "p0": {
+      "x": 0, 
+      "y": 0
+    }, 
+    "p1": {
+      "x": 2980, 
+      "y": 0
+    }, 
+    "p2": {
+      "x": 2980, 
+      "y": 2855
+    }, 
+    "p3": {
+      "x": 0, 
+      "y": 2855
+    }, 
+    "round": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 00 a4 0b 00 00 00 00 00", 
+    "00 a4 0b 00 00 27 0b 00 00 00 00 00 00 27 0b 00", 
+    "00"
+  ], 
+  "seqno": 28, 
+  "size": 33, 
+  "tagid": 79, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT_RECTANGLE", 
+  "type": "ShapeRectangle"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 01 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 29, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "gso ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6f 73 67 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 30, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 31, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 4800
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 c0 12 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 32, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "gso ", 
+    "description": "", 
+    "flags": 74072328, 
+    "height": 2855, 
+    "instance_id": 2085489279, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 2980, 
+    "x": 4251, 
+    "y": 4345, 
+    "z_order": 4
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6f 73 67 08 41 6a 04 f9 10 00 00 9b 10 00 00", 
+    "a4 0b 00 00 27 0b 00 00 04 00 00 00 00 00 00 00", 
+    "00 00 00 00 7f 0a 4e 7c 00 00 00 00"
+  ], 
+  "seqno": 33, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "GShapeObjectControl"
+},
+{
+  "content": {
+    "angle": 0, 
+    "border": {
+      "color": 0, 
+      "flags": 3506438209, 
+      "width": 33
+    }, 
+    "chid": "$rec", 
+    "chid0": "$rec", 
+    "fill_flags": 512, 
+    "fill_image": {
+      "flags": 5, 
+      "storage_id": 1
+    }, 
+    "fill_shape": 0, 
+    "flags": 0, 
+    "height": 2855, 
+    "initial_height": 2855, 
+    "initial_width": 2980, 
+    "level_in_group": 0, 
+    "local_version": 1, 
+    "rotation_center": {
+      "x": 1490, 
+      "y": 1427
+    }, 
+    "scalerotations": [
+      {
+        "rotator": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }, 
+        "scaler": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }
+      }
+    ], 
+    "scalerotations_count": 1, 
+    "translation": {
+      "a": 1.0, 
+      "b": 0.0, 
+      "c": 0.0, 
+      "d": 1.0, 
+      "e": 0.0, 
+      "f": 0.0
+    }, 
+    "unknown": 0, 
+    "unknown1": 0, 
+    "width": 2980, 
+    "x_in_group": 0, 
+    "y_in_group": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "63 65 72 24 63 65 72 24 00 00 00 00 00 00 00 00", 
+    "00 00 01 00 a4 0b 00 00 27 0b 00 00 a4 0b 00 00", 
+    "27 0b 00 00 00 00 00 00 00 00 d2 05 00 00 93 05", 
+    "00 00 01 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 21 00 00 00 41 00 00 d1", 
+    "00 02 00 00 00 05 00 00 00 01 00 00 00 00 00"
+  ], 
+  "seqno": 34, 
+  "size": 223, 
+  "tagid": 76, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT", 
+  "type": "ShapeComponent"
+},
+{
+  "content": {
+    "p0": {
+      "x": 0, 
+      "y": 0
+    }, 
+    "p1": {
+      "x": 2980, 
+      "y": 0
+    }, 
+    "p2": {
+      "x": 2980, 
+      "y": 2855
+    }, 
+    "p3": {
+      "x": 0, 
+      "y": 2855
+    }, 
+    "round": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 00 a4 0b 00 00 00 00 00", 
+    "00 a4 0b 00 00 27 0b 00 00 00 00 00 00 27 0b 00", 
+    "00"
+  ], 
+  "seqno": 35, 
+  "size": 33, 
+  "tagid": 79, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT_RECTANGLE", 
+  "type": "ShapeRectangle"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 01 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 36, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "gso ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6f 73 67 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 37, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 38, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 6400
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 19 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 39, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "gso ", 
+    "description": "", 
+    "flags": 74072328, 
+    "height": 2855, 
+    "instance_id": 2085489280, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 2980, 
+    "x": 5668, 
+    "y": 5762, 
+    "z_order": 5
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6f 73 67 08 41 6a 04 82 16 00 00 24 16 00 00", 
+    "a4 0b 00 00 27 0b 00 00 05 00 00 00 00 00 00 00", 
+    "00 00 00 00 80 0a 4e 7c 00 00 00 00"
+  ], 
+  "seqno": 40, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "GShapeObjectControl"
+},
+{
+  "content": {
+    "angle": 0, 
+    "border": {
+      "color": 0, 
+      "flags": 3506438209, 
+      "width": 33
+    }, 
+    "chid": "$rec", 
+    "chid0": "$rec", 
+    "fill_colorpattern": {
+      "background_color": 16744255, 
+      "pattern_color": 0, 
+      "pattern_type_flags": 4294967295
+    }, 
+    "fill_flags": 768, 
+    "fill_image": {
+      "flags": 5, 
+      "storage_id": 1
+    }, 
+    "fill_shape": 0, 
+    "flags": 0, 
+    "height": 2855, 
+    "initial_height": 2855, 
+    "initial_width": 2980, 
+    "level_in_group": 0, 
+    "local_version": 1, 
+    "rotation_center": {
+      "x": 1490, 
+      "y": 1427
+    }, 
+    "scalerotations": [
+      {
+        "rotator": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }, 
+        "scaler": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }
+      }
+    ], 
+    "scalerotations_count": 1, 
+    "translation": {
+      "a": 1.0, 
+      "b": 0.0, 
+      "c": 0.0, 
+      "d": 1.0, 
+      "e": 0.0, 
+      "f": 0.0
+    }, 
+    "unknown": 0, 
+    "unknown1": 0, 
+    "width": 2980, 
+    "x_in_group": 0, 
+    "y_in_group": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "63 65 72 24 63 65 72 24 00 00 00 00 00 00 00 00", 
+    "00 00 01 00 a4 0b 00 00 27 0b 00 00 a4 0b 00 00", 
+    "27 0b 00 00 00 00 00 00 00 00 d2 05 00 00 93 05", 
+    "00 00 01 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 21 00 00 00 41 00 00 d1", 
+    "00 03 00 00 00 3f 7f ff 00 00 00 00 00 ff ff ff", 
+    "ff 05 00 00 00 01 00 00 00 00 00"
+  ], 
+  "seqno": 41, 
+  "size": 235, 
+  "tagid": 76, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT", 
+  "type": "ShapeComponent"
+},
+{
+  "content": {
+    "p0": {
+      "x": 0, 
+      "y": 0
+    }, 
+    "p1": {
+      "x": 2980, 
+      "y": 0
+    }, 
+    "p2": {
+      "x": 2980, 
+      "y": 2855
+    }, 
+    "p3": {
+      "x": 0, 
+      "y": 2855
+    }, 
+    "round": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 00 a4 0b 00 00 00 00 00", 
+    "00 a4 0b 00 00 27 0b 00 00 00 00 00 00 27 0b 00", 
+    "00"
+  ], 
+  "seqno": 42, 
+  "size": 33, 
+  "tagid": 79, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT_RECTANGLE", 
+  "type": "ShapeRectangle"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483657
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 80 00 08 00 00 01 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 43, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "gso ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6f 73 67 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 44, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 45, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 8000
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 40 1f 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 46, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "gso ", 
+    "description": "", 
+    "flags": 74072328, 
+    "height": 2855, 
+    "instance_id": 2085489275, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 2980, 
+    "x": 7085, 
+    "y": 7179, 
+    "z_order": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6f 73 67 08 41 6a 04 0b 1c 00 00 ad 1b 00 00", 
+    "a4 0b 00 00 27 0b 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 7b 0a 4e 7c 00 00 00 00"
+  ], 
+  "seqno": 47, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "GShapeObjectControl"
+},
+{
+  "content": {
+    "angle": 0, 
+    "border": {
+      "color": 0, 
+      "flags": 3506438209, 
+      "width": 33
+    }, 
+    "chid": "$rec", 
+    "chid0": "$rec", 
+    "fill_blur_center": 50, 
+    "fill_flags": 1536, 
+    "fill_gradation": {
+      "blur": 50, 
+      "center": {
+        "x": 0, 
+        "y": 0
+      }, 
+      "colors": [
+        16744255, 
+        0
+      ], 
+      "shear": 90, 
+      "type": 1
+    }, 
+    "fill_image": {
+      "flags": 5, 
+      "storage_id": 1
+    }, 
+    "fill_shape": 1, 
+    "flags": 0, 
+    "height": 2855, 
+    "initial_height": 2855, 
+    "initial_width": 2980, 
+    "level_in_group": 0, 
+    "local_version": 1, 
+    "rotation_center": {
+      "x": 1490, 
+      "y": 1427
+    }, 
+    "scalerotations": [
+      {
+        "rotator": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }, 
+        "scaler": {
+          "a": 1.0, 
+          "b": 0.0, 
+          "c": 0.0, 
+          "d": 1.0, 
+          "e": 0.0, 
+          "f": 0.0
+        }
+      }
+    ], 
+    "scalerotations_count": 1, 
+    "translation": {
+      "a": 1.0, 
+      "b": 0.0, 
+      "c": 0.0, 
+      "d": 1.0, 
+      "e": 0.0, 
+      "f": 0.0
+    }, 
+    "unknown": 0, 
+    "unknown1": 0, 
+    "width": 2980, 
+    "x_in_group": 0, 
+    "y_in_group": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "63 65 72 24 63 65 72 24 00 00 00 00 00 00 00 00", 
+    "00 00 01 00 a4 0b 00 00 27 0b 00 00 a4 0b 00 00", 
+    "27 0b 00 00 00 00 00 00 00 00 d2 05 00 00 93 05", 
+    "00 00 01 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 00 00 f0 3f 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 21 00 00 00 41 00 00 d1", 
+    "00 06 00 00 00 01 5a 00 00 00 00 00 00 00 00 00", 
+    "00 00 32 00 00 00 02 00 00 00 3f 7f ff 00 00 00", 
+    "00 00 05 00 00 00 01 00 01 00 00 00 32"
+  ], 
+  "seqno": 48, 
+  "size": 253, 
+  "tagid": 76, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT", 
+  "type": "ShapeComponent"
+},
+{
+  "content": {
+    "p0": {
+      "x": 0, 
+      "y": 0
+    }, 
+    "p1": {
+      "x": 2980, 
+      "y": 0
+    }, 
+    "p2": {
+      "x": 2980, 
+      "y": 2855
+    }, 
+    "p3": {
+      "x": 0, 
+      "y": 2855
+    }, 
+    "round": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 00 a4 0b 00 00 00 00 00", 
+    "00 a4 0b 00 00 27 0b 00 00 00 00 00 00 27 0b 00", 
+    "00"
+  ], 
+  "seqno": 49, 
+  "size": 33, 
+  "tagid": 79, 
+  "tagname": "HWPTAG_SHAPE_COMPONENT_RECTANGLE", 
+  "type": "ShapeRectangle"
+}
+]

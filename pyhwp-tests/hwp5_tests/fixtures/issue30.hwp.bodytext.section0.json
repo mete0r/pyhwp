@@ -1,0 +1,363 @@
+[
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 4, 
+    "instance_id": 0, 
+    "linesegs": 3, 
+    "parashape_id": 1, 
+    "rangetags": 0, 
+    "split": 3, 
+    "style_id": 0, 
+    "text": 2147483790
+  }, 
+  "level": 0, 
+  "payload": [
+    "8e 00 00 80 04 00 00 00 01 00 00 03 01 00 00 00", 
+    "03 00 00 00 00 00"
+  ], 
+  "seqno": 0, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "secd", 
+          "code": 2, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          16
+        ], 
+        {
+          "chid": "cold", 
+          "code": 2, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          16, 
+          141
+        ], 
+        "ODT \ubcc0\ud658 \uc2dc \uc6d0\ubb38\uc5d0 \uc5c6\ub294 \uacf5\ubc31\uc774 \ub744\uc5c4\ub744\uc5c4 \ub098\ud0c0\ub0a8 ODT \ubcc0\ud658 \uc2dc \uc911\uac04 \uc911\uac04\uc5d0 \uacf5\ubc31 \ubb38\uc790\ub4e4\uc774 \ub4e4\uc5b4\uac00\ub294 \ud604\uc0c1\uc774 \ubc1c\uc0dd\ud55c\ub2e4. \uc544\ub9c8\ub3c4 \ubcc0\ud658 \uacfc\uc815\uc5d0\uc11c xmllint\uc758 reindent \ub54c\ubb38\uc5d0 new line \ubb38\uc790\uac00 \ub4e4\uc5b4\uac00\ub294 \uac83 \uac19\uc74c."
+      ], 
+      [
+        [
+          141, 
+          142
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "02 00 64 63 65 73 00 00 00 00 00 00 00 00 02 00", 
+    "02 00 64 6c 6f 63 00 00 00 00 00 00 00 00 02 00", 
+    "4f 00 44 00 54 00 20 00 c0 bc 58 d6 20 00 dc c2", 
+    "20 00 d0 c6 38 bb d0 c5 20 00 c6 c5 94 b2 20 00", 
+    "f5 ac 31 bc 74 c7 20 00 44 b7 c4 c5 44 b7 c4 c5", 
+    "20 00 98 b0 c0 d0 a8 b0 20 00 4f 00 44 00 54 00", 
+    "20 00 c0 bc 58 d6 20 00 dc c2 20 00 11 c9 04 ac", 
+    "20 00 11 c9 04 ac d0 c5 20 00 f5 ac 31 bc 20 00", 
+    "38 bb 90 c7 e4 b4 74 c7 20 00 e4 b4 b4 c5 00 ac", 
+    "94 b2 20 00 04 d6 c1 c0 74 c7 20 00 1c bc dd c0", 
+    "5c d5 e4 b2 2e 00 20 00 44 c5 c8 b9 c4 b3 20 00", 
+    "c0 bc 58 d6 20 00 fc ac 15 c8 d0 c5 1c c1 20 00", 
+    "78 00 6d 00 6c 00 6c 00 69 00 6e 00 74 00 58 c7", 
+    "20 00 72 00 65 00 69 00 6e 00 64 00 65 00 6e 00", 
+    "74 00 20 00 4c b5 38 bb d0 c5 20 00 6e 00 65 00", 
+    "77 00 20 00 6c 00 69 00 6e 00 65 00 20 00 38 bb", 
+    "90 c7 00 ac 20 00 e4 b4 b4 c5 00 ac 94 b2 20 00", 
+    "83 ac 20 00 19 ac 4c c7 2e 00 0d 00"
+  ], 
+  "seqno": 1, 
+  "size": 284, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 2, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 67, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 1600
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 127, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 3200
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00 43 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 00 00 00 00", 
+    "18 a6 00 00 00 00 06 00 7f 00 00 00 80 0c 00 00", 
+    "e8 03 00 00 e8 03 00 00 52 03 00 00 58 02 00 00", 
+    "00 00 00 00 18 a6 00 00 00 00 06 00"
+  ], 
+  "seqno": 3, 
+  "size": 108, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "secd", 
+    "columnspacing": 1134, 
+    "defaultTabStops": 8000, 
+    "flags": 0, 
+    "grid_horizontal": 0, 
+    "grid_vertical": 0, 
+    "numbering_shape_id": 1, 
+    "starting_equationnum": 0, 
+    "starting_pagenum": 0, 
+    "starting_picturenum": 0, 
+    "starting_tablenum": 0, 
+    "unknown1": 0, 
+    "unknown2": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "64 63 65 73 00 00 00 00 6e 04 00 00 00 00 40 1f", 
+    "00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00"
+  ], 
+  "seqno": 4, 
+  "size": 36, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "SectionDef"
+},
+{
+  "content": {
+    "attr": 0, 
+    "bookbinding_offset": 0, 
+    "bottom_offset": 4252, 
+    "footer_offset": 4252, 
+    "header_offset": 4252, 
+    "height": 84188, 
+    "left_offset": 8504, 
+    "right_offset": 8504, 
+    "top_offset": 5668, 
+    "width": 59528
+  }, 
+  "level": 2, 
+  "payload": [
+    "88 e8 00 00 dc 48 01 00 38 21 00 00 38 21 00 00", 
+    "24 16 00 00 9c 10 00 00 9c 10 00 00 9c 10 00 00", 
+    "00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 5, 
+  "size": 40, 
+  "tagid": 73, 
+  "tagname": "HWPTAG_PAGE_DEF", 
+  "type": "PageDef"
+},
+{
+  "content": {
+    "flags": 0, 
+    "notes_spacing": 283, 
+    "prefix": 0, 
+    "splitter_color": 0, 
+    "splitter_length": -1, 
+    "splitter_margin_bottom": 567, 
+    "splitter_margin_top": 850, 
+    "splitter_stroke_type": 1, 
+    "splitter_unknown": -1, 
+    "splitter_width": 1, 
+    "starting_number": 1, 
+    "suffix": 41, 
+    "usersymbol": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 29 00 01 00 ff ff ff ff", 
+    "52 03 37 02 1b 01 01 01 00 00 00 00"
+  ], 
+  "seqno": 6, 
+  "size": 28, 
+  "tagid": 74, 
+  "tagname": "HWPTAG_FOOTNOTE_SHAPE", 
+  "type": "FootnoteShape"
+},
+{
+  "content": {
+    "flags": 0, 
+    "notes_spacing": 0, 
+    "prefix": 0, 
+    "splitter_color": 0, 
+    "splitter_length": 12280, 
+    "splitter_margin_bottom": 567, 
+    "splitter_margin_top": 850, 
+    "splitter_stroke_type": 1, 
+    "splitter_unknown": 224, 
+    "splitter_width": 1, 
+    "starting_number": 1, 
+    "suffix": 41, 
+    "usersymbol": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 29 00 01 00 f8 2f e0 00", 
+    "52 03 37 02 00 00 01 01 00 00 00 00"
+  ], 
+  "seqno": 7, 
+  "size": 28, 
+  "tagid": 74, 
+  "tagname": "HWPTAG_FOOTNOTE_SHAPE", 
+  "type": "FootnoteShape"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 8, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 9, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 10, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "attr2": 0, 
+    "chid": "cold", 
+    "flags": 4100, 
+    "spacing": 0, 
+    "splitter": {
+      "color": 0, 
+      "stroke_flags": 0, 
+      "width_flags": 0
+    }
+  }, 
+  "level": 1, 
+  "payload": [
+    "64 6c 6f 63 04 10 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 11, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "ColumnsDef"
+}
+]

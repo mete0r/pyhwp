@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HwpDoc version="5.0.1.7">
+  <HwpSummaryInfo byteorder="fffe" clsid="9fa2b660-1061-11d4-b4c6-006097c09d8c" format="0" os="2" osversion="261">
+    <Property id="0" name="PID_PROPDISPNAMEDICT" value="{0: '\x00'}"/>
+    <Property id="2" name="PIDSI_TITLE"/>
+    <Property id="3" name="PIDSI_SUBJECT"/>
+    <Property id="4" name="PIDSI_AUTHOR" value="mete0r"/>
+    <Property id="5" name="PIDSI_KEYWORDS"/>
+    <Property id="6" name="PIDSI_COMMENTS"/>
+    <Property id="8" name="PIDSI_LASTAUTHOR" value="mete0r"/>
+    <Property id="9" name="PIDSI_REVNUMBER" value="6, 7, 9, 1053 WIN6"/>
+    <Property id="11" name="PIDSI_LASTPRINTED" value="1601-01-01 00:00:00"/>
+    <Property id="12" name="PIDSI_CREATE_DTM" value="2012-05-29 08:18:16.827000"/>
+    <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2012-05-29 08:28:39.963000"/>
+    <Property id="14" name="PIDSI_PAGECOUNT"/>
+    <Property id="20" value="2012년 5월 29일 화요일 오후 5:18:16"/>
+    <Property id="21"/>
+  </HwpSummaryInfo>
+  <DocInfo>
+    <DocumentProperties character-unit-loc-in-paragraph="0" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="1" picture-startnum="1" section-count="1" table-startnum="1"/>
+    <IdMappings bindata="1" borderfills="1" bullets="0" charshapes="5" cn-fonts="2" en-fonts="2" jp-fonts="2" ko-fonts="2" memoshapes="0" numberings="1" other-fonts="2" parashapes="12" styles="14" symbol-fonts="2" tabdefs="3" user-fonts="2">
+      <BinData access="never" compression="storage_default" flags="0001" storage="embedding">
+        <BinDataEmbedding attribute-name="bindata" ext="jpg" storage-id="BIN0002"/>
+      </BinData>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Gulim" flags="61" font-file-type="ttf" metric="1" name="굴림">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="11" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
+      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" shape="0" slash="0">
+        <Border attribute-name="left" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+        <Border attribute-name="right" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+        <Border attribute-name="top" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+        <Border attribute-name="bottom" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+        <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
+        <FillColorPattern attribute-name="fill_colorpattern" background-color="#ffffff" pattern-color="#000000" pattern-type="none" pattern-type-flags="FFFFFFFF"/>
+      </BorderFill>
+      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
+      </CharShape>
+      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+        <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
+        <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
+      </CharShape>
+      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
+      </CharShape>
+      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+        <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
+        <LetterWidthExpansion attribute-name="letter_width_expansion" cn="95" en="95" jp="95" ko="95" other="95" symbol="95" user="95"/>
+        <LetterSpacing attribute-name="letter_spacing" cn="-5" en="-5" jp="-5" ko="-5" other="-5" symbol="-5" user="-5"/>
+        <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
+      </CharShape>
+      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <LetterWidthExpansion attribute-name="letter_width_expansion" cn="95" en="95" jp="95" ko="95" other="95" symbol="95" user="95"/>
+        <LetterSpacing attribute-name="letter_spacing" cn="-5" en="-5" jp="-5" ko="-5" other="-5" symbol="-5" user="-5"/>
+        <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
+        <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
+        <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
+      </CharShape>
+      <TabDef unknown1="0" unknown2="0"/>
+      <TabDef unknown1="1" unknown2="0"/>
+      <TabDef unknown1="2" unknown2="0"/>
+      <Numbering starting-number="0">
+        <Array name="levels">
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^1." paragraph-align="left" width-correction="0"/>
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="^2." paragraph-align="left" width-correction="0"/>
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^3)" paragraph-align="left" width-correction="0"/>
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="^4)" paragraph-align="left" width-correction="0"/>
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="(^5)" paragraph-align="left" width-correction="0"/>
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="(^6)" paragraph-align="left" width-correction="0"/>
+          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000002C" numbering-format="^7" paragraph-align="left" width-correction="0"/>
+        </Array>
+      </Numbering>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="-2620" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="130" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000080" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="1" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000080" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="3000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000080" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="2000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="00802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="4000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="1" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="02802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="6000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="2" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="04802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="8000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="3" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="06802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="10000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="4" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="08802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="12000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="5" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="0A802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="14000" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="outline" ignore-margin="0" in-single-line="0" indent="0" level="6" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="20" numbering-bullet-id="0" parashapeflags="0C802880" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="word" lineheight-along-fontsize="0" linespacing="150" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000000" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="2" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="바탕글" name="Normal" next-style-id="0" parashape-id="2" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="본문" name="Body" next-style-id="1" parashape-id="3" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 1" name="Outline 1" next-style-id="2" parashape-id="4" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 2" name="Outline 2" next-style-id="3" parashape-id="5" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 3" name="Outline 3" next-style-id="4" parashape-id="6" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 4" name="Outline 4" next-style-id="5" parashape-id="7" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 5" name="Outline 5" next-style-id="6" parashape-id="8" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 6" name="Outline 6" next-style-id="7" parashape-id="9" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="개요 7" name="Outline 7" next-style-id="8" parashape-id="10" unknown="0"/>
+      <Style charshape-id="0" flags="00" kind="paragraph" lang-id="1042" local-name="쪽 번호" name="Page Number" next-style-id="9" parashape-id="2" unknown="0"/>
+      <Style charshape-id="2" flags="00" kind="paragraph" lang-id="1042" local-name="머리말" name="Header" next-style-id="10" parashape-id="11" unknown="0"/>
+      <Style charshape-id="3" flags="00" kind="paragraph" lang-id="1042" local-name="각주" name="Footnote" next-style-id="11" parashape-id="0" unknown="0"/>
+      <Style charshape-id="3" flags="00" kind="paragraph" lang-id="1042" local-name="미주" name="Endnote" next-style-id="12" parashape-id="0" unknown="0"/>
+      <Style charshape-id="4" flags="00" kind="paragraph" lang-id="1042" local-name="메모" name="Memo" next-style-id="13" parashape-id="1" unknown="0"/>
+    </IdMappings>
+  </DocInfo>
+  <BodyText>
+    <SectionDef chid="secd" columnspacing="1134" defaultTabStops="8000" flags="00000000" grid-horizontal="0" grid-vertical="0" hide-background="0" hide-blank-line="0" hide-border="0" hide-footer="0" hide-header="0" hide-page="0" hide-pagenumber="0" numbering-shape-id="1" pagenum-on-split-section="0" section-id="0" show-background-on-first-page-only="0" show-border-on-first-page-only="0" squared-manuscript-paper="0" starting-equationnum="0" starting-pagenum="0" starting-picturenum="0" starting-tablenum="0" text-direction="0" unknown1="0" unknown2="0">
+      <PageDef attr="00000000" bookbinding="left" bookbinding-offset="0" bottom-offset="4252" footer-offset="4252" header-offset="4252" height="84188" left-offset="8504" orientation="portrait" right-offset="8504" top-offset="5668" width="59528"/>
+      <FootnoteShape flags="00000000" notes-spacing="283" prefix="" splitter-color="#000000" splitter-length="-1" splitter-margin-bottom="567" splitter-margin-top="850" splitter-stroke-type="01" splitter-unknown="-1" splitter-width="01" starting-number="1" stroke-type="solid" suffix=")" usersymbol="" width="0.12mm"/>
+      <FootnoteShape flags="00000000" notes-spacing="0" prefix="" splitter-color="#000000" splitter-length="12280" splitter-margin-bottom="567" splitter-margin-top="850" splitter-stroke-type="01" splitter-unknown="224" splitter-width="01" starting-number="1" stroke-type="solid" suffix=")" usersymbol="" width="0.12mm"/>
+      <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
+      <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
+      <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
+      <Paragraph chars="25" charshapes="1" control="1" controlmask="00000804" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="1" rangetags="0" split="03" style-id="0" text="00000019" unknown="0" unknown1="1">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="22500">
+          <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
+            <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+          </ColumnsDef>
+          <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6210" flow="block" gshape-id="0" halign="left" height="22500" height-relto="absolute" hrelto="column" inline="0" instance-id="2052024670" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="37500" width-relto="absolute" x="0" y="0" z-order="0">
+            <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="22500" initial-height="3413" initial-width="5689" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="0" width="37500" x-in-group="0" y-in-group="0">
+              <Coord attribute-name="rotation_center" x="18750" y="11250"/>
+              <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+              <Array name="scalerotations">
+                <ScaleRotationMatrix>
+                  <Matrix a="6.59166813148" attribute-name="scaler" b="0.0" c="0.0" d="6.59244066803" e="0.0" f="0.0"/>
+                  <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                </ScaleRotationMatrix>
+              </Array>
+              <ShapePicture padding-bottom="0" padding-left="0" padding-right="0" padding-top="0">
+                <BorderLine arrow-end="none" arrow-end-fill="0" arrow-end-size="smallest" arrow-start="none" arrow-start-fill="0" arrow-start-size="smallest" attribute-name="border" color="#000000" flags="00000000" line-end="round" stroke="none" width="0"/>
+                <ImageRect attribute-name="rect">
+                  <Coord attribute-name="p0" x="0" y="0"/>
+                  <Coord attribute-name="p1" x="5689" y="0"/>
+                  <Coord attribute-name="p2" x="5689" y="3413"/>
+                  <Coord attribute-name="p3" x="0" y="3413"/>
+                </ImageRect>
+                <ImageClip attribute-name="clip" bottom="22500" left="0" right="37500" top="0"/>
+                <PictureInfo attribute-name="picture" bindata-id="1" brightness="0" contrast="0" effect="0"/>
+              </ShapePicture>
+            </ShapeComponent>
+          </GShapeObjectControl>
+          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="9" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="1" parashape-id="1" rangetags="0" split="04" style-id="0" text="80000009" unknown="1" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="11250">
+          <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6210" flow="block" gshape-id="1" halign="left" height="11250" height-relto="absolute" hrelto="column" inline="0" instance-id="2052024671" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="18750" width-relto="absolute" x="0" y="0" z-order="1">
+            <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="11250" initial-height="3413" initial-width="5689" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="1" width="18750" x-in-group="0" y-in-group="0">
+              <Coord attribute-name="rotation_center" x="9375" y="5625"/>
+              <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+              <Array name="scalerotations">
+                <ScaleRotationMatrix>
+                  <Matrix a="3.29583406574" attribute-name="scaler" b="0.0" c="0.0" d="3.29622033402" e="0.0" f="0.0"/>
+                  <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                </ScaleRotationMatrix>
+              </Array>
+              <ShapePicture padding-bottom="0" padding-left="0" padding-right="0" padding-top="0">
+                <BorderLine arrow-end="none" arrow-end-fill="0" arrow-end-size="smallest" arrow-start="none" arrow-start-fill="0" arrow-start-size="smallest" attribute-name="border" color="#000000" flags="00000000" line-end="round" stroke="none" width="0"/>
+                <ImageRect attribute-name="rect">
+                  <Coord attribute-name="p0" x="0" y="0"/>
+                  <Coord attribute-name="p1" x="5689" y="0"/>
+                  <Coord attribute-name="p2" x="5689" y="3413"/>
+                  <Coord attribute-name="p3" x="0" y="3413"/>
+                </ImageRect>
+                <ImageClip attribute-name="clip" bottom="22500" left="0" right="37500" top="0"/>
+                <PictureInfo attribute-name="picture" bindata-id="1" brightness="0" contrast="0" effect="0"/>
+              </ShapePicture>
+            </ShapeComponent>
+          </GShapeObjectControl>
+          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+    </SectionDef>
+  </BodyText>
+</HwpDoc>
