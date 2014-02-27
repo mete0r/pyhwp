@@ -171,7 +171,7 @@
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="246A4000" flow="front" gshape-id="0" halign="left" height="5476" height-relto="absolute" hrelto="paper" inline="0" instance-id="1732707051" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="0" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paper" width="11763" width-relto="absolute" x="9736" y="11163" z-order="4">
-            <ListHeader linebreak="0" listflags="00000000" paragraphs="1" textdirection="0" unknown1="0" valign="top">
+            <GShapeObjectCaption flags="00000003" include-margin="0" linebreak="0" listflags="00000000" maxsize="11763" paragraphs="1" position="bottom" separation="850" textdirection="0" unknown1="0" valign="top" width="8504">
               <Paragraph chars="15" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000F" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="11760" x="0" y="0">
                   <Text charshape-id="1">그림 </Text>
@@ -180,7 +180,7 @@
                   <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                 </LineSeg>
               </Paragraph>
-            </ListHeader>
+            </GShapeObjectCaption>
             <ShapeComponent angle="0" chid="$rec" chid0="$rec" fill-colorpattern="0" fill-flags="0000" fill-gradation="0" fill-image="0" fill-shape="0" flags="01000000" flip="0" height="5476" initial-height="5476" initial-width="11763" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="0" unknown="0" unknown1="0" width="11763" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="5881" y="2738"/>
               <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>

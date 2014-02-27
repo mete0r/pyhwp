@@ -29,6 +29,7 @@ from hwp5.dataio import HWPUNIT16
 from hwp5.dataio import BYTE
 from hwp5.binmodel._shared import Margin
 from hwp5.binmodel.controls.table_control import TableControl
+from hwp5.binmodel.controls.gshape_object_control import GShapeObjectControl
 from hwp5.binmodel.controls.header_footer import Header
 from hwp5.binmodel.controls.header_footer import Footer
 from hwp5.binmodel.tagid60_shape_component import ShapeComponent
@@ -116,6 +117,10 @@ class TableCell(ListHeader):
         yield UINT16, 'borderfill_id',
         yield SHWPUNIT, 'unknown_width',
     attributes = staticmethod(attributes)
+
+
+class GShapeObjectCaption(TableCaption):
+    parent_model_type = GShapeObjectControl
 
 
 class TextboxParagraphList(ListHeader):

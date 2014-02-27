@@ -356,9 +356,13 @@
 },
 {
   "content": {
+    "flags": 3, 
     "listflags": 0, 
+    "maxsize": 11763, 
     "paragraphs": 1, 
-    "unknown1": 0
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
   }, 
   "level": 2, 
   "payload": [
@@ -369,10 +373,7 @@
   "size": 22, 
   "tagid": 72, 
   "tagname": "HWPTAG_LIST_HEADER", 
-  "type": "ListHeader", 
-  "unparsed": [
-    "03 00 00 00 38 21 00 00 52 03 f3 2d 00 00"
-  ]
+  "type": "GShapeObjectCaption"
 },
 {
   "content": {
