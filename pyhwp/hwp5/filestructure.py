@@ -18,13 +18,14 @@
 #
 import codecs
 import zlib
-from .utils import cached_property
-from .dataio import UINT32, Flags, Struct
-from .storage import ItemWrapper
-from .storage import StorageWrapper
-from .storage import ItemConversionStorage
-from .importhelper import importStringIO
 import logging
+
+from hwp5.utils import cached_property
+from hwp5.dataio import UINT32, Flags, Struct
+from hwp5.storage import ItemWrapper
+from hwp5.storage import StorageWrapper
+from hwp5.storage import ItemConversionStorage
+from hwp5.importhelper import importStringIO
 
 
 logger = logging.getLogger(__name__)
