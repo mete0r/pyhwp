@@ -44,5 +44,8 @@ class Style(RecordModel):
         yield INT16, 'lang_id',
         yield UINT16, 'parashape_id',
         yield UINT16, 'charshape_id',
-        yield dict(type=UINT16, name='unknown', version=(5, 0, 0, 5))  # SPEC
+
+        # unknown fields
+        # following fields are found from 5.0.0.0
+        yield UINT16, 'unknown'
     attributes = classmethod(attributes)
