@@ -27,6 +27,7 @@ from hwp5.storage import StorageWrapper
 from hwp5.storage import ItemConversionStorage
 from hwp5.importhelper import importStringIO
 from hwp5.utils import transcoder
+from hwp5.utils import GeneratorReader
 
 
 logger = logging.getLogger(__name__)
@@ -100,42 +101,6 @@ def storage_is_hwp5file(stg):
     else:
         logger.info('fileheader.signature = %r', fileheader.signature)
         return False
-
-
-class GeneratorReader(object):
-    ''' convert a string generator into file-like reader
-
-        def gen():
-            yield 'hello'
-            yield 'world'
-
-        f = GeneratorReader(gen())
-        assert 'hell' == f.read(4)
-        assert 'oworld' == f.read()
-    '''
-
-    def __init__(self, gen):
-        self.gen = gen
-        self.buffer = ''
-
-    def read(self, size=None):
-        if size is None:
-            d, self.buffer = self.buffer, ''
-            return d + ''.join(self.gen)
-
-        for data in self.gen:
-            self.buffer += data
-            bufsize = len(self.buffer)
-            if bufsize >= size:
-                size = min(bufsize, size)
-                d, self.buffer = self.buffer[:size], self.buffer[size:]
-                return d
-
-        d, self.buffer = self.buffer, ''
-        return d
-
-    def close(self):
-        self.gen = self.buffer = None
 
 
 class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
