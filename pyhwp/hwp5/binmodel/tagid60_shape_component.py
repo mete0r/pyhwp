@@ -66,6 +66,48 @@ class ScaleRotationMatrix(Struct):
     attributes = staticmethod(attributes)
 
 
+def parent_must_be_gso(context, values):
+    ''' parent record type is GShapeObjectControl '''
+    # GSO-child ShapeComponent specific:
+    # it may be a GSO model's attribute, e.g. 'child_chid'
+    if 'parent' in context:
+        parent_context, parent_model = context['parent']
+        return parent_model['type'] is GShapeObjectControl
+
+
+def chid_is_container(context, values):
+    ''' chid == CHID.CONTAINER '''
+    return values['chid'] == CHID.CONTAINER
+
+
+def chid_is_rect(context, values):
+    ''' chid == CHID.RECT '''
+    return values['chid'] == CHID.RECT
+
+
+def chid_is_rect_and_fill_colorpattern(context, values):
+    ''' chid == CHID.RECT and fill_flags.fill_colorpattern '''
+    return (values['chid'] == CHID.RECT and
+            values['fill_flags'].fill_colorpattern)
+
+
+def chid_is_rect_and_fill_image(context, values):
+    ''' chid == CHID.RECT and fill_flags.fill_image '''
+    return (values['chid'] == CHID.RECT and
+            values['fill_flags'].fill_image)
+
+
+def chid_is_rect_and_fill_gradation(context, values):
+    ''' chid == CHID.RECT and fill_flags.fill_gradation '''
+    return (values['chid'] == CHID.RECT and
+            values['fill_flags'].fill_gradation)
+
+
+def chid_is_line(context, values):
+    ''' chid == CHID.LINE '''
+    return values['chid'] == CHID.LINE
+
+
 class ShapeComponent(RecordModel):
     ''' 4.2.9.2.1. 개체 요소 '''
     tagid = HWPTAG_SHAPE_COMPONENT
@@ -78,14 +120,6 @@ class ShapeComponent(RecordModel):
 
     def attributes(cls):
         ''' 표 78 개체 요소 속성 '''
-
-        def parent_must_be_gso(context, values):
-            ''' parent record type is GShapeObjectControl '''
-            # GSO-child ShapeComponent specific:
-            # it may be a GSO model's attribute, e.g. 'child_chid'
-            if 'parent' in context:
-                parent_context, parent_model = context['parent']
-                return parent_model['type'] is GShapeObjectControl
 
         yield dict(type=CHID, name='chid0', condition=parent_must_be_gso)
 
@@ -113,9 +147,6 @@ class ShapeComponent(RecordModel):
         # Container
         #
 
-        def chid_is_container(context, values):
-            ''' chid == CHID.CONTAINER '''
-            return values['chid'] == CHID.CONTAINER
         yield dict(type=N_ARRAY(WORD, CHID),
                    name='controls',
                    condition=chid_is_container)
@@ -123,25 +154,6 @@ class ShapeComponent(RecordModel):
         #
         # Rectangle
         #
-
-        def chid_is_rect(context, values):
-            ''' chid == CHID.RECT '''
-            return values['chid'] == CHID.RECT
-
-        def chid_is_rect_and_fill_colorpattern(context, values):
-            ''' chid == CHID.RECT and fill_flags.fill_colorpattern '''
-            return (values['chid'] == CHID.RECT and
-                    values['fill_flags'].fill_colorpattern)
-
-        def chid_is_rect_and_fill_image(context, values):
-            ''' chid == CHID.RECT and fill_flags.fill_image '''
-            return (values['chid'] == CHID.RECT and
-                    values['fill_flags'].fill_image)
-
-        def chid_is_rect_and_fill_gradation(context, values):
-            ''' chid == CHID.RECT and fill_flags.fill_gradation '''
-            return (values['chid'] == CHID.RECT and
-                    values['fill_flags'].fill_gradation)
 
         ''' 표 81 테두리 선 정보 '''
         yield dict(type=BorderLine, name='border', condition=chid_is_rect)
@@ -171,10 +183,6 @@ class ShapeComponent(RecordModel):
         #
         # Line
         #
-
-        def chid_is_line(context, values):
-            ''' chid == CHID.LINE '''
-            return values['chid'] == CHID.LINE
 
         yield dict(type=BorderLine, name='line',
                    condition=chid_is_line)
