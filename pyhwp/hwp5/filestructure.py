@@ -16,8 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import codecs
-import zlib
 import logging
 
 from hwp5.utils import cached_property
@@ -28,6 +26,7 @@ from hwp5.storage import ItemConversionStorage
 from hwp5.importhelper import importStringIO
 from hwp5.utils import transcoder
 from hwp5.utils import GeneratorReader
+from hwp5.compressed import decompress
 
 
 logger = logging.getLogger(__name__)
@@ -103,59 +102,14 @@ def storage_is_hwp5file(stg):
         return False
 
 
-class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
-    def __init__(self, errors='strict', wbits=15):
-        assert errors == 'strict'
-        self.errors = errors
-        self.wbits = wbits
-        self.reset()
-
-    def decode(self, input, final=False):
-        c = self.decompressobj.decompress(input)
-        if final:
-            c += self.decompressobj.flush()
-        return c
-
-    def reset(self):
-        self.decompressobj = zlib.decompressobj(self.wbits)
-
-
-def uncompress_gen(source, bufsize=4096):
-    dec = ZLibIncrementalDecoder(wbits=-15)
-    exausted = False
-    while not exausted:
-        input = source.read(bufsize)
-        if len(input) < bufsize:
-            exausted = True
-        yield dec.decode(input, exausted)
-
-
-def uncompress_experimental(source, bufsize=4096):
-    ''' uncompress inputstream
-
-        stream: a file-like readable
-        returns a file-like readable
-    '''
-    return GeneratorReader(uncompress_gen(source, bufsize))
-
-
-def uncompress(stream):
-    ''' uncompress inputstream
-
-        stream: a file-like readable
-        returns a file-like readable
-    '''
-    return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
-
-
 class CompressedStream(ItemWrapper):
 
     def open(self):
-        return uncompress(self.wrapped.open())
+        return decompress(self.wrapped.open())
 
 
 class CompressedStorage(StorageWrapper):
-    ''' uncompress streams in the underlying storage '''
+    ''' decompress streams in the underlying storage '''
     def __getitem__(self, name):
         from hwp5.storage import is_stream
         item = self.wrapped[name]
