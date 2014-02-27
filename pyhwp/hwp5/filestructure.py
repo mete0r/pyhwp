@@ -26,6 +26,7 @@ from hwp5.storage import ItemWrapper
 from hwp5.storage import StorageWrapper
 from hwp5.storage import ItemConversionStorage
 from hwp5.importhelper import importStringIO
+from hwp5.utils import transcoder
 
 
 logger = logging.getLogger(__name__)
@@ -74,27 +75,6 @@ class FileHeader(Struct):
         yield cls.Flags, 'flags'
         yield BYTES(216), 'reserved'
     attributes = classmethod(attributes)
-
-
-def recode(backend_stream, backend_encoding, frontend_encoding,
-           errors='strict'):
-    import codecs
-    enc = codecs.getencoder(frontend_encoding)
-    dec = codecs.getdecoder(frontend_encoding)
-    rd = codecs.getreader(backend_encoding)
-    wr = codecs.getwriter(backend_encoding)
-    return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
-
-
-def recoder(backend_encoding, frontend_encoding, errors='strict'):
-    def recode(backend_stream):
-        import codecs
-        enc = codecs.getencoder(frontend_encoding)
-        dec = codecs.getdecoder(frontend_encoding)
-        rd = codecs.getreader(backend_encoding)
-        wr = codecs.getwriter(backend_encoding)
-        return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
-    return recode
 
 
 def is_hwp5file(filename):
@@ -389,8 +369,8 @@ class PreviewText(object):
         return {'.utf8': self.open_utf8}
 
     def open_utf8(self):
-        recode = recoder('utf-16le', 'utf-8')
-        return recode(self.open())
+        transcode = transcoder('utf-16le', 'utf-8')
+        return transcode(self.open())
 
     def get_utf8(self):
         f = self.open_utf8()

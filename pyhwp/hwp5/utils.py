@@ -16,6 +16,8 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from functools import partial
+import codecs
 
 
 class NIL:
@@ -76,3 +78,19 @@ class JsonObjects(object):
     def dump(self, outfile, **kwargs):
         for s in self.generate(**kwargs):
             outfile.write(s)
+
+
+def transcode(backend_stream, backend_encoding, frontend_encoding,
+              errors='strict'):
+    enc = codecs.getencoder(frontend_encoding)
+    dec = codecs.getdecoder(frontend_encoding)
+    rd = codecs.getreader(backend_encoding)
+    wr = codecs.getwriter(backend_encoding)
+    return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
+
+
+def transcoder(backend_encoding, frontend_encoding, errors='strict'):
+    return partial(transcode,
+                   backend_encoding=backend_encoding,
+                   frontend_encoding=frontend_encoding,
+                   errors=errors)
