@@ -1247,8 +1247,8 @@
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 0
+    "flags": 0, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [
@@ -1262,8 +1262,8 @@
 },
 {
   "content": {
-    "unknown1": 1, 
-    "unknown2": 0
+    "flags": 1, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [
@@ -1277,8 +1277,8 @@
 },
 {
   "content": {
-    "unknown1": 2, 
-    "unknown2": 0
+    "flags": 2, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [

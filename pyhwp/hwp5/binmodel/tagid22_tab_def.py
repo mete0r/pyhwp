@@ -18,7 +18,26 @@
 #
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_TAB_DEF
+from hwp5.dataio import HWPUNIT
 from hwp5.dataio import UINT32
+from hwp5.dataio import Enum
+from hwp5.dataio import Flags
+from hwp5.dataio import Struct
+from hwp5.dataio import N_ARRAY
+
+
+class Tab(Struct):
+
+    Kind = Enum(LEFT=0, RIGHT=1, CENTER=2, FLOAT=3)
+
+    Flags = Flags(UINT32,
+                  0, 7, Kind, 'kind',
+                  8, 15, 'fill_type')
+
+    @classmethod
+    def attributes(cls):
+        yield HWPUNIT, 'pos',
+        yield cls.Flags, 'flags'
 
 
 class TabDef(RecordModel):
@@ -26,14 +45,12 @@ class TabDef(RecordModel):
 
     tagid = HWPTAG_TAB_DEF
 
-    def attributes():
-        # SPEC is confusing
-        yield dict(type=UINT32, name='unknown1', version=(5, 0, 1, 7))
-        yield dict(type=UINT32, name='unknown2', version=(5, 0, 1, 7))
-        #yield UINT32, 'attr',
-        #yield UINT16, 'count',
-        #yield HWPUNIT, 'pos',
-        #yield UINT8, 'kind',
-        #yield UINT8, 'fillType',
-        #yield UINT16, 'reserved',
-    attributes = staticmethod(attributes)
+    ''' 표 32 탭 정의 속성 '''
+    Flags = Flags(UINT32,
+                  0, 'autotab_left',
+                  1, 'autotab_right')
+
+    @classmethod
+    def attributes(cls):
+        yield dict(type=cls.Flags, name='flags')
+        yield dict(type=N_ARRAY(UINT32, Tab), name='tabs')

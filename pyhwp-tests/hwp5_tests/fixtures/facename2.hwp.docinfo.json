@@ -1120,8 +1120,8 @@
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 0
+    "flags": 0, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [

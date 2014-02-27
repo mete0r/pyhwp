@@ -112,9 +112,15 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <TabDef unknown1="0" unknown2="0"/>
-      <TabDef unknown1="1" unknown2="0"/>
-      <TabDef unknown1="2" unknown2="0"/>
+      <TabDef autotab-left="0" autotab-right="0" flags="00000000">
+        <Array name="tabs"/>
+      </TabDef>
+      <TabDef autotab-left="1" autotab-right="0" flags="00000001">
+        <Array name="tabs"/>
+      </TabDef>
+      <TabDef autotab-left="0" autotab-right="1" flags="00000002">
+        <Array name="tabs"/>
+      </TabDef>
       <Numbering starting-number="0">
         <Array name="levels">
           <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^1." paragraph-align="left" width-correction="0"/>

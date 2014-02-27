@@ -111,8 +111,8 @@ hwp5proc find --help | head -n 1 | grep 'Find record models'
 hwp5proc find --model=Paragraph $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
 hwp5proc find --tag=HWPTAG_PARA_HEADER $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
 hwp5proc find --tag=66 $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
-hwp5proc find --incomplete $SAMPLES_DIR/tabdef.hwp | grep 'TabDef'
-hwp5proc find --incomplete --dump $SAMPLES_DIR/tabdef.hwp | grep 'STARTEVENT: TabDef'
+hwp5proc find --incomplete $SAMPLES_DIR/shapeline.hwp | grep 'ShapeComponent'
+hwp5proc find --incomplete --dump $SAMPLES_DIR/shapeline.hwp | grep 'STARTEVENT: ShapeComponent'
 echo "$SAMPLE" | hwp5proc find --from-stdin | wc -l | grep '^195$'
 hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $1}' | grep "^$SAMPLE$"
 hwp5proc find "$SAMPLE" 2> /dev/null | head -n 1 | awk '{print $2}' | grep "^DocInfo$"

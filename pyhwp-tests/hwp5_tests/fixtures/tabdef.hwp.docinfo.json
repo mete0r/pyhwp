@@ -872,8 +872,8 @@
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 0
+    "flags": 0, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [
@@ -887,8 +887,8 @@
 },
 {
   "content": {
-    "unknown1": 1, 
-    "unknown2": 0
+    "flags": 1, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [
@@ -902,8 +902,8 @@
 },
 {
   "content": {
-    "unknown1": 2, 
-    "unknown2": 0
+    "flags": 2, 
+    "tabs": []
   }, 
   "level": 1, 
   "payload": [
@@ -917,8 +917,21 @@
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 3
+    "flags": 0, 
+    "tabs": [
+      {
+        "flags": 1, 
+        "pos": 6000
+      }, 
+      {
+        "flags": 1, 
+        "pos": 12000
+      }, 
+      {
+        "flags": 1, 
+        "pos": 18000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -929,16 +942,25 @@
   "size": 32, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "70 17 00 00 01 00 00 00 e0 2e 00 00 01 00 00 00", 
-    "50 46 00 00 01 00 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 3
+    "flags": 0, 
+    "tabs": [
+      {
+        "flags": 0, 
+        "pos": 4000
+      }, 
+      {
+        "flags": 0, 
+        "pos": 8000
+      }, 
+      {
+        "flags": 0, 
+        "pos": 12000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -949,16 +971,25 @@
   "size": 32, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "a0 0f 00 00 00 00 00 00 40 1f 00 00 00 00 00 00", 
-    "e0 2e 00 00 00 00 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 3
+    "flags": 0, 
+    "tabs": [
+      {
+        "flags": 2, 
+        "pos": 6000
+      }, 
+      {
+        "flags": 2, 
+        "pos": 12000
+      }, 
+      {
+        "flags": 2, 
+        "pos": 18000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -969,16 +1000,25 @@
   "size": 32, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "70 17 00 00 02 00 00 00 e0 2e 00 00 02 00 00 00", 
-    "50 46 00 00 02 00 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 3
+    "flags": 0, 
+    "tabs": [
+      {
+        "flags": 3, 
+        "pos": 6000
+      }, 
+      {
+        "flags": 3, 
+        "pos": 12000
+      }, 
+      {
+        "flags": 3, 
+        "pos": 18000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -989,16 +1029,25 @@
   "size": 32, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "70 17 00 00 03 00 00 00 e0 2e 00 00 03 00 00 00", 
-    "50 46 00 00 03 00 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
-    "unknown1": 0, 
-    "unknown2": 3
+    "flags": 0, 
+    "tabs": [
+      {
+        "flags": 768, 
+        "pos": 8000
+      }, 
+      {
+        "flags": 768, 
+        "pos": 16000
+      }, 
+      {
+        "flags": 768, 
+        "pos": 24000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -1009,16 +1058,21 @@
   "size": 32, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "40 1f 00 00 00 03 00 00 80 3e 00 00 00 03 00 00", 
-    "c0 5d 00 00 00 03 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
-    "unknown1": 1, 
-    "unknown2": 2
+    "flags": 1, 
+    "tabs": [
+      {
+        "flags": 0, 
+        "pos": 8000
+      }, 
+      {
+        "flags": 0, 
+        "pos": 16000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -1029,15 +1083,21 @@
   "size": 24, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "40 1f 00 00 00 00 00 00 80 3e 00 00 00 00 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
-    "unknown1": 3, 
-    "unknown2": 2
+    "flags": 3, 
+    "tabs": [
+      {
+        "flags": 0, 
+        "pos": 8000
+      }, 
+      {
+        "flags": 0, 
+        "pos": 16000
+      }
+    ]
   }, 
   "level": 1, 
   "payload": [
@@ -1048,10 +1108,7 @@
   "size": 24, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
-  "type": "TabDef", 
-  "unparsed": [
-    "40 1f 00 00 00 00 00 00 80 3e 00 00 00 00 00 00"
-  ]
+  "type": "TabDef"
 },
 {
   "content": {
