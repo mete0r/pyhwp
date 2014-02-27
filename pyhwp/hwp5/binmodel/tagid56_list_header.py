@@ -102,11 +102,11 @@ class TableCaption(ListHeader):
 
 
 class TableCell(ListHeader):
+    ''' 표 75 셀 속성 '''
     parent_model_type = TableControl
     before_tablebody = True
 
     def attributes():
-        ''' 표 75 셀 속성 '''
         yield UINT16, 'col',
         yield UINT16, 'row',
         yield UINT16, 'colspan',
@@ -124,6 +124,7 @@ class GShapeObjectCaption(TableCaption):
 
 
 class TextboxParagraphList(ListHeader):
+    ''' 표 85 그리기 개체 글상자용 텍스트 속성 '''
     parent_model_type = ShapeComponent
 
     def attributes():
@@ -133,6 +134,7 @@ class TextboxParagraphList(ListHeader):
 
 
 class HeaderFooterParagraphList(ListHeader):
+    ''' 표 129 머리말/꼬리말 '''
     def attributes():
         yield HWPUNIT, 'width'
         yield HWPUNIT, 'height'
