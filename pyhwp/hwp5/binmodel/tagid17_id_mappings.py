@@ -43,6 +43,14 @@ class IdMappings(RecordModel):
         yield UINT32, 'bullets',
         yield UINT32, 'parashapes',
         yield UINT32, 'styles',
-        # TODO: memoshapes does not exist at least 5.0.1.6
+
+        # memoshapes are found from 5.0.1.7, but not in 5.0.1.6
         yield dict(type=UINT32, name='memoshapes', version=(5, 0, 1, 7))
+
+        # TODO unknown fields:
+        # followings are found from 5.0.3.2, but not in 5.0.3.1
+        # but some 5.0.3.3 files do not have them:
+        #   5.0.3.3/d6dfac424525298119de54410c3b22d74aa85511
+        # yield dict(type=UINT32, name='unknown1', version=(5, 0, 3, 2))
+        # yield dict(type=UINT32, name='unknown2', version=(5, 0, 3, 2))
     attributes = staticmethod(attributes)
