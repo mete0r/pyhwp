@@ -430,7 +430,7 @@ def read_type_events(type, context, stream):
             pe.path = context.get('path')
             pe.treegroup = context.get('treegroup')
             pe.record = context.get('record')
-            pe.offset = stream.tell()
+            pe.offset = item.get('bin_offset')
             raise pe
 
 
