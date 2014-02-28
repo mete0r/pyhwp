@@ -19,7 +19,10 @@
 import logging
 
 from hwp5 import recordstream
-from hwp5.bintype import read_type
+from hwp5.bintype import resolve_type_events
+from hwp5.bintype import resolve_values_from_stream
+from hwp5.dataio import ParseError
+from hwp5.bintype import ERROREVENT
 from hwp5.tagids import tagnames
 from hwp5.importhelper import importStringIO
 from hwp5.recordstream import nth
@@ -278,15 +281,41 @@ def parse_model(context, model):
     ''' HWPTAG로 모델 결정 후 기본 파싱 '''
 
     stream = context['stream']
+    resolve_values = resolve_values_from_stream(stream)
+    events = resolve_model_events(context, model, resolve_values)
+    events = raise_on_errorevent(context, events)
+    model['binevents'] = list(events)
 
-    # HWPTAG로 모델 결정
-    model['type'] = tag_models.get(model['tagid'], RecordModel)
-    model['binevents'] = model_events = list()
+    logger.debug('model: %s', model['type'].__name__)
+    logger.debug('%s', model['content'])
 
-    # 1차 파싱
-    model['content'] = read_type(model['type'], context, stream, model_events)
 
-    # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
+def raise_on_errorevent(context, events):
+    binevents = list()
+    for ev, item in events:
+        yield ev, item
+        binevents.append((ev, item))
+        if ev is ERROREVENT:
+            e = item['exception']
+            msg = 'can\'t parse %s' % item['type']
+            pe = ParseError(msg)
+            pe.cause = e
+            pe.path = context.get('path')
+            pe.treegroup = context.get('treegroup')
+            pe.record = context.get('record')
+            pe.offset = item.get('bin_offset')
+            pe.binevents = binevents
+            raise pe
+
+
+def resolve_model_events(context, model, resolve_values):
+    model['type'] = model_type = tag_models.get(model['tagid'], RecordModel)
+
+    for ev, item in resolve_type_events(model_type, context, resolve_values):
+        yield ev, item
+
+    model['content'] = item['value']
+
     extension_types = getattr(model['type'], 'extension_types', None)
     if extension_types:
         key = model['type'].get_extension_key(context, model)
@@ -297,7 +326,11 @@ def parse_model(context, model):
             # CommonControl, TableControl에서 각각 정의한
             # 멤버들을 읽어들여야 함
             for cls in get_extension_mro(extension, model['type']):
-                content = read_type(cls, context, stream, model_events)
+                extension_type_events = resolve_type_events(cls, context,
+                                                            resolve_values)
+                for ev, item in extension_type_events:
+                    yield ev, item
+                content = item['value']
                 model['content'].update(content)
             model['type'] = extension
 
@@ -310,9 +343,6 @@ def parse_model(context, model):
         on_child = getattr(parent_type, 'on_child', None)
         if on_child:
             on_child(parent_content, parent_context, (context, model))
-
-    logger.debug('model: %s', model['type'].__name__)
-    logger.debug('%s', model['content'])
 
 
 def get_extension_mro(cls, up_to_cls=None):
