@@ -173,7 +173,7 @@ def pop_subevents(events_deque):
                 return
 
 
-def resolve_types(typedef_events, context):
+def resolve_typedefs(typedef_events, context):
     from hwp5.treeop import STARTEVENT, ENDEVENT
     from hwp5.dataio import X_ARRAY
     from hwp5.dataio import VariableLengthArrayType
@@ -279,7 +279,7 @@ def resolve_types(typedef_events, context):
             yield ev, item
 
 
-def collect_values(events):
+def construct_composite_values(events):
     from hwp5.treeop import STARTEVENT, ENDEVENT
     from hwp5.dataio import StructType
     from hwp5.dataio import X_ARRAY
@@ -353,9 +353,9 @@ def log_events(events, log_fn):
 
 def eval_typedef_events(typedef_events, context, resolve_values):
     events = static_to_mutable(typedef_events)
-    events = resolve_types(events, context)
+    events = resolve_typedefs(events, context)
     events = resolve_values(events)
-    events = collect_values(events)
+    events = construct_composite_values(events)
     events = log_events(events, logger.debug)
     return events
 
