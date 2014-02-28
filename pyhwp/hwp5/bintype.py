@@ -406,9 +406,7 @@ def resolve_value_from_stream(item, stream):
         return item_type.read(stream)
 
 
-def read_type_events(type, context, stream):
-    resolve_values = resolve_values_from_stream(stream)
-
+def resolve_type_events(type, context, resolve_values):
     # get typedef events: if current version is specified in the context,
     # get version specific typedef
     if 'version' in context:
@@ -418,7 +416,12 @@ def read_type_events(type, context, stream):
         events = get_compiled_typedef(type)
 
     # evaluate with context/stream
-    events = eval_typedef_events(events, context, resolve_values)
+    return eval_typedef_events(events, context, resolve_values)
+
+
+def read_type_events(type, context, stream):
+    resolve_values = resolve_values_from_stream(stream)
+    events = resolve_type_events(type, context, resolve_values)
     for ev, item in events:
         yield ev, item
         if ev is ERROREVENT:
