@@ -223,6 +223,10 @@ StringIO = importStringIO()
 logger = logging.getLogger(__name__)
 
 
+class UnknownTagModel(object):
+    pass
+
+
 class Text(object):
     pass
 
@@ -309,7 +313,8 @@ def raise_on_errorevent(context, events):
 
 
 def resolve_model_events(context, model, resolve_values):
-    model['type'] = model_type = tag_models.get(model['tagid'], RecordModel)
+    model['type'] = model_type = tag_models.get(model['tagid'],
+                                                UnknownTagModel)
 
     for ev, item in resolve_type_events(model_type, context, resolve_values):
         yield ev, item
