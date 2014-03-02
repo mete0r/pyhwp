@@ -20,13 +20,10 @@
 
 Usage::
 
-    hwp5proc models [--simple | --json | --format=<format>]
+    hwp5proc models [--simple | --json | --format=<format> | --events]
                     [--treegroup=<treegroup> | --seqno=<seqno>]
                     [--loglevel=<loglevel>] [--logfile=<logfile>]
-                    <hwp5file> <record-stream>
-    hwp5proc models [--simple | --json | --format=<format>]
-                    [--treegroup=<treegroup> | --seqno=<seqno>]
-                    [--loglevel=<loglevel>] [--logfile=<logfile>] -V <version>
+                    (<hwp5file> <record-stream> | -V <version>)
     hwp5proc models --help
 
 Options::
@@ -85,11 +82,41 @@ from itertools import islice
 import sys
 
 from hwp5.proc import entrypoint
+from hwp5.dataio import hexdump
+from hwp5.treeop import ENDEVENT
+from hwp5.binmodel import RecordModel
 
 
 @entrypoint(__doc__)
 def main(args):
     stream = stream_from_args(args)
+    if args['--events']:
+        for event, item in stream.parse_model_events():
+            type = item['type'].__name__
+            if event is not None:
+                if item['type'] is RecordModel:
+                    record = item['record']
+                    fmt = '     %s Record %s level=%s %s'
+                    print fmt % (event.__name__,
+                                 record['seqno'],
+                                 record['level'],
+                                 record['tagname'])
+                    if event is ENDEVENT:
+                        leftover = item['leftover']
+                        print '%04x' % leftover['offset']
+                        if len(leftover['bytes']):
+                            print ''
+                            print 'leftover:'
+                            print hexdump(leftover['bytes'])
+                        print '-' * 20
+                else:
+                    print '    ', event.__name__, type, item.get('name', '')
+            else:
+                offset = item['bin_offset']
+                name = item.get('name', '-')
+                value = item.get('value', '-')
+                print '%04x' % offset, type, name, repr(value)
+        return
 
     models_from_stream = models_from_args(args)
     models = models_from_stream(stream)
