@@ -19,6 +19,8 @@
 import logging
 
 from hwp5 import recordstream
+from hwp5.treeop import STARTEVENT
+from hwp5.treeop import ENDEVENT
 from hwp5.bintype import resolve_type_events
 from hwp5.bintype import resolve_values_from_stream
 from hwp5.dataio import ParseError
@@ -285,8 +287,8 @@ def parse_model(context, model):
     ''' HWPTAG로 모델 결정 후 기본 파싱 '''
 
     stream = context['stream']
-    resolve_values = resolve_values_from_stream(stream)
-    events = resolve_model_events(context, model, resolve_values)
+    context['resolve_values'] = resolve_values_from_stream(stream)
+    events = resolve_model_events(context, model)
     events = raise_on_errorevent(context, events)
     model['binevents'] = list(events)
 
@@ -312,7 +314,33 @@ def raise_on_errorevent(context, events):
             raise pe
 
 
-def resolve_model_events(context, model, resolve_values):
+def resolve_models(context, records):
+    model_contexts = (dict(context, record=record, model=dict(record))
+                      for record in records)
+
+    level_prefixed = ((context['model']['level'], context)
+                      for context in model_contexts)
+    root_item = {}
+    ancestors_prefixed = prefix_ancestors_from_level(level_prefixed, root_item)
+    for ancestors, context in ancestors_prefixed:
+        parent = ancestors[-1]
+        context['parent'] = parent, parent.get('model', {})
+
+        record_frame = context['record']
+        context['type'] = RecordModel
+        context['name'] = record_frame['tagname']
+        yield STARTEVENT, context
+        for x in resolve_model_events(context, context['model']):
+            yield x
+        event, item = x
+        context['value'] = item
+        yield ENDEVENT, context
+
+
+def resolve_model_events(context, model):
+
+    resolve_values = context['resolve_values']
+
     model['type'] = model_type = tag_models.get(model['tagid'],
                                                 UnknownTagModel)
 
@@ -417,6 +445,32 @@ class ModelStream(recordstream.RecordStream):
         d = super(ModelStream, self).other_formats()
         d['.models'] = self.models_json().open
         return d
+
+    def parse_model_events(self):
+        context = dict(version=self.version)
+
+        def resolve_values_from_record(record):
+            stream = StringIO(record['payload'])
+            return resolve_values_from_stream(stream)
+
+        for group_idx, records in enumerate(self.records_treegrouped()):
+            context['treegroup'] = group_idx
+            for x in resolve_models(context, records):
+                event, item = x
+                if item['type'] is RecordModel:
+                    if event is STARTEVENT:
+                        record_frame = item['record']
+                        stream = StringIO(record_frame['payload'])
+                        resolve_values = resolve_values_from_stream(stream)
+                        item['stream'] = stream
+                        item['resolve_values'] = resolve_values
+                    elif event is ENDEVENT:
+                        stream = item['stream']
+                        item['leftover'] = {
+                            'offset': stream.tell(),
+                            'bytes': stream.read()
+                        }
+                yield x
 
 
 class DocInfo(ModelStream):
