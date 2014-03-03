@@ -10,7 +10,7 @@ CHANGES
 0.1b7 (2014-01-31)
 ------------------
 
-- support distribution docs.
+- support distribution docs. (based on Changwoo Ryu's algorithm)
 
 0.1b6 (2014-01-20)
 ------------------
