@@ -175,8 +175,12 @@
       </Paragraph>
       <Paragraph chars="10" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="11" rangetags="0" split="02" style-id="0" text="0000000A" unknown="0" unknown1="1">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19842" x="0" y="0">
-          <ColumnsDef attr2="15733" chid="cold" count="2" direction="l2r" flags="0008" kind="normal" same-widths="0" spacing="0" widths="[15291, 1744]">
-            <Border attribute-name="splitter" color="#0102ff" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+          <ColumnsDef attr2="0" chid="cold" count="2" direction="l2r" flags="0008" kind="normal" same-widths="0" spacing="0">
+            <Column0 attribute-name="column0" width="15291"/>
+            <Array name="columns">
+              <Column spacing="1744" width="15733"/>
+            </Array>
+            <Border attribute-name="splitter" color="#ff0000" stroke-flags="01" stroke-type="solid" width="0.15mm" width-flags="02"/>
           </ColumnsDef>
           <Text charshape-id="1">2</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
@@ -184,8 +188,13 @@
       </Paragraph>
       <Paragraph chars="10" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="02" style-id="0" text="8000000A" unknown="1" unknown1="1">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13412" x="0" y="0">
-          <ColumnsDef attr2="434" chid="cold" count="3" direction="l2r" flags="000C" kind="normal" same-widths="0" spacing="0" widths="[10336, 870, 10336]">
-            <Border attribute-name="splitter" color="#000001" stroke-flags="28" stroke-type="double" width="1.0mm" width-flags="2A"/>
+          <ColumnsDef attr2="0" chid="cold" count="3" direction="l2r" flags="000C" kind="normal" same-widths="0" spacing="0">
+            <Column0 attribute-name="column0" width="10336"/>
+            <Array name="columns">
+              <Column spacing="870" width="10336"/>
+              <Column spacing="434" width="10792"/>
+            </Array>
+            <Border attribute-name="splitter" color="#ff0000" stroke-flags="01" stroke-type="solid" width="0.15mm" width-flags="02"/>
           </ColumnsDef>
           <Text charshape-id="1">3</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>

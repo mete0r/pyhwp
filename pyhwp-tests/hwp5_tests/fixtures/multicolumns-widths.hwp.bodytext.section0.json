@@ -433,19 +433,24 @@
 },
 {
   "content": {
-    "attr2": 15733, 
+    "attr2": 0, 
     "chid": "cold", 
+    "column0": {
+      "width": 15291
+    }, 
+    "columns": [
+      {
+        "spacing": 1744, 
+        "width": 15733
+      }
+    ], 
     "flags": 8, 
     "spacing": 0, 
     "splitter": {
-      "color": 16712193, 
-      "stroke_flags": 0, 
-      "width_flags": 0
-    }, 
-    "widths": [
-      15291, 
-      1744
-    ]
+      "color": 255, 
+      "stroke_flags": 1, 
+      "width_flags": 2
+    }
   }, 
   "level": 1, 
   "payload": [
@@ -456,10 +461,7 @@
   "size": 22, 
   "tagid": 71, 
   "tagname": "HWPTAG_CTRL_HEADER", 
-  "type": "ColumnsDef", 
-  "unparsed": [
-    "00 00"
-  ]
+  "type": "ColumnsDef"
 },
 {
   "content": {
@@ -577,20 +579,28 @@
 },
 {
   "content": {
-    "attr2": 434, 
+    "attr2": 0, 
     "chid": "cold", 
+    "column0": {
+      "width": 10336
+    }, 
+    "columns": [
+      {
+        "spacing": 870, 
+        "width": 10336
+      }, 
+      {
+        "spacing": 434, 
+        "width": 10792
+      }
+    ], 
     "flags": 12, 
     "spacing": 0, 
     "splitter": {
-      "color": 33619968, 
-      "stroke_flags": 40, 
-      "width_flags": 42
-    }, 
-    "widths": [
-      10336, 
-      870, 
-      10336
-    ]
+      "color": 255, 
+      "stroke_flags": 1, 
+      "width_flags": 2
+    }
   }, 
   "level": 1, 
   "payload": [
@@ -601,9 +611,6 @@
   "size": 26, 
   "tagid": 71, 
   "tagname": "HWPTAG_CTRL_HEADER", 
-  "type": "ColumnsDef", 
-  "unparsed": [
-    "ff 00 00 00"
-  ]
+  "type": "ColumnsDef"
 }
 ]

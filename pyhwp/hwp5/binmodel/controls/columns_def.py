@@ -19,11 +19,28 @@
 from hwp5.binmodel.controlchar import CHID
 from hwp5.dataio import Enum
 from hwp5.dataio import Flags
+from hwp5.dataio import Struct
 from hwp5.dataio import UINT16
 from hwp5.dataio import WORD
 from hwp5.dataio import HWPUNIT16
+from hwp5.dataio import X_ARRAY
+from hwp5.dataio import ref_member_flag
 from hwp5.binmodel.controls._shared import Control
 from hwp5.binmodel._shared import Border
+
+
+class Column0(Struct):
+
+    @staticmethod
+    def attributes():
+        yield WORD, 'width'
+
+
+class Column(Struct):
+    @staticmethod
+    def attributes():
+        yield WORD, 'spacing'
+        yield WORD, 'width'
 
 
 class ColumnsDef(Control):
@@ -39,8 +56,6 @@ class ColumnsDef(Control):
                   12, 'same_widths')
 
     def attributes(cls):
-        from hwp5.dataio import X_ARRAY
-        from hwp5.dataio import ref_member_flag
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'spacing'
 
@@ -48,8 +63,17 @@ class ColumnsDef(Control):
             ''' flags.same_widths == 0 '''
             return not values['flags'].same_widths
 
-        yield dict(name='widths',
-                   type=X_ARRAY(WORD, ref_member_flag('flags', 'count')),
+        def n_entries(member_ref):
+            def n_entries(context, values):
+                n_columns = member_ref(context, values)
+                return n_columns - 1
+            return n_entries
+
+        yield dict(name='column0', type=Column0,
+                   condition=not_same_widths)
+        yield dict(name='columns',
+                   type=X_ARRAY(Column,
+                                n_entries(ref_member_flag('flags', 'count'))),
                    condition=not_same_widths)
         yield UINT16, 'attr2'
         yield Border, 'splitter'
