@@ -120,7 +120,12 @@ from hwp5.binmodel.tagid70_shape_component_container import ShapeContainer
 from hwp5.binmodel.tagid71_ctrl_data import ControlData
 from hwp5.binmodel.tagid72_ctrl_eqedit import EqEdit
 from hwp5.binmodel.tagid74_shape_component_textart import ShapeTextArt
+from hwp5.binmodel.tagid75_form_object import FormObject
+from hwp5.binmodel.tagid76_memo_shape import MemoShape
+from hwp5.binmodel.tagid77_memo_list import MemoList
 from hwp5.binmodel.tagid78_forbidden_char import ForbiddenChar
+from hwp5.binmodel.tagid79_chart_data import ChartData
+from hwp5.binmodel.tagid99_shape_component_unknown import ShapeUnknown
 from hwp5.dataio import dumpbytes
 from hwp5.treeop import prefix_ancestors_from_level
 from hwp5.utils import JsonObjects
@@ -175,7 +180,12 @@ ShapeContainer
 ControlData
 EqEdit
 ShapeTextArt
+FormObject
+MemoShape
+MemoList
 ForbiddenChar
+ChartData
+ShapeUnknown
 CHID
 ControlChar
 BookmarkControl
