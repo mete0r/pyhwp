@@ -225,7 +225,7 @@ StringIO = importStringIO()
 logger = logging.getLogger(__name__)
 
 
-class UnknownTagModel(object):
+class UnknownTagModel(RecordModel):
     pass
 
 
