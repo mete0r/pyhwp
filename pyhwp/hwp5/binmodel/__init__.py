@@ -51,6 +51,7 @@ from hwp5.binmodel.tagid27_doc_data import DocData
 from hwp5.binmodel.tagid28_distribute_doc_data import DistributeDocData
 from hwp5.binmodel.tagid30_compatible_document import CompatibleDocument
 from hwp5.binmodel.tagid31_layout_compatibility import LayoutCompatibility
+from hwp5.binmodel.tagid32_unknown import TagModel32
 from hwp5.binmodel.tagid50_para_header import Paragraph
 from hwp5.binmodel.tagid51_para_text import ParaText
 from hwp5.binmodel.tagid51_para_text import ParaTextChunks
@@ -150,6 +151,7 @@ DocData
 DistributeDocData
 CompatibleDocument
 LayoutCompatibility
+TagModel32
 Paragraph
 ParaText
 ParaTextChunks
