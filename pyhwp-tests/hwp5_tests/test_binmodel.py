@@ -873,19 +873,16 @@ class TestControlChar(TestBase):
 class TestFootnoteShape(TestBase):
 
     def test_footnote_shape(self):
-        import pickle
-        f = self.open_fixture('5000-footnote-shape.dat', 'r')
-        try:
-            records = pickle.load(f)
-        finally:
-            f.close()
+        from fixtures import get_fixture_path
+        from hwp5.binmodel import Hwp5File
+        path = get_fixture_path('footnote-endnote.hwp')
+        hwp5file = Hwp5File(path)
 
-        context = dict(version=(5, 0, 0, 0))
-        from hwp5.binmodel import parse_models
-        models = parse_models(context, records)
+        models = hwp5file.bodytext.section(0).models()
         models = list(models)
-        self.assertEquals(850, models[0]['content']['splitter_margin_top'])
-        self.assertEquals(567, models[0]['content']['splitter_margin_bottom'])
+        fnshape = models[6]
+        self.assertEquals(850, fnshape['content']['splitter_margin_top'])
+        self.assertEquals(567, fnshape['content']['splitter_margin_bottom'])
 
 
 class TestControlData(TestBase):

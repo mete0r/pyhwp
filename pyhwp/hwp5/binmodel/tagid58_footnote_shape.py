@@ -44,5 +44,5 @@ class FootnoteShape(RecordModel):
         yield HWPUNIT16, 'notes_spacing'
         yield Border.StrokeType, 'splitter_stroke_type'
         yield Border.Width, 'splitter_width'
-        yield dict(type=COLORREF, name='splitter_color', version=(5, 0, 0, 6))
+        yield COLORREF, 'splitter_color'
     attributes = classmethod(attributes)
