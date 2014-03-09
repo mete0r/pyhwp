@@ -170,7 +170,7 @@
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
           <Text charshape-id="1">각주참조</Text>
-          <FootNote chid="fn  " number="1">
+          <FootNote chid="fn  " number="1" unknown0="2686976" unknown1="0">
             <ListHeader linebreak="0" listflags="00000000" paragraphs="1" textdirection="0" unknown1="0" valign="top">
               <Paragraph chars="16" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="10" rangetags="0" split="00" style-id="11" text="80000010" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="900" height2="900" height85="765" indented="0" space-below="272" width="42520" x="0" y="0">
@@ -181,7 +181,7 @@
               </Paragraph>
             </ListHeader>
           </FootNote>
-          <FootNote chid="fn  " number="2">
+          <FootNote chid="fn  " number="2" unknown0="2686976" unknown1="0">
             <ListHeader linebreak="0" listflags="00000000" paragraphs="1" textdirection="0" unknown1="0" valign="top">
               <Paragraph chars="21" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="10" rangetags="0" split="00" style-id="11" text="80000015" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="900" height2="900" height85="765" indented="0" space-below="272" width="42520" x="0" y="0">
@@ -198,7 +198,7 @@
       <Paragraph chars="21" charshapes="1" control="0" controlmask="00020000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="11" rangetags="0" split="00" style-id="0" text="80000015" unknown="1" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="1600">
           <Text charshape-id="1">미주참조</Text>
-          <EndNote chid="en  " number="1">
+          <EndNote chid="en  " number="1" unknown0="2686976" unknown1="0">
             <ListHeader linebreak="0" listflags="00000000" paragraphs="1" textdirection="0" unknown1="0" valign="top">
               <Paragraph chars="16" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="0" rangetags="0" split="00" style-id="0" text="80000010" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">
@@ -209,7 +209,7 @@
               </Paragraph>
             </ListHeader>
           </EndNote>
-          <EndNote chid="en  " number="2">
+          <EndNote chid="en  " number="2" unknown0="2686976" unknown1="0">
             <ListHeader linebreak="0" listflags="00000000" paragraphs="1" textdirection="0" unknown1="0" valign="top">
               <Paragraph chars="21" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="0" rangetags="0" split="00" style-id="0" text="80000015" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">

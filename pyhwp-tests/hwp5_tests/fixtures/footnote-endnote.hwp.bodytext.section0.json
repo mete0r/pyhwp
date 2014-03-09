@@ -344,7 +344,9 @@
 {
   "content": {
     "chid": "fn  ", 
-    "number": 1
+    "number": 1, 
+    "unknown0": 2686976, 
+    "unknown1": 0
   }, 
   "level": 1, 
   "payload": [
@@ -354,10 +356,7 @@
   "size": 16, 
   "tagid": 71, 
   "tagname": "HWPTAG_CTRL_HEADER", 
-  "type": "FootNote", 
-  "unparsed": [
-    "00 00 29 00 00 00 00 00"
-  ]
+  "type": "FootNote"
 },
 {
   "content": {
@@ -511,7 +510,9 @@
 {
   "content": {
     "chid": "fn  ", 
-    "number": 2
+    "number": 2, 
+    "unknown0": 2686976, 
+    "unknown1": 0
   }, 
   "level": 1, 
   "payload": [
@@ -521,10 +522,7 @@
   "size": 16, 
   "tagid": 71, 
   "tagname": "HWPTAG_CTRL_HEADER", 
-  "type": "FootNote", 
-  "unparsed": [
-    "00 00 29 00 00 00 00 00"
-  ]
+  "type": "FootNote"
 },
 {
   "content": {
@@ -805,7 +803,9 @@
 {
   "content": {
     "chid": "en  ", 
-    "number": 1
+    "number": 1, 
+    "unknown0": 2686976, 
+    "unknown1": 0
   }, 
   "level": 1, 
   "payload": [
@@ -815,10 +815,7 @@
   "size": 16, 
   "tagid": 71, 
   "tagname": "HWPTAG_CTRL_HEADER", 
-  "type": "EndNote", 
-  "unparsed": [
-    "00 00 29 00 00 00 00 00"
-  ]
+  "type": "EndNote"
 },
 {
   "content": {
@@ -972,7 +969,9 @@
 {
   "content": {
     "chid": "en  ", 
-    "number": 2
+    "number": 2, 
+    "unknown0": 2686976, 
+    "unknown1": 0
   }, 
   "level": 1, 
   "payload": [
@@ -982,10 +981,7 @@
   "size": 16, 
   "tagid": 71, 
   "tagname": "HWPTAG_CTRL_HEADER", 
-  "type": "EndNote", 
-  "unparsed": [
-    "00 00 29 00 00 00 00 00"
-  ]
+  "type": "EndNote"
 },
 {
   "content": {

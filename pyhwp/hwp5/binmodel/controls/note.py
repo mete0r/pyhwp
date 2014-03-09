@@ -18,13 +18,18 @@
 #
 from hwp5.binmodel.controlchar import CHID
 from hwp5.dataio import UINT32
+from hwp5.dataio import UINT16
 from hwp5.binmodel.controls._shared import Control
 
 
 class Note(Control):
     ''' 4.2.10.4 미주/각주 '''
     def attributes():
-        yield dict(type=UINT32, name='number', version=(5, 0, 0, 6))  # SPEC
+        yield UINT32, 'number'
+        yield UINT32, 'unknown0'
+        yield UINT32, 'unknown1'
+        yield dict(type=UINT16, name='unknown2', version=(5, 0, 3, 0))
+        yield dict(type=UINT16, name='unknown3', version=(5, 0, 3, 0))
     attributes = staticmethod(attributes)
 
 
