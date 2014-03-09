@@ -62,4 +62,7 @@ class Numbering(RecordModel):
         ''' 표 33 문단 번호 '''
         yield ARRAY(NumberingLevel, 7), 'levels'
         yield UINT16, 'starting_number'
+        yield dict(type=ARRAY(UINT32, 7),
+                   name='unknown',
+                   version=(5, 0, 3, 0))
     attributes = classmethod(attributes)
