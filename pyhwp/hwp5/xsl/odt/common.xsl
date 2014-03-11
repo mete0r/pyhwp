@@ -860,7 +860,7 @@
 
   <xsl:template match="LineSeg">
     <xsl:param name="paragraph" />
-    <xsl:apply-templates select="Text|GShapeObjectControl|ControlChar">
+    <xsl:apply-templates select="Text|GShapeObjectControl|FootNote|EndNote|ControlChar">
       <xsl:with-param name="paragraph" select="$paragraph"/>
       <xsl:with-param name="lineseg-pos" select="position()"/>
     </xsl:apply-templates>
@@ -1550,5 +1550,44 @@
     </xsl:element>
   </xsl:template>
 
+  <!-- 각주 -->
+  <xsl:template match="FootNote">
+    <xsl:apply-templates mode="text:note" select="." />
+  </xsl:template>
+
+  <!-- 미주 -->
+  <xsl:template match="EndNote">
+    <xsl:apply-templates mode="text:note" select="." />
+  </xsl:template>
+
+  <!-- 각주/미주 공통 -->
+  <xsl:template mode="text:note" match="FootNote|EndNote">
+    <xsl:element name="text:note">
+      <xsl:attribute name="text:id"><xsl:value-of select="local-name()" />-<xsl:value-of select="@number" /></xsl:attribute>
+      <xsl:apply-templates mode="text:note-class" select="." />
+      <xsl:apply-templates mode="text:note-citation" select="." />
+      <xsl:apply-templates mode="text:note-body" select="." />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="text:note-class" match="FootNote">
+    <xsl:attribute name="text:note-class">footnote</xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="text:note-class" match="EndNote">
+    <xsl:attribute name="text:note-class">endnote</xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="text:note-citation" match="FootNote|EndNote">
+    <xsl:element name="text:note-citation">
+      <xsl:value-of select="@number"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="text:note-body" match="FootNote|EndNote">
+    <xsl:element name="text:note-body">
+      <xsl:apply-templates select="ListHeader/Paragraph" />
+    </xsl:element>
+  </xsl:template>
 
 </xsl:stylesheet>
