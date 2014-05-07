@@ -102,6 +102,7 @@ _metadata = {
             'hwp5odt=hwp5.hwp5odt:main',
             'hwp5txt=hwp5.hwp5txt:main',
             'hwp5html=hwp5.hwp5html:main',
+            'hwp5view=hwp5.hwp5view:main',
         ]
     },
 
