@@ -183,13 +183,20 @@ htmlhelp_basename = 'pyhwpdoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+'preamble': '\\usepackage{kotex}',
+
+# Workaround for latex babel language; there are no korean support currently
+# Just force it to english documentclass
+# see https://bitbucket.org/birkenfeld/sphinx/src/
+#     87eb42dafb5c172e085893d57224fa58e3df80e8/sphinx/writers/latex.py
+#     ?at=default#cl-238
+'extraclassoptions': 'english',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
