@@ -58,7 +58,7 @@ class OleStorage(object):
         self.entry = entry
 
     def __iter__(self):
-        return (entry.getName() for entry in self.entry)
+        return (entry.getName() for entry in self.entry.getEntries())
 
     def __getitem__(self, name):
         from java.io import FileNotFoundException
