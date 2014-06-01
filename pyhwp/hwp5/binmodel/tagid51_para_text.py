@@ -18,12 +18,12 @@
 #
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_PARA_TEXT
-from hwp5.dataio import CompoundType
+from hwp5.dataio import ArrayType
 from hwp5.binmodel.controlchar import ControlChar
 
 
 class ParaTextChunks(list):
-    __metaclass__ = CompoundType
+    __metaclass__ = ArrayType
 
     def read(cls, f):
         bytes = f.read()
