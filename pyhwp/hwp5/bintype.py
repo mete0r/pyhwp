@@ -16,8 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 import logging
+
+from hwp5.dataio import FlagsType
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,7 +31,6 @@ def bintype_map_events(bin_item):
     from hwp5.dataio import VariableLengthArrayType
     from hwp5.dataio import X_ARRAY
     from hwp5.dataio import SelectiveType
-    from hwp5.dataio import FlagsType
 
     bin_type = bin_item['type']
     if isinstance(bin_type, StructType):
@@ -64,9 +66,12 @@ def bintype_map_events(bin_item):
                 yield x
         yield ENDEVENT, bin_item
     elif isinstance(bin_type, FlagsType):
-        yield STARTEVENT, bin_item
-        yield None, dict(type=bin_type.basetype)
-        yield ENDEVENT, bin_item
+        # TODO: this should be done in model definitions
+        # bin_type: used in binary reading
+        # flags_type: binary value to flags type
+        bin_item['bin_type'] = bin_type.basetype
+        bin_item['flags_type'] = bin_type
+        yield None, bin_item
     else:
         yield None, bin_item
 
@@ -279,13 +284,21 @@ def resolve_typedefs(typedef_events, context):
             yield ev, item
 
 
+def evaluate_bin_values(events):
+    for ev, item in events:
+        if 'flags_type' in item:
+            flags_type = item['flags_type']
+            assert isinstance(flags_type, FlagsType)
+            item['value'] = flags_type(item['value'])
+        yield ev, item
+
+
 def construct_composite_values(events):
     from hwp5.treeop import STARTEVENT, ENDEVENT
     from hwp5.dataio import StructType
     from hwp5.dataio import X_ARRAY
     from hwp5.dataio import FixedArrayType
     from hwp5.dataio import VariableLengthArrayType
-    from hwp5.dataio import FlagsType
 
     stack = []
 
@@ -296,8 +309,6 @@ def construct_composite_values(events):
             elif isinstance(item['type'], (X_ARRAY, VariableLengthArrayType,
                                            FixedArrayType)):
                 item['value'] = list()
-            elif isinstance(item['type'], FlagsType):
-                pass
             else:
                 assert False
             stack.append(item)
@@ -317,8 +328,6 @@ def construct_composite_values(events):
                                      VariableLengthArrayType,
                                      FixedArrayType)):
                         stack[-1]['value'].append(item['value'])
-                    elif isinstance(stack[-1]['type'], FlagsType):
-                        stack[-1]['value'] = stack[-1]['type'](item['value'])
         yield ev, item
 
 
@@ -355,6 +364,7 @@ def eval_typedef_events(typedef_events, context, resolve_values):
     events = static_to_mutable(typedef_events)
     events = resolve_typedefs(events, context)
     events = resolve_values(events)
+    events = evaluate_bin_values(events)
     events = construct_composite_values(events)
     events = log_events(events, logger.debug)
     return events
@@ -380,7 +390,10 @@ def resolve_value_from_stream(item, stream):
     from hwp5.dataio import BSTR
     from hwp5.binmodel import ParaTextChunks
     from hwp5.binmodel import CHID
-    item_type = item['type']
+    if 'bin_type' in item:
+        item_type = item['bin_type']
+    else:
+        item_type = item['type']
     if hasattr(item_type, 'binfmt'):
         binfmt = item_type.binfmt
         binsize = struct.calcsize(binfmt)
