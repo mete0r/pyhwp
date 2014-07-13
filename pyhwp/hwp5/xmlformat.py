@@ -187,12 +187,14 @@ def xmlevents_to_bytechunks(xmlevents, encoding='utf-8'):
                 yield n
                 yield '='
                 v = quoteattr(v, entities)
+                v = v.replace('\x00', '')
                 if isinstance(v, unicode):
                     v = v.encode(encoding)
                 yield v
             yield '>'
         elif event is Text:
             text = escape(item)
+            text = text.replace('\x00', '')
             if isinstance(text, unicode):
                 text = text.encode(encoding)
             yield text

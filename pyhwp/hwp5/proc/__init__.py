@@ -97,7 +97,7 @@ def entrypoint(rest_doc):
 
 
 subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
-               'records', 'models', 'find', 'xml', 'rawunz',
+               'records', 'models', 'find', 'xml', 'xml2', 'rawunz',
                'diststream']
 
 

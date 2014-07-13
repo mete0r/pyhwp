@@ -186,10 +186,12 @@ class BitGroupDescriptor(object):
 
     def __get__(self, instance, owner):
         valuetype = self.valuetype
+        return valuetype(self.get_int_value(instance))
+
+    def get_int_value(self, instance):
         lsb = self.lsb
         msb = self.msb
-        return valuetype(int(instance >> lsb) &
-                         int((2 ** (msb + 1 - lsb)) - 1))
+        return int(instance >> lsb) & int((2 ** (msb + 1 - lsb)) - 1)
 
 
 class FlagsType(type):
