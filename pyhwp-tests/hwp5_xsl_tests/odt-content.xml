@@ -419,10 +419,10 @@
       <context:subtree select="//style:style[@style:name='Table-1-1-1']">
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.12mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -433,10 +433,10 @@
       <context:subtree select="//style:style[@style:name='Table-1-1-2']">
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.12mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -447,10 +447,10 @@
       <context:subtree select="//style:style[@style:name='Table-1-2-1']">
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.4mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -461,10 +461,10 @@
       <context:subtree select="//style:style[@style:name='Table-1-2-2']">
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.4mm solid #000000</attr>
           <attr name="fo:border-right">0.4mm solid #000000</attr>
           <attr name="fo:border-top">0.4mm solid #000000</attr>
@@ -934,10 +934,10 @@
         <attr name="style:name">Table-1-1-1</attr>
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.12mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -949,10 +949,10 @@
         <attr name="style:name">Table-1-1-2</attr>
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.12mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -964,10 +964,10 @@
         <attr name="style:name">Table-1-1-3</attr>
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.12mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -979,10 +979,10 @@
         <attr name="style:name">Table-1-2-1</attr>
         <attr name="style:family">table-cell</attr>
         <context:subtree select="style:table-cell-properties">
-          <attr name="fo:padding-left">1mm</attr>
-          <attr name="fo:padding-right">1mm</attr>
-          <attr name="fo:padding-top">1mm</attr>
-          <attr name="fo:padding-bottom">1mm</attr>
+          <attr name="fo:padding-left">0.5mm</attr>
+          <attr name="fo:padding-right">0.5mm</attr>
+          <attr name="fo:padding-top">0.5mm</attr>
+          <attr name="fo:padding-bottom">0.5mm</attr>
           <attr name="fo:border-left">0.12mm solid #000000</attr>
           <attr name="fo:border-right">0.12mm solid #000000</attr>
           <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -1000,10 +1000,10 @@
       <attr name="style:name">Table-1-2-3</attr>
       <attr name="style:family">table-cell</attr>
       <context:subtree select="style:table-cell-properties">
-        <attr name="fo:padding-left">1mm</attr>
-        <attr name="fo:padding-right">1mm</attr>
-        <attr name="fo:padding-top">1mm</attr>
-        <attr name="fo:padding-bottom">1mm</attr>
+        <attr name="fo:padding-left">0.5mm</attr>
+        <attr name="fo:padding-right">0.5mm</attr>
+        <attr name="fo:padding-top">0.5mm</attr>
+        <attr name="fo:padding-bottom">0.5mm</attr>
         <attr name="fo:border-left">0.12mm solid #000000</attr>
         <attr name="fo:border-right">0.12mm solid #000000</attr>
         <attr name="fo:border-top">0.12mm solid #000000</attr>
@@ -1013,10 +1013,10 @@
 
     <context:xslt mode="style:table-cell-properties" select="(//TableCell)[1]">
       <elem>style:table-cell-properties</elem>
-      <attr name="fo:padding-left">1mm</attr>
-      <attr name="fo:padding-right">1mm</attr>
-      <attr name="fo:padding-top">1mm</attr>
-      <attr name="fo:padding-bottom">1mm</attr>
+      <attr name="fo:padding-left">0.5mm</attr>
+      <attr name="fo:padding-right">0.5mm</attr>
+      <attr name="fo:padding-top">0.5mm</attr>
+      <attr name="fo:padding-bottom">0.5mm</attr>
       <attr name="fo:border-left">0.12mm solid #000000</attr>
       <attr name="fo:border-right">0.12mm solid #000000</attr>
       <attr name="fo:border-top">0.12mm solid #000000</attr>

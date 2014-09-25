@@ -980,10 +980,10 @@
       Elements:
 	style:background-image 17.3.
       -->
-      <xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-      <xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-      <xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-      <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-left"><xsl:value-of select="round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-right"><xsl:value-of select="round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-top"><xsl:value-of select="round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
       <xsl:variable name="bfid" select="@borderfill-id" />
       <xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
 	<xsl:apply-templates mode="fo-border" select="." />
