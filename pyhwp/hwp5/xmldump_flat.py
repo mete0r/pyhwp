@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2014 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -16,43 +16,8 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Transform an HWPv5 file into an XML.
-
-.. note::
-
-   This command is experimental. Its output format is subject to change at any
-   time.
-
-Usage::
-
-    hwp5proc xml2 [--no-xml-decl]
-                  [--output=<file>]
-                  [--loglevel=<loglevel>] [--logfile=<logfile>]
-                  <hwp5file>
-    hwp5proc xml2 --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-
-       --no-xml-decl        Don't output <?xml ... ?> XML declaration.
-       --output=<file>      Output filename.
-
-    <hwp5file>              HWPv5 files (*.hwp)
-
-Example::
-
-    $ hwp5proc xml2 samples/sample-5017.hwp > sample-5017.xml
-    $ xmllint --format sample-5017.xml
-
-'''
 from __future__ import with_statement
-import sys
 
-from hwp5.proc import entrypoint
-from hwp5.binmodel import Hwp5File
 from hwp5.binmodel import ParaTextChunks
 from hwp5.binmodel import Text
 from hwp5.binmodel import ControlChar
@@ -69,29 +34,7 @@ from hwp5.dataio import FlagsType
 from hwp5.dataio import EnumType
 
 
-@entrypoint(__doc__)
-def main(args):
-    ''' Transform <hwp5file> into an XML.
-    '''
-
-    if args['--output']:
-        output = open(args['--output'], 'w')
-    else:
-        output = sys.stdout
-
-    if args['--no-xml-decl']:
-        xml_declaration = False
-    else:
-        xml_declaration = True
-
-    xml_declaration
-
-    with output:
-        hwp5file = Hwp5File(args['<hwp5file>'])
-        gen_xml(hwp5file, output, xml_declaration)
-
-
-def gen_xml(hwp5file, output, xml_declaration=True):
+def xmldump_flat(hwp5file, output, xml_declaration=True):
     xmlevents = xmlevents_from_hwp5file(hwp5file)
     bytechunks = xmlevents_to_bytechunks(xmlevents)
     if xml_declaration:
