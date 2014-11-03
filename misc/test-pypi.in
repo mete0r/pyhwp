@@ -12,7 +12,7 @@ VERSION=`cat VERSION.txt`
 
 mkdir -p releases
 rm -rf releases/$VERSION
-virtualenv releases/$VERSION
+mkvenv cp2 releases/$VERSION
 set +u
 . releases/$VERSION/bin/activate
 set -u

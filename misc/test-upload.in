@@ -13,7 +13,7 @@ python setup.py sdist upload -r https://testpypi.python.org/pypi | tee upload.lo
 tail -n 1 upload.log | grep 200
 
 rm -rf testpypi
-virtualenv testpypi
+mkvenv cp2 testpypi
 set +u
 . testpypi/bin/activate
 set -u

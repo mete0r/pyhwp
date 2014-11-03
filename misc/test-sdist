@@ -18,7 +18,7 @@ tar tfz $SDIST | grep -F "pyhwp-$VERSION/COPYING"
 tar tfz $SDIST | grep -F "pyhwp-$VERSION/pyhwp/hwp5/README"
 tar tfz $SDIST | grep -F "pyhwp-$VERSION/pyhwp/hwp5/COPYING"
 
-[ -f $VENV/bin/activate ] || virtualenv --no-site-packages $VENV
+[ -f $VENV/bin/activate ] || mkvenv cp2 $VENV
 set +eu
 . $VENV/bin/activate
 set -eu
