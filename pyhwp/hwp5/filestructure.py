@@ -16,15 +16,17 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import codecs
-import zlib
-from .utils import cached_property
-from .dataio import UINT32, Flags, Struct
-from .storage import ItemWrapper
-from .storage import StorageWrapper
-from .storage import ItemConversionStorage
-from .importhelper import importStringIO
 import logging
+
+from hwp5.utils import cached_property
+from hwp5.dataio import UINT32, Flags, Struct
+from hwp5.storage import ItemWrapper
+from hwp5.storage import StorageWrapper
+from hwp5.storage import ItemConversionStorage
+from hwp5.importhelper import importStringIO
+from hwp5.utils import transcoder
+from hwp5.utils import GeneratorReader
+from hwp5.compressed import decompress
 
 
 logger = logging.getLogger(__name__)
@@ -75,27 +77,6 @@ class FileHeader(Struct):
     attributes = classmethod(attributes)
 
 
-def recode(backend_stream, backend_encoding, frontend_encoding,
-           errors='strict'):
-    import codecs
-    enc = codecs.getencoder(frontend_encoding)
-    dec = codecs.getdecoder(frontend_encoding)
-    rd = codecs.getreader(backend_encoding)
-    wr = codecs.getwriter(backend_encoding)
-    return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
-
-
-def recoder(backend_encoding, frontend_encoding, errors='strict'):
-    def recode(backend_stream):
-        import codecs
-        enc = codecs.getencoder(frontend_encoding)
-        dec = codecs.getdecoder(frontend_encoding)
-        rd = codecs.getreader(backend_encoding)
-        wr = codecs.getwriter(backend_encoding)
-        return codecs.StreamRecoder(backend_stream, enc, dec, rd, wr, errors)
-    return recode
-
-
 def is_hwp5file(filename):
     ''' Test whether it is an HWP format v5 file. '''
     from hwp5.errors import InvalidOleStorageError
@@ -121,95 +102,14 @@ def storage_is_hwp5file(stg):
         return False
 
 
-class GeneratorReader(object):
-    ''' convert a string generator into file-like reader
-
-        def gen():
-            yield 'hello'
-            yield 'world'
-
-        f = GeneratorReader(gen())
-        assert 'hell' == f.read(4)
-        assert 'oworld' == f.read()
-    '''
-
-    def __init__(self, gen):
-        self.gen = gen
-        self.buffer = ''
-
-    def read(self, size=None):
-        if size is None:
-            d, self.buffer = self.buffer, ''
-            return d + ''.join(self.gen)
-
-        for data in self.gen:
-            self.buffer += data
-            bufsize = len(self.buffer)
-            if bufsize >= size:
-                size = min(bufsize, size)
-                d, self.buffer = self.buffer[:size], self.buffer[size:]
-                return d
-
-        d, self.buffer = self.buffer, ''
-        return d
-
-    def close(self):
-        self.gen = self.buffer = None
-
-
-class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
-    def __init__(self, errors='strict', wbits=15):
-        assert errors == 'strict'
-        self.errors = errors
-        self.wbits = wbits
-        self.reset()
-
-    def decode(self, input, final=False):
-        c = self.decompressobj.decompress(input)
-        if final:
-            c += self.decompressobj.flush()
-        return c
-
-    def reset(self):
-        self.decompressobj = zlib.decompressobj(self.wbits)
-
-
-def uncompress_gen(source, bufsize=4096):
-    dec = ZLibIncrementalDecoder(wbits=-15)
-    exausted = False
-    while not exausted:
-        input = source.read(bufsize)
-        if len(input) < bufsize:
-            exausted = True
-        yield dec.decode(input, exausted)
-
-
-def uncompress_experimental(source, bufsize=4096):
-    ''' uncompress inputstream
-
-        stream: a file-like readable
-        returns a file-like readable
-    '''
-    return GeneratorReader(uncompress_gen(source, bufsize))
-
-
-def uncompress(stream):
-    ''' uncompress inputstream
-
-        stream: a file-like readable
-        returns a file-like readable
-    '''
-    return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
-
-
 class CompressedStream(ItemWrapper):
 
     def open(self):
-        return uncompress(self.wrapped.open())
+        return decompress(self.wrapped.open())
 
 
 class CompressedStorage(StorageWrapper):
-    ''' uncompress streams in the underlying storage '''
+    ''' decompress streams in the underlying storage '''
     def __getitem__(self, name):
         from hwp5.storage import is_stream
         item = self.wrapped[name]
@@ -388,8 +288,8 @@ class PreviewText(object):
         return {'.utf8': self.open_utf8}
 
     def open_utf8(self):
-        recode = recoder('utf-16le', 'utf-8')
-        return recode(self.open())
+        transcode = transcoder('utf-16le', 'utf-8')
+        return transcode(self.open())
 
     def get_utf8(self):
         f = self.open_utf8()
@@ -476,7 +376,7 @@ class HwpFileHeader(object):
 
     def open_text(self):
         d = FileHeader.Flags.dictvalue(self.value['flags'])
-        d['signature'] = self.value['signature']
+        d['signature'] = self.value['signature'][:len('HWP Document File')]
         d['version'] = '%d.%d.%d.%d' % self.value['version']
         out = StringIO()
         for k, v in sorted(d.items()):
@@ -505,26 +405,69 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
     value = cached_property(to_dict)
 
+    @property
+    def byteorder(self):
+        return self.value['byteorder']
+
+    @property
+    def format(self):
+        return self.value['format']
+
+    @property
+    def os(self):
+        return self.value['os']
+
+    @property
+    def osversion(self):
+        return self.value['osversion']
+
+    @property
+    def clsid(self):
+        return self.value['clsid']
+
+    @property
+    def sections(self):
+        for section in self.value['sections']:
+            formatid = section['formatid']
+            properties = section['properties']
+            yield formatid, properties
+
+    UNKNOWN_FMTID = '9fa2b660-1061-11d4-b4c6-006097c09d8c'
+
+    @property
+    def propertyset(self):
+        from uuid import UUID
+        for formatid, properties in self.sections:
+            if formatid == UUID(self.UNKNOWN_FMTID):
+                return properties
+
+    @property
+    def plaintext_lines(self):
+
+        os_names = {
+            0: 'win16',
+            1: 'macos',
+            2: 'win32'
+        }
+
+        yield 'byteorder: 0x%x' % self.byteorder
+        yield 'clsid: %s' % self.clsid
+        yield 'format: %d' % self.format
+        yield 'os: %s %s' % (self.os, os_names.get(self.os, ''))
+        yield 'osversion: %d' % self.osversion
+
+        for formatid, properties in self.sections:
+            yield ('-- Section %s --' % formatid)
+            for prop_id, prop in properties.items():
+                prop_name = prop.get('name') or prop_id
+                prop_value = prop.get('value')
+                prop_str = u'%s: %s' % (prop_name, prop_value)
+                yield prop_str.encode('utf-8')
+
     def open_text(self):
         out = StringIO()
-
-        def uuid_from_bytes_tuple(t):
-            from uuid import UUID
-            return UUID(bytes_le=''.join(chr(x) for x in t))
-
-        print >> out, 'byteorder: 0x%x' % self.value['byteorder']
-        print >> out, 'clsid: %s' % uuid_from_bytes_tuple(self.value['clsid'])
-        print >> out, 'format: %d' % self.value['format']
-        print >> out, 'os: %d' % self.value['os']
-        print >> out, 'osversion: %d' % self.value['osversion']
-
-        for section in self.value['sections']:
-            formatid = uuid_from_bytes_tuple(section['formatid'])
-            print >> out, ('-- Section %s --' % formatid)
-            for prop in section['properties'].values():
-                prop_str = u'%s: %s' % (prop['name'], prop.get('value'))
-                print >> out, prop_str.encode('utf-8')
-
+        for line in self.plaintext_lines:
+            out.write(line + '\n')
         out.seek(0)
         return out
 
@@ -567,13 +510,14 @@ class Hwp5File(ItemConversionStorage):
         if name == 'PrvText':
             return PreviewText
         if name == '\005HwpSummaryInformation':
-            return self.with_version(HwpSummaryInfo)
+            return self.with_version(self.summaryinfo_class)
 
     def with_version(self, f):
         def wrapped(item):
             return f(item, self.header.version)
         return wrapped
 
+    summaryinfo_class = HwpSummaryInfo
     docinfo_class = VersionSensitiveItem
     bodytext_class = Sections
 

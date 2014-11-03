@@ -38,5 +38,5 @@ def main(args):
     from hwp5.filestructure import Hwp5File
     hwp5file = Hwp5File(args['<hwp5file>'])
     h = hwp5file.fileheader
-    #print h.signature.replace('\x00', ''),
+    # print h.signature.replace('\x00', ''),
     print '%d.%d.%d.%d' % h.version

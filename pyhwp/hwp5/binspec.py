@@ -311,7 +311,7 @@ def get_extends(t, up_to_type=None):
     import inspect
     mro = inspect.getmro(t)
     mro = mro[1:]  # exclude self
-    #mro = take_up_to(up_to_type, mro)
+    # mro = take_up_to(up_to_type, mro)
     mro = takewhile(lambda cls: cls is not up_to_type, mro)
     mro = (t for t in mro if 'members' in t.__dict__)
     mro = list(mro)

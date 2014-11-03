@@ -11,6 +11,7 @@ from hwp5.distdoc import decrypt_tail
 from hwp5.recordstream import read_record
 from hwp5.tagids import HWPTAG_PARA_HEADER
 import hwp5.distdoc
+import hwp5.compressed
 
 from hwp5_tests.test_filestructure import TestBase
 
@@ -50,13 +51,13 @@ class TestHwp5DistDocFunctions(TestBase):
                 # skip this test
                 return
             raise
-        uncompressed = zlib.decompress(decrypted, -15)
-        record = read_record(StringIO(uncompressed), 0)
+        decompressed = zlib.decompress(decrypted, -15)
+        record = read_record(StringIO(decompressed), 0)
         self.assertEquals(0, record['level'])
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
         self.assertEquals(22, record['size'])
 
-        self.assertEquals(390, len(uncompressed))
+        self.assertEquals(390, len(decompressed))
 
     def test_distdoc_decode(self):
         section = self.section
@@ -68,7 +69,7 @@ class TestHwp5DistDocFunctions(TestBase):
                 # skip this test
                 return
             raise
-        stream = hwp5.filestructure.uncompress(stream)
+        stream = hwp5.compressed.decompress(stream)
         record = read_record(stream, 0)
         self.assertEquals(0, record['level'])
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])

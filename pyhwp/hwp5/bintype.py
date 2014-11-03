@@ -16,8 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 import logging
+
+from hwp5.dataio import FlagsType
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,7 +31,6 @@ def bintype_map_events(bin_item):
     from hwp5.dataio import VariableLengthArrayType
     from hwp5.dataio import X_ARRAY
     from hwp5.dataio import SelectiveType
-    from hwp5.dataio import FlagsType
 
     bin_type = bin_item['type']
     if isinstance(bin_type, StructType):
@@ -64,9 +66,12 @@ def bintype_map_events(bin_item):
                 yield x
         yield ENDEVENT, bin_item
     elif isinstance(bin_type, FlagsType):
-        yield STARTEVENT, bin_item
-        yield None, dict(type=bin_type.basetype)
-        yield ENDEVENT, bin_item
+        # TODO: this should be done in model definitions
+        # bin_type: used in binary reading
+        # flags_type: binary value to flags type
+        bin_item['bin_type'] = bin_type.basetype
+        bin_item['flags_type'] = bin_type
+        yield None, bin_item
     else:
         yield None, bin_item
 
@@ -173,7 +178,7 @@ def pop_subevents(events_deque):
                 return
 
 
-def resolve_types(typedef_events, context):
+def resolve_typedefs(typedef_events, context):
     from hwp5.treeop import STARTEVENT, ENDEVENT
     from hwp5.dataio import X_ARRAY
     from hwp5.dataio import VariableLengthArrayType
@@ -279,13 +284,21 @@ def resolve_types(typedef_events, context):
             yield ev, item
 
 
-def collect_values(events):
+def evaluate_bin_values(events):
+    for ev, item in events:
+        if 'flags_type' in item:
+            flags_type = item['flags_type']
+            assert isinstance(flags_type, FlagsType)
+            item['value'] = flags_type(item['value'])
+        yield ev, item
+
+
+def construct_composite_values(events):
     from hwp5.treeop import STARTEVENT, ENDEVENT
     from hwp5.dataio import StructType
     from hwp5.dataio import X_ARRAY
     from hwp5.dataio import FixedArrayType
     from hwp5.dataio import VariableLengthArrayType
-    from hwp5.dataio import FlagsType
 
     stack = []
 
@@ -296,8 +309,6 @@ def collect_values(events):
             elif isinstance(item['type'], (X_ARRAY, VariableLengthArrayType,
                                            FixedArrayType)):
                 item['value'] = list()
-            elif isinstance(item['type'], FlagsType):
-                pass
             else:
                 assert False
             stack.append(item)
@@ -317,8 +328,6 @@ def collect_values(events):
                                      VariableLengthArrayType,
                                      FixedArrayType)):
                         stack[-1]['value'].append(item['value'])
-                    elif isinstance(stack[-1]['type'], FlagsType):
-                        stack[-1]['value'] = stack[-1]['type'](item['value'])
         yield ev, item
 
 
@@ -353,9 +362,10 @@ def log_events(events, log_fn):
 
 def eval_typedef_events(typedef_events, context, resolve_values):
     events = static_to_mutable(typedef_events)
-    events = resolve_types(events, context)
+    events = resolve_typedefs(events, context)
     events = resolve_values(events)
-    events = collect_values(events)
+    events = evaluate_bin_values(events)
+    events = construct_composite_values(events)
     events = log_events(events, logger.debug)
     return events
 
@@ -380,7 +390,10 @@ def resolve_value_from_stream(item, stream):
     from hwp5.dataio import BSTR
     from hwp5.binmodel import ParaTextChunks
     from hwp5.binmodel import CHID
-    item_type = item['type']
+    if 'bin_type' in item:
+        item_type = item['bin_type']
+    else:
+        item_type = item['type']
     if hasattr(item_type, 'binfmt'):
         binfmt = item_type.binfmt
         binsize = struct.calcsize(binfmt)
@@ -406,9 +419,7 @@ def resolve_value_from_stream(item, stream):
         return item_type.read(stream)
 
 
-def read_type_events(type, context, stream):
-    resolve_values = resolve_values_from_stream(stream)
-
+def resolve_type_events(type, context, resolve_values):
     # get typedef events: if current version is specified in the context,
     # get version specific typedef
     if 'version' in context:
@@ -418,7 +429,12 @@ def read_type_events(type, context, stream):
         events = get_compiled_typedef(type)
 
     # evaluate with context/stream
-    events = eval_typedef_events(events, context, resolve_values)
+    return eval_typedef_events(events, context, resolve_values)
+
+
+def read_type_events(type, context, stream):
+    resolve_values = resolve_values_from_stream(stream)
+    events = resolve_type_events(type, context, resolve_values)
     for ev, item in events:
         yield ev, item
         if ev is ERROREVENT:
@@ -430,7 +446,7 @@ def read_type_events(type, context, stream):
             pe.path = context.get('path')
             pe.treegroup = context.get('treegroup')
             pe.record = context.get('record')
-            pe.offset = stream.tell()
+            pe.offset = item.get('bin_offset')
             raise pe
 
 
@@ -449,60 +465,6 @@ def read_type_item(type, context, stream, binevents=None):
 def read_type(type, context, stream, binevents=None):
     item = read_type_item(type, context, stream, binevents)
     return item['value']
-
-
-def parse_model(context, model):
-    ''' HWPTAG로 모델 결정 후 기본 파싱 '''
-
-    from hwp5.binmodel import tag_models
-    from hwp5.binmodel import RecordModel
-
-    stream = context['stream']
-
-    # HWPTAG로 모델 결정
-    model['type'] = tag_models.get(model['tagid'], RecordModel)
-    model['binevents'] = model_events = list()
-
-    # 1차 파싱
-    model['content'] = read_type(model['type'], context, stream, model_events)
-
-    # 키 속성으로 모델 타입 변경 (예: Control.chid에 따라 TableControl 등으로)
-    extension_types = getattr(model['type'], 'extension_types', None)
-    if extension_types:
-        key = model['type'].get_extension_key(context, model)
-        extension = extension_types.get(key)
-        if extension is not None:
-            # 예: Control -> TableControl로 바뀌는 경우,
-            # Control의 member들은 이미 읽은 상태이고
-            # CommonControl, TableControl에서 각각 정의한
-            # 멤버들을 읽어들여야 함
-            for cls in get_extension_mro(extension, model['type']):
-                content = read_type(cls, context, stream, model_events)
-                model['content'].update(content)
-            model['type'] = extension
-
-    if 'parent' in context:
-        parent = context['parent']
-        parent_context, parent_model = parent
-        parent_type = parent_model.get('type')
-        parent_content = parent_model.get('content')
-
-        on_child = getattr(parent_type, 'on_child', None)
-        if on_child:
-            on_child(parent_content, parent_context, (context, model))
-
-    logger.debug('model: %s', model['type'].__name__)
-    logger.debug('%s', model['content'])
-
-
-def get_extension_mro(cls, up_to_cls=None):
-    import inspect
-    from itertools import takewhile
-    mro = inspect.getmro(cls)
-    mro = takewhile(lambda cls: cls is not up_to_cls, mro)
-    mro = list(cls for cls in mro if 'attributes' in cls.__dict__)
-    mro = reversed(mro)
-    return mro
 
 
 def dump_events(events):

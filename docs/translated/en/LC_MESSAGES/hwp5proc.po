@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-19 23:41+0900\n"
+"POT-Creation-Date: 2014-11-03 12:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,9 +60,9 @@ msgstr ""
 #: ../../../pyhwp/hwp5/proc/cat.py:docstring hwp5.proc.cat:10
 #: ../../../pyhwp/hwp5/proc/unpack.py:docstring hwp5.proc.unpack:10
 #: ../../../pyhwp/hwp5/proc/records.py:docstring hwp5.proc.records:14
-#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:14
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:11
 #: ../../../pyhwp/hwp5/proc/find.py:docstring hwp5.proc.find:11
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:17
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:18
 msgid "Options::"
 msgstr ""
 
@@ -134,9 +134,9 @@ msgstr ""
 #: ../../../pyhwp/hwp5/proc/unpack.py:docstring hwp5.proc.unpack:22
 #: hwp5.proc.unpack:27 ../../../pyhwp/hwp5/proc/records.py:docstring
 #: hwp5.proc.records:38 hwp5.proc.records:42 hwp5.proc.records:50
-#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:35
-#: hwp5.proc.models:43 hwp5.proc.models:47 hwp5.proc.models:55
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:29 hwp5.proc.xml:37
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:34
+#: hwp5.proc.models:42 hwp5.proc.models:48 hwp5.proc.models:57
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring hwp5.proc.xml:31 hwp5.proc.xml:39
 msgid "Example::"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr ""
 # 241ea6ff890d49db8d765402e0c7b6b5
 # 2a49fc3eff194012a083bf9bc0426d93
 #: ../../../pyhwp/hwp5/proc/records.py:docstring of hwp5.proc.records:46
-#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:51
+#: ../../../pyhwp/hwp5/proc/models.py:docstring hwp5.proc.models:53
 msgid ""
 "If neither <hwp5file> nor <record-stream> is specified, the record stream is "
 "read from the standard input with an assumption that the input is in the "
@@ -191,12 +191,12 @@ msgid "Find record models with specified predicates."
 msgstr ""
 
 # 78f39cd8bb2c46a89417b59931917868
-#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:24
+#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:29
 msgid "Example: Find paragraphs::"
 msgstr ""
 
 # 9e23e53b35ca4aefb5e8c1ffa99d3d26
-#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:30
+#: ../../../pyhwp/hwp5/proc/find.py:docstring of hwp5.proc.find:35
 msgid ""
 "Example: Find and dump records of ``HWPTAG_LIST_HEADER`` which is parsed "
 "incompletely::"
@@ -220,7 +220,7 @@ msgid ""
 msgstr ""
 
 # d89687875f5d4135963346b8e2de3a53
-#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:34
+#: ../../../pyhwp/hwp5/proc/xml.py:docstring of hwp5.proc.xml:36
 msgid ""
 "With ``--embedbin`` option, you can embed base64-encoded ``BinData/*`` files "
 "in the output XML."

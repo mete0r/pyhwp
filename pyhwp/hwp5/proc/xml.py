@@ -28,6 +28,7 @@ Usage::
     hwp5proc xml [--embedbin]
                  [--no-xml-decl]
                  [--output=<file>]
+                 [--format=<format>]
                  [--loglevel=<loglevel>] [--logfile=<logfile>]
                  <hwp5file>
     hwp5proc xml --help
@@ -43,6 +44,7 @@ Options::
        --output=<file>      Output filename.
 
     <hwp5file>              HWPv5 files (*.hwp)
+    <format>                "flat", "nested" (default: "nested")
 
 Example::
 
@@ -60,6 +62,7 @@ Example::
 '''
 from __future__ import with_statement
 from hwp5.proc import entrypoint
+from hwp5.xmldump_flat import xmldump_flat
 
 
 @entrypoint(__doc__)
@@ -82,7 +85,12 @@ def main(args):
     else:
         xml_declaration = True
 
+    fmt = args['--format'] or 'nested'
+
     with output:
         hwp5file = Hwp5File(args['<hwp5file>'])
-        hwp5file.xmlevents(**opts).dump(output,
-                                        xml_declaration=xml_declaration)
+        if fmt == 'flat':
+            xmldump_flat(hwp5file, output, xml_declaration=xml_declaration)
+        elif fmt == 'nested':
+            hwp5file.xmlevents(**opts).dump(output,
+                                            xml_declaration=xml_declaration)

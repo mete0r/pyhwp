@@ -16,22 +16,41 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from collections import deque
+from itertools import chain
+from pprint import pformat
 from tempfile import TemporaryFile
-
-from .treeop import STARTEVENT, ENDEVENT
-from .treeop import build_subtree
-from .treeop import tree_events, tree_events_multi
-from .binmodel import SectionDef
-from .binmodel import ListHeader
-from .binmodel import Paragraph
-from .binmodel import Text
-from .binmodel import TableControl, GShapeObjectControl, ShapeComponent
-from .binmodel import TableBody, TableCell
-from .dataio import Struct
-from .filestructure import VERSION
-from . import binmodel
-
+import base64
 import logging
+
+from hwp5.treeop import STARTEVENT, ENDEVENT
+from hwp5.treeop import prefix_event
+from hwp5.treeop import build_subtree
+from hwp5.treeop import tree_events
+from hwp5.treeop import tree_events_multi
+from hwp5.dataio import Struct
+from hwp5.filestructure import VERSION
+from hwp5 import binmodel
+from hwp5 import filestructure
+from hwp5.binmodel.controls import SectionDef
+from hwp5.binmodel.controls import TableControl
+from hwp5.binmodel.controls import GShapeObjectControl
+from hwp5.binmodel import BinData
+from hwp5.binmodel import ListHeader
+from hwp5.binmodel import Paragraph
+from hwp5.binmodel import Text
+from hwp5.binmodel import ShapeComponent
+from hwp5.binmodel import TableBody
+from hwp5.binmodel import TableCell
+from hwp5.binmodel import ParaText
+from hwp5.binmodel import ParaLineSeg
+from hwp5.binmodel import ParaCharShape
+from hwp5.binmodel import LineSeg
+from hwp5.binmodel import ParaRangeTag
+from hwp5.binmodel import Field
+from hwp5.binmodel import ControlChar
+from hwp5.binmodel import Control
+
 logger = logging.getLogger(__name__)
 
 
@@ -125,7 +144,6 @@ def line_segmented(chunks, ranged_linesegs):
 
 def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
     ''' lineseg/charshaped text chunks '''
-    from .binmodel import ParaText, ParaLineSeg, ParaCharShape
 
     stack = []  # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
@@ -138,6 +156,8 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 paratext = stack[-1].get(ParaText)
                 paracharshape = stack[-1].get(ParaCharShape)
                 paralineseg = stack[-1].get(ParaLineSeg)
+                # TODO: RangeTags are not used for now
+                # pararangetag = stack[-1].get(ParaRangeTag)
                 if paratext is None:
                     paratext = (ParaText,
                                 dict(chunks=[((0, 0), '')]),
@@ -149,8 +169,7 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
 
                 yield ENDEVENT, (model, attributes, context)
                 stack.pop()
-        #elif model in (ParaText, ParaCharShape):
-        elif model in (ParaText, ParaCharShape, ParaLineSeg):
+        elif model in (ParaText, ParaCharShape, ParaLineSeg, ParaRangeTag):
             if event == STARTEVENT:
                 stack[-1][model] = model, attributes, context
         else:
@@ -159,7 +178,6 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
 
 def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
                                            paralineseg):
-    from .binmodel import LineSeg
 
     paratext_model, paratext_attributes, paratext_context = paratext
 
@@ -192,7 +210,6 @@ def merge_paragraph_text_charshape_lineseg(paratext, paracharshape,
 
 
 def range_shaped_textchunk_events(paratext_context, range_shaped_textchunks):
-    from .binmodel import ControlChar
     for (startpos, endpos), (shape, none), chunk in range_shaped_textchunks:
         if isinstance(chunk, basestring):
             textitem = (Text,
@@ -243,35 +260,50 @@ def wrap_section(event_prefixed_mac, sect_id=None):
 
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''
-    from .binmodel import ControlChar, Control
     if stack is None:
         stack = []  # stack of ancestor Paragraphs
     for event, item in event_prefixed_mac:
         model, attributes, context = item
         if model is Paragraph:
-            if event == STARTEVENT:
-                stack.append(dict())
-                yield STARTEVENT, item
-            else:
-                yield ENDEVENT, item
-                stack.pop()
+            for x in meci_paragraph(event, stack, item):
+                yield x
         elif model is ControlChar:
-            if event is STARTEVENT:
-                if attributes['kind'] is ControlChar.EXTENDED:
-                    control_subtree = stack[-1].get(Control).pop(0)
-                    tev = tree_events(*control_subtree)
-                    yield tev.next()  # to evade the Control/STARTEVENT trigger
-                                      # in parse_models_pass3()
-                    for k in make_extended_controls_inline(tev, stack):
-                        yield k
-                else:
-                    yield STARTEVENT, item
-                    yield ENDEVENT, item
+            for x in meci_controlchar(event, stack, item, attributes):
+                yield x
         elif issubclass(model, Control) and event == STARTEVENT:
             control_subtree = build_subtree(event_prefixed_mac)
-            stack[-1].setdefault(Control, []).append(control_subtree)
+            paragraph = stack[-1]
+            paragraph_controls = paragraph.setdefault(Control, [])
+            paragraph_controls.append(control_subtree)
         else:
             yield event, item
+
+
+def meci_paragraph(event, stack, item):
+    if event == STARTEVENT:
+        stack.append(dict())
+        yield STARTEVENT, item
+    else:
+        yield ENDEVENT, item
+        stack.pop()
+
+
+def meci_controlchar(event, stack, item, attributes):
+    if event is STARTEVENT:
+        if attributes['kind'] is ControlChar.EXTENDED:
+            paragraph = stack[-1]
+            paragraph_controls = paragraph.get(Control)
+            control_subtree = paragraph_controls.pop(0)
+            tev = tree_events(*control_subtree)
+            # to evade the Control/STARTEVENT trigger
+            # in parse_models_pass3()
+            yield tev.next()
+
+            for k in make_extended_controls_inline(tev, stack):
+                yield k
+        else:
+            yield STARTEVENT, item
+            yield ENDEVENT, item
 
 
 def make_paragraphs_children_of_listheader(event_prefixed_mac,
@@ -306,73 +338,108 @@ def make_paragraphs_children_of_listheader(event_prefixed_mac,
 
 
 def match_field_start_end(event_prefixed_mac):
-    from .binmodel import Field, ControlChar
     stack = []
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if issubclass(model, Field):
-            if event is STARTEVENT:
-                stack.append(item)
-                yield event, item
-            else:
-                pass
+            for x in mfse_field(event, stack, item):
+                yield x
+        elif model is LineSeg:
+            for x in mfse_lineseg(event, stack, item):
+                yield x
         elif model is ControlChar and attributes['name'] == 'FIELD_END':
-            if event is ENDEVENT:
-                if len(stack) > 0:
-                    yield event, stack.pop()
-                else:
-                    logger.warning('unmatched field end')
+            for x in mfse_field_end(event, stack, item):
+                yield x
         else:
             yield event, item
+
+
+def mfse_field(event, stack, item):
+    if event is STARTEVENT:
+        stack.append(item)
+        yield event, item
+    else:
+        pass
+
+
+def mfse_lineseg(event, stack, item):
+    if event is ENDEVENT:
+        # fields still not closed; temporarily close them
+        for field_item in reversed(stack):
+            yield ENDEVENT, field_item
+        yield event, item
+    elif event is STARTEVENT:
+        yield event, item
+        # fields temporarily closed; open them again
+        for field_item in stack:
+            yield STARTEVENT, field_item
+
+
+def mfse_field_end(event, stack, item):
+    if event is ENDEVENT:
+        if len(stack) > 0:
+            yield event, stack.pop()
+        else:
+            logger.warning('unmatched field end')
 
 
 class TableRow:
     pass
 
 
-def restructure_tablebody(event_prefixed_mac):
-    ROW_OPEN = 1
-    ROW_CLOSE = 2
+ROW_OPEN = 1
+ROW_CLOSE = 2
 
-    from collections import deque
+
+def restructure_tablebody(event_prefixed_mac):
+    ''' Group table columns in each rows and wrap them with TableRow. '''
     stack = []
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if model is TableBody:
-            if event is STARTEVENT:
-                rowcols = deque()
-                for cols in attributes.pop('rowcols'):
-                    if cols == 1:
-                        rowcols.append(ROW_OPEN | ROW_CLOSE)
-                    else:
-                        rowcols.append(ROW_OPEN)
-                        for i in range(0, cols - 2):
-                            rowcols.append(0)
-                        rowcols.append(ROW_CLOSE)
-                stack.append((context, rowcols))
-                yield event, item
-            else:
-                yield event, item
-                stack.pop()
+            for x in rstbody_tablebody(event, stack, item, attributes,
+                                       context):
+                yield x
         elif model is TableCell:
-            table_context, rowcols = stack[-1]
-            row_context = dict(table_context)
-            if event is STARTEVENT:
-                how = rowcols[0]
-                if how & ROW_OPEN:
-                    yield STARTEVENT, (TableRow, dict(), row_context)
-            yield event, item
-            if event is ENDEVENT:
-                how = rowcols.popleft()
-                if how & ROW_CLOSE:
-                    yield ENDEVENT, (TableRow, dict(), row_context)
+            for x in rstbody_tablecell(event, stack, item):
+                yield x
         else:
             yield event, item
 
 
+def rstbody_tablebody(event, stack, item, attributes, context):
+    if event is STARTEVENT:
+        rowcols = deque()
+        for cols in attributes.pop('rowcols'):
+            if cols == 1:
+                rowcols.append(ROW_OPEN | ROW_CLOSE)
+            else:
+                rowcols.append(ROW_OPEN)
+                for i in range(0, cols - 2):
+                    rowcols.append(0)
+                rowcols.append(ROW_CLOSE)
+        stack.append((context, rowcols))
+        yield event, item
+    else:
+        yield event, item
+        stack.pop()
+
+
+def rstbody_tablecell(event, stack, item):
+    table_context, rowcols = stack[-1]
+    row_context = dict(table_context)
+    if event is STARTEVENT:
+        how = rowcols[0]
+        if how & ROW_OPEN:
+            yield STARTEVENT, (TableRow, dict(), row_context)
+    yield event, item
+    if event is ENDEVENT:
+        how = rowcols.popleft()
+        if how & ROW_CLOSE:
+            yield ENDEVENT, (TableRow, dict(), row_context)
+
+
 def embed_bindata(event_prefixed_mac, bindata):
-    from hwp5.binmodel import BinData
-    import base64
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
         if event is STARTEVENT and model is BinData:
@@ -392,7 +459,6 @@ def embed_bindata(event_prefixed_mac, bindata):
 
 
 def prefix_binmodels_with_event(context, models):
-    from .treeop import prefix_event
     level_prefixed = ((model['level'],
                        (model['type'], model['content'], context))
                       for model in models)
@@ -400,7 +466,6 @@ def prefix_binmodels_with_event(context, models):
 
 
 def wrap_modelevents(wrapper_model, modelevents):
-    from .treeop import STARTEVENT, ENDEVENT
     yield STARTEVENT, wrapper_model
     for mev in modelevents:
         yield mev
@@ -410,11 +475,20 @@ def wrap_modelevents(wrapper_model, modelevents):
 def modelevents_to_xmlevents(modelevents):
     from hwp5.xmlformat import startelement
     for event, (model, attributes, context) in modelevents:
-        if event is STARTEVENT:
-            for x in startelement(context, (model, attributes)):
-                yield x
-        elif event is ENDEVENT:
-            yield ENDEVENT, model.__name__
+        try:
+            if event is STARTEVENT:
+                for x in startelement(context, (model, attributes)):
+                    yield x
+            elif event is ENDEVENT:
+                yield ENDEVENT, model.__name__
+        except:
+            logger.error('model: %s', pformat({
+                'event': event,
+                'model': model,
+                'attributes': attributes,
+                'context': context
+            }))
+            raise
 
 
 class XmlEvents(object):
@@ -474,6 +548,42 @@ class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
         return d
 
 
+class HwpSummaryInfo(filestructure.HwpSummaryInfo, XmlEventsMixin):
+
+    class Property(Struct):
+        pass
+
+    def events(self, **context):
+        content = dict(byteorder='%x' % self.byteorder,
+                       format=str(self.format),
+                       osversion=str(self.osversion),
+                       os=str(self.os),
+                       clsid=str(self.clsid))
+
+        summaryinfo = HwpSummaryInfo, content, context
+
+        events = prefix_binmodels_with_event(context, self.properties)
+        events = wrap_modelevents(summaryinfo, events)
+        for x in events:
+            yield x
+
+    @property
+    def properties(self):
+        propertyset = filestructure.HwpSummaryInfo.propertyset.__get__(self)
+        for prop_id, prop in propertyset.items():
+            name = prop.get('name')
+            value = prop.get('value')
+
+            content = dict(id=prop_id)
+            if name:
+                content['name'] = name
+            if value:
+                content['value'] = unicode(value)
+            yield dict(level=0,
+                       type=self.Property,
+                       content=content)
+
+
 class DocInfo(ModelEventStream):
 
     def events(self, **kwargs):
@@ -518,7 +628,6 @@ class Sections(binmodel.Sections, XmlEventsMixin):
 
         class BodyText(object):
             pass
-        from itertools import chain
         bodytext_events = chain(*bodytext_events)
         bodytext = BodyText, dict(), dict()
         return wrap_modelevents(bodytext, bodytext_events)
@@ -538,17 +647,18 @@ class HwpDoc(Struct):
 
 class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
 
+    summaryinfo_class = HwpSummaryInfo
     docinfo_class = DocInfo
     bodytext_class = Sections
 
     def events(self, **kwargs):
-        from itertools import chain
         if 'embedbin' in kwargs and kwargs['embedbin'] and 'BinData' in self:
             kwargs['embedbin'] = self['BinData']
         else:
             kwargs.pop('embedbin', None)
 
-        events = chain(self.docinfo.events(**kwargs),
+        events = chain(self.summaryinfo.events(**kwargs),
+                       self.docinfo.events(**kwargs),
                        self.text.events(**kwargs))
 
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()

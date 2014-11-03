@@ -20,6 +20,7 @@ class TestBinIO(TestCase):
     def BasicStruct(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import UINT16
+
         class BasicStruct(object):
             __metaclass__ = StructType
 
@@ -33,6 +34,7 @@ class TestBinIO(TestCase):
     def NestedStruct(self):
         from hwp5.dataio import StructType
         from hwp5.dataio import UINT16
+
         class NestedStruct(object):
             __metaclass__ = StructType
 
@@ -64,7 +66,6 @@ class TestBinIO(TestCase):
 
         ev, item = events.next()
         self.assertEquals((ENDEVENT, bin_item), (ev, item))
-
 
     def test_map_events_nested(self):
         from hwp5.treeop import STARTEVENT, ENDEVENT
@@ -113,8 +114,10 @@ class TestBinIO(TestCase):
         from hwp5.bintype import bintype_map_events
 
         xarray_type = X_ARRAY(self.BasicStruct, ref_member('count'))
+
         class StructWithXArray(object):
             __metaclass__ = StructType
+
             @staticmethod
             def attributes():
                 yield UINT16, 'count'
@@ -192,9 +195,10 @@ class TestBinIO(TestCase):
         from hwp5.dataio import ref_member
         from hwp5.bintype import bintype_map_events
         from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_types
+        from hwp5.bintype import resolve_typedefs
 
         xarray_type = X_ARRAY(UINT16, ref_member('a'))
+
         class StructWithXArray(object):
             __metaclass__ = StructType
 
@@ -208,7 +212,7 @@ class TestBinIO(TestCase):
         static_events = list(static_events)
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals((STARTEVENT, struct), (ev, struct))
         self.assertEquals((None,
@@ -229,7 +233,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals((STARTEVENT, struct), (ev, struct))
         self.assertEquals((None,
@@ -252,7 +256,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals((STARTEVENT, struct), (ev, struct))
         self.assertEquals((None,
@@ -284,9 +288,10 @@ class TestBinIO(TestCase):
         from hwp5.dataio import ref_member
         from hwp5.bintype import bintype_map_events
         from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_types
+        from hwp5.bintype import resolve_typedefs
 
         xarray_type = X_ARRAY(self.BasicStruct, ref_member('a'))
+
         class StructWithXArray(object):
             __metaclass__ = StructType
 
@@ -300,7 +305,7 @@ class TestBinIO(TestCase):
         static_events = list(static_events)
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals((STARTEVENT, struct), (ev, struct))
         self.assertEquals((None,
@@ -317,7 +322,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals((STARTEVENT, struct), (ev, struct))
         self.assertEquals((None,
@@ -328,13 +333,13 @@ class TestBinIO(TestCase):
                            dict(name='b', count=1, type=xarray_type)),
                           events.next())
         self.assertEquals((STARTEVENT, dict(type=self.BasicStruct)),
-                           events.next())
+                          events.next())
         self.assertEquals((None, dict(name='a', type=UINT16)),
                           events.next())
         self.assertEquals((None, dict(name='b', type=UINT16)),
                           events.next())
         self.assertEquals((ENDEVENT, dict(type=self.BasicStruct)),
-                           events.next())
+                          events.next())
         self.assertEquals((ENDEVENT,
                            dict(name='b', count=1, type=xarray_type)),
                           events.next())
@@ -342,7 +347,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals((STARTEVENT, struct), (ev, struct))
         self.assertEquals((None,
@@ -353,21 +358,21 @@ class TestBinIO(TestCase):
                            dict(name='b', count=2, type=xarray_type)),
                           events.next())
         self.assertEquals((STARTEVENT, dict(type=self.BasicStruct)),
-                           events.next())
+                          events.next())
         self.assertEquals((None, dict(name='a', type=UINT16)),
                           events.next())
         self.assertEquals((None, dict(name='b', type=UINT16)),
                           events.next())
         self.assertEquals((ENDEVENT, dict(type=self.BasicStruct)),
-                           events.next())
+                          events.next())
         self.assertEquals((STARTEVENT, dict(type=self.BasicStruct)),
-                           events.next())
+                          events.next())
         self.assertEquals((None, dict(name='a', type=UINT16)),
                           events.next())
         self.assertEquals((None, dict(name='b', type=UINT16)),
                           events.next())
         self.assertEquals((ENDEVENT, dict(type=self.BasicStruct)),
-                           events.next())
+                          events.next())
         self.assertEquals((ENDEVENT,
                            dict(name='b', count=2, type=xarray_type)),
                           events.next())
@@ -380,7 +385,7 @@ class TestBinIO(TestCase):
         from hwp5.dataio import UINT16
         from hwp5.bintype import bintype_map_events
         from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_types
+        from hwp5.bintype import resolve_typedefs
 
         def if_a_is_1(context, values):
             return values['a'] == 1
@@ -398,7 +403,7 @@ class TestBinIO(TestCase):
         static_events = list(static_events)
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals(STARTEVENT, ev)
         self.assertEquals(StructWithCondition, struct['type'])
@@ -413,7 +418,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals(STARTEVENT, ev)
         self.assertEquals(StructWithCondition, struct['type'])
@@ -437,7 +442,7 @@ class TestBinIO(TestCase):
         from hwp5.dataio import UINT16
         from hwp5.bintype import bintype_map_events
         from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_types
+        from hwp5.bintype import resolve_typedefs
 
         def if_a_is_1(context, values):
             return values['a'] == 1
@@ -448,14 +453,15 @@ class TestBinIO(TestCase):
             @staticmethod
             def attributes():
                 yield UINT16, 'a'
-                yield dict(name='b', type=self.BasicStruct, condition=if_a_is_1)
+                yield dict(name='b', type=self.BasicStruct,
+                           condition=if_a_is_1)
                 yield UINT16, 'c'
 
         static_events = bintype_map_events(dict(type=StructWithCondition))
         static_events = list(static_events)
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals(STARTEVENT, ev)
         self.assertEquals(StructWithCondition, struct['type'])
@@ -470,7 +476,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals(STARTEVENT, ev)
         self.assertEquals(StructWithCondition, struct['type'])
@@ -504,7 +510,7 @@ class TestBinIO(TestCase):
         from hwp5.dataio import UINT16
         from hwp5.bintype import bintype_map_events
         from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_types
+        from hwp5.bintype import resolve_typedefs
 
         class StructWithSelectiveType(object):
             __metaclass__ = StructType
@@ -522,7 +528,7 @@ class TestBinIO(TestCase):
         static_events = list(static_events)
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals(STARTEVENT, ev)
         self.assertEquals(StructWithSelectiveType, struct['type'])
@@ -539,7 +545,7 @@ class TestBinIO(TestCase):
                           events.next())
 
         events = static_to_mutable(iter(static_events))
-        events = resolve_types(events, dict())
+        events = resolve_typedefs(events, dict())
         ev, struct = events.next()
         self.assertEquals(STARTEVENT, ev)
         self.assertEquals(StructWithSelectiveType, struct['type'])
@@ -591,6 +597,7 @@ class TestBinIO(TestCase):
 
         from hwp5.dataio import StructType
         from hwp5.dataio import BSTR
+
         class StructWithBSTR(object):
             __metaclass__ = StructType
 
@@ -611,6 +618,7 @@ class TestBinIO(TestCase):
         assertEquals((ENDEVENT, bin_item), events.next())
 
         from hwp5.binmodel import ParaTextChunks
+
         class StructWithParaTextChunks(object):
             __metaclass__ = StructType
 
@@ -636,7 +644,7 @@ class TestBinIO(TestCase):
         from hwp5.dataio import UINT16
         from hwp5.bintype import bintype_map_events
         from hwp5.bintype import resolve_values_from_stream
-        from hwp5.bintype import collect_values
+        from hwp5.bintype import construct_composite_values
         from StringIO import StringIO
 
         stream = StringIO('\x01\x00\x01\x01\x02\x01\x02\x00')
@@ -645,7 +653,7 @@ class TestBinIO(TestCase):
         bin_item = dict(type=self.NestedStruct)
         events = bintype_map_events(bin_item)
         events = resolve_values(events)
-        events = collect_values(events)
+        events = construct_composite_values(events)
 
         a = dict(name='a', type=UINT16, bin_offset=0, value=1)
         s_a = dict(name='a', type=UINT16, bin_offset=2, value=0x101)
@@ -659,7 +667,7 @@ class TestBinIO(TestCase):
         self.assertEquals((None, a), events.next())
         self.assertEquals((STARTEVENT, dict(name='s', type=self.BasicStruct,
                                             value=dict())),
-                           events.next())
+                          events.next())
         self.assertEquals((None, s_a), events.next())
         self.assertEquals((None, s_b), events.next())
         self.assertEquals((ENDEVENT, s), events.next())
@@ -695,7 +703,7 @@ class TestReadEvents(TestCase):
         a = dict(name='a', type=UINT16, value=0, bin_offset=0)
         c = dict(name='c', type=UINT16, value=2, bin_offset=2)
         self.assertEquals((STARTEVENT, dict(type=StructWithCondition,
-                                           value=dict())),
+                                            value=dict())),
                           events.next())
         self.assertEquals((None, a), events.next())
         self.assertEquals((None, c), events.next())

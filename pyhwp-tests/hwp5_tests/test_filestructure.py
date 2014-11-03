@@ -193,13 +193,13 @@ class TestHwp5Compression(TestBase):
     def scripts(self):
         return self.hwp5file_compressed['Scripts']
 
-    def test_docinfo_uncompressed(self):
+    def test_docinfo_decompressed(self):
         from hwp5.recordstream import read_record
         from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
         record = read_record(self.docinfo, 0)
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
 
-    def test_bodytext_uncompressed(self):
+    def test_bodytext_decompressed(self):
         from hwp5.recordstream import read_record
         from hwp5.tagids import HWPTAG_PARA_HEADER
         record = read_record(self.bodytext['Section0'].open(), 0)
@@ -350,50 +350,3 @@ class TestGeneratorReader(TestCase):
         self.assertEquals('lo wor', f.read(6))
         self.assertEquals('ldmy ', f.read(5))
         self.assertEquals('name isgenreader', f.read(1000))
-
-
-from hwp5.utils import cached_property
-
-
-class TestUncompress(TestCase):
-
-    @cached_property
-    def original_data(self):
-        import os
-        return os.urandom(16384)
-
-    @cached_property
-    def compressed_data(self):
-        import zlib
-        return zlib.compress(self.original_data)
-
-    def test_incremental_decode(self):
-        compressed_data = self.compressed_data
-
-        from hwp5.filestructure import ZLibIncrementalDecoder
-        dec = ZLibIncrementalDecoder(wbits=-15)
-        data = dec.decode(compressed_data[2:2048])
-        data += dec.decode(compressed_data[2048:2048 + 1024])
-        data += dec.decode(compressed_data[2048 + 1024:2048 + 1024 + 4096])
-        data += dec.decode(compressed_data[2048 + 1024 + 4096:], True)
-
-        self.assertEquals(self.original_data, data)
-
-    def test_uncompress(self):
-        from StringIO import StringIO
-
-        from hwp5.filestructure import uncompress_gen
-        gen = uncompress_gen(StringIO(self.compressed_data[2:]))
-        self.assertEquals(self.original_data, ''.join(gen))
-
-        #print '-----'
-
-        from hwp5.filestructure import uncompress
-
-        f = uncompress(StringIO(self.compressed_data[2:]))
-        g = StringIO(self.original_data)
-
-        self.assertEquals(f.read(2048), g.read(2048))
-        self.assertEquals(f.read(1024), g.read(1024))
-        self.assertEquals(f.read(4096), g.read(4096))
-        self.assertEquals(f.read(), g.read())

@@ -1,10 +1,24 @@
 CHANGES
 =======
 
+0.1b8 (2014-11-03)
+------------------
+
+- hwp5view: experimental viewer with webkitgtk+ 
+- hwp5proc: xml --formats ("flat", "nested")
+- hwp5proc: models --events (experimental) 
+- hwp5proc: models --seqno --format (incompatible changes)
+- hwp5proc: find --from-stdin 
+- hwp5proc: find --format
+- binmodels: GShapeObjectCaption
+- olestorage: Gsf implementation through python-gi
+- olestorage: use new olefile instead of OleFileIO_PL
+
+
 0.1b7 (2014-01-31)
 ------------------
 
-- support distribution docs.
+- support distribution docs. (based on `Changwoo Ryu's algorithm <https://groups.google.com/forum/#!topic/hwp-foss/d2KL2ypR89Q>`_)
 
 0.1b6 (2014-01-20)
 ------------------
@@ -27,7 +41,7 @@ CHANGES
 ------------------
 
 - hwp5proc records: new option '--raw-header'
-- hwp5odt: new '--document' option produces single ODT XML files (*.fodt)
+- hwp5odt: new '--document' option produces single ODT XML files (``*.fodt``)
 - hwp5odt: new '--styles', '--content' option produces styles/content XML files
 - ODT XSL files restructured
 

@@ -860,7 +860,7 @@
 
   <xsl:template match="LineSeg">
     <xsl:param name="paragraph" />
-    <xsl:apply-templates select="Text|GShapeObjectControl|ControlChar">
+    <xsl:apply-templates select="Text|GShapeObjectControl|FootNote|EndNote|ControlChar">
       <xsl:with-param name="paragraph" select="$paragraph"/>
       <xsl:with-param name="lineseg-pos" select="position()"/>
     </xsl:apply-templates>
@@ -980,10 +980,10 @@
       Elements:
 	style:background-image 17.3.
       -->
-      <xsl:attribute name="fo:padding-left"><xsl:value-of select="2 * round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-      <xsl:attribute name="fo:padding-right"><xsl:value-of select="2 * round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-      <xsl:attribute name="fo:padding-top"><xsl:value-of select="2 * round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
-      <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="2 * round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-left"><xsl:value-of select="round(@padding-left div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-right"><xsl:value-of select="round(@padding-right div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-top"><xsl:value-of select="round(@padding-top div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
+      <xsl:attribute name="fo:padding-bottom"><xsl:value-of select="round(@padding-bottom div 7200 * 2.54 * 10 * 100) div 100" />mm</xsl:attribute>
       <xsl:variable name="bfid" select="@borderfill-id" />
       <xsl:for-each select="/HwpDoc/DocInfo/IdMappings/BorderFill[number($bfid)]">
 	<xsl:apply-templates mode="fo-border" select="." />
@@ -1550,5 +1550,44 @@
     </xsl:element>
   </xsl:template>
 
+  <!-- 각주 -->
+  <xsl:template match="FootNote">
+    <xsl:apply-templates mode="text:note" select="." />
+  </xsl:template>
+
+  <!-- 미주 -->
+  <xsl:template match="EndNote">
+    <xsl:apply-templates mode="text:note" select="." />
+  </xsl:template>
+
+  <!-- 각주/미주 공통 -->
+  <xsl:template mode="text:note" match="FootNote|EndNote">
+    <xsl:element name="text:note">
+      <xsl:attribute name="text:id"><xsl:value-of select="local-name()" />-<xsl:value-of select="@number" /></xsl:attribute>
+      <xsl:apply-templates mode="text:note-class" select="." />
+      <xsl:apply-templates mode="text:note-citation" select="." />
+      <xsl:apply-templates mode="text:note-body" select="." />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="text:note-class" match="FootNote">
+    <xsl:attribute name="text:note-class">footnote</xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="text:note-class" match="EndNote">
+    <xsl:attribute name="text:note-class">endnote</xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="text:note-citation" match="FootNote|EndNote">
+    <xsl:element name="text:note-citation">
+      <xsl:value-of select="@number"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template mode="text:note-body" match="FootNote|EndNote">
+    <xsl:element name="text:note-body">
+      <xsl:apply-templates select="ListHeader/Paragraph" />
+    </xsl:element>
+  </xsl:template>
 
 </xsl:stylesheet>

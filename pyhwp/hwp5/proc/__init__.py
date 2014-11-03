@@ -103,7 +103,7 @@ subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
 
 import hwp5
 version = '''hwp5proc (pyhwp) %s
-Copyright (C) 2010-2012 mete0r <mete0r@sarangbang.or.kr>
+Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
 License AGPLv3+: GNU Affero GPL version 3 or any later
 <http://gnu.org/licenses/agpl.txt>.
 This is free software: you are free to change and redistribute it.
