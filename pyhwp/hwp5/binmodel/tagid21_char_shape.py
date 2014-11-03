@@ -77,6 +77,6 @@ class CharShape(RecordModel):
         yield COLORREF, 'underline_color',
         yield COLORREF, 'shade_color',
         yield COLORREF, 'shadow_color',
-        #yield UINT16, 'borderfill_id',        # DIFFSPEC
-        #yield COLORREF, 'strikeoutColor',    # DIFFSPEC
+        # yield UINT16, 'borderfill_id',        # DIFFSPEC
+        # yield COLORREF, 'strikeoutColor',    # DIFFSPEC
     attributes = classmethod(attributes)

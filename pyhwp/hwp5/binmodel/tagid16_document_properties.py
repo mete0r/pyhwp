@@ -39,5 +39,5 @@ class DocumentProperties(RecordModel):
         yield UINT32, 'list_id',
         yield UINT32, 'paragraph_id',
         yield UINT32, 'character_unit_loc_in_paragraph',
-        #yield UINT32, 'flags',   # DIFFSPEC
+        # yield UINT32, 'flags',   # DIFFSPEC
     attributes = staticmethod(attributes)

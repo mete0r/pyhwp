@@ -27,7 +27,7 @@ class ShapeArc(RecordModel):
 
     def attributes(cls):
         ''' 표 96 호 개체 속성 '''
-        #yield ShapeEllipse.Flags, 'flags' # SPEC TODO
+        # yield ShapeEllipse.Flags, 'flags' # SPEC TODO
         yield Coord, 'center'
         yield Coord, 'axis1'
         yield Coord, 'axis2'

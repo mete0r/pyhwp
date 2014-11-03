@@ -157,7 +157,7 @@ def make_texts_linesegmented_and_charshaped(event_prefixed_mac):
                 paracharshape = stack[-1].get(ParaCharShape)
                 paralineseg = stack[-1].get(ParaLineSeg)
                 # TODO: RangeTags are not used for now
-                #pararangetag = stack[-1].get(ParaRangeTag)
+                # pararangetag = stack[-1].get(ParaRangeTag)
                 if paratext is None:
                     paratext = (ParaText,
                                 dict(chunks=[((0, 0), '')]),
@@ -295,8 +295,10 @@ def meci_controlchar(event, stack, item, attributes):
             paragraph_controls = paragraph.get(Control)
             control_subtree = paragraph_controls.pop(0)
             tev = tree_events(*control_subtree)
-            yield tev.next()  # to evade the Control/STARTEVENT trigger
-                              # in parse_models_pass3()
+            # to evade the Control/STARTEVENT trigger
+            # in parse_models_pass3()
+            yield tev.next()
+
             for k in make_extended_controls_inline(tev, stack):
                 yield k
         else:

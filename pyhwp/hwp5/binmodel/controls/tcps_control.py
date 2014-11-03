@@ -27,8 +27,8 @@ class TCPSControl(Control):
 
     def attributes():
         yield BSTR, 'textlength'
-        #yield UINT8, 'frameType'
-        #yield INT8, 'internalCharacterSize'
-        #yield UINT8, 'internalCharacterFold'
-        #yield N_ARRAY(UINT8, UINT32), 'characterShapeIds'
+        # yield UINT8, 'frameType'
+        # yield INT8, 'internalCharacterSize'
+        # yield UINT8, 'internalCharacterFold'
+        # yield N_ARRAY(UINT8, UINT32), 'characterShapeIds'
     attributes = staticmethod(attributes)

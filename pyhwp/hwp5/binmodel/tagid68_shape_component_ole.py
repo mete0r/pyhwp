@@ -33,9 +33,11 @@ class ShapeOLE(RecordModel):
     Flags = Flags(UINT32,
                   0, 7, 'dvaspect',
                   8, 'moniker',
-                  9, 15, 'baseline')  # 0 means defaut (85%)
-                                      # 1 means 0%
-                                      # 101 means 100%
+                  # baseline:
+                  #  0 means defaut (85%)
+                  #  1 means 0%
+                  #  101 means 100%
+                  9, 15, 'baseline')
 
     @classmethod
     def attributes(cls):

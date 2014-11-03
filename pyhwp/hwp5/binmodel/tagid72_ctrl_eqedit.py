@@ -38,8 +38,8 @@ class EqEdit(RecordModel):
         # TODO: followings are not tested against real files
         if False:
             yield
-        #yield cls.Flags, 'flags'
-        #yield BSTR, 'script'
-        #yield HWPUNIT, 'font_size'
-        #yield COLORREF, 'color'
-        #yield INT16, 'baseline'
+        # yield cls.Flags, 'flags'
+        # yield BSTR, 'script'
+        # yield HWPUNIT, 'font_size'
+        # yield COLORREF, 'color'
+        # yield INT16, 'baseline'

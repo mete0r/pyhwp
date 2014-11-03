@@ -84,7 +84,7 @@ def xmlattr_dashednames(attrs):
 def xmlattr_uniqnames(attrs):
     names = set([])
     for k, v in attrs:
-        assert not k in names, 'name clashes: %s' % k
+        assert k not in names, 'name clashes: %s' % k
         yield k, v
         names.add(k)
 

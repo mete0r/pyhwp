@@ -43,7 +43,7 @@ class PageDef(RecordModel):
         yield HWPUNIT, 'footer_offset',
         yield HWPUNIT, 'bookbinding_offset',
         yield cls.Flags, 'attr',
-        #yield UINT32, 'attr',
+        # yield UINT32, 'attr',
     attributes = classmethod(attributes)
 
     def getDimension(self):

@@ -88,6 +88,6 @@ class ParaShape(RecordModel):
         yield HWPUNIT16,  'border_top',
         yield HWPUNIT16,  'border_bottom',
         yield dict(type=cls.Flags2, name='flags2', version=(5, 0, 1, 7))
-        #yield cls.Flags3, 'flags3',   # DIFFSPEC
-        #yield UINT32, 'lineSpacing',  # DIFFSPEC
+        # yield cls.Flags3, 'flags3',   # DIFFSPEC
+        # yield UINT32, 'lineSpacing',  # DIFFSPEC
     attributes = classmethod(attributes)
