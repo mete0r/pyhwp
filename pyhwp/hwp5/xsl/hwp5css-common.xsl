@@ -16,6 +16,7 @@
                     <xsl:value-of select="@doubled-margin-right div 100 div 2"/>pt
                     <xsl:value-of select="@doubled-margin-bottom div 100 div 2"/>pt
                     <xsl:value-of select="@doubled-margin-left div 100 div 2"/>pt;
+                <xsl:apply-templates select="." mode="css-text-align" />
             }
             .parashape-<xsl:number value="position()-1" /> &gt; span {
             <xsl:choose>
@@ -58,5 +59,19 @@
           margin-left: <xsl:value-of select="PageDef/@left-offset div 100" />pt;
           margin-right <xsl:value-of select="PageDef/@right-offset div 100" />pt;
         }
+    </xsl:template>
+
+    <xsl:template match="ParaShape" mode="css-text-align">
+        text-align: <xsl:apply-templates select="." mode="css-text-align-value" />;
+    </xsl:template>
+
+    <xsl:template match="ParaShape" mode="css-text-align-value">
+        <xsl:choose>
+            <xsl:when test="@align = 'center'">center</xsl:when>
+            <xsl:when test="@align = 'left'">left</xsl:when>
+            <xsl:when test="@align = 'right'">right</xsl:when>
+            <xsl:when test="@align = 'both'">justify</xsl:when>
+            <xsl:otherwise>justify</xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
