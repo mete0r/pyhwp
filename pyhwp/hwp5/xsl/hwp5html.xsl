@@ -22,6 +22,7 @@
         </xsl:element>
         <xsl:apply-templates select="HwpSummaryInfo" mode="head" />
         <xsl:apply-templates select="DocInfo" mode="head" />
+        <xsl:apply-templates select="BodyText/SectionDef" mode="style" />
       </xsl:element>
       <xsl:apply-templates select="BodyText" mode="body" />
     </xsl:element>
@@ -55,6 +56,13 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="SectionDef" mode="style">
+    <xsl:element name="style">
+      <xsl:attribute name="type">text/css</xsl:attribute>
+      <xsl:apply-templates select="." mode="style-content" />
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="BodyText" mode="body">
     <xsl:element name="body">
       <xsl:apply-templates select="SectionDef" mode="div-section" />
@@ -63,7 +71,7 @@
 
   <xsl:template match="SectionDef" mode="div-section">
     <xsl:element name="div">
-      <xsl:attribute name="class">Section</xsl:attribute>
+      <xsl:attribute name="class">Section <xsl:value-of select="generate-id(.)"/></xsl:attribute>
       <xsl:for-each select="Paragraph">
         <xsl:apply-templates select="." mode="p"/>
       </xsl:for-each>

@@ -51,4 +51,12 @@
     </xsl:template>
 
     <xsl:template match="Border" mode="cssborder"> 1px solid <xsl:value-of select="@color" />/* width:<xsl:value-of select="@width" /> style:<xsl:value-of select="@style" /> */ </xsl:template>
+
+    <xsl:template match="SectionDef" mode="style-content">
+        .<xsl:value-of select="generate-id(.)" /> {
+          width: <xsl:value-of select="PageDef/@width div 100" />pt;
+          margin-left: <xsl:value-of select="PageDef/@left-offset div 100" />pt;
+          margin-right <xsl:value-of select="PageDef/@right-offset div 100" />pt;
+        }
+    </xsl:template>
 </xsl:stylesheet>
