@@ -209,12 +209,16 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template mode="make-style-name" match="Style">
+    <xsl:call-template name="make-ncname">
+      <xsl:with-param name="str" select="@local-name" />
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template mode="style:style" match="Style">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">
-        <xsl:call-template name="make-ncname">
-          <xsl:with-param name="str" select="@local-name" />
-        </xsl:call-template>
+        <xsl:apply-templates mode="make-style-name" select="." />
       </xsl:attribute>
       <!--
       <xsl:attribute name="style:parent-style-name"/>
@@ -222,9 +226,7 @@
       <xsl:variable name="styles" select="/HwpDoc/DocInfo/IdMappings/Style" />
       <xsl:variable name="next-style-id" select="@next-style-id + 1"/>
       <xsl:attribute name="style:next-style-name">
-        <xsl:call-template name="make-ncname">
-          <xsl:with-param name="str" select="$styles[$next-style-id]/@local-name" />
-        </xsl:call-template>
+        <xsl:apply-templates mode="make-style-name" select="$styles[$next-style-id]" />
       </xsl:attribute>
       <xsl:attribute name="style:family">paragraph</xsl:attribute>
       <xsl:attribute name="style:class">text</xsl:attribute>
@@ -239,10 +241,11 @@
   <xsl:template name="make-ncname">
     <!-- see #140 -->
     <!-- see http://www.w3.org/TR/REC-xml-names/#NT-NCName -->
+    <!-- see http://www.w3.org/TR/REC-xml/#NT-Name -->
     <!-- see http://stackoverflow.com/questions/1631396/what-is-an-xsncname-type-and-when-should-it-be-used -->
     <xsl:param name="str" />
     <xsl:variable name="prohibited"> !&quot;#$%&amp;&apos;()*+,/:;&lt;=&gt;?@[\]^`{|}~</xsl:variable>
-    <xsl:variable name="replace">------------------------------</xsl:variable>
+    <xsl:variable name="replace">______________________________</xsl:variable>
     <xsl:value-of select="translate($str, $prohibited, $replace)" />
   </xsl:template>
 
@@ -820,7 +823,7 @@
 
   <xsl:template mode="style:parent-style-name" match="Style">
     <xsl:attribute name="style:parent-style-name">
-      <xsl:value-of select="translate(translate(@local-name, ' ', '_'), '/', '-')" />
+      <xsl:apply-templates mode="make-style-name" select="." />
     </xsl:attribute>
   </xsl:template>
 
@@ -848,7 +851,9 @@
             <xsl:attribute name="text:style-name">Paragraph-<xsl:value-of select="@paragraph-id + 1"/></xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="text:style-name"><xsl:value-of select="$style/@local-name"/></xsl:attribute>
+            <xsl:attribute name="text:style-name">
+              <xsl:apply-templates mode="make-style-name" select="$style" />
+            </xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:apply-templates select="LineSeg">
