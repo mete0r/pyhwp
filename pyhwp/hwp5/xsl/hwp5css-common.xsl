@@ -22,7 +22,7 @@
             .parashape-<xsl:number value="position()-1" /> &gt; span {
             <xsl:choose>
                 <xsl:when test="@linespacing-type = 'ratio'">
-                line-height: <xsl:value-of select="@linespacing"/>%;
+                line-height: <xsl:value-of select="@linespacing div 100"/>;
                 </xsl:when>
             </xsl:choose>
             }
