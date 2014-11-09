@@ -29,6 +29,7 @@ Usage::
                  [--no-xml-decl]
                  [--output=<file>]
                  [--format=<format>]
+                 [--no-validate-wellformed]
                  [--loglevel=<loglevel>] [--logfile=<logfile>]
                  <hwp5file>
     hwp5proc xml --help
@@ -100,12 +101,13 @@ def main(args):
     open_dest = wrap_open_dest_for_tty(open_dest, [
         pager(),
         syntaxhighlight('application/xml'),
+    ] + ([
         xmllint(format=True),
-    ])
+    ] if not args['--no-validate-wellformed'] else []))
     open_dest = wrap_open_dest(open_dest, [
         xmllint(encode='utf-8'),
         xmllint(c14n=True),
-    ])
+    ] if not args['--no-validate-wellformed'] else [])
 
     hwp5file = Hwp5File(args['<hwp5file>'])
     with open_dest() as output:
