@@ -105,7 +105,7 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:for-each select="LineSeg">
-        <xsl:apply-templates />
+        <xsl:apply-templates select="Text|ControlChar|TableControl|GShapeObjectControl" />
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
