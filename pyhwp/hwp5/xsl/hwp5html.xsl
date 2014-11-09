@@ -71,7 +71,7 @@
 
   <xsl:template match="SectionDef" mode="div-section">
     <xsl:element name="div">
-      <xsl:attribute name="class">Section <xsl:value-of select="generate-id(.)"/></xsl:attribute>
+      <xsl:attribute name="class">Section Section-<xsl:value-of select="position()-1"/></xsl:attribute>
       <xsl:for-each select="Paragraph">
         <xsl:apply-templates select="." mode="p"/>
       </xsl:for-each>
