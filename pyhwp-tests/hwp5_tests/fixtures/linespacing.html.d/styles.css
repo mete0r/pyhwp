@@ -478,6 +478,14 @@
                 color: #000000;
                 font-size: 10pt;
                 
+                text-decoration: overline;
+                text-decoration-style: dotted;
+                text-decoration-color: #0000ff;
+                -moz-text-decoration-style: dotted;
+                -moz-text-decoration-color: #0000ff;
+                -webkit-text-decoration-style: dotted;
+                -webkit-text-decoration-color: #0000ff;
+            
             }
         
             .charshape-6 {
@@ -485,6 +493,14 @@
                 color: #000000;
                 font-size: 20pt;
                 
+                text-decoration: overline;
+                text-decoration-style: dotted;
+                text-decoration-color: #0000ff;
+                -moz-text-decoration-style: dotted;
+                -moz-text-decoration-color: #0000ff;
+                -webkit-text-decoration-style: dotted;
+                -webkit-text-decoration-color: #0000ff;
+            
             }
         
             .charshape-7 {
@@ -492,6 +508,14 @@
                 color: #000000;
                 font-size: 15pt;
                 
+                text-decoration: overline;
+                text-decoration-style: dotted;
+                text-decoration-color: #0000ff;
+                -moz-text-decoration-style: dotted;
+                -moz-text-decoration-color: #0000ff;
+                -webkit-text-decoration-style: dotted;
+                -webkit-text-decoration-color: #0000ff;
+            
             }
         
             .borderfill-1 {

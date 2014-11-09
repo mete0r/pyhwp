@@ -37,9 +37,6 @@
             p.Footnote {
             }
         
-            p.Endnote {
-            }
-        
             p.Memo {
             }
         
@@ -70,19 +67,17 @@
                     0pt
                     0pt
                     0pt
-                    0pt;
+                    20pt;
                 
         text-align: justify;
     
-        text-indent: -13.1pt
+        text-indent: 0pt
     ;
-        
-        padding-left: 13.1pt;
         
             }
             .parashape-1 > span {
             
-                line-height: 130%;
+                line-height: 160%;
                 
             }
         
@@ -91,7 +86,7 @@
                     0pt
                     0pt
                     0pt
-                    0pt;
+                    30pt;
                 
         text-align: justify;
     
@@ -110,7 +105,7 @@
                     0pt
                     0pt
                     0pt
-                    15pt;
+                    40pt;
                 
         text-align: justify;
     
@@ -129,7 +124,7 @@
                     0pt
                     0pt
                     0pt
-                    10pt;
+                    50pt;
                 
         text-align: justify;
     
@@ -148,7 +143,7 @@
                     0pt
                     0pt
                     0pt
-                    20pt;
+                    60pt;
                 
         text-align: justify;
     
@@ -167,7 +162,7 @@
                     0pt
                     0pt
                     0pt
-                    30pt;
+                    70pt;
                 
         text-align: justify;
     
@@ -186,7 +181,7 @@
                     0pt
                     0pt
                     0pt
-                    40pt;
+                    15pt;
                 
         text-align: justify;
     
@@ -205,7 +200,7 @@
                     0pt
                     0pt
                     0pt
-                    50pt;
+                    0pt;
                 
         text-align: justify;
     
@@ -215,7 +210,7 @@
             }
             .parashape-8 > span {
             
-                line-height: 160%;
+                line-height: 150%;
                 
             }
         
@@ -224,7 +219,7 @@
                     0pt
                     0pt
                     0pt
-                    60pt;
+                    10pt;
                 
         text-align: justify;
     
@@ -243,17 +238,19 @@
                     0pt
                     0pt
                     0pt
-                    70pt;
+                    0pt;
                 
         text-align: justify;
     
-        text-indent: 0pt
+        text-indent: -13.1pt
     ;
+        
+        padding-left: 13.1pt;
         
             }
             .parashape-10 > span {
             
-                line-height: 160%;
+                line-height: 130%;
                 
             }
         
@@ -272,7 +269,7 @@
             }
             .parashape-11 > span {
             
-                line-height: 150%;
+                line-height: 160%;
                 
             }
         
@@ -319,8 +316,14 @@
                 color: #000000;
                 font-size: 10pt;
                 
-                font-weight: bold;
-                
+                text-decoration: underline;
+                text-decoration-style: solid;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: solid;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: solid;
+                -webkit-text-decoration-color: #000000;
+            
             }
         
             .charshape-6 {
@@ -328,120 +331,17 @@
                 color: #000000;
                 font-size: 10pt;
                 
-                font-style: italic;
-                
+                text-decoration: underline;
+                text-decoration-style: dashed;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: dashed;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: dashed;
+                -webkit-text-decoration-color: #000000;
+            
             }
         
             .charshape-7 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-                text-decoration: underline;
-                text-decoration-style: solid;
-                text-decoration-color: #000000;
-                -moz-text-decoration-style: solid;
-                -moz-text-decoration-color: #000000;
-                -webkit-text-decoration-style: solid;
-                -webkit-text-decoration-color: #000000;
-            
-            }
-        
-            .charshape-8 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-                text-decoration: overline;
-                text-decoration-style: solid;
-                text-decoration-color: #000000;
-                -moz-text-decoration-style: solid;
-                -moz-text-decoration-color: #000000;
-                -webkit-text-decoration-style: solid;
-                -webkit-text-decoration-color: #000000;
-            
-            }
-        
-            .charshape-9 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-                text-decoration: line-through;
-                text-decoration-style: solid;
-                text-decoration-color: #000000;
-                -moz-text-decoration-style: solid;
-                -moz-text-decoration-color: #000000;
-                -webkit-text-decoration-style: solid;
-                -webkit-text-decoration-color: #000000;
-            
-            }
-        
-            .charshape-10 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-11 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-12 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-13 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-14 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-15 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-16 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-17 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-                text-decoration: underline;
-                text-decoration-style: solid;
-                text-decoration-color: #ff0000;
-                -moz-text-decoration-style: solid;
-                -moz-text-decoration-color: #ff0000;
-                -webkit-text-decoration-style: solid;
-                -webkit-text-decoration-color: #ff0000;
-            
-            }
-        
-            .charshape-18 {
                 /* fontface-ko  */
                 color: #000000;
                 font-size: 10pt;
@@ -452,6 +352,126 @@
                 -moz-text-decoration-style: dotted;
                 -moz-text-decoration-color: #000000;
                 -webkit-text-decoration-style: dotted;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-8 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: dashed;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: dashed;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: dashed;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-9 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: dashed;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: dashed;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: dashed;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-10 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: dashed;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: dashed;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: dashed;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-11 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: dotted;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: dotted;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: dotted;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-12 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: double;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: double;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: double;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-13 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: double;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: double;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: double;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-14 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: double;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: double;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: double;
+                -webkit-text-decoration-color: #000000;
+            
+            }
+        
+            .charshape-15 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+                text-decoration: underline;
+                text-decoration-style: double;
+                text-decoration-color: #000000;
+                -moz-text-decoration-style: double;
+                -moz-text-decoration-color: #000000;
+                -webkit-text-decoration-style: double;
                 -webkit-text-decoration-color: #000000;
             
             }

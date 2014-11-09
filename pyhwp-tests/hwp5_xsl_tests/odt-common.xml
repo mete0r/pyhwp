@@ -356,7 +356,7 @@
 
 
     <!--
-    underline = unknown (TODO: should be linethrough)
+    underline = line_through
     -->
     <context:wrap-subnodes
       select="//CharShape[10]">
@@ -391,7 +391,7 @@
     </context:wrap-subnodes>
 
     <!--
-    underline = upperline
+    underline = overline
     -->
     <context:wrap-subnodes>
       <xunit:select>//CharShape[9]</xunit:select>

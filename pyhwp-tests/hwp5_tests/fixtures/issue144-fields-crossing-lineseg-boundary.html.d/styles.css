@@ -323,6 +323,14 @@
                 color: #0000ff;
                 font-size: 32pt;
                 
+                text-decoration: underline;
+                text-decoration-style: solid;
+                text-decoration-color: #0000ff;
+                -moz-text-decoration-style: solid;
+                -moz-text-decoration-color: #0000ff;
+                -webkit-text-decoration-style: solid;
+                -webkit-text-decoration-color: #0000ff;
+            
             }
         
             .borderfill-1 {

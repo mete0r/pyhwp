@@ -5,15 +5,15 @@
     "controlmask": 4, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 0, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 3, 
     "style_id": 0, 
-    "text": 18
+    "text": 21
   }, 
   "level": 0, 
   "payload": [
-    "12 00 00 00 04 00 00 00 00 00 00 03 01 00 00 00", 
+    "15 00 00 00 04 00 00 00 0b 00 00 03 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 0, 
@@ -50,14 +50,14 @@
       [
         [
           16, 
-          17
+          20
         ], 
-        "\uac00"
+        "\uc2e4\uc120\ubc11\uc904"
       ], 
       [
         [
-          17, 
-          18
+          20, 
+          21
         ], 
         {
           "code": 13
@@ -69,10 +69,10 @@
   "payload": [
     "02 00 64 63 65 73 00 00 00 00 00 00 00 00 02 00", 
     "02 00 64 6c 6f 63 00 00 00 00 00 00 00 00 02 00", 
-    "00 ac 0d 00"
+    "e4 c2 20 c1 11 bc 04 c9 0d 00"
   ], 
   "seqno": 1, 
-  "size": 36, 
+  "size": 42, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -82,13 +82,13 @@
     "charshapes": [
       [
         0, 
-        1
+        5
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 01 00 00 00"
+    "00 00 00 00 05 00 00 00"
   ], 
   "seqno": 2, 
   "size": 8, 
@@ -319,19 +319,19 @@
 },
 {
   "content": {
-    "charshapes": 2, 
+    "charshapes": 1, 
     "controlmask": 0, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 0, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
-    "text": 7
+    "text": 5
   }, 
   "level": 0, 
   "payload": [
-    "07 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00", 
+    "05 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 12, 
@@ -346,14 +346,14 @@
       [
         [
           0, 
-          6
+          4
         ], 
-        "\uae30\uc6b8\uc784\uc9c4\ud558\uac8c"
+        "\ub300\uc2dc\ubc11\uc904"
       ], 
       [
         [
-          6, 
-          7
+          4, 
+          5
         ], 
         {
           "code": 13
@@ -363,10 +363,10 @@
   }, 
   "level": 1, 
   "payload": [
-    "30 ae b8 c6 84 c7 c4 c9 58 d5 8c ac 0d 00"
+    "00 b3 dc c2 11 bc 04 c9 0d 00"
   ], 
   "seqno": 13, 
-  "size": 14, 
+  "size": 10, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -377,19 +377,15 @@
       [
         0, 
         6
-      ], 
-      [
-        3, 
-        5
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 06 00 00 00 03 00 00 00 05 00 00 00"
+    "00 00 00 00 06 00 00 00"
   ], 
   "seqno": 14, 
-  "size": 16, 
+  "size": 8, 
   "tagid": 68, 
   "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
   "type": "ParaCharShape"
@@ -425,19 +421,19 @@
 },
 {
   "content": {
-    "charshapes": 5, 
+    "charshapes": 1, 
     "controlmask": 0, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 0, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
-    "text": 13
+    "text": 5
   }, 
   "level": 0, 
   "payload": [
-    "0d 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00", 
+    "05 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 16, 
@@ -452,14 +448,14 @@
       [
         [
           0, 
-          12
+          4
         ], 
-        "\ubc11\uc904\uc5c6\uc74c\ubc11\uc904\uac00\uc6b4\ub370\uc904\uc717\uc904"
+        "\uc810\uc120\ubc11\uc904"
       ], 
       [
         [
-          12, 
-          13
+          4, 
+          5
         ], 
         {
           "code": 13
@@ -469,11 +465,10 @@
   }, 
   "level": 1, 
   "payload": [
-    "11 bc 04 c9 c6 c5 4c c7 11 bc 04 c9 00 ac b4 c6", 
-    "70 b3 04 c9 17 c7 04 c9 0d 00"
+    "10 c8 20 c1 11 bc 04 c9 0d 00"
   ], 
   "seqno": 17, 
-  "size": 26, 
+  "size": 10, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -483,34 +478,16 @@
     "charshapes": [
       [
         0, 
-        0
-      ], 
-      [
-        4, 
         7
-      ], 
-      [
-        6, 
-        9
-      ], 
-      [
-        10, 
-        8
-      ], 
-      [
-        12, 
-        8
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 00 00 00 00 04 00 00 00 07 00 00 00", 
-    "06 00 00 00 09 00 00 00 0a 00 00 00 08 00 00 00", 
-    "0c 00 00 00 08 00 00 00"
+    "00 00 00 00 07 00 00 00"
   ], 
   "seqno": 18, 
-  "size": 40, 
+  "size": 8, 
   "tagid": 68, 
   "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
   "type": "ParaCharShape"
@@ -546,19 +523,19 @@
 },
 {
   "content": {
-    "charshapes": 5, 
+    "charshapes": 1, 
     "controlmask": 0, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 2, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
-    "text": 33
+    "text": 7
   }, 
   "level": 0, 
   "payload": [
-    "21 00 00 00 00 00 00 00 02 00 00 00 05 00 00 00", 
+    "07 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 20, 
@@ -573,14 +550,14 @@
       [
         [
           0, 
-          32
+          6
         ], 
-        "\uae00\uc790\ud06c\uae30: \uae30\uc900\ud06c\uae3010pt \ud55c\uae0090% \uc601\ubb3880% \uae30\ud0c070%"
+        "\ub300\uc2dc\uc77c\uc810\ubc11\uc904"
       ], 
       [
         [
-          32, 
-          33
+          6, 
+          7
         ], 
         {
           "code": 13
@@ -590,14 +567,10 @@
   }, 
   "level": 1, 
   "payload": [
-    "00 ae 90 c7 6c d0 30 ae 3a 00 20 00 30 ae 00 c9", 
-    "6c d0 30 ae 31 00 30 00 70 00 74 00 20 00 5c d5", 
-    "00 ae 39 00 30 00 25 00 20 00 01 c6 38 bb 38 00", 
-    "30 00 25 00 20 00 30 ae c0 d0 37 00 30 00 25 00", 
-    "0d 00"
+    "00 b3 dc c2 7c c7 10 c8 11 bc 04 c9 0d 00"
   ], 
   "seqno": 21, 
-  "size": 66, 
+  "size": 14, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -607,34 +580,16 @@
     "charshapes": [
       [
         0, 
-        1
-      ], 
-      [
-        5, 
-        12
-      ], 
-      [
-        14, 
-        11
-      ], 
-      [
-        20, 
-        13
-      ], 
-      [
-        26, 
-        14
+        8
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 01 00 00 00 05 00 00 00 0c 00 00 00", 
-    "0e 00 00 00 0b 00 00 00 14 00 00 00 0d 00 00 00", 
-    "1a 00 00 00 0e 00 00 00"
+    "00 00 00 00 08 00 00 00"
   ], 
   "seqno": 22, 
-  "size": 40, 
+  "size": 8, 
   "tagid": 68, 
   "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
   "type": "ParaCharShape"
@@ -670,19 +625,19 @@
 },
 {
   "content": {
-    "charshapes": 4, 
+    "charshapes": 1, 
     "controlmask": 0, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 2, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
-    "text": 43
+    "text": 7
   }, 
   "level": 0, 
   "payload": [
-    "2b 00 00 00 00 00 00 00 02 00 00 00 04 00 00 00", 
+    "07 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 24, 
@@ -697,14 +652,14 @@
       [
         [
           0, 
-          42
+          6
         ], 
-        "\ud3f0\ud2b8: \ud55c\uae00\ub3cb\uc6c0 \uc601\ubb38CourierNew \uae30\ud0c0\u0642LucidaSansUnicode"
+        "\ub300\uc2dc\uc774\uc810\ubc11\uc904"
       ], 
       [
         [
-          42, 
-          43
+          6, 
+          7
         ], 
         {
           "code": 13
@@ -714,15 +669,10 @@
   }, 
   "level": 1, 
   "payload": [
-    "f0 d3 b8 d2 3a 00 20 00 5c d5 00 ae cb b3 c0 c6", 
-    "20 00 01 c6 38 bb 43 00 6f 00 75 00 72 00 69 00", 
-    "65 00 72 00 4e 00 65 00 77 00 20 00 30 ae c0 d0", 
-    "42 06 4c 00 75 00 63 00 69 00 64 00 61 00 53 00", 
-    "61 00 6e 00 73 00 55 00 6e 00 69 00 63 00 6f 00", 
-    "64 00 65 00 0d 00"
+    "00 b3 dc c2 74 c7 10 c8 11 bc 04 c9 0d 00"
   ], 
   "seqno": 25, 
-  "size": 86, 
+  "size": 14, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -732,29 +682,16 @@
     "charshapes": [
       [
         0, 
-        1
-      ], 
-      [
-        3, 
-        15
-      ], 
-      [
-        8, 
-        10
-      ], 
-      [
-        21, 
-        16
+        9
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 01 00 00 00 03 00 00 00 0f 00 00 00", 
-    "08 00 00 00 0a 00 00 00 15 00 00 00 10 00 00 00"
+    "00 00 00 00 09 00 00 00"
   ], 
   "seqno": 26, 
-  "size": 32, 
+  "size": 8, 
   "tagid": 68, 
   "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
   "type": "ParaCharShape"
@@ -794,15 +731,15 @@
     "controlmask": 0, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 2, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
-    "text": 5
+    "text": 6
   }, 
   "level": 0, 
   "payload": [
-    "05 00 00 00 00 00 00 00 02 00 00 00 01 00 00 00", 
+    "06 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 28, 
@@ -817,14 +754,14 @@
       [
         [
           0, 
-          4
+          5
         ], 
-        "\ubd89\uc740\ubc11\uc904"
+        "\uae34\ub300\uc2dc\ubc11\uc904"
       ], 
       [
         [
-          4, 
-          5
+          5, 
+          6
         ], 
         {
           "code": 13
@@ -834,10 +771,10 @@
   }, 
   "level": 1, 
   "payload": [
-    "89 bd 40 c7 11 bc 04 c9 0d 00"
+    "34 ae 00 b3 dc c2 11 bc 04 c9 0d 00"
   ], 
   "seqno": 29, 
-  "size": 10, 
+  "size": 12, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -847,13 +784,13 @@
     "charshapes": [
       [
         0, 
-        17
+        10
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 11 00 00 00"
+    "00 00 00 00 0a 00 00 00"
   ], 
   "seqno": 30, 
   "size": 8, 
@@ -896,15 +833,15 @@
     "controlmask": 0, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 2, 
+    "parashape_id": 11, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
-    "text": 2147483653
+    "text": 6
   }, 
   "level": 0, 
   "payload": [
-    "05 00 00 80 00 00 00 00 02 00 00 00 01 00 00 00", 
+    "06 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 32, 
@@ -919,14 +856,14 @@
       [
         [
           0, 
-          4
+          5
         ], 
-        "\uc810\uc120\ubc11\uc904"
+        "\ud070\uc810\uc120\ubc11\uc904"
       ], 
       [
         [
-          4, 
-          5
+          5, 
+          6
         ], 
         {
           "code": 13
@@ -936,10 +873,10 @@
   }, 
   "level": 1, 
   "payload": [
-    "10 c8 20 c1 11 bc 04 c9 0d 00"
+    "70 d0 10 c8 20 c1 11 bc 04 c9 0d 00"
   ], 
   "seqno": 33, 
-  "size": 10, 
+  "size": 12, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -949,13 +886,13 @@
     "charshapes": [
       [
         0, 
-        18
+        11
       ]
     ]
   }, 
   "level": 1, 
   "payload": [
-    "00 00 00 00 12 00 00 00"
+    "00 00 00 00 0b 00 00 00"
   ], 
   "seqno": 34, 
   "size": 8, 
@@ -987,6 +924,414 @@
     "00 00 06 00"
   ], 
   "seqno": 35, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 11, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 7
+  }, 
+  "level": 0, 
+  "payload": [
+    "07 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 36, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          6
+        ], 
+        "\uc774\uc911\uc2e4\uc120\ubc11\uc904"
+      ], 
+      [
+        [
+          6, 
+          7
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "74 c7 11 c9 e4 c2 20 c1 11 bc 04 c9 0d 00"
+  ], 
+  "seqno": 37, 
+  "size": 14, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        12
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 0c 00 00 00"
+  ], 
+  "seqno": 38, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 11200
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 c0 2b 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 39, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 11, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 7
+  }, 
+  "level": 0, 
+  "payload": [
+    "07 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 40, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          6
+        ], 
+        "\uc774\uc911\uc99d\uac00\ubc11\uc904"
+      ], 
+      [
+        [
+          6, 
+          7
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "74 c7 11 c9 9d c9 00 ac 11 bc 04 c9 0d 00"
+  ], 
+  "seqno": 41, 
+  "size": 14, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        13
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 0d 00 00 00"
+  ], 
+  "seqno": 42, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 12800
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 32 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 43, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 11, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 7
+  }, 
+  "level": 0, 
+  "payload": [
+    "07 00 00 00 00 00 00 00 0b 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 44, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          6
+        ], 
+        "\uc774\uc911\uac10\uc18c\ubc11\uc904"
+      ], 
+      [
+        [
+          6, 
+          7
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "74 c7 11 c9 10 ac 8c c1 11 bc 04 c9 0d 00"
+  ], 
+  "seqno": 45, 
+  "size": 14, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        14
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 0e 00 00 00"
+  ], 
+  "seqno": 46, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 14400
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 40 38 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 47, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 11, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483653
+  }, 
+  "level": 0, 
+  "payload": [
+    "05 00 00 80 00 00 00 00 0b 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 48, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          4
+        ], 
+        "\uc0bc\uc911\ubc11\uc904"
+      ], 
+      [
+        [
+          4, 
+          5
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "bc c0 11 c9 11 bc 04 c9 0d 00"
+  ], 
+  "seqno": 49, 
+  "size": 10, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        15
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 0f 00 00 00"
+  ], 
+  "seqno": 50, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 42520, 
+        "x": 0, 
+        "y": 16000
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 80 3e 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 00 00 00 00 18 a6 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 51, 
   "size": 36, 
   "tagid": 69, 
   "tagname": "HWPTAG_PARA_LINE_SEG", 

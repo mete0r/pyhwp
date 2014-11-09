@@ -53,12 +53,16 @@ class CharShape(RecordModel):
     tagid = HWPTAG_CHAR_SHAPE
 
     # 표 30 글자 모양 속성
-    Underline = Enum(NONE=0, UNDERLINE=1, UNKNOWN=2, UPPERLINE=3)
+    Underline = Enum(NONE=0, UNDERLINE=1, LINE_THROUGH=2, OVERLINE=3)
+    UnderlineStyle = Enum(SOLID=0, DASHED=1, DOTTED=2, DASH_DOT=3,
+                          DASH_DOT_DOT=4, LONG_DASHED=5, LARGE_DOTTED=6,
+                          DOUBLE=7, LOWER_WEIGHTED=8, UPPER_WEIGHTED=9,
+                          MIDDLE_WEIGHTED=10)
     Flags = Flags(UINT32,
                   0, 'italic',
                   1, 'bold',
                   2, 3, Underline, 'underline',
-                  4, 7, 'underline_style',
+                  4, 7, UnderlineStyle, 'underline_style',
                   8, 10, 'outline',
                   11, 13, 'shadow')
 

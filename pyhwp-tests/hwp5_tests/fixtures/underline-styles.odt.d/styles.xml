@@ -123,7 +123,7 @@
     <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
     <style:style style:name="바탕글" style:next-style-name="바탕글" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="single" style:text-overline-style="dotted" style:text-overline-width="auto" style:text-overline-color="#0000ff" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="본문" style:next-style-name="본문" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="15pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
@@ -166,10 +166,6 @@
       <style:text-properties style:font-name="굴림" style:font-name-asian="굴림" fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="각주" style:next-style-name="각주" style:family="paragraph" style:class="text">
-      <style:paragraph-properties fo:text-align="justify" fo:text-indent="-13.1pt" fo:margin-left="13.1pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="130%"/>
-      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
-    </style:style>
-    <style:style style:name="미주" style:next-style-name="미주" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="-13.1pt" fo:margin-left="13.1pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="130%"/>
       <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="9pt" style:font-size-asian="9pt" style:font-size-complex="9pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>

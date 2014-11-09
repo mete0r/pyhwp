@@ -40,6 +40,7 @@
                 <xsl:if test="@bold = 1">
                 font-weight: bold;
                 </xsl:if>
+                <xsl:apply-templates select="." mode="css-text-decoration" />
             }
         </xsl:for-each>
         <xsl:for-each select="BorderFill">
@@ -86,5 +87,53 @@
     <xsl:template match="ParaShape" mode="css-text-indent-value">
         <!-- @indent seems to be doubled -->
         <xsl:value-of select="@indent div 100 div 2" />pt
+    </xsl:template>
+
+    <xsl:template match="CharShape" mode="css-text-decoration">
+        <xsl:choose>
+            <xsl:when test="@underline = 'underline'">
+                text-decoration: underline;
+                text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                text-decoration-color: <xsl:value-of select="@underline-color" />;
+                -moz-text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                -moz-text-decoration-color: <xsl:value-of select="@underline-color" />;
+                -webkit-text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                -webkit-text-decoration-color: <xsl:value-of select="@underline-color" />;
+            </xsl:when>
+            <xsl:when test="@underline = 'overline'">
+                text-decoration: overline;
+                text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                text-decoration-color: <xsl:value-of select="@underline-color" />;
+                -moz-text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                -moz-text-decoration-color: <xsl:value-of select="@underline-color" />;
+                -webkit-text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                -webkit-text-decoration-color: <xsl:value-of select="@underline-color" />;
+            </xsl:when>
+            <xsl:when test="@underline = 'line_through'">
+                text-decoration: line-through;
+                text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                text-decoration-color: <xsl:value-of select="@underline-color" />;
+                -moz-text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                -moz-text-decoration-color: <xsl:value-of select="@underline-color" />;
+                -webkit-text-decoration-style: <xsl:apply-templates select="." mode="css-text-decoration-style-value" />;
+                -webkit-text-decoration-color: <xsl:value-of select="@underline-color" />;
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="CharShape" mode="css-text-decoration-style-value">
+        <xsl:choose>
+            <xsl:when test="@underline-style = 'solid'">solid</xsl:when>
+            <xsl:when test="@underline-style = 'dashed'">dashed</xsl:when>
+            <xsl:when test="@underline-style = 'dotted'">dotted</xsl:when>
+            <xsl:when test="@underline-style = 'dash_dot'">dashed</xsl:when>
+            <xsl:when test="@underline-style = 'dash_dot_dot'">dashed</xsl:when>
+            <xsl:when test="@underline-style = 'long_dashed'">dashed</xsl:when>
+            <xsl:when test="@underline-style = 'large_dotted'">dotted</xsl:when>
+            <xsl:when test="@underline-style = 'double'">double</xsl:when>
+            <xsl:when test="@underline-style = 'lower_weighted'">double</xsl:when>
+            <xsl:when test="@underline-style = 'upper_weighted'">double</xsl:when>
+            <xsl:when test="@underline-style = 'middle_weighted'">double</xsl:when>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>

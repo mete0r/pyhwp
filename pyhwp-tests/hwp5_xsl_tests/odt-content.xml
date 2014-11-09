@@ -90,7 +90,7 @@
         <empty>@style:text-overline-color</empty>
       </context:subtree>
 
-      # underline: unknown (TODO: should be linethrough)
+      # underline: line_through
       <context:subtree select="//style:style[@style:name='p3-1-3']/style:text-properties">
         <attr name="style:text-underline-type">none</attr>
         <empty>@style:text-underline-style</empty>
@@ -106,7 +106,7 @@
         <empty>@style:text-overline-color</empty>
       </context:subtree>
 
-      # underline: upperline (TODO: should be overline)
+      # underline: overline
       <context:subtree select="//style:style[@style:name='p3-1-4']/style:text-properties">
         <attr name="style:text-underline-type">none</attr>
         <empty>@style:text-underline-style</empty>
