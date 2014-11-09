@@ -309,15 +309,25 @@
   </xsl:template>
 
   <xsl:template match="ShapeComponent" mode="css-width">
-    <xsl:text>width: </xsl:text>
-    <xsl:value-of select="@width div 100" />
-    <xsl:text>pt;</xsl:text>
+    <xsl:call-template name="css-declaration">
+      <xsl:with-param name="property">width</xsl:with-param>
+      <xsl:with-param name="value">
+        <xsl:call-template name="hwpunit-to-mm">
+          <xsl:with-param name="hwpunit" select="@width" />
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="ShapeComponent" mode="css-height">
-    <xsl:text>height: </xsl:text>
-    <xsl:value-of select="@height div 100" />
-    <xsl:text>pt;</xsl:text>
+    <xsl:call-template name="css-declaration">
+      <xsl:with-param name="property">height</xsl:with-param>
+      <xsl:with-param name="value">
+        <xsl:call-template name="hwpunit-to-mm">
+          <xsl:with-param name="hwpunit" select="@height" />
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="TableControl[@inline='1']|GShapeObjectControl[@inline='1']" mode="css-display">
