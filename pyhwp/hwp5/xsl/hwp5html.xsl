@@ -238,7 +238,44 @@
   <xsl:template match="TableCell">
     <xsl:element name="td">
       <xsl:attribute name="class">borderfill-<xsl:value-of select="@borderfill-id"/></xsl:attribute>
-      <xsl:attribute name="style">width:<xsl:value-of select="@width div 100"/>pt; height:<xsl:value-of select="@height div 100"/>pt;</xsl:attribute>
+      <xsl:attribute name="style">
+        <xsl:call-template name="css-declaration">
+          <xsl:with-param name="property">width</xsl:with-param>
+          <xsl:with-param name="value">
+            <xsl:call-template name="hwpunit-to-mm">
+              <xsl:with-param name="hwpunit" select="@width" />
+            </xsl:call-template>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="css-declaration">
+          <xsl:with-param name="property">height</xsl:with-param>
+          <xsl:with-param name="value">
+            <xsl:call-template name="hwpunit-to-mm">
+              <xsl:with-param name="hwpunit" select="@height" />
+            </xsl:call-template>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="css-declaration">
+          <xsl:with-param name="property">padding</xsl:with-param>
+          <xsl:with-param name="value">
+            <xsl:call-template name="hwpunit-to-mm">
+              <xsl:with-param name="hwpunit" select="@padding-top" />
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="hwpunit-to-mm">
+              <xsl:with-param name="hwpunit" select="@padding-right" />
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="hwpunit-to-mm">
+              <xsl:with-param name="hwpunit" select="@padding-bottom" />
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="hwpunit-to-mm">
+              <xsl:with-param name="hwpunit" select="@padding-left" />
+            </xsl:call-template>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:attribute>
       <xsl:attribute name="rowspan"><xsl:value-of select="@rowspan"/></xsl:attribute>
       <xsl:attribute name="colspan"><xsl:value-of select="@colspan"/></xsl:attribute>
       <xsl:apply-templates />
