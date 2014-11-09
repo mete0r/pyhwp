@@ -183,32 +183,24 @@
               <TableRow>
                 <TableCell borderfill-id="2" col="0" colspan="1" height="7086" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="3779" unknown1="0" valign="middle" width="3779">
                   <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="3496" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
+                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="3496" x="0" y="0"/>
                   </Paragraph>
                 </TableCell>
                 <TableCell borderfill-id="2" col="1" colspan="1" height="7086" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="3779" unknown1="0" valign="middle" width="3779">
                   <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="3496" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
+                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="3496" x="0" y="0"/>
                   </Paragraph>
                 </TableCell>
                 <TableCell borderfill-id="2" col="2" colspan="1" height="14172" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="2" textdirection="0" unknown-width="3779" unknown1="0" valign="middle" width="3779">
                   <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="3496" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
+                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="3496" x="0" y="0"/>
                   </Paragraph>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell borderfill-id="2" col="0" colspan="2" height="7086" linebreak="0" listflags="05000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="7558" unknown1="0" valign="middle" width="7558">
                   <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7276" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
+                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7276" x="0" y="0"/>
                   </Paragraph>
                 </TableCell>
               </TableRow>
@@ -218,9 +210,7 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="1" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="14738">
-          <Text charshape-id="1"/>
-        </LineSeg>
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="14738"/>
       </Paragraph>
     </SectionDef>
   </BodyText>

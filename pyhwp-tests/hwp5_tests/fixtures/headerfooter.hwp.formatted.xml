@@ -170,7 +170,7 @@
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
-          <Text charshape-id="1">첫 페이지</Text>
+          <Text charshape-id="1" lang="ko">첫 페이지</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
@@ -180,9 +180,10 @@
             <HeaderParagraphList height="4252" linebreak="0" listflags="00000000" numberrefsbitmap="0" paragraphs="1" textdirection="0" textrefsbitmap="0" unknown1="0" valign="top" width="42520">
               <Paragraph chars="27" charshapes="1" control="0" controlmask="00040000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="10" text="8000001B" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="900" height2="900" height85="765" indented="0" space-below="452" width="42520" x="0" y="0">
-                  <Text charshape-id="2">Header 이것은 머리말입니다</Text>
+                  <Text charshape-id="2" lang="en">Header </Text>
+                  <Text charshape-id="2" lang="ko">이것은 머리말입니다</Text>
                   <AutoNumbering chid="atno" flags="00000000" footnoteshape="0" kind="page" number="1" prefix="" suffix="" superscript="0" usersymbol=""/>
-                  <Text charshape-id="2">.</Text>
+                  <Text charshape-id="2" lang="ko">.</Text>
                   <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                 </LineSeg>
               </Paragraph>
@@ -192,7 +193,8 @@
             <FooterParagraphList height="4252" linebreak="0" listflags="00000040" numberrefsbitmap="0" paragraphs="1" textdirection="0" textrefsbitmap="0" unknown1="0" valign="bottom" width="42520">
               <Paragraph chars="19" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="11" rangetags="0" split="00" style-id="10" text="80000013" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="900" height2="900" height85="765" indented="0" space-below="452" width="42520" x="0" y="0">
-                  <Text charshape-id="2">Footer 이것은 꼬리말입니다.</Text>
+                  <Text charshape-id="2" lang="en">Footer </Text>
+                  <Text charshape-id="2" lang="ko">이것은 꼬리말입니다.</Text>
                   <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                 </LineSeg>
               </Paragraph>

@@ -290,102 +290,234 @@
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
-          <Text charshape-id="1">ko바탕en바탕cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="40" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="11" rangetags="0" split="00" style-id="0" text="00000028" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="1600">
-          <Text charshape-id="1">ko</Text>
-          <Text charshape-id="5">한컴바탕</Text>
-          <Text charshape-id="1">en바탕cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="5" lang="ko">한컴바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="41" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="0" text="00000029" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="3200">
-          <Text charshape-id="1">ko</Text>
-          <Text charshape-id="6">한양신명조</Text>
-          <Text charshape-id="1">en바탕cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="6" lang="ko">한양신명조</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="40" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="11" rangetags="0" split="00" style-id="0" text="00000028" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="4800">
-          <Text charshape-id="1">ko</Text>
-          <Text charshape-id="7">휴먼명조</Text>
-          <Text charshape-id="1">en바탕cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="7" lang="ko">휴먼명조</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="41" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="11" rangetags="0" split="00" style-id="0" text="00000029" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="6400">
-          <Text charshape-id="1">ko바탕en</Text>
-          <Text charshape-id="8">Arial</Text>
-          <Text charshape-id="1">cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="8" lang="en">Arial</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="47" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002F" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="8000">
-          <Text charshape-id="1">ko바탕en</Text>
-          <Text charshape-id="9">ComicSansMS</Text>
-          <Text charshape-id="1">cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="9" lang="en">ComicSansMS</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="46" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002E" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9600">
-          <Text charshape-id="1">ko바탕en</Text>
-          <Text charshape-id="10">CourierNew</Text>
-          <Text charshape-id="1">cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="10" lang="en">CourierNew</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="47" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="7" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002F" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="11200">
-          <Text charshape-id="1">ko바탕en</Text>
-          <Text charshape-id="11">DejaVuSerif</Text>
-          <Text charshape-id="1">cn바탕jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="11" lang="en">DejaVuSerif</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="42" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="8" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002A" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="12800">
-          <Text charshape-id="1">ko바탕en바탕cn</Text>
-          <Text charshape-id="12">SimHei</Text>
-          <Text charshape-id="1">jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="12" lang="en">SimHei</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="42" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="9" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002A" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="14400">
-          <Text charshape-id="1">ko바탕en바탕cn</Text>
-          <Text charshape-id="13">SimSun</Text>
-          <Text charshape-id="1">jp바탕other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="13" lang="en">SimSun</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="44" charshapes="3" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="10" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002C" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="16000">
-          <Text charshape-id="1">ko바탕en바탕cn바탕jp</Text>
-          <Text charshape-id="14">MSGothic</Text>
-          <Text charshape-id="1">other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="14" lang="en">MSGothic</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="44" charshapes="3" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="11" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002C" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="17600">
-          <Text charshape-id="1">ko바탕en바탕cn바탕jp</Text>
-          <Text charshape-id="15">MSMinCho</Text>
-          <Text charshape-id="1">other바탕symbol바탕user바탕</Text>
+          <Text charshape-id="1" lang="en">ko</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">en</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">cn</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">jp</Text>
+          <Text charshape-id="15" lang="en">MSMinCho</Text>
+          <Text charshape-id="1" lang="en">other</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">symbol</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
+          <Text charshape-id="1" lang="en">user</Text>
+          <Text charshape-id="1" lang="ko">바탕</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="12" parashape-id="11" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="19200">
-          <Text charshape-id="1"/>
-        </LineSeg>
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="19200"/>
       </Paragraph>
     </SectionDef>
   </BodyText>

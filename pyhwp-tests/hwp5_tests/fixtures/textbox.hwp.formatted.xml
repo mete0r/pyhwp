@@ -174,9 +174,9 @@
             <GShapeObjectCaption expand-to-margin="0" flags="00000003" linebreak="0" listflags="00000000" max-width="11763" paragraphs="1" position="bottom" separation="850" textdirection="0" unknown1="0" valign="top" width="8504">
               <Paragraph chars="15" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000F" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="11760" x="0" y="0">
-                  <Text charshape-id="1">그림 </Text>
+                  <Text charshape-id="1" lang="ko">그림 </Text>
                   <AutoNumbering chid="atno" flags="00000003" footnoteshape="0" kind="picture" number="1" prefix="" suffix="" superscript="0" usersymbol=""/>
-                  <Text charshape-id="1"> 캡션</Text>
+                  <Text charshape-id="1" lang="ko"> 캡션</Text>
                   <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                 </LineSeg>
               </Paragraph>
@@ -194,7 +194,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="11763" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000004" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="11196" x="0" y="0">
-                    <Text charshape-id="1">글상자</Text>
+                    <Text charshape-id="1" lang="ko">글상자</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>

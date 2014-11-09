@@ -181,9 +181,9 @@
             <TableCaption expand-to-margin="0" flags="00000003" linebreak="0" listflags="00000000" max-width="41954" paragraphs="1" position="bottom" separation="850" textdirection="0" unknown1="0" valign="top" width="8504">
               <Paragraph chars="12" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="0" rangetags="0" split="00" style-id="0" text="8000000C" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41952" x="0" y="0">
-                  <Text charshape-id="1">표 </Text>
+                  <Text charshape-id="1" lang="ko">표 </Text>
                   <AutoNumbering chid="atno" flags="00000004" footnoteshape="0" kind="table" number="1" prefix="" suffix="" superscript="0" usersymbol=""/>
-                  <Text charshape-id="1"> </Text>
+                  <Text charshape-id="1" lang="ko"> </Text>
                   <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                 </LineSeg>
               </Paragraph>
@@ -197,10 +197,10 @@
                       <ColumnsDef attr2="0" chid="cold" count="2" direction="l2r" flags="1008" kind="normal" same-widths="1" spacing="2268">
                         <Border attribute-name="splitter" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
                       </ColumnsDef>
-                      <Text charshape-id="1">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
+                      <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
                     </LineSeg>
                     <LineSeg a8="0" chpos="32" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19700" x="0" y="0">
-                      <Text charshape-id="1">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
+                      <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
                       <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                     </LineSeg>
                   </Paragraph>
@@ -217,9 +217,9 @@
             <GShapeObjectCaption expand-to-margin="0" flags="00000003" linebreak="0" listflags="00000000" max-width="20340" paragraphs="1" position="bottom" separation="850" textdirection="0" unknown1="0" valign="top" width="8504">
               <Paragraph chars="13" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="0" rangetags="0" split="00" style-id="0" text="8000000D" unknown="1" unknown1="0">
                 <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20340" x="0" y="0">
-                  <Text charshape-id="1">그림 </Text>
+                  <Text charshape-id="1" lang="ko">그림 </Text>
                   <AutoNumbering chid="atno" flags="00000003" footnoteshape="0" kind="picture" number="1" prefix="" suffix="" superscript="0" usersymbol=""/>
-                  <Text charshape-id="1"> </Text>
+                  <Text charshape-id="1" lang="ko"> </Text>
                   <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                 </LineSeg>
               </Paragraph>
@@ -240,28 +240,28 @@
                     <ColumnsDef attr2="0" chid="cold" count="2" direction="l2r" flags="1008" kind="normal" same-widths="1" spacing="2268">
                       <Border attribute-name="splitter" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
                     </ColumnsDef>
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="17" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="1600">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="26" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="3200">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="35" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="4800">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="44" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="0">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="53" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="1600">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="62" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="3200">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                   </LineSeg>
                   <LineSeg a8="0" chpos="71" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="8752" x="0" y="4800">
-                    <Text charshape-id="1">다단 다단 다단 </Text>
+                    <Text charshape-id="1" lang="ko">다단 다단 다단 </Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>

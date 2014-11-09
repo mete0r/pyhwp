@@ -189,7 +189,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000007" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">left 0</Text>
+                    <Text charshape-id="1" lang="en">left 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -221,7 +221,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000008" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">left 10</Text>
+                    <Text charshape-id="1" lang="en">left 10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -253,7 +253,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="9" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000009" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">center 0</Text>
+                    <Text charshape-id="1" lang="en">center 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -285,7 +285,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="11" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="8" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000B" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">center -10</Text>
+                    <Text charshape-id="1" lang="en">center -10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -317,7 +317,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="10" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000008" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">right 0</Text>
+                    <Text charshape-id="1" lang="en">right 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -349,7 +349,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="9" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="12" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000009" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">right 10</Text>
+                    <Text charshape-id="1" lang="en">right 10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -381,7 +381,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="9" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="14" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000009" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">inside 0</Text>
+                    <Text charshape-id="1" lang="en">inside 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -413,7 +413,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="9" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="16" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000009" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">inside 0</Text>
+                    <Text charshape-id="1" lang="en">inside 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -445,7 +445,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="10" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="18" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000A" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">outside 0</Text>
+                    <Text charshape-id="1" lang="en">outside 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -477,7 +477,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="11" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="20" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000B" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">outside 10</Text>
+                    <Text charshape-id="1" lang="en">outside 10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -509,7 +509,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="22" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000006" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">top 0</Text>
+                    <Text charshape-id="1" lang="en">top 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -541,7 +541,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="24" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000007" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">top 10</Text>
+                    <Text charshape-id="1" lang="en">top 10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -573,7 +573,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="9" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="26" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000009" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">middle 0</Text>
+                    <Text charshape-id="1" lang="en">middle 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -605,7 +605,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="11" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="28" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000B" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">middle -10</Text>
+                    <Text charshape-id="1" lang="en">middle -10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -637,7 +637,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="9" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="30" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000009" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">bottom 0</Text>
+                    <Text charshape-id="1" lang="en">bottom 0</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>
@@ -669,7 +669,7 @@
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="10" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="32" parashape-id="2" rangetags="0" split="00" style-id="0" text="8000000A" unknown="1" unknown1="0">
                   <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1">bottom 10</Text>
+                    <Text charshape-id="1" lang="en">bottom 10</Text>
                     <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                   </LineSeg>
                 </Paragraph>

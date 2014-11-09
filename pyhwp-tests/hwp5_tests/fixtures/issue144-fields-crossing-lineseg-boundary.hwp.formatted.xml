@@ -186,26 +186,26 @@
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
           <FieldHyperLink chid="%hlk" command="http\://google.com;1;0;0;" editableInReadOnly="0" extra-attr="0" flags="0000A800" id="1528818375" modified="1" visitedType="5">
-            <Text charshape-id="6">google google google </Text>
+            <Text charshape-id="6" lang="en">google google google </Text>
           </FieldHyperLink>
         </LineSeg>
         <LineSeg a8="0" chpos="45" flags="0006" height="3200" height2="3200" height85="2720" indented="0" space-below="1920" width="42520" x="0" y="5120">
           <FieldHyperLink chid="%hlk" command="http\://google.com;1;0;0;" editableInReadOnly="0" extra-attr="0" flags="0000A800" id="1528818375" modified="1" visitedType="5">
-            <Text charshape-id="6">google google google</Text>
+            <Text charshape-id="6" lang="en">google google google</Text>
           </FieldHyperLink>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="44" charshapes="2" control="0" controlmask="00000008" instance-id="0" linesegs="2" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="11" rangetags="0" split="00" style-id="0" text="0000002C" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="3200" height2="3200" height85="2720" indented="0" space-below="1920" width="42520" x="0" y="10240">
-          <Text charshape-id="5">gmail g</Text>
+          <Text charshape-id="5" lang="en">gmail g</Text>
           <FieldHyperLink chid="%hlk" command="http\://gmail.com;1;0;0;" editableInReadOnly="0" extra-attr="0" flags="0000A800" id="1528818376" modified="1" visitedType="5">
-            <Text charshape-id="6">mail gmail gmail </Text>
+            <Text charshape-id="6" lang="en">mail gmail gmail </Text>
           </FieldHyperLink>
         </LineSeg>
         <LineSeg a8="0" chpos="32" flags="0006" height="3200" height2="3200" height85="2720" indented="0" space-below="1920" width="42520" x="0" y="15360">
           <FieldHyperLink chid="%hlk" command="http\://gmail.com;1;0;0;" editableInReadOnly="0" extra-attr="0" flags="0000A800" id="1528818376" modified="1" visitedType="5">
-            <Text charshape-id="6">gmail gmail</Text>
+            <Text charshape-id="6" lang="en">gmail gmail</Text>
             <ControlChar char="&#13;" charshape-id="6" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
           </FieldHyperLink>
         </LineSeg>
@@ -213,9 +213,9 @@
       <Paragraph chars="15" charshapes="2" control="0" controlmask="00000010" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="0" text="8000000F" unknown="1" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="3200" height2="3200" height85="2720" indented="0" space-below="1920" width="42520" x="0" y="20480">
           <FieldHyperLink chid="%hlk" command="http\://gmail.com;1;0;0;" editableInReadOnly="0" extra-attr="0" flags="0000A800" id="1528818376" modified="1" visitedType="5">
-            <Text charshape-id="6">gmai</Text>
+            <Text charshape-id="6" lang="en">gmai</Text>
           </FieldHyperLink>
-          <Text charshape-id="5">le</Text>
+          <Text charshape-id="5" lang="en">le</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>

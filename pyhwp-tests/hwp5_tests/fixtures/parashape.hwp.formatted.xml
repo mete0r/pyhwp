@@ -178,61 +178,87 @@
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
-          <Text charshape-id="1">문단1</Text>
+          <Text charshape-id="1" lang="ko">문단1</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000004" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="4300">
-          <Text charshape-id="1">문단2</Text>
+          <Text charshape-id="1" lang="ko">문단2</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="76" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="2" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="12" rangetags="0" split="00" style-id="0" text="0000004C" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0016" height="1000" height2="1000" height85="850" indented="1" space-below="600" width="42520" x="0" y="5900">
-          <Text charshape-id="1">문단3 - 들여쓰기 10pt 들여쓰기 10pt 들여쓰기 10pt 들여쓰기 10pt 들여쓰기 10pt 들</Text>
+          <Text charshape-id="1" lang="ko">문단3 - 들여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">들여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">들여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">들여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">들여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">들</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="57" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="7500">
-          <Text charshape-id="1">여쓰기 10pt 들여쓰기 10pt</Text>
+          <Text charshape-id="1" lang="ko">여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">들여쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="76" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="2" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="13" rangetags="0" split="00" style-id="0" text="0000004C" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9100">
-          <Text charshape-id="1">문단4 - 내어쓰기 10pt 내어쓰기 10pt 내어쓰기 10pt 내어쓰기 10pt 내어쓰기 10pt 내어</Text>
+          <Text charshape-id="1" lang="ko">문단4 - 내어쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">내어쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">내어쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">내어쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">내어쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">내어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="58" flags="0016" height="1000" height2="1000" height85="850" indented="1" space-below="600" width="42520" x="0" y="10700">
-          <Text charshape-id="1">쓰기 10pt 내어쓰기 10pt</Text>
+          <Text charshape-id="1" lang="ko">쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt </Text>
+          <Text charshape-id="1" lang="ko">내어쓰기 10</Text>
+          <Text charshape-id="1" lang="en">pt</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="15" rangetags="0" split="00" style-id="0" text="00000005" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="12300">
-          <Text charshape-id="1">문단 5</Text>
+          <Text charshape-id="1" lang="ko">문단 5</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="16" rangetags="0" split="00" style-id="0" text="00000005" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="13900">
-          <Text charshape-id="1">문단 6</Text>
+          <Text charshape-id="1" lang="ko">문단 6</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="17" rangetags="0" split="00" style-id="0" text="00000005" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="15500">
-          <Text charshape-id="1">문단 7</Text>
+          <Text charshape-id="1" lang="ko">문단 7</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="7" parashape-id="18" rangetags="0" split="00" style-id="0" text="00000005" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="17100">
-          <Text charshape-id="1">문단 8</Text>
+          <Text charshape-id="1" lang="ko">문단 8</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="8" parashape-id="19" rangetags="0" split="00" style-id="0" text="80000005" unknown="1" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="18700">
-          <Text charshape-id="1">문단 9</Text>
+          <Text charshape-id="1" lang="ko">문단 9</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>

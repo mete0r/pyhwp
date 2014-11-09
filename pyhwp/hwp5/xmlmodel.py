@@ -50,6 +50,7 @@ from hwp5.binmodel import ParaRangeTag
 from hwp5.binmodel import Field
 from hwp5.binmodel import ControlChar
 from hwp5.binmodel import Control
+from .charsets import tokenize_unicode_by_lang
 
 logger = logging.getLogger(__name__)
 
@@ -439,6 +440,25 @@ def rstbody_tablecell(event, stack, item):
             yield ENDEVENT, (TableRow, dict(), row_context)
 
 
+def tokenize_text_by_lang(event_prefixed_mac):
+    ''' Group table columns in each rows and wrap them with TableRow. '''
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if model is Text:
+            if event is STARTEVENT:
+                charshape_id = attributes['charshape_id']
+                for lang, text in tokenize_unicode_by_lang(attributes['text']):
+                    token = (Text, {
+                        'charshape_id': charshape_id,
+                        'lang': lang,
+                        'text': text,
+                    }, context)
+                    yield STARTEVENT, token
+                    yield ENDEVENT, token
+        else:
+            yield event, item
+
+
 def embed_bindata(event_prefixed_mac, bindata):
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
@@ -617,6 +637,7 @@ class Section(ModelEventStream):
         events = make_paragraphs_children_of_listheader(events, TableBody,
                                                         TableCell)
         events = restructure_tablebody(events)
+        events = tokenize_text_by_lang(events)
 
         section_idx = kwargs.get('section_idx')
         events = wrap_section(events, section_idx)

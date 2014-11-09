@@ -183,9 +183,7 @@
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000041" line-end="flat" stroke="solid" width="33"/>
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="8504" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                  <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0">
-                    <Text charshape-id="1"/>
-                  </LineSeg>
+                  <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7936" x="0" y="0"/>
                 </Paragraph>
               </TextboxParagraphList>
               <ShapeRectangle round="0">
@@ -209,9 +207,7 @@
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000041" line-end="flat" stroke="solid" width="33"/>
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="15868" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                  <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="15300" x="0" y="0">
-                    <Text charshape-id="1"/>
-                  </LineSeg>
+                  <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="15300" x="0" y="0"/>
                 </Paragraph>
               </TextboxParagraphList>
               <ShapeRectangle round="0">
@@ -235,9 +231,7 @@
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000041" line-end="flat" stroke="solid" width="33"/>
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="15868" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                  <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="15300" x="0" y="0">
-                    <Text charshape-id="1"/>
-                  </LineSeg>
+                  <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="15300" x="0" y="0"/>
                 </Paragraph>
               </TextboxParagraphList>
               <ShapeRectangle round="0">

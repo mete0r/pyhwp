@@ -309,7 +309,7 @@
                   <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="2802" padding-bottom="0" padding-left="0" padding-right="0" padding-top="0" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                     <Paragraph chars="2" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="12" rangetags="0" split="00" style-id="0" text="80000002" unknown="1" unknown1="0">
                       <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="1200" width="2800" x="0" y="0">
-                        <Text charshape-id="5">목</Text>
+                        <Text charshape-id="5" lang="ko">목</Text>
                         <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                       </LineSeg>
                     </Paragraph>
@@ -342,7 +342,7 @@
                   <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="2802" padding-bottom="0" padding-left="0" padding-right="0" padding-top="0" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                     <Paragraph chars="2" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="12" rangetags="0" split="00" style-id="0" text="80000002" unknown="1" unknown1="0">
                       <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="1200" width="2800" x="0" y="0">
-                        <Text charshape-id="5">차</Text>
+                        <Text charshape-id="5" lang="ko">차</Text>
                         <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                       </LineSeg>
                     </Paragraph>

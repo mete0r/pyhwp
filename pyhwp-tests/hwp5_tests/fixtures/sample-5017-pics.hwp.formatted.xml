@@ -176,7 +176,7 @@
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
-          <Text charshape-id="4">글자취급</Text>
+          <Text charshape-id="4" lang="ko">글자취급</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6311" flow="block" gshape-id="0" halign="left" height="7560" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1465824588" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="12600" width-relto="absolute" x="0" y="0" z-order="1">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="7560" initial-height="7560" initial-width="12600" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="0" width="12600" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="6300" y="3780"/>
@@ -228,46 +228,46 @@
               </ShapePicture>
             </ShapeComponent>
           </GShapeObjectControl>
-          <Text charshape-id="4">어울림 (양쪽 본문)</Text>
+          <Text charshape-id="4" lang="ko">어울림 (양쪽 본문)</Text>
           <ControlChar char="&#13;" charshape-id="4" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="216" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="12" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="0" rangetags="0" split="00" style-id="0" text="000000D8" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0002" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19015" x="0" y="1600">
-          <Text charshape-id="4">어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="21" flags="0004" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7677" x="34843" y="1600">
-          <Text charshape-id="4">울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="29" flags="0002" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19015" x="0" y="3200">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="50" flags="0004" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7677" x="34843" y="3200">
-          <Text charshape-id="4">림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="58" flags="0002" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19015" x="0" y="4800">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림 </Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림 </Text>
         </LineSeg>
         <LineSeg a8="0" chpos="80" flags="0004" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7677" x="34843" y="4800">
-          <Text charshape-id="4">어울림 어울림 </Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 </Text>
         </LineSeg>
         <LineSeg a8="0" chpos="88" flags="0002" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19015" x="0" y="6400">
-          <Text charshape-id="4">어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="109" flags="0004" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7677" x="34843" y="6400">
-          <Text charshape-id="4">울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="117" flags="0002" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19015" x="0" y="8000">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="138" flags="0004" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="7677" x="34843" y="8000">
-          <Text charshape-id="4">림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="146" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9600">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="194" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="11200">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림</Text>
           <ControlChar char="&#13;" charshape-id="4" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
@@ -296,31 +296,31 @@
               </ShapePicture>
             </ShapeComponent>
           </GShapeObjectControl>
-          <Text charshape-id="4">어울림 (왼쪽 본문)</Text>
+          <Text charshape-id="4" lang="ko">어울림 (왼쪽 본문)</Text>
           <ControlChar char="&#13;" charshape-id="4" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="216" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="7" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="0" rangetags="0" split="00" style-id="0" text="000000D8" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="0" y="1600">
-          <Text charshape-id="4">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="26" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="0" y="3200">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="53" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="0" y="4800">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울림 어울림 </Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울림 어울림 </Text>
         </LineSeg>
         <LineSeg a8="0" chpos="80" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="0" y="6400">
-          <Text charshape-id="4">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="106" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="0" y="8000">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="133" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9600">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="181" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="11200">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림</Text>
           <ControlChar char="&#13;" charshape-id="4" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
@@ -349,37 +349,37 @@
               </ShapePicture>
             </ShapeComponent>
           </GShapeObjectControl>
-          <Text charshape-id="4">어울림 (오른쪽 본문)</Text>
+          <Text charshape-id="4" lang="ko">어울림 (오른쪽 본문)</Text>
           <ControlChar char="&#13;" charshape-id="4" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="216" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="7" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="0" rangetags="0" split="00" style-id="0" text="000000D8" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="18663" y="1600">
-          <Text charshape-id="4">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="26" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="18663" y="3200">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="53" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="18663" y="4800">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울림 어울림 </Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울림 어울림 </Text>
         </LineSeg>
         <LineSeg a8="0" chpos="80" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="18663" y="6400">
-          <Text charshape-id="4">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
+          <Text charshape-id="4" lang="ko">어울림 어울림 어울림 어울림 어울림 어울림 어울</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="106" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="23857" x="18663" y="8000">
-          <Text charshape-id="4">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="133" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9600">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어</Text>
         </LineSeg>
         <LineSeg a8="0" chpos="181" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="11200">
-          <Text charshape-id="4">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림</Text>
+          <Text charshape-id="4" lang="ko">울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림 어울림</Text>
           <ControlChar char="&#13;" charshape-id="4" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="20" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="7" parashape-id="0" rangetags="0" split="04" style-id="0" text="00000014" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9682">
-          <Text charshape-id="4">자리차지 (왼쪽정렬)</Text>
+          <Text charshape-id="4" lang="ko">자리차지 (왼쪽정렬)</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6210" flow="block" gshape-id="4" halign="left" height="9682" height-relto="absolute" hrelto="column" inline="0" instance-id="1465824590" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16138" width-relto="absolute" x="2835" y="0" z-order="3">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9682" initial-height="9682" initial-width="16138" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="4" width="16138" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="8069" y="4841"/>
@@ -408,7 +408,7 @@
       </Paragraph>
       <Paragraph chars="21" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="8" parashape-id="0" rangetags="0" split="04" style-id="0" text="00000015" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9682">
-          <Text charshape-id="4">자리차지 (오른쪽정렬)</Text>
+          <Text charshape-id="4" lang="ko">자리차지 (오른쪽정렬)</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6A10" flow="block" gshape-id="5" halign="right" height="9682" height-relto="absolute" hrelto="column" inline="0" instance-id="1468402560" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16138" width-relto="absolute" x="2835" y="0" z-order="6">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9682" initial-height="9682" initial-width="16138" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="5" width="16138" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="8069" y="4841"/>
@@ -437,7 +437,7 @@
       </Paragraph>
       <Paragraph chars="21" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="9" parashape-id="0" rangetags="0" split="04" style-id="0" text="00000015" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9682">
-          <Text charshape-id="4">자리차지 (가운데정렬)</Text>
+          <Text charshape-id="4" lang="ko">자리차지 (가운데정렬)</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6610" flow="block" gshape-id="6" halign="center" height="9682" height-relto="absolute" hrelto="column" inline="0" instance-id="1468402561" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16138" width-relto="absolute" x="-2835" y="0" z-order="7">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9682" initial-height="9682" initial-width="16138" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="6" width="16138" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="8069" y="4841"/>
@@ -466,7 +466,7 @@
       </Paragraph>
       <Paragraph chars="20" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="10" parashape-id="0" rangetags="0" split="04" style-id="0" text="00000014" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9682">
-          <Text charshape-id="4">자리차지 (안쪽정렬)</Text>
+          <Text charshape-id="4" lang="ko">자리차지 (안쪽정렬)</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6E10" flow="block" gshape-id="7" halign="inside" height="9682" height-relto="absolute" hrelto="column" inline="0" instance-id="1468402562" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16138" width-relto="absolute" x="2835" y="0" z-order="8">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9682" initial-height="9682" initial-width="16138" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="7" width="16138" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="8069" y="4841"/>
@@ -495,7 +495,7 @@
       </Paragraph>
       <Paragraph chars="21" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="11" parashape-id="0" rangetags="0" split="04" style-id="0" text="00000015" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9682">
-          <Text charshape-id="4">자리차지 (바깥쪽정렬)</Text>
+          <Text charshape-id="4" lang="ko">자리차지 (바깥쪽정렬)</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A7210" flow="block" gshape-id="8" halign="outside" height="9682" height-relto="absolute" hrelto="column" inline="0" instance-id="1468402563" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16138" width-relto="absolute" x="2835" y="0" z-order="9">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9682" initial-height="9682" initial-width="16138" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="8" width="16138" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="8069" y="4841"/>
@@ -524,7 +524,7 @@
       </Paragraph>
       <Paragraph chars="12" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="12" parashape-id="0" rangetags="0" split="04" style-id="0" text="0000000C" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">
-          <Text charshape-id="4">글뒤로</Text>
+          <Text charshape-id="4" lang="ko">글뒤로</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="044A6210" flow="back" gshape-id="9" halign="left" height="9981" height-relto="absolute" hrelto="column" inline="0" instance-id="1465824591" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16635" width-relto="absolute" x="0" y="0" z-order="0">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9981" initial-height="9981" initial-width="16635" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="9" width="16635" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="8317" y="4990"/>
@@ -553,7 +553,7 @@
       </Paragraph>
       <Paragraph chars="14" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="13" parashape-id="0" rangetags="0" split="04" style-id="0" text="8000000E" unknown="1" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">
-          <Text charshape-id="4">글 앞으로</Text>
+          <Text charshape-id="4" lang="ko">글 앞으로</Text>
           <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="046A6210" flow="front" gshape-id="10" halign="left" height="8193" height-relto="absolute" hrelto="column" inline="0" instance-id="1465824592" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="13654" width-relto="absolute" x="7449" y="62" z-order="10">
             <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="8193" initial-height="8193" initial-width="13654" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="10" width="13654" x-in-group="0" y-in-group="0">
               <Coord attribute-name="rotation_center" x="6827" y="4096"/>

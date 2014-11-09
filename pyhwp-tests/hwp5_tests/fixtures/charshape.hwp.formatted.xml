@@ -291,54 +291,58 @@
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
-          <Text charshape-id="1">가</Text>
+          <Text charshape-id="1" lang="ko">가</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="7" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000007" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="1600">
-          <Text charshape-id="6">기울임</Text>
-          <Text charshape-id="5">진하게</Text>
+          <Text charshape-id="6" lang="ko">기울임</Text>
+          <Text charshape-id="5" lang="ko">진하게</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="13" charshapes="5" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="0" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="3200">
-          <Text charshape-id="0">밑줄없음</Text>
-          <Text charshape-id="7">밑줄</Text>
-          <Text charshape-id="9">가운데줄</Text>
-          <Text charshape-id="8">윗줄</Text>
+          <Text charshape-id="0" lang="ko">밑줄없음</Text>
+          <Text charshape-id="7" lang="ko">밑줄</Text>
+          <Text charshape-id="9" lang="ko">가운데줄</Text>
+          <Text charshape-id="8" lang="ko">윗줄</Text>
           <ControlChar char="&#13;" charshape-id="8" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="33" charshapes="5" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000021" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="4800">
-          <Text charshape-id="1">글자크기:</Text>
-          <Text charshape-id="12"> 기준크기10pt</Text>
-          <Text charshape-id="11"> 한글90%</Text>
-          <Text charshape-id="13"> 영문80%</Text>
-          <Text charshape-id="14"> 기타70%</Text>
+          <Text charshape-id="1" lang="ko">글자크기:</Text>
+          <Text charshape-id="12" lang="ko"> 기준크기10</Text>
+          <Text charshape-id="12" lang="en">pt</Text>
+          <Text charshape-id="11" lang="ko"> 한글90%</Text>
+          <Text charshape-id="13" lang="ko"> 영문80%</Text>
+          <Text charshape-id="14" lang="ko"> 기타70%</Text>
           <ControlChar char="&#13;" charshape-id="14" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="43" charshapes="4" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="2" rangetags="0" split="00" style-id="0" text="0000002B" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="6400">
-          <Text charshape-id="1">폰트:</Text>
-          <Text charshape-id="15"> 한글돋움</Text>
-          <Text charshape-id="10"> 영문CourierNew</Text>
-          <Text charshape-id="16"> 기타قLucidaSansUnicode</Text>
+          <Text charshape-id="1" lang="ko">폰트:</Text>
+          <Text charshape-id="15" lang="ko"> 한글돋움</Text>
+          <Text charshape-id="10" lang="ko"> 영문</Text>
+          <Text charshape-id="10" lang="en">CourierNew</Text>
+          <Text charshape-id="16" lang="ko"> 기타</Text>
+          <Text charshape-id="16" lang="other">ق</Text>
+          <Text charshape-id="16" lang="en">LucidaSansUnicode</Text>
           <ControlChar char="&#13;" charshape-id="16" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000005" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="8000">
-          <Text charshape-id="17">붉은밑줄</Text>
+          <Text charshape-id="17" lang="ko">붉은밑줄</Text>
           <ControlChar char="&#13;" charshape-id="17" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000005" unknown="1" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9600">
-          <Text charshape-id="18">점선밑줄</Text>
+          <Text charshape-id="18" lang="ko">점선밑줄</Text>
           <ControlChar char="&#13;" charshape-id="18" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>

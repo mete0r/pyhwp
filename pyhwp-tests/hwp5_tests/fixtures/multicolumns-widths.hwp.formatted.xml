@@ -169,7 +169,7 @@
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#ff0000" stroke-flags="01" stroke-type="solid" width="0.15mm" width-flags="02"/>
           </ColumnsDef>
-          <Text charshape-id="1">1</Text>
+          <Text charshape-id="1" lang="ko">1</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
@@ -182,7 +182,7 @@
             </Array>
             <Border attribute-name="splitter" color="#ff0000" stroke-flags="01" stroke-type="solid" width="0.15mm" width-flags="02"/>
           </ColumnsDef>
-          <Text charshape-id="1">2</Text>
+          <Text charshape-id="1" lang="ko">2</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
@@ -196,7 +196,7 @@
             </Array>
             <Border attribute-name="splitter" color="#ff0000" stroke-flags="01" stroke-type="solid" width="0.15mm" width-flags="02"/>
           </ColumnsDef>
-          <Text charshape-id="1">3</Text>
+          <Text charshape-id="1" lang="ko">3</Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
