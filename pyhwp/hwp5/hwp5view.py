@@ -70,6 +70,36 @@ def main():
             # view.load_uri(index_uri)
             view.load_string(content, 'text/html', 'utf-8', base_uri)
 
+            def on_load(webview, webframe):
+                script = ('window.location.href = "dimension:" '
+                          '+ document.body.scrollWidth + "x"'
+                          '+ document.body.scrollHeight')
+                webview.execute_script(script)
+
+            MIN_WIDTH = 300
+            MIN_HEIGHT = 400
+            MAX_WIDTH = 1024
+            MAX_HEIGHT = 800
+
+            view.connect('load-finished', on_load)
+
+            def on_navigation_requested(webview, frame, req, data=None):
+                uri = req.get_uri()
+                scheme, path = uri.split(':', 1)
+                if scheme == 'dimension':
+                    width, height = path.split('x', 1)
+                    width = int(width)
+                    height = int(height)
+                    width = min(width, MAX_WIDTH)
+                    height = min(height, MAX_HEIGHT)
+                    width = max(width, MIN_WIDTH)
+                    height = max(height, MIN_HEIGHT)
+                    window.resize(width + 4, height)
+                    return True
+                return False
+
+            view.connect('navigation-requested', on_navigation_requested)
+
             scrolled_window = Gtk.ScrolledWindow()
             scrolled_window.add(view)
 
@@ -79,7 +109,7 @@ def main():
             window = Gtk.Window()
             window.add(vbox)
             window.connect('delete-event', Gtk.main_quit)
-            window.set_default_size(600, 400)
+            window.set_default_size(600, 800)
             window.show_all()
 
             Gtk.main()
