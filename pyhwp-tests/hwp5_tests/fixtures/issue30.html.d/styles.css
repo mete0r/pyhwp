@@ -1,0 +1,323 @@
+
+        /* Styles */
+        
+            p.Normal {
+            }
+        
+            p.Body {
+            }
+        
+            p.Outline-1 {
+            }
+        
+            p.Outline-2 {
+            }
+        
+            p.Outline-3 {
+            }
+        
+            p.Outline-4 {
+            }
+        
+            p.Outline-5 {
+            }
+        
+            p.Outline-6 {
+            }
+        
+            p.Outline-7 {
+            }
+        
+            p.Page-Number {
+            }
+        
+            p.Header {
+            }
+        
+            p.Footnote {
+            }
+        
+            p.Endnote {
+            }
+        
+            p.Memo {
+            }
+        
+
+        /* Paragraph attributes */
+        
+            .parashape-0 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    0pt;
+                
+        text-align: justify;
+    
+        text-indent: -13.1pt
+    ;
+        
+        padding-left: 13.1pt;
+        
+            }
+            .parashape-0 > span {
+            
+                line-height: 130%;
+                
+            }
+        
+            .parashape-1 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    0pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-1 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-2 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    0pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-2 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-3 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    15pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-3 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-4 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    10pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-4 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-5 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    20pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-5 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-6 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    30pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-6 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-7 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    40pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-7 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-8 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    50pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-8 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-9 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    60pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-9 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-10 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    70pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-10 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-11 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    0pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-11 > span {
+            
+                line-height: 150%;
+                
+            }
+        
+
+        /* Text attributes */
+        
+            .charshape-0 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-1 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-2 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 9pt;
+                
+            }
+        
+            .charshape-3 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 9pt;
+                
+            }
+        
+            .charshape-4 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 9pt;
+                
+            }
+        
+            .borderfill-1 {
+                border-top:  1px solid #000000/* width:0.1mm style: */ ;
+                border-right:  1px solid #000000/* width:0.1mm style: */ ;
+                border-bottom:  1px solid #000000/* width:0.1mm style: */ ;
+                border-left:  1px solid #000000/* width:0.1mm style: */ ;
+            }
+        

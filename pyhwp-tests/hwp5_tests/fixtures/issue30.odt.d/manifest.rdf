@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#"
+    xmlns:odf="http://docs.oasis-open.org/ns/office/1.2/meta/odf#">
+    <pkg:Document rdf:about="">
+        <pkg:hasPart rdf:resource="content.xml"/>
+        <pkg:hasPart rdf:resource="styles.xml"/>
+    </pkg:Document>
+    <odf:ContentFile rdf:about="content.xml"/>
+    <odf:StylesFile rdf:about="styles.xml"/>
+</rdf:RDF>

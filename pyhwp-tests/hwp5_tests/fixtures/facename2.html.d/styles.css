@@ -1,0 +1,134 @@
+
+        /* Styles */
+        
+            p.Normal {
+            }
+        
+            p. {
+            }
+        
+            p. {
+            }
+        
+            p. {
+            }
+        
+            p. {
+            }
+        
+            p. {
+            }
+        
+            p. {
+            }
+        
+            p. {
+            }
+        
+
+        /* Paragraph attributes */
+        
+            .parashape-0 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    0pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-0 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+            .parashape-1 {
+                margin:
+                    0pt
+                    0pt
+                    0pt
+                    0pt;
+                
+        text-align: justify;
+    
+        text-indent: 0pt
+    ;
+        
+            }
+            .parashape-1 > span {
+            
+                line-height: 160%;
+                
+            }
+        
+
+        /* Text attributes */
+        
+            .charshape-0 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-1 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-2 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-3 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-4 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-5 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-6 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .charshape-7 {
+                /* fontface-ko  */
+                color: #000000;
+                font-size: 10pt;
+                
+            }
+        
+            .borderfill-1 {
+                border-top:  1px solid #000000/* width:0.1mm style: */ ;
+                border-right:  1px solid #000000/* width:0.1mm style: */ ;
+                border-bottom:  1px solid #000000/* width:0.1mm style: */ ;
+                border-left:  1px solid #000000/* width:0.1mm style: */ ;
+            }
+        
