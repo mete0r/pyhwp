@@ -1,13 +1,13 @@
 [
 {
   "content": {
-    "character_unit_loc_in_paragraph": 16, 
+    "character_unit_loc_in_paragraph": 21, 
     "endnote_startnum": 1, 
     "footnote_startnum": 1, 
     "list_id": 0, 
     "math_startnum": 1, 
     "page_startnum": 1, 
-    "paragraph_id": 1, 
+    "paragraph_id": 0, 
     "picture_startnum": 1, 
     "section_count": 1, 
     "table_startnum": 1
@@ -15,7 +15,7 @@
   "level": 0, 
   "payload": [
     "01 00 01 00 01 00 01 00 01 00 01 00 01 00 00 00", 
-    "00 00 01 00 00 00 10 00 00 00"
+    "00 00 00 00 00 00 15 00 00 00"
   ], 
   "seqno": 0, 
   "size": 26, 
@@ -1026,66 +1026,6 @@
     "border_top": 0, 
     "borderfill_id": 1, 
     "doubled_margin_bottom": 0, 
-    "doubled_margin_left": 0, 
-    "doubled_margin_right": 0, 
-    "doubled_margin_top": 0, 
-    "flags2": 0, 
-    "indent": 0, 
-    "linespacing": 160, 
-    "numbering_bullet_id": 0, 
-    "parashapeflags": 384, 
-    "tabdef_id": 0
-  }, 
-  "level": 1, 
-  "payload": [
-    "80 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
-    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
-    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
-  ], 
-  "seqno": 27, 
-  "size": 46, 
-  "tagid": 25, 
-  "tagname": "HWPTAG_PARA_SHAPE", 
-  "type": "ParaShape"
-},
-{
-  "content": {
-    "border_bottom": 0, 
-    "border_left": 0, 
-    "border_right": 0, 
-    "border_top": 0, 
-    "borderfill_id": 1, 
-    "doubled_margin_bottom": 0, 
-    "doubled_margin_left": 0, 
-    "doubled_margin_right": 0, 
-    "doubled_margin_top": 0, 
-    "flags2": 0, 
-    "indent": 0, 
-    "linespacing": 160, 
-    "numbering_bullet_id": 0, 
-    "parashapeflags": 128, 
-    "tabdef_id": 0
-  }, 
-  "level": 1, 
-  "payload": [
-    "80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
-    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
-    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
-  ], 
-  "seqno": 28, 
-  "size": 46, 
-  "tagid": 25, 
-  "tagname": "HWPTAG_PARA_SHAPE", 
-  "type": "ParaShape"
-},
-{
-  "content": {
-    "border_bottom": 0, 
-    "border_left": 0, 
-    "border_right": 0, 
-    "border_top": 0, 
-    "borderfill_id": 1, 
-    "doubled_margin_bottom": 0, 
     "doubled_margin_left": 3000, 
     "doubled_margin_right": 0, 
     "doubled_margin_top": 0, 
@@ -1102,7 +1042,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 29, 
+  "seqno": 27, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1132,7 +1072,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 30, 
+  "seqno": 28, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1162,7 +1102,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 31, 
+  "seqno": 29, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1192,7 +1132,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 32, 
+  "seqno": 30, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1222,7 +1162,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 33, 
+  "seqno": 31, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1252,7 +1192,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 34, 
+  "seqno": 32, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1282,7 +1222,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 35, 
+  "seqno": 33, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1309,6 +1249,66 @@
   "level": 1, 
   "payload": [
     "80 28 80 0c b0 36 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 34, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 0, 
+    "parashapeflags": 384, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 35, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 0, 
+    "parashapeflags": 128, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
@@ -1356,13 +1356,13 @@
     "local_name": "\ubc14\ud0d5\uae00", 
     "name": "Normal", 
     "next_style_id": 0, 
-    "parashape_id": 2, 
+    "parashape_id": 10, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "03 00 14 bc d5 d0 00 ae 06 00 4e 00 6f 00 72 00", 
-    "6d 00 61 00 6c 00 00 00 12 04 02 00 01 00 00 00"
+    "6d 00 61 00 6c 00 00 00 12 04 0a 00 01 00 00 00"
   ], 
   "seqno": 38, 
   "size": 32, 
@@ -1378,13 +1378,13 @@
     "local_name": "\ubcf8\ubb38", 
     "name": "Body", 
     "next_style_id": 1, 
-    "parashape_id": 3, 
+    "parashape_id": 1, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "02 00 f8 bc 38 bb 04 00 42 00 6f 00 64 00 79 00", 
-    "00 01 12 04 03 00 01 00 00 00"
+    "00 01 12 04 01 00 01 00 00 00"
   ], 
   "seqno": 39, 
   "size": 26, 
@@ -1400,14 +1400,14 @@
     "local_name": "\uac1c\uc694 1", 
     "name": "Outline 1", 
     "next_style_id": 2, 
-    "parashape_id": 4, 
+    "parashape_id": 2, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 31 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 31 00 00 02", 
-    "12 04 04 00 01 00 00 00"
+    "12 04 02 00 01 00 00 00"
   ], 
   "seqno": 40, 
   "size": 40, 
@@ -1423,14 +1423,14 @@
     "local_name": "\uac1c\uc694 2", 
     "name": "Outline 2", 
     "next_style_id": 3, 
-    "parashape_id": 5, 
+    "parashape_id": 3, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 32 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 32 00 00 03", 
-    "12 04 05 00 01 00 00 00"
+    "12 04 03 00 01 00 00 00"
   ], 
   "seqno": 41, 
   "size": 40, 
@@ -1446,14 +1446,14 @@
     "local_name": "\uac1c\uc694 3", 
     "name": "Outline 3", 
     "next_style_id": 4, 
-    "parashape_id": 6, 
+    "parashape_id": 4, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 33 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 33 00 00 04", 
-    "12 04 06 00 01 00 00 00"
+    "12 04 04 00 01 00 00 00"
   ], 
   "seqno": 42, 
   "size": 40, 
@@ -1469,14 +1469,14 @@
     "local_name": "\uac1c\uc694 4", 
     "name": "Outline 4", 
     "next_style_id": 5, 
-    "parashape_id": 7, 
+    "parashape_id": 5, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 34 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 34 00 00 05", 
-    "12 04 07 00 01 00 00 00"
+    "12 04 05 00 01 00 00 00"
   ], 
   "seqno": 43, 
   "size": 40, 
@@ -1492,14 +1492,14 @@
     "local_name": "\uac1c\uc694 5", 
     "name": "Outline 5", 
     "next_style_id": 6, 
-    "parashape_id": 8, 
+    "parashape_id": 6, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 35 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 35 00 00 06", 
-    "12 04 08 00 01 00 00 00"
+    "12 04 06 00 01 00 00 00"
   ], 
   "seqno": 44, 
   "size": 40, 
@@ -1515,14 +1515,14 @@
     "local_name": "\uac1c\uc694 6", 
     "name": "Outline 6", 
     "next_style_id": 7, 
-    "parashape_id": 9, 
+    "parashape_id": 7, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 36 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 36 00 00 07", 
-    "12 04 09 00 01 00 00 00"
+    "12 04 07 00 01 00 00 00"
   ], 
   "seqno": 45, 
   "size": 40, 
@@ -1538,14 +1538,14 @@
     "local_name": "\uac1c\uc694 7", 
     "name": "Outline 7", 
     "next_style_id": 8, 
-    "parashape_id": 10, 
+    "parashape_id": 8, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 1c ac 94 c6 20 00 37 00 09 00 4f 00 75 00", 
     "74 00 6c 00 69 00 6e 00 65 00 20 00 37 00 00 08", 
-    "12 04 0a 00 01 00 00 00"
+    "12 04 08 00 01 00 00 00"
   ], 
   "seqno": 46, 
   "size": 40, 
@@ -1561,14 +1561,14 @@
     "local_name": "\ucabd \ubc88\ud638", 
     "name": "Page Number", 
     "next_style_id": 9, 
-    "parashape_id": 2, 
+    "parashape_id": 10, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "04 00 bd ca 20 00 88 bc 38 d6 0b 00 50 00 61 00", 
     "67 00 65 00 20 00 4e 00 75 00 6d 00 62 00 65 00", 
-    "72 00 00 09 12 04 02 00 00 00 00 00"
+    "72 00 00 09 12 04 0a 00 00 00 00 00"
   ], 
   "seqno": 47, 
   "size": 44, 
@@ -1651,13 +1651,13 @@
     "local_name": "\uba54\ubaa8", 
     "name": "Memo", 
     "next_style_id": 13, 
-    "parashape_id": 1, 
+    "parashape_id": 9, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "02 00 54 ba a8 ba 04 00 4d 00 65 00 6d 00 6f 00", 
-    "00 0d 12 04 01 00 04 00 00 00"
+    "00 0d 12 04 09 00 04 00 00 00"
   ], 
   "seqno": 51, 
   "size": 26, 

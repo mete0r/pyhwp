@@ -22,7 +22,13 @@
         </xsl:element>
         <xsl:apply-templates select="HwpSummaryInfo" mode="head" />
         <xsl:apply-templates select="DocInfo" mode="head" />
-        <xsl:apply-templates select="BodyText/SectionDef" mode="style" />
+        <xsl:element name="style">
+          <xsl:attribute name="type">text/css</xsl:attribute>
+          <xsl:text>&#10;</xsl:text>
+          <xsl:apply-templates select="BodyText/SectionDef" mode="css-rule" />
+          <xsl:apply-templates select="//Header" mode="css-rule" />
+          <xsl:apply-templates select="//Footer" mode="css-rule" />
+        </xsl:element>
       </xsl:element>
       <xsl:apply-templates select="BodyText" mode="body" />
     </xsl:element>
@@ -56,14 +62,6 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="SectionDef" mode="style">
-    <xsl:element name="style">
-      <xsl:attribute name="type">text/css</xsl:attribute>
-      <xsl:text>&#10;</xsl:text>
-      <xsl:apply-templates select="." mode="css-rule" />
-    </xsl:element>
-  </xsl:template>
-
   <xsl:template match="BodyText" mode="body">
     <xsl:element name="body">
       <xsl:apply-templates select="SectionDef" mode="div" />
@@ -81,9 +79,28 @@
         <xsl:text>Paper</xsl:text>
       </xsl:attribute>
       <xsl:element name="div">
-        <xsl:attribute name="class">Page</xsl:attribute>
-        <xsl:apply-templates />
+        <xsl:attribute name="class">HeaderPageFooter</xsl:attribute>
+        <xsl:apply-templates select="//Header" mode="div" />
+        <xsl:element name="div">
+          <xsl:attribute name="class">Page</xsl:attribute>
+          <xsl:apply-templates />
+        </xsl:element>
+        <xsl:apply-templates select="//Footer" mode="div" />
       </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="Header" mode="div">
+    <xsl:element name="div">
+      <xsl:attribute name="class">HeaderArea</xsl:attribute>
+      <xsl:apply-templates select="HeaderParagraphList/Paragraph" />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="Footer" mode="div">
+    <xsl:element name="div">
+      <xsl:attribute name="class">FooterArea</xsl:attribute>
+      <xsl:apply-templates select="FooterParagraphList/Paragraph" />
     </xsl:element>
   </xsl:template>
 

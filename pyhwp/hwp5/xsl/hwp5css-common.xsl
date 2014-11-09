@@ -487,11 +487,12 @@
     </xsl:template>
 
     <xsl:template match="SectionDef" mode="css-rule">
+        <xsl:variable name="section-selector">
+            <xsl:text>.Section-</xsl:text>
+            <xsl:value-of select="@section-id" />
+        </xsl:variable>
         <xsl:call-template name="css-rule">
-            <xsl:with-param name="selector">
-                <xsl:text>.Section-</xsl:text>
-                <xsl:value-of select="@section-id" />
-            </xsl:with-param>
+            <xsl:with-param name="selector" select="$section-selector" />
             <xsl:with-param name="declarations">
                 <xsl:apply-templates select="PageDef" mode="paper-dimension" />
             </xsl:with-param>
@@ -499,9 +500,20 @@
 
         <xsl:call-template name="css-rule">
             <xsl:with-param name="selector">
-                <xsl:text>.Section-</xsl:text>
-                <xsl:value-of select="@section-id" />
-                <xsl:text> .Page</xsl:text>
+                <xsl:value-of select="$section-selector" />
+                <xsl:text> </xsl:text>
+                <xsl:text>.HeaderPageFooter</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="declarations">
+                <xsl:apply-templates select="PageDef" mode="headerpagefooter-css" />
+            </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="css-rule">
+            <xsl:with-param name="selector">
+                <xsl:value-of select="$section-selector" />
+                <xsl:text> </xsl:text>
+                <xsl:text>.Page</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="declarations">
                 <xsl:apply-templates select="PageDef" mode="page-css" />
@@ -509,36 +521,65 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="PageDef" mode="page-css">
+    <xsl:template match="PageDef" mode="headerpagefooter-css">
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">position</xsl:with-param>
+            <xsl:with-param name="value">relative</xsl:with-param>
+        </xsl:call-template>
+
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">margin-top</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@top-offset div 100" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@top-offset" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
 
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">margin-right</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@right-offset div 100" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@right-offset" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
 
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">margin-bottom</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@bottom-offset div 100" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@bottom-offset" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
 
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">margin-left</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@left-offset div 100" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@left-offset" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="PageDef" mode="page-css">
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">padding-top</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@header-offset" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">padding-bottom</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@footer-offset" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -558,8 +599,9 @@
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">width</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@width div 100" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@width" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -568,8 +610,81 @@
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">width</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@height div 100" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-mm">
+                    <xsl:with-param name="hwpunit" select="@height" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="Header" mode="css-rule">
+        <xsl:call-template name="css-rule">
+            <xsl:with-param name="selector">.HeaderArea</xsl:with-param>
+            <xsl:with-param name="declarations">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">position</xsl:with-param>
+                    <xsl:with-param name="value">absolute</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">left</xsl:with-param>
+                    <xsl:with-param name="value">0</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">top</xsl:with-param>
+                    <xsl:with-param name="value">0</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">width</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="hwpunit-to-mm">
+                            <xsl:with-param name="hwpunit" select="HeaderParagraphList/@width" />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">height</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="hwpunit-to-mm">
+                            <xsl:with-param name="hwpunit" select="HeaderParagraphList/@height" />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="Footer" mode="css-rule">
+        <xsl:call-template name="css-rule">
+            <xsl:with-param name="selector">.FooterArea</xsl:with-param>
+            <xsl:with-param name="declarations">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">position</xsl:with-param>
+                    <xsl:with-param name="value">absolute</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">left</xsl:with-param>
+                    <xsl:with-param name="value">0</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">bottom</xsl:with-param>
+                    <xsl:with-param name="value">0</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">width</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="hwpunit-to-mm">
+                            <xsl:with-param name="hwpunit" select="FooterParagraphList/@width" />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">height</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="hwpunit-to-mm">
+                            <xsl:with-param name="hwpunit" select="FooterParagraphList/@height" />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -699,6 +814,12 @@
             <xsl:when test="@underline-style = 'upper_weighted'">double</xsl:when>
             <xsl:when test="@underline-style = 'middle_weighted'">double</xsl:when>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="hwpunit-to-mm">
+        <xsl:param name="hwpunit" />
+        <xsl:value-of select="floor($hwpunit div 100 * 0.352777778 + 0.5)" />
+        <xsl:text>mm</xsl:text>
     </xsl:template>
 
     <xsl:template name="css-rule">

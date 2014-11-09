@@ -16,7 +16,7 @@ body {
 }
 /* Styles */
 .Normal {
-/* @parashape-id = 2*/
+/* @parashape-id = 10*/
   margin: 0pt 0pt 0pt 0pt;
   text-align: justify;
   text-indent: 0pt;
@@ -35,7 +35,7 @@ body {
   font-size: 10pt;
 }
 .Body {
-/* @parashape-id = 3*/
+/* @parashape-id = 1*/
   margin: 0pt 0pt 0pt 15pt;
   text-align: justify;
   text-indent: 0pt;
@@ -54,7 +54,7 @@ body {
   font-size: 10pt;
 }
 .Outline-1 {
-/* @parashape-id = 4*/
+/* @parashape-id = 2*/
   margin: 0pt 0pt 0pt 10pt;
   text-align: justify;
   text-indent: 0pt;
@@ -73,7 +73,7 @@ body {
   font-size: 10pt;
 }
 .Outline-2 {
-/* @parashape-id = 5*/
+/* @parashape-id = 3*/
   margin: 0pt 0pt 0pt 20pt;
   text-align: justify;
   text-indent: 0pt;
@@ -92,7 +92,7 @@ body {
   font-size: 10pt;
 }
 .Outline-3 {
-/* @parashape-id = 6*/
+/* @parashape-id = 4*/
   margin: 0pt 0pt 0pt 30pt;
   text-align: justify;
   text-indent: 0pt;
@@ -111,7 +111,7 @@ body {
   font-size: 10pt;
 }
 .Outline-4 {
-/* @parashape-id = 7*/
+/* @parashape-id = 5*/
   margin: 0pt 0pt 0pt 40pt;
   text-align: justify;
   text-indent: 0pt;
@@ -130,7 +130,7 @@ body {
   font-size: 10pt;
 }
 .Outline-5 {
-/* @parashape-id = 8*/
+/* @parashape-id = 6*/
   margin: 0pt 0pt 0pt 50pt;
   text-align: justify;
   text-indent: 0pt;
@@ -149,7 +149,7 @@ body {
   font-size: 10pt;
 }
 .Outline-6 {
-/* @parashape-id = 9*/
+/* @parashape-id = 7*/
   margin: 0pt 0pt 0pt 60pt;
   text-align: justify;
   text-indent: 0pt;
@@ -168,7 +168,7 @@ body {
   font-size: 10pt;
 }
 .Outline-7 {
-/* @parashape-id = 10*/
+/* @parashape-id = 8*/
   margin: 0pt 0pt 0pt 70pt;
   text-align: justify;
   text-indent: 0pt;
@@ -187,7 +187,7 @@ body {
   font-size: 10pt;
 }
 .Page-Number {
-/* @parashape-id = 2*/
+/* @parashape-id = 10*/
   margin: 0pt 0pt 0pt 0pt;
   text-align: justify;
   text-indent: 0pt;
@@ -265,7 +265,7 @@ body {
   font-size: 9pt;
 }
 .Memo {
-/* @parashape-id = 1*/
+/* @parashape-id = 9*/
   margin: 0pt 0pt 0pt 0pt;
   text-align: justify;
   text-indent: 0pt;
@@ -295,7 +295,7 @@ p.parashape-0 > span {
   line-height: 1.3;
 }
 p.parashape-1 {
-  margin: 0pt 0pt 0pt 0pt;
+  margin: 0pt 0pt 0pt 15pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -304,7 +304,7 @@ p.parashape-1 > span {
   line-height: 1.6;
 }
 p.parashape-2 {
-  margin: 0pt 0pt 0pt 0pt;
+  margin: 0pt 0pt 0pt 10pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -313,7 +313,7 @@ p.parashape-2 > span {
   line-height: 1.6;
 }
 p.parashape-3 {
-  margin: 0pt 0pt 0pt 15pt;
+  margin: 0pt 0pt 0pt 20pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -322,7 +322,7 @@ p.parashape-3 > span {
   line-height: 1.6;
 }
 p.parashape-4 {
-  margin: 0pt 0pt 0pt 10pt;
+  margin: 0pt 0pt 0pt 30pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -331,7 +331,7 @@ p.parashape-4 > span {
   line-height: 1.6;
 }
 p.parashape-5 {
-  margin: 0pt 0pt 0pt 20pt;
+  margin: 0pt 0pt 0pt 40pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -340,7 +340,7 @@ p.parashape-5 > span {
   line-height: 1.6;
 }
 p.parashape-6 {
-  margin: 0pt 0pt 0pt 30pt;
+  margin: 0pt 0pt 0pt 50pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -349,7 +349,7 @@ p.parashape-6 > span {
   line-height: 1.6;
 }
 p.parashape-7 {
-  margin: 0pt 0pt 0pt 40pt;
+  margin: 0pt 0pt 0pt 60pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -358,7 +358,7 @@ p.parashape-7 > span {
   line-height: 1.6;
 }
 p.parashape-8 {
-  margin: 0pt 0pt 0pt 50pt;
+  margin: 0pt 0pt 0pt 70pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -367,7 +367,7 @@ p.parashape-8 > span {
   line-height: 1.6;
 }
 p.parashape-9 {
-  margin: 0pt 0pt 0pt 60pt;
+  margin: 0pt 0pt 0pt 0pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
@@ -376,7 +376,7 @@ p.parashape-9 > span {
   line-height: 1.6;
 }
 p.parashape-10 {
-  margin: 0pt 0pt 0pt 70pt;
+  margin: 0pt 0pt 0pt 0pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
