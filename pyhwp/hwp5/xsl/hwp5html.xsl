@@ -74,14 +74,12 @@
       <xsl:attribute name="class">Section Section-<xsl:value-of select="position()-1"/> Paper</xsl:attribute>
       <xsl:element name="div">
         <xsl:attribute name="class">Page</xsl:attribute>
-        <xsl:for-each select="Paragraph">
-          <xsl:apply-templates select="." mode="p"/>
-        </xsl:for-each>
+        <xsl:apply-templates />
       </xsl:element>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="Paragraph" mode="p">
+  <xsl:template match="Paragraph">
     <xsl:element name="p">
       <xsl:variable name="styleid" select="@style-id"/>
       <xsl:attribute name="class"><xsl:value-of select="translate(/HwpDoc/DocInfo/IdMappings/Style[number($styleid)+1]/@name, ' ', '-')" /> parashape-<xsl:value-of select="@parashape-id"/></xsl:attribute>
