@@ -1950,7 +1950,7 @@
   "content": {
     "flags": 3, 
     "listflags": 0, 
-    "maxsize": 40454, 
+    "max_width": 40454, 
     "paragraphs": 2, 
     "separation": 850, 
     "unknown1": 0, 

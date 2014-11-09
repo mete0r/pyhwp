@@ -370,7 +370,7 @@ class TableTest(TestBase):
         self.assertEquals(TableCaption, child_model['type'])
         self.assertEquals(dict(listflags=0,
                                width=8504,
-                               maxsize=40454,
+                               max_width=40454,
                                unknown1=0,
                                flags=3L,
                                separation=850,
@@ -742,7 +742,7 @@ class TableCaptionCellTest(TestCase):
         self.assertEquals(3, model_content['flags'])
         self.assertEquals(8504L, model_content['width'])
         self.assertEquals(850, model_content['separation'])
-        self.assertEquals(40454L, model_content['maxsize'])
+        self.assertEquals(40454L, model_content['max_width'])
 
         tablecell = result[3]
         context, model = tablecell

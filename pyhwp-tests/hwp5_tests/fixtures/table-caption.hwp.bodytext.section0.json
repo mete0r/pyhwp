@@ -358,7 +358,7 @@
   "content": {
     "flags": 2, 
     "listflags": 0, 
-    "maxsize": 20976, 
+    "max_width": 20976, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -790,7 +790,7 @@
   "content": {
     "flags": 3, 
     "listflags": 0, 
-    "maxsize": 20976, 
+    "max_width": 20976, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -1223,7 +1223,7 @@
   "content": {
     "flags": 0, 
     "listflags": 32, 
-    "maxsize": 8504, 
+    "max_width": 8504, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -1655,7 +1655,7 @@
   "content": {
     "flags": 1, 
     "listflags": 32, 
-    "maxsize": 8504, 
+    "max_width": 8504, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -2087,7 +2087,7 @@
   "content": {
     "flags": 0, 
     "listflags": 0, 
-    "maxsize": 8504, 
+    "max_width": 8504, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -2519,7 +2519,7 @@
   "content": {
     "flags": 1, 
     "listflags": 64, 
-    "maxsize": 8504, 
+    "max_width": 8504, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -2964,7 +2964,7 @@
   "content": {
     "flags": 7, 
     "listflags": 0, 
-    "maxsize": 26646, 
+    "max_width": 26646, 
     "paragraphs": 2, 
     "separation": 850, 
     "unknown1": 0, 
@@ -3397,7 +3397,7 @@
   "content": {
     "flags": 3, 
     "listflags": 8, 
-    "maxsize": 20976, 
+    "max_width": 20976, 
     "paragraphs": 2, 
     "separation": 850, 
     "unknown1": 0, 

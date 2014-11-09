@@ -358,7 +358,7 @@
   "content": {
     "flags": 3, 
     "listflags": 0, 
-    "maxsize": 11763, 
+    "max_width": 11763, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 

@@ -358,7 +358,7 @@
   "content": {
     "flags": 3, 
     "listflags": 0, 
-    "maxsize": 41954, 
+    "max_width": 41954, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 
@@ -875,7 +875,7 @@
   "content": {
     "flags": 3, 
     "listflags": 0, 
-    "maxsize": 20340, 
+    "max_width": 20340, 
     "paragraphs": 1, 
     "separation": 850, 
     "unknown1": 0, 

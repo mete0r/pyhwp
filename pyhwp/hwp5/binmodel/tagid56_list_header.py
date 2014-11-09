@@ -90,14 +90,15 @@ class TableCaption(ListHeader):
     Position = Enum(LEFT=0, RIGHT=1, TOP=2, BOTTOM=3)
     Flags = Flags(UINT32,
                   0, 1, Position, 'position',
-                  2, 'include_margin')
+                  # 캡션이 긴 경우 테이블 여백 영역까지 확장
+                  2, 'expand_to_margin')
 
     def attributes(cls):
         ''' 표 67 캡션 '''
         yield cls.Flags, 'flags',
         yield HWPUNIT, 'width',
         yield HWPUNIT16, 'separation',  # 캡션과 틀 사이 간격
-        yield HWPUNIT, 'maxsize',
+        yield HWPUNIT, 'max_width',  # expand_to_margin 고려한 최대 너비
     attributes = classmethod(attributes)
 
 
