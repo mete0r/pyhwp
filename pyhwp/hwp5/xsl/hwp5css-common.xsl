@@ -12,118 +12,167 @@
     </xsl:template>
 
     <xsl:template match="Style" mode="css-rule">
+        <xsl:variable name="paragraph-selector">
+            <xsl:text>.</xsl:text>
+            <xsl:value-of select="translate(@name, ' ', '-')"/>
+        </xsl:variable>
+        <xsl:variable name="spans-selector">
+            <xsl:value-of select="$paragraph-selector" />
+            <xsl:text> &gt; </xsl:text>
+            <xsl:text>span</xsl:text>
+        </xsl:variable>
+        <xsl:if test="@kind = 'paragraph'">
+            <xsl:variable name="parashape_pos" select="@parashape-id + 1" />
+            <xsl:variable name="parashape" select="//ParaShape[$parashape_pos]" />
+            <xsl:call-template name="css-rule">
+                <xsl:with-param name="selector" select="$paragraph-selector" />
+                <xsl:with-param name="declarations">
+                    <xsl:text>/* </xsl:text>
+                    <xsl:text>@parashape-id = </xsl:text>
+                    <xsl:value-of select="@parashape-id" />
+                    <xsl:text>*/&#10;</xsl:text>
+                    <xsl:apply-templates select="$parashape" mode="css-declaration" />
+                </xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="css-rule">
+                <xsl:with-param name="selector" select="$spans-selector" />
+                <xsl:with-param name="declarations">
+                    <xsl:apply-templates select="$parashape" mode="css-declaration-for-span" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:variable name="charshape_pos" select="number(@charshape-id) + 1" />
+        <xsl:variable name="charshape" select="//CharShape[$charshape_pos]" />
         <xsl:call-template name="css-rule">
-            <xsl:with-param name="selector">
-                <xsl:text>p.</xsl:text>
-                <xsl:value-of select="translate(@name, ' ', '-')"/>
+            <xsl:with-param name="selector" select="$spans-selector" />
+            <xsl:with-param name="declarations">
+                <xsl:text>/* </xsl:text>
+                <xsl:text>@charshape-id = </xsl:text>
+                <xsl:value-of select="@charshape-id" />
+                <xsl:text>*/&#10;</xsl:text>
+                <xsl:apply-templates select="$charshape" mode="css-declaration" />
             </xsl:with-param>
-            <xsl:with-param name="declarations"></xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="ParaShape" mode="css-rule">
+        <xsl:variable name="paragraph-selector">
+            <xsl:text>p.parashape-</xsl:text>
+            <xsl:number value="position()-1" />
+        </xsl:variable>
+        <xsl:variable name="spans-selector">
+            <xsl:value-of select="$paragraph-selector" />
+            <xsl:text> &gt; </xsl:text>
+            <xsl:text>span</xsl:text>
+        </xsl:variable>
         <xsl:call-template name="css-rule">
-            <xsl:with-param name="selector">
-                <xsl:text>.parashape-</xsl:text>
-                <xsl:number value="position()-1" />
-            </xsl:with-param>
+            <xsl:with-param name="selector" select="$paragraph-selector" />
             <xsl:with-param name="declarations">
-                <xsl:call-template name="css-declaration">
-                    <xsl:with-param name="property">margin</xsl:with-param>
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="@doubled-margin-top div 100 div 2"/>
-                        <xsl:text>pt </xsl:text>
-                        <xsl:value-of select="@doubled-margin-right div 100 div 2"/>
-                        <xsl:text>pt </xsl:text>
-                        <xsl:value-of select="@doubled-margin-bottom div 100 div 2"/>
-                        <xsl:text>pt </xsl:text>
-                        <xsl:value-of select="@doubled-margin-left div 100 div 2"/>
-                        <xsl:text>pt</xsl:text>
-                    </xsl:with-param>
-                </xsl:call-template>
-                <xsl:apply-templates select="." mode="text-align" />
-                <xsl:apply-templates select="." mode="text-indent" />
-                <xsl:choose>
-                    <xsl:when test="@linespacing-type = 'ratio'">
-                        <xsl:call-template name="css-declaration">
-                            <xsl:with-param name="property">min-height</xsl:with-param>
-                            <xsl:with-param name="value">
-                                <xsl:value-of select="@linespacing div 100" />
-                                <xsl:text>em</xsl:text>
-                            </xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:when>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="css-declaration" />
             </xsl:with-param>
         </xsl:call-template>
 
         <xsl:call-template name="css-rule">
-            <xsl:with-param name="selector">
-                <xsl:text>.parashape-</xsl:text>
-                <xsl:number value="position()-1" />
-                <xsl:text> &gt; span</xsl:text>
-            </xsl:with-param>
+            <xsl:with-param name="selector" select="$spans-selector" />
             <xsl:with-param name="declarations">
-                <xsl:choose>
-                    <xsl:when test="@linespacing-type = 'ratio'">
-                        <xsl:call-template name="css-declaration">
-                            <xsl:with-param name="property">line-height</xsl:with-param>
-                            <xsl:with-param name="value">
-                                <xsl:value-of select="@linespacing div 100"/>
-                            </xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:when>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="css-declaration-for-span" />
             </xsl:with-param>
         </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="ParaShape" mode="css-declaration">
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">margin</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:value-of select="@doubled-margin-top div 100 div 2"/>
+                <xsl:text>pt</xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@doubled-margin-right div 100 div 2"/>
+                <xsl:text>pt</xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@doubled-margin-bottom div 100 div 2"/>
+                <xsl:text>pt</xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@doubled-margin-left div 100 div 2"/>
+                <xsl:text>pt</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates select="." mode="text-align" />
+        <xsl:apply-templates select="." mode="text-indent" />
+        <xsl:choose>
+            <xsl:when test="@linespacing-type = 'ratio'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">min-height</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:value-of select="@linespacing div 100" />
+                        <xsl:text>em</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="ParaShape" mode="css-declaration-for-span">
+        <xsl:choose>
+            <xsl:when test="@linespacing-type = 'ratio'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">line-height</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:value-of select="@linespacing div 100"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="CharShape" mode="css-rule">
         <xsl:call-template name="css-rule">
             <xsl:with-param name="selector">
-                <xsl:text>.charshape-</xsl:text>
+                <xsl:text>span.charshape-</xsl:text>
                 <xsl:number value="position()-1" />
             </xsl:with-param>
             <xsl:with-param name="declarations">
-
-                <xsl:call-template name="css-declaration">
-                    <xsl:with-param name="property">color</xsl:with-param>
-                    <xsl:with-param name="value"><xsl:value-of select="@text-color" /></xsl:with-param>
-                </xsl:call-template>
-
-                <xsl:call-template name="css-declaration">
-                    <xsl:with-param name="property">font-family</xsl:with-param>
-                    <xsl:with-param name="value">
-                        <xsl:apply-templates select="FontFace" mode="css-declaration-font-family-value" />
-                    </xsl:with-param>
-                </xsl:call-template>
-
-                <xsl:call-template name="css-declaration">
-                    <xsl:with-param name="property">font-size</xsl:with-param>
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="@basesize div 100"/>
-                        <xsl:text>pt</xsl:text>
-                    </xsl:with-param>
-                </xsl:call-template>
-
-                <xsl:if test="@italic = 1">
-                    <xsl:call-template name="css-declaration">
-                        <xsl:with-param name="property">font-style</xsl:with-param>
-                        <xsl:with-param name="value">italic</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:if>
-
-                <xsl:if test="@bold = 1">
-                    <xsl:call-template name="css-declaration">
-                        <xsl:with-param name="property">font-weight</xsl:with-param>
-                        <xsl:with-param name="value">bold</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:if>
-
-                <xsl:apply-templates select="." mode="text-decoration" />
-
+                <xsl:apply-templates select="." mode="css-declaration" />
             </xsl:with-param>
         </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="CharShape" mode="css-declaration">
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">color</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="@text-color" /></xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">font-family</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:apply-templates select="FontFace" mode="css-declaration-font-family-value" />
+            </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">font-size</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:value-of select="@basesize div 100"/>
+                <xsl:text>pt</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:if test="@italic = 1">
+            <xsl:call-template name="css-declaration">
+                <xsl:with-param name="property">font-style</xsl:with-param>
+                <xsl:with-param name="value">italic</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:if test="@bold = 1">
+            <xsl:call-template name="css-declaration">
+                <xsl:with-param name="property">font-weight</xsl:with-param>
+                <xsl:with-param name="value">bold</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+
+        <xsl:apply-templates select="." mode="text-decoration" />
     </xsl:template>
 
     <xsl:template match="FontFace" mode="css-declaration-font-family-value">

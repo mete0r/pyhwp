@@ -83,7 +83,20 @@
   <xsl:template match="Paragraph">
     <xsl:element name="p">
       <xsl:variable name="styleid" select="@style-id"/>
-      <xsl:attribute name="class"><xsl:value-of select="translate(/HwpDoc/DocInfo/IdMappings/Style[number($styleid)+1]/@name, ' ', '-')" /> parashape-<xsl:value-of select="@parashape-id"/></xsl:attribute>
+      <xsl:variable name="style" select="//Style[number($styleid)+1]" />
+      <xsl:variable name="stylename" select="$style/@name" />
+      <xsl:variable name="stylencname" select="translate($stylename, ' ', '-')" />
+      <xsl:attribute name="class">
+        <xsl:value-of select="$stylencname" />
+        <xsl:choose>
+          <xsl:when test="$style/@parashape-id = @parashape-id"></xsl:when>
+          <xsl:otherwise>
+            <xsl:text> </xsl:text>
+            <xsl:text>parashape-</xsl:text>
+            <xsl:value-of select="@parashape-id"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
       <xsl:for-each select="LineSeg">
         <xsl:apply-templates />
       </xsl:for-each>
@@ -92,8 +105,23 @@
 
   <xsl:template match="ControlChar"><xsl:value-of select="@char"/></xsl:template>
 
-  <xsl:template match="Text">
-    <xsl:element name="span"><xsl:attribute name="class">charshape-<xsl:value-of select="@charshape-id"/></xsl:attribute><xsl:value-of select="text()"/></xsl:element>
+  <xsl:template match="Paragraph/LineSeg/Text">
+    <xsl:element name="span">
+      <xsl:variable name="styleid" select="../../@style-id"/>
+      <xsl:variable name="style" select="//Style[number($styleid)+1]" />
+      <xsl:variable name="stylename" select="$style/@name" />
+      <xsl:variable name="stylencname" select="translate($stylename, ' ', '-')" />
+      <xsl:choose>
+        <xsl:when test="$style/@charshape-id = @charshape-id"></xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="class">
+            <xsl:text>charshape-</xsl:text>
+            <xsl:value-of select="@charshape-id" />
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="text()"/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="TableCaption">

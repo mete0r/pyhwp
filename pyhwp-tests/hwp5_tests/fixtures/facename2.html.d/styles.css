@@ -15,43 +15,18 @@ body {
   margin-bottom: 0;
 }
 /* Styles */
-p.Normal {
-}
-p. {
-}
-p. {
-}
-p. {
-}
-p. {
-}
-p. {
-}
-p. {
-}
-p. {
-}
-/* Paragraph attributes */
-.parashape-0 {
+.Normal {
+/* @parashape-id = 0*/
   margin: 0pt 0pt 0pt 0pt;
   text-align: justify;
   text-indent: 0pt;
   min-height: 1.6em;
 }
-.parashape-0 > span {
+.Normal > span {
   line-height: 1.6;
 }
-.parashape-1 {
-  margin: 0pt 0pt 0pt 0pt;
-  text-align: justify;
-  text-indent: 0pt;
-  min-height: 1.6em;
-}
-.parashape-1 > span {
-  line-height: 1.6;
-}
-/* Text attributes */
-.charshape-0 {
+.Normal > span {
+/* @charshape-id = 0*/
   color: #000000;
   font-family: /* base: 1 3 6 9 10 11 12 */
 /* base + offset: 2 5 8 11 10 11 12 */
@@ -59,23 +34,18 @@ p. {
 "바탕", "바탕", "바탕", "바탕", "고딕", "바탕", "바탕";
   font-size: 10pt;
 }
-.charshape-1 {
-  color: #000000;
-  font-family: /* base: 1 3 6 9 10 11 12 */
-/* base + offset: 2 3 8 11 10 11 12 */
-/* ko en cn jp other symbol user */
-"바탕", "Arial", "바탕", "바탕", "고딕", "바탕", "바탕";
-  font-size: 10pt;
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
 }
-.charshape-2 {
-  color: #000000;
-  font-family: /* base: 1 3 6 9 10 11 12 */
-/* base + offset: 2 5 8 10 10 11 12 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "고딕", "고딕", "바탕", "바탕";
-  font-size: 10pt;
+. > span {
+  line-height: 1.6;
 }
-.charshape-3 {
+. > span {
+/* @charshape-id = 3*/
   color: #000000;
   font-family: /* base: 1 3 6 9 10 11 12 */
 /* base + offset: 1 5 8 11 10 11 12 */
@@ -83,7 +53,18 @@ p. {
 "한컴돋움", "바탕", "바탕", "바탕", "고딕", "바탕", "바탕";
   font-size: 10pt;
 }
-.charshape-4 {
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+. > span {
+  line-height: 1.6;
+}
+. > span {
+/* @charshape-id = 4*/
   color: #000000;
   font-family: /* base: 1 3 6 9 10 11 12 */
 /* base + offset: 2 4 8 11 10 11 12 */
@@ -91,7 +72,37 @@ p. {
 "바탕", "Times New Roman", "바탕", "바탕", "고딕", "바탕", "바탕";
   font-size: 10pt;
 }
-.charshape-5 {
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+. > span {
+  line-height: 1.6;
+}
+. > span {
+/* @charshape-id = 1*/
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 3 8 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "Arial", "바탕", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+. > span {
+  line-height: 1.6;
+}
+. > span {
+/* @charshape-id = 5*/
   color: #000000;
   font-family: /* base: 1 3 6 9 10 11 12 */
 /* base + offset: 2 5 6 11 10 11 12 */
@@ -99,7 +110,18 @@ p. {
 "바탕", "바탕", "해서 약자", "바탕", "고딕", "바탕", "바탕";
   font-size: 10pt;
 }
-.charshape-6 {
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+. > span {
+  line-height: 1.6;
+}
+. > span {
+/* @charshape-id = 6*/
   color: #000000;
   font-family: /* base: 1 3 6 9 10 11 12 */
 /* base + offset: 2 5 7 11 10 11 12 */
@@ -107,7 +129,121 @@ p. {
 "바탕", "바탕", "해서 간자", "바탕", "고딕", "바탕", "바탕";
   font-size: 10pt;
 }
-.charshape-7 {
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+. > span {
+  line-height: 1.6;
+}
+. > span {
+/* @charshape-id = 7*/
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 5 8 9 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "바탕", "명조", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+. {
+/* @parashape-id = 1*/
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+. > span {
+  line-height: 1.6;
+}
+. > span {
+/* @charshape-id = 2*/
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 5 8 10 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "바탕", "고딕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+/* Paragraph attributes */
+p.parashape-0 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-0 > span {
+  line-height: 1.6;
+}
+p.parashape-1 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-1 > span {
+  line-height: 1.6;
+}
+/* Text attributes */
+span.charshape-0 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 5 8 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "바탕", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-1 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 3 8 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "Arial", "바탕", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-2 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 5 8 10 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "바탕", "고딕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-3 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 1 5 8 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"한컴돋움", "바탕", "바탕", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-4 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 4 8 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "Times New Roman", "바탕", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-5 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 5 6 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "해서 약자", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-6 {
+  color: #000000;
+  font-family: /* base: 1 3 6 9 10 11 12 */
+/* base + offset: 2 5 7 11 10 11 12 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "해서 간자", "바탕", "고딕", "바탕", "바탕";
+  font-size: 10pt;
+}
+span.charshape-7 {
   color: #000000;
   font-family: /* base: 1 3 6 9 10 11 12 */
 /* base + offset: 2 5 8 9 10 11 12 */
