@@ -922,51 +922,51 @@
     "levels": [
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 76, 
         "numbering_format": "^1.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 140, 
         "numbering_format": "^2.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^3.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 108, 
         "numbering_format": "^4)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 172, 
         "numbering_format": "^5)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^6)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 44, 
         "numbering_format": "^7", 
+        "space": 50, 
         "width_correction": 0
       }
     ], 
@@ -995,51 +995,51 @@
     "levels": [
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^1.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^2.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^3)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^4)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "(^5)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "(^6)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 44, 
         "numbering_format": "^7", 
+        "space": 50, 
         "width_correction": 0
       }
     ], 
@@ -1068,51 +1068,51 @@
     "levels": [
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^1.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^2.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^3)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^4)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "(^5)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "(^6)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 44, 
         "numbering_format": "^7", 
+        "space": 50, 
         "width_correction": 0
       }
     ], 
@@ -1141,51 +1141,51 @@
     "levels": [
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "\uc81c^1\uc7a5", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "\uc81c^2\uc808", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "\uc81c^3\ud56d", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "-", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "", 
+        "space": 50, 
         "width_correction": 0
       }
     ], 

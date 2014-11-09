@@ -35,17 +35,17 @@ class NumberingLevel(Struct):
     Align = Enum(LEFT=0, CENTER=1, RIGHT=2, UNKNOWN=3)
     DistanceType = Enum(RATIO=0, VALUE=1)
     Flags = Flags(UINT32,
-                  0, 1, Align, 'paragraph_align',
+                  0, 1, Align, 'align',
                   2, 'auto_width',
-                  3, 'auto_dedent',
-                  4, DistanceType, 'distance_to_body_type')
+                  3, 'auto_indent',
+                  4, DistanceType, 'space_type')
 
     @classmethod
     def attributes(cls):
         ''' 표 34 문단 머리 정보 '''
         yield cls.Flags, 'flags'
         yield HWPUNIT16, 'width_correction'
-        yield HWPUNIT16, 'distance_to_body'
+        yield UINT16, 'space'
         yield INT32, 'charshape_id'
         yield BSTR, 'numbering_format'  # see 표 36 문단 번호 형식
 

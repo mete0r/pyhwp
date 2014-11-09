@@ -126,13 +126,13 @@
       </TabDef>
       <Numbering starting-number="0">
         <Array name="levels">
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^1." paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="^2." paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^3)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="^4)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="(^5)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="(^6)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000002C" numbering-format="^7" paragraph-align="left" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000000C" numbering-format="^1." space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000010C" numbering-format="^2." space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000000C" numbering-format="^3)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000010C" numbering-format="^4)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000000C" numbering-format="(^5)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000010C" numbering-format="(^6)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000002C" numbering-format="^7" space="50" space-type="ratio" width-correction="0"/>
         </Array>
       </Numbering>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
