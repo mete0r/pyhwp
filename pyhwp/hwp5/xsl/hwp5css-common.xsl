@@ -17,6 +17,7 @@
                     <xsl:value-of select="@doubled-margin-bottom div 100 div 2"/>pt
                     <xsl:value-of select="@doubled-margin-left div 100 div 2"/>pt;
                 <xsl:apply-templates select="." mode="css-text-align" />
+                <xsl:apply-templates select="." mode="css-text-indent" />
             }
             .parashape-<xsl:number value="position()-1" /> &gt; span {
             <xsl:choose>
@@ -73,5 +74,17 @@
             <xsl:when test="@align = 'both'">justify</xsl:when>
             <xsl:otherwise>justify</xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="ParaShape" mode="css-text-indent">
+        text-indent: <xsl:apply-templates select="." mode="css-text-indent-value" />;
+        <xsl:if test="@indent &lt; 0">
+        padding-left: <xsl:value-of select="@indent div 100 div 2 * -1" />pt;
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="ParaShape" mode="css-text-indent-value">
+        <!-- @indent seems to be doubled -->
+        <xsl:value-of select="@indent div 100 div 2" />pt
     </xsl:template>
 </xsl:stylesheet>
