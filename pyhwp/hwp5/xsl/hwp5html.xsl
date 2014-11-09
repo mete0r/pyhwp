@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
   <xsl:import href="hwp5css-common.xsl" />
@@ -122,9 +122,11 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:for-each select="LineSeg">
-        <xsl:apply-templates select="Text|ControlChar|AutoNumbering|TableControl|GShapeObjectControl" />
+        <xsl:apply-templates select="Text|ControlChar|AutoNumbering|TableControl[@inline='1']|GShapeObjectControl[@inline='1']" />
       </xsl:for-each>
     </xsl:element>
+    <xsl:apply-templates select="LineSeg/TableControl[@inline='0']" />
+    <xsl:apply-templates select="LineSeg/GShapeObjectControl[@inline='0']" />
   </xsl:template>
 
   <xsl:template match="ControlChar"><xsl:value-of select="@char"/></xsl:template>
@@ -182,13 +184,49 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="TableControl">
+  <xsl:template match="TableControl[@inline='1']">
+    <xsl:element name="span">
+      <xsl:attribute name="class">
+        <xsl:text>TableControl</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="style">
+        <xsl:apply-templates select="." mode="css-display" />
+      </xsl:attribute>
+      <xsl:element name="table">
+        <xsl:attribute name="class">borderfill-<xsl:value-of select="TableBody/@borderfill-id"/></xsl:attribute>
+        <xsl:attribute name="cellspacing"><xsl:value-of select="TableBody/@cellspacing"/></xsl:attribute>
+        <xsl:attribute name="style">
+          <xsl:apply-templates select="." mode="css-width" />
+          <xsl:apply-templates select="." mode="table-border" />
+        </xsl:attribute>
+        <xsl:apply-templates />
+      </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="TableControl[@inline='0']">
     <xsl:element name="table">
-      <xsl:attribute name="class">borderfill-<xsl:value-of select="TableBody/@borderfill-id"/></xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:text>TableControl</xsl:text>
+        <xsl:text> </xsl:text>
+        <xsl:text>borderfill-</xsl:text>
+        <xsl:value-of select="TableBody/@borderfill-id"/>
+      </xsl:attribute>
       <xsl:attribute name="cellspacing"><xsl:value-of select="TableBody/@cellspacing"/></xsl:attribute>
-      <xsl:attribute name="style">border-collapse:collapse;</xsl:attribute>
+      <xsl:attribute name="style">
+        <xsl:apply-templates select="." mode="css-width" />
+        <xsl:apply-templates select="." mode="extendedcontrol-hpos" />
+        <xsl:apply-templates select="." mode="table-border" />
+      </xsl:attribute>
       <xsl:apply-templates />
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="TableControl" mode="table-border">
+    <xsl:call-template name="css-declaration">
+      <xsl:with-param name="property">border-collapse</xsl:with-param>
+      <xsl:with-param name="value">collapse</xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="TableRow">
@@ -207,9 +245,24 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="GShapeObjectControl">
+  <xsl:template match="GShapeObjectControl[@inline='1']">
+    <xsl:element name="span">
+      <xsl:attribute name="class">GShapeObjectControl</xsl:attribute>
+      <xsl:attribute name="style">
+        <xsl:apply-templates select="." mode="css-width" />
+        <xsl:apply-templates select="." mode="css-display" />
+      </xsl:attribute>
+      <xsl:apply-templates />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="GShapeObjectControl[@inline='0']">
     <xsl:element name="div">
-      <xsl:attribute name="class">GShapeObject</xsl:attribute>
+      <xsl:attribute name="class">GShapeObjectControl</xsl:attribute>
+      <xsl:attribute name="style">
+        <xsl:apply-templates select="." mode="css-width" />
+        <xsl:apply-templates select="." mode="extendedcontrol-hpos" />
+      </xsl:attribute>
       <xsl:apply-templates />
     </xsl:element>
   </xsl:template>
@@ -265,5 +318,281 @@
     <xsl:text>height: </xsl:text>
     <xsl:value-of select="@height div 100" />
     <xsl:text>pt;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="TableControl[@inline='1']|GShapeObjectControl[@inline='1']" mode="css-display">
+    <xsl:call-template name="css-declaration">
+      <xsl:with-param name="property">display</xsl:with-param>
+      <xsl:with-param name="value">inline-block</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="TableControl|GShapeObjectControl" mode="css-width">
+    <xsl:call-template name="css-declaration">
+      <xsl:with-param name="property">width</xsl:with-param>
+      <xsl:with-param name="value">
+        <xsl:call-template name="hwpunit-to-mm">
+          <xsl:with-param name="hwpunit" select="@width" />
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="TableControl|GShapeObjectControl" mode="extendedcontrol-hpos">
+    <xsl:variable name="paragraph" select="../.." />
+    <xsl:variable name="parashape_pos" select="number($paragraph/@parashape-id) + 1" />
+    <xsl:variable name="parashape" select="//ParaShape[$parashape_pos]" />
+    <xsl:variable name="section" select="$paragraph/.." />
+    <xsl:variable name="pagedef" select="$section/PageDef" />
+    <xsl:text>/*</xsl:text>
+    <xsl:text> hrelto: </xsl:text>
+    <xsl:value-of select="@hrelto" />
+    <xsl:text> halign: </xsl:text>
+    <xsl:value-of select="@halign" />
+    <xsl:text>*/</xsl:text>
+    <xsl:choose>
+      <!-- 문단 -->
+      <xsl:when test="@hrelto = 'paragraph'">
+        <xsl:choose>
+          <!-- 왼쪽으로부터 -->
+          <xsl:when test="@halign = 'left'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="$parashape/@doubled-margin-left div 2 + @margin-left + @x" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 오른쪽으로부터 -->
+          <xsl:when test="@halign = 'right'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이)                             : 종이 x축에서
+                  - (쪽 오른쪽 여백) - (문단 오른쪽 여백) : 문단 맨 오른쪽
+                  - (@x)                                  : x만큼 왼쪽으로
+                  - (개체 오른쪽 여백) - (개체 넓이)      : 개체 맨 왼쪽
+                  - (쪽 왼쪽 여백)                        : 쪽 x축으로
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    $pagedef/@width
+                    - $pagedef/@right-offset - $parashape/@doubled-margin-right div 2
+                    - @x
+                    - @margin-right - @width
+                    - $pagedef/@left-offset
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 가운데로부터 -->
+          <xsl:when test="@halign = 'center'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이 - 쪽 양쪽 여백 - 문단 양쪽 여백) / 2 : 문단 중간
+                  - (개체 넓이 / 2)                               : 개체 너비 절반만큼 왼쪽
+                  + (@x)                                          : x만큼 오른쪽
+                  + (문단 왼쪽 여백)                              : 문단 x 축에서 쪽 x축으로
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    ($pagedef/@width - $pagedef/@left-offset - $pagedef/@right-offset) div 2
+                    - @width div 2
+                    + @x
+                    + $parashape/@doubled-margin-left div 2
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+      <!-- 단 -->
+      <xsl:when test="@hrelto = 'column'">
+        <xsl:choose>
+          <!-- 왼쪽으로부터 -->
+          <xsl:when test="@halign = 'left'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@margin-left + @x" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 오른쪽으로부터 -->
+          <xsl:when test="@halign = 'right'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이)                             : 종이 x축에서
+                  - (쪽 오른쪽 여백)                      : 단 맨 오른쪽
+                  - (@x)                                  : x만큼 왼쪽으로
+                  - (개체 오른쪽 여백) - (개체 넓이)      : 개체 맨 왼쪽
+                  - (쪽 왼쪽 여백)                        : 쪽 x축으로
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    $pagedef/@width
+                    - $pagedef/@right-offset
+                    - @x
+                    - @margin-right - @width
+                    - $pagedef/@left-offset
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 가운데로부터 -->
+          <xsl:when test="@halign = 'center'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이 - 쪽 양쪽 여백) / 2     : 쪽 중간
+                  - (개체 넓이 / 2)                  : 개체 너비 절반만큼 왼쪽
+                  + (@x)                             : x만큼 오른쪽
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    ($pagedef/@width - $pagedef/@left-offset - $pagedef/@right-offset) div 2
+                    - @width div 2
+                    + @x
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+      <!-- 쪽 -->
+      <xsl:when test="@hrelto = 'page'">
+        <xsl:choose>
+          <!-- 왼쪽으로부터 -->
+          <xsl:when test="@halign = 'left'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@margin-left + @x" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 오른쪽으로부터 -->
+          <xsl:when test="@halign = 'right'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이)                             : 종이 x축에서
+                  - (쪽 오른쪽 여백)                      : 쪽 맨 오른쪽
+                  - (@x)                                  : x만큼 왼쪽으로
+                  - (개체 오른쪽 여백) - (개체 넓이)      : 개체 맨 왼쪽
+                  - (쪽 왼쪽 여백)                        : 쪽 x축으로
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    $pagedef/@width
+                    - $pagedef/@right-offset
+                    - @x
+                    - @margin-right - @width
+                    - $pagedef/@left-offset
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 가운데로부터 -->
+          <xsl:when test="@halign = 'center'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이 - 쪽 양쪽 여백) / 2     : 쪽 중간
+                  - (개체 넓이 / 2)                  : 개체 너비 절반만큼 왼쪽
+                  + (@x)                             : x만큼 오른쪽
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    ($pagedef/@width - $pagedef/@left-offset - $pagedef/@right-offset) div 2
+                    - @width div 2
+                    + @x
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+      <!-- 종이 -->
+      <xsl:when test="@hrelto = 'paper'">
+        <xsl:choose>
+          <!-- 왼쪽으로부터 -->
+          <xsl:when test="@halign = 'left'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@margin-left + @x - $pagedef/@left-offset" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 오른쪽으로부터 -->
+          <xsl:when test="@halign = 'right'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이)                        : 종이 x축에서, 종이 맨 오른쪽
+                  - (@x)                             : x만큼 왼쪽
+                  - (개체 오른쪽 여백) - (개체 넓이) : 개체 맨 왼쪽
+                  - (쪽 왼쪽 여백)                   : 쪽 x축으로
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    $pagedef/@width
+                    - @x
+                    - @margin-right - @width
+                    - $pagedef/@left-offset
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- 가운데로부터 -->
+          <xsl:when test="@halign = 'center'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-left</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <!--
+                  (종이 넓이 / 2)                    : 종이 x축에서, 종이 가운데
+                  - (개체 넓이 / 2)                  : 개체 너비 절반만큼 왼쪽
+                  + (@x)                             : x만큼 오른쪽
+                  - (쪽 왼쪽 여백)                   : 쪽 x축으로
+                  -->
+                  <xsl:with-param name="hwpunit" select="
+                    $pagedef/@width div 2
+                    - @width div 2
+                    + @x
+                    - $pagedef/@left-offset
+                    " />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>

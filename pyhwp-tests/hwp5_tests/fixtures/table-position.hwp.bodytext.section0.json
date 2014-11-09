@@ -1,0 +1,10118 @@
+[
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 4, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 3, 
+    "style_id": 0, 
+    "text": 17
+  }, 
+  "level": 0, 
+  "payload": [
+    "11 00 00 00 04 00 00 00 04 00 00 03 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 0, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "secd", 
+          "code": 2, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          16
+        ], 
+        {
+          "chid": "cold", 
+          "code": 2, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          16, 
+          17
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "02 00 64 63 65 73 00 00 00 00 00 00 00 00 02 00", 
+    "02 00 64 6c 6f 63 00 00 00 00 00 00 00 00 02 00", 
+    "0d 00"
+  ], 
+  "seqno": 1, 
+  "size": 34, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 2, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 40520, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 48 9e 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 3, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "secd", 
+    "columnspacing": 1134, 
+    "defaultTabStops": 8000, 
+    "flags": 0, 
+    "grid_horizontal": 0, 
+    "grid_vertical": 0, 
+    "numbering_shape_id": 1, 
+    "starting_equationnum": 0, 
+    "starting_pagenum": 0, 
+    "starting_picturenum": 0, 
+    "starting_tablenum": 0, 
+    "unknown1": 0, 
+    "unknown2": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "64 63 65 73 00 00 00 00 6e 04 00 00 00 00 40 1f", 
+    "00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00"
+  ], 
+  "seqno": 4, 
+  "size": 36, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "SectionDef"
+},
+{
+  "content": {
+    "attr": 0, 
+    "bookbinding_offset": 0, 
+    "bottom_offset": 4252, 
+    "footer_offset": 4252, 
+    "header_offset": 4252, 
+    "height": 84188, 
+    "left_offset": 8504, 
+    "right_offset": 8504, 
+    "top_offset": 5668, 
+    "width": 59528
+  }, 
+  "level": 2, 
+  "payload": [
+    "88 e8 00 00 dc 48 01 00 38 21 00 00 38 21 00 00", 
+    "24 16 00 00 9c 10 00 00 9c 10 00 00 9c 10 00 00", 
+    "00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 5, 
+  "size": 40, 
+  "tagid": 73, 
+  "tagname": "HWPTAG_PAGE_DEF", 
+  "type": "PageDef"
+},
+{
+  "content": {
+    "flags": 0, 
+    "notes_spacing": 283, 
+    "prefix": 0, 
+    "splitter_color": 0, 
+    "splitter_length": -1, 
+    "splitter_margin_bottom": 567, 
+    "splitter_margin_top": 850, 
+    "splitter_stroke_type": 1, 
+    "splitter_unknown": -1, 
+    "splitter_width": 1, 
+    "starting_number": 1, 
+    "suffix": 41, 
+    "usersymbol": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 29 00 01 00 ff ff ff ff", 
+    "52 03 37 02 1b 01 01 01 00 00 00 00"
+  ], 
+  "seqno": 6, 
+  "size": 28, 
+  "tagid": 74, 
+  "tagname": "HWPTAG_FOOTNOTE_SHAPE", 
+  "type": "FootnoteShape"
+},
+{
+  "content": {
+    "flags": 0, 
+    "notes_spacing": 0, 
+    "prefix": 0, 
+    "splitter_color": 0, 
+    "splitter_length": 12280, 
+    "splitter_margin_bottom": 567, 
+    "splitter_margin_top": 850, 
+    "splitter_stroke_type": 1, 
+    "splitter_unknown": 224, 
+    "splitter_width": 1, 
+    "starting_number": 1, 
+    "suffix": 41, 
+    "usersymbol": 0
+  }, 
+  "level": 2, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 29 00 01 00 f8 2f e0 00", 
+    "52 03 37 02 00 00 01 01 00 00 00 00"
+  ], 
+  "seqno": 7, 
+  "size": 28, 
+  "tagid": 74, 
+  "tagname": "HWPTAG_FOOTNOTE_SHAPE", 
+  "type": "FootnoteShape"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 8, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 9, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "borderfill_id": 0, 
+    "flags": 1, 
+    "margin": {
+      "bottom": 1417, 
+      "left": 1417, 
+      "right": 1417, 
+      "top": 1417
+    }
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 89 05 89 05 89 05 89 05 00 00"
+  ], 
+  "seqno": 10, 
+  "size": 14, 
+  "tagid": 75, 
+  "tagname": "HWPTAG_PAGE_BORDER_FILL", 
+  "type": "PageBorderFill"
+},
+{
+  "content": {
+    "attr2": 0, 
+    "chid": "cold", 
+    "flags": 4100, 
+    "spacing": 0, 
+    "splitter": {
+      "color": 0, 
+      "stroke_flags": 0, 
+      "width_flags": 0
+    }
+  }, 
+  "level": 1, 
+  "payload": [
+    "64 6c 6f 63 04 10 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 11, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "ColumnsDef"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 3, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 11
+  }, 
+  "level": 0, 
+  "payload": [
+    "0b 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "03 00 00 00 00 00"
+  ], 
+  "seqno": 12, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          1
+        ], 
+        "\uc804"
+      ], 
+      [
+        [
+          1, 
+          9
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          9, 
+          10
+        ], 
+        "\ud6c4"
+      ], 
+      [
+        [
+          10, 
+          11
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "04 c8 0b 00 20 6c 62 74 00 00 00 00 00 00 00 00", 
+    "0b 00 c4 d6 0d 00"
+  ], 
+  "seqno": 13, 
+  "size": 22, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 14, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 40520, 
+        "x": 1000, 
+        "y": 1600
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 1, 
+        "flags": 6, 
+        "height": 4414, 
+        "height2": 4414, 
+        "height85": 3752, 
+        "space_below": 600, 
+        "width": 40520, 
+        "x": 1000, 
+        "y": 3200
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 9, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 40520, 
+        "x": 1000, 
+        "y": 8214
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 40 06 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 48 9e 00 00", 
+    "00 00 06 00 01 00 00 00 80 0c 00 00 3e 11 00 00", 
+    "3e 11 00 00 a8 0e 00 00 58 02 00 00 e8 03 00 00", 
+    "48 9e 00 00 00 00 06 00 09 00 00 00 16 20 00 00", 
+    "e8 03 00 00 e8 03 00 00 52 03 00 00 58 02 00 00", 
+    "e8 03 00 00 48 9e 00 00 00 00 06 00"
+  ], 
+  "seqno": 15, 
+  "size": 108, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673850129, 
+    "height": 2564, 
+    "instance_id": 1748212087, 
+    "margin": {
+      "bottom": 0, 
+      "left": 0, 
+      "right": 0, 
+      "top": 0
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 41954, 
+    "x": 0, 
+    "y": 0, 
+    "z_order": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 11 23 2a 28 00 00 00 00 00 00 00 00", 
+    "e2 a3 00 00 04 0a 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 77 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 16, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 41954, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 e2 a3 00 00"
+  ], 
+  "seqno": 17, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483675
+  }, 
+  "level": 2, 
+  "payload": [
+    "1b 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 18, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          26
+        ], 
+        " \uc5ec\ubc31 0mm, \uae00\uc790\ucc98\ub7fc \ucde8\uae09"
+      ], 
+      [
+        [
+          26, 
+          27
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 30 00 6d 00", 
+    "6d 00 2c 00 20 00 00 ae 90 c7 98 cc fc b7 20 00", 
+    "e8 cd 09 ae 0d 00"
+  ], 
+  "seqno": 19, 
+  "size": 54, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 20, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 39952, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 10 9c 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 21, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 1, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 01 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 22, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 23, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 20977, 
+    "width": 20977
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f1 51 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f1 51 00 00"
+  ], 
+  "seqno": 24, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 25, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 26, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18692, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 04 49 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 27, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 20977, 
+    "width": 20977
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f1 51 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f1 51 00 00"
+  ], 
+  "seqno": 28, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 29, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 30, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18692, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 04 49 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 31, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 20977, 
+    "width": 20977
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f1 51 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f1 51 00 00"
+  ], 
+  "seqno": 32, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 33, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 34, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18692, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 04 49 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 35, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 20977, 
+    "width": 20977
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f1 51 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f1 51 00 00"
+  ], 
+  "seqno": 36, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 37, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 38, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18692, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 04 49 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 39, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 4, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 04 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 40, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 41, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 42, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 43, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673850128, 
+    "height": 2564, 
+    "instance_id": 1748212100, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 5
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 23 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 05 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 84 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 44, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 45, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483680
+  }, 
+  "level": 2, 
+  "payload": [
+    "20 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 46, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          31
+        ], 
+        " \uc5ec\ubc31 10mm, \ubb38\ub2e8 \uc67c\ucabd\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          31, 
+          32
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 38 bb e8 b2 20 00 7c c6", 
+    "bd ca 80 bd 30 d1 20 00 35 00 6d 00 6d 00 0d 00"
+  ], 
+  "seqno": 47, 
+  "size": 64, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 48, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 49, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 2, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 02 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 50, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 51, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 52, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 53, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 54, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 55, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 56, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 57, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 58, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 59, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 60, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 61, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 62, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 63, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 64, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 65, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 66, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 67, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 68, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 69, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 70, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 10084
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 64 27 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 71, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673849872, 
+    "height": 2564, 
+    "instance_id": 1748212102, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 6
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 22 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 06 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 86 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 72, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 73, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483679
+  }, 
+  "level": 2, 
+  "payload": [
+    "1f 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 74, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          30
+        ], 
+        " \uc5ec\ubc31 10mm, \ub2e8 \uc67c\ucabd\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          30, 
+          31
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 e8 b2 20 00 7c c6 bd ca", 
+    "80 bd 30 d1 20 00 35 00 6d 00 6d 00 0d 00"
+  ], 
+  "seqno": 75, 
+  "size": 62, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 76, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 77, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 3, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 03 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 78, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 79, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 80, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 81, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 82, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 83, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 84, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 85, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 86, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 87, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 88, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 89, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 90, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 91, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 92, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 93, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 94, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 95, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 96, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 97, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 98, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 20168
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 c8 4e 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 99, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673849616, 
+    "height": 2564, 
+    "instance_id": 1748212103, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 7
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 21 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 07 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 87 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 100, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 101, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483679
+  }, 
+  "level": 2, 
+  "payload": [
+    "1f 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 102, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          30
+        ], 
+        " \uc5ec\ubc31 10mm, \ucabd \uc67c\ucabd\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          30, 
+          31
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 bd ca 20 00 7c c6 bd ca", 
+    "80 bd 30 d1 20 00 35 00 6d 00 6d 00 0d 00"
+  ], 
+  "seqno": 103, 
+  "size": 62, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 104, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 105, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 4, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 04 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 106, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 107, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 108, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 109, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 110, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 111, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 112, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 113, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 114, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 115, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 116, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 117, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 118, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 119, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 120, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 121, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 122, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 123, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 124, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 125, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 126, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 30252
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 2c 76 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 127, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673849360, 
+    "height": 2564, 
+    "instance_id": 1748212104, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 9921, 
+    "y": 0, 
+    "z_order": 8
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 20 2a 28 00 00 00 00 c1 26 00 00", 
+    "f0 51 00 00 04 0a 00 00 08 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 88 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 128, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 129, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483681
+  }, 
+  "level": 2, 
+  "payload": [
+    "21 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 130, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          32
+        ], 
+        " \uc5ec\ubc31 10mm, \uc885\uc774 \uc67c\ucabd\ubd80\ud130 35mm"
+      ], 
+      [
+        [
+          32, 
+          33
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 85 c8 74 c7 20 00 7c c6", 
+    "bd ca 80 bd 30 d1 20 00 33 00 35 00 6d 00 6d 00", 
+    "0d 00"
+  ], 
+  "seqno": 131, 
+  "size": 66, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 132, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 133, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 5, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 05 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 134, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 135, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 136, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 137, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 138, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 139, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 140, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 141, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 142, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 143, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 144, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 145, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 146, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 147, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 148, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 149, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 150, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 151, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 4, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 04 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 152, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 153, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 154, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 155, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673852176, 
+    "height": 2564, 
+    "instance_id": 1748212105, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 9
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 2b 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 09 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 89 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 156, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 157, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 2147483648, 
+    "linesegs": 2, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483681
+  }, 
+  "level": 2, 
+  "payload": [
+    "21 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "02 00 00 00 00 80"
+  ], 
+  "seqno": 158, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          32
+        ], 
+        " \uc5ec\ubc31 10mm, \ubb38\ub2e8 \uc624\ub978\ucabd\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          32, 
+          33
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 38 bb e8 b2 20 00 24 c6", 
+    "78 b9 bd ca 80 bd 30 d1 20 00 35 00 6d 00 6d 00", 
+    "0d 00"
+  ], 
+  "seqno": 159, 
+  "size": 66, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 160, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 29, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00 1d 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 e8 03 00 00", 
+    "20 4a 00 00 00 00 06 00"
+  ], 
+  "seqno": 161, 
+  "size": 72, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 6, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 06 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 162, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 163, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 164, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 165, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 166, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 167, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 168, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 169, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 170, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 171, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 172, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 173, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 174, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 175, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 176, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 177, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 178, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 179, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 180, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 181, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 182, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 11684
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 a4 2d 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 183, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673851920, 
+    "height": 2564, 
+    "instance_id": 1748212106, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 10
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 2a 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 0a 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 8a 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 184, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 185, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483680
+  }, 
+  "level": 2, 
+  "payload": [
+    "20 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 186, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          31
+        ], 
+        " \uc5ec\ubc31 10mm, \ub2e8 \uc624\ub978\ucabd\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          31, 
+          32
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 e8 b2 20 00 24 c6 78 b9", 
+    "bd ca 80 bd 30 d1 20 00 35 00 6d 00 6d 00 0d 00"
+  ], 
+  "seqno": 187, 
+  "size": 64, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 188, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 189, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 7, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 07 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 190, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 191, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 192, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 193, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 194, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 195, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 196, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 197, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 198, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 199, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 200, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 201, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 202, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 203, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 204, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 205, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 206, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 207, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 208, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 209, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 210, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 21768
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 08 55 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 211, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673851664, 
+    "height": 2564, 
+    "instance_id": 1748212107, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 11
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 29 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 0b 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 8b 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 212, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 213, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483680
+  }, 
+  "level": 2, 
+  "payload": [
+    "20 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 214, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          31
+        ], 
+        " \uc5ec\ubc31 10mm, \ucabd \uc624\ub978\ucabd\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          31, 
+          32
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 bd ca 20 00 24 c6 78 b9", 
+    "bd ca 80 bd 30 d1 20 00 35 00 6d 00 6d 00 0d 00"
+  ], 
+  "seqno": 215, 
+  "size": 64, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 216, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 217, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 8, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 08 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 218, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 219, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 220, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 221, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 222, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 223, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 224, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 225, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 226, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 227, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 228, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 229, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 230, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 231, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 232, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 233, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 234, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 235, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 236, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 237, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 238, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 31852
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 6c 7c 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 239, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673851408, 
+    "height": 2564, 
+    "instance_id": 1748212108, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 9921, 
+    "y": 0, 
+    "z_order": 12
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 28 2a 28 00 00 00 00 c1 26 00 00", 
+    "f0 51 00 00 04 0a 00 00 0c 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 8c 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 240, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 241, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 2147483648, 
+    "linesegs": 2, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483682
+  }, 
+  "level": 2, 
+  "payload": [
+    "22 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "02 00 00 00 00 80"
+  ], 
+  "seqno": 242, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          33
+        ], 
+        " \uc5ec\ubc31 10mm, \uc885\uc774 \uc624\ub978\ucabd\ubd80\ud130 35mm"
+      ], 
+      [
+        [
+          33, 
+          34
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 85 c8 74 c7 20 00 24 c6", 
+    "78 b9 bd ca 80 bd 30 d1 20 00 33 00 35 00 6d 00", 
+    "6d 00 0d 00"
+  ], 
+  "seqno": 243, 
+  "size": 68, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 244, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 29, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00 1d 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 e8 03 00 00", 
+    "20 4a 00 00 00 00 06 00"
+  ], 
+  "seqno": 245, 
+  "size": 72, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 9, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 09 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 246, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 247, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 248, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 249, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 250, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 251, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 252, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 253, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 254, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 255, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 256, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 257, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 258, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 259, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 260, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 2147483648, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 80"
+  ], 
+  "seqno": 261, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 262, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 263, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 4, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 04 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 264, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 265, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 266, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 267, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673851152, 
+    "height": 2564, 
+    "instance_id": 1748212096, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 1
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 27 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 01 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 80 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 268, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 269, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 2, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483682
+  }, 
+  "level": 2, 
+  "payload": [
+    "22 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "02 00 00 00 00 00"
+  ], 
+  "seqno": 270, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          33
+        ], 
+        " \uc5ec\ubc31 10mm, \ubb38\ub2e8 \uac00\uc6b4\ub370\ub85c\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          33, 
+          34
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 38 bb e8 b2 20 00 00 ac", 
+    "b4 c6 70 b3 5c b8 80 bd 30 d1 20 00 35 00 6d 00", 
+    "6d 00 0d 00"
+  ], 
+  "seqno": 271, 
+  "size": 68, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 272, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 30, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00 1e 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 e8 03 00 00", 
+    "20 4a 00 00 00 00 06 00"
+  ], 
+  "seqno": 273, 
+  "size": 72, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 10, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 0a 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 274, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 275, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 276, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 277, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 278, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 279, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 280, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 281, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 282, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 283, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 284, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 285, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 286, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 287, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 288, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 289, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 290, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 291, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 292, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 293, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 294, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 11684
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 a4 2d 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 295, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673850896, 
+    "height": 2564, 
+    "instance_id": 1748212097, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 2
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 26 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 02 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 81 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 296, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 297, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 2, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483681
+  }, 
+  "level": 2, 
+  "payload": [
+    "21 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "02 00 00 00 00 00"
+  ], 
+  "seqno": 298, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          32
+        ], 
+        " \uc5ec\ubc31 10mm, \ub2e8 \uac00\uc6b4\ub370\ub85c\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          32, 
+          33
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 e8 b2 20 00 00 ac b4 c6", 
+    "70 b3 5c b8 80 bd 30 d1 20 00 35 00 6d 00 6d 00", 
+    "0d 00"
+  ], 
+  "seqno": 299, 
+  "size": 66, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 300, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 29, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00 1d 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 e8 03 00 00", 
+    "20 4a 00 00 00 00 06 00"
+  ], 
+  "seqno": 301, 
+  "size": 72, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 11, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 0b 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 302, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 303, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 304, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 305, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 306, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 307, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 308, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 309, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 310, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 311, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 312, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 313, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 314, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 315, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 316, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 317, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 318, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 319, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 9
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 00 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 320, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 321, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 322, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 23368
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 48 5b 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 323, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673850640, 
+    "height": 2564, 
+    "instance_id": 1748212098, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 3
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 25 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 03 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 82 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 324, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 325, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 2, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483681
+  }, 
+  "level": 2, 
+  "payload": [
+    "21 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "02 00 00 00 00 00"
+  ], 
+  "seqno": 326, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          32
+        ], 
+        " \uc5ec\ubc31 10mm, \ucabd \uac00\uc6b4\ub370\ub85c\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          32, 
+          33
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 bd ca 20 00 00 ac b4 c6", 
+    "70 b3 5c b8 80 bd 30 d1 20 00 35 00 6d 00 6d 00", 
+    "0d 00"
+  ], 
+  "seqno": 327, 
+  "size": 66, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 328, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 29, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00 1d 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 e8 03 00 00", 
+    "20 4a 00 00 00 00 06 00"
+  ], 
+  "seqno": 329, 
+  "size": 72, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 12, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 0c 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 330, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 331, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 332, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 333, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 334, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 335, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 336, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 337, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 338, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 339, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 340, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 341, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 342, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 343, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 344, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 345, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 346, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 347, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 2048, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 4, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483657
+  }, 
+  "level": 0, 
+  "payload": [
+    "09 00 00 80 00 08 00 00 04 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 348, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          8
+        ], 
+        {
+          "chid": "tbl ", 
+          "code": 11, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          8, 
+          9
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "0b 00 20 6c 62 74 00 00 00 00 00 00 00 00 0b 00", 
+    "0d 00"
+  ], 
+  "seqno": 349, 
+  "size": 18, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 350, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 0, 
+        "x": 1000, 
+        "y": 35052
+      }
+    ]
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 ec 88 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 00 00 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 351, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "tbl ", 
+    "description": "", 
+    "flags": 673850384, 
+    "height": 2564, 
+    "instance_id": 1748212099, 
+    "margin": {
+      "bottom": 2835, 
+      "left": 2835, 
+      "right": 2835, 
+      "top": 2835
+    }, 
+    "unknown1": 0, 
+    "unknown2": 0, 
+    "width": 20976, 
+    "x": 1417, 
+    "y": 0, 
+    "z_order": 4
+  }, 
+  "level": 1, 
+  "payload": [
+    "20 6c 62 74 10 24 2a 28 00 00 00 00 89 05 00 00", 
+    "f0 51 00 00 04 0a 00 00 04 00 00 00 13 0b 13 0b", 
+    "13 0b 13 0b 83 99 33 68 00 00 00 00"
+  ], 
+  "seqno": 352, 
+  "size": 44, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "TableControl"
+},
+{
+  "content": {
+    "flags": 3, 
+    "listflags": 0, 
+    "maxsize": 20976, 
+    "paragraphs": 1, 
+    "separation": 850, 
+    "unknown1": 0, 
+    "width": 8504
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 00 00 00 00 03 00 00 00 38 21 00 00", 
+    "52 03 f0 51 00 00"
+  ], 
+  "seqno": 353, 
+  "size": 22, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCaption"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 262144, 
+    "instance_id": 0, 
+    "linesegs": 2, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483682
+  }, 
+  "level": 2, 
+  "payload": [
+    "22 00 00 80 00 00 04 00 03 00 00 00 01 00 00 00", 
+    "02 00 00 00 00 00"
+  ], 
+  "seqno": 354, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "chunks": [
+      [
+        [
+          0, 
+          2
+        ], 
+        "\ud45c "
+      ], 
+      [
+        [
+          2, 
+          10
+        ], 
+        {
+          "chid": "atno", 
+          "code": 18, 
+          "param": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        }
+      ], 
+      [
+        [
+          10, 
+          33
+        ], 
+        " \uc5ec\ubc31 10mm, \uc885\uc774 \uac00\uc6b4\ub370\ub85c\ubd80\ud130 5mm"
+      ], 
+      [
+        [
+          33, 
+          34
+        ], 
+        {
+          "code": 13
+        }
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "5c d4 20 00 12 00 6f 6e 74 61 00 00 00 00 00 00", 
+    "00 00 12 00 20 00 ec c5 31 bc 20 00 31 00 30 00", 
+    "6d 00 6d 00 2c 00 20 00 85 c8 74 c7 20 00 00 ac", 
+    "b4 c6 70 b3 5c b8 80 bd 30 d1 20 00 35 00 6d 00", 
+    "6d 00 0d 00"
+  ], 
+  "seqno": 355, 
+  "size": 68, 
+  "tagid": 67, 
+  "tagname": "HWPTAG_PARA_TEXT", 
+  "type": "ParaText"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 356, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 0
+      }, 
+      {
+        "a8": 0, 
+        "chpos": 30, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 18976, 
+        "x": 1000, 
+        "y": 1600
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 20 4a 00 00", 
+    "00 00 06 00 1e 00 00 00 40 06 00 00 e8 03 00 00", 
+    "e8 03 00 00 52 03 00 00 58 02 00 00 e8 03 00 00", 
+    "20 4a 00 00 00 00 06 00"
+  ], 
+  "seqno": 357, 
+  "size": 72, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "chid": "atno", 
+    "flags": 4, 
+    "number": 13, 
+    "prefix": 0, 
+    "suffix": 0, 
+    "usersymbol": 0
+  }, 
+  "level": 3, 
+  "payload": [
+    "6f 6e 74 61 04 00 00 00 0d 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 358, 
+  "size": 16, 
+  "tagid": 71, 
+  "tagname": "HWPTAG_CTRL_HEADER", 
+  "type": "AutoNumbering"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "cellspacing": 0, 
+    "cols": 2, 
+    "flags": 67108870, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "rowcols": [
+      2, 
+      2
+    ], 
+    "rows": 2, 
+    "validZones": []
+  }, 
+  "level": 2, 
+  "payload": [
+    "06 00 00 04 02 00 02 00 00 00 8d 00 8d 00 8d 00", 
+    "8d 00 02 00 02 00 01 00 00 00"
+  ], 
+  "seqno": 359, 
+  "size": 26, 
+  "tagid": 77, 
+  "tagname": "HWPTAG_TABLE", 
+  "type": "TableBody"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 360, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 361, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 362, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 363, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 0, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 00 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 364, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 365, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 366, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 367, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 0, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 00 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 368, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 369, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 370, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 371, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+},
+{
+  "content": {
+    "borderfill_id": 1, 
+    "col": 1, 
+    "colspan": 1, 
+    "height": 282, 
+    "listflags": 32, 
+    "padding": {
+      "bottom": 141, 
+      "left": 141, 
+      "right": 141, 
+      "top": 141
+    }, 
+    "paragraphs": 1, 
+    "row": 1, 
+    "rowspan": 1, 
+    "unknown1": 0, 
+    "unknown_width": 10488, 
+    "width": 10488
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 00 20 00 00 00 01 00 01 00 01 00 01 00", 
+    "f8 28 00 00 1a 01 00 00 8d 00 8d 00 8d 00 8d 00", 
+    "01 00 f8 28 00 00"
+  ], 
+  "seqno": 372, 
+  "size": 38, 
+  "tagid": 72, 
+  "tagname": "HWPTAG_LIST_HEADER", 
+  "type": "TableCell"
+},
+{
+  "content": {
+    "charshapes": 1, 
+    "controlmask": 0, 
+    "instance_id": 0, 
+    "linesegs": 1, 
+    "parashape_id": 3, 
+    "rangetags": 0, 
+    "split": 0, 
+    "style_id": 0, 
+    "text": 2147483649
+  }, 
+  "level": 2, 
+  "payload": [
+    "01 00 00 80 00 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00"
+  ], 
+  "seqno": 373, 
+  "size": 22, 
+  "tagid": 66, 
+  "tagname": "HWPTAG_PARA_HEADER", 
+  "type": "Paragraph"
+},
+{
+  "content": {
+    "charshapes": [
+      [
+        0, 
+        1
+      ]
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 01 00 00 00"
+  ], 
+  "seqno": 374, 
+  "size": 8, 
+  "tagid": 68, 
+  "tagname": "HWPTAG_PARA_CHAR_SHAPE", 
+  "type": "ParaCharShape"
+},
+{
+  "content": {
+    "linesegs": [
+      {
+        "a8": 0, 
+        "chpos": 0, 
+        "flags": 6, 
+        "height": 1000, 
+        "height2": 1000, 
+        "height85": 850, 
+        "space_below": 600, 
+        "width": 8204, 
+        "x": 1000, 
+        "y": 0
+      }
+    ]
+  }, 
+  "level": 3, 
+  "payload": [
+    "00 00 00 00 00 00 00 00 e8 03 00 00 e8 03 00 00", 
+    "52 03 00 00 58 02 00 00 e8 03 00 00 0c 20 00 00", 
+    "00 00 06 00"
+  ], 
+  "seqno": 375, 
+  "size": 36, 
+  "tagid": 69, 
+  "tagname": "HWPTAG_PARA_LINE_SEG", 
+  "type": "ParaLineSeg"
+}
+]
