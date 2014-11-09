@@ -164,26 +164,6 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="TableCaption">
-    <xsl:element name="caption">
-      <xsl:attribute name="class">TableCaption</xsl:attribute>
-      <xsl:choose>
-        <xsl:when test="@position = 'top'">
-          <xsl:attribute name="style">caption-side: <xsl:value-of select="@position" />;</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@position = 'bottom'">
-          <xsl:attribute name="style">caption-side: <xsl:value-of select="@position" />;</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:comment>
-            not supported @position: <xsl:value-of select="@position" />
-          </xsl:comment>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates />
-    </xsl:element>
-  </xsl:template>
-
   <xsl:template match="TableControl[@inline='1']">
     <xsl:element name="span">
       <xsl:attribute name="class">
@@ -227,6 +207,67 @@
       <xsl:with-param name="property">border-collapse</xsl:with-param>
       <xsl:with-param name="value">collapse</xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="TableCaption">
+    <xsl:element name="caption">
+      <xsl:attribute name="class">TableCaption</xsl:attribute>
+      <xsl:attribute name="style">
+        <xsl:choose>
+          <xsl:when test="@position = 'top'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">caption-side</xsl:with-param>
+              <xsl:with-param name="value" select="@position" />
+            </xsl:call-template>
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-bottom</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@separation" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">width</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@width" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="@position = 'bottom'">
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">caption-side</xsl:with-param>
+              <xsl:with-param name="value" select="@position" />
+            </xsl:call-template>
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">margin-top</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@separation" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="css-declaration">
+              <xsl:with-param name="property">width</xsl:with-param>
+              <xsl:with-param name="value">
+                <xsl:call-template name="hwpunit-to-mm">
+                  <xsl:with-param name="hwpunit" select="@width" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>/* </xsl:text>
+            <xsl:text>not supported @position: </xsl:text>
+            <xsl:value-of select="@position" />
+            <xsl:text> */&#10;</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:apply-templates />
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="TableRow">
