@@ -818,7 +818,7 @@
 
     <xsl:template name="hwpunit-to-mm">
         <xsl:param name="hwpunit" />
-        <xsl:value-of select="floor($hwpunit div 100 * 0.352777778 + 0.5)" />
+        <xsl:value-of select="floor($hwpunit div 100 * 0.352777778 * 100 + 0.5) div 100" />
         <xsl:text>mm</xsl:text>
     </xsl:template>
 
