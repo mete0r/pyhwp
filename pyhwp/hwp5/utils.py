@@ -22,6 +22,7 @@ from functools import partial
 import codecs
 import logging
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -282,8 +283,6 @@ def syntaxhighlight_pygments(mimetype):
 
 @contextmanager
 def make_temp_file():
-    import tempfile
-    import os
     fd, name = tempfile.mkstemp()
     with unlink_path(name):
         with os.fdopen(fd, 'w+') as f:
@@ -300,8 +299,6 @@ def unlink_path(path):
 
 
 def pager():
-    import os
-    import shlex
     pager_cmd = os.environ.get('PAGER')
     if pager_cmd:
         pager_cmd = shlex.split(pager_cmd)
