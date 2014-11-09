@@ -31,6 +31,7 @@ Usage::
 
 '''
 import logging
+import os
 
 from docopt import docopt
 
@@ -42,6 +43,18 @@ def rest_to_docopt(doc):
     ''' ReST to docopt conversion
     '''
     return doc.replace('::\n\n', ':\n').replace('``', '')
+
+
+def init_with_environ():
+    from ..plat import xsltproc
+    from ..plat import xmllint
+    if 'PYHWP_XSLTPROC' in os.environ:
+        xsltproc.executable = os.environ['PYHWP_XSLTPROC']
+        xsltproc.enable()
+
+    if 'PYHWP_XMLLINT' in os.environ:
+        xmllint.executable = os.environ['PYHWP_XMLLINT']
+        xmllint.enable()
 
 
 def init_logger(args):

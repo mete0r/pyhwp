@@ -16,8 +16,20 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import with_statement
+from contextlib import contextmanager
 from functools import partial
 import codecs
+import logging
+import os
+import shutil
+import sys
+import tempfile
+
+from .importhelper import pkg_resources_filename
+
+
+logger = logging.getLogger(__name__)
 
 
 class NIL:
@@ -129,3 +141,68 @@ class GeneratorReader(object):
 
     def close(self):
         self.gen = self.buffer = None
+
+
+@contextmanager
+def hwp5_resources_path(res_path):
+    try:
+        path = pkg_resources_filename('hwp5', res_path)
+    except Exception:
+        logger.info('%s: pkg_resources_filename failed; using resource_stream',
+                    res_path)
+        with mkstemp_open() as (path, g):
+            import pkg_resources
+            f = pkg_resources.resource_stream('hwp5', res_path)
+            try:
+                shutil.copyfileobj(f, g)
+                g.close()
+                yield path
+            finally:
+                f.close()
+    else:
+        yield path
+
+
+def make_open_dest_file(path):
+    if path:
+        @contextmanager
+        def open_dest_path():
+            with open(path, 'w') as f:
+                yield f
+        return open_dest_path
+    else:
+        @contextmanager
+        def open_stdout():
+            yield sys.stdout
+        return open_stdout
+
+
+@contextmanager
+def mkstemp_open(*args, **kwargs):
+
+    if (kwargs.get('text', False) or (len(args) >= 4 and args[3])):
+        text = True
+    else:
+        text = False
+
+    mode = 'w+' if text else 'wb+'
+    fd, path = tempfile.mkstemp(*args, **kwargs)
+    try:
+        f = os.fdopen(fd, mode)
+        try:
+            yield path, f
+        finally:
+            try:
+                f.close()
+            except Exception:
+                pass
+    finally:
+        unlink_or_warning(path)
+
+
+def unlink_or_warning(path):
+    try:
+        os.unlink(path)
+    except Exception, e:
+        logger.exception(e)
+        logger.warning('%s cannot be deleted', path)

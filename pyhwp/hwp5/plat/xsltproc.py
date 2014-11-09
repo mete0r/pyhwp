@@ -18,6 +18,7 @@
 #
 from __future__ import with_statement
 import logging
+from subprocess import Popen
 
 
 logger = logging.getLogger(__name__)
@@ -56,11 +57,40 @@ def disable():
 
 
 def xslt(xsl_path, inp_path, out_path):
-    from subprocess import Popen
-    args = [executable, '-o', out_path, xsl_path, inp_path]
-    p = Popen(args)
-    p.wait()
-    if p.returncode == 0:
-        return dict()
-    else:
-        return dict(errors=[])
+    xslt = XSLT(xsl_path)
+    return xslt.transform(inp_path, out_path)
+
+
+class XSLT:
+
+    def __init__(self, xsl_path):
+        self.xsl_path = xsl_path
+
+    def transform(self, input, output):
+        '''
+        >>> T.transform('input.xml', 'output.xml')
+        '''
+        args = [executable, '-o', output, self.xsl_path, input]
+        p = Popen(args)
+        p.wait()
+        if p.returncode == 0:
+            return dict()
+        else:
+            return dict(errors=[])
+
+    def transform_into_stream(self, input, output):
+        '''
+        >>> T.transform_into_stream('input.xml', sys.stdout)
+        '''
+        args = [executable, self.xsl_path, input]
+        p = Popen(args, stdout=output)
+        p.wait()
+        if p.returncode == 0:
+            return dict()
+        else:
+            return dict(errors=[])
+
+
+def xslt_compile(xsl_path):
+    xslt = XSLT(xsl_path)
+    return xslt.transform_into_stream

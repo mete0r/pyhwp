@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import with_statement
+from contextlib import closing
 import os
 import os.path
 import shutil
@@ -26,6 +28,11 @@ class HtmlConvTest(TestBase):
     def xhwp5_path(self):
         return self.id() + '.xhwp5'
 
+    @property
+    def transform(self):
+        from hwp5.hwp5html import HTMLTransform
+        return HTMLTransform()
+
     def create_xhwp5(self):
         xhwp5_path = self.xhwp5_path
         xhwp5_file = file(xhwp5_path, 'w')
@@ -39,25 +46,17 @@ class HtmlConvTest(TestBase):
         base_dir = self.make_base_dir()
         css_path = os.path.join(base_dir, 'styles.css')
 
-        xhwp5_path = self.create_xhwp5()
-        from hwp5.hwp5html import generate_css_file
-        generate_css_file(self.xslt, xhwp5_path, css_path)
-
-        self.assertTrue(os.path.exists(css_path))
-        #with file(css_path) as f:
-        #    print f.read()
+        with closing(self.hwp5file) as hwp5file:
+            with file(css_path, 'w+') as f:
+                self.transform.transform_hwp5_to_css(hwp5file, f)
 
     def test_generate_html_file(self):
         base_dir = self.make_base_dir()
-        html_path = os.path.join(base_dir, 'index.html')
+        html_path = os.path.join(base_dir, 'index.xhtml')
 
-        xhwp5_path = self.create_xhwp5()
-        from hwp5.hwp5html import generate_html_file
-        generate_html_file(self.xslt, xhwp5_path, html_path)
-
-        self.assertTrue(os.path.exists(html_path))
-        #with file(html_path) as f:
-        #    print f.read()
+        with closing(self.hwp5file) as hwp5file:
+            with file(html_path, 'w+') as f:
+                self.transform.transform_hwp5_to_xhtml(hwp5file, f)
 
     def test_extract_bindata_dir(self):
         base_dir = self.make_base_dir()
@@ -65,8 +64,7 @@ class HtmlConvTest(TestBase):
 
         bindata_dir = os.path.join(base_dir, 'bindata')
 
-        from hwp5.hwp5html import extract_bindata_dir
-        extract_bindata_dir(hwp5file, bindata_dir)
+        self.transform.extract_bindata_dir(hwp5file, bindata_dir)
 
         bindata_stg = hwp5file['BinData']
 
@@ -81,6 +79,5 @@ class HtmlConvTest(TestBase):
 
         bindata_dir = os.path.join(base_dir, 'bindata')
 
-        from hwp5.hwp5html import extract_bindata_dir
-        extract_bindata_dir(hwp5file, bindata_dir)
+        self.transform.extract_bindata_dir(hwp5file, bindata_dir)
         self.assertFalse(os.path.exists(bindata_dir))

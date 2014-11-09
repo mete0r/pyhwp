@@ -30,49 +30,68 @@ Options::
     --version           Show version
     --loglevel=<level>  Set log level.
     --logfile=<file>    Set log file.
+
+    --output=<file>     Output file
 '''
-import os.path
+from __future__ import with_statement
+from contextlib import closing
+import logging
+import sys
+
+from .transforms import BaseTransform
+from .utils import cached_property
+
+
+logger = logging.getLogger(__name__)
+
+
+RESOURCE_PATH_XSL_TEXT = 'xsl/plaintext.xsl'
+
+
+class TextTransform(BaseTransform):
+
+    @property
+    def transform_hwp5_to_text(self):
+        transform_xhwp5 = self.transform_xhwp5_to_text
+        return self.make_transform_hwp5(transform_xhwp5)
+
+    @cached_property
+    def transform_xhwp5_to_text(self):
+        '''
+        >>> T.transform_xhwp5_to_css('hwp5.xml', 'styles.css')
+        '''
+        resource_path = RESOURCE_PATH_XSL_TEXT
+        return self.make_xsl_transform(resource_path)
 
 
 def main():
-    from hwp5 import __version__ as version
-    from hwp5.proc import rest_to_docopt
-    from hwp5.proc import init_logger
     from docopt import docopt
+
+    from . import __version__ as version
+    from .dataio import ParseError
+    from .errors import InvalidHwp5FileError
+    from .proc import rest_to_docopt
+    from .proc import init_logger
+    from .utils import make_open_dest_file
+    from .xmlmodel import Hwp5File
+
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)
     init_logger(args)
 
-    make(args)
+    hwp5path = args['<hwp5file>']
 
+    text_transform = TextTransform()
 
-def make(args):
-    from hwp5.plat import get_xslt
-    from hwp5.importhelper import pkg_resources_filename
-    from tempfile import mkstemp
-    from hwp5.xmlmodel import Hwp5File
+    open_dest = make_open_dest_file(args['--output'])
+    transform = text_transform.transform_hwp5_to_text
 
-    hwp5_filename = args['<hwp5file>']
-    rootname = os.path.basename(hwp5_filename)
-    if rootname.lower().endswith('.hwp'):
-        rootname = rootname[0:-4]
-    txt_path = rootname + '.txt'
-
-    xslt = get_xslt()
-    plaintext_xsl = pkg_resources_filename('hwp5', 'xsl/plaintext.xsl')
-
-    hwp5file = Hwp5File(hwp5_filename)
     try:
-        xhwp5_fd, xhwp5_path = mkstemp()
-        try:
-            xhwp5_file = os.fdopen(xhwp5_fd, 'w')
-            try:
-                hwp5file.xmlevents().dump(xhwp5_file)
-            finally:
-                xhwp5_file.close()
-
-            xslt(plaintext_xsl, xhwp5_path, txt_path)
-        finally:
-            os.unlink(xhwp5_path)
-    finally:
-        hwp5file.close()
+        with closing(Hwp5File(hwp5path)) as hwp5file:
+            with open_dest() as dest:
+                transform(hwp5file, dest)
+    except ParseError, e:
+        e.print_to_logger(logger)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        sys.exit(1)

@@ -26,3 +26,15 @@ class InvalidOleStorageError(Exception):
 class InvalidHwp5FileError(Exception):
     ''' Invalid HWP Document format v5 File. '''
     pass
+
+
+class ImplementationNotAvailable(Exception):
+    pass
+
+
+class ValidationFailed(Exception):
+    pass
+
+
+class RelaxNGValidationFailed(ValidationFailed):
+    pass

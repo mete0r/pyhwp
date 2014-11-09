@@ -48,7 +48,7 @@ from hwp5 import __version__ as version
 from hwp5.proc import rest_to_docopt
 from hwp5.proc import init_logger
 from hwp5.xmlmodel import Hwp5File
-from hwp5.hwp5html import generate_htmldir
+from hwp5.hwp5html import HTMLTransform
 
 
 logger = logging.getLogger(__name__)
@@ -127,7 +127,7 @@ def make_temporary_directory(*args, **kwargs):
 @contextmanager
 def hwp5html(filename, out_dir):
     with closing(Hwp5File(filename)) as hwp5file:
-        generate_htmldir(hwp5file, out_dir)
+        HTMLTransform().transform_hwp5_to_dir(hwp5file, out_dir)
         yield os.path.join(out_dir, 'index.xhtml')
 
 

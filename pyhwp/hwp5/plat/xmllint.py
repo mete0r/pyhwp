@@ -17,6 +17,8 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from __future__ import with_statement
+from contextlib import contextmanager
+import subprocess
 import logging
 
 
@@ -61,3 +63,30 @@ def relaxng(rng_path, inp_path):
     p = Popen(args)
     p.wait()
     return p.returncode == 0
+
+
+def relaxng_compile(rng_path):
+    relaxng = RelaxNG(rng_path)
+    return relaxng.validating_output
+
+
+class RelaxNG:
+
+    def __init__(self, rng_path):
+        self.rng_path = rng_path
+
+    @contextmanager
+    def validating_output(self, output):
+        args = [executable, '--relaxng', self.rng_path, '-']
+        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=output)
+        try:
+            yield p.stdin
+        except:
+            p.stdin.close()
+            p.wait()
+            raise
+        else:
+            p.stdin.close()
+            p.wait()
+            if p.returncode != 0:
+                raise Exception('RelaxNG validation failed')

@@ -5,7 +5,7 @@ from mixin_xslt import XsltTestMixin
 
 
 class TestPlatXsltProc(unittest.TestCase, XsltTestMixin):
-    
+
     xslt = None
     xslt_compile = None
 

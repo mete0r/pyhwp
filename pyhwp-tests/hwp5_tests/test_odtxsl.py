@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 from unittest import TestCase
+from contextlib import closing
 
 
 def example_path(filename):
@@ -8,15 +9,16 @@ def example_path(filename):
     return get_fixture_path(filename)
 
 
-def example(filename):
+def open_example(filename):
     from hwp5.xmlmodel import Hwp5File
     path = example_path(filename)
-    return Hwp5File(path)
+    return closing(Hwp5File(path))
 
 
 class TestPrecondition(TestCase):
     def test_example(self):
-        assert example('linespacing.hwp') is not None
+        with open_example('linespacing.hwp') as hwp5file:
+            assert hwp5file is not None
 
 
 class TestODTTransform(TestCase):
@@ -36,18 +38,16 @@ class TestODTTransform(TestCase):
         return ODTTransform(xslt, relaxng)
 
     def test_convert_bindata(self):
-        hwp5path = example_path('sample-5017.hwp')
-        hwp5file = example('sample-5017.hwp')
-        try:
+        from hwp5.hwp5odt import open_odtpkg
+
+        with open_example('sample-5017.hwp') as hwp5file:
             f = hwp5file['BinData']['BIN0002.jpg'].open()
             try:
                 data1 = f.read()
             finally:
                 f.close()
-        finally:
-            hwp5file.close()
-
-        self.transform.transform_to_package(hwp5path, self.odt_path)
+            with open_odtpkg(self.odt_path) as odtpkg:
+                self.transform.transform_hwp5_to_package(hwp5file, odtpkg)
 
         from zipfile import ZipFile
         zf = ZipFile(self.odt_path)
