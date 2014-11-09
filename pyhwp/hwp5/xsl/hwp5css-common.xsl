@@ -239,6 +239,8 @@
                         <xsl:apply-templates select="Border[@attribute-name='left']" mode="border-value"/>
                     </xsl:with-param>
                 </xsl:call-template>
+
+                <xsl:apply-templates select="FillColorPattern" mode="css-declaration" />
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -287,6 +289,103 @@
             <xsl:when test="@stroke-type = 'groove'">groove</xsl:when>
             <xsl:when test="@stroke-type = 'ridge'">ridge</xsl:when>
             <xsl:otherwise>solid</xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="FillColorPattern" mode="css-declaration">
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">background-color</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:value-of select="@background-color" />
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates select="." mode="background-image" />
+    </xsl:template>
+
+    <xsl:template match="FillColorPattern" mode="background-image">
+        <xsl:choose>
+            <xsl:when test="@pattern-type = 'none'"></xsl:when>
+            <xsl:when test="@pattern-type = 'horizontal'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:text>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAATSURBVAjXY2AgGTAy/CddEyEAAFOKAQGTpJ5ZAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTExLTA1VDE1OjM3OjA3KzA5OjAwrbX03gAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNC0xMS0wNVQxNTozNzowNyswOTowMNzoTGIAAAAASUVORK5CYII=</xsl:text>
+                        <xsl:text>)</xsl:text>
+                        <xsl:text>/* </xsl:text>
+                        <xsl:value-of select="@pattern-type" />
+                        <xsl:text> */</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@pattern-type = 'vertical'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:text>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAAVSURBVAjXY2CAgP9QmoGJAQ3QRwAAg8ABDm14IFwAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTQtMTEtMDVUMTU6Mzc6MzcrMDk6MDAjOvM9AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTExLTA1VDE1OjM3OjM3KzA5OjAwUmdLgQAAAABJRU5ErkJggg==</xsl:text>
+                        <xsl:text>)</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@pattern-type = 'backslash'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:text>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAAQSURBVAjXY2D4z4ABBkAIABqKB/lrzYhNAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTExLTA1VDE1OjM4OjE0KzA5OjAwofy1UAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNC0xMS0wNVQxNTozODoxNCswOTowMNChDewAAAAASUVORK5CYII=</xsl:text>
+                        <xsl:text>)</xsl:text>
+                        <xsl:text>/* </xsl:text>
+                        <xsl:value-of select="@pattern-type" />
+                        <xsl:text> */</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@pattern-type = 'slash'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:text>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAAPSURBVAjXY2BABf8HiAsAGooH+VFK23UAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTQtMTEtMDVUMTU6Mzg6MzUrMDk6MDBFrrmZAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTExLTA1VDE1OjM4OjM1KzA5OjAwNPMBJQAAAABJRU5ErkJggg==</xsl:text>
+                        <xsl:text>)</xsl:text>
+                        <xsl:text>/* </xsl:text>
+                        <xsl:value-of select="@pattern-type" />
+                        <xsl:text> */</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@pattern-type = 'grid'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:text>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAAVSURBVAjXY2T4z4AG0ASY0OVpIgAA/d8CDKGA4lwAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTQtMTEtMDVUMTU6MzQ6MzUrMDk6MDBfklkXAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTExLTA1VDE1OjM0OjM1KzA5OjAwLs/hqwAAAABJRU5ErkJggg==</xsl:text>
+                        <xsl:text>)</xsl:text>
+                        <xsl:text>/* </xsl:text>
+                        <xsl:value-of select="@pattern-type" />
+                        <xsl:text> */</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@pattern-type = 'cross'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:text>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAAeSURBVAjXY2CAgP9QmoGJAQ1gCDAiFKMCEszAEAAAEWMDCQJfExIAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTQtMTEtMDVUMTU6Mzk6NDErMDk6MDBU5v+tAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTExLTA1VDE1OjM5OjQxKzA5OjAwJbtHEQAAAABJRU5ErkJggg==</xsl:text>
+                        <xsl:text>)</xsl:text>
+                        <xsl:text>/* </xsl:text>
+                        <xsl:value-of select="@pattern-type" />
+                        <xsl:text> */</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>/* </xsl:text>
+                <xsl:text>unrecognized @pattern-type: </xsl:text>
+                <xsl:value-of select="@pattern-type" />
+                <xsl:text> */</xsl:text>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 

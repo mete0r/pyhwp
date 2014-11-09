@@ -277,6 +277,7 @@ p.Memo {
   border-right: 1px none #000000;
   border-bottom: 1px none #000000;
   border-left: 1px none #000000;
+  background-color: #ffffff;
 }
 .borderfill-3 {
   border-top: 1px solid #000000;
@@ -295,6 +296,8 @@ p.Memo {
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
   border-left: 2px solid #000000;
+  background-color: #99ccff;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAQAAABuBnYAAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAAEgAAABIAEbJaz4AAAAVSURBVAjXY2CAgP9QmoGJAQ3QRwAAg8ABDm14IFwAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTQtMTEtMDVUMTU6Mzc6MzcrMDk6MDAjOvM9AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTExLTA1VDE1OjM3OjM3KzA5OjAwUmdLgQAAAABJRU5ErkJggg==);
 }
 .borderfill-6 {
   border-top: 1px solid #000000;
