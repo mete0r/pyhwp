@@ -18,6 +18,9 @@
                     <xsl:value-of select="@doubled-margin-left div 100 div 2"/>pt;
                 <xsl:apply-templates select="." mode="css-text-align" />
                 <xsl:apply-templates select="." mode="css-text-indent" />
+                <xsl:choose>
+                    <xsl:when test="@linespacing-type = 'ratio'">min-height: <xsl:value-of select="@linespacing div 100" />em;</xsl:when>
+                </xsl:choose>
             }
             .parashape-<xsl:number value="position()-1" /> &gt; span {
             <xsl:choose>
