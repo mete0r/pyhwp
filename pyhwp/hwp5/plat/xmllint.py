@@ -66,8 +66,7 @@ def relaxng(rng_path, inp_path):
 
 
 def relaxng_compile(rng_path):
-    relaxng = RelaxNG(rng_path)
-    return relaxng.validating_output
+    return RelaxNG(rng_path)
 
 
 class RelaxNG:
