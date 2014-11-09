@@ -84,17 +84,21 @@
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">margin</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@doubled-margin-top div 100 div 2"/>
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-pt">
+                    <xsl:with-param name="hwpunit" select="@doubled-margin-top div 2" />
+                </xsl:call-template>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="@doubled-margin-right div 100 div 2"/>
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-pt">
+                    <xsl:with-param name="hwpunit" select="@doubled-margin-right div 2" />
+                </xsl:call-template>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="@doubled-margin-bottom div 100 div 2"/>
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-pt">
+                    <xsl:with-param name="hwpunit" select="@doubled-margin-bottom div 2" />
+                </xsl:call-template>
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="@doubled-margin-left div 100 div 2"/>
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-pt">
+                    <xsl:with-param name="hwpunit" select="@doubled-margin-left div 2" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
         <xsl:apply-templates select="." mode="text-align" />
@@ -153,8 +157,9 @@
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">font-size</xsl:with-param>
             <xsl:with-param name="value">
-                <xsl:value-of select="@basesize div 100"/>
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-pt">
+                    <xsl:with-param name="hwpunit" select="@basesize" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
 
@@ -709,8 +714,9 @@
             <xsl:with-param name="property">text-indent</xsl:with-param>
             <xsl:with-param name="value">
                 <!-- @indent seems to be doubled -->
-                <xsl:value-of select="@indent div 100 div 2" />
-                <xsl:text>pt</xsl:text>
+                <xsl:call-template name="hwpunit-to-pt">
+                    <xsl:with-param name="hwpunit" select="@indent div 2" />
+                </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
 
@@ -718,8 +724,9 @@
             <xsl:call-template name="css-declaration">
                 <xsl:with-param name="property">padding-left</xsl:with-param>
                 <xsl:with-param name="value">
-                    <xsl:value-of select="@indent div 100 div 2 * -1" />
-                    <xsl:text>pt</xsl:text>
+                    <xsl:call-template name="hwpunit-to-pt">
+                        <xsl:with-param name="hwpunit" select="@indent div 2 * -1" />
+                    </xsl:call-template>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
@@ -820,6 +827,12 @@
         <xsl:param name="hwpunit" />
         <xsl:value-of select="floor($hwpunit div 100 * 0.352777778 * 100 + 0.5) div 100" />
         <xsl:text>mm</xsl:text>
+    </xsl:template>
+
+    <xsl:template name="hwpunit-to-pt">
+        <xsl:param name="hwpunit" />
+        <xsl:value-of select="$hwpunit div 100" />
+        <xsl:text>pt</xsl:text>
     </xsl:template>
 
     <xsl:template name="css-rule">
