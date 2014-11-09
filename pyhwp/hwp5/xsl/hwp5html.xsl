@@ -98,6 +98,19 @@
   <xsl:template match="TableCaption">
     <xsl:element name="caption">
       <xsl:attribute name="class">TableCaption</xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="@position = 'top'">
+          <xsl:attribute name="style">caption-side: <xsl:value-of select="@position" />;</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@position = 'bottom'">
+          <xsl:attribute name="style">caption-side: <xsl:value-of select="@position" />;</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:comment>
+            not supported @position: <xsl:value-of select="@position" />
+          </xsl:comment>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates />
     </xsl:element>
   </xsl:template>
