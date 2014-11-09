@@ -502,3 +502,17 @@ span.charshape-4 {
   border-left: 1px none #000000;
   background-color: #ffffff;
 }
+.Bullet-1::before {
+  content: "●";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-2::before {
+  content: "•";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}

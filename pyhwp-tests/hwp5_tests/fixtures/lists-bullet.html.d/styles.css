@@ -206,6 +206,51 @@ p.parashape-18 {
 p.parashape-18 > span {
   line-height: 1.6;
 }
+p.parashape-19 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-19 > span {
+  line-height: 1.6;
+}
+p.parashape-20 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-20 > span {
+  line-height: 1.6;
+}
+p.parashape-21 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-21 > span {
+  line-height: 1.6;
+}
+p.parashape-22 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-22 > span {
+  line-height: 1.6;
+}
+p.parashape-23 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+p.parashape-23 > span {
+  line-height: 1.6;
+}
 /* Text attributes */
 span.charshape-0 {
   color: #000000;
@@ -221,4 +266,158 @@ span.charshape-0 {
   border-bottom: 1px none #000000;
   border-left: 1px none #000000;
   background-color: #ffffff;
+}
+.Bullet-1::before {
+  content: "●";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-2::before {
+  content: "•";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-3::before {
+  content: "■";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-4::before {
+  content: "▪";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-5::before {
+  content: "◆";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-6::before {
+  content: "⬩";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-7::before {
+  content: "▶";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-8::before {
+  content: "○";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-9::before {
+  content: "☐";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-10::before {
+  content: "◇";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-11::before {
+  content: "▷";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-12::before {
+  content: "◉";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-13::before {
+  content: "☑";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-14::before {
+  content: "✓";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-15::before {
+  content: "★";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-16::before {
+  content: "❖";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-17::before {
+  content: "☞";
+  display: inline-block;
+  text-align: left;
+  width: 1em;
+  margin-right: 0.5em;
+}
+.Bullet-18::before {
+  content: "☀";
+  display: inline-block;
+  text-align: center;
+  width: 10pt;
+  margin-right: 5pt;
+}
+.Bullet-19::before {
+  content: "☀";
+  display: inline-block;
+  text-align: right;
+  width: 10pt;
+  margin-right: 5pt;
+}
+.Bullet-20::before {
+  content: "☀";
+  display: inline-block;
+  text-align: left;
+  width: 20pt;
+  margin-right: 10pt;
+}
+.Bullet-21::before {
+  content: "☀";
+  display: inline-block;
+  text-align: left;
+  width: 10pt;
+  margin-right: 0pt;
+}
+.Bullet-22::before {
+  content: "☀";
+  display: inline-block;
+  text-align: left;
+  width: 10pt;
+  margin-right: 0pt;
 }

@@ -9,6 +9,7 @@
         <xsl:text>/* Text attributes */&#10;</xsl:text>
         <xsl:apply-templates select="CharShape" mode="css-rule" />
         <xsl:apply-templates select="BorderFill" mode="css-rule" />
+        <xsl:apply-templates select="Bullet" mode="css-rule" />
     </xsl:template>
 
     <xsl:template match="Style" mode="css-rule">
@@ -127,6 +128,79 @@
                 </xsl:call-template>
             </xsl:when>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="Bullet" mode="css-rule">
+        <xsl:call-template name="css-rule">
+            <xsl:with-param name="selector">
+                <xsl:text>.</xsl:text>
+                <xsl:text>Bullet-</xsl:text>
+                <xsl:number value="position()" />
+                <xsl:text>::before</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="declarations">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">content</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>"</xsl:text>
+                        <xsl:value-of select="@char" />
+                        <xsl:text>"</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">display</xsl:with-param>
+                    <xsl:with-param name="value">inline-block</xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">text-align</xsl:with-param>
+                    <xsl:with-param name="value" select="@align" />
+                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="number(@width) = 0">
+                        <xsl:call-template name="css-declaration">
+                            <xsl:with-param name="property">width</xsl:with-param>
+                            <xsl:with-param name="value">1em</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:call-template name="css-declaration">
+                            <xsl:with-param name="property">margin-right</xsl:with-param>
+                            <xsl:with-param name="value">
+                                <xsl:value-of select="@space div 100" />
+                                <xsl:text>em</xsl:text>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="css-declaration">
+                            <xsl:with-param name="property">width</xsl:with-param>
+                            <xsl:with-param name="value">
+                                <xsl:call-template name="hwpunit-to-pt">
+                                    <xsl:with-param name="hwpunit" select="@width" />
+                                </xsl:call-template>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:call-template name="css-declaration">
+                            <xsl:with-param name="property">margin-right</xsl:with-param>
+                            <xsl:with-param name="value">
+                                <xsl:call-template name="hwpunit-to-pt">
+                                    <xsl:with-param name="hwpunit" select="@width * @space div 100" />
+                                </xsl:call-template>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="Paragraph|Style" mode="add-class-bullet">
+        <xsl:variable name="parashape_pos" select="number(@parashape-id) + 1" />
+        <xsl:variable name="parashape" select="//ParaShape[$parashape_pos]" />
+        <xsl:variable name="bullet_id" select="$parashape/@numbering-bullet-id" />
+        <xsl:if test="$bullet_id &gt; 0">
+            <xsl:text> </xsl:text>
+            <xsl:text>Bullet-</xsl:text>
+            <xsl:value-of select="$parashape/@numbering-bullet-id" />
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="CharShape" mode="css-rule">

@@ -110,14 +110,19 @@
       <xsl:variable name="style" select="//Style[number($styleid)+1]" />
       <xsl:variable name="stylename" select="$style/@name" />
       <xsl:variable name="stylencname" select="translate($stylename, ' ', '-')" />
+      <xsl:variable name="parashape_pos" select="number(@parashape-id) + 1" />
+      <xsl:variable name="parashape" select="//ParaShape[$parashape_pos]" />
       <xsl:attribute name="class">
         <xsl:value-of select="$stylencname" />
         <xsl:choose>
-          <xsl:when test="$style/@parashape-id = @parashape-id"></xsl:when>
+          <xsl:when test="$style/@parashape-id = @parashape-id">
+            <xsl:apply-templates select="$style" mode="add-class-bullet" />
+          </xsl:when>
           <xsl:otherwise>
             <xsl:text> </xsl:text>
             <xsl:text>parashape-</xsl:text>
             <xsl:value-of select="@parashape-id"/>
+            <xsl:apply-templates select="." mode="add-class-bullet" />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>

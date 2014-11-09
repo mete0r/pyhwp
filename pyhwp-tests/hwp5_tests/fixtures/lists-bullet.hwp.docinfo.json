@@ -1,13 +1,13 @@
 [
 {
   "content": {
-    "character_unit_loc_in_paragraph": 0, 
+    "character_unit_loc_in_paragraph": 7, 
     "endnote_startnum": 1, 
     "footnote_startnum": 1, 
     "list_id": 0, 
     "math_startnum": 1, 
     "page_startnum": 1, 
-    "paragraph_id": 8, 
+    "paragraph_id": 111, 
     "picture_startnum": 1, 
     "section_count": 1, 
     "table_startnum": 1
@@ -15,7 +15,7 @@
   "level": 0, 
   "payload": [
     "01 00 01 00 01 00 01 00 01 00 01 00 01 00 00 00", 
-    "00 00 08 00 00 00 00 00 00 00"
+    "00 00 6f 00 00 00 07 00 00 00"
   ], 
   "seqno": 0, 
   "size": 26, 
@@ -27,7 +27,7 @@
   "content": {
     "bindata": 0, 
     "borderfills": 1, 
-    "bullets": 17, 
+    "bullets": 22, 
     "charshapes": 1, 
     "cn_fonts": 1, 
     "en_fonts": 1, 
@@ -36,7 +36,7 @@
     "memoshapes": 0, 
     "numberings": 1, 
     "other_fonts": 1, 
-    "parashapes": 19, 
+    "parashapes": 24, 
     "styles": 1, 
     "symbol_fonts": 1, 
     "tabdefs": 1, 
@@ -47,7 +47,7 @@
     "00 00 00 00 01 00 00 00 01 00 00 00 01 00 00 00", 
     "01 00 00 00 01 00 00 00 01 00 00 00 01 00 00 00", 
     "01 00 00 00 01 00 00 00 01 00 00 00 01 00 00 00", 
-    "11 00 00 00 13 00 00 00 01 00 00 00 00 00 00 00"
+    "16 00 00 00 18 00 00 00 01 00 00 00 00 00 00 00"
   ], 
   "seqno": 1, 
   "size": 64, 
@@ -777,6 +777,96 @@
 },
 {
   "content": {
+    "char": 9728, 
+    "charshape_id": -1, 
+    "flags": 9, 
+    "space": 50, 
+    "width": 1000
+  }, 
+  "level": 1, 
+  "payload": [
+    "09 00 00 00 e8 03 32 00 ff ff ff ff 00 26"
+  ], 
+  "seqno": 30, 
+  "size": 14, 
+  "tagid": 24, 
+  "tagname": "HWPTAG_BULLET", 
+  "type": "Bullet"
+},
+{
+  "content": {
+    "char": 9728, 
+    "charshape_id": -1, 
+    "flags": 10, 
+    "space": 50, 
+    "width": 1000
+  }, 
+  "level": 1, 
+  "payload": [
+    "0a 00 00 00 e8 03 32 00 ff ff ff ff 00 26"
+  ], 
+  "seqno": 31, 
+  "size": 14, 
+  "tagid": 24, 
+  "tagname": "HWPTAG_BULLET", 
+  "type": "Bullet"
+},
+{
+  "content": {
+    "char": 9728, 
+    "charshape_id": -1, 
+    "flags": 8, 
+    "space": 50, 
+    "width": 2000
+  }, 
+  "level": 1, 
+  "payload": [
+    "08 00 00 00 d0 07 32 00 ff ff ff ff 00 26"
+  ], 
+  "seqno": 32, 
+  "size": 14, 
+  "tagid": 24, 
+  "tagname": "HWPTAG_BULLET", 
+  "type": "Bullet"
+},
+{
+  "content": {
+    "char": 9728, 
+    "charshape_id": -1, 
+    "flags": 8, 
+    "space": 0, 
+    "width": 1000
+  }, 
+  "level": 1, 
+  "payload": [
+    "08 00 00 00 e8 03 00 00 ff ff ff ff 00 26"
+  ], 
+  "seqno": 33, 
+  "size": 14, 
+  "tagid": 24, 
+  "tagname": "HWPTAG_BULLET", 
+  "type": "Bullet"
+},
+{
+  "content": {
+    "char": 9728, 
+    "charshape_id": -1, 
+    "flags": 0, 
+    "space": 0, 
+    "width": 1000
+  }, 
+  "level": 1, 
+  "payload": [
+    "00 00 00 00 e8 03 00 00 ff ff ff ff 00 26"
+  ], 
+  "seqno": 34, 
+  "size": 14, 
+  "tagid": 24, 
+  "tagname": "HWPTAG_BULLET", 
+  "type": "Bullet"
+},
+{
+  "content": {
     "border_bottom": 0, 
     "border_left": 0, 
     "border_right": 0, 
@@ -799,7 +889,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "00 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 30, 
+  "seqno": 35, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -829,7 +919,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 31, 
+  "seqno": 36, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -859,7 +949,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 03 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 32, 
+  "seqno": 37, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -889,7 +979,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 01 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 33, 
+  "seqno": 38, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -919,7 +1009,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 0f 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 34, 
+  "seqno": 39, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -949,7 +1039,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 02 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 35, 
+  "seqno": 40, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -979,7 +1069,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 04 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 36, 
+  "seqno": 41, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1009,7 +1099,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 05 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 37, 
+  "seqno": 42, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1039,7 +1129,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 06 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 38, 
+  "seqno": 43, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1069,7 +1159,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 07 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 39, 
+  "seqno": 44, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1099,7 +1189,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 08 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 40, 
+  "seqno": 45, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1129,7 +1219,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 09 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 41, 
+  "seqno": 46, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1159,7 +1249,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 0a 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 42, 
+  "seqno": 47, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1189,7 +1279,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 0b 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 43, 
+  "seqno": 48, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1219,7 +1309,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 0c 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 44, 
+  "seqno": 49, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1249,7 +1339,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 0d 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 45, 
+  "seqno": 50, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1279,7 +1369,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 0e 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 46, 
+  "seqno": 51, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1309,7 +1399,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 10 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 47, 
+  "seqno": 52, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1339,7 +1429,157 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 11 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 48, 
+  "seqno": 53, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 18, 
+    "parashapeflags": 25166208, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 01 80 01 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 12 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 54, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 19, 
+    "parashapeflags": 25166208, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 01 80 01 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 13 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 55, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 20, 
+    "parashapeflags": 25166208, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 01 80 01 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 14 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 56, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 21, 
+    "parashapeflags": 25166208, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 01 80 01 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 15 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 57, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": 0, 
+    "linespacing": 160, 
+    "numbering_bullet_id": 22, 
+    "parashapeflags": 25166208, 
+    "tabdef_id": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 01 80 01 00 00 00 00 00 00 00 00 00 00 00 00", 
+    "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 16 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 58, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -1361,7 +1601,7 @@
     "03 00 14 bc d5 d0 00 ae 06 00 4e 00 6f 00 72 00", 
     "6d 00 61 00 6c 00 00 00 12 04 00 00 00 00 00 00"
   ], 
-  "seqno": 49, 
+  "seqno": 59, 
   "size": 32, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 

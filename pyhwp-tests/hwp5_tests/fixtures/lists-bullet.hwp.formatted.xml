@@ -11,14 +11,14 @@
     <Property id="9" name="PIDSI_REVNUMBER" value="6, 5, 0, 825 WIN6"/>
     <Property id="11" name="PIDSI_LASTPRINTED" value="1601-01-01 00:00:00"/>
     <Property id="12" name="PIDSI_CREATE_DTM" value="2014-11-06 16:00:09.650000"/>
-    <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2014-11-06 16:10:12.076000"/>
+    <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2014-11-07 03:42:53.921000"/>
     <Property id="14" name="PIDSI_PAGECOUNT"/>
     <Property id="20" value="2014년 11월 7일 금요일 오전 1:00:09"/>
     <Property id="21"/>
   </HwpSummaryInfo>
   <DocInfo>
-    <DocumentProperties character-unit-loc-in-paragraph="0" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="8" picture-startnum="1" section-count="1" table-startnum="1"/>
-    <IdMappings bindata="0" borderfills="1" bullets="17" charshapes="1" cn-fonts="1" en-fonts="1" jp-fonts="1" ko-fonts="1" memoshapes="0" numberings="1" other-fonts="1" parashapes="19" styles="1" symbol-fonts="1" tabdefs="1" user-fonts="1">
+    <DocumentProperties character-unit-loc-in-paragraph="7" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="111" picture-startnum="1" section-count="1" table-startnum="1"/>
+    <IdMappings bindata="0" borderfills="1" bullets="22" charshapes="1" cn-fonts="1" en-fonts="1" jp-fonts="1" ko-fonts="1" memoshapes="0" numberings="1" other-fonts="1" parashapes="24" styles="1" symbol-fonts="1" tabdefs="1" user-fonts="1">
       <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
@@ -87,6 +87,11 @@
       <Bullet align="left" auto-indent="1" char="★" charshape-id="-1" flags="00000008" space="50" width="0"/>
       <Bullet align="left" auto-indent="1" char="❖" charshape-id="-1" flags="00000008" space="50" width="0"/>
       <Bullet align="left" auto-indent="1" char="☞" charshape-id="-1" flags="00000008" space="50" width="0"/>
+      <Bullet align="center" auto-indent="1" char="☀" charshape-id="-1" flags="00000009" space="50" width="1000"/>
+      <Bullet align="right" auto-indent="1" char="☀" charshape-id="-1" flags="0000000A" space="50" width="1000"/>
+      <Bullet align="left" auto-indent="1" char="☀" charshape-id="-1" flags="00000008" space="50" width="2000"/>
+      <Bullet align="left" auto-indent="1" char="☀" charshape-id="-1" flags="00000008" space="0" width="1000"/>
+      <Bullet align="left" auto-indent="0" char="☀" charshape-id="-1" flags="00000000" space="0" width="1000"/>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="0" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000080" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="3" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
@@ -106,6 +111,11 @@
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="14" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="16" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="17" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="18" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="19" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="20" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="21" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
+      <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="bullet" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="22" parashapeflags="01800180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
       <Style charshape-id="0" flags="00" kind="paragraph" lang-id="1042" local-name="바탕글" name="Normal" next-style-id="0" parashape-id="0" unknown="0"/>
     </IdMappings>
   </DocInfo>
@@ -570,9 +580,225 @@
           <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
-      <Paragraph chars="2" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="75" parashape-id="3" rangetags="0" split="00" style-id="0" text="80000002" unknown="1" unknown1="0">
+      <Paragraph chars="2" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="75" parashape-id="3" rangetags="0" split="00" style-id="0" text="00000002" unknown="0" unknown1="0">
         <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="54400">
           <Text charshape-id="0">3</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="76" parashape-id="1" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="56000">
+          <Text charshape-id="0">글머리표 사용자정의 ☀</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="77" parashape-id="19" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="57600">
+          <Text charshape-id="0">너비 10pt</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="78" parashape-id="19" rangetags="0" split="00" style-id="0" text="00000007" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="59200">
+          <Text charshape-id="0">정렬 가운데</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="12" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="79" parashape-id="19" rangetags="0" split="00" style-id="0" text="0000000C" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="60800">
+          <Text charshape-id="0">본문과의 간격 50%</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="80" parashape-id="19" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="62400">
+          <Text charshape-id="0">자동 내어쓰기</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="81" parashape-id="19" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="64000">
+          <Text charshape-id="0">글자모양 없음</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="82" parashape-id="1" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">
+          <Text charshape-id="0">글머리표 사용자정의 ☀</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="83" parashape-id="20" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="1600">
+          <Text charshape-id="0">너비 10pt</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="84" parashape-id="20" rangetags="0" split="00" style-id="0" text="00000007" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="3200">
+          <Text charshape-id="0">정렬 오른쪽</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="12" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="85" parashape-id="20" rangetags="0" split="00" style-id="0" text="0000000C" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="4800">
+          <Text charshape-id="0">본문과의 간격 50%</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="86" parashape-id="20" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="6400">
+          <Text charshape-id="0">자동 내어쓰기</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="87" parashape-id="20" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="8000">
+          <Text charshape-id="0">글자모양 없음</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="88" parashape-id="1" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="9600">
+          <Text charshape-id="0">글머리표 사용자정의 ☀</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="89" parashape-id="21" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="11200">
+          <Text charshape-id="0">너비 20pt</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="90" parashape-id="21" rangetags="0" split="00" style-id="0" text="00000006" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="12800">
+          <Text charshape-id="0">정렬 왼쪽</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="12" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="91" parashape-id="21" rangetags="0" split="00" style-id="0" text="0000000C" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="14400">
+          <Text charshape-id="0">본문과의 간격 50%</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="92" parashape-id="21" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="16000">
+          <Text charshape-id="0">자동 내어쓰기</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="93" parashape-id="21" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="17600">
+          <Text charshape-id="0">글자모양 없음</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="94" parashape-id="1" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="19200">
+          <Text charshape-id="0">글머리표 사용자정의 ☀</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="95" parashape-id="22" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="20800">
+          <Text charshape-id="0">너비 10pt</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="96" parashape-id="22" rangetags="0" split="00" style-id="0" text="00000006" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="22400">
+          <Text charshape-id="0">정렬 왼쪽</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="11" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="97" parashape-id="22" rangetags="0" split="00" style-id="0" text="0000000B" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="24000">
+          <Text charshape-id="0">본문과의 간격 0%</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="98" parashape-id="22" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="25600">
+          <Text charshape-id="0">자동 내어쓰기</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="99" parashape-id="22" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="27200">
+          <Text charshape-id="0">글자모양 없음</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="100" parashape-id="1" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="28800">
+          <Text charshape-id="0">글머리표 사용자정의 ☀</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="101" parashape-id="23" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="30400">
+          <Text charshape-id="0">너비 10pt</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="102" parashape-id="23" rangetags="0" split="00" style-id="0" text="00000006" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="32000">
+          <Text charshape-id="0">정렬 왼쪽</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="11" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="103" parashape-id="23" rangetags="0" split="00" style-id="0" text="0000000B" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="33600">
+          <Text charshape-id="0">본문과의 간격 0%</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="10" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="104" parashape-id="23" rangetags="0" split="00" style-id="0" text="0000000A" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="35200">
+          <Text charshape-id="0">자동 내어쓰기 X</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="105" parashape-id="23" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="36800">
+          <Text charshape-id="0">글자모양 없음</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="106" parashape-id="1" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="38400">
+          <Text charshape-id="0">글머리표 사용자정의 ☀</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="8" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="107" parashape-id="23" rangetags="0" split="00" style-id="0" text="00000008" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="40000">
+          <Text charshape-id="0">너비 10pt</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="108" parashape-id="23" rangetags="0" split="00" style-id="0" text="00000006" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="41600">
+          <Text charshape-id="0">정렬 왼쪽</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="11" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="109" parashape-id="23" rangetags="0" split="00" style-id="0" text="0000000B" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="43200">
+          <Text charshape-id="0">본문과의 간격 0%</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="10" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="110" parashape-id="23" rangetags="0" split="00" style-id="0" text="0000000A" unknown="0" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="44800">
+          <Text charshape-id="0">자동 내어쓰기 X</Text>
+          <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+        </LineSeg>
+      </Paragraph>
+      <Paragraph chars="15" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="111" parashape-id="23" rangetags="0" split="00" style-id="0" text="8000000F" unknown="1" unknown1="0">
+        <LineSeg a8="0" chpos="0" flags="0026" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="46400">
+          <Text charshape-id="0">새 글머리표 모양: sun</Text>
           <ControlChar char="&#13;" charshape-id="0" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
