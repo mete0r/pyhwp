@@ -23,6 +23,7 @@ import codecs
 import logging
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -175,6 +176,140 @@ def make_open_dest_file(path):
         def open_stdout():
             yield sys.stdout
         return open_stdout
+
+
+def wrap_open_dest_for_tty(open_dest, wrappers):
+    @contextmanager
+    def open_dest_wrapped():
+        with open_dest() as output:
+            if output.isatty():
+                with cascade_contextmanager_filters(output,
+                                                    wrappers) as output:
+                    yield output
+            else:
+                yield output
+    return open_dest_wrapped
+
+
+def wrap_open_dest(open_dest, wrappers):
+    @contextmanager
+    def open_dest_wrapped():
+        with open_dest() as output:
+            with cascade_contextmanager_filters(output, wrappers) as output:
+                yield output
+    return open_dest_wrapped
+
+
+@contextmanager
+def cascade_contextmanager_filters(arg, filters):
+    if len(filters) == 0:
+        yield arg
+    else:
+        flt, filters = filters[0], filters[1:]
+        with flt(arg) as ret:
+            with cascade_contextmanager_filters(ret, filters) as ret:
+                yield ret
+
+
+@contextmanager
+def null_contextmanager_filter(output):
+    yield output
+
+
+def output_thru_subprocess(cmd):
+    @contextmanager
+    def filter(output):
+        logger.debug('%r', cmd)
+        try:
+            p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=output)
+        except Exception, e:
+            logger.error('%r: %s', ' '.join(cmd), e)
+            yield output
+        else:
+            try:
+                yield p.stdin
+            except IOError, e:
+                import errno
+                if e.errno != errno.EPIPE:
+                    raise
+            finally:
+                p.stdin.close()
+                p.wait()
+                retcode = p.returncode
+                logger.debug('%r exit %d', cmd, retcode)
+    return filter
+
+
+def xmllint(c14n=False, encode=None, format=False, nonet=True):
+    cmd = ['xmllint']
+    if c14n:
+        cmd.append('--c14n')
+    if encode:
+        cmd += ['--encode', encode]
+    if format:
+        cmd.append('--format')
+    if nonet:
+        cmd.append('--nonet')
+    cmd.append('-')
+    return output_thru_subprocess(cmd)
+
+
+def syntaxhighlight(mimetype):
+    try:
+        return syntaxhighlight_pygments(mimetype)
+    except Exception, e:
+        logger.info(e)
+        return null_contextmanager_filter
+
+
+def syntaxhighlight_pygments(mimetype):
+    from pygments import highlight
+    from pygments.lexers import get_lexer_for_mimetype
+    from pygments.formatters import TerminalFormatter
+
+    lexer = get_lexer_for_mimetype(mimetype, encoding='utf-8')
+    formatter = TerminalFormatter(encoding='utf-8')
+
+    @contextmanager
+    def filter(output):
+        with make_temp_file() as f:
+            yield f
+            f.seek(0)
+            code = f.read()
+        highlight(code, lexer, formatter, output)
+    return filter
+
+
+@contextmanager
+def make_temp_file():
+    import tempfile
+    import os
+    fd, name = tempfile.mkstemp()
+    with unlink_path(name):
+        with os.fdopen(fd, 'w+') as f:
+            yield f
+
+
+@contextmanager
+def unlink_path(path):
+    import os
+    try:
+        yield
+    finally:
+        os.unlink(path)
+
+
+def pager():
+    import os
+    import shlex
+    pager_cmd = os.environ.get('PAGER')
+    if pager_cmd:
+        pager_cmd = shlex.split(pager_cmd)
+        return output_thru_subprocess(pager_cmd)
+    return pager_less
+
+
+pager_less = output_thru_subprocess(['less', '-R'])
 
 
 @contextmanager

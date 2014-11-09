@@ -362,12 +362,15 @@ def main():
     if args['--document']:
         odt_transform.embedbin = not args['--no-embed-image']
         transform = odt_transform.transform_hwp5_to_single_document
+        open_dest = wrap_for_xml(open_dest)
     elif args['--styles']:
         odt_transform.embedbin = args['--embed-image']
         transform = odt_transform.transform_hwp5_to_styles
+        open_dest = wrap_for_xml(open_dest)
     elif args['--content']:
         odt_transform.embedbin = args['--embed-image']
         transform = odt_transform.transform_hwp5_to_content
+        open_dest = wrap_for_xml(open_dest)
     else:
         odt_transform.embedbin = args['--embed-image']
         transform = odt_transform.transform_hwp5_to_package
@@ -397,3 +400,15 @@ def open_odtpkg(path):
     odtpkg = ODTPackage(path)
     with closing(odtpkg):
         yield odtpkg
+
+
+def wrap_for_xml(open_dest):
+    from .utils import wrap_open_dest_for_tty
+    from .utils import pager
+    from .utils import syntaxhighlight
+    from .utils import xmllint
+    return wrap_open_dest_for_tty(open_dest, [
+        pager(),
+        syntaxhighlight('application/xml'),
+        xmllint(format=True),
+    ])

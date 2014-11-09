@@ -144,8 +144,10 @@ def main():
     open_dest = make_open_dest_file(args['--output'])
     if args['--css']:
         transform = html_transform.transform_hwp5_to_css
+        open_dest = wrap_for_css(open_dest)
     elif args['--html']:
         transform = html_transform.transform_hwp5_to_xhtml
+        open_dest = wrap_for_xml(open_dest)
     else:
         transform = html_transform.transform_hwp5_to_dir
         dest_path = args['--output']
@@ -170,3 +172,25 @@ def open_dir(path):
         shutil.rmtree(path)
     os.mkdir(path)
     yield path
+
+
+def wrap_for_css(open_dest):
+    from .utils import wrap_open_dest_for_tty
+    from .utils import pager
+    from .utils import syntaxhighlight
+    return wrap_open_dest_for_tty(open_dest, [
+        pager(),
+        syntaxhighlight('text/css'),
+    ])
+
+
+def wrap_for_xml(open_dest):
+    from .utils import wrap_open_dest_for_tty
+    from .utils import pager
+    from .utils import syntaxhighlight
+    from .utils import xmllint
+    return wrap_open_dest_for_tty(open_dest, [
+        pager(),
+        syntaxhighlight('application/xml'),
+        xmllint(format=True, nonet=True),
+    ])
