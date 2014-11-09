@@ -6,6 +6,7 @@
     <style:font-face style:name="명조" svg:font-family="'은 바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="고딕" svg:font-family="'은 돋움'" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Lohit Hindi" svg:font-family="'Lohit Hindi'" style:font-family-generic="system" style:font-pitch="variable"/>
+    <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="한컴돋움" svg:font-family="'한컴돋움'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="Arial" svg:font-family="'Arial'" style:font-family-generic="swiss" style:font-pitch="variable"/>
@@ -16,7 +17,6 @@
     <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="명조" svg:font-family="'명조'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="고딕" svg:font-family="'고딕'" style:font-family-generic="roman" style:font-pitch="variable"/>
-    <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="바탕" svg:font-family="'바탕'" style:font-family-generic="roman" style:font-pitch="variable"/>
@@ -123,11 +123,11 @@
     <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
     <style:style style:name="바탕글" style:next-style-name="바탕글" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="Arial" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="한글-한컴돋움" style:next-style-name="한글-한컴돋움" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="Arial" style:font-name-asian="한컴돋움" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="한컴돋움" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="영문-TimesNewRoman" style:next-style-name="영문-TimesNewRoman" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
@@ -139,19 +139,19 @@
     </style:style>
     <style:style style:name="중문-약자" style:next-style-name="중문-약자" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="Arial" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="중문-간자" style:next-style-name="중문-간자" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="Arial" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="일문-명조" style:next-style-name="일문-명조" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="Arial" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
     <style:style style:name="일문-고딕" style:next-style-name="일문-고딕" style:family="paragraph" style:class="text">
       <style:paragraph-properties fo:text-align="justify" fo:text-indent="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:margin-bottom="0pt" fo:line-height="160%"/>
-      <style:text-properties style:font-name="Arial" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
+      <style:text-properties style:font-name="바탕" style:font-name-asian="바탕" fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt" style:text-underline-type="none" style:text-overline-type="none" style:text-line-through-type="none"/>
     </style:style>
   </office:styles>
   <office:automatic-styles>

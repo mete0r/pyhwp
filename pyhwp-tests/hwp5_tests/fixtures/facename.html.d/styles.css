@@ -25,13 +25,36 @@ body {
 .Normal > span {
   line-height: 1.6;
 }
-.Normal > span {
 /* @charshape-id = 1*/
+.Normal > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Normal > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Body {
@@ -44,13 +67,36 @@ body {
 .Body > span {
   line-height: 1.6;
 }
-.Body > span {
 /* @charshape-id = 1*/
+.Body > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Body > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Body > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Body > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Body > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Body > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Body > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Body > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-1 {
@@ -63,13 +109,36 @@ body {
 .Outline-1 > span {
   line-height: 1.6;
 }
-.Outline-1 > span {
 /* @charshape-id = 1*/
+.Outline-1 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-1 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-1 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-1 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-1 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-1 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-1 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-1 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-2 {
@@ -82,13 +151,36 @@ body {
 .Outline-2 > span {
   line-height: 1.6;
 }
-.Outline-2 > span {
 /* @charshape-id = 1*/
+.Outline-2 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-2 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-2 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-2 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-2 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-2 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-2 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-2 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-3 {
@@ -101,13 +193,36 @@ body {
 .Outline-3 > span {
   line-height: 1.6;
 }
-.Outline-3 > span {
 /* @charshape-id = 1*/
+.Outline-3 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-3 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-3 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-3 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-3 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-3 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-3 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-3 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-4 {
@@ -120,13 +235,36 @@ body {
 .Outline-4 > span {
   line-height: 1.6;
 }
-.Outline-4 > span {
 /* @charshape-id = 1*/
+.Outline-4 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-4 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-4 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-4 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-4 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-4 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-4 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-4 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-5 {
@@ -139,13 +277,36 @@ body {
 .Outline-5 > span {
   line-height: 1.6;
 }
-.Outline-5 > span {
 /* @charshape-id = 1*/
+.Outline-5 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-5 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-5 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-5 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-5 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-5 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-5 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-5 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-6 {
@@ -158,13 +319,36 @@ body {
 .Outline-6 > span {
   line-height: 1.6;
 }
-.Outline-6 > span {
 /* @charshape-id = 1*/
+.Outline-6 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-6 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-6 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-6 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-6 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-6 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-6 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-6 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Outline-7 {
@@ -177,13 +361,36 @@ body {
 .Outline-7 > span {
   line-height: 1.6;
 }
-.Outline-7 > span {
 /* @charshape-id = 1*/
+.Outline-7 > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Outline-7 > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-7 > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-7 > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-7 > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-7 > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-7 > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Outline-7 > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .Page-Number {
@@ -196,13 +403,36 @@ body {
 .Page-Number > span {
   line-height: 1.6;
 }
-.Page-Number > span {
 /* @charshape-id = 0*/
+.Page-Number > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 1 6 12 16 18 20 22 */
-/* ko en cn jp other symbol user */
-"굴림", "굴림", "굴림", "굴림", "MS Gothic", "굴림", "굴림";
+}
+.Page-Number > span.lang-ko {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+.Page-Number > span.lang-en {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+.Page-Number > span.lang-cn {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+.Page-Number > span.lang-jp {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+.Page-Number > span.lang-other {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+.Page-Number > span.lang-symbol {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+.Page-Number > span.lang-user {
+  font-family: "굴림", sans-serif;
   font-size: 10pt;
 }
 .Header {
@@ -215,13 +445,36 @@ body {
 .Header > span {
   line-height: 1.5;
 }
-.Header > span {
 /* @charshape-id = 2*/
+.Header > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 1 6 12 16 18 20 22 */
-/* ko en cn jp other symbol user */
-"굴림", "굴림", "굴림", "굴림", "MS Gothic", "굴림", "굴림";
+}
+.Header > span.lang-ko {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Header > span.lang-en {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Header > span.lang-cn {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Header > span.lang-jp {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Header > span.lang-other {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Header > span.lang-symbol {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Header > span.lang-user {
+  font-family: "굴림", sans-serif;
   font-size: 9pt;
 }
 .Footnote {
@@ -235,13 +488,36 @@ body {
 .Footnote > span {
   line-height: 1.3;
 }
-.Footnote > span {
 /* @charshape-id = 4*/
+.Footnote > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+.Footnote > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+.Footnote > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+.Footnote > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+.Footnote > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+.Footnote > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+.Footnote > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+.Footnote > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 9pt;
 }
 .Memo {
@@ -254,13 +530,36 @@ body {
 .Memo > span {
   line-height: 1.6;
 }
-.Memo > span {
 /* @charshape-id = 3*/
+.Memo > span {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 1 6 12 16 18 20 22 */
-/* ko en cn jp other symbol user */
-"굴림", "굴림", "굴림", "굴림", "MS Gothic", "굴림", "굴림";
+}
+.Memo > span.lang-ko {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Memo > span.lang-en {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Memo > span.lang-cn {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Memo > span.lang-jp {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Memo > span.lang-other {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Memo > span.lang-symbol {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+.Memo > span.lang-user {
+  font-family: "굴림", sans-serif;
   font-size: 9pt;
 }
 /* Paragraph attributes */
@@ -376,130 +675,498 @@ p.parashape-11 > span {
 /* Text attributes */
 span.charshape-0 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 1 6 12 16 18 20 22 */
-/* ko en cn jp other symbol user */
-"굴림", "굴림", "굴림", "굴림", "MS Gothic", "굴림", "굴림";
+}
+span.charshape-0.lang-ko {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-en {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-cn {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-jp {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-other {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-symbol {
+  font-family: "굴림", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-user {
+  font-family: "굴림", sans-serif;
   font-size: 10pt;
 }
 span.charshape-1 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-1.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-1.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-1.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-1.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-1.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-1.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-1.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-2 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 1 6 12 16 18 20 22 */
-/* ko en cn jp other symbol user */
-"굴림", "굴림", "굴림", "굴림", "MS Gothic", "굴림", "굴림";
+}
+span.charshape-2.lang-ko {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-2.lang-en {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-2.lang-cn {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-2.lang-jp {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-2.lang-other {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-2.lang-symbol {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-2.lang-user {
+  font-family: "굴림", sans-serif;
   font-size: 9pt;
 }
 span.charshape-3 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 1 6 12 16 18 20 22 */
-/* ko en cn jp other symbol user */
-"굴림", "굴림", "굴림", "굴림", "MS Gothic", "굴림", "굴림";
+}
+span.charshape-3.lang-ko {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-3.lang-en {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-3.lang-cn {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-3.lang-jp {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-3.lang-other {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-3.lang-symbol {
+  font-family: "굴림", sans-serif;
+  font-size: 9pt;
+}
+span.charshape-3.lang-user {
+  font-family: "굴림", sans-serif;
   font-size: 9pt;
 }
 span.charshape-4 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-4.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+span.charshape-4.lang-en {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+span.charshape-4.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+span.charshape-4.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+span.charshape-4.lang-other {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+span.charshape-4.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 9pt;
+}
+span.charshape-4.lang-user {
+  font-family: "바탕", serif;
   font-size: 9pt;
 }
 span.charshape-5 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 3 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"한컴바탕", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-5.lang-ko {
+  font-family: "한컴바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-5.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-5.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-5.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-5.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-5.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-5.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-6 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 5 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"한양신명조", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-6.lang-ko {
+  font-family: "한양신명조", serif;
+  font-size: 10pt;
+}
+span.charshape-6.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-6.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-6.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-6.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-6.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-6.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-7 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 4 7 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"휴먼명조", "바탕", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-7.lang-ko {
+  font-family: "휴먼명조", serif;
+  font-size: 10pt;
+}
+span.charshape-7.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-7.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-7.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-7.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-7.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-7.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-8 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 8 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "Arial", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-8.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-8.lang-en {
+  font-family: "Arial", sans-serif;
+  font-size: 10pt;
+}
+span.charshape-8.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-8.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-8.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-8.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-8.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-9 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 9 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "Comic Sans MS", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-9.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-9.lang-en {
+  font-family: "Comic Sans MS", cursive;
+  font-size: 10pt;
+}
+span.charshape-9.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-9.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-9.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-9.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-9.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-10 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 10 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "Courier New", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-10.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-10.lang-en {
+  font-family: "Courier New", monospace;
+  font-size: 10pt;
+}
+span.charshape-10.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-10.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-10.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-10.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-10.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-11 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 11 13 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "DejaVu Serif", "바탕", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-11.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-11.lang-en {
+  font-family: "DejaVu Serif", serif;
+  font-size: 10pt;
+}
+span.charshape-11.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-11.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-11.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-11.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-11.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-12 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 14 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "SimHei", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-12.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-12.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-12.lang-cn {
+  font-family: "SimHei", serif;
+  font-size: 10pt;
+}
+span.charshape-12.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-12.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-12.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-12.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-13 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 15 17 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "SimSun", "바탕", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-13.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-13.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-13.lang-cn {
+  font-family: "SimSun", serif;
+  font-size: 10pt;
+}
+span.charshape-13.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-13.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-13.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-13.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-14 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 18 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "MS Gothic", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-14.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-14.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-14.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-14.lang-jp {
+  font-family: "MS Gothic", monospace;
+  font-size: 10pt;
+}
+span.charshape-14.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-14.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-14.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 span.charshape-15 {
   color: #000000;
-  font-family: /* base: 1 6 12 16 18 20 22 */
-/* base + offset: 2 7 13 19 19 21 23 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "MS Mincho", "MS Mincho", "바탕", "바탕";
+}
+span.charshape-15.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-15.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-15.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-15.lang-jp {
+  font-family: "MS Mincho", monospace;
+  font-size: 10pt;
+}
+span.charshape-15.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-15.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-15.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .borderfill-1 {

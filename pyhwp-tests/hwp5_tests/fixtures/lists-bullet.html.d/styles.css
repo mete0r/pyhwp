@@ -25,13 +25,36 @@ body {
 .Normal > span {
   line-height: 1.6;
 }
-.Normal > span {
 /* @charshape-id = 0*/
+.Normal > span {
   color: #000000;
-  font-family: /* base: 1 2 3 4 5 6 7 */
-/* base + offset: 1 2 3 4 5 6 7 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "바탕", "바탕", "바탕";
+}
+.Normal > span.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+.Normal > span.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 /* Paragraph attributes */
@@ -254,10 +277,33 @@ p.parashape-23 > span {
 /* Text attributes */
 span.charshape-0 {
   color: #000000;
-  font-family: /* base: 1 2 3 4 5 6 7 */
-/* base + offset: 1 2 3 4 5 6 7 */
-/* ko en cn jp other symbol user */
-"바탕", "바탕", "바탕", "바탕", "바탕", "바탕", "바탕";
+}
+span.charshape-0.lang-ko {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-en {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-cn {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-jp {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-other {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-symbol {
+  font-family: "바탕", serif;
+  font-size: 10pt;
+}
+span.charshape-0.lang-user {
+  font-family: "바탕", serif;
   font-size: 10pt;
 }
 .borderfill-1 {

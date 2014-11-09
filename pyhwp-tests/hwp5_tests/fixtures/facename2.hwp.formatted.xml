@@ -7,23 +7,25 @@
     <Property id="4" name="PIDSI_AUTHOR" value="mete0r"/>
     <Property id="5" name="PIDSI_KEYWORDS"/>
     <Property id="6" name="PIDSI_COMMENTS"/>
-    <Property id="8" name="PIDSI_LASTAUTHOR" value="mete0r"/>
+    <Property id="8" name="PIDSI_LASTAUTHOR" value="user"/>
     <Property id="9" name="PIDSI_REVNUMBER" value="6, 5, 0, 825 WIN6"/>
     <Property id="11" name="PIDSI_LASTPRINTED" value="1601-01-01 00:00:00"/>
     <Property id="12" name="PIDSI_CREATE_DTM" value="2013-07-24 10:46:21.081000"/>
-    <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2013-07-24 11:25:53.220000"/>
+    <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2014-11-09 13:20:47.264000"/>
     <Property id="14" name="PIDSI_PAGECOUNT"/>
     <Property id="20" value="2013년 7월 24일 수요일 오후 7:46:21"/>
     <Property id="21"/>
   </HwpSummaryInfo>
   <DocInfo>
-    <DocumentProperties character-unit-loc-in-paragraph="44" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="7" picture-startnum="1" section-count="1" table-startnum="1"/>
+    <DocumentProperties character-unit-loc-in-paragraph="18" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="7" picture-startnum="1" section-count="1" table-startnum="1"/>
     <IdMappings bindata="0" borderfills="1" bullets="0" charshapes="8" cn-fonts="3" en-fonts="3" jp-fonts="3" ko-fonts="2" memoshapes="0" numberings="1" other-fonts="1" parashapes="2" styles="8" symbol-fonts="1" tabdefs="1" user-fonts="1">
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
+        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
+      </FaceName>
       <FaceName alternate="0" default="1" default-font="Haansoft Dotum" flags="61" font-file-type="ttf" metric="1" name="한컴돋움">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
       <FaceName alternate="0" default="1" default-font="Arial" flags="61" font-file-type="ttf" metric="1" name="Arial">
@@ -32,8 +34,7 @@
       <FaceName alternate="0" default="1" default-font="Times New Roman" flags="61" font-file-type="ttf" metric="1" name="Times New Roman">
         <Panose1 arm-style="5" attribute-name="panose1" contrast="5" family-type="2" letterform="2" midline="3" proportion="3" serif-style="2" stroke-variation="4" weight="6" x-height="4"/>
       </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
       <FaceName alternate="0" default="1" default-font="Haeseo Jananese" flags="62" font-file-type="hft" metric="1" name="해서 약자">
@@ -42,8 +43,7 @@
       <FaceName alternate="0" default="1" default-font="Haeseo Chinese" flags="62" font-file-type="hft" metric="1" name="해서 간자">
         <Panose1 arm-style="0" attribute-name="panose1" contrast="0" family-type="1" letterform="0" midline="0" proportion="0" serif-style="0" stroke-variation="0" weight="0" x-height="0"/>
       </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
       <FaceName alternate="0" default="1" default-font="Myeongjo" flags="62" font-file-type="hft" metric="1" name="명조">
@@ -52,20 +52,13 @@
       <FaceName alternate="0" default="1" default-font="Gothic" flags="62" font-file-type="hft" metric="1" name="고딕">
         <Panose1 arm-style="0" attribute-name="panose1" contrast="0" family-type="2" letterform="0" midline="0" proportion="0" serif-style="0" stroke-variation="0" weight="0" x-height="0"/>
       </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
-        <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
-      </FaceName>
-      <FaceName alternate="1" default="0" flags="C1" font-file-type="ttf" metric="1" name="바탕">
-        <AlternateFont attribute-name="alternate_font" kind="1" name="한컴바탕"/>
+      <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
       <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" slash="0">
@@ -77,7 +70,7 @@
         <FillColorPattern attribute-name="fill_colorpattern" background-color="#ffffff" pattern-color="#000000" pattern-type="none" pattern-type-flags="FFFFFFFF"/>
       </BorderFill>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="2" en="2" jp="2" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -85,7 +78,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="2" en="0" jp="2" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="0" en="1" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -93,7 +86,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="2" en="2" jp="1" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="2" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -101,7 +94,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="2" en="2" jp="2" ko="0" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="1" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -109,7 +102,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="2" en="1" jp="2" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="0" en="2" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -117,7 +110,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="0" en="2" jp="2" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="1" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -125,7 +118,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="1" en="2" jp="2" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="2" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -133,7 +126,7 @@
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
-        <FontFace attribute-name="font_face" cn="2" en="2" jp="0" ko="1" other="0" symbol="0" user="0"/>
+        <FontFace attribute-name="font_face" cn="0" en="0" jp="1" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <RelativeSize attribute-name="relative_size" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
@@ -157,13 +150,13 @@
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="0" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000080" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="0" valign="font" with-next-paragraph="0"/>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="1" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
       <Style charshape-id="0" flags="00" kind="paragraph" lang-id="1042" local-name="바탕글" name="Normal" next-style-id="0" parashape-id="0" unknown="0"/>
-      <Style charshape-id="3" flags="00" kind="paragraph" lang-id="1042" local-name="한글-한컴돋움" name="" next-style-id="1" parashape-id="1" unknown="0"/>
-      <Style charshape-id="4" flags="00" kind="paragraph" lang-id="1042" local-name="영문-TimesNewRoman" name="" next-style-id="2" parashape-id="1" unknown="0"/>
-      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="영문-Arial" name="" next-style-id="3" parashape-id="1" unknown="0"/>
-      <Style charshape-id="5" flags="00" kind="paragraph" lang-id="1042" local-name="중문-약자" name="" next-style-id="4" parashape-id="1" unknown="0"/>
-      <Style charshape-id="6" flags="00" kind="paragraph" lang-id="1042" local-name="중문-간자" name="" next-style-id="5" parashape-id="1" unknown="0"/>
-      <Style charshape-id="7" flags="00" kind="paragraph" lang-id="1042" local-name="일문-명조" name="" next-style-id="6" parashape-id="1" unknown="0"/>
-      <Style charshape-id="2" flags="00" kind="paragraph" lang-id="1042" local-name="일문-고딕" name="" next-style-id="7" parashape-id="1" unknown="0"/>
+      <Style charshape-id="3" flags="00" kind="paragraph" lang-id="1042" local-name="한글-한컴돋움" name="kohkdu" next-style-id="1" parashape-id="1" unknown="0"/>
+      <Style charshape-id="4" flags="00" kind="paragraph" lang-id="1042" local-name="영문-TimesNewRoman" name="entnr" next-style-id="2" parashape-id="1" unknown="0"/>
+      <Style charshape-id="1" flags="00" kind="paragraph" lang-id="1042" local-name="영문-Arial" name="enarial" next-style-id="3" parashape-id="1" unknown="0"/>
+      <Style charshape-id="5" flags="00" kind="paragraph" lang-id="1042" local-name="중문-약자" name="cnyak" next-style-id="4" parashape-id="1" unknown="0"/>
+      <Style charshape-id="6" flags="00" kind="paragraph" lang-id="1042" local-name="중문-간자" name="cngan" next-style-id="5" parashape-id="1" unknown="0"/>
+      <Style charshape-id="7" flags="00" kind="paragraph" lang-id="1042" local-name="일문-명조" name="jpmincho" next-style-id="6" parashape-id="1" unknown="0"/>
+      <Style charshape-id="2" flags="00" kind="paragraph" lang-id="1042" local-name="일문-고딕" name="jpgothic" next-style-id="7" parashape-id="1" unknown="0"/>
     </IdMappings>
   </DocInfo>
   <BodyText>

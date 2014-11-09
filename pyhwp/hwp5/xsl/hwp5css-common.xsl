@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text" media-type="text/css" encoding="utf-8" indent="no" />
+
+    <xsl:variable name="facenamebaseko" select="1" />
+    <xsl:variable name="facenamebaseen" select="$facenamebaseko + //IdMappings/@ko-fonts" />
+    <xsl:variable name="facenamebasecn" select="$facenamebaseen + //IdMappings/@en-fonts" />
+    <xsl:variable name="facenamebasejp" select="$facenamebasecn + //IdMappings/@cn-fonts" />
+    <xsl:variable name="facenamebaseot" select="$facenamebasejp + //IdMappings/@jp-fonts" />
+    <xsl:variable name="facenamebasesy" select="$facenamebaseot + //IdMappings/@other-fonts" />
+    <xsl:variable name="facenamebaseus" select="$facenamebasesy + //IdMappings/@symbol-fonts" />
+
     <xsl:template match="IdMappings" mode="css-rule">
         <xsl:text>/* Styles */&#10;</xsl:text>
         <xsl:apply-templates select="Style" mode="css-rule" />
@@ -42,18 +51,18 @@
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
+
+        <xsl:text>/* </xsl:text>
+        <xsl:text>@charshape-id = </xsl:text>
+        <xsl:value-of select="@charshape-id" />
+        <xsl:text>*/&#10;</xsl:text>
         <xsl:variable name="charshape_pos" select="number(@charshape-id) + 1" />
         <xsl:variable name="charshape" select="//CharShape[$charshape_pos]" />
-        <xsl:call-template name="css-rule">
-            <xsl:with-param name="selector" select="$spans-selector" />
-            <xsl:with-param name="declarations">
-                <xsl:text>/* </xsl:text>
-                <xsl:text>@charshape-id = </xsl:text>
-                <xsl:value-of select="@charshape-id" />
-                <xsl:text>*/&#10;</xsl:text>
-                <xsl:apply-templates select="$charshape" mode="css-declaration" />
-            </xsl:with-param>
-        </xsl:call-template>
+        <xsl:for-each select="$charshape">
+            <xsl:call-template name="charshape-css-rule">
+                <xsl:with-param name="charshape-selector" select="$spans-selector" />
+            </xsl:call-template>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="ParaShape" mode="css-rule">
@@ -204,14 +213,70 @@
     </xsl:template>
 
     <xsl:template match="CharShape" mode="css-rule">
+
+        <xsl:variable name="charshape-selector">
+            <xsl:text>span.charshape-</xsl:text>
+            <xsl:number value="position()-1" />
+        </xsl:variable>
+
+        <xsl:call-template name="charshape-css-rule">
+            <xsl:with-param name="charshape-selector" select="$charshape-selector" />
+        </xsl:call-template>
+
+    </xsl:template>
+
+    <xsl:template name="charshape-css-rule">
+
+        <xsl:param name="charshape-selector" />
+
         <xsl:call-template name="css-rule">
-            <xsl:with-param name="selector">
-                <xsl:text>span.charshape-</xsl:text>
-                <xsl:number value="position()-1" />
-            </xsl:with-param>
+            <xsl:with-param name="selector" select="$charshape-selector" />
             <xsl:with-param name="declarations">
                 <xsl:apply-templates select="." mode="css-declaration" />
             </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">ko</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebaseko + FontFace/@ko" />
+            <xsl:with-param name="font-size" select="RelativeSize/@ko" />
+        </xsl:call-template>
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">en</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebaseen + FontFace/@en" />
+            <xsl:with-param name="font-size" select="RelativeSize/@en" />
+        </xsl:call-template>
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">cn</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebasecn + FontFace/@cn" />
+            <xsl:with-param name="font-size" select="RelativeSize/@cn" />
+        </xsl:call-template>
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">jp</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebasejp + FontFace/@jp" />
+            <xsl:with-param name="font-size" select="RelativeSize/@jp" />
+        </xsl:call-template>
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">other</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebaseot + FontFace/@other" />
+            <xsl:with-param name="font-size" select="RelativeSize/@other" />
+        </xsl:call-template>
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">symbol</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebasesy + FontFace/@symbol" />
+            <xsl:with-param name="font-size" select="RelativeSize/@symbol" />
+        </xsl:call-template>
+        <xsl:call-template name="charshape-css-rule-lang">
+            <xsl:with-param name="selector" select="$charshape-selector" />
+            <xsl:with-param name="lang">user</xsl:with-param>
+            <xsl:with-param name="facename-idx" select="$facenamebaseus + FontFace/@user" />
+            <xsl:with-param name="font-size" select="RelativeSize/@user" />
         </xsl:call-template>
     </xsl:template>
 
@@ -219,22 +284,6 @@
         <xsl:call-template name="css-declaration">
             <xsl:with-param name="property">color</xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="@text-color" /></xsl:with-param>
-        </xsl:call-template>
-
-        <xsl:call-template name="css-declaration">
-            <xsl:with-param name="property">font-family</xsl:with-param>
-            <xsl:with-param name="value">
-                <xsl:apply-templates select="FontFace" mode="css-declaration-font-family-value" />
-            </xsl:with-param>
-        </xsl:call-template>
-
-        <xsl:call-template name="css-declaration">
-            <xsl:with-param name="property">font-size</xsl:with-param>
-            <xsl:with-param name="value">
-                <xsl:call-template name="hwpunit-to-pt">
-                    <xsl:with-param name="hwpunit" select="@basesize" />
-                </xsl:call-template>
-            </xsl:with-param>
         </xsl:call-template>
 
         <xsl:if test="@italic = 1">
@@ -254,83 +303,69 @@
         <xsl:apply-templates select="." mode="text-decoration" />
     </xsl:template>
 
-    <xsl:template match="FontFace" mode="css-declaration-font-family-value">
-        <xsl:variable name="facenamebaseko" select="1" />
-        <xsl:variable name="facenamebaseen" select="$facenamebaseko + //IdMappings/@ko-fonts" />
-        <xsl:variable name="facenamebasecn" select="$facenamebaseen + //IdMappings/@en-fonts" />
-        <xsl:variable name="facenamebasejp" select="$facenamebasecn + //IdMappings/@cn-fonts" />
-        <xsl:variable name="facenamebaseot" select="$facenamebasejp + //IdMappings/@other-fonts" />
-        <xsl:variable name="facenamebasesy" select="$facenamebaseot + //IdMappings/@symbol-fonts" />
-        <xsl:variable name="facenamebaseus" select="$facenamebasesy + //IdMappings/@user-fonts" />
-        <xsl:text>/*</xsl:text>
-        <xsl:text> </xsl:text>
-        <xsl:text>base: </xsl:text>
-        <xsl:value-of select="$facenamebaseko" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenamebaseen" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenamebasecn" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenamebasejp" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenamebaseot" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenamebasesy" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenamebaseus" />
-        <xsl:text> </xsl:text>
-        <xsl:text>*/</xsl:text>
-        <xsl:text>&#10;</xsl:text>
+    <xsl:template name="charshape-css-rule-lang">
+        <xsl:param name="selector" />
+        <xsl:param name="lang" />
+        <xsl:param name="facename-idx" />
+        <xsl:param name="font-size" />
 
-        <xsl:variable name="facenameidko" select="$facenamebaseko + @ko" />
-        <xsl:variable name="facenameiden" select="$facenamebaseen + @en" />
-        <xsl:variable name="facenameidcn" select="$facenamebasecn + @cn" />
-        <xsl:variable name="facenameidjp" select="$facenamebasejp + @jp" />
-        <xsl:variable name="facenameidot" select="$facenamebaseot + @other" />
-        <xsl:variable name="facenameidsy" select="$facenamebasesy + @symbol" />
-        <xsl:variable name="facenameidus" select="$facenamebaseus + @user" />
-        <xsl:text>/*</xsl:text>
-        <xsl:text> </xsl:text>
-        <xsl:text>base + offset: </xsl:text>
-        <xsl:value-of select="$facenameidko" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenameiden" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenameidcn" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenameidjp" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenameidot" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenameidsy" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$facenameidus" />
-        <xsl:text> </xsl:text>
-        <xsl:text>*/</xsl:text>
-        <xsl:text>&#10;</xsl:text>
+        <xsl:call-template name="css-rule">
+            <xsl:with-param name="selector">
+                <xsl:value-of select="$selector" />
+                <xsl:text>.lang-</xsl:text>
+                <xsl:value-of select="$lang" />
+            </xsl:with-param>
+            <xsl:with-param name="declarations">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">font-family</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:apply-templates select="//FaceName[$facename-idx]" mode="font-family-value" />
+                        <xsl:apply-templates select="//FaceName[$facename-idx]" mode="font-family-generic-value" />
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">font-size</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="hwpunit-to-pt">
+                            <xsl:with-param name="hwpunit" select="@basesize * $font-size div 100" />
+                        </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
 
-        <xsl:text>/*</xsl:text>
-        <xsl:text> </xsl:text>
-        <xsl:text>ko en cn jp other symbol user</xsl:text>
-        <xsl:text> </xsl:text>
-        <xsl:text>*/</xsl:text>
-        <xsl:text>&#10;</xsl:text>
-
+    <xsl:template match="FaceName" mode="font-family-value">
         <xsl:text>"</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameidko]/@name" />
-        <xsl:text>", "</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameiden]/@name" />
-        <xsl:text>", "</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameidcn]/@name" />
-        <xsl:text>", "</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameidjp]/@name" />
-        <xsl:text>", "</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameidot]/@name" />
-        <xsl:text>", "</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameidsy]/@name" />
-        <xsl:text>", "</xsl:text>
-        <xsl:value-of select="//FaceName[$facenameidus]/@name" />
+        <xsl:value-of select="@name" />
         <xsl:text>"</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="FaceName" mode="font-family-generic-value">
+        <xsl:choose>
+            <xsl:when test="contains(@name, '바탕')"><xsl:text>, serif</xsl:text></xsl:when>
+            <xsl:when test="contains(@name, '돋움')"><xsl:text>, sans-serif</xsl:text></xsl:when>
+            <xsl:when test="contains(@name, '명조')"><xsl:text>, serif</xsl:text></xsl:when>
+            <xsl:when test="contains(@name, '고딕')"><xsl:text>, sans-serif</xsl:text></xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="Panose1" mode="font-family-generic-value" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="Panose1" mode="font-family-generic-value">
+        <xsl:choose>
+            <!-- family-kind 2: Latin Text/Display -->
+            <xsl:when test="@family-type = 2 and @proportion = 9"><xsl:text>, monospace</xsl:text></xsl:when>
+            <xsl:when test="@family-type = 2 and @serif-style &gt; 10"><xsl:text>, sans-serif</xsl:text></xsl:when>
+            <xsl:when test="@family-type = 2 and @serif-style &lt; 11"><xsl:text>, serif</xsl:text></xsl:when>
+            <!-- family-kind 3: Latin Hand Written -->
+            <xsl:when test="@family-type = 3"><xsl:text>, cursive</xsl:text></xsl:when>
+            <!-- family-kind 4: Latin Decorative -->
+            <xsl:when test="@family-type = 4"><xsl:text>, fantasy</xsl:text></xsl:when>
+            <!-- family-kind 5: Latin Symbol -->
+            <xsl:when test="@family-type = 5"></xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="BorderFill" mode="css-rule">

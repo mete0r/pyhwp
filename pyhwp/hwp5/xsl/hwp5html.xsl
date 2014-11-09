@@ -142,15 +142,18 @@
       <xsl:variable name="style" select="//Style[number($styleid)+1]" />
       <xsl:variable name="stylename" select="$style/@name" />
       <xsl:variable name="stylencname" select="translate($stylename, ' ', '-')" />
-      <xsl:choose>
-        <xsl:when test="$style/@charshape-id = @charshape-id"></xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="class">
-            <xsl:text>charshape-</xsl:text>
-            <xsl:value-of select="@charshape-id" />
-          </xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:attribute name="class">
+        <xsl:text>lang-</xsl:text>
+        <xsl:value-of select="@lang" />
+        <xsl:choose>
+          <xsl:when test="$style/@charshape-id = @charshape-id"></xsl:when>
+          <xsl:otherwise>
+              <xsl:text> </xsl:text>
+              <xsl:text>charshape-</xsl:text>
+              <xsl:value-of select="@charshape-id" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
       <xsl:value-of select="text()"/>
     </xsl:element>
   </xsl:template>
