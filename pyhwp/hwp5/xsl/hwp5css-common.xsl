@@ -215,42 +215,79 @@
                 <xsl:call-template name="css-declaration">
                     <xsl:with-param name="property">border-top</xsl:with-param>
                     <xsl:with-param name="value">
-                        <xsl:apply-templates select="Border[@attribute-name='top']" mode="cssborder"/>
+                        <xsl:apply-templates select="Border[@attribute-name='top']" mode="border-value"/>
                     </xsl:with-param>
                 </xsl:call-template>
 
                 <xsl:call-template name="css-declaration">
                     <xsl:with-param name="property">border-right</xsl:with-param>
                     <xsl:with-param name="value">
-                        <xsl:apply-templates select="Border[@attribute-name='right']" mode="cssborder"/>
+                        <xsl:apply-templates select="Border[@attribute-name='right']" mode="border-value"/>
                     </xsl:with-param>
                 </xsl:call-template>
 
                 <xsl:call-template name="css-declaration">
                     <xsl:with-param name="property">border-bottom</xsl:with-param>
                     <xsl:with-param name="value">
-                        <xsl:apply-templates select="Border[@attribute-name='bottom']" mode="cssborder"/>
+                        <xsl:apply-templates select="Border[@attribute-name='bottom']" mode="border-value"/>
                     </xsl:with-param>
                 </xsl:call-template>
 
                 <xsl:call-template name="css-declaration">
                     <xsl:with-param name="property">border-left</xsl:with-param>
                     <xsl:with-param name="value">
-                        <xsl:apply-templates select="Border[@attribute-name='left']" mode="cssborder"/>
+                        <xsl:apply-templates select="Border[@attribute-name='left']" mode="border-value"/>
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="Border" mode="cssborder">
-        <xsl:text>1px solid </xsl:text>
-        <xsl:value-of select="@color" />
-        <xsl:text>/*</xsl:text>
-        <xsl:value-of select="@width" />
+    <xsl:template match="Border" mode="border-value">
+        <xsl:apply-templates select="." mode="border-width-value" />
         <xsl:text> </xsl:text>
-        <xsl:value-of select="@stroke-type" />
-        <xsl:text>*/</xsl:text>
+        <xsl:apply-templates select="." mode="border-style-value" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@color" />
+    </xsl:template>
+
+    <xsl:template match="Border" mode="border-width-value">
+        <xsl:choose>
+            <xsl:when test="@width = '0.1mm'">1px</xsl:when>
+            <xsl:when test="@width = '0.12mm'">1px</xsl:when>
+            <xsl:when test="@width = '0.15mm'">1px</xsl:when>
+            <xsl:when test="@width = '0.2mm'">1px</xsl:when>
+            <xsl:when test="@width = '0.25mm'">1px</xsl:when>
+            <xsl:when test="@width = '0.4mm'">2px</xsl:when>
+            <xsl:when test="@width = '0.5mm'">2px</xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@width" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="Border" mode="border-style-value">
+        <xsl:choose>
+            <xsl:when test="@stroke-type = 'none'">none</xsl:when>
+            <xsl:when test="@stroke-type = 'solid'">solid</xsl:when>
+            <xsl:when test="@stroke-type = 'dashed'">dashed</xsl:when>
+            <xsl:when test="@stroke-type = 'dotted'">dotted</xsl:when>
+            <xsl:when test="@stroke-type = 'dash-dot'">dashed</xsl:when>
+            <xsl:when test="@stroke-type = 'dash-dot-dot'">dashed</xsl:when>
+            <xsl:when test="@stroke-type = 'long-dash'">dahsed</xsl:when>
+            <xsl:when test="@stroke-type = 'large-dot'">dotted</xsl:when>
+            <xsl:when test="@stroke-type = 'double'">double</xsl:when>
+            <xsl:when test="@stroke-type = 'double-2'">double</xsl:when>
+            <xsl:when test="@stroke-type = 'double-3'">double</xsl:when>
+            <xsl:when test="@stroke-type = 'triple'">double</xsl:when>
+            <xsl:when test="@stroke-type = 'wave'">solid</xsl:when>
+            <xsl:when test="@stroke-type = 'double-wave'">double</xsl:when>
+            <xsl:when test="@stroke-type = 'inset'">inset</xsl:when>
+            <xsl:when test="@stroke-type = 'outset'">outset</xsl:when>
+            <xsl:when test="@stroke-type = 'groove'">groove</xsl:when>
+            <xsl:when test="@stroke-type = 'ridge'">ridge</xsl:when>
+            <xsl:otherwise>solid</xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="SectionDef" mode="css-rule">

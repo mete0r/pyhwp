@@ -196,14 +196,14 @@ p.Memo {
   font-size: 9pt;
 }
 .borderfill-1 {
-  border-top: 1px solid #000000/*0.1mm none*/;
-  border-right: 1px solid #000000/*0.1mm none*/;
-  border-bottom: 1px solid #000000/*0.1mm none*/;
-  border-left: 1px solid #000000/*0.1mm none*/;
+  border-top: 1px none #000000;
+  border-right: 1px none #000000;
+  border-bottom: 1px none #000000;
+  border-left: 1px none #000000;
 }
 .borderfill-2 {
-  border-top: 1px solid #000000/*0.12mm solid*/;
-  border-right: 1px solid #000000/*0.12mm solid*/;
-  border-bottom: 1px solid #000000/*0.12mm solid*/;
-  border-left: 1px solid #000000/*0.12mm solid*/;
+  border-top: 1px solid #000000;
+  border-right: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: 1px solid #000000;
 }
