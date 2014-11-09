@@ -18,6 +18,19 @@
 #
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_BULLET
+from hwp5.dataio import INT32
+from hwp5.dataio import UINT32
+from hwp5.dataio import UINT16
+from hwp5.dataio import HWPUNIT16
+from hwp5.dataio import WCHAR
+from hwp5.dataio import Enum
+from hwp5.dataio import Flags
+
+
+BulletAlignEnum = Enum(LEFT=0, CENTER=1, RIGHT=2)
+BulletFlags = Flags(UINT32,
+                    0, 1, BulletAlignEnum, 'align',
+                    3, 'auto_indent')
 
 
 class Bullet(RecordModel):
@@ -25,4 +38,11 @@ class Bullet(RecordModel):
 
     tagid = HWPTAG_BULLET
 
-    # TODO
+    @staticmethod
+    def attributes():
+        # TODO: Spec 1.2 is insufficient and incorrect
+        yield BulletFlags, 'flags',
+        yield HWPUNIT16, 'width',  # 너비, 단위: HWPUNIT
+        yield UINT16, 'space',  # 본문과의 간격, 단위: %
+        yield INT32, 'charshape_id',
+        yield WCHAR, 'char'

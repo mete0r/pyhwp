@@ -17,6 +17,9 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from itertools import chain
+
+from hypua2jamo import codes2unicode
+
 from hwp5.filestructure import VERSION
 from hwp5.dataio import typed_struct_attributes
 from hwp5.dataio import Struct
@@ -69,11 +72,41 @@ def expanded_xmlattribute((name, (t, value))):
         if value == 0:
             yield name, u''
         else:
-            yield name, unichr(value)
+            if value in PUA_SYMBOLS:
+                yield name, PUA_SYMBOLS[value]
+            else:
+                yield name, codes2unicode([value])
     elif t is BinStorageId:
         yield name, 'BIN%04X' % value
     else:
         yield name, xmlattrval(value)
+
+
+# TODO: arbitrary assignment; not based on any standards
+PUA_SYMBOLS = {
+    0xF046: u'☞',  # U+261E WHITE RIGHT POINTING INDEX
+    0xF06C: u'●',  # U+25CF BLACK CIRCLE
+    # F06C: u'⚫',  # U+26AB MEDIUM BLACK CIRCLE
+    0xF09F: u'•',  # U+2022 BULLET = black small circle
+    0xF0A1: u'○',  # U+25CB WHITE CIRCLE
+    # F0A1: u'⚪',  # U+26AA MEDIUM WHITE CIRCLE
+    # F0A1: u'⚬',  # U+26AC MEDIUM SMALL WHITE CIRCLE
+    # F0A1: u' ',  # U+25E6 WHITE BULLET
+    0xF06E: u'■',  # U+25A0 BLACK SQUARE = molding mark
+    0xF0A7: u'▪',  # U+25AA BLACK SMALL SQUARE = square bullet
+    0xF06F: u'☐',  # U+2610 BALLOT BOX
+    # F06F: u'□',  # U+25A1 WHITE SQUARE = quadrature
+    0xF075: u'◆',  # U+25C6 BLACK DIAMOND
+    0xF077: u'⬩',  # U+2B29 BLACK SMALL DIAMOND
+    # F077: u'⬥',  # U+2B25 BLACK MEDIUM DIAMOND
+    # F077: u'⬦',  # U+2B26 WHITE MEDIUM DIAMOND
+    0xF076: u'❖',  # U+2756 BLACK DIAMOND MINUS WHITE X
+    0xF0A4: u'◉',  # U+25C9 FISHEYE
+    # F0A4: u'⦿ ', # U+29BF CIRCLED BULLET
+    0xF0AB: u'★',  # U+2605 BLACK STAR
+    0xF0Fc: u'✓',  # U+2713 CHECK MARK
+    0xF0FE: u'☑',  # U+2611 BALLOT BOX WITH CHECK
+}
 
 
 def xmlattr_dashednames(attrs):
