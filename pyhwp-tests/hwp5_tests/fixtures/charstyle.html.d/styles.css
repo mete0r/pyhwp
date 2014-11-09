@@ -15,326 +15,189 @@
     .Paper:last-child {
       margin-bottom: 0;
     }
-    
-        /* Styles */
-        
-            p.Normal {
-            }
-        
-            p.Body {
-            }
-        
-            p.Outline-1 {
-            }
-        
-            p.Outline-2 {
-            }
-        
-            p.Outline-3 {
-            }
-        
-            p.Outline-4 {
-            }
-        
-            p.Outline-5 {
-            }
-        
-            p.Outline-6 {
-            }
-        
-            p.Outline-7 {
-            }
-        
-            p.Page-Number {
-            }
-        
-            p.Header {
-            }
-        
-            p.Footnote {
-            }
-        
-            p.Memo {
-            }
-        
-            p. {
-            }
-        
-
-        /* Paragraph attributes */
-        
-            .parashape-0 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    0pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-0 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-1 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    20pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-1 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-2 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    30pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-2 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-3 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    40pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-3 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-4 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    50pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-4 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-5 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    60pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-5 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-6 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    70pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-6 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-7 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    15pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-7 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-8 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    0pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.5em;
-            }
-            .parashape-8 > span {
-            
-                line-height: 1.5;
-                
-            }
-        
-            .parashape-9 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    10pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-9 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-            .parashape-10 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    0pt;
-                
-        text-align: justify;
-    
-        text-indent: -13.1pt
-    ;
-        
-        padding-left: 13.1pt;
-        min-height: 1.3em;
-            }
-            .parashape-10 > span {
-            
-                line-height: 1.3;
-                
-            }
-        
-            .parashape-11 {
-                margin:
-                    0pt
-                    0pt
-                    0pt
-                    0pt;
-                
-        text-align: justify;
-    
-        text-indent: 0pt
-    ;
-        min-height: 1.6em;
-            }
-            .parashape-11 > span {
-            
-                line-height: 1.6;
-                
-            }
-        
-
-        /* Text attributes */
-        
-            .charshape-0 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-1 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 10pt;
-                
-            }
-        
-            .charshape-2 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 9pt;
-                
-            }
-        
-            .charshape-3 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 9pt;
-                
-            }
-        
-            .charshape-4 {
-                /* fontface-ko  */
-                color: #000000;
-                font-size: 9pt;
-                
-            }
-        
-            .borderfill-1 {
-                border-top:  1px solid #000000/* width:0.1mm style: */ ;
-                border-right:  1px solid #000000/* width:0.1mm style: */ ;
-                border-bottom:  1px solid #000000/* width:0.1mm style: */ ;
-                border-left:  1px solid #000000/* width:0.1mm style: */ ;
-            }
-        
+/* Styles */
+p.Normal {
+}
+p.Body {
+}
+p.Outline-1 {
+}
+p.Outline-2 {
+}
+p.Outline-3 {
+}
+p.Outline-4 {
+}
+p.Outline-5 {
+}
+p.Outline-6 {
+}
+p.Outline-7 {
+}
+p.Page-Number {
+}
+p.Header {
+}
+p.Footnote {
+}
+p.Memo {
+}
+p. {
+}
+/* Paragraph attributes */
+.parashape-0 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-0 > span {
+  line-height: 1.6;
+}
+.parashape-1 {
+  margin: 0pt 0pt 0pt 20pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-1 > span {
+  line-height: 1.6;
+}
+.parashape-2 {
+  margin: 0pt 0pt 0pt 30pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-2 > span {
+  line-height: 1.6;
+}
+.parashape-3 {
+  margin: 0pt 0pt 0pt 40pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-3 > span {
+  line-height: 1.6;
+}
+.parashape-4 {
+  margin: 0pt 0pt 0pt 50pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-4 > span {
+  line-height: 1.6;
+}
+.parashape-5 {
+  margin: 0pt 0pt 0pt 60pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-5 > span {
+  line-height: 1.6;
+}
+.parashape-6 {
+  margin: 0pt 0pt 0pt 70pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-6 > span {
+  line-height: 1.6;
+}
+.parashape-7 {
+  margin: 0pt 0pt 0pt 15pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-7 > span {
+  line-height: 1.6;
+}
+.parashape-8 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.5em;
+}
+.parashape-8 > span {
+  line-height: 1.5;
+}
+.parashape-9 {
+  margin: 0pt 0pt 0pt 10pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-9 > span {
+  line-height: 1.6;
+}
+.parashape-10 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: -13.1pt;
+  padding-left: 13.1pt;
+  min-height: 1.3em;
+}
+.parashape-10 > span {
+  line-height: 1.3;
+}
+.parashape-11 {
+  margin: 0pt 0pt 0pt 0pt;
+  text-align: justify;
+  text-indent: 0pt;
+  min-height: 1.6em;
+}
+.parashape-11 > span {
+  line-height: 1.6;
+}
+/* Text attributes */
+.charshape-0 {
+  color: #000000;
+  font-family: /* base: 1 3 5 7 9 11 13 */
+/* base + offset: 1 3 5 7 9 11 13 */
+/* ko en cn jp other symbol user */
+"굴림", "굴림", "굴림", "굴림", "굴림", "굴림", "굴림";
+  font-size: 10pt;
+}
+.charshape-1 {
+  color: #000000;
+  font-family: /* base: 1 3 5 7 9 11 13 */
+/* base + offset: 2 4 6 8 10 12 14 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "바탕", "바탕", "바탕", "바탕", "바탕";
+  font-size: 10pt;
+}
+.charshape-2 {
+  color: #000000;
+  font-family: /* base: 1 3 5 7 9 11 13 */
+/* base + offset: 1 3 5 7 9 11 13 */
+/* ko en cn jp other symbol user */
+"굴림", "굴림", "굴림", "굴림", "굴림", "굴림", "굴림";
+  font-size: 9pt;
+}
+.charshape-3 {
+  color: #000000;
+  font-family: /* base: 1 3 5 7 9 11 13 */
+/* base + offset: 1 3 5 7 9 11 13 */
+/* ko en cn jp other symbol user */
+"굴림", "굴림", "굴림", "굴림", "굴림", "굴림", "굴림";
+  font-size: 9pt;
+}
+.charshape-4 {
+  color: #000000;
+  font-family: /* base: 1 3 5 7 9 11 13 */
+/* base + offset: 2 4 6 8 10 12 14 */
+/* ko en cn jp other symbol user */
+"바탕", "바탕", "바탕", "바탕", "바탕", "바탕", "바탕";
+  font-size: 9pt;
+}
+.borderfill-1 {
+  border-top: 1px solid #000000/*0.1mm none*/;
+  border-right: 1px solid #000000/*0.1mm none*/;
+  border-bottom: 1px solid #000000/*0.1mm none*/;
+  border-left: 1px solid #000000/*0.1mm none*/;
+}

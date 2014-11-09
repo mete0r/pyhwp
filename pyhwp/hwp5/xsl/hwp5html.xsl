@@ -52,14 +52,15 @@
   <xsl:template match="IdMappings" mode="style">
     <xsl:element name="style">
       <xsl:attribute name="type">text/css</xsl:attribute>
-      <xsl:apply-templates select="." mode="content" />
+      <xsl:apply-templates select="." mode="css-rule" />
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="SectionDef" mode="style">
     <xsl:element name="style">
       <xsl:attribute name="type">text/css</xsl:attribute>
-      <xsl:apply-templates select="." mode="css-rule-section" />
+      <xsl:text>&#10;</xsl:text>
+      <xsl:apply-templates select="." mode="css-rule" />
     </xsl:element>
   </xsl:template>
 

@@ -3,6 +3,7 @@
   <xsl:import href="hwp5css-common.xsl" />
   <xsl:output method="text" media-type="text/css" encoding="utf-8" indent="no" />
   <xsl:template match="/">
+    <xsl:text>
     body {
       background-color: #eee;
       padding: 4px;
@@ -19,6 +20,7 @@
     .Paper:last-child {
       margin-bottom: 0;
     }
-    <xsl:apply-templates select="HwpDoc/DocInfo/IdMappings" mode="content" />
+</xsl:text>
+    <xsl:apply-templates select="HwpDoc/DocInfo/IdMappings" mode="css-rule" />
   </xsl:template>
 </xsl:stylesheet>
