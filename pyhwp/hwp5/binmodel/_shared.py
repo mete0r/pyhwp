@@ -28,6 +28,7 @@ from hwp5.dataio import UINT32
 from hwp5.dataio import UINT16
 from hwp5.dataio import UINT8
 from hwp5.dataio import INT32
+from hwp5.dataio import INT8
 from hwp5.dataio import BYTE
 from hwp5.dataio import HWPUNIT16
 from hwp5.dataio import SHWPUNIT
@@ -193,10 +194,39 @@ class FillColorPattern(Fill):
 
 
 class FillImage(Fill):
-    def attributes():
-        yield UINT32, 'flags'
-        yield BinStorageId, 'storage_id'
-    attributes = staticmethod(attributes)
+    FillImageEnum = Enum(TILE_ALL=0,
+                         TILE_HORIZONTAL_TOP=1,
+                         TILE_HORIZONTAL_BOTTOM=2,
+                         TILE_VERTICAL_LEFT=3,
+                         TILE_VERTICAL_RIGHT=4,
+                         RESIZE=5,
+                         CENTER=6,
+                         CENTER_TOP=7,
+                         CENTER_BOTTOM=8,
+                         LEFT_MIDDLE=9,
+                         LEFT_TOP=10,
+                         LEFT_BOTTOM=11,
+                         RIGHT_MIDDLE=12,
+                         RIGHT_TOP=13,
+                         RIGHT_BOTTOM=14,
+                         NONE=15)
+    FillImageFlags = Flags(BYTE,
+                           0, 16, FillImageEnum, 'fillimage_type')
+
+    EffectEnum = Enum(REAL_PIC=0,
+                      GRAY_SCALE=1,
+                      BLACK_WHITE=2,
+                      PATTERN8x8=3)
+    EffectFlags = Flags(UINT8,
+                        0, 8, EffectEnum, 'effect_type')
+
+    def attributes(cls):
+        yield cls.FillImageFlags, 'flags'
+        yield INT8, 'brightness'
+        yield INT8, 'contrast'
+        yield cls.EffectFlags, 'effect'
+        yield UINT16, 'bindata_id'
+    attributes = classmethod(attributes)
 
 
 class Coord32(Struct):
@@ -212,6 +242,8 @@ class FillGradation(Fill):
         yield UINT32, 'shear',
         yield Coord32, 'center',
         yield UINT32, 'blur',
+        # TODO: 스펙 1.2에 따르면 색상 수 > 2인 경우
+        # 색상이 바뀌는 위치 배열이 온다고 함
         yield N_ARRAY(UINT32, COLORREF), 'colors',
     attributes = staticmethod(attributes)
 

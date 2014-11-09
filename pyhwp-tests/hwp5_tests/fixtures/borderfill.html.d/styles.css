@@ -475,12 +475,16 @@ span.charshape-4 {
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
   background-color: #3f7fff;
+  background-image: url(bindata/BIN0001.jpg) ;
+  background-size: 100% 100%;
 }
 .borderfill-7 {
   border-top: 1px solid #000000;
   border-right: 1px solid #000000;
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
+  background-image: url(bindata/BIN0001.jpg) ;
+  background-size: 100% 100%;
 }
 .borderfill-8 {
   border-top: 1px solid #000000;
@@ -490,4 +494,6 @@ span.charshape-4 {
   background-image: linear-gradient(90deg,#3f7fff,#000000);
   background-image: -webkit-linear-gradient(90deg,#3f7fff,#000000);
   background-image: -moz-linear-gradient(90deg,#3f7fff,#000000);
+  background-image: url(bindata/BIN0001.jpg) ;
+  background-size: 100% 100%;
 }

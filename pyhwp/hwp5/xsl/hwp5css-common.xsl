@@ -296,6 +296,7 @@
 
                 <xsl:apply-templates select="FillColorPattern" mode="css-declaration" />
                 <xsl:apply-templates select="FillGradation" mode="css-declaration" />
+                <xsl:apply-templates select="FillImage" mode="css-declaration" />
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -489,6 +490,47 @@
                 <xsl:text>)</xsl:text>
             </xsl:with-param>
         </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="FillImage" mode="css-declaration">
+        <xsl:variable name="bindataid" select="@bindata-id"/>
+        <xsl:variable name="bindata" select="/HwpDoc/DocInfo/IdMappings/BinData[number($bindataid)]"/>
+        <xsl:choose>
+            <xsl:when test="@fillimage-type = 'resize'">
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-image</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>url(</xsl:text>
+                        <xsl:apply-templates select="$bindata" mode="url" />
+                        <xsl:text>)</xsl:text>
+                        <xsl:text> </xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="css-declaration">
+                    <xsl:with-param name="property">background-size</xsl:with-param>
+                    <xsl:with-param name="value">
+                        <xsl:text>100% 100%</xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>/* </xsl:text>
+                <xsl:text> unsupported @fillimage-type: </xsl:text>
+                <xsl:value-of select="@fillimage-type" />
+                <xsl:text> */&#10;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="BinData" mode="url">
+        <xsl:apply-templates select="BinDataEmbedding" mode="url" />
+    </xsl:template>
+
+    <xsl:template match="BinDataEmbedding" mode="url">
+        <xsl:text>bindata/</xsl:text>
+        <xsl:value-of select="@storage-id"/>
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="@ext"/>
     </xsl:template>
 
     <xsl:template match="SectionDef" mode="css-rule">

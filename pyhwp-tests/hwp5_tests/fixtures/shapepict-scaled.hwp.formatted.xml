@@ -64,7 +64,7 @@
       <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
-      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" shape="0" slash="0">
+      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" slash="0">
         <Border attribute-name="left" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
         <Border attribute-name="right" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
         <Border attribute-name="top" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>

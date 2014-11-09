@@ -172,7 +172,8 @@ class BorderFillTest(TestBase):
         self.assertEquals(2, borderfill['fillflags'])
         self.assertEquals(None, borderfill.get('fill_colorpattern'))
         self.assertEquals(None, borderfill.get('fill_gradation'))
-        self.assertEquals(dict(flags=5, storage_id=1),
+        self.assertEquals(dict(flags=5, bindata_id=1, effect=0, brightness=0,
+                               contrast=0),
                           borderfill.get('fill_image'))
 
         borderfill = tablecells[4]['borderfill']
@@ -182,7 +183,8 @@ class BorderFillTest(TestBase):
                                pattern_type_flags=0xffffffff),
                           borderfill['fill_colorpattern'])
         self.assertEquals(None, borderfill.get('fill_gradation'))
-        self.assertEquals(dict(flags=5, storage_id=1),
+        self.assertEquals(dict(flags=5, bindata_id=1, effect=0, brightness=0,
+                               contrast=0),
                           borderfill.get('fill_image'))
 
         borderfill = tablecells[5]['borderfill']
@@ -192,7 +194,8 @@ class BorderFillTest(TestBase):
                                colors=[0xff7f3f, 0],
                                shear=90, type=1),
                           borderfill['fill_gradation'])
-        self.assertEquals(dict(flags=5, storage_id=1),
+        self.assertEquals(dict(flags=5, bindata_id=1, effect=0, brightness=0,
+                               contrast=0),
                           borderfill.get('fill_image'))
 
 
@@ -483,7 +486,8 @@ class ShapeComponentTest(TestBase):
         self.assertTrue(shapecomp['fill_flags'].fill_image)
         self.assertEquals(None, shapecomp.get('fill_colorpattern'))
         self.assertEquals(None, shapecomp.get('fill_gradation'))
-        self.assertEquals(dict(flags=5, storage_id=1),
+        self.assertEquals(dict(flags=5, bindata_id=1, effect=0, brightness=0,
+                               contrast=0),
                           shapecomp['fill_image'])
 
         shapecomp = shapecomps.pop(0)['content']
@@ -495,7 +499,8 @@ class ShapeComponentTest(TestBase):
                                pattern_type_flags=0xffffffff),
                           shapecomp['fill_colorpattern'])
         self.assertEquals(None, shapecomp.get('fill_gradation'))
-        self.assertEquals(dict(flags=5, storage_id=1),
+        self.assertEquals(dict(flags=5, bindata_id=1, effect=0, brightness=0,
+                               contrast=0),
                           shapecomp['fill_image'])
 
         shapecomp = shapecomps.pop(0)['content']
@@ -507,7 +512,8 @@ class ShapeComponentTest(TestBase):
                                center=dict(x=0, y=0),
                                colors=[0xff7f3f, 0],
                                blur=50), shapecomp['fill_gradation'])
-        self.assertEquals(dict(flags=5, storage_id=1),
+        self.assertEquals(dict(flags=5, bindata_id=1, effect=0, brightness=0,
+                               contrast=0),
                           shapecomp['fill_image'])
 
     def test_colorpattern_gradation(self):

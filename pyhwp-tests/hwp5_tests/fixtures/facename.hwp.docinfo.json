@@ -829,7 +829,6 @@
       "stroke_flags": 0, 
       "width_flags": 0
     }, 
-    "shape": 0, 
     "top": {
       "color": 0, 
       "stroke_flags": 0, 
@@ -847,7 +846,10 @@
   "size": 52, 
   "tagid": 20, 
   "tagname": "HWPTAG_BORDER_FILL", 
-  "type": "BorderFill"
+  "type": "BorderFill", 
+  "unparsed": [
+    "00 00 00 00"
+  ]
 },
 {
   "content": {
