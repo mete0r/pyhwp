@@ -105,7 +105,7 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:for-each select="LineSeg">
-        <xsl:apply-templates select="Text|ControlChar|TableControl|GShapeObjectControl" />
+        <xsl:apply-templates select="Text|ControlChar|AutoNumbering|TableControl|GShapeObjectControl" />
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
@@ -128,6 +128,20 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="text()"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="AutoNumbering">
+    <xsl:element name="span">
+      <xsl:attribute name="class">
+        <xsl:text>autonumbering</xsl:text>
+        <xsl:text> </xsl:text>
+        <xsl:text>autonumbering-</xsl:text>
+        <xsl:value-of select="@kind" />
+      </xsl:attribute>
+      <xsl:value-of select="@prefix" />
+      <xsl:value-of select="@number" />
+      <xsl:value-of select="@suffix" />
     </xsl:element>
   </xsl:template>
 
