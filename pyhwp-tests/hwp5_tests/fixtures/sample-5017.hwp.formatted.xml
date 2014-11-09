@@ -110,8 +110,10 @@
         <Border attribute-name="top" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="bottom" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
-        <FillGradation attribute-name="fill_gradation" blur="50" colors="[4144959, 8355711]" shear="0" type="2">
+        <FillGradation attribute-name="fill_gradation" blur="50" shear="0" type="2">
           <Coord32 attribute-name="center" x="100" y="0"/>
+          <colors alpha="0" b="63" g="63" hex="#3f3f3f" r="63"/>
+          <colors alpha="0" b="127" g="127" hex="#7f7f7f" r="127"/>
         </FillGradation>
       </BorderFill>
       <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">

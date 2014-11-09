@@ -202,8 +202,10 @@
                 </ScaleRotationMatrix>
               </Array>
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000042" line-end="flat" stroke="dashed" width="33"/>
-              <FillGradation attribute-name="fill_gradation" blur="51" colors="[16777215, 1118481]" shear="90" type="1">
+              <FillGradation attribute-name="fill_gradation" blur="51" shear="90" type="1">
                 <Coord32 attribute-name="center" x="1" y="2"/>
+                <colors alpha="0" b="255" g="255" hex="#ffffff" r="255"/>
+                <colors alpha="0" b="17" g="17" hex="#111111" r="17"/>
               </FillGradation>
               <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="20200" padding-bottom="283" padding-left="283" padding-right="283" padding-top="283" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                 <Paragraph chars="5" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="12" rangetags="0" split="00" style-id="0" text="80000005" unknown="1" unknown1="0">

@@ -100,6 +100,8 @@ def is_complex_type(type, value):
         return True
     elif isinstance(type, ArrayType) and issubclass(type.itemtype, Struct):
         return True
+    elif isinstance(type, ArrayType) and issubclass(type.itemtype, COLORREF):
+        return True
     else:
         return False
 
@@ -158,12 +160,25 @@ def startelement(context, (model, attributes)):
                 yield x
         else:
             assert isinstance(_value, (tuple, list)), (_value, _type)
-            assert issubclass(_type.itemtype, Struct), (_value, _type)
-            yield STARTEVENT, ('Array', {'name': _name})
-            for _itemvalue in _value:
-                for x in element(context, (_type.itemtype, _itemvalue)):
-                    yield x
-            yield ENDEVENT, 'Array'
+            # assert issubclass(_type.itemtype, Struct), (_value, _type)
+            if issubclass(_type.itemtype, Struct):
+                yield STARTEVENT, ('Array', {'name': _name})
+                for _itemvalue in _value:
+                    for x in element(context, (_type.itemtype, _itemvalue)):
+                        yield x
+                yield ENDEVENT, 'Array'
+            elif issubclass(_type.itemtype, COLORREF):
+                for _itemvalue in _value:
+                    yield STARTEVENT, (_name, {
+                        'r': '%d' % ((_itemvalue >> 0) & 0xff),
+                        'g': '%d' % ((_itemvalue >> 8) & 0xff),
+                        'b': '%d' % ((_itemvalue >> 16) & 0xff),
+                        'alpha': '%d' % ((_itemvalue >> 24) & 0xff),
+                        'hex': xmlattrval(_type.itemtype(_itemvalue))
+                    })
+                    yield ENDEVENT, _name
+            else:
+                assert False, (_value, _type)
 
 
 def element(context, (model, attributes)):

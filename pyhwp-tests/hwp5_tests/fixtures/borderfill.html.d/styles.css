@@ -220,6 +220,9 @@ p.Memo {
   border-right: 1px solid #000000;
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
+  background-image: linear-gradient(90deg,#3f7fff,#000000);
+  background-image: -webkit-linear-gradient(90deg,#3f7fff,#000000);
+  background-image: -moz-linear-gradient(90deg,#3f7fff,#000000);
 }
 .borderfill-5 {
   border-top: 1px none #000000;
@@ -245,4 +248,7 @@ p.Memo {
   border-right: 1px solid #000000;
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
+  background-image: linear-gradient(90deg,#3f7fff,#000000);
+  background-image: -webkit-linear-gradient(90deg,#3f7fff,#000000);
+  background-image: -moz-linear-gradient(90deg,#3f7fff,#000000);
 }

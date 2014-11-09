@@ -233,8 +233,10 @@
                 </ScaleRotationMatrix>
               </Array>
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000041" line-end="flat" stroke="solid" width="33"/>
-              <FillGradation attribute-name="fill_gradation" blur="50" colors="[16744255, 0]" shear="90" type="1">
+              <FillGradation attribute-name="fill_gradation" blur="50" shear="90" type="1">
                 <Coord32 attribute-name="center" x="0" y="0"/>
+                <colors alpha="0" b="255" g="127" hex="#3f7fff" r="63"/>
+                <colors alpha="0" b="0" g="0" hex="#000000" r="0"/>
               </FillGradation>
               <ShapeRectangle round="0">
                 <Coord attribute-name="p0" x="0" y="0"/>
@@ -311,8 +313,10 @@
                 </ScaleRotationMatrix>
               </Array>
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000041" line-end="flat" stroke="solid" width="33"/>
-              <FillGradation attribute-name="fill_gradation" blur="50" colors="[16744255, 0]" shear="90" type="1">
+              <FillGradation attribute-name="fill_gradation" blur="50" shear="90" type="1">
                 <Coord32 attribute-name="center" x="0" y="0"/>
+                <colors alpha="0" b="255" g="127" hex="#3f7fff" r="63"/>
+                <colors alpha="0" b="0" g="0" hex="#000000" r="0"/>
               </FillGradation>
               <FillImage attribute-name="fill_image" flags="5" storage-id="BIN0001"/>
               <ShapeRectangle round="0">

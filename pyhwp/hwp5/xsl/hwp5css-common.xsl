@@ -241,6 +241,7 @@
                 </xsl:call-template>
 
                 <xsl:apply-templates select="FillColorPattern" mode="css-declaration" />
+                <xsl:apply-templates select="FillGradation" mode="css-declaration" />
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -387,6 +388,53 @@
                 <xsl:text> */</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="FillGradation" mode="css-declaration">
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">background-image</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:text>linear-gradient</xsl:text>
+                <xsl:text>(</xsl:text>
+                <xsl:value-of select="@shear" />
+                <xsl:text>deg</xsl:text>
+                <xsl:for-each select="colors">
+                    <xsl:text>,</xsl:text>
+                    <xsl:value-of select="@hex" />
+                </xsl:for-each>
+                <xsl:text>)</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">background-image</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:text>-webkit-linear-gradient</xsl:text>
+                <xsl:text>(</xsl:text>
+                <xsl:value-of select="@shear" />
+                <xsl:text>deg</xsl:text>
+                <xsl:for-each select="colors">
+                    <xsl:text>,</xsl:text>
+                    <xsl:value-of select="@hex" />
+                </xsl:for-each>
+                <xsl:text>)</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+
+        <xsl:call-template name="css-declaration">
+            <xsl:with-param name="property">background-image</xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:text>-moz-linear-gradient</xsl:text>
+                <xsl:text>(</xsl:text>
+                <xsl:value-of select="@shear" />
+                <xsl:text>deg</xsl:text>
+                <xsl:for-each select="colors">
+                    <xsl:text>,</xsl:text>
+                    <xsl:value-of select="@hex" />
+                </xsl:for-each>
+                <xsl:text>)</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="SectionDef" mode="css-rule">
