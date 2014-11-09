@@ -202,7 +202,7 @@
                 </ScaleRotationMatrix>
               </Array>
               <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000042" line-end="flat" stroke="dashed" width="33"/>
-              <FillGradation attribute-name="fill_gradation" blur="51" shear="90" type="1">
+              <FillGradation attribute-name="fill_gradation" blur="51" gradation-type="linear" shear="90" type="01">
                 <Coord32 attribute-name="center" x="1" y="2"/>
                 <colors alpha="0" b="255" g="255" hex="#ffffff" r="255"/>
                 <colors alpha="0" b="17" g="17" hex="#111111" r="17"/>

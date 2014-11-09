@@ -236,12 +236,17 @@ class Coord32(Struct):
     attributes = staticmethod(attributes)
 
 
+GradationTypeEnum = Enum(LINEAR=1, CIRCULAR=2, CONICAL=3, RECTANGULAR=4)
+GradationTypeFlags = Flags(BYTE,
+                           0, 8, GradationTypeEnum, 'gradation_type')
+
+
 class FillGradation(Fill):
     def attributes():
-        yield BYTE,   'type',
-        yield UINT32, 'shear',
+        yield GradationTypeFlags, 'type',
+        yield UINT32, 'shear',  # 기울임 각 (도)
         yield Coord32, 'center',
-        yield UINT32, 'blur',
+        yield UINT32, 'blur',  # 번짐 정도: 0-100
         # TODO: 스펙 1.2에 따르면 색상 수 > 2인 경우
         # 색상이 바뀌는 위치 배열이 온다고 함
         yield N_ARRAY(UINT32, COLORREF), 'colors',
