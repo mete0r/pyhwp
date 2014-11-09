@@ -1,4 +1,21 @@
 
+    body {
+      background-color: #eee;
+      padding: 4px;
+      margin: 0;
+    }
+    .Paper {
+      background-color: #fff;
+      border:1px solid black;
+      margin: 1em auto;
+    }
+    .Paper:first-child {
+      margin-top: 0;
+    }
+    .Paper:last-child {
+      margin-bottom: 0;
+    }
+    
         /* Styles */
         
             p.Normal {

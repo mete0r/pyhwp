@@ -55,12 +55,38 @@
 
     <xsl:template match="Border" mode="cssborder"> 1px solid <xsl:value-of select="@color" />/* width:<xsl:value-of select="@width" /> style:<xsl:value-of select="@style" /> */ </xsl:template>
 
-    <xsl:template match="SectionDef" mode="style-content">
+    <xsl:template match="SectionDef" mode="css-rule-section">
         .Section-<xsl:value-of select="position()-1" /> {
-          width: <xsl:value-of select="PageDef/@width div 100" />pt;
-          margin-left: <xsl:value-of select="PageDef/@left-offset div 100" />pt;
-          margin-right <xsl:value-of select="PageDef/@right-offset div 100" />pt;
+            <xsl:apply-templates select="PageDef" mode="css-decl-paper-dimension" />
         }
+        .Section-<xsl:value-of select="position()-1" /> .Page {
+            <xsl:apply-templates select="PageDef" mode="css-decl-page" />
+        }
+    </xsl:template>
+
+    <xsl:template match="PageDef" mode="css-decl-page">
+        margin-top: <xsl:value-of select="@top-offset div 100" />pt;
+        margin-bottom: <xsl:value-of select="@bottom-offset div 100" />pt;
+        margin-left: <xsl:value-of select="@left-offset div 100" />pt;
+        margin-right: <xsl:value-of select="@right-offset div 100" />pt;
+    </xsl:template>
+    <xsl:template match="PageDef" mode="css-decl-paper-dimension">
+        <xsl:choose>
+            <xsl:when test="@orientation = 'portrait'">
+                <xsl:apply-templates select="." mode="css-decl-paper-dimension-portrait" />
+            </xsl:when>
+            <xsl:when test="@orientation = 'landscape'">
+                <xsl:apply-templates select="." mode="css-decl-paper-dimension-landscape" />
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="PageDef" mode="css-decl-paper-dimension-portrait">
+        width: <xsl:value-of select="@width div 100" />pt;
+    </xsl:template>
+
+    <xsl:template match="PageDef" mode="css-decl-paper-dimension-landscape">
+        width: <xsl:value-of select="@height div 100" />pt;
     </xsl:template>
 
     <xsl:template match="ParaShape" mode="css-text-align">

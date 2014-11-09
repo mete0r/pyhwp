@@ -59,7 +59,7 @@
   <xsl:template match="SectionDef" mode="style">
     <xsl:element name="style">
       <xsl:attribute name="type">text/css</xsl:attribute>
-      <xsl:apply-templates select="." mode="style-content" />
+      <xsl:apply-templates select="." mode="css-rule-section" />
     </xsl:element>
   </xsl:template>
 
@@ -71,10 +71,13 @@
 
   <xsl:template match="SectionDef" mode="div-section">
     <xsl:element name="div">
-      <xsl:attribute name="class">Section Section-<xsl:value-of select="position()-1"/></xsl:attribute>
-      <xsl:for-each select="Paragraph">
-        <xsl:apply-templates select="." mode="p"/>
-      </xsl:for-each>
+      <xsl:attribute name="class">Section Section-<xsl:value-of select="position()-1"/> Paper</xsl:attribute>
+      <xsl:element name="div">
+        <xsl:attribute name="class">Page</xsl:attribute>
+        <xsl:for-each select="Paragraph">
+          <xsl:apply-templates select="." mode="p"/>
+        </xsl:for-each>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 
