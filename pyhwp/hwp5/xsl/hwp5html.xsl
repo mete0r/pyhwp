@@ -66,13 +66,20 @@
 
   <xsl:template match="BodyText" mode="body">
     <xsl:element name="body">
-      <xsl:apply-templates select="SectionDef" mode="div-section" />
+      <xsl:apply-templates select="SectionDef" mode="div" />
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="SectionDef" mode="div-section">
+  <xsl:template match="SectionDef" mode="div">
     <xsl:element name="div">
-      <xsl:attribute name="class">Section Section-<xsl:value-of select="position()-1"/> Paper</xsl:attribute>
+      <xsl:attribute name="class">
+        <xsl:text>Section</xsl:text>
+        <xsl:text> </xsl:text>
+        <xsl:text>Section-</xsl:text>
+        <xsl:value-of select="@section-id" />
+        <xsl:text> </xsl:text>
+        <xsl:text>Paper</xsl:text>
+      </xsl:attribute>
       <xsl:element name="div">
         <xsl:attribute name="class">Page</xsl:attribute>
         <xsl:apply-templates />

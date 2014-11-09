@@ -490,7 +490,7 @@
         <xsl:call-template name="css-rule">
             <xsl:with-param name="selector">
                 <xsl:text>.Section-</xsl:text>
-                <xsl:value-of select="position()-1" />
+                <xsl:value-of select="@section-id" />
             </xsl:with-param>
             <xsl:with-param name="declarations">
                 <xsl:apply-templates select="PageDef" mode="paper-dimension" />
@@ -500,7 +500,7 @@
         <xsl:call-template name="css-rule">
             <xsl:with-param name="selector">
                 <xsl:text>.Section-</xsl:text>
-                <xsl:value-of select="position()-1" />
+                <xsl:value-of select="@section-id" />
                 <xsl:text> .Page</xsl:text>
             </xsl:with-param>
             <xsl:with-param name="declarations">
