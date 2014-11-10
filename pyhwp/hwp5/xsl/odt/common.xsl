@@ -772,7 +772,7 @@
         </xsl:attribute>
         <xsl:apply-templates mode="style:parent-style-name" select="$style" />
         <xsl:if test="@new-section = '1'">
-          <xsl:apply-templates mode="style:master-page-name" select=".." />
+          <xsl:apply-templates mode="style:master-page-name" select="../.." />
         </xsl:if>
 	<xsl:apply-templates mode="style:paragraph-properties" select="." />
       </xsl:element>

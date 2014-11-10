@@ -259,6 +259,43 @@ def wrap_section(event_prefixed_mac, sect_id=None):
     yield ENDEVENT, sectiondef
 
 
+class ColumnSet:
+    pass
+
+
+def wrap_columns(event_prefixed_mac):
+
+    stack = []
+
+    for event, item in event_prefixed_mac:
+        model, attributes, context = item
+
+        if model is Paragraph:
+            if event is STARTEVENT:
+
+                split = attributes['split']
+                split = Paragraph.SplitFlags(split)
+
+                if split.new_columnsdef:
+                    if stack[-1][0] is ColumnSet:
+                        yield ENDEVENT, stack.pop()
+
+                    columns = (ColumnSet, {}, {})
+                    stack.append(columns)
+                    yield STARTEVENT, columns
+
+        else:
+            if event is STARTEVENT:
+                stack.append(item)
+            else:
+                if model != stack[-1][0]:
+                    assert stack[-1][0] is ColumnSet
+                    yield ENDEVENT, stack.pop()
+                stack.pop()
+
+        yield event, item
+
+
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''
     if stack is None:
@@ -641,6 +678,7 @@ class Section(ModelEventStream):
 
         section_idx = kwargs.get('section_idx')
         events = wrap_section(events, section_idx)
+        events = wrap_columns(events)
 
         return events
 

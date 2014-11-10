@@ -438,7 +438,8 @@
     <xsl:variable name="paragraph" select="../.." />
     <xsl:variable name="parashape_pos" select="number($paragraph/@parashape-id) + 1" />
     <xsl:variable name="parashape" select="//ParaShape[$parashape_pos]" />
-    <xsl:variable name="section" select="$paragraph/.." />
+    <xsl:variable name="columnset" select="$paragraph/.." />
+    <xsl:variable name="section" select="$columnset/.." />
     <xsl:variable name="pagedef" select="$section/PageDef" />
     <xsl:text>/*</xsl:text>
     <xsl:text> hrelto: </xsl:text>

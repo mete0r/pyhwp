@@ -165,44 +165,46 @@
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
-      <Paragraph chars="22" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="9" rangetags="0" split="03" style-id="0" text="00000016" unknown="0" unknown1="1">
-        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="0">
-          <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
-            <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
-          </ColumnsDef>
-          <Text charshape-id="1" lang="ko">첫 페이지</Text>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="17" charshapes="1" control="0" controlmask="00010000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="9" rangetags="0" split="00" style-id="0" text="80000011" unknown="1" unknown1="0">
-        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="1600">
-          <Header chid="head" flags="00000000" places="both_pages">
-            <HeaderParagraphList height="4252" linebreak="0" listflags="00000000" numberrefsbitmap="0" paragraphs="1" textdirection="0" textrefsbitmap="0" unknown1="0" valign="top" width="42520">
-              <Paragraph chars="27" charshapes="1" control="0" controlmask="00040000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="10" text="8000001B" unknown="1" unknown1="0">
-                <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="452" width="42520" x="0" y="0">
-                  <Text charshape-id="2" lang="en">Header </Text>
-                  <Text charshape-id="2" lang="ko">이것은 머리말입니다</Text>
-                  <AutoNumbering chid="atno" flags="00000000" footnoteshape="0" kind="page" number="1" prefix="" suffix="" superscript="0" usersymbol=""/>
-                  <Text charshape-id="2" lang="ko">.</Text>
-                  <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                </LineSeg>
-              </Paragraph>
-            </HeaderParagraphList>
-          </Header>
-          <Footer chid="foot" flags="00000002" places="odd_page">
-            <FooterParagraphList height="4252" linebreak="0" listflags="00000040" numberrefsbitmap="0" paragraphs="1" textdirection="0" textrefsbitmap="0" unknown1="0" valign="bottom" width="42520">
-              <Paragraph chars="19" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="11" rangetags="0" split="00" style-id="10" text="80000013" unknown="1" unknown1="0">
-                <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="452" width="42520" x="0" y="0">
-                  <Text charshape-id="2" lang="en">Footer </Text>
-                  <Text charshape-id="2" lang="ko">이것은 꼬리말입니다.</Text>
-                  <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                </LineSeg>
-              </Paragraph>
-            </FooterParagraphList>
-          </Footer>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
+      <ColumnSet>
+        <Paragraph chars="22" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="9" rangetags="0" split="03" style-id="0" text="00000016" unknown="0" unknown1="1">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="0">
+            <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
+              <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+            </ColumnsDef>
+            <Text charshape-id="1" lang="ko">첫 페이지</Text>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="17" charshapes="1" control="0" controlmask="00010000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="9" rangetags="0" split="00" style-id="0" text="80000011" unknown="1" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="1600">
+            <Header chid="head" flags="00000000" places="both_pages">
+              <HeaderParagraphList height="4252" linebreak="0" listflags="00000000" numberrefsbitmap="0" paragraphs="1" textdirection="0" textrefsbitmap="0" unknown1="0" valign="top" width="42520">
+                <Paragraph chars="27" charshapes="1" control="0" controlmask="00040000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="10" text="8000001B" unknown="1" unknown1="0">
+                  <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="452" width="42520" x="0" y="0">
+                    <Text charshape-id="2" lang="en">Header </Text>
+                    <Text charshape-id="2" lang="ko">이것은 머리말입니다</Text>
+                    <AutoNumbering chid="atno" flags="00000000" footnoteshape="0" kind="page" number="1" prefix="" suffix="" superscript="0" usersymbol=""/>
+                    <Text charshape-id="2" lang="ko">.</Text>
+                    <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                  </LineSeg>
+                </Paragraph>
+              </HeaderParagraphList>
+            </Header>
+            <Footer chid="foot" flags="00000002" places="odd_page">
+              <FooterParagraphList height="4252" linebreak="0" listflags="00000040" numberrefsbitmap="0" paragraphs="1" textdirection="0" textrefsbitmap="0" unknown1="0" valign="bottom" width="42520">
+                <Paragraph chars="19" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="11" rangetags="0" split="00" style-id="10" text="80000013" unknown="1" unknown1="0">
+                  <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="452" width="42520" x="0" y="0">
+                    <Text charshape-id="2" lang="en">Footer </Text>
+                    <Text charshape-id="2" lang="ko">이것은 꼬리말입니다.</Text>
+                    <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                  </LineSeg>
+                </Paragraph>
+              </FooterParagraphList>
+            </Footer>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+      </ColumnSet>
     </SectionDef>
   </BodyText>
 </HwpDoc>
