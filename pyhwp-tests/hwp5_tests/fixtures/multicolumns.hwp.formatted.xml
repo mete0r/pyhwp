@@ -165,7 +165,7 @@
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <Paragraph chars="17" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="11" rangetags="0" split="03" style-id="0" text="00000011" unknown="0" unknown1="1">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="0">
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="2268">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.12mm" width-flags="01"/>
           </ColumnsDef>
@@ -173,628 +173,628 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="1977" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="82" new-column="0" new-columnsdef="1" new-number="0" new-page="1" new-section="0" paragraph-id="1" parashape-id="11" rangetags="0" split="06" style-id="0" text="000007B9" unknown="0" unknown1="1">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="0">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="0">
           <ColumnsDef attr2="0" chid="cold" count="2" direction="l2r" flags="1008" kind="normal" same-widths="1" spacing="2268">
             <Border attribute-name="splitter" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
           </ColumnsDef>
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="32" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="1600">
+        <LineSeg bullet="0" chpos="32" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="1600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="56" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="3200">
+        <LineSeg bullet="0" chpos="56" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="3200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="80" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="4800">
+        <LineSeg bullet="0" chpos="80" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="4800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="104" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="6400">
+        <LineSeg bullet="0" chpos="104" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="6400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="128" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="8000">
+        <LineSeg bullet="0" chpos="128" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="8000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="152" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="9600">
+        <LineSeg bullet="0" chpos="152" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="9600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="176" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="11200">
+        <LineSeg bullet="0" chpos="176" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="11200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="200" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="12800">
+        <LineSeg bullet="0" chpos="200" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="12800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="224" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="14400">
+        <LineSeg bullet="0" chpos="224" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="14400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="248" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="16000">
+        <LineSeg bullet="0" chpos="248" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="16000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="272" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="17600">
+        <LineSeg bullet="0" chpos="272" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="17600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="296" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="19200">
+        <LineSeg bullet="0" chpos="296" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="19200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="320" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="20800">
+        <LineSeg bullet="0" chpos="320" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="20800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="344" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="22400">
+        <LineSeg bullet="0" chpos="344" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="22400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="368" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="24000">
+        <LineSeg bullet="0" chpos="368" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="24000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="392" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="25600">
+        <LineSeg bullet="0" chpos="392" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="25600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="416" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="27200">
+        <LineSeg bullet="0" chpos="416" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="27200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="440" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="28800">
+        <LineSeg bullet="0" chpos="440" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="28800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="464" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="30400">
+        <LineSeg bullet="0" chpos="464" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="30400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="488" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="32000">
+        <LineSeg bullet="0" chpos="488" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="32000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="512" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="33600">
+        <LineSeg bullet="0" chpos="512" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="33600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="536" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="35200">
+        <LineSeg bullet="0" chpos="536" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="35200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="560" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="36800">
+        <LineSeg bullet="0" chpos="560" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="36800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="584" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="38400">
+        <LineSeg bullet="0" chpos="584" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="38400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="608" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="40000">
+        <LineSeg bullet="0" chpos="608" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="40000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="632" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="41600">
+        <LineSeg bullet="0" chpos="632" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="41600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="656" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="43200">
+        <LineSeg bullet="0" chpos="656" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="43200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="680" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="44800">
+        <LineSeg bullet="0" chpos="680" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="44800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="704" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="46400">
+        <LineSeg bullet="0" chpos="704" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="46400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="728" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="48000">
+        <LineSeg bullet="0" chpos="728" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="48000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="752" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="49600">
+        <LineSeg bullet="0" chpos="752" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="49600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="776" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="51200">
+        <LineSeg bullet="0" chpos="776" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="51200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="800" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="52800">
+        <LineSeg bullet="0" chpos="800" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="52800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="824" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="54400">
+        <LineSeg bullet="0" chpos="824" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="54400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="848" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="56000">
+        <LineSeg bullet="0" chpos="848" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="56000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="872" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="57600">
+        <LineSeg bullet="0" chpos="872" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="57600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="896" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="59200">
+        <LineSeg bullet="0" chpos="896" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="59200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="920" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="60800">
+        <LineSeg bullet="0" chpos="920" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="60800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="944" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="62400">
+        <LineSeg bullet="0" chpos="944" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="62400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="968" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="64000">
+        <LineSeg bullet="0" chpos="968" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="64000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="992" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="0">
+        <LineSeg bullet="0" chpos="992" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="0">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1016" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="1600">
+        <LineSeg bullet="0" chpos="1016" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="1600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1040" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="3200">
+        <LineSeg bullet="0" chpos="1040" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="3200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1064" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="4800">
+        <LineSeg bullet="0" chpos="1064" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="4800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1088" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="6400">
+        <LineSeg bullet="0" chpos="1088" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="6400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1112" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="8000">
+        <LineSeg bullet="0" chpos="1112" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="8000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1136" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="9600">
+        <LineSeg bullet="0" chpos="1136" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="9600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1160" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="11200">
+        <LineSeg bullet="0" chpos="1160" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="11200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1184" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="12800">
+        <LineSeg bullet="0" chpos="1184" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="12800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1208" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="14400">
+        <LineSeg bullet="0" chpos="1208" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="14400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1232" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="16000">
+        <LineSeg bullet="0" chpos="1232" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="16000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1256" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="17600">
+        <LineSeg bullet="0" chpos="1256" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="17600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1280" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="19200">
+        <LineSeg bullet="0" chpos="1280" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="19200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1304" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="20800">
+        <LineSeg bullet="0" chpos="1304" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="20800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1328" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="22400">
+        <LineSeg bullet="0" chpos="1328" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="22400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1352" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="24000">
+        <LineSeg bullet="0" chpos="1352" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="24000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1376" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="25600">
+        <LineSeg bullet="0" chpos="1376" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="25600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1400" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="27200">
+        <LineSeg bullet="0" chpos="1400" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="27200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1424" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="28800">
+        <LineSeg bullet="0" chpos="1424" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="28800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1448" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="30400">
+        <LineSeg bullet="0" chpos="1448" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="30400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1472" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="32000">
+        <LineSeg bullet="0" chpos="1472" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="32000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1496" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="33600">
+        <LineSeg bullet="0" chpos="1496" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="33600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1520" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="35200">
+        <LineSeg bullet="0" chpos="1520" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="35200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1544" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="36800">
+        <LineSeg bullet="0" chpos="1544" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="36800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1568" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="38400">
+        <LineSeg bullet="0" chpos="1568" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="38400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1592" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="40000">
+        <LineSeg bullet="0" chpos="1592" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="40000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1616" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="41600">
+        <LineSeg bullet="0" chpos="1616" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="41600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1640" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="43200">
+        <LineSeg bullet="0" chpos="1640" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="43200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1664" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="44800">
+        <LineSeg bullet="0" chpos="1664" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="44800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1688" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="46400">
+        <LineSeg bullet="0" chpos="1688" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="46400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1712" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="48000">
+        <LineSeg bullet="0" chpos="1712" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="48000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1736" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="49600">
+        <LineSeg bullet="0" chpos="1736" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="49600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1760" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="51200">
+        <LineSeg bullet="0" chpos="1760" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="51200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1784" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="52800">
+        <LineSeg bullet="0" chpos="1784" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="52800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1808" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="54400">
+        <LineSeg bullet="0" chpos="1808" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="54400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1832" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="56000">
+        <LineSeg bullet="0" chpos="1832" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="56000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1856" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="57600">
+        <LineSeg bullet="0" chpos="1856" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="57600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1880" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="59200">
+        <LineSeg bullet="0" chpos="1880" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="59200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1904" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="60800">
+        <LineSeg bullet="0" chpos="1904" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="60800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1928" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="62400">
+        <LineSeg bullet="0" chpos="1928" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="62400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1952" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="20124" x="0" y="64000">
+        <LineSeg bullet="0" chpos="1952" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="20124" x="0" y="64000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 다단 다단 다단 </Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="1854" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="123" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="02" style-id="0" text="8000073E" unknown="1" unknown1="1">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="0">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="0">
           <ColumnsDef attr2="0" chid="cold" count="3" direction="l2r" flags="100C" kind="normal" same-widths="1" spacing="1134">
             <Border attribute-name="splitter" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
           </ColumnsDef>
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="23" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="1600">
+        <LineSeg bullet="0" chpos="23" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="1600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="38" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="3200">
+        <LineSeg bullet="0" chpos="38" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="3200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="53" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="4800">
+        <LineSeg bullet="0" chpos="53" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="4800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="68" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="6400">
+        <LineSeg bullet="0" chpos="68" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="6400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="83" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="8000">
+        <LineSeg bullet="0" chpos="83" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="8000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="98" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="9600">
+        <LineSeg bullet="0" chpos="98" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="9600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="113" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="11200">
+        <LineSeg bullet="0" chpos="113" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="11200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="128" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="12800">
+        <LineSeg bullet="0" chpos="128" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="12800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="143" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="14400">
+        <LineSeg bullet="0" chpos="143" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="14400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="158" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="16000">
+        <LineSeg bullet="0" chpos="158" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="16000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="173" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="17600">
+        <LineSeg bullet="0" chpos="173" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="17600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="188" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="19200">
+        <LineSeg bullet="0" chpos="188" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="19200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="203" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="20800">
+        <LineSeg bullet="0" chpos="203" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="20800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="218" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="22400">
+        <LineSeg bullet="0" chpos="218" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="22400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="233" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="24000">
+        <LineSeg bullet="0" chpos="233" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="24000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="248" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="25600">
+        <LineSeg bullet="0" chpos="248" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="25600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="263" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="27200">
+        <LineSeg bullet="0" chpos="263" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="27200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="278" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="28800">
+        <LineSeg bullet="0" chpos="278" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="28800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="293" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="30400">
+        <LineSeg bullet="0" chpos="293" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="30400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="308" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="32000">
+        <LineSeg bullet="0" chpos="308" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="32000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="323" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="33600">
+        <LineSeg bullet="0" chpos="323" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="33600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="338" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="35200">
+        <LineSeg bullet="0" chpos="338" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="35200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="353" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="36800">
+        <LineSeg bullet="0" chpos="353" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="36800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="368" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="38400">
+        <LineSeg bullet="0" chpos="368" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="38400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="383" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="40000">
+        <LineSeg bullet="0" chpos="383" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="40000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="398" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="41600">
+        <LineSeg bullet="0" chpos="398" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="41600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="413" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="43200">
+        <LineSeg bullet="0" chpos="413" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="43200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="428" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="44800">
+        <LineSeg bullet="0" chpos="428" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="44800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="443" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="46400">
+        <LineSeg bullet="0" chpos="443" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="46400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="458" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="48000">
+        <LineSeg bullet="0" chpos="458" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="48000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="473" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="49600">
+        <LineSeg bullet="0" chpos="473" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="49600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="488" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="51200">
+        <LineSeg bullet="0" chpos="488" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="51200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="503" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="52800">
+        <LineSeg bullet="0" chpos="503" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="52800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="518" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="54400">
+        <LineSeg bullet="0" chpos="518" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="54400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="533" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="56000">
+        <LineSeg bullet="0" chpos="533" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="56000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="548" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="57600">
+        <LineSeg bullet="0" chpos="548" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="57600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="563" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="59200">
+        <LineSeg bullet="0" chpos="563" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="59200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="578" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="60800">
+        <LineSeg bullet="0" chpos="578" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="60800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="593" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="62400">
+        <LineSeg bullet="0" chpos="593" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="62400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="608" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="64000">
+        <LineSeg bullet="0" chpos="608" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="64000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="623" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="0">
+        <LineSeg bullet="0" chpos="623" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="0">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="638" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="1600">
+        <LineSeg bullet="0" chpos="638" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="1600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="653" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="3200">
+        <LineSeg bullet="0" chpos="653" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="3200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="668" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="4800">
+        <LineSeg bullet="0" chpos="668" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="4800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="683" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="6400">
+        <LineSeg bullet="0" chpos="683" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="6400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="698" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="8000">
+        <LineSeg bullet="0" chpos="698" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="8000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="713" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="9600">
+        <LineSeg bullet="0" chpos="713" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="9600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="728" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="11200">
+        <LineSeg bullet="0" chpos="728" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="11200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="743" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="12800">
+        <LineSeg bullet="0" chpos="743" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="12800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="758" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="14400">
+        <LineSeg bullet="0" chpos="758" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="14400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="773" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="16000">
+        <LineSeg bullet="0" chpos="773" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="16000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="788" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="17600">
+        <LineSeg bullet="0" chpos="788" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="17600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="803" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="19200">
+        <LineSeg bullet="0" chpos="803" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="19200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="818" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="20800">
+        <LineSeg bullet="0" chpos="818" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="20800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="833" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="22400">
+        <LineSeg bullet="0" chpos="833" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="22400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="848" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="24000">
+        <LineSeg bullet="0" chpos="848" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="24000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="863" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="25600">
+        <LineSeg bullet="0" chpos="863" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="25600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="878" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="27200">
+        <LineSeg bullet="0" chpos="878" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="27200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="893" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="28800">
+        <LineSeg bullet="0" chpos="893" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="28800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="908" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="30400">
+        <LineSeg bullet="0" chpos="908" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="30400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="923" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="32000">
+        <LineSeg bullet="0" chpos="923" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="32000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="938" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="33600">
+        <LineSeg bullet="0" chpos="938" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="33600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="953" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="35200">
+        <LineSeg bullet="0" chpos="953" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="35200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="968" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="36800">
+        <LineSeg bullet="0" chpos="968" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="36800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="983" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="38400">
+        <LineSeg bullet="0" chpos="983" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="38400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="998" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="40000">
+        <LineSeg bullet="0" chpos="998" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="40000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1013" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="41600">
+        <LineSeg bullet="0" chpos="1013" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="41600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1028" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="43200">
+        <LineSeg bullet="0" chpos="1028" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="43200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1043" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="44800">
+        <LineSeg bullet="0" chpos="1043" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="44800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1058" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="46400">
+        <LineSeg bullet="0" chpos="1058" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="46400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1073" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="48000">
+        <LineSeg bullet="0" chpos="1073" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="48000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1088" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="49600">
+        <LineSeg bullet="0" chpos="1088" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="49600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1103" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="51200">
+        <LineSeg bullet="0" chpos="1103" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="51200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1118" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="52800">
+        <LineSeg bullet="0" chpos="1118" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="52800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1133" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="54400">
+        <LineSeg bullet="0" chpos="1133" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="54400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1148" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="56000">
+        <LineSeg bullet="0" chpos="1148" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="56000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1163" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="57600">
+        <LineSeg bullet="0" chpos="1163" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="57600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1178" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="59200">
+        <LineSeg bullet="0" chpos="1178" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="59200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1193" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="60800">
+        <LineSeg bullet="0" chpos="1193" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="60800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1208" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="62400">
+        <LineSeg bullet="0" chpos="1208" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="62400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1223" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="64000">
+        <LineSeg bullet="0" chpos="1223" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="64000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1238" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="0">
+        <LineSeg bullet="0" chpos="1238" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="0">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1253" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="1600">
+        <LineSeg bullet="0" chpos="1253" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="1600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1268" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="3200">
+        <LineSeg bullet="0" chpos="1268" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="3200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1283" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="4800">
+        <LineSeg bullet="0" chpos="1283" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="4800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1298" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="6400">
+        <LineSeg bullet="0" chpos="1298" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="6400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1313" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="8000">
+        <LineSeg bullet="0" chpos="1313" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="8000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1328" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="9600">
+        <LineSeg bullet="0" chpos="1328" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="9600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1343" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="11200">
+        <LineSeg bullet="0" chpos="1343" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="11200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1358" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="12800">
+        <LineSeg bullet="0" chpos="1358" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="12800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1373" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="14400">
+        <LineSeg bullet="0" chpos="1373" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="14400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1388" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="16000">
+        <LineSeg bullet="0" chpos="1388" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="16000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1403" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="17600">
+        <LineSeg bullet="0" chpos="1403" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="17600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1418" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="19200">
+        <LineSeg bullet="0" chpos="1418" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="19200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1433" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="20800">
+        <LineSeg bullet="0" chpos="1433" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="20800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1448" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="22400">
+        <LineSeg bullet="0" chpos="1448" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="22400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1463" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="24000">
+        <LineSeg bullet="0" chpos="1463" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="24000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1478" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="25600">
+        <LineSeg bullet="0" chpos="1478" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="25600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1493" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="27200">
+        <LineSeg bullet="0" chpos="1493" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="27200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1508" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="28800">
+        <LineSeg bullet="0" chpos="1508" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="28800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1523" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="30400">
+        <LineSeg bullet="0" chpos="1523" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="30400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1538" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="32000">
+        <LineSeg bullet="0" chpos="1538" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="32000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1553" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="33600">
+        <LineSeg bullet="0" chpos="1553" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="33600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1568" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="35200">
+        <LineSeg bullet="0" chpos="1568" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="35200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1583" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="36800">
+        <LineSeg bullet="0" chpos="1583" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="36800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1598" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="38400">
+        <LineSeg bullet="0" chpos="1598" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="38400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1613" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="40000">
+        <LineSeg bullet="0" chpos="1613" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="40000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1628" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="41600">
+        <LineSeg bullet="0" chpos="1628" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="41600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1643" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="43200">
+        <LineSeg bullet="0" chpos="1643" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="43200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1658" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="44800">
+        <LineSeg bullet="0" chpos="1658" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="44800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1673" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="46400">
+        <LineSeg bullet="0" chpos="1673" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="46400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1688" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="48000">
+        <LineSeg bullet="0" chpos="1688" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="48000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1703" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="49600">
+        <LineSeg bullet="0" chpos="1703" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="49600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1718" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="51200">
+        <LineSeg bullet="0" chpos="1718" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="51200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1733" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="52800">
+        <LineSeg bullet="0" chpos="1733" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="52800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1748" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="54400">
+        <LineSeg bullet="0" chpos="1748" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="54400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1763" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="56000">
+        <LineSeg bullet="0" chpos="1763" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="56000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1778" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="57600">
+        <LineSeg bullet="0" chpos="1778" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="57600">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1793" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="59200">
+        <LineSeg bullet="0" chpos="1793" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="59200">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1808" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="60800">
+        <LineSeg bullet="0" chpos="1808" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="60800">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1823" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="62400">
+        <LineSeg bullet="0" chpos="1823" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="62400">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
         </LineSeg>
-        <LineSeg a8="0" chpos="1838" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="13416" x="0" y="64000">
+        <LineSeg bullet="0" chpos="1838" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="13416" x="0" y="64000">
           <Text charshape-id="1" lang="ko">다단 다단 다단 다단 다단 </Text>
           <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>

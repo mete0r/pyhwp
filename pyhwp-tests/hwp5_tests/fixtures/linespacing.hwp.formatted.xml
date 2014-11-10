@@ -199,7 +199,7 @@
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <Paragraph chars="32" charshapes="1" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="13" rangetags="0" split="03" style-id="0" text="00000020" unknown="0" unknown1="1">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="0">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="0">
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
@@ -208,26 +208,26 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="1000">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="1000">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="15" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="18" rangetags="0" split="00" style-id="0" text="0000000F" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="500" width="42520" x="0" y="2000">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="500" width="42520" x="0" y="2000">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">글자에 따라 150%</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="3500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="3500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="19" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="500" width="42520" x="0" y="4500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="500" width="42520" x="0" y="4500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">고정 값 15</Text>
           <Text charshape-id="5" lang="en">pt</Text>
@@ -235,13 +235,13 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="6000">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="6000">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="14" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="20" rangetags="0" split="00" style-id="0" text="0000000E" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="500" width="42520" x="0" y="7000">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="500" width="42520" x="0" y="7000">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">여백만 지정 5</Text>
           <Text charshape-id="5" lang="en">pt</Text>
@@ -249,26 +249,26 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="7" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="8500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="8500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="15" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="8" parashape-id="12" rangetags="0" split="00" style-id="0" text="0000000F" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="9500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="9500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">글자에 따라 100%</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="9" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="10500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="10500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="10" parashape-id="13" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="11500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="11500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">고정 값 10</Text>
           <Text charshape-id="5" lang="en">pt</Text>
@@ -276,13 +276,13 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="11" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="12500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="12500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="14" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="12" parashape-id="14" rangetags="0" split="00" style-id="0" text="0000000E" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="13500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="13500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">여백만 지정 0</Text>
           <Text charshape-id="5" lang="en">pt</Text>
@@ -290,26 +290,26 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="13" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="14500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="14500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="15" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="14" parashape-id="16" rangetags="0" split="00" style-id="0" text="0000000F" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="1000" width="42520" x="0" y="15500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="1000" width="42520" x="0" y="15500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">글자에 따라 200%</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="15" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="17500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="17500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="13" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="16" parashape-id="15" rangetags="0" split="00" style-id="0" text="0000000D" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="1000" width="42520" x="0" y="18500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="1000" width="42520" x="0" y="18500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">고정 값 20</Text>
           <Text charshape-id="5" lang="en">pt</Text>
@@ -317,13 +317,13 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="17" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="20500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="20500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="15" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="18" parashape-id="17" rangetags="0" split="00" style-id="0" text="0000000F" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="1000" width="42520" x="0" y="21500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="1000" width="42520" x="0" y="21500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">여백만 지정 10</Text>
           <Text charshape-id="5" lang="en">pt</Text>
@@ -331,13 +331,13 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="19" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="23500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="23500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="15" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="20" parashape-id="12" rangetags="0" split="00" style-id="0" text="0000000F" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="0" width="42520" x="0" y="24500">
+        <LineSeg bullet="0" chpos="0" height="2000" height-baseline="1700" height-text="2000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="24500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">글자에 따라 </Text>
           <Text charshape-id="6" lang="ko">100%</Text>
@@ -345,13 +345,13 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="21" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="26500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="26500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="12" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="22" parashape-id="13" rangetags="0" split="00" style-id="0" text="0000000C" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1500" height2="1500" height85="1275" indented="0" space-below="-500" width="42520" x="0" y="27500">
+        <LineSeg bullet="0" chpos="0" height="1500" height-baseline="1275" height-text="1500" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="-500" width="42520" x="0" y="27500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">고정 값 </Text>
           <Text charshape-id="7" lang="en">0pt</Text>
@@ -359,13 +359,13 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="23" parashape-id="13" rangetags="0" split="00" style-id="0" text="00000010" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="28500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="28500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>
       </Paragraph>
       <Paragraph chars="14" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="24" parashape-id="14" rangetags="0" split="00" style-id="0" text="0000000E" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="0" width="42520" x="0" y="29500">
+        <LineSeg bullet="0" chpos="0" height="2000" height-baseline="1700" height-text="2000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="29500">
           <Text charshape-id="5" lang="en">|H </Text>
           <Text charshape-id="5" lang="ko">여백만 지정 </Text>
           <Text charshape-id="6" lang="en">0pt</Text>
@@ -373,7 +373,7 @@
         </LineSeg>
       </Paragraph>
       <Paragraph chars="16" charshapes="2" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="25" parashape-id="13" rangetags="0" split="00" style-id="0" text="80000010" unknown="1" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="0" width="42520" x="0" y="31500">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="0" width="42520" x="0" y="31500">
           <Text charshape-id="5" lang="en">|HHHHHHHHHHHHHH</Text>
           <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
         </LineSeg>

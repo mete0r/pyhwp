@@ -214,7 +214,7 @@
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <Paragraph chars="25" charshapes="1" control="1" controlmask="00000804" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="1" rangetags="0" split="03" style-id="0" text="80000019" unknown="1" unknown1="1">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="0">
+        <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="0">
           <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
             <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
           </ColumnsDef>
@@ -308,7 +308,7 @@
                   <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000040" line-end="flat" stroke="none" width="34"/>
                   <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="2802" padding-bottom="0" padding-left="0" padding-right="0" padding-top="0" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                     <Paragraph chars="2" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="12" rangetags="0" split="00" style-id="0" text="80000002" unknown="1" unknown1="0">
-                      <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="1200" width="2800" x="0" y="0">
+                      <LineSeg bullet="0" chpos="0" height="2000" height-baseline="1700" height-text="2000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="1200" width="2800" x="0" y="0">
                         <Text charshape-id="5" lang="ko">목</Text>
                         <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                       </LineSeg>
@@ -341,7 +341,7 @@
                   <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="normal" arrow-start="none" arrow-start-fill="1" arrow-start-size="normal" attribute-name="border" color="#000000" flags="D1000040" line-end="flat" stroke="none" width="34"/>
                   <TextboxParagraphList linebreak="0" listflags="00000020" maxwidth="2802" padding-bottom="0" padding-left="0" padding-right="0" padding-top="0" paragraphs="1" textdirection="0" unknown1="0" valign="middle">
                     <Paragraph chars="2" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="12" rangetags="0" split="00" style-id="0" text="80000002" unknown="1" unknown1="0">
-                      <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="1200" width="2800" x="0" y="0">
+                      <LineSeg bullet="0" chpos="0" height="2000" height-baseline="1700" height-text="2000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="1200" width="2800" x="0" y="0">
                         <Text charshape-id="5" lang="ko">차</Text>
                         <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
                       </LineSeg>
