@@ -48,7 +48,7 @@ def xslt(xsl_path, inp_path, out_path):
 
 class XSLT:
 
-    def __init__(self, xsl_path):
+    def __init__(self, xsl_path, **params):
         from javax.xml.transform import URIResolver
         from javax.xml.transform import TransformerFactory
         from javax.xml.transform.stream import StreamSource
@@ -78,6 +78,8 @@ class XSLT:
         xslt_factory.setURIResolver(uri_resolver)
 
         self.transformer = xslt_factory.newTransformer(xsl_source)
+        for k, v in params.items():
+            self.transformer.setParameter(k, unicode(v))
 
     def transform(self, input, output):
         '''
@@ -110,8 +112,8 @@ class XSLT:
         return dict()
 
 
-def xslt_compile(xsl_path):
-    xslt = XSLT(xsl_path)
+def xslt_compile(xsl_path, **params):
+    xslt = XSLT(xsl_path, **params)
     return xslt.transform_into_stream
 
 

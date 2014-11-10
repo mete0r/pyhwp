@@ -48,9 +48,9 @@ class BaseTransform:
                 return transform_xhwp5(xhwp5path, output)
         return transform_hwp5
 
-    def make_xsl_transform(self, resource_path):
+    def make_xsl_transform(self, resource_path, **params):
         with hwp5_resources_path(resource_path) as xsl_path:
-            return self.xslt_compile(xsl_path)
+            return self.xslt_compile(xsl_path, **params)
 
     @contextmanager
     def transformed_xhwp5_at_temp(self, hwp5file):
