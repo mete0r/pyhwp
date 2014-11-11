@@ -19,7 +19,7 @@ chardet==3.0.4            # via requests
 check-manifest==0.35
 click==6.7                # via pip-tools, sphinx-intl
 colorama==0.3.9           # via zest.releaser
-coloredlogs==7.3
+colorlog==4.0.2
 commonmark==0.7.4         # via sphinx-argparse
 configparser==3.5.0       # via entrypoints, flake8
 coverage==4.5.3
@@ -36,7 +36,6 @@ funcsigs==1.0.2           # via pytest
 functools32==3.2.3.post2  # via jsonschema
 future==0.16.0            # via commonmark
 html5lib==0.999999999     # via bleach
-humanfriendly==4.4.1      # via coloredlogs
 hypua2jamo==0.4.4
 idna==2.6                 # via requests
 imagesize==0.7.1          # via sphinx
@@ -56,7 +55,6 @@ lxml==3.8.0 ; platform_python_implementation != "Jython"
 markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via flake8
 mistune==0.7.4            # via nbconvert
-monotonic==1.5            # via humanfriendly
 more-itertools==5.0.0     # via pytest
 nbconvert==5.3.1          # via jupyter, notebook
 nbformat==4.4.0           # via ipywidgets, nbconvert, notebook
