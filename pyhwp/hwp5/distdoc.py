@@ -82,7 +82,7 @@ def decode_head_to_sha1(record_payload):
         n -= 1
 
     decoded = ''.join(chr(x) for x in data)
-    sha1offset = 4 + (data[0] & 0xf)
+    sha1offset = 4 + (seed & 0xf)
 
     ucs16le = decoded[sha1offset:sha1offset + 80]
     return ucs16le
