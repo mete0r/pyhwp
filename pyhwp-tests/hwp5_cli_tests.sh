@@ -85,6 +85,7 @@ hwp5proc records $SAMPLE DocInfo | grep '"seqno": 66,'
 hwp5proc records --simple $SAMPLE DocInfo --range=0-2 | grep '0001  HWPTAG_ID_MAPPINGS'
 hwp5proc records --simple $SAMPLE DocInfo --range=0-2 | wc -l | grep '^2$'
 hwp5proc records --raw $SAMPLE DocInfo --range=0-2 | hwp5proc records --simple | grep '0001  HWPTAG_ID_MAPPINGS'
+hwp5proc records --json $SAMPLE DocInfo --range=1
 
 echo '-------------------------'
 echo '* Testing hwp5proc models'
