@@ -22,7 +22,7 @@ from hwp5.dataio import UINT32
 from hwp5.dataio import UINT16
 from hwp5.dataio import BYTE
 from hwp5.dataio import Flags
-from hwp5.dataio import N_ARRAY
+# from hwp5.dataio import N_ARRAY
 from hwp5.binmodel._shared import Border
 from hwp5.binmodel._shared import FillColorPattern
 from hwp5.binmodel._shared import FillGradation
