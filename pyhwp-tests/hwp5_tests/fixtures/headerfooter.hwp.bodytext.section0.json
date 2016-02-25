@@ -5,15 +5,15 @@
     "controlmask": 4, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 1, 
+    "parashape_id": 9, 
     "rangetags": 0, 
     "split": 3, 
     "style_id": 0, 
-    "text": 17
+    "text": 22
   }, 
   "level": 0, 
   "payload": [
-    "11 00 00 00 04 00 00 00 01 00 00 03 01 00 00 00", 
+    "16 00 00 00 04 00 00 00 09 00 00 03 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 0, 
@@ -50,7 +50,14 @@
       [
         [
           16, 
-          17
+          21
+        ], 
+        "\uccab \ud398\uc774\uc9c0"
+      ], 
+      [
+        [
+          21, 
+          22
         ], 
         {
           "code": 13
@@ -62,10 +69,10 @@
   "payload": [
     "02 00 64 63 65 73 00 00 00 00 00 00 00 00 02 00", 
     "02 00 64 6c 6f 63 00 00 00 00 00 00 00 00 02 00", 
-    "0d 00"
+    "ab cc 20 00 98 d3 74 c7 c0 c9 0d 00"
   ], 
   "seqno": 1, 
-  "size": 34, 
+  "size": 44, 
   "tagid": 67, 
   "tagname": "HWPTAG_PARA_TEXT", 
   "type": "ParaText"
@@ -93,12 +100,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -316,7 +322,7 @@
     "controlmask": 65536, 
     "instance_id": 0, 
     "linesegs": 1, 
-    "parashape_id": 1, 
+    "parashape_id": 9, 
     "rangetags": 0, 
     "split": 0, 
     "style_id": 0, 
@@ -324,7 +330,7 @@
   }, 
   "level": 0, 
   "payload": [
-    "11 00 00 80 00 00 01 00 01 00 00 00 01 00 00 00", 
+    "11 00 00 80 00 00 01 00 09 00 00 00 01 00 00 00", 
     "01 00 00 00 00 00"
   ], 
   "seqno": 12, 
@@ -404,12 +410,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -566,12 +571,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 900, 
-        "height2": 900, 
-        "height85": 765, 
+        "height_baseline": 765, 
+        "height_text": 900, 
+        "lineseg_flags": 393216, 
         "space_below": 452, 
         "width": 42520, 
         "x": 0, 
@@ -728,12 +732,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 900, 
-        "height2": 900, 
-        "height85": 765, 
+        "height_baseline": 765, 
+        "height_text": 900, 
+        "lineseg_flags": 393216, 
         "space_below": 452, 
         "width": 42520, 
         "x": 0, 

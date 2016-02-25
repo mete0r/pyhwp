@@ -37,7 +37,8 @@ class XsltTestMixin(object):
 
         transform = self.xslt_compile(xsl_path)
         self.assertTrue(callable(transform))
-        transform(inp_path, out_path)
+        with file(out_path, 'w') as f:
+            transform(inp_path, f)
 
         from xml.etree import ElementTree as etree
         with file(out_path) as f:

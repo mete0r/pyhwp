@@ -1,13 +1,13 @@
 [
 {
   "content": {
-    "character_unit_loc_in_paragraph": 25, 
+    "character_unit_loc_in_paragraph": 4, 
     "endnote_startnum": 1, 
     "footnote_startnum": 1, 
     "list_id": 0, 
     "math_startnum": 1, 
     "page_startnum": 1, 
-    "paragraph_id": 4, 
+    "paragraph_id": 5, 
     "picture_startnum": 1, 
     "section_count": 1, 
     "table_startnum": 1
@@ -15,7 +15,7 @@
   "level": 0, 
   "payload": [
     "01 00 01 00 01 00 01 00 01 00 01 00 01 00 00 00", 
-    "00 00 04 00 00 00 19 00 00 00"
+    "00 00 05 00 00 00 04 00 00 00"
   ], 
   "seqno": 0, 
   "size": 26, 
@@ -28,7 +28,7 @@
     "bindata": 0, 
     "borderfills": 1, 
     "bullets": 0, 
-    "charshapes": 17, 
+    "charshapes": 19, 
     "cn_fonts": 2, 
     "en_fonts": 3, 
     "jp_fonts": 2, 
@@ -46,7 +46,7 @@
   "payload": [
     "00 00 00 00 03 00 00 00 03 00 00 00 02 00 00 00", 
     "02 00 00 00 03 00 00 00 02 00 00 00 02 00 00 00", 
-    "01 00 00 00 11 00 00 00 03 00 00 00 01 00 00 00", 
+    "01 00 00 00 13 00 00 00 03 00 00 00 01 00 00 00", 
     "00 00 00 00 0c 00 00 00 0e 00 00 00 00 00 00 00"
   ], 
   "seqno": 1, 
@@ -569,7 +569,7 @@
     }, 
     "fill_colorpattern": {
       "background_color": -1, 
-      "pattern_color": 0, 
+      "pattern_color": -16777216, 
       "pattern_type_flags": 4294967295
     }, 
     "fillflags": 1, 
@@ -583,7 +583,6 @@
       "stroke_flags": 0, 
       "width_flags": 0
     }, 
-    "shape": 0, 
     "top": {
       "color": 0, 
       "stroke_flags": 0, 
@@ -594,14 +593,17 @@
   "payload": [
     "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", 
     "00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00", 
-    "01 00 00 00 ff ff ff ff 00 00 00 00 ff ff ff ff", 
+    "01 00 00 00 ff ff ff ff 00 00 00 ff ff ff ff ff", 
     "00 00 00 00"
   ], 
   "seqno": 19, 
   "size": 52, 
   "tagid": 20, 
   "tagname": "HWPTAG_BORDER_FILL", 
-  "type": "BorderFill"
+  "type": "BorderFill", 
+  "unparsed": [
+    "00 00 00 00"
+  ]
 },
 {
   "content": {
@@ -1829,6 +1831,150 @@
 },
 {
   "content": {
+    "basesize": 1000, 
+    "charshapeflags": 4, 
+    "font_face": {
+      "cn": 1, 
+      "en": 1, 
+      "jp": 1, 
+      "ko": 2, 
+      "other": 2, 
+      "symbol": 1, 
+      "user": 1
+    }, 
+    "letter_spacing": {
+      "cn": 0, 
+      "en": 0, 
+      "jp": 0, 
+      "ko": 0, 
+      "other": 0, 
+      "symbol": 0, 
+      "user": 0
+    }, 
+    "letter_width_expansion": {
+      "cn": 100, 
+      "en": 100, 
+      "jp": 100, 
+      "ko": 100, 
+      "other": 100, 
+      "symbol": 100, 
+      "user": 100
+    }, 
+    "position": {
+      "cn": 0, 
+      "en": 0, 
+      "jp": 0, 
+      "ko": 0, 
+      "other": 0, 
+      "symbol": 0, 
+      "user": 0
+    }, 
+    "relative_size": {
+      "cn": 100, 
+      "en": 100, 
+      "jp": 100, 
+      "ko": 100, 
+      "other": 100, 
+      "symbol": 100, 
+      "user": 100
+    }, 
+    "shade_color": -1, 
+    "shadow_color": 11711154, 
+    "shadow_space": {
+      "x": 10, 
+      "y": 10
+    }, 
+    "text_color": 0, 
+    "underline_color": 255
+  }, 
+  "level": 1, 
+  "payload": [
+    "02 00 01 00 01 00 01 00 02 00 01 00 01 00 64 64", 
+    "64 64 64 64 64 00 00 00 00 00 00 00 64 64 64 64", 
+    "64 64 64 00 00 00 00 00 00 00 e8 03 00 00 04 00", 
+    "00 00 0a 0a 00 00 00 00 ff 00 00 00 ff ff ff ff", 
+    "b2 b2 b2 00"
+  ], 
+  "seqno": 37, 
+  "size": 68, 
+  "tagid": 21, 
+  "tagname": "HWPTAG_CHAR_SHAPE", 
+  "type": "CharShape"
+},
+{
+  "content": {
+    "basesize": 1000, 
+    "charshapeflags": 36, 
+    "font_face": {
+      "cn": 1, 
+      "en": 1, 
+      "jp": 1, 
+      "ko": 2, 
+      "other": 2, 
+      "symbol": 1, 
+      "user": 1
+    }, 
+    "letter_spacing": {
+      "cn": 0, 
+      "en": 0, 
+      "jp": 0, 
+      "ko": 0, 
+      "other": 0, 
+      "symbol": 0, 
+      "user": 0
+    }, 
+    "letter_width_expansion": {
+      "cn": 100, 
+      "en": 100, 
+      "jp": 100, 
+      "ko": 100, 
+      "other": 100, 
+      "symbol": 100, 
+      "user": 100
+    }, 
+    "position": {
+      "cn": 0, 
+      "en": 0, 
+      "jp": 0, 
+      "ko": 0, 
+      "other": 0, 
+      "symbol": 0, 
+      "user": 0
+    }, 
+    "relative_size": {
+      "cn": 100, 
+      "en": 100, 
+      "jp": 100, 
+      "ko": 100, 
+      "other": 100, 
+      "symbol": 100, 
+      "user": 100
+    }, 
+    "shade_color": -1, 
+    "shadow_color": 11711154, 
+    "shadow_space": {
+      "x": 10, 
+      "y": 10
+    }, 
+    "text_color": 0, 
+    "underline_color": 0
+  }, 
+  "level": 1, 
+  "payload": [
+    "02 00 01 00 01 00 01 00 02 00 01 00 01 00 64 64", 
+    "64 64 64 64 64 00 00 00 00 00 00 00 64 64 64 64", 
+    "64 64 64 00 00 00 00 00 00 00 e8 03 00 00 24 00", 
+    "00 00 0a 0a 00 00 00 00 00 00 00 00 ff ff ff ff", 
+    "b2 b2 b2 00"
+  ], 
+  "seqno": 38, 
+  "size": 68, 
+  "tagid": 21, 
+  "tagname": "HWPTAG_CHAR_SHAPE", 
+  "type": "CharShape"
+},
+{
+  "content": {
     "flags": 0, 
     "tabs": []
   }, 
@@ -1836,7 +1982,7 @@
   "payload": [
     "00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 37, 
+  "seqno": 39, 
   "size": 8, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
@@ -1851,7 +1997,7 @@
   "payload": [
     "01 00 00 00 00 00 00 00"
   ], 
-  "seqno": 38, 
+  "seqno": 40, 
   "size": 8, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
@@ -1866,7 +2012,7 @@
   "payload": [
     "02 00 00 00 00 00 00 00"
   ], 
-  "seqno": 39, 
+  "seqno": 41, 
   "size": 8, 
   "tagid": 22, 
   "tagname": "HWPTAG_TAB_DEF", 
@@ -1877,51 +2023,51 @@
     "levels": [
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^1.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^2.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^3)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^4)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "(^5)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "(^6)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 44, 
         "numbering_format": "^7", 
+        "space": 50, 
         "width_correction": 0
       }
     ], 
@@ -1939,41 +2085,11 @@
     "ff ff 04 00 28 00 5e 00 36 00 29 00 2c 00 00 00", 
     "00 00 32 00 ff ff ff ff 02 00 5e 00 37 00 00 00"
   ], 
-  "seqno": 40, 
+  "seqno": 42, 
   "size": 144, 
   "tagid": 23, 
   "tagname": "HWPTAG_NUMBERING", 
   "type": "Numbering"
-},
-{
-  "content": {
-    "border_bottom": 0, 
-    "border_left": 0, 
-    "border_right": 0, 
-    "border_top": 0, 
-    "borderfill_id": 1, 
-    "doubled_margin_bottom": 0, 
-    "doubled_margin_left": 0, 
-    "doubled_margin_right": 0, 
-    "doubled_margin_top": 0, 
-    "flags2": 0, 
-    "indent": -2620, 
-    "linespacing": 130, 
-    "numbering_bullet_id": 0, 
-    "parashapeflags": 128, 
-    "tabdef_id": 1
-  }, 
-  "level": 1, 
-  "payload": [
-    "80 00 00 00 00 00 00 00 00 00 00 00 c4 f5 ff ff", 
-    "00 00 00 00 00 00 00 00 82 00 00 00 01 00 00 00", 
-    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
-  ], 
-  "seqno": 41, 
-  "size": 46, 
-  "tagid": 25, 
-  "tagname": "HWPTAG_PARA_SHAPE", 
-  "type": "ParaShape"
 },
 {
   "content": {
@@ -1999,7 +2115,37 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 42, 
+  "seqno": 43, 
+  "size": 46, 
+  "tagid": 25, 
+  "tagname": "HWPTAG_PARA_SHAPE", 
+  "type": "ParaShape"
+},
+{
+  "content": {
+    "border_bottom": 0, 
+    "border_left": 0, 
+    "border_right": 0, 
+    "border_top": 0, 
+    "borderfill_id": 1, 
+    "doubled_margin_bottom": 0, 
+    "doubled_margin_left": 0, 
+    "doubled_margin_right": 0, 
+    "doubled_margin_top": 0, 
+    "flags2": 0, 
+    "indent": -2620, 
+    "linespacing": 130, 
+    "numbering_bullet_id": 0, 
+    "parashapeflags": 128, 
+    "tabdef_id": 1
+  }, 
+  "level": 1, 
+  "payload": [
+    "80 00 00 00 00 00 00 00 00 00 00 00 c4 f5 ff ff", 
+    "00 00 00 00 00 00 00 00 82 00 00 00 01 00 00 00", 
+    "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  ], 
+  "seqno": 44, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2029,7 +2175,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 43, 
+  "seqno": 45, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2059,7 +2205,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 44, 
+  "seqno": 46, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2089,7 +2235,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 45, 
+  "seqno": 47, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2119,7 +2265,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 46, 
+  "seqno": 48, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2149,7 +2295,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 47, 
+  "seqno": 49, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2179,7 +2325,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 48, 
+  "seqno": 50, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2209,7 +2355,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 49, 
+  "seqno": 51, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2239,7 +2385,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 50, 
+  "seqno": 52, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2269,7 +2415,7 @@
     "00 00 00 00 00 00 00 00 a0 00 00 00 00 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 51, 
+  "seqno": 53, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2299,7 +2445,7 @@
     "00 00 00 00 00 00 00 00 96 00 00 00 02 00 00 00", 
     "01 00 00 00 00 00 00 00 00 00 00 00 00 00"
   ], 
-  "seqno": 52, 
+  "seqno": 54, 
   "size": 46, 
   "tagid": 25, 
   "tagname": "HWPTAG_PARA_SHAPE", 
@@ -2321,7 +2467,7 @@
     "03 00 14 bc d5 d0 00 ae 06 00 4e 00 6f 00 72 00", 
     "6d 00 61 00 6c 00 00 00 12 04 02 00 01 00 00 00"
   ], 
-  "seqno": 53, 
+  "seqno": 55, 
   "size": 32, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2343,7 +2489,7 @@
     "02 00 f8 bc 38 bb 04 00 42 00 6f 00 64 00 79 00", 
     "00 01 12 04 03 00 01 00 00 00"
   ], 
-  "seqno": 54, 
+  "seqno": 56, 
   "size": 26, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2366,7 +2512,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 31 00 00 02", 
     "12 04 04 00 01 00 00 00"
   ], 
-  "seqno": 55, 
+  "seqno": 57, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2389,7 +2535,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 32 00 00 03", 
     "12 04 05 00 01 00 00 00"
   ], 
-  "seqno": 56, 
+  "seqno": 58, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2412,7 +2558,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 33 00 00 04", 
     "12 04 06 00 01 00 00 00"
   ], 
-  "seqno": 57, 
+  "seqno": 59, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2435,7 +2581,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 34 00 00 05", 
     "12 04 07 00 01 00 00 00"
   ], 
-  "seqno": 58, 
+  "seqno": 60, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2458,7 +2604,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 35 00 00 06", 
     "12 04 08 00 01 00 00 00"
   ], 
-  "seqno": 59, 
+  "seqno": 61, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2481,7 +2627,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 36 00 00 07", 
     "12 04 09 00 01 00 00 00"
   ], 
-  "seqno": 60, 
+  "seqno": 62, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2504,7 +2650,7 @@
     "74 00 6c 00 69 00 6e 00 65 00 20 00 37 00 00 08", 
     "12 04 0a 00 01 00 00 00"
   ], 
-  "seqno": 61, 
+  "seqno": 63, 
   "size": 40, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2527,7 +2673,7 @@
     "67 00 65 00 20 00 4e 00 75 00 6d 00 62 00 65 00", 
     "72 00 00 09 12 04 02 00 00 00 00 00"
   ], 
-  "seqno": 62, 
+  "seqno": 64, 
   "size": 44, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2549,7 +2695,7 @@
     "03 00 38 ba ac b9 d0 b9 06 00 48 00 65 00 61 00", 
     "64 00 65 00 72 00 00 0a 12 04 0b 00 02 00 00 00"
   ], 
-  "seqno": 63, 
+  "seqno": 65, 
   "size": 32, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2563,16 +2709,16 @@
     "local_name": "\uac01\uc8fc", 
     "name": "Footnote", 
     "next_style_id": 11, 
-    "parashape_id": 0, 
+    "parashape_id": 1, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "02 00 01 ac fc c8 08 00 46 00 6f 00 6f 00 74 00", 
-    "6e 00 6f 00 74 00 65 00 00 0b 12 04 00 00 03 00", 
+    "6e 00 6f 00 74 00 65 00 00 0b 12 04 01 00 03 00", 
     "00 00"
   ], 
-  "seqno": 64, 
+  "seqno": 66, 
   "size": 34, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2586,15 +2732,15 @@
     "local_name": "\ubbf8\uc8fc", 
     "name": "Endnote", 
     "next_style_id": 12, 
-    "parashape_id": 0, 
+    "parashape_id": 1, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "02 00 f8 bb fc c8 07 00 45 00 6e 00 64 00 6e 00", 
-    "6f 00 74 00 65 00 00 0c 12 04 00 00 03 00 00 00"
+    "6f 00 74 00 65 00 00 0c 12 04 01 00 03 00 00 00"
   ], 
-  "seqno": 65, 
+  "seqno": 67, 
   "size": 32, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 
@@ -2608,15 +2754,15 @@
     "local_name": "\uba54\ubaa8", 
     "name": "Memo", 
     "next_style_id": 13, 
-    "parashape_id": 1, 
+    "parashape_id": 0, 
     "unknown": 0
   }, 
   "level": 1, 
   "payload": [
     "02 00 54 ba a8 ba 04 00 4d 00 65 00 6d 00 6f 00", 
-    "00 0d 12 04 01 00 04 00 00 00"
+    "00 0d 12 04 00 00 04 00 00 00"
   ], 
-  "seqno": 66, 
+  "seqno": 68, 
   "size": 26, 
   "tagid": 26, 
   "tagname": "HWPTAG_STYLE", 

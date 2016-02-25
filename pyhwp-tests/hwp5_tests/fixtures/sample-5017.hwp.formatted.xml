@@ -67,14 +67,14 @@
       <FaceName alternate="0" default="1" default-font="Batang" flags="61" font-file-type="ttf" metric="1" name="바탕">
         <Panose1 arm-style="1" attribute-name="panose1" contrast="0" family-type="2" letterform="1" midline="1" proportion="0" serif-style="3" stroke-variation="1" weight="6" x-height="1"/>
       </FaceName>
-      <BorderFill backslash="0" borderflags="0000" colorpattern="0" effect-3d="0" effect-shadow="0" fillflags="00000000" gradation="0" image="0" shape="0" slash="0">
+      <BorderFill backslash="0" borderflags="0000" colorpattern="0" effect-3d="0" effect-shadow="0" fillflags="00000000" gradation="0" image="0" slash="0">
         <Border attribute-name="left" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="right" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="top" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="bottom" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
       </BorderFill>
-      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" shape="0" slash="0">
+      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" slash="0">
         <Border attribute-name="left" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
         <Border attribute-name="right" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
         <Border attribute-name="top" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
@@ -82,21 +82,21 @@
         <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
         <FillColorPattern attribute-name="fill_colorpattern" background-color="#ffffff" pattern-color="#000000" pattern-type="none" pattern-type-flags="FFFFFFFF"/>
       </BorderFill>
-      <BorderFill backslash="0" borderflags="0000" colorpattern="0" effect-3d="0" effect-shadow="0" fillflags="00000000" gradation="0" image="0" shape="0" slash="0">
+      <BorderFill backslash="0" borderflags="0000" colorpattern="0" effect-3d="0" effect-shadow="0" fillflags="00000000" gradation="0" image="0" slash="0">
         <Border attribute-name="left" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="right" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="top" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="bottom" color="#000000" stroke-flags="01" stroke-type="solid" width="0.4mm" width-flags="06"/>
         <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
       </BorderFill>
-      <BorderFill backslash="0" borderflags="0000" colorpattern="0" effect-3d="0" effect-shadow="0" fillflags="00000000" gradation="0" image="0" shape="0" slash="0">
+      <BorderFill backslash="0" borderflags="0000" colorpattern="0" effect-3d="0" effect-shadow="0" fillflags="00000000" gradation="0" image="0" slash="0">
         <Border attribute-name="left" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="right" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="top" color="#0000ff" stroke-flags="02" stroke-type="dashed" width="0.12mm" width-flags="01"/>
         <Border attribute-name="bottom" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
       </BorderFill>
-      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" shape="0" slash="0">
+      <BorderFill backslash="0" borderflags="0000" colorpattern="1" effect-3d="0" effect-shadow="0" fillflags="00000001" gradation="0" image="0" slash="0">
         <Border attribute-name="left" color="#000000" stroke-flags="01" stroke-type="solid" width="0.4mm" width-flags="06"/>
         <Border attribute-name="right" color="#000000" stroke-flags="01" stroke-type="solid" width="0.4mm" width-flags="06"/>
         <Border attribute-name="top" color="#000000" stroke-flags="01" stroke-type="solid" width="0.4mm" width-flags="06"/>
@@ -110,11 +110,13 @@
         <Border attribute-name="top" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="bottom" color="#000000" stroke-flags="01" stroke-type="solid" width="0.12mm" width-flags="01"/>
         <Border attribute-name="diagonal" color="#000000" stroke-flags="01" stroke-type="solid" width="0.1mm" width-flags="00"/>
-        <FillGradation attribute-name="fill_gradation" blur="50" colors="[4144959, 8355711]" shear="0" type="2">
+        <FillGradation attribute-name="fill_gradation" blur="50" gradation-type="circular" shear="0" type="02">
           <Coord32 attribute-name="center" x="100" y="0"/>
+          <colors alpha="0" b="63" g="63" hex="#3f3f3f" r="63"/>
+          <colors alpha="0" b="127" g="127" hex="#7f7f7f" r="127"/>
         </FillGradation>
       </BorderFill>
-      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -122,7 +124,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -130,7 +132,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -138,7 +140,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="95" en="95" jp="95" ko="95" other="95" symbol="95" user="95"/>
         <LetterSpacing attribute-name="letter_spacing" cn="-5" en="-5" jp="-5" ko="-5" other="-5" symbol="-5" user="-5"/>
@@ -146,7 +148,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="900" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="95" en="95" jp="95" ko="95" other="95" symbol="95" user="95"/>
         <LetterSpacing attribute-name="letter_spacing" cn="-5" en="-5" jp="-5" ko="-5" other="-5" symbol="-5" user="-5"/>
@@ -154,7 +156,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="1000" bold="1" charshapeflags="00000002" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="1000" bold="1" charshapeflags="00000002" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -162,7 +164,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="1000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="200" en="200" jp="200" ko="200" other="200" symbol="200" user="200"/>
         <LetterSpacing attribute-name="letter_spacing" cn="50" en="50" jp="50" ko="50" other="50" symbol="50" user="50"/>
@@ -170,7 +172,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="2000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="2000" bold="0" charshapeflags="00000000" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -178,7 +180,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="2000" bold="1" charshapeflags="00000002" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="2000" bold="1" charshapeflags="00000002" italic="0" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -186,7 +188,7 @@
         <Position attribute-name="position" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
         <ShadowSpace attribute-name="shadow_space" x="10" y="10"/>
       </CharShape>
-      <CharShape basesize="2000" bold="0" charshapeflags="00000001" italic="1" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="0">
+      <CharShape basesize="2000" bold="0" charshapeflags="00000001" italic="1" outline="0" shade-color="#ffffff" shadow="0" shadow-color="#b2b2b2" text-color="#000000" underline="none" underline-color="#000000" underline-style="solid">
         <FontFace attribute-name="font_face" cn="1" en="1" jp="1" ko="1" other="1" symbol="1" user="1"/>
         <LetterWidthExpansion attribute-name="letter_width_expansion" cn="100" en="100" jp="100" ko="100" other="100" symbol="100" user="100"/>
         <LetterSpacing attribute-name="letter_spacing" cn="0" en="0" jp="0" ko="0" other="0" symbol="0" user="0"/>
@@ -205,13 +207,13 @@
       </TabDef>
       <Numbering starting-number="0">
         <Array name="levels">
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^1." paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="^2." paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="^3)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="^4)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000000C" numbering-format="(^5)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000010C" numbering-format="(^6)" paragraph-align="left" width-correction="0"/>
-          <NumberingLevel auto-dedent="1" auto-width="1" charshape-id="-1" distance-to-body="50" distance-to-body-type="ratio" flags="0000002C" numbering-format="^7" paragraph-align="left" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000000C" numbering-format="^1." space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000010C" numbering-format="^2." space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000000C" numbering-format="^3)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000010C" numbering-format="^4)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000000C" numbering-format="(^5)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000010C" numbering-format="(^6)" space="50" space-type="ratio" width-correction="0"/>
+          <NumberingLevel align="left" auto-indent="1" auto-width="1" charshape-id="-1" flags="0000002C" numbering-format="^7" space="50" space-type="ratio" width-correction="0"/>
         </Array>
       </Numbering>
       <ParaShape align="both" autospace-alphabet="0" autospace-number="0" border-bottom="0" border-left="0" border-right="0" border-top="0" borderfill-id="2" doubled-margin-bottom="0" doubled-margin-left="0" doubled-margin-right="0" doubled-margin-top="0" flags2="00000000" head-shape="none" ignore-margin="0" in-single-line="0" indent="0" level="0" linebreak-alphabet="word" linebreak-hangul="char" lineheight-along-fontsize="0" linespacing="160" linespacing-type="ratio" linked-border="0" minimum-space="0" numbering-bullet-id="0" parashapeflags="00000180" protect="0" protect-single-line="0" reserved="0" start-new-page="0" tabdef-id="0" tail-shape="0" use-paper-grid="1" valign="font" with-next-paragraph="0"/>
@@ -253,277 +255,269 @@
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
       <PageBorderFill borderfill-id="0" fill="paper" flags="00000001" include-footer="0" include-header="0" margin-bottom="1417" margin-left="1417" margin-right="1417" margin-top="1417" relative-to="paper"/>
-      <Paragraph chars="34" charshapes="5" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="0" rangetags="0" split="03" style-id="0" text="00000022" unknown="0" unknown1="1">
-        <LineSeg a8="0" chpos="0" flags="0006" height="2000" height2="2000" height85="1700" indented="0" space-below="1200" width="42520" x="0" y="0">
-          <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
-            <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
-          </ColumnsDef>
-          <Text charshape-id="7">한글 </Text>
-          <Text charshape-id="8">2005</Text>
-          <Text charshape-id="7"> </Text>
-          <Text charshape-id="9">예제</Text>
-          <Text charshape-id="7"> 파일입니다.</Text>
-          <ControlChar char="&#13;" charshape-id="7" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000001" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="3200">
-          <Text charshape-id="1"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="10" text="00000007" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="900" height2="900" height85="765" indented="0" space-below="452" width="42520" x="0" y="4800">
-          <Text charshape-id="2">머리말입니다</Text>
-          <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000001" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="6152">
-          <Text charshape-id="1"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="112" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="3" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000070" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="7752">
-          <Text charshape-id="1">본문 </Text>
-          <Text charshape-id="5">내용</Text>
-          <Text charshape-id="1">입니다. 본 문서는 ᄒᆞᆫ글 워드 프로세서의 파일 저장 형식 중, ᄒᆞᆫ글 2002</Text>
-        </LineSeg>
-        <LineSeg a8="0" chpos="51" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="9352">
-          <Text charshape-id="1"> 이후 제품에서 사용되는 ᄒᆞᆫ글 문서 파일 형식 5.0 및 ᄒᆞᆫ글 97 문서 파일 형식, </Text>
-        </LineSeg>
-        <LineSeg a8="0" chpos="103" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="10952">
-          <Text charshape-id="1">HWPML에 관하여 설명한다.</Text>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="20" charshapes="2" control="1" controlmask="00000800" instance-id="0" linesegs="4" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000014" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="4730" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="13552">
-          <Text charshape-id="1">표</Text>
-        </LineSeg>
-        <LineSeg a8="0" chpos="1" flags="0006" height="4730" height2="4730" height85="4021" indented="0" space-below="600" width="41020" x="1500" y="15152">
-          <TableControl affect-line-spacing="0" chid="tbl " description="" flags="082A2311" flow="block" halign="left" height="4164" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1453501933" margin-bottom="283" margin-left="283" margin-right="283" margin-top="283" number-category="table" overlap-others="0" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" table-id="0" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="40454" width-relto="absolute" x="0" y="0" z-order="0">
-            <TableBody borderfill-id="4" cellspacing="0" cols="2" flags="04000006" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" repeat-header="1" rowcols="()" rows="2" split-page="split">
-              <Array name="validZones"/>
-              <TableRow>
-                <TableCell borderfill-id="1" col="0" colspan="1" height="282" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
-                  <Paragraph chars="3" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000003" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1">A0</Text>
-                      <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-                <TableCell borderfill-id="3" col="1" colspan="1" height="282" linebreak="1" listflags="00000028" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
-                  <Paragraph chars="3" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="7" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000003" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1">B0</Text>
-                      <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell borderfill-id="6" col="0" colspan="1" height="282" linebreak="0" listflags="05000040" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="bottom" width="20227">
-                  <Paragraph chars="3" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="8" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000003" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1">A1</Text>
-                      <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-                <TableCell borderfill-id="5" col="1" colspan="1" height="282" linebreak="0" listflags="00000000" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="2" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="top" width="20227">
-                  <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="9" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000004" unknown="0" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1">B10</Text>
-                      <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                    </LineSeg>
-                  </Paragraph>
-                  <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="10" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000004" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="1600">
-                      <Text charshape-id="1">B11</Text>
-                      <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </TableControl>
-        </LineSeg>
-        <LineSeg a8="0" chpos="9" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="20482">
-          <Text charshape-id="1">표</Text>
-          <Text charshape-id="5">끝</Text>
-        </LineSeg>
-        <LineSeg a8="0" chpos="11" flags="0006" height="4678" height2="4678" height85="3976" indented="0" space-below="600" width="41020" x="1500" y="22082">
-          <TableControl affect-line-spacing="0" chid="tbl " description="" flags="082A2311" flow="block" halign="left" height="4112" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1455447557" margin-bottom="283" margin-left="283" margin-right="283" margin-top="283" number-category="table" overlap-others="0" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" table-id="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="40539" width-relto="absolute" x="0" y="0" z-order="1">
-            <TableBody borderfill-id="1" cellspacing="0" cols="1" flags="04000006" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" repeat-header="1" rowcols="()" rows="1" split-page="split">
-              <Array name="validZones"/>
-              <TableRow>
-                <TableCell borderfill-id="1" col="0" colspan="1" height="4112" linebreak="0" listflags="01000021" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="1" unknown-width="40539" unknown1="0" valign="middle" width="40539">
-                  <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="11" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000007" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="500" indented="0" space-below="600" width="3828" x="0" y="0">
-                      <Text charshape-id="1">table2</Text>
-                      <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </TableControl>
-          <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="9" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="12" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000009" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="0" x="1500" y="28360">
-          <TableControl affect-line-spacing="0" chid="tbl " description="" flags="282A2310" flow="block" halign="left" height="2564" height-relto="absolute" hrelto="paragraph" inline="0" instance-id="1455447562" margin-bottom="1134" margin-left="283" margin-right="850" margin-top="567" number-category="table" overlap-others="0" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" table-id="2" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="40454" width-relto="absolute" x="0" y="0" z-order="3">
-            <TableCaption flags="00000003" include-margin="0" linebreak="0" listflags="00000000" maxsize="40454" paragraphs="2" position="bottom" separation="850" textdirection="0" unknown1="0" valign="top" width="8504">
-              <Paragraph chars="18" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="13" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000012" unknown="0" unknown1="0">
-                <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="40452" x="0" y="0">
-                  <Text charshape-id="1">표 </Text>
-                  <AutoNumbering chid="atno" flags="00000004" footnoteshape="0" kind="table" number="3" prefix="" suffix="" superscript="0" usersymbol=""/>
-                  <Text charshape-id="1"> 2x2짜리표</Text>
-                  <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                </LineSeg>
-              </Paragraph>
-              <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="14" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000004" unknown="1" unknown1="0">
-                <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="40452" x="0" y="1600">
-                  <Text charshape-id="1">가나다</Text>
-                  <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-                </LineSeg>
-              </Paragraph>
-            </TableCaption>
-            <TableBody borderfill-id="1" cellspacing="0" cols="2" flags="04000006" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" repeat-header="1" rowcols="()" rows="2" split-page="split">
-              <Array name="validZones"/>
-              <TableRow>
-                <TableCell borderfill-id="1" col="0" colspan="1" height="282" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
-                  <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="15" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-                <TableCell borderfill-id="1" col="1" colspan="1" height="282" linebreak="0" listflags="04000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
-                  <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="16" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell borderfill-id="1" col="0" colspan="1" height="282" linebreak="0" listflags="01000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
-                  <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="17" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-                <TableCell borderfill-id="1" col="1" colspan="1" height="282" linebreak="0" listflags="04000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
-                  <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="18" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
-                    <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="19944" x="0" y="0">
-                      <Text charshape-id="1"/>
-                    </LineSeg>
-                  </Paragraph>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </TableControl>
-          <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="19" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000006" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="36075">
-          <Text charshape-id="1">다음 문단</Text>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="20" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000001" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="38675">
-          <Text charshape-id="1"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="132" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="3" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="21" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000084" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="41275">
-          <Text charshape-id="1">본 </Text>
-          <Text charshape-id="6">문서</Text>
-          <Text charshape-id="1">는 먼저 ᄒᆞᆫ글 문서 파일 형식 5.0에 관하여 설명한 후, ᄒᆞᆫ글 97 </Text>
-        </LineSeg>
-        <LineSeg a8="0" chpos="47" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="42875">
-          <Text charshape-id="1">문서 파일 형식, HWPML에 관하여 설명한다. 각 형식에 대한 설명은 문서 파일 형식 내</Text>
-        </LineSeg>
-        <LineSeg a8="0" chpos="97" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="41020" x="1500" y="44475">
-          <Text charshape-id="1">의 주요한 자료 형식 및 파일 구조, 레코드 구조에 대해서 설명한다.</Text>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="9" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="22" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000009" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1000" height2="1000" height85="850" indented="0" space-below="600" width="42520" x="0" y="57375">
-          <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6210" flow="block" gshape-id="0" halign="left" height="9810" height-relto="absolute" hrelto="column" inline="0" instance-id="1458668992" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16350" width-relto="absolute" x="11173" y="490" z-order="2">
-            <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9810" initial-height="9810" initial-width="16350" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="0" width="16350" x-in-group="0" y-in-group="0">
-              <Coord attribute-name="rotation_center" x="8175" y="4905"/>
-              <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
-              <Array name="scalerotations">
-                <ScaleRotationMatrix>
-                  <Matrix a="1.0" attribute-name="scaler" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
-                  <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
-                </ScaleRotationMatrix>
-              </Array>
-              <ShapePicture padding-bottom="0" padding-left="0" padding-right="0" padding-top="0">
-                <BorderLine arrow-end="none" arrow-end-fill="0" arrow-end-size="smallest" arrow-start="none" arrow-start-fill="0" arrow-start-size="smallest" attribute-name="border" color="#000000" flags="00000000" line-end="round" stroke="none" width="0"/>
-                <ImageRect attribute-name="rect">
-                  <Coord attribute-name="p0" x="0" y="0"/>
-                  <Coord attribute-name="p1" x="16350" y="0"/>
-                  <Coord attribute-name="p2" x="16350" y="9810"/>
-                  <Coord attribute-name="p3" x="0" y="9810"/>
-                </ImageRect>
-                <ImageClip attribute-name="clip" bottom="22500" left="0" right="37500" top="0"/>
-                <PictureInfo attribute-name="picture" bindata-id="1" brightness="0" contrast="0" effect="0"/>
-              </ShapePicture>
-            </ShapeComponent>
-          </GShapeObjectControl>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="23" parashape-id="12" rangetags="0" split="00" style-id="12" text="00000007" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="900" height2="900" height85="765" indented="0" space-below="272" width="42520" x="0" y="58975">
-          <Text charshape-id="3">미주입니다.</Text>
-          <ControlChar char="&#13;" charshape-id="3" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="10" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="24" parashape-id="14" rangetags="0" split="00" style-id="11" text="0000000A" unknown="0" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0016" height="900" height2="900" height85="765" indented="1" space-below="272" width="42520" x="0" y="60147">
-          <Text charshape-id="3">이건 각주이지요.</Text>
-          <ControlChar char="&#13;" charshape-id="3" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
-      <Paragraph chars="15" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="25" parashape-id="0" rangetags="0" split="04" style-id="0" text="8000000F" unknown="1" unknown1="0">
-        <LineSeg a8="0" chpos="0" flags="0006" height="1200" height2="1200" height85="1020" indented="0" space-below="600" width="42520" x="0" y="0">
-          <Text charshape-id="1">다음 페이지</Text>
-          <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6311" flow="block" gshape-id="1" halign="left" height="1200" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1571560625" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="1200" width-relto="absolute" x="0" y="0" z-order="4">
-            <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="20000000" flip="0" height="1200" initial-height="1614" initial-width="1614" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="1" width="1200" x-in-group="0" y-in-group="0">
-              <Coord attribute-name="rotation_center" x="600" y="600"/>
-              <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
-              <Array name="scalerotations">
-                <ScaleRotationMatrix>
-                  <Matrix a="0.743494423792" attribute-name="scaler" b="0.0" c="0.0" d="0.743494423792" e="0.0" f="0.0"/>
-                  <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
-                </ScaleRotationMatrix>
-              </Array>
-              <ShapePicture padding-bottom="0" padding-left="0" padding-right="0" padding-top="0">
-                <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="smallest" arrow-start="none" arrow-start-fill="1" arrow-start-size="smallest" attribute-name="border" color="#000000" flags="C0000000" line-end="round" stroke="none" width="0"/>
-                <ImageRect attribute-name="rect">
-                  <Coord attribute-name="p0" x="0" y="0"/>
-                  <Coord attribute-name="p1" x="1614" y="0"/>
-                  <Coord attribute-name="p2" x="1614" y="1614"/>
-                  <Coord attribute-name="p3" x="0" y="1614"/>
-                </ImageRect>
-                <ImageClip attribute-name="clip" bottom="1200" left="0" right="1200" top="0"/>
-                <PictureInfo attribute-name="picture" bindata-id="2" brightness="0" contrast="0" effect="0"/>
-              </ShapePicture>
-            </ShapeComponent>
-          </GShapeObjectControl>
-          <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
-        </LineSeg>
-      </Paragraph>
+      <ColumnSet>
+        <Paragraph chars="34" charshapes="5" control="0" controlmask="00000004" instance-id="0" linesegs="1" new-column="0" new-columnsdef="1" new-number="0" new-page="0" new-section="1" paragraph-id="0" parashape-id="0" rangetags="0" split="03" style-id="0" text="00000022" unknown="0" unknown1="1">
+          <LineSeg bullet="0" chpos="0" height="2000" height-baseline="1700" height-text="2000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="1200" width="42520" x="0" y="0">
+            <ColumnsDef attr2="0" chid="cold" count="1" direction="l2r" flags="1004" kind="normal" same-widths="1" spacing="0">
+              <Border attribute-name="splitter" color="#000000" stroke-flags="00" stroke-type="none" width="0.1mm" width-flags="00"/>
+            </ColumnsDef>
+            <Text charshape-id="7" lang="ko">한글 </Text>
+            <Text charshape-id="8" lang="ko">2005</Text>
+            <Text charshape-id="7" lang="ko"> </Text>
+            <Text charshape-id="9" lang="ko">예제</Text>
+            <Text charshape-id="7" lang="ko"> 파일입니다.</Text>
+            <ControlChar char="&#13;" charshape-id="7" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="1" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000001" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="3200"/>
+        </Paragraph>
+        <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="2" parashape-id="11" rangetags="0" split="00" style-id="10" text="00000007" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="452" width="42520" x="0" y="4800">
+            <Text charshape-id="2" lang="ko">머리말입니다</Text>
+            <ControlChar char="&#13;" charshape-id="2" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="2147483648" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="3" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000001" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="6152"/>
+        </Paragraph>
+        <Paragraph chars="112" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="3" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="4" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000070" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="7752">
+            <Text charshape-id="1" lang="ko">본문 </Text>
+            <Text charshape-id="5" lang="ko">내용</Text>
+            <Text charshape-id="1" lang="ko">입니다. 본 문서는 ᄒᆞᆫ글 워드 프로세서의 파일 저장 형식 중, ᄒᆞᆫ글 2002</Text>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="51" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="9352">
+            <Text charshape-id="1" lang="ko"> 이후 제품에서 사용되는 ᄒᆞᆫ글 문서 파일 형식 5.0 및 ᄒᆞᆫ글 97 문서 파일 형식, </Text>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="103" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="10952">
+            <Text charshape-id="1" lang="en">HWPML</Text>
+            <Text charshape-id="1" lang="ko">에 관하여 설명한다.</Text>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="20" charshapes="2" control="1" controlmask="00000800" instance-id="0" linesegs="4" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="5" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000014" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="4730" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="13552">
+            <Text charshape-id="1" lang="ko">표</Text>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="1" height="4730" height-baseline="4021" height-text="4730" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="15152">
+            <TableControl affect-line-spacing="0" chid="tbl " description="" flags="082A2311" flow="block" halign="left" height="4164" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1453501933" margin-bottom="283" margin-left="283" margin-right="283" margin-top="283" number-category="table" overlap-others="0" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" table-id="0" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="40454" width-relto="absolute" x="0" y="0" z-order="0">
+              <TableBody borderfill-id="4" cellspacing="0" cols="2" flags="04000006" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" repeat-header="1" rowcols="()" rows="2" split-page="split">
+                <Array name="validZones"/>
+                <TableRow>
+                  <TableCell borderfill-id="1" col="0" colspan="1" height="282" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
+                    <Paragraph chars="3" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="6" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000003" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0">
+                        <Text charshape-id="1" lang="en">A0</Text>
+                        <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                      </LineSeg>
+                    </Paragraph>
+                  </TableCell>
+                  <TableCell borderfill-id="3" col="1" colspan="1" height="282" linebreak="1" listflags="00000028" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
+                    <Paragraph chars="3" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="7" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000003" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0">
+                        <Text charshape-id="1" lang="en">B0</Text>
+                        <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                      </LineSeg>
+                    </Paragraph>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell borderfill-id="6" col="0" colspan="1" height="282" linebreak="0" listflags="05000040" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="bottom" width="20227">
+                    <Paragraph chars="3" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="8" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000003" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0">
+                        <Text charshape-id="1" lang="en">A1</Text>
+                        <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                      </LineSeg>
+                    </Paragraph>
+                  </TableCell>
+                  <TableCell borderfill-id="5" col="1" colspan="1" height="282" linebreak="0" listflags="00000000" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="2" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="top" width="20227">
+                    <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="9" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000004" unknown="0" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0">
+                        <Text charshape-id="1" lang="en">B10</Text>
+                        <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                      </LineSeg>
+                    </Paragraph>
+                    <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="10" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000004" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="1600">
+                        <Text charshape-id="1" lang="en">B11</Text>
+                        <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                      </LineSeg>
+                    </Paragraph>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </TableControl>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="9" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="20482">
+            <Text charshape-id="1" lang="ko">표</Text>
+            <Text charshape-id="5" lang="ko">끝</Text>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="11" height="4678" height-baseline="3976" height-text="4678" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="22082">
+            <TableControl affect-line-spacing="0" chid="tbl " description="" flags="082A2311" flow="block" halign="left" height="4112" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1455447557" margin-bottom="283" margin-left="283" margin-right="283" margin-top="283" number-category="table" overlap-others="0" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" table-id="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="40539" width-relto="absolute" x="0" y="0" z-order="1">
+              <TableBody borderfill-id="1" cellspacing="0" cols="1" flags="04000006" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" repeat-header="1" rowcols="()" rows="1" split-page="split">
+                <Array name="validZones"/>
+                <TableRow>
+                  <TableCell borderfill-id="1" col="0" colspan="1" height="4112" linebreak="0" listflags="01000021" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="1" unknown-width="40539" unknown1="0" valign="middle" width="40539">
+                    <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="11" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000007" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="500" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="3828" x="0" y="0">
+                        <Text charshape-id="1" lang="en">table2</Text>
+                        <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                      </LineSeg>
+                    </Paragraph>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </TableControl>
+            <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="9" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="12" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000009" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="0" x="1500" y="28360">
+            <TableControl affect-line-spacing="0" chid="tbl " description="" flags="282A2310" flow="block" halign="left" height="2564" height-relto="absolute" hrelto="paragraph" inline="0" instance-id="1455447562" margin-bottom="1134" margin-left="283" margin-right="850" margin-top="567" number-category="table" overlap-others="0" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" table-id="2" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="40454" width-relto="absolute" x="0" y="0" z-order="3">
+              <TableCaption expand-to-margin="0" flags="00000003" linebreak="0" listflags="00000000" max-width="40454" paragraphs="2" position="bottom" separation="850" textdirection="0" unknown1="0" valign="top" width="8504">
+                <Paragraph chars="18" charshapes="1" control="0" controlmask="00040000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="13" parashape-id="2" rangetags="0" split="00" style-id="0" text="00000012" unknown="0" unknown1="0">
+                  <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="40452" x="0" y="0">
+                    <Text charshape-id="1" lang="ko">표 </Text>
+                    <AutoNumbering chid="atno" flags="00000004" footnoteshape="0" kind="table" number="3" prefix="" suffix="" superscript="0" usersymbol=""/>
+                    <Text charshape-id="1" lang="en"> 2x2</Text>
+                    <Text charshape-id="1" lang="ko">짜리표</Text>
+                    <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                  </LineSeg>
+                </Paragraph>
+                <Paragraph chars="4" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="14" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000004" unknown="1" unknown1="0">
+                  <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="40452" x="0" y="1600">
+                    <Text charshape-id="1" lang="ko">가나다</Text>
+                    <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+                  </LineSeg>
+                </Paragraph>
+              </TableCaption>
+              <TableBody borderfill-id="1" cellspacing="0" cols="2" flags="04000006" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" repeat-header="1" rowcols="()" rows="2" split-page="split">
+                <Array name="validZones"/>
+                <TableRow>
+                  <TableCell borderfill-id="1" col="0" colspan="1" height="282" linebreak="0" listflags="00000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
+                    <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="15" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0"/>
+                    </Paragraph>
+                  </TableCell>
+                  <TableCell borderfill-id="1" col="1" colspan="1" height="282" linebreak="0" listflags="04000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="0" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
+                    <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="16" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0"/>
+                    </Paragraph>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell borderfill-id="1" col="0" colspan="1" height="282" linebreak="0" listflags="01000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
+                    <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="17" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0"/>
+                    </Paragraph>
+                  </TableCell>
+                  <TableCell borderfill-id="1" col="1" colspan="1" height="282" linebreak="0" listflags="04000020" padding-bottom="141" padding-left="141" padding-right="141" padding-top="141" paragraphs="1" row="1" rowspan="1" textdirection="0" unknown-width="20227" unknown1="0" valign="middle" width="20227">
+                    <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="18" parashape-id="2" rangetags="0" split="00" style-id="0" text="80000001" unknown="1" unknown1="0">
+                      <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="19944" x="0" y="0"/>
+                    </Paragraph>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </TableControl>
+            <ControlChar char="&#13;" charshape-id="5" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="6" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="19" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000006" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="36075">
+            <Text charshape-id="1" lang="ko">다음 문단</Text>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="1" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="20" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000001" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="38675"/>
+        </Paragraph>
+        <Paragraph chars="132" charshapes="3" control="0" controlmask="00000000" instance-id="0" linesegs="3" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="21" parashape-id="13" rangetags="0" split="00" style-id="1" text="00000084" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="41275">
+            <Text charshape-id="1" lang="ko">본 </Text>
+            <Text charshape-id="6" lang="ko">문서</Text>
+            <Text charshape-id="1" lang="ko">는 먼저 ᄒᆞᆫ글 문서 파일 형식 5.0에 관하여 설명한 후, ᄒᆞᆫ글 97 </Text>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="47" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="42875">
+            <Text charshape-id="1" lang="ko">문서 파일 형식, </Text>
+            <Text charshape-id="1" lang="en">HWPML</Text>
+            <Text charshape-id="1" lang="ko">에 관하여 설명한다. 각 형식에 대한 설명은 문서 파일 형식 내</Text>
+          </LineSeg>
+          <LineSeg bullet="0" chpos="97" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="44475">
+            <Text charshape-id="1" lang="ko">의 주요한 자료 형식 및 파일 구조, 레코드 구조에 대해서 설명한다.</Text>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="9" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="22" parashape-id="0" rangetags="0" split="00" style-id="0" text="00000009" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="57375">
+            <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6210" flow="block" gshape-id="0" halign="left" height="9810" height-relto="absolute" hrelto="column" inline="0" instance-id="1458668992" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="16350" width-relto="absolute" x="11173" y="490" z-order="2">
+              <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="24000000" flip="0" height="9810" initial-height="9810" initial-width="16350" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="0" width="16350" x-in-group="0" y-in-group="0">
+                <Coord attribute-name="rotation_center" x="8175" y="4905"/>
+                <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                <Array name="scalerotations">
+                  <ScaleRotationMatrix>
+                    <Matrix a="1.0" attribute-name="scaler" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                    <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                  </ScaleRotationMatrix>
+                </Array>
+                <ShapePicture padding-bottom="0" padding-left="0" padding-right="0" padding-top="0">
+                  <BorderLine arrow-end="none" arrow-end-fill="0" arrow-end-size="smallest" arrow-start="none" arrow-start-fill="0" arrow-start-size="smallest" attribute-name="border" color="#000000" flags="00000000" line-end="round" stroke="none" width="0"/>
+                  <ImageRect attribute-name="rect">
+                    <Coord attribute-name="p0" x="0" y="0"/>
+                    <Coord attribute-name="p1" x="16350" y="0"/>
+                    <Coord attribute-name="p2" x="16350" y="9810"/>
+                    <Coord attribute-name="p3" x="0" y="9810"/>
+                  </ImageRect>
+                  <ImageClip attribute-name="clip" bottom="22500" left="0" right="37500" top="0"/>
+                  <PictureInfo attribute-name="picture" bindata-id="1" brightness="0" contrast="0" effect="0"/>
+                </ShapePicture>
+              </ShapeComponent>
+            </GShapeObjectControl>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="7" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="23" parashape-id="12" rangetags="0" split="00" style-id="12" text="00000007" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="272" width="42520" x="0" y="58975">
+            <Text charshape-id="3" lang="ko">미주입니다.</Text>
+            <ControlChar char="&#13;" charshape-id="3" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="10" charshapes="1" control="0" controlmask="00000000" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="0" new-section="0" paragraph-id="24" parashape-id="14" rangetags="0" split="00" style-id="11" text="0000000A" unknown="0" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="900" height-baseline="765" height-text="900" indented="1" line-head="1" line-tail="1" lineseg-flags="00160000" space-below="272" width="42520" x="0" y="60147">
+            <Text charshape-id="3" lang="ko">이건 각주이지요.</Text>
+            <ControlChar char="&#13;" charshape-id="3" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+        <Paragraph chars="15" charshapes="1" control="1" controlmask="00000800" instance-id="0" linesegs="1" new-column="0" new-columnsdef="0" new-number="0" new-page="1" new-section="0" paragraph-id="25" parashape-id="0" rangetags="0" split="04" style-id="0" text="8000000F" unknown="1" unknown1="0">
+          <LineSeg bullet="0" chpos="0" height="1200" height-baseline="1020" height-text="1200" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="42520" x="0" y="0">
+            <Text charshape-id="1" lang="ko">다음 페이지</Text>
+            <GShapeObjectControl affect-line-spacing="0" chid="gso " description="" flags="042A6311" flow="block" gshape-id="1" halign="left" height="1200" height-relto="absolute" hrelto="paragraph" inline="1" instance-id="1571560625" margin-bottom="0" margin-left="0" margin-right="0" margin-top="0" number-category="figure" overlap-others="1" protect-size-when-vrelto-paragraph="0" restrict-in-page="1" text-side="both" unknown1="0" unknown2="0" valign="top" vrelto="paragraph" width="1200" width-relto="absolute" x="0" y="0" z-order="4">
+              <ShapeComponent angle="0" chid="$pic" chid0="$pic" flags="20000000" flip="0" height="1200" initial-height="1614" initial-width="1614" level-in-group="0" local-version="1" scalerotations-count="1" shape-id="1" width="1200" x-in-group="0" y-in-group="0">
+                <Coord attribute-name="rotation_center" x="600" y="600"/>
+                <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                <Array name="scalerotations">
+                  <ScaleRotationMatrix>
+                    <Matrix a="0.743494423792" attribute-name="scaler" b="0.0" c="0.0" d="0.743494423792" e="0.0" f="0.0"/>
+                    <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
+                  </ScaleRotationMatrix>
+                </Array>
+                <ShapePicture padding-bottom="0" padding-left="0" padding-right="0" padding-top="0">
+                  <BorderLine arrow-end="none" arrow-end-fill="1" arrow-end-size="smallest" arrow-start="none" arrow-start-fill="1" arrow-start-size="smallest" attribute-name="border" color="#000000" flags="C0000000" line-end="round" stroke="none" width="0"/>
+                  <ImageRect attribute-name="rect">
+                    <Coord attribute-name="p0" x="0" y="0"/>
+                    <Coord attribute-name="p1" x="1614" y="0"/>
+                    <Coord attribute-name="p2" x="1614" y="1614"/>
+                    <Coord attribute-name="p3" x="0" y="1614"/>
+                  </ImageRect>
+                  <ImageClip attribute-name="clip" bottom="1200" left="0" right="1200" top="0"/>
+                  <PictureInfo attribute-name="picture" bindata-id="2" brightness="0" contrast="0" effect="0"/>
+                </ShapePicture>
+              </ShapeComponent>
+            </GShapeObjectControl>
+            <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
+          </LineSeg>
+        </Paragraph>
+      </ColumnSet>
     </SectionDef>
   </BodyText>
 </HwpDoc>

@@ -1,50 +1,53 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 from unittest import TestCase
+from contextlib import closing
 
 
-def example(filename):
+def example_path(filename):
     from fixtures import get_fixture_path
+    return get_fixture_path(filename)
+
+
+def open_example(filename):
     from hwp5.xmlmodel import Hwp5File
-    path = get_fixture_path(filename)
-    return Hwp5File(path)
+    path = example_path(filename)
+    return closing(Hwp5File(path))
 
 
 class TestPrecondition(TestCase):
     def test_example(self):
-        assert example('linespacing.hwp') is not None
+        with open_example('linespacing.hwp') as hwp5file:
+            assert hwp5file is not None
 
 
-class TestODTPackageConverter(TestCase):
+class TestODTTransform(TestCase):
 
     @property
     def odt_path(self):
         return self.id() + '.odt'
 
     @property
-    def convert(self):
+    def transform(self):
         from hwp5 import plat
-        from hwp5.hwp5odt import ODTPackageConverter
+        from hwp5.hwp5odt import ODTTransform
 
-        xslt = plat.get_xslt()
+        xslt = plat.get_xslt_compile()
         assert xslt is not None, 'no XSLT implementation is available'
-        relaxng = plat.get_relaxng()
-        return ODTPackageConverter(xslt, relaxng)
+        relaxng = plat.get_relaxng_compile()
+        return ODTTransform(xslt, relaxng)
 
     def test_convert_bindata(self):
-        hwp5file = example('sample-5017.hwp')
-        try:
+        from hwp5.hwp5odt import open_odtpkg
+
+        with open_example('sample-5017.hwp') as hwp5file:
             f = hwp5file['BinData']['BIN0002.jpg'].open()
             try:
                 data1 = f.read()
             finally:
                 f.close()
-
-            convert = self.convert
-            with convert.prepare():
-                convert.convert_to(hwp5file, self.odt_path)
-        finally:
-            hwp5file.close()
+            with open_odtpkg(self.odt_path) as odtpkg:
+                self.transform.transform_hwp5_to_package(hwp5file, odtpkg)
 
         from zipfile import ZipFile
         zf = ZipFile(self.odt_path)

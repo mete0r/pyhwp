@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -17,7 +17,9 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from __future__ import with_statement
+from contextlib import closing
 import logging
+import os.path
 
 
 logger = logging.getLogger(__name__)
@@ -44,47 +46,104 @@ def xslt(xsl_path, inp_path, out_path):
     return transform(inp_path, out_path)
 
 
-def xslt_compile(xsl_path):
-    from javax.xml.transform import URIResolver
-    from javax.xml.transform import TransformerFactory
-    from javax.xml.transform.stream import StreamSource
-    from javax.xml.transform.stream import StreamResult
-    from java.io import FileInputStream
-    from java.io import FileOutputStream
-    import os.path
+class XSLT:
 
-    xsl_path = os.path.abspath(xsl_path)
-    xsl_base = os.path.dirname(xsl_path)
+    def __init__(self, xsl_path, **params):
+        from javax.xml.transform import URIResolver
+        from javax.xml.transform import TransformerFactory
+        from javax.xml.transform.stream import StreamSource
+        from java.io import FileInputStream
 
-    xsl_fis = FileInputStream(xsl_path)
+        xsl_path = os.path.abspath(xsl_path)
+        xsl_base = os.path.dirname(xsl_path)
 
-    xsl_source = StreamSource(xsl_fis)
+        xsl_fis = FileInputStream(xsl_path)
 
-    class BaseURIResolver(URIResolver):
+        xsl_source = StreamSource(xsl_fis)
 
-        def __init__(self, base):
-            self.base = base
+        class BaseURIResolver(URIResolver):
 
-        def resolve(self, href, base):
-            path = os.path.join(self.base, href)
-            path = os.path.abspath(path)
-            fis = FileInputStream(path)
-            return StreamSource(fis)
+            def __init__(self, base):
+                self.base = base
 
-    uri_resolver = BaseURIResolver(xsl_base)
+            def resolve(self, href, base):
+                path = os.path.join(self.base, href)
+                path = os.path.abspath(path)
+                fis = FileInputStream(path)
+                return StreamSource(fis)
 
-    xslt_factory = TransformerFactory.newInstance()
-    xslt_factory.setURIResolver(uri_resolver)
+        uri_resolver = BaseURIResolver(xsl_base)
 
-    transformer = xslt_factory.newTransformer(xsl_source)
+        xslt_factory = TransformerFactory.newInstance()
+        xslt_factory.setURIResolver(uri_resolver)
 
-    def transform(inp_path, out_path):
-        inp_path = os.path.abspath(inp_path)
-        out_path = os.path.abspath(out_path)
-        inp_fis = FileInputStream(inp_path)
-        out_fos = FileOutputStream(out_path)
-        inp_source = StreamSource(inp_fis)
-        out_result = StreamResult(out_fos)
-        transformer.transform(inp_source, out_result)
+        self.transformer = xslt_factory.newTransformer(xsl_source)
+        for k, v in params.items():
+            self.transformer.setParameter(k, unicode(v))
+
+    def transform(self, input, output):
+        '''
+        >>> T.transform('input.xml', 'output.xml')
+        '''
+        from java.io import FileInputStream
+        from java.io import FileOutputStream
+        out_path = os.path.abspath(output)
+        inp_path = os.path.abspath(input)
+        with closing(FileInputStream(inp_path)) as inp_fis:
+            with closing(FileOutputStream(out_path)) as out_fos:
+                return self._transform(inp_fis, out_fos)
+
+    def transform_into_stream(self, input, output):
+        '''
+        >>> T.transform('input.xml', sys.stdout)
+        '''
+        from java.io import FileInputStream
+        inp_path = os.path.abspath(input)
+        with closing(FileInputStream(inp_path)) as inp_fis:
+            out_fos = wrap_filelike_outputstream(output)
+            return self._transform(inp_fis, out_fos)
+
+    def _transform(self, input, output):
+        from javax.xml.transform.stream import StreamSource
+        from javax.xml.transform.stream import StreamResult
+        inp_source = StreamSource(input)
+        out_result = StreamResult(output)
+        self.transformer.transform(inp_source, out_result)
         return dict()
-    return transform
+
+
+def xslt_compile(xsl_path, **params):
+    xslt = XSLT(xsl_path, **params)
+    return xslt.transform_into_stream
+
+
+def wrap_filelike_inputstream(f):
+    from org.python.core import FilelikeInputStream
+    return FilelikeInputStream(f)
+
+
+def wrap_filelike_outputstream(f):
+    from java.io import OutputStream
+
+    class FilelikeOutputStream(OutputStream):
+
+        def write(self, *args):
+            if len(args) == 1:
+                # byte
+                ch = chr(args[0] & 0xff)
+                f.write(ch)
+            if len(args) == 3:
+                # array.array, offset, length
+                array, offset, length = args
+                buf = array.tostring()
+                f.write(buf[offset:offset+length])
+            else:
+                logger.debug('%r', args)
+                self.super__write(*args)
+
+        def flush(self):
+            f.flush()
+
+        def close(self):
+            pass
+    return FilelikeOutputStream()

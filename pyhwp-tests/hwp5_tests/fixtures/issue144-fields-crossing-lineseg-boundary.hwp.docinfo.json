@@ -490,7 +490,6 @@
       "stroke_flags": 0, 
       "width_flags": 0
     }, 
-    "shape": 0, 
     "top": {
       "color": 0, 
       "stroke_flags": 0, 
@@ -508,7 +507,10 @@
   "size": 52, 
   "tagid": 20, 
   "tagname": "HWPTAG_BORDER_FILL", 
-  "type": "BorderFill"
+  "type": "BorderFill", 
+  "unparsed": [
+    "00 00 00 00"
+  ]
 },
 {
   "content": {
@@ -1064,51 +1066,51 @@
     "levels": [
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^1.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^2.", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "^3)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "^4)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 12, 
         "numbering_format": "(^5)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 268, 
         "numbering_format": "(^6)", 
+        "space": 50, 
         "width_correction": 0
       }, 
       {
         "charshape_id": -1, 
-        "distance_to_body": 50, 
         "flags": 44, 
         "numbering_format": "^7", 
+        "space": 50, 
         "width_correction": 0
       }
     ], 

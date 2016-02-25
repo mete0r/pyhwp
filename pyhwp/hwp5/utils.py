@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -16,8 +16,22 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import with_statement
+from contextlib import contextmanager
 from functools import partial
 import codecs
+import logging
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
+
+from .importhelper import pkg_resources_filename
+
+
+logger = logging.getLogger(__name__)
 
 
 class NIL:
@@ -129,3 +143,198 @@ class GeneratorReader(object):
 
     def close(self):
         self.gen = self.buffer = None
+
+
+@contextmanager
+def hwp5_resources_path(res_path):
+    try:
+        path = pkg_resources_filename('hwp5', res_path)
+    except Exception:
+        logger.info('%s: pkg_resources_filename failed; using resource_stream',
+                    res_path)
+        with mkstemp_open() as (path, g):
+            import pkg_resources
+            f = pkg_resources.resource_stream('hwp5', res_path)
+            try:
+                shutil.copyfileobj(f, g)
+                g.close()
+                yield path
+            finally:
+                f.close()
+    else:
+        yield path
+
+
+def make_open_dest_file(path):
+    if path:
+        @contextmanager
+        def open_dest_path():
+            with open(path, 'w') as f:
+                yield f
+        return open_dest_path
+    else:
+        @contextmanager
+        def open_stdout():
+            yield sys.stdout
+        return open_stdout
+
+
+def wrap_open_dest_for_tty(open_dest, wrappers):
+    @contextmanager
+    def open_dest_wrapped():
+        with open_dest() as output:
+            if output.isatty():
+                with cascade_contextmanager_filters(output,
+                                                    wrappers) as output:
+                    yield output
+            else:
+                yield output
+    return open_dest_wrapped
+
+
+def wrap_open_dest(open_dest, wrappers):
+    @contextmanager
+    def open_dest_wrapped():
+        with open_dest() as output:
+            with cascade_contextmanager_filters(output, wrappers) as output:
+                yield output
+    return open_dest_wrapped
+
+
+@contextmanager
+def cascade_contextmanager_filters(arg, filters):
+    if len(filters) == 0:
+        yield arg
+    else:
+        flt, filters = filters[0], filters[1:]
+        with flt(arg) as ret:
+            with cascade_contextmanager_filters(ret, filters) as ret:
+                yield ret
+
+
+@contextmanager
+def null_contextmanager_filter(output):
+    yield output
+
+
+def output_thru_subprocess(cmd):
+    @contextmanager
+    def filter(output):
+        logger.debug('%r', cmd)
+        try:
+            p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=output)
+        except Exception, e:
+            logger.error('%r: %s', ' '.join(cmd), e)
+            yield output
+        else:
+            try:
+                yield p.stdin
+            except IOError, e:
+                import errno
+                if e.errno != errno.EPIPE:
+                    raise
+            finally:
+                p.stdin.close()
+                p.wait()
+                retcode = p.returncode
+                logger.debug('%r exit %d', cmd, retcode)
+    return filter
+
+
+def xmllint(c14n=False, encode=None, format=False, nonet=True):
+    cmd = ['xmllint']
+    if c14n:
+        cmd.append('--c14n')
+    if encode:
+        cmd += ['--encode', encode]
+    if format:
+        cmd.append('--format')
+    if nonet:
+        cmd.append('--nonet')
+    cmd.append('-')
+    return output_thru_subprocess(cmd)
+
+
+def syntaxhighlight(mimetype):
+    try:
+        return syntaxhighlight_pygments(mimetype)
+    except Exception, e:
+        logger.info(e)
+        return null_contextmanager_filter
+
+
+def syntaxhighlight_pygments(mimetype):
+    from pygments import highlight
+    from pygments.lexers import get_lexer_for_mimetype
+    from pygments.formatters import TerminalFormatter
+
+    lexer = get_lexer_for_mimetype(mimetype, encoding='utf-8')
+    formatter = TerminalFormatter(encoding='utf-8')
+
+    @contextmanager
+    def filter(output):
+        with make_temp_file() as f:
+            yield f
+            f.seek(0)
+            code = f.read()
+        highlight(code, lexer, formatter, output)
+    return filter
+
+
+@contextmanager
+def make_temp_file():
+    fd, name = tempfile.mkstemp()
+    with unlink_path(name):
+        with os.fdopen(fd, 'w+') as f:
+            yield f
+
+
+@contextmanager
+def unlink_path(path):
+    import os
+    try:
+        yield
+    finally:
+        os.unlink(path)
+
+
+def pager():
+    pager_cmd = os.environ.get('PAGER')
+    if pager_cmd:
+        pager_cmd = shlex.split(pager_cmd)
+        return output_thru_subprocess(pager_cmd)
+    return pager_less
+
+
+pager_less = output_thru_subprocess(['less', '-R'])
+
+
+@contextmanager
+def mkstemp_open(*args, **kwargs):
+
+    if (kwargs.get('text', False) or (len(args) >= 4 and args[3])):
+        text = True
+    else:
+        text = False
+
+    mode = 'w+' if text else 'wb+'
+    fd, path = tempfile.mkstemp(*args, **kwargs)
+    try:
+        f = os.fdopen(fd, mode)
+        try:
+            yield path, f
+        finally:
+            try:
+                f.close()
+            except Exception:
+                pass
+    finally:
+        unlink_or_warning(path)
+
+
+def unlink_or_warning(path):
+    try:
+        os.unlink(path)
+    except Exception, e:
+        logger.exception(e)
+        logger.warning('%s cannot be deleted', path)

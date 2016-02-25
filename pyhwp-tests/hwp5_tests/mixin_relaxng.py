@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 import logging
+import shutil
+
+from hwp5.errors import ValidationFailed
+from hwp5.utils import mkstemp_open
 
 
 logger = logging.getLogger(__name__)
@@ -9,7 +13,7 @@ logger = logging.getLogger(__name__)
 class RelaxNGTestMixin(object):
 
     rng = '''<?xml version="1.0" encoding="UTF-8"?>
-<grammar 
+<grammar
   xmlns="http://relaxng.org/ns/structure/1.0"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <define name="doc">
@@ -28,6 +32,7 @@ class RelaxNGTestMixin(object):
   </start>
 </grammar>
 '''
+
     def test_relaxng_compile(self):
         if self.relaxng_compile is None:
             logger.warning('%s: skipped', self.id())
@@ -48,10 +53,24 @@ class RelaxNGTestMixin(object):
         with file(bad_path, 'w') as f:
             f.write(bad)
 
-        validate = self.relaxng_compile(rng_path)
-        self.assertTrue(callable(validate))
-        self.assertTrue(validate(inp_path))
-        self.assertFalse(validate(bad_path))
+        relaxng = self.relaxng_compile(rng_path)
+        self.assertTrue(relaxng.validate(inp_path))
+        self.assertFalse(relaxng.validate(bad_path))
+
+        with file(inp_path) as f:
+            with mkstemp_open() as (tmp_path, g):
+                with relaxng.validating_output(g) as g:
+                    shutil.copyfileobj(f, g)
+
+        with file(bad_path) as f:
+            with mkstemp_open() as (tmp_path, g):
+                try:
+                    with relaxng.validating_output(g) as g:
+                        shutil.copyfileobj(f, g)
+                except ValidationFailed:
+                    pass
+                else:
+                    assert False, 'ValidationError expected'
 
     def test_relaxng(self):
         if self.relaxng is None:

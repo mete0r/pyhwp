@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from functools import partial
 import logging
 from hwp5.plat import olefileio
 from hwp5.plat import _lxml
@@ -41,11 +42,45 @@ def get_xslt():
         return _uno.xslt
 
 
+def get_xslt_compile():
+    modules = [
+        javax_transform,
+        _lxml,
+        xsltproc,
+        _uno
+    ]
+    for module in modules:
+        if module.is_enabled():
+            xslt_compile = getattr(module, 'xslt_compile', None)
+            if xslt_compile:
+                return xslt_compile
+            xslt = getattr(module, 'xslt', None)
+            if xslt:
+                def xslt_compile(xsl_path):
+                    return partial(xslt, xsl_path)
+
+
 def get_relaxng():
     if _lxml.is_enabled():
         return _lxml.relaxng
     if xmllint.is_enabled():
         return xmllint.relaxng
+
+
+def get_relaxng_compile():
+    modules = [
+        _lxml,
+        xmllint,
+    ]
+    for module in modules:
+        if module.is_enabled():
+            relaxng_compile = getattr(module, 'relaxng_compile', None)
+            if relaxng_compile:
+                return relaxng_compile
+            relaxng = getattr(module, 'relaxng', None)
+            if relaxng:
+                def relaxng_compile(rng_path):
+                    return partial(relaxng, rng_path)
 
 
 def get_olestorage_class():

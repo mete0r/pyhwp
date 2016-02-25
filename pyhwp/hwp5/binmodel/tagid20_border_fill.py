@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -22,6 +22,7 @@ from hwp5.dataio import UINT32
 from hwp5.dataio import UINT16
 from hwp5.dataio import BYTE
 from hwp5.dataio import Flags
+# from hwp5.dataio import N_ARRAY
 from hwp5.binmodel._shared import Border
 from hwp5.binmodel._shared import FillColorPattern
 from hwp5.binmodel._shared import FillGradation
@@ -74,7 +75,11 @@ class BorderFill(RecordModel):
                    condition=fill_gradation)
         yield dict(type=FillImage, name='fill_image',
                    condition=fill_image)
-        yield UINT32, 'shape'
+        yield dict(type=UINT32, name='shape',
+                   condition=fill_gradation)
         yield dict(type=BYTE, name='blur_center',
                    condition=fill_gradation)
+        # 스펙 1.2의 표28 설명과는 달리,
+        # 적어도 5.0.1.7에서, 있는 경우가 있고 없는 경우가 있음
+        #  yield N_ARRAY(UINT32, BYTE), 'extended'  # SPEC
     attributes = classmethod(attributes)

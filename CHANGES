@@ -1,6 +1,16 @@
 CHANGES
 =======
 
+0.1b9 (2016-02-26)
+------------------
+
+- hwp5html: serveral improvements
+  - lang-* classes of span elements and associated css font-family
+  - horizontal page layouts
+  - Single page layout
+  - enhance horizontal positioning of TableControl, GShapeObject
+- distdoc: fix sha1offset (by Hodong Kim)
+
 0.1b8 (2014-11-03)
 ------------------
 

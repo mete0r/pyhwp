@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -50,6 +50,7 @@ from hwp5.binmodel import ParaRangeTag
 from hwp5.binmodel import Field
 from hwp5.binmodel import ControlChar
 from hwp5.binmodel import Control
+from .charsets import tokenize_unicode_by_lang
 
 logger = logging.getLogger(__name__)
 
@@ -258,6 +259,43 @@ def wrap_section(event_prefixed_mac, sect_id=None):
     yield ENDEVENT, sectiondef
 
 
+class ColumnSet:
+    pass
+
+
+def wrap_columns(event_prefixed_mac):
+
+    stack = []
+
+    for event, item in event_prefixed_mac:
+        model, attributes, context = item
+
+        if model is Paragraph:
+            if event is STARTEVENT:
+
+                split = attributes['split']
+                split = Paragraph.SplitFlags(split)
+
+                if split.new_columnsdef:
+                    if stack[-1][0] is ColumnSet:
+                        yield ENDEVENT, stack.pop()
+
+                    columns = (ColumnSet, {}, {})
+                    stack.append(columns)
+                    yield STARTEVENT, columns
+
+        else:
+            if event is STARTEVENT:
+                stack.append(item)
+            else:
+                if model != stack[-1][0]:
+                    assert stack[-1][0] is ColumnSet
+                    yield ENDEVENT, stack.pop()
+                stack.pop()
+
+        yield event, item
+
+
 def make_extended_controls_inline(event_prefixed_mac, stack=None):
     ''' inline extended-controls into paragraph texts '''
     if stack is None:
@@ -439,6 +477,25 @@ def rstbody_tablecell(event, stack, item):
             yield ENDEVENT, (TableRow, dict(), row_context)
 
 
+def tokenize_text_by_lang(event_prefixed_mac):
+    ''' Group table columns in each rows and wrap them with TableRow. '''
+    for event, item in event_prefixed_mac:
+        (model, attributes, context) = item
+        if model is Text:
+            if event is STARTEVENT:
+                charshape_id = attributes['charshape_id']
+                for lang, text in tokenize_unicode_by_lang(attributes['text']):
+                    token = (Text, {
+                        'charshape_id': charshape_id,
+                        'lang': lang,
+                        'text': text,
+                    }, context)
+                    yield STARTEVENT, token
+                    yield ENDEVENT, token
+        else:
+            yield event, item
+
+
 def embed_bindata(event_prefixed_mac, bindata):
     for event, item in event_prefixed_mac:
         (model, attributes, context) = item
@@ -453,6 +510,16 @@ def embed_bindata(event_prefixed_mac, bindata):
                 finally:
                     bin_stream.close()
                 b64 = base64.b64encode(binary)
+                truncated = []
+                while b64:
+                    if len(b64) > 64:
+                        truncated.append(b64[:64])
+                        b64 = b64[64:]
+                    else:
+                        truncated.append(b64)
+                        b64 = ''
+                b64 = '\n'.join(truncated)
+                b64 = '\n' + b64 + '\n'
                 attributes['bindata']['<text>'] = b64
                 attributes['bindata']['inline'] = 'true'
         yield event, item
@@ -607,9 +674,11 @@ class Section(ModelEventStream):
         events = make_paragraphs_children_of_listheader(events, TableBody,
                                                         TableCell)
         events = restructure_tablebody(events)
+        events = tokenize_text_by_lang(events)
 
         section_idx = kwargs.get('section_idx')
         events = wrap_section(events, section_idx)
+        events = wrap_columns(events)
 
         return events
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,25 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from __future__ import with_statement
+from contextlib import contextmanager
 import logging
+import os.path
+import shutil
+import tempfile
+
+from ..errors import ValidationFailed
 
 
 logger = logging.getLogger(__name__)
 
 
-try:
-    from lxml import etree
-    etree
-except ImportError:
-    is_enabled = lambda: False
-else:
-    is_enabled = lambda: True
+def is_enabled():
+    try:
+        from lxml import etree  # noqa
+    except ImportError:
+        return False
+    else:
+        return True
 
 
 def xslt(xsl_path, inp_path, out_path):
@@ -40,42 +46,62 @@ def xslt(xsl_path, inp_path, out_path):
     :param out_path: output path
     '''
     transform = xslt_compile(xsl_path)
-    return transform(inp_path, out_path)
+    with file(out_path, 'w') as f:
+        return transform(inp_path, f)
 
 
-def xslt_compile(xsl_path):
-    ''' Compile XSL Transform function.
-    :param xsl_path: stylesheet path
-    :returns: a transform function
-    '''
-    from lxml import etree
+def xslt_compile(xsl_path, **params):
+    xslt = XSLT(xsl_path, **params)
+    return xslt.transform_into_stream
 
-    with file(xsl_path) as xsl_file:
-        xsl_doc = etree.parse(xsl_file)
 
-    xslt = etree.XSLT(xsl_doc)
+class XSLT:
 
-    def transform(inp_path, out_path):
-        ''' Transform XML with %r.
+    def __init__(self, xsl_path, **params):
+        ''' Compile XSL Transform function.
+        :param xsl_path: stylesheet path
+        :returns: a transform function
+        '''
+        from lxml import etree
 
-        :param inp_path: input path
-        :param out_path: output path
-        ''' % xsl_path
-        with file(inp_path) as inp_file:
-            with file(out_path, 'w') as out_file:
-                from os.path import basename
-                inp = etree.parse(inp_file)
-                logger.info('_lxml.xslt(%s) start', basename(xsl_path))
-                out = xslt(inp)
-                logger.info('_lxml.xslt(%s) end', basename(xsl_path))
-                out_file.write(str(out))
-                return dict()
-    return transform
+        with file(xsl_path) as xsl_file:
+            xsl_doc = etree.parse(xsl_file)
+
+        self.xsl_path = xsl_path
+        self.etree_xslt = etree.XSLT(xsl_doc)
+        self.params = dict((name, etree.XSLT.strparam(value))
+                           for name, value in params.items())
+
+    def transform(self, input, output):
+        '''
+        >>> T.transform('input.xml', 'output.xml')
+        '''
+        with file(input) as inp_file:
+            with file(output, 'w') as out_file:
+                return self._transform(inp_file, out_file)
+
+    def transform_into_stream(self, input, output):
+        '''
+        >>> T.transform_into_stream('input.xml', sys.stdout)
+        '''
+        with file(input) as inp_file:
+            return self._transform(inp_file, output)
+
+    def _transform(self, input, output):
+        from lxml import etree
+        source = etree.parse(input)
+        logger.info('_lxml.xslt(%s) start',
+                    os.path.basename(self.xsl_path))
+        result = self.etree_xslt(source, **self.params)
+        logger.info('_lxml.xslt(%s) end',
+                    os.path.basename(self.xsl_path))
+        output.write(str(result))
+        return dict()
 
 
 def relaxng(rng_path, inp_path):
-    validate = relaxng_compile(rng_path)
-    return validate(inp_path)
+    relaxng = RelaxNG(rng_path)
+    return relaxng.validate(inp_path)
 
 
 def relaxng_compile(rng_path):
@@ -84,35 +110,63 @@ def relaxng_compile(rng_path):
     :param rng_path: RelaxNG path
     :returns: a validation function
     '''
+    return RelaxNG(rng_path)
 
-    rng_file = file(rng_path)
-    try:
-        rng = etree.parse(rng_file)
-    finally:
-        rng_file.close()
 
-    relaxng = etree.RelaxNG(rng)
+class RelaxNG:
 
-    def validate(inp_path):
-        ''' Validate XML against %r
-        ''' % rng_path
-        from os.path import basename
-        with file(inp_path) as f:
-            inp = etree.parse(f)
-        logger.info('_lxml.relaxng(%s) start', basename(rng_path))
+    def __init__(self, rng_path):
+        from lxml import etree
+
+        with file(rng_path) as rng_file:
+            rng = etree.parse(rng_file)
+
+        self.rng_path = rng_path
+        self.etree_relaxng = etree.RelaxNG(rng)
+
+    @contextmanager
+    def validating_output(self, output):
+        fd, name = tempfile.mkstemp()
         try:
-            valid = relaxng.validate(inp)
+            with os.fdopen(fd, 'w+') as f:
+                yield f
+                f.seek(0)
+                if not self.validate_stream(f):
+                    raise ValidationFailed('RelaxNG')
+                f.seek(0)
+                shutil.copyfileobj(f, output)
+        finally:
+            try:
+                os.unlink(name)
+            except Exception, e:
+                logger.warning('%s: can\'t unlink %s', e, name)
+
+    def validate(self, input):
+        from lxml import etree
+        with file(input) as f:
+            doc = etree.parse(f)
+        return self._validate(doc)
+
+    def validate_stream(self, input):
+        from lxml import etree
+        doc = etree.parse(input)
+        return self._validate(doc)
+
+    def _validate(self, doc):
+        from os.path import basename
+        logger.info('_lxml.relaxng(%s) start', basename(self.rng_path))
+        try:
+            valid = self.etree_relaxng.validate(doc)
         except Exception, e:
             logger.exception(e)
             raise
         else:
             if not valid:
-                for error in relaxng.error_log:
+                for error in self.etree_relaxng.error_log:
                     logger.error('%s', error)
             return valid
         finally:
-            logger.info('_lxml.relaxng(%s) end', basename(rng_path))
-    return validate
+            logger.info('_lxml.relaxng(%s) end', basename(self.rng_path))
 
 
 def errlog_to_dict(error):

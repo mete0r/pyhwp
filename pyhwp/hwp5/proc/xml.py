@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -29,6 +29,7 @@ Usage::
                  [--no-xml-decl]
                  [--output=<file>]
                  [--format=<format>]
+                 [--no-validate-wellformed]
                  [--loglevel=<loglevel>] [--logfile=<logfile>]
                  <hwp5file>
     hwp5proc xml --help
@@ -61,36 +62,53 @@ Example::
 
 '''
 from __future__ import with_statement
+from functools import partial
+import logging
+
 from hwp5.proc import entrypoint
 from hwp5.xmldump_flat import xmldump_flat
+
+
+logger = logging.getLogger(__name__)
+
+
+def xmldump_nested(hwp5file, output, embedbin=False, xml_declaration=True):
+    dump = hwp5file.xmlevents(embedbin=embedbin).dump
+    dump = partial(dump, xml_declaration=xml_declaration)
+    dump(output)
 
 
 @entrypoint(__doc__)
 def main(args):
     ''' Transform <hwp5file> into an XML.
     '''
-    import sys
     from hwp5.xmlmodel import Hwp5File
-
-    opts = dict()
-    opts['embedbin'] = args['--embedbin']
-
-    if args['--output']:
-        output = open(args['--output'], 'w')
-    else:
-        output = sys.stdout
-
-    if args['--no-xml-decl']:
-        xml_declaration = False
-    else:
-        xml_declaration = True
+    from ..utils import make_open_dest_file
+    from ..utils import wrap_open_dest_for_tty
+    from ..utils import wrap_open_dest
+    from ..utils import pager
+    from ..utils import syntaxhighlight
+    from ..utils import xmllint
 
     fmt = args['--format'] or 'nested'
+    if fmt == 'flat':
+        xmldump = partial(xmldump_flat, xml_declaration=args['--no-xml-decl'])
+    elif fmt == 'nested':
+        xmldump = partial(xmldump_nested, embedbin=args['--embedbin'],
+                          xml_declaration=args['--no-xml-decl'])
 
-    with output:
-        hwp5file = Hwp5File(args['<hwp5file>'])
-        if fmt == 'flat':
-            xmldump_flat(hwp5file, output, xml_declaration=xml_declaration)
-        elif fmt == 'nested':
-            hwp5file.xmlevents(**opts).dump(output,
-                                            xml_declaration=xml_declaration)
+    open_dest = make_open_dest_file(args['--output'])
+    open_dest = wrap_open_dest_for_tty(open_dest, [
+        pager(),
+        syntaxhighlight('application/xml'),
+    ] + ([
+        xmllint(format=True),
+    ] if not args['--no-validate-wellformed'] else []))
+    open_dest = wrap_open_dest(open_dest, [
+        xmllint(encode='utf-8'),
+        xmllint(c14n=True),
+    ] if not args['--no-validate-wellformed'] else [])
+
+    hwp5file = Hwp5File(args['<hwp5file>'])
+    with open_dest() as output:
+        xmldump(hwp5file, output)

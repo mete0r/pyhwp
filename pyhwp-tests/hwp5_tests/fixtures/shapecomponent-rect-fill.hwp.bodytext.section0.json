@@ -105,12 +105,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -548,12 +547,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -805,12 +803,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -1072,12 +1069,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -1141,8 +1137,11 @@
     "chid0": "$rec", 
     "fill_flags": 512, 
     "fill_image": {
-      "flags": 5, 
-      "storage_id": 1
+      "bindata_id": 1, 
+      "brightness": 0, 
+      "contrast": 0, 
+      "effect": 0, 
+      "flags": 5
     }, 
     "fill_shape": 0, 
     "flags": 0, 
@@ -1327,12 +1326,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -1401,8 +1399,11 @@
     }, 
     "fill_flags": 768, 
     "fill_image": {
-      "flags": 5, 
-      "storage_id": 1
+      "bindata_id": 1, 
+      "brightness": 0, 
+      "contrast": 0, 
+      "effect": 0, 
+      "flags": 5
     }, 
     "fill_shape": 0, 
     "flags": 0, 
@@ -1588,12 +1589,11 @@
   "content": {
     "linesegs": [
       {
-        "a8": 0, 
         "chpos": 0, 
-        "flags": 6, 
         "height": 1000, 
-        "height2": 1000, 
-        "height85": 850, 
+        "height_baseline": 850, 
+        "height_text": 1000, 
+        "lineseg_flags": 393216, 
         "space_below": 600, 
         "width": 42520, 
         "x": 0, 
@@ -1671,8 +1671,11 @@
       "type": 1
     }, 
     "fill_image": {
-      "flags": 5, 
-      "storage_id": 1
+      "bindata_id": 1, 
+      "brightness": 0, 
+      "contrast": 0, 
+      "effect": 0, 
+      "flags": 5
     }, 
     "fill_shape": 1, 
     "flags": 0, 

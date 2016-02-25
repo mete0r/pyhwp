@@ -209,12 +209,16 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template mode="make-style-name" match="Style">
+    <xsl:call-template name="make-ncname">
+      <xsl:with-param name="str" select="@local-name" />
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template mode="style:style" match="Style">
     <xsl:element name="style:style">
       <xsl:attribute name="style:name">
-        <xsl:call-template name="make-ncname">
-          <xsl:with-param name="str" select="@local-name" />
-        </xsl:call-template>
+        <xsl:apply-templates mode="make-style-name" select="." />
       </xsl:attribute>
       <!--
       <xsl:attribute name="style:parent-style-name"/>
@@ -222,9 +226,7 @@
       <xsl:variable name="styles" select="/HwpDoc/DocInfo/IdMappings/Style" />
       <xsl:variable name="next-style-id" select="@next-style-id + 1"/>
       <xsl:attribute name="style:next-style-name">
-        <xsl:call-template name="make-ncname">
-          <xsl:with-param name="str" select="$styles[$next-style-id]/@local-name" />
-        </xsl:call-template>
+        <xsl:apply-templates mode="make-style-name" select="$styles[$next-style-id]" />
       </xsl:attribute>
       <xsl:attribute name="style:family">paragraph</xsl:attribute>
       <xsl:attribute name="style:class">text</xsl:attribute>
@@ -239,10 +241,11 @@
   <xsl:template name="make-ncname">
     <!-- see #140 -->
     <!-- see http://www.w3.org/TR/REC-xml-names/#NT-NCName -->
+    <!-- see http://www.w3.org/TR/REC-xml/#NT-Name -->
     <!-- see http://stackoverflow.com/questions/1631396/what-is-an-xsncname-type-and-when-should-it-be-used -->
     <xsl:param name="str" />
     <xsl:variable name="prohibited"> !&quot;#$%&amp;&apos;()*+,/:;&lt;=&gt;?@[\]^`{|}~</xsl:variable>
-    <xsl:variable name="replace">------------------------------</xsl:variable>
+    <xsl:variable name="replace">______________________________</xsl:variable>
     <xsl:value-of select="translate($str, $prohibited, $replace)" />
   </xsl:template>
 
@@ -615,11 +618,43 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template mode="style:text-xxxline-style-value" match="CharShape">
+    <xsl:choose>
+      <xsl:when test="@underline-style = 'solid'">solid</xsl:when>
+      <xsl:when test="@underline-style = 'dashed'">dash</xsl:when>
+      <xsl:when test="@underline-style = 'dotted'">dotted</xsl:when>
+      <xsl:when test="@underline-style = 'dash_dot'">dot-dash</xsl:when>
+      <xsl:when test="@underline-style = 'dash_dot_dot'">dot-dot-dash</xsl:when>
+      <xsl:when test="@underline-style = 'long_dashed'">long-dash</xsl:when>
+      <xsl:when test="@underline-style = 'large_dotted'">dotted</xsl:when>
+      <xsl:when test="@underline-style = 'double'">solid</xsl:when>
+      <xsl:when test="@underline-style = 'lower_weighted'">solid</xsl:when>
+      <xsl:when test="@underline-style = 'upper_weighted'">solid</xsl:when>
+      <xsl:when test="@underline-style = 'middle_weighted'">solid</xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="style:text-xxxline-type-value" match="CharShape">
+    <xsl:choose>
+      <xsl:when test="@underline-style = 'solid'">single</xsl:when>
+      <xsl:when test="@underline-style = 'dashed'">single</xsl:when>
+      <xsl:when test="@underline-style = 'dotted'">single</xsl:when>
+      <xsl:when test="@underline-style = 'dash_dot'">single</xsl:when>
+      <xsl:when test="@underline-style = 'dash_dot_dot'">single</xsl:when>
+      <xsl:when test="@underline-style = 'long_dashed'">single</xsl:when>
+      <xsl:when test="@underline-style = 'large_dotted'">single</xsl:when>
+      <xsl:when test="@underline-style = 'double'">double</xsl:when>
+      <xsl:when test="@underline-style = 'lower_weighted'">double</xsl:when>
+      <xsl:when test="@underline-style = 'upper_weighted'">double</xsl:when>
+      <xsl:when test="@underline-style = 'middle_weighted'">double</xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template mode="style:text-underline" match="CharShape">
     <xsl:choose>
       <xsl:when test="@underline = 'underline'">
-        <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
-        <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
+        <xsl:attribute name="style:text-underline-type"><xsl:apply-templates mode="style:text-xxxline-type-value" select="." /></xsl:attribute>
+        <xsl:attribute name="style:text-underline-style"><xsl:apply-templates mode="style:text-xxxline-style-value" select="." /></xsl:attribute>
         <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
         <xsl:attribute name="style:text-underline-color">
           <xsl:value-of select="@underline-color"/>
@@ -633,9 +668,9 @@
 
   <xsl:template mode="style:text-overline" match="CharShape">
     <xsl:choose>
-      <xsl:when test="@underline = 'upperline'">
-        <xsl:attribute name="style:text-overline-type">single</xsl:attribute>
-        <xsl:attribute name="style:text-overline-style">solid</xsl:attribute>
+      <xsl:when test="@underline = 'overline'">
+        <xsl:attribute name="style:text-overline-type"><xsl:apply-templates mode="style:text-xxxline-type-value" select="." /></xsl:attribute>
+        <xsl:attribute name="style:text-overline-style"><xsl:apply-templates mode="style:text-xxxline-style-value" select="." /></xsl:attribute>
         <xsl:attribute name="style:text-overline-width">auto</xsl:attribute>
         <xsl:attribute name="style:text-overline-color">
           <xsl:value-of select="@underline-color"/>
@@ -649,9 +684,9 @@
 
   <xsl:template mode="style:text-line-through" match="CharShape">
     <xsl:choose>
-      <xsl:when test="@underline = 'unknown'">
-        <xsl:attribute name="style:text-line-through-type">single</xsl:attribute>
-        <xsl:attribute name="style:text-line-through-style">solid</xsl:attribute>
+      <xsl:when test="@underline = 'line_through'">
+        <xsl:attribute name="style:text-line-through-type"><xsl:apply-templates mode="style:text-xxxline-type-value" select="." /></xsl:attribute>
+        <xsl:attribute name="style:text-line-through-style"><xsl:apply-templates mode="style:text-xxxline-style-value" select="." /></xsl:attribute>
         <xsl:attribute name="style:text-line-through-width">auto</xsl:attribute>
         <xsl:attribute name="style:text-line-through-color">
           <xsl:value-of select="@underline-color"/>
@@ -737,7 +772,7 @@
         </xsl:attribute>
         <xsl:apply-templates mode="style:parent-style-name" select="$style" />
         <xsl:if test="@new-section = '1'">
-          <xsl:apply-templates mode="style:master-page-name" select=".." />
+          <xsl:apply-templates mode="style:master-page-name" select="../.." />
         </xsl:if>
 	<xsl:apply-templates mode="style:paragraph-properties" select="." />
       </xsl:element>
@@ -820,7 +855,7 @@
 
   <xsl:template mode="style:parent-style-name" match="Style">
     <xsl:attribute name="style:parent-style-name">
-      <xsl:value-of select="translate(translate(@local-name, ' ', '_'), '/', '-')" />
+      <xsl:apply-templates mode="make-style-name" select="." />
     </xsl:attribute>
   </xsl:template>
 
@@ -848,7 +883,9 @@
             <xsl:attribute name="text:style-name">Paragraph-<xsl:value-of select="@paragraph-id + 1"/></xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="text:style-name"><xsl:value-of select="$style/@local-name"/></xsl:attribute>
+            <xsl:attribute name="text:style-name">
+              <xsl:apply-templates mode="make-style-name" select="$style" />
+            </xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:apply-templates select="LineSeg">

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +21,7 @@ from hwp5.tagids import HWPTAG_PARA_LINE_SEG
 from hwp5.binmodel._shared import ref_parent_member
 from hwp5.dataio import ArrayType
 from hwp5.dataio import Struct
-from hwp5.dataio import UINT16
+from hwp5.dataio import UINT32
 from hwp5.dataio import Flags
 from hwp5.dataio import SHWPUNIT
 from hwp5.dataio import INT32
@@ -29,20 +29,26 @@ from hwp5.dataio import X_ARRAY
 
 
 class LineSeg(Struct):
-    Flags = Flags(UINT16,
-                  4, 'indented')
+    Flags = Flags(UINT32,
+                  # 0, 'first_in_page',
+                  # 1, 'first_in_column',
+                  # 16, 'empty',
+                  17, 'line_head',
+                  18, 'line_tail',
+                  # 19, 'auto_hyphen',
+                  20, 'indented',
+                  21, 'bullet')
 
     def attributes(cls):
         yield INT32, 'chpos',
         yield SHWPUNIT, 'y',
         yield SHWPUNIT, 'height',
-        yield SHWPUNIT, 'height2',
-        yield SHWPUNIT, 'height85',
+        yield SHWPUNIT, 'height_text',
+        yield SHWPUNIT, 'height_baseline',
         yield SHWPUNIT, 'space_below',
         yield SHWPUNIT, 'x',
         yield SHWPUNIT, 'width'
-        yield UINT16, 'a8'
-        yield cls.Flags, 'flags'
+        yield cls.Flags, 'lineseg_flags'
     attributes = classmethod(attributes)
 
 

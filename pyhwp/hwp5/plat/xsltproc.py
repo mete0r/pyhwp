@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -18,6 +18,7 @@
 #
 from __future__ import with_statement
 import logging
+from subprocess import Popen
 
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,6 @@ enabled = None
 
 
 def xslt_reachable():
-    from subprocess import Popen
     args = [executable, '--version']
     try:
         p = Popen(args)
@@ -56,11 +56,45 @@ def disable():
 
 
 def xslt(xsl_path, inp_path, out_path):
-    from subprocess import Popen
-    args = [executable, '-o', out_path, xsl_path, inp_path]
-    p = Popen(args)
-    p.wait()
-    if p.returncode == 0:
-        return dict()
-    else:
-        return dict(errors=[])
+    xslt = XSLT(xsl_path)
+    return xslt.transform(inp_path, out_path)
+
+
+class XSLT:
+
+    def __init__(self, xsl_path, **params):
+        self.xsl_path = xsl_path
+        self.cmd = [executable]
+        for name, value in params.items():
+            self.cmd.extend(['--stringparam', name, value])
+
+    def transform(self, input, output):
+        '''
+        >>> T.transform('input.xml', 'output.xml')
+        '''
+        cmd = self.cmd + ['-o', output, self.xsl_path, input]
+        logger.info('%r', cmd)
+        p = Popen(cmd)
+        p.wait()
+        if p.returncode == 0:
+            return dict()
+        else:
+            return dict(errors=[])
+
+    def transform_into_stream(self, input, output):
+        '''
+        >>> T.transform_into_stream('input.xml', sys.stdout)
+        '''
+        cmd = self.cmd + [self.xsl_path, input]
+        logger.info('%r', cmd)
+        p = Popen(cmd, stdout=output)
+        p.wait()
+        if p.returncode == 0:
+            return dict()
+        else:
+            return dict(errors=[])
+
+
+def xslt_compile(xsl_path, **params):
+    xslt = XSLT(xsl_path, **params)
+    return xslt.transform_into_stream

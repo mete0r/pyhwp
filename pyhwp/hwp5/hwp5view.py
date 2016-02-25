@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -48,7 +48,7 @@ from hwp5 import __version__ as version
 from hwp5.proc import rest_to_docopt
 from hwp5.proc import init_logger
 from hwp5.xmlmodel import Hwp5File
-from hwp5.hwp5html import generate_htmldir
+from hwp5.hwp5html import HTMLTransform
 
 
 logger = logging.getLogger(__name__)
@@ -70,6 +70,36 @@ def main():
             # view.load_uri(index_uri)
             view.load_string(content, 'text/html', 'utf-8', base_uri)
 
+            def on_load(webview, webframe):
+                script = ('window.location.href = "dimension:" '
+                          '+ document.body.scrollWidth + "x"'
+                          '+ document.body.scrollHeight')
+                webview.execute_script(script)
+
+            MIN_WIDTH = 300
+            MIN_HEIGHT = 400
+            MAX_WIDTH = 1024
+            MAX_HEIGHT = 800
+
+            view.connect('load-finished', on_load)
+
+            def on_navigation_requested(webview, frame, req, data=None):
+                uri = req.get_uri()
+                scheme, path = uri.split(':', 1)
+                if scheme == 'dimension':
+                    width, height = path.split('x', 1)
+                    width = int(width)
+                    height = int(height)
+                    width = min(width, MAX_WIDTH)
+                    height = min(height, MAX_HEIGHT)
+                    width = max(width, MIN_WIDTH)
+                    height = max(height, MIN_HEIGHT)
+                    window.resize(width + 4, height)
+                    return True
+                return False
+
+            view.connect('navigation-requested', on_navigation_requested)
+
             scrolled_window = Gtk.ScrolledWindow()
             scrolled_window.add(view)
 
@@ -79,7 +109,7 @@ def main():
             window = Gtk.Window()
             window.add(vbox)
             window.connect('delete-event', Gtk.main_quit)
-            window.set_default_size(600, 400)
+            window.set_default_size(600, 800)
             window.show_all()
 
             Gtk.main()
@@ -97,7 +127,7 @@ def make_temporary_directory(*args, **kwargs):
 @contextmanager
 def hwp5html(filename, out_dir):
     with closing(Hwp5File(filename)) as hwp5file:
-        generate_htmldir(hwp5file, out_dir)
+        HTMLTransform().transform_hwp5_to_dir(hwp5file, out_dir)
         yield os.path.join(out_dir, 'index.xhtml')
 
 
