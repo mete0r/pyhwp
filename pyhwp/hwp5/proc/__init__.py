@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -116,7 +116,7 @@ subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
 
 import hwp5
 version = '''hwp5proc (pyhwp) %s
-Copyright (C) 2010-2014 mete0r <mete0r@sarangbang.or.kr>
+Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 License AGPLv3+: GNU Affero GPL version 3 or any later
 <http://gnu.org/licenses/agpl.txt>.
 This is free software: you are free to change and redistribute it.
