@@ -1,0 +1,10 @@
+language: python
+python:
+  - "2.7"
+  - "pypy"
+install:
+  - pip install -r requirements-dev.txt
+  - pip install tox-travis
+  - buildout
+script:
+  - tox
