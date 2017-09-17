@@ -3,7 +3,9 @@ python:
   - "2.7"
   - "pypy"
 install:
-  - pip install buildout tox-travis
+  - pip install -U setuptools pip wheel
+  - pip install -U zc.buildout tox tox-travis
   - buildout
+  - tox --version
 script:
   - tox
