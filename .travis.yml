@@ -13,4 +13,4 @@ install:
   - sort --version
   - env | sort
 script:
-  - tox
+  - /bin/bash .travis.sh
