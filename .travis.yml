@@ -26,5 +26,6 @@ install:
   - tox --version
   - sort --version
   - env | sort
+  - if [ "$TOXENV" == "jy27" ]; then make install-jython; fi
 script:
   - tox
