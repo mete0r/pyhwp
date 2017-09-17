@@ -5,6 +5,7 @@ include Makefile
 include VERSION.txt
 include README
 include README.rst
+include buildout.cfg
 include classifiers.txt
 include ez_setup.py
 include pyhwp/README.rst

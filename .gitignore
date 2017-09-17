@@ -12,7 +12,6 @@
 /.tox
 /bin
 /build
-/buildout.cfg
 /develop-eggs
 /dist
 /docs/.build
