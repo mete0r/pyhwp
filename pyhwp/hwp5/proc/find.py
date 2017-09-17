@@ -72,8 +72,9 @@ def main(args):
     filenames = filenames_from_args(args)
 
     conditions = list(conditions_from_args(args))
-    conditions_match = lambda m: all(condition(m) for condition in conditions)
-    filter_conditions = partial(ifilter, conditions_match)
+    filter_conditions = partial(
+        ifilter, lambda m: all(condition(m) for condition in conditions)
+    )
 
     print_model = printer_from_args(args)
 

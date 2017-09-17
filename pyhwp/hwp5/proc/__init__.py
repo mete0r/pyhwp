@@ -35,6 +35,8 @@ import os
 
 from docopt import docopt
 
+import hwp5
+
 
 logger = logging.getLogger(__name__)
 
@@ -114,7 +116,6 @@ subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
                'diststream']
 
 
-import hwp5
 version = '''hwp5proc (pyhwp) %s
 Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
 License AGPLv3+: GNU Affero GPL version 3 or any later

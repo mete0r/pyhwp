@@ -106,10 +106,10 @@ HWPUNIT = Primitive('HWPUNIT', long, '<I')
 SHWPUNIT = Primitive('SHWPUNIT', int, '<i')
 HWPUNIT16 = Primitive('HWPUNIT16', int, '<h')
 
-inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
-hwp2inch = lambda x: x / 7200.0
-hwp2mm = lambda x: inch2mm(hwp2inch(x))
-hwp2pt = lambda x: int((x / 100.0) * 10 + 0.5) / 10.0
+inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100  # noqa
+hwp2inch = lambda x: x / 7200.0  # noqa
+hwp2mm = lambda x: inch2mm(hwp2inch(x))  # noqa
+hwp2pt = lambda x: int((x / 100.0) * 10 + 0.5) / 10.0  # noqa
 
 
 class HexBytes(type):
@@ -421,15 +421,17 @@ N_ARRAY = VariableLengthArrayType
 
 
 def ref_member(member_name):
-    f = lambda context, values: values[member_name]
-    f.__doc__ = member_name
-    return f
+    def fn(context, values):
+        return values[member_name]
+    fn.__doc__ = member_name
+    return fn
 
 
 def ref_member_flag(member_name, bitfield_name):
-    f = lambda context, values: getattr(values[member_name], bitfield_name)
-    f.__doc__ = '%s.%s' % (member_name, bitfield_name)
-    return f
+    def fn(context, values):
+        return getattr(values[member_name], bitfield_name)
+    fn.__doc__ = '%s.%s' % (member_name, bitfield_name)
+    return fn
 
 
 class X_ARRAY(object):
