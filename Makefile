@@ -58,3 +58,9 @@ requirements-dev.txt: $(REQUIREMENTS_IN_DEV)
 .PHONY: notebook
 notebook:
 	$(VENV)	jupyter notebook --notebook-dir=notebooks
+
+
+.PHONY: clitest
+clitest:
+	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt
+	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5odt.txt
