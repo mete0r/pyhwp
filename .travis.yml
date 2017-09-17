@@ -20,7 +20,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libxml2-utils xsltproc
 install:
-  - pip install -U setuptools pip wheel
+  - pip install -U setuptools pip wheel jip
   - pip install -U zc.buildout tox
   - buildout
   - tox --version
