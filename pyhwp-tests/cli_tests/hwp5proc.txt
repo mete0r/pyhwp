@@ -165,26 +165,18 @@ summaryinfo 명령
           --logfile=<file>    Set log file.
 
    $ hwp5proc summaryinfo samples/sample-5017.hwp
-   byteorder: 0xfffe
-   clsid: 9fa2b660-1061-11d4-b4c6-006097c09d8c
-   format: 0
-   os: 2 win32
-   osversion: 261
-   -- Section 9fa2b660-1061-11d4-b4c6-006097c09d8c --
-   PID_PROPDISPNAMEDICT: {0: '\x00'}
-   PIDSI_TITLE: 제목입니다.
-   PIDSI_SUBJECT: 주제입니다.
-   PIDSI_AUTHOR: 지은이입니다.
-   PIDSI_KEYWORDS: 키워드입니다.
-   PIDSI_COMMENTS: 기타입니다.
-   PIDSI_LASTAUTHOR: mete0r
-   PIDSI_REVNUMBER: 6, 7, 9, 1053 WIN6
-   PIDSI_LASTPRINTED: 1601-01-01 00:00:00
-   PIDSI_CREATE_DTM: 2010-07-02 03:36:13.540000
-   PIDSI_LASTSAVE_DTM: 2011-06-14 12:54:58.775000
-   PIDSI_PAGECOUNT: 2
-   20: 2010년 7월 2일 금요일 오후 12:36:13
-   21: 26
+   Title: 제목입니다.
+   Author: 지은이입니다.
+   Keywords: 키워드입니다.
+   Comments: 기타입니다.
+   Last saved by: mete0r
+   Revision Number: 6, 7, 9, 1053 WIN6
+   Last Printed at: 1601-01-01 00:00:00
+   Created at: 2010-07-02 03:36:13.540000
+   Last saved at: 2011-06-14 12:54:58.775000
+   Number of pages: 2
+   Date: 2010년 7월 2일 금요일 오후 12:36:13
+   Number of paragraphs: 26
 
 -------
 ls 명령
@@ -374,6 +366,30 @@ cat 명령
    signature: HWP Document File
    version: 5.0.1.7
    xmltemplate_storage: 0
+
+   $ hwp5proc cat --vstreams samples/sample-5017.hwp $(printf '\005HwpSummaryInformation.txt')
+   - ByteOrder: 0xfffe
+   - Version: 0
+   - SystemIdentifier: 0x00020105
+   - CLSID: 9fa2b660-1061-11d4-b4c6-006097c09d8c
+   
+   - 00000030: Property Set 9fa2b660-1061-11d4-b4c6-006097c09d8c
+               -------------------------------------------------
+   - 000000a8: PIDSI_TITLE(=0x00000002): 제목입니다.
+   - 000000c0: PIDSI_SUBJECT(=0x00000003): 주제입니다.
+   - 000000d8: PIDSI_AUTHOR(=0x00000004): 지은이입니다.
+   - 000000f0: HWPPIDSI_DATE_STR(=0x00000014): 2010년 7월 2일 금요일 오후 12:36:13
+   - 00000130: PIDSI_KEYWORDS(=0x00000005): 키워드입니다.
+   - 00000148: PIDSI_COMMENTS(=0x00000006): 기타입니다.
+   - 00000160: PIDSI_LASTAUTHOR(=0x00000008): mete0r
+   - 00000178: PIDSI_REVNUMBER(=0x00000009): 6, 7, 9, 1053 WIN6
+   - 000001a8: PIDSI_CREATE_DTM(=0x0000000c): 2010-07-02 03:36:13.540000
+   - 000001b4: PIDSI_LASTSAVE_DTM(=0x0000000d): 2011-06-14 12:54:58.775000
+   - 000001c0: PIDSI_LASTPRINTED(=0x0000000b): 1601-01-01 00:00:00
+   - 000001cc: PIDSI_PAGECOUNT(=0x0000000e): 2
+   - 000001d4: HWPPIDSI_PARACOUNT(=0x00000015): 26
+   - 000001dc: PID_DICTIONARY(=0x00000000):
+               - 0: 
 
    $ hwp5proc cat samples/sample-5017.hwp BodyText/Section0 | sha1sum
    0c66f772894487ba06cd225ebc4871f552e07cf8  -
@@ -1576,21 +1592,27 @@ xml 명령
    $ hwp5proc xml samples/sample-5017.hwp | xmllint --format -
    <?xml version="1.0" encoding="utf-8"?>
    <HwpDoc version="5.0.1.7">
-     <HwpSummaryInfo byteorder="fffe" clsid="9fa2b660-1061-11d4-b4c6-006097c09d8c" format="0" os="2" osversion="261">
-       <Property id="0" name="PID_PROPDISPNAMEDICT" value="{0: '\x00'}"/>
-       <Property id="2" name="PIDSI_TITLE" value="제목입니다."/>
-       <Property id="3" name="PIDSI_SUBJECT" value="주제입니다."/>
-       <Property id="4" name="PIDSI_AUTHOR" value="지은이입니다."/>
-       <Property id="5" name="PIDSI_KEYWORDS" value="키워드입니다."/>
-       <Property id="6" name="PIDSI_COMMENTS" value="기타입니다."/>
-       <Property id="8" name="PIDSI_LASTAUTHOR" value="mete0r"/>
-       <Property id="9" name="PIDSI_REVNUMBER" value="6, 7, 9, 1053 WIN6"/>
-       <Property id="11" name="PIDSI_LASTPRINTED" value="1601-01-01 00:00:00"/>
-       <Property id="12" name="PIDSI_CREATE_DTM" value="2010-07-02 03:36:13.540000"/>
-       <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2011-06-14 12:54:58.775000"/>
-       <Property id="14" name="PIDSI_PAGECOUNT" value="2"/>
-       <Property id="20" value="2010년 7월 2일 금요일 오후 12:36:13"/>
-       <Property id="21" value="26"/>
+     <HwpSummaryInfo>
+       <PropertySetStream byte-order="fffe" clsid="9fa2b660-1061-11d4-b4c6-006097c09d8c" system-identifier="00020105" version="0">
+         <PropertySet fmtid="9fa2b660-1061-11d4-b4c6-006097c09d8c" offset="48">
+           <Property id="2" id-label="PIDSI_TITLE" offset="120" type="VT_LPWSTR" type-code="0x001f" value="제목입니다."/>
+           <Property id="3" id-label="PIDSI_SUBJECT" offset="144" type="VT_LPWSTR" type-code="0x001f" value="주제입니다."/>
+           <Property id="4" id-label="PIDSI_AUTHOR" offset="168" type="VT_LPWSTR" type-code="0x001f" value="지은이입니다."/>
+           <Property id="20" id-label="HWPPIDSI_DATE_STR" offset="192" type="VT_LPWSTR" type-code="0x001f" value="2010년 7월 2일 금요일 오후 12:36:13"/>
+           <Property id="5" id-label="PIDSI_KEYWORDS" offset="256" type="VT_LPWSTR" type-code="0x001f" value="키워드입니다."/>
+           <Property id="6" id-label="PIDSI_COMMENTS" offset="280" type="VT_LPWSTR" type-code="0x001f" value="기타입니다."/>
+           <Property id="8" id-label="PIDSI_LASTAUTHOR" offset="304" type="VT_LPWSTR" type-code="0x001f" value="mete0r"/>
+           <Property id="9" id-label="PIDSI_REVNUMBER" offset="328" type="VT_LPWSTR" type-code="0x001f" value="6, 7, 9, 1053 WIN6"/>
+           <Property id="12" id-label="PIDSI_CREATE_DTM" offset="376" type="VT_FILETIME" type-code="0x0040" value="2010-07-02 03:36:13.540000"/>
+           <Property id="13" id-label="PIDSI_LASTSAVE_DTM" offset="388" type="VT_FILETIME" type-code="0x0040" value="2011-06-14 12:54:58.775000"/>
+           <Property id="11" id-label="PIDSI_LASTPRINTED" offset="400" type="VT_FILETIME" type-code="0x0040" value="1601-01-01 00:00:00"/>
+           <Property id="14" id-label="PIDSI_PAGECOUNT" offset="412" type="VT_I4" type-code="0x0003" value="2"/>
+           <Property id="21" id-label="HWPPIDSI_PARACOUNT" offset="420" type="VT_I4" type-code="0x0003" value="26"/>
+           <Property id="0" id-label="PID_DICTIONARY" offset="428">
+             <DictionaryEntry id="0" name=""/>
+           </Property>
+         </PropertySet>
+       </PropertySetStream>
      </HwpSummaryInfo>
      <DocInfo>
        <DocumentProperties character-unit-loc-in-paragraph="5" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="7" picture-startnum="1" section-count="1" table-startnum="1"/>
@@ -2101,21 +2123,27 @@ xml 명령
    $ hwp5proc xml --embedbin samples/sample-5017.hwp | xmllint --format -
    <?xml version="1.0" encoding="utf-8"?>
    <HwpDoc version="5.0.1.7">
-     <HwpSummaryInfo byteorder="fffe" clsid="9fa2b660-1061-11d4-b4c6-006097c09d8c" format="0" os="2" osversion="261">
-       <Property id="0" name="PID_PROPDISPNAMEDICT" value="{0: '\x00'}"/>
-       <Property id="2" name="PIDSI_TITLE" value="제목입니다."/>
-       <Property id="3" name="PIDSI_SUBJECT" value="주제입니다."/>
-       <Property id="4" name="PIDSI_AUTHOR" value="지은이입니다."/>
-       <Property id="5" name="PIDSI_KEYWORDS" value="키워드입니다."/>
-       <Property id="6" name="PIDSI_COMMENTS" value="기타입니다."/>
-       <Property id="8" name="PIDSI_LASTAUTHOR" value="mete0r"/>
-       <Property id="9" name="PIDSI_REVNUMBER" value="6, 7, 9, 1053 WIN6"/>
-       <Property id="11" name="PIDSI_LASTPRINTED" value="1601-01-01 00:00:00"/>
-       <Property id="12" name="PIDSI_CREATE_DTM" value="2010-07-02 03:36:13.540000"/>
-       <Property id="13" name="PIDSI_LASTSAVE_DTM" value="2011-06-14 12:54:58.775000"/>
-       <Property id="14" name="PIDSI_PAGECOUNT" value="2"/>
-       <Property id="20" value="2010년 7월 2일 금요일 오후 12:36:13"/>
-       <Property id="21" value="26"/>
+     <HwpSummaryInfo>
+       <PropertySetStream byte-order="fffe" clsid="9fa2b660-1061-11d4-b4c6-006097c09d8c" system-identifier="00020105" version="0">
+         <PropertySet fmtid="9fa2b660-1061-11d4-b4c6-006097c09d8c" offset="48">
+           <Property id="2" id-label="PIDSI_TITLE" offset="120" type="VT_LPWSTR" type-code="0x001f" value="제목입니다."/>
+           <Property id="3" id-label="PIDSI_SUBJECT" offset="144" type="VT_LPWSTR" type-code="0x001f" value="주제입니다."/>
+           <Property id="4" id-label="PIDSI_AUTHOR" offset="168" type="VT_LPWSTR" type-code="0x001f" value="지은이입니다."/>
+           <Property id="20" id-label="HWPPIDSI_DATE_STR" offset="192" type="VT_LPWSTR" type-code="0x001f" value="2010년 7월 2일 금요일 오후 12:36:13"/>
+           <Property id="5" id-label="PIDSI_KEYWORDS" offset="256" type="VT_LPWSTR" type-code="0x001f" value="키워드입니다."/>
+           <Property id="6" id-label="PIDSI_COMMENTS" offset="280" type="VT_LPWSTR" type-code="0x001f" value="기타입니다."/>
+           <Property id="8" id-label="PIDSI_LASTAUTHOR" offset="304" type="VT_LPWSTR" type-code="0x001f" value="mete0r"/>
+           <Property id="9" id-label="PIDSI_REVNUMBER" offset="328" type="VT_LPWSTR" type-code="0x001f" value="6, 7, 9, 1053 WIN6"/>
+           <Property id="12" id-label="PIDSI_CREATE_DTM" offset="376" type="VT_FILETIME" type-code="0x0040" value="2010-07-02 03:36:13.540000"/>
+           <Property id="13" id-label="PIDSI_LASTSAVE_DTM" offset="388" type="VT_FILETIME" type-code="0x0040" value="2011-06-14 12:54:58.775000"/>
+           <Property id="11" id-label="PIDSI_LASTPRINTED" offset="400" type="VT_FILETIME" type-code="0x0040" value="1601-01-01 00:00:00"/>
+           <Property id="14" id-label="PIDSI_PAGECOUNT" offset="412" type="VT_I4" type-code="0x0003" value="2"/>
+           <Property id="21" id-label="HWPPIDSI_PARACOUNT" offset="420" type="VT_I4" type-code="0x0003" value="26"/>
+           <Property id="0" id-label="PID_DICTIONARY" offset="428">
+             <DictionaryEntry id="0" name=""/>
+           </Property>
+         </PropertySet>
+       </PropertySetStream>
      </HwpSummaryInfo>
      <DocInfo>
        <DocumentProperties character-unit-loc-in-paragraph="5" endnote-startnum="1" footnote-startnum="1" list-id="0" math-startnum="1" page-startnum="1" paragraph-id="7" picture-startnum="1" section-count="1" table-startnum="1"/>

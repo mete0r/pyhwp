@@ -617,38 +617,93 @@ class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
 
 class HwpSummaryInfo(filestructure.HwpSummaryInfo, XmlEventsMixin):
 
-    class Property(Struct):
-        pass
-
     def events(self, **context):
-        content = dict(byteorder='%x' % self.byteorder,
-                       format=str(self.format),
-                       osversion=str(self.osversion),
-                       os=str(self.os),
-                       clsid=str(self.clsid))
+        generator = PropertySetStreamModelEventsGenerator(context)
+        events = generator.generateModelEvents(self.propertySetStream)
+        element = HwpSummaryInfo, {}, context
+        return wrap_modelevents(element, events)
 
-        summaryinfo = HwpSummaryInfo, content, context
 
-        events = prefix_binmodels_with_event(context, self.properties)
-        events = wrap_modelevents(summaryinfo, events)
-        for x in events:
-            yield x
+class PropertySetStreamModelEventsGenerator(object):
 
-    @property
-    def properties(self):
-        propertyset = filestructure.HwpSummaryInfo.propertyset.__get__(self)
-        for prop_id, prop in propertyset.items():
-            name = prop.get('name')
-            value = prop.get('value')
+    def __init__(self, context):
+        self.context = context
 
-            content = dict(id=prop_id)
-            if name:
-                content['name'] = name
-            if value:
-                content['value'] = unicode(value)
-            yield dict(level=0,
-                       type=self.Property,
-                       content=content)
+    def generateModelEvents(self, stream):
+        return self.getPropertySetStreamEvents(stream)
+
+    def getPropertySetStreamEvents(self, stream):
+        from .msoleprops import PropertySetStream
+        sectionEvents = [
+            self.getPropertySetEvents(propertyset)
+            for propertyset in stream.propertysets
+        ]
+        events = chain(*sectionEvents)
+
+        content = dict(
+            byte_order='{:04x}'.format(
+                stream.byteOrder,
+            ),
+            version=str(stream.version),
+            system_identifier='{:08x}'.format(
+                stream.systemIdentifier,
+            ),
+            clsid=str(stream.clsid)
+        )
+        element = PropertySetStream, content, self.context
+        return wrap_modelevents(element, events)
+
+    def getPropertySetEvents(self, propertyset):
+        from .msoleprops import PropertySet
+        propertyEvents = [
+            self.getPropertyEvents(property)
+            for property in sorted(
+                propertyset.properties,
+                key=lambda property: property.desc.offset
+            )
+        ]
+        events = chain(*propertyEvents)
+
+        content = dict(
+            fmtid=propertyset.fmtid,
+            offset=propertyset.desc.offset,
+        )
+        element = PropertySet, content, self.context
+        return wrap_modelevents(element, events)
+
+    def getPropertyEvents(self, property):
+        from .msoleprops import PID_DICTIONARY
+        from .msoleprops import Property
+        content = dict(
+            id=property.desc.id,
+            offset=property.desc.offset,
+        )
+        if property.idLabel is not None:
+            content['id_label'] = property.idLabel
+        if property.type is not None:
+            content['type'] = str(property.type.vt_type.__name__)
+            content['type_code'] = '0x{:04x}'.format(property.type.code)
+        if property.id == PID_DICTIONARY.id:
+            events = self.getDictionaryEvents(property.value)
+        else:
+            events = ()
+            content['value'] = property.value
+        element = Property, content, self.context
+        return wrap_modelevents(element, events)
+
+    def getDictionaryEvents(self, dictionary):
+        events = list(self.getDictionaryEntryEvents(entry)
+                      for entry in dictionary.entries)
+        return chain(*events)
+
+    def getDictionaryEntryEvents(self, entry):
+        from .msoleprops import DictionaryEntry
+        content = dict(
+            id=entry.id,
+            name=entry.name,
+        )
+        element = DictionaryEntry, content, self.context
+        return wrap_modelevents(element, ())
 
 
 class DocInfo(ModelEventStream):

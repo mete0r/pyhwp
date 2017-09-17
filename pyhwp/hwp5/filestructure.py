@@ -27,6 +27,7 @@ from hwp5.importhelper import importStringIO
 from hwp5.utils import transcoder
 from hwp5.utils import GeneratorReader
 from hwp5.compressed import decompress
+from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
 
 
 logger = logging.getLogger(__name__)
@@ -393,80 +394,103 @@ class HwpSummaryInfo(VersionSensitiveItem):
     def other_formats(self):
         return {'.txt': self.open_text}
 
-    def to_dict(self):
+    def getPropertySetStream(self):
+        from .msoleprops import PropertySetFormat
+        from .msoleprops import PropertySetStreamReader
+        from .summaryinfo import FMTID_HWP_SUMMARY_INFORMATION
+        from .summaryinfo import HWP_PROPERTIES
+
+        propertySetFormat = PropertySetFormat(
+            FMTID_HWP_SUMMARY_INFORMATION,
+            HWP_PROPERTIES
+        )
+        reader = PropertySetStreamReader([propertySetFormat])
         f = self.open()
-        from hwp5.msoleprops import MSOLEPropertySet
         try:
-            context = dict(version=self.version)
-            summaryinfo = MSOLEPropertySet.read(f, context)
-            return summaryinfo
+            return reader.read(f)
         finally:
             f.close()
 
-    value = cached_property(to_dict)
+    propertySetStream = cached_property(getPropertySetStream)
+
+    def getHwpSummaryInfoPropertySet(self):
+        stream = self.propertySetStream
+        if stream.clsid == CLSID_HWP_SUMMARY_INFORMATION:
+            return stream.propertysets[0]
+
+    propertySet = cached_property(getHwpSummaryInfoPropertySet)
 
     @property
-    def byteorder(self):
-        return self.value['byteorder']
+    def title(self):
+        from .msoleprops import PIDSI_TITLE
+        return self.propertySet[PIDSI_TITLE]
 
     @property
-    def format(self):
-        return self.value['format']
+    def author(self):
+        from .msoleprops import PIDSI_AUTHOR
+        return self.propertySet[PIDSI_AUTHOR]
 
     @property
-    def os(self):
-        return self.value['os']
+    def keywords(self):
+        from .msoleprops import PIDSI_KEYWORDS
+        return self.propertySet[PIDSI_KEYWORDS]
 
     @property
-    def osversion(self):
-        return self.value['osversion']
+    def comments(self):
+        from .msoleprops import PIDSI_COMMENTS
+        return self.propertySet[PIDSI_COMMENTS]
 
     @property
-    def clsid(self):
-        return self.value['clsid']
+    def lastSavedBy(self):
+        from .msoleprops import PIDSI_LASTAUTHOR
+        return self.propertySet[PIDSI_LASTAUTHOR]
 
     @property
-    def sections(self):
-        for section in self.value['sections']:
-            formatid = section['formatid']
-            properties = section['properties']
-            yield formatid, properties
-
-    UNKNOWN_FMTID = '9fa2b660-1061-11d4-b4c6-006097c09d8c'
+    def revisionNumber(self):
+        from .msoleprops import PIDSI_REVNUMBER
+        return self.propertySet[PIDSI_REVNUMBER]
 
     @property
-    def propertyset(self):
-        from uuid import UUID
-        for formatid, properties in self.sections:
-            if formatid == UUID(self.UNKNOWN_FMTID):
-                return properties
+    def lastPrintedTime(self):
+        from .msoleprops import PIDSI_LASTPRINTED
+        return self.propertySet[PIDSI_LASTPRINTED]
+
+    @property
+    def createdTime(self):
+        from .msoleprops import PIDSI_CREATE_DTM
+        return self.propertySet[PIDSI_CREATE_DTM]
+
+    @property
+    def lastSavedTime(self):
+        from .msoleprops import PIDSI_LASTSAVE_DTM
+        return self.propertySet[PIDSI_LASTSAVE_DTM]
+
+    @property
+    def numberOfPages(self):
+        from .msoleprops import PIDSI_PAGECOUNT
+        return self.propertySet[PIDSI_PAGECOUNT]
+
+    @property
+    def dateString(self):
+        from .summaryinfo import HWPPIDSI_DATE_STR
+        return self.propertySet[HWPPIDSI_DATE_STR]
+
+    @property
+    def numberOfParagraphs(self):
+        from .summaryinfo import HWPPIDSI_PARACOUNT
+        return self.propertySet[HWPPIDSI_PARACOUNT]
 
     @property
     def plaintext_lines(self):
-
-        os_names = {
-            0: 'win16',
-            1: 'macos',
-            2: 'win32'
-        }
-
-        yield 'byteorder: 0x%x' % self.byteorder
-        yield 'clsid: %s' % self.clsid
-        yield 'format: %d' % self.format
-        yield 'os: %s %s' % (self.os, os_names.get(self.os, ''))
-        yield 'osversion: %d' % self.osversion
-
-        for formatid, properties in self.sections:
-            yield ('-- Section %s --' % formatid)
-            for prop_id, prop in properties.items():
-                prop_name = prop.get('name') or prop_id
-                prop_value = prop.get('value')
-                prop_str = u'%s: %s' % (prop_name, prop_value)
-                yield prop_str.encode('utf-8')
+        from .msoleprops import PropertySetStreamTextFormatter
+        stream = self.getPropertySetStream()
+        formatter = PropertySetStreamTextFormatter()
+        return formatter.formatTextLines(stream)
 
     def open_text(self):
         out = StringIO()
         for line in self.plaintext_lines:
+            line = line.encode('utf-8')
             out.write(line + '\n')
         out.seek(0)
         return out
