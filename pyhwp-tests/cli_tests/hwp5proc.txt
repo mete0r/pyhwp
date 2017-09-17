@@ -435,7 +435,8 @@ unpack 명령
 
    $ rm -rf sample-5017
    $ hwp5proc unpack samples/sample-5017.hwp
-   $ find sample-5017 -type f | sort | xargs sha1sum
+   $ find sample-5017 -type f | sort --dictionary | xargs sha1sum
+   25233fb7d96f387fbe07eadae65c7ba3cdccaab1  sample-5017/_05HwpSummaryInformation
    a651496e95dd70a7a5c3ae08f8829cecd5e6ed7b  sample-5017/BinData/BIN0002.jpg
    e0f44117bf675d77297a86a322bd9eaa96543c37  sample-5017/BinData/BIN0002.png
    e0f44117bf675d77297a86a322bd9eaa96543c37  sample-5017/BinData/BIN0003.png
@@ -447,19 +448,20 @@ unpack 명령
    23302ee8ea7ddf4b1b7bfb8f6c307df589eeea4f  sample-5017/PrvText
    e40fe23054d2df479a06947174be594ff4c80497  sample-5017/Scripts/DefaultJScript
    3da89ee273be13437e7ecf760f3fbd4dc0e8d1fe  sample-5017/Scripts/JScriptVersion
-   25233fb7d96f387fbe07eadae65c7ba3cdccaab1  sample-5017/_05HwpSummaryInformation
 
    $ rm -rf sample-5017
    $ hwp5proc unpack --vstreams samples/sample-5017.hwp
-   $ find sample-5017 -type f | sort
+   $ find sample-5017 -type f | sort --dictionary
+   sample-5017/_05HwpSummaryInformation
+   sample-5017/_05HwpSummaryInformation.txt
    sample-5017/BinData/BIN0002.jpg
    sample-5017/BinData/BIN0002.png
    sample-5017/BinData/BIN0003.png
-   sample-5017/BodyText.xml
    sample-5017/BodyText/Section0
    sample-5017/BodyText/Section0.models
    sample-5017/BodyText/Section0.records
    sample-5017/BodyText/Section0.xml
+   sample-5017/BodyText.xml
    sample-5017/DocInfo
    sample-5017/DocInfo.models
    sample-5017/DocInfo.records
@@ -472,8 +474,6 @@ unpack 명령
    sample-5017/PrvText.utf8
    sample-5017/Scripts/DefaultJScript
    sample-5017/Scripts/JScriptVersion
-   sample-5017/_05HwpSummaryInformation
-   sample-5017/_05HwpSummaryInformation.txt
 
 records 명령
 ------------
