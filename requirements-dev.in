@@ -4,6 +4,7 @@ babel
 check-manifest
 coloredlogs
 flake8
+jip
 jupyter
 lxml
 pip-tools >= 1.9.0

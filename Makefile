@@ -1,5 +1,6 @@
 define ALL
 	update-requirements
+	install-jython
 endef
 ALL:=$(shell echo $(ALL))  # to remove line-feeds
 
@@ -64,3 +65,12 @@ notebook:
 clitest:
 	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt
 	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5odt.txt
+
+
+.PHONY: install-jython
+install-jython: parts/jython2.7/bin/jython
+parts/jython2.7/bin/jython:
+	rm -rf parts/jython2.7
+	mkdir -p parts
+	$(VENV) jip install org.python:jython-installer:2.7.1b3
+	$(VENV) java -jar $(VIRTUAL_ENV)/javalib/jython-installer-2.7.1b3.jar -s -d $(PWD)/parts/jython2.7

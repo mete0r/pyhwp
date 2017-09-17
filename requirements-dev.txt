@@ -37,6 +37,7 @@ ipython-genutils==0.2.0   # via nbformat, notebook, qtconsole, traitlets
 ipython==5.4.1            # via ipykernel, ipywidgets, jupyter-console
 ipywidgets==7.0.0         # via jupyter
 jinja2==2.9.6             # via nbconvert, notebook, sphinx
+jip==0.9.13
 jsonschema==2.6.0         # via nbformat
 jupyter-client==5.1.0     # via ipykernel, jupyter-console, notebook, qtconsole
 jupyter-console==5.2.0    # via jupyter
@@ -74,7 +75,7 @@ qtconsole==4.3.1
 readme-renderer==17.2     # via restview
 repoze.sphinx.autointerface==0.8
 requests-toolbelt==0.8.0  # via twine
-requests==2.18.4          # via requests-toolbelt, sphinx, twine
+requests==2.18.4          # via jip, requests-toolbelt, sphinx, twine
 restview==2.7.0
 scandir==1.5              # via pathlib2
 simplegeneric==0.8.1      # via ipython
