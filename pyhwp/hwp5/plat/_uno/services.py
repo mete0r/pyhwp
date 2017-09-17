@@ -65,4 +65,5 @@ class ContextBoundNamespace(object):
                 if basename.find('.') == -1:
                     yield basename
 
+
 css = Namespace('com.sun.star')

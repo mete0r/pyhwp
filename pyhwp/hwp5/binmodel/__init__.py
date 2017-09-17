@@ -248,6 +248,8 @@ class Text(object):
 def _check_tag_models():
     for tagid, name in tagnames.iteritems():
         assert tagid in tag_models, 'RecordModel for %s is missing!' % name
+
+
 _check_tag_models()
 
 

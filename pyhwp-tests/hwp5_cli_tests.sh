@@ -11,7 +11,7 @@ error() {
     exit 1
 }
 
-SAMPLES_DIR=pyhwp-tests/hwp5_tests/fixtures
+SAMPLES_DIR=$1
 SAMPLE=$SAMPLES_DIR/sample-5017.hwp
 
 [ -e "$SAMPLES_DIR" ] || error "$SAMPLES_DIR is not found"
@@ -102,16 +102,17 @@ hwp5proc models $SAMPLE bodytext/0 --seqno=4 | grep 'type' | grep 'SectionDef'
 hwp5proc models --simple $SAMPLE bodytext/0 | grep '^0127 '
 hwp5proc models --treegroup=1 --simple $SAMPLE bodytext/0 | wc -l | grep '^3$'
 hwp5proc models $SAMPLE bodytext/0 --format='%(seqno)s %(level)s %(tagname)s\n' | wc -l | grep '^128$'
-hwp5proc cat $SAMPLE BodyText/Section0 | hwp5proc models --simple -V 5.0.1.7 | grep '0127 *ShapePicture'
+hwp5proc cat $SAMPLE BodyText/Section0 > sec0
+cat sec0 | hwp5proc models --simple -V 5.0.1.7 | grep '0127 *ShapePicture'
 
 echo '-----------------------'
 echo '* Testing hwp5proc find'
 echo '-----------------------'
 hwp5proc find 2>&1 | head -n 3 | grep 'Usage:'
 hwp5proc find --help | head -n 1 | grep 'Find record models'
-hwp5proc find --model=Paragraph $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
-hwp5proc find --tag=HWPTAG_PARA_HEADER $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
-hwp5proc find --tag=66 $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^14$'
+hwp5proc find --model=Paragraph $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^16$'
+hwp5proc find --tag=HWPTAG_PARA_HEADER $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^16$'
+hwp5proc find --tag=66 $SAMPLES_DIR/charshape.hwp $SAMPLES_DIR/parashape.hwp | wc -l | grep '^16$'
 hwp5proc find --incomplete $SAMPLES_DIR/shapeline.hwp | grep 'ShapeComponent'
 hwp5proc find --incomplete --dump $SAMPLES_DIR/shapeline.hwp | grep 'STARTEVENT: ShapeComponent'
 echo "$SAMPLE" | hwp5proc find --from-stdin | wc -l | grep '^195$'
@@ -131,8 +132,8 @@ hwp5proc xml 2>&1 | head -n 3 | grep 'Usage:'
 hwp5proc xml --help | head -n 1 | grep 'Transform'
 hwp5proc xml $SAMPLE | xmllint --format - | grep 'BinDataEmbedding' | grep 'inline' | wc -l | grep '^0$'
 hwp5proc xml --embedbin $SAMPLE | xmllint --format - | grep 'BinDataEmbedding' | grep 'inline' | wc -l | grep '^2$'
-hwp5proc xml $SAMPLE | head -n 1 | grep '[<][?]xml'
-hwp5proc xml --no-xml-decl $SAMPLE | head -n 1 | grep -v '[<][?]xml'
+hwp5proc xml $SAMPLE | head -n 1 | grep '[<][?]xml' && echo ok
+hwp5proc xml --no-xml-decl $SAMPLE | head -n 1 | grep -v '[<][?]xml' && echo ok
 
 echo '-----------------'
 echo '* Testing hwp5odt'
@@ -145,5 +146,9 @@ unzip -l sample-5017.odt | grep 'content.xml'
 unzip -l sample-5017.odt | grep 'BIN0002.jpg'
 unzip -p sample-5017.odt content.xml | xmllint --format - | grep 'office:binary-data' | wc -l | head -n 1 | grep '^0$'
 hwp5odt --embed-image $SAMPLE
-unzip -p sample-5017.odt content.xml | xmllint --format - | grep 'office:binary-data' | wc -l | head -n 1 | grep '^2$'
+unzip -p sample-5017.odt content.xml | xmllint --format - | grep 'office:binary-data' | wc -l | head -n 1 | grep '^4$'
 rm -f sample-5017.odt
+
+echo '========='
+echo 'COMPLETED'
+echo '========='

@@ -92,10 +92,16 @@ def main(args):
 
     fmt = args['--format'] or 'nested'
     if fmt == 'flat':
-        xmldump = partial(xmldump_flat, xml_declaration=args['--no-xml-decl'])
+        xmldump = partial(
+            xmldump_flat,
+            xml_declaration=not args['--no-xml-decl']
+        )
     elif fmt == 'nested':
-        xmldump = partial(xmldump_nested, embedbin=args['--embedbin'],
-                          xml_declaration=args['--no-xml-decl'])
+        xmldump = partial(
+            xmldump_nested,
+            xml_declaration=not args['--no-xml-decl'],
+            embedbin=args['--embedbin'],
+        )
 
     open_dest = make_open_dest_file(args['--output'])
     open_dest = wrap_open_dest_for_tty(open_dest, [

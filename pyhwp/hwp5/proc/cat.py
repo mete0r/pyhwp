@@ -86,7 +86,3 @@ def main(args):
     finally:
         if hasattr(f, 'close'):
             f.close()
-        # Without this, last part of the output
-        # can be truncated in Jython 2.5.3
-        # See #141
-        sys.stdout.close()
