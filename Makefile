@@ -72,5 +72,5 @@ install-jython: parts/jython2.7/bin/jython
 parts/jython2.7/bin/jython:
 	rm -rf parts/jython2.7
 	mkdir -p parts
-	$(VENV) jip install org.python:jython-installer:2.7.1b3
+	$(VIRTUAL_ENV)/bin/jip install org.python:jython-installer:2.7.1b3
 	$(VENV) java -jar $(VIRTUAL_ENV)/javalib/jython-installer-2.7.1b3.jar -s -d $(PWD)/parts/jython2.7
