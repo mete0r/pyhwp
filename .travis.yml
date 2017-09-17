@@ -1,16 +1,29 @@
 language: python
-python:
-  - "2.7"
-  - "pypy"
+env:
+matrix:
+  include:
+    - python: "2.7"
+      env: TOXENV=lint
+    - python: "2.7"
+      env: TOXENV=docs
+    - python: "2.7"
+      env: TOXENV=py27
+    - python: "pypy"
+      env: TOXENV=pypy
+    - python: "2.7"
+      env: TOXENV=jy27
+  allow_failures:
+    - python: "2.7"
+      env: TOXENV=jy27
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libxml2-utils xsltproc
 install:
   - pip install -U setuptools pip wheel
-  - pip install -U zc.buildout tox tox-travis
+  - pip install -U zc.buildout tox
   - buildout
   - tox --version
   - sort --version
   - env | sort
 script:
-  - /bin/bash .travis.sh
+  - tox
