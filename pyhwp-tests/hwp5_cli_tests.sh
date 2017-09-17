@@ -102,7 +102,8 @@ hwp5proc models $SAMPLE bodytext/0 --seqno=4 | grep 'type' | grep 'SectionDef'
 hwp5proc models --simple $SAMPLE bodytext/0 | grep '^0127 '
 hwp5proc models --treegroup=1 --simple $SAMPLE bodytext/0 | wc -l | grep '^3$'
 hwp5proc models $SAMPLE bodytext/0 --format='%(seqno)s %(level)s %(tagname)s\n' | wc -l | grep '^128$'
-hwp5proc cat $SAMPLE BodyText/Section0 | hwp5proc models --simple -V 5.0.1.7 | grep '0127 *ShapePicture'
+hwp5proc cat $SAMPLE BodyText/Section0 > sec0
+cat sec0 | hwp5proc models --simple -V 5.0.1.7 | grep '0127 *ShapePicture'
 
 echo '-----------------------'
 echo '* Testing hwp5proc find'
