@@ -9,6 +9,7 @@
 /*.egg
 /.eggs
 /.installed.cfg
+/.tox
 /bin
 /build
 /buildout.cfg
@@ -35,7 +36,6 @@
 /src
 /test-xsl
 /testpypi
-/tox.ini
 /venv
 /xsltcoverage.xml
 coverage-original.xml

@@ -11,7 +11,7 @@ error() {
     exit 1
 }
 
-SAMPLES_DIR=pyhwp-tests/hwp5_tests/fixtures
+SAMPLES_DIR=$1
 SAMPLE=$SAMPLES_DIR/sample-5017.hwp
 
 [ -e "$SAMPLES_DIR" ] || error "$SAMPLES_DIR is not found"

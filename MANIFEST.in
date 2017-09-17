@@ -21,6 +21,7 @@ include requirements-test.in
 include requirements-test.txt
 exclude samples
 include stdeb.cfg
+include tox.ini
 include tox.ini.in
 prune buildouts
 prune docs
