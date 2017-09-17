@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2017 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -15,9 +15,8 @@
 #
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from __future__ import with_statement
-from copy import deepcopy
-import sys
+from __future__ import absolute_import
+from __future__ import print_function
 import os.path
 
 
@@ -51,15 +50,47 @@ def import_setuptools():
     return setuptools
 
 
-# TODO: load from setup.json
-_metadata = {
+@setupdir
+def readfile(filename):
+    with file(filename) as f:
+        return f.read()
+
+
+def get_version():
+    version = readfile('VERSION.txt')
+    version = version.strip()
+    return version
+
+
+def get_long_description():
+    long_description = readfile('README')
+    return long_description
+
+
+def get_classifiers():
+    classifiers = readfile('classifiers.txt')
+    classifiers = classifiers.strip()
+    classifiers = classifiers.split('\n')
+    classifiers = sorted(classifiers)
+    return classifiers
+
+
+def get_install_requires():
+    requires = readfile('requirements.in')
+    requires = requires.strip()
+    requires = requires.split('\n')
+    requires = list(requires)
+    return requires
+
+
+setup_kwargs = {
 
     # basic information
 
     'name': 'pyhwp',
-    '@version': 'VERSION.txt',
+    'version': get_version(),
     'description': 'hwp file format parser',
-    '@long_description': 'README',
+    'long_description': get_long_description(),
 
     # authorative
 
@@ -70,7 +101,7 @@ _metadata = {
 
     # classifying
 
-    '@classifiers': 'classifiers.txt',
+    'classifiers': get_classifiers(),
 
     'keywords': 'hwp',
 
@@ -78,7 +109,20 @@ _metadata = {
 
     'setup_requires': [],
 
-    '@root_package': 'pyhwp',
+    'packages': [
+        'hwp5',
+        'hwp5.binmodel',
+        'hwp5.binmodel.controls',
+        'hwp5.plat',
+        'hwp5.plat._uno',
+        'hwp5.proc',
+        'hwp5.storage',
+        'hwp5.transforms',
+    ],
+    # do not use '.'; just omit to specify setup.py directory
+    'package_dir': {
+        '': 'pyhwp',
+    },
 
     'package_data': {
         'hwp5': [
@@ -106,147 +150,14 @@ _metadata = {
         ]
     },
 
-    '@requires': 'requirement.txt',
+    'install_requires': get_install_requires(),
 }
-
-
-@setupdir
-def readfile(filename):
-    with file(filename) as f:
-        return f.read()
-
-
-@setupdir
-def export_metadata(metadata, filename):
-    try:
-        import json
-    except ImportError:
-        return
-    with file(filename, 'w') as f:
-        json.dump(metadata, f, indent=2, sort_keys=True)
-
-
-export_metadata(_metadata, 'setup.json')
-
-
-@setupdir
-def preprocess_metadata(template_metadata):
-
-    metadata = deepcopy(template_metadata)
-
-    if '@root_package' in metadata:
-        setuptools = import_setuptools()
-        find_packages = setuptools.find_packages
-
-        root_dir = metadata.pop('@root_package')
-        packages = find_packages(root_dir)
-        metadata['packages'] = packages
-
-        package_dir = metadata.get('package_dir', {})
-        package_dir[''] = root_dir
-        metadata['package_dir'] = package_dir
-
-    if '@version' in metadata:
-        version = metadata.pop('@version')
-        version = readfile(version)
-        version = version.strip()
-        metadata['version'] = version
-
-    if '@long_description' in metadata:
-        long_description = metadata.pop('@long_description')
-        long_description = readfile(long_description)
-        metadata['long_description'] = long_description
-
-    if '@classifiers' in metadata:
-        classifiers = metadata.pop('@classifiers')
-        classifiers = readfile(classifiers)
-        classifiers = classifiers.strip()
-        classifiers = classifiers.split('\n')
-        classifiers = sorted(classifiers)
-        metadata['classifiers'] = classifiers
-
-    if '@requires' in metadata:
-        requires = metadata.pop('@requires')
-        requires = readfile(requires)
-        requires = requires.strip()
-        requires = requires.split('\n')
-        requires = requires_from_requirements(requires)
-        requires = list(requires)
-        metadata['requires'] = requires
-
-    # TODO:
-    # insert/replace 'Development Status' classifier along with alpha/beta tag
-    # in version?
-
-    # TODO:
-    # check License classifiers?
-    # sync License classifiers and license field?
-
-    # TODO:
-    # Make os/python version/implementation classifier to reflect CI result
-    # automatically?
-
-    return metadata
-
-
-def requires_from_requirements(requirements):
-    for req in requirements:
-        name, op, version = req.split(' ')
-        yield name, op, version
-
-
-metadata = preprocess_metadata(_metadata)
-export_metadata(metadata, 'setup-static.json')
-
-
-def prepare_runtime_metadata(metadata):
-
-    metadata = deepcopy(metadata)
-
-    if sys.version_info >= (2, 6):
-        setup_requires = metadata.get('setup_requires', [])
-        setup_requires += ['wheel']
-        metadata['setup_requires'] = setup_requires
-
-    if 'requires' in metadata:
-        requires = metadata['requires']
-        metadata['requires'] = list(('%s(%s%s)' % req)
-                                    for req in requires)
-
-        install_requires = metadata.get('install_requires', [])
-        install_requires += list(('%s %s %s') % req
-                                 for req in requires)
-        metadata['install_requires'] = install_requires
-
-    if 'java' not in sys.platform and sys.version < '3':
-        install_requires = metadata.get('install_requires', [])
-        if sys.version_info < (2, 6):
-            # OleFileIO_PL 0.30 has dropped Python 2.5 support
-            olefileio = 'OleFileIO_PL >= 0.23'
-            olefileio += ', < 0.30'
-        else:
-            olefileio = 'olefile >= 0.40'
-        install_requires.append(olefileio)
-        metadata['install_requires'] = install_requires
-
-    try:
-        __import__('json')
-    except ImportError:
-        install_requires = metadata.get('install_requires', [])
-        install_requires.append('simplejson')
-        metadata['install_requires'] = install_requires
-
-    return metadata
-
-
-runtime_metadata = prepare_runtime_metadata(metadata)
-export_metadata(runtime_metadata, 'setup-runtime.json')
 
 
 @setupdir
 def main():
     setuptools = import_setuptools()
-    setuptools.setup(**runtime_metadata)
+    setuptools.setup(**setup_kwargs)
 
 
 if __name__ == '__main__':

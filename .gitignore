@@ -38,5 +38,3 @@ testpypi
 test-xsl
 xsltcoverage.xml
 /*.egg
-/setup-runtime.json
-/setup-static.json
