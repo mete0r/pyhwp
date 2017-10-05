@@ -42,6 +42,13 @@ VENV	:= . bin/activate &&
 .PHONY: all
 all: $(ALL)
 
+.PHONY: bootstrap
+bootstrap:
+	[ -e bin/activate ] || virtualenv -p python2.7 .
+	$(VENV) pip install -U setuptools pip wheel pip-tools
+	make update-requirements
+	$(VENV) buildout
+
 .PHONY: update-requirements
 update-requirements: $(REQUIREMENTS_FILES)
 	$(VENV) pip-sync $(FIND_LINKS) $(PIP_NO_INDEX) requirements-dev.txt
