@@ -1,0 +1,5 @@
+alabaster >= 0.7.10
+repoze.sphinx.autointerface
+sphinx >= 1.5
+sphinx-argparse
+sphinx-intl
