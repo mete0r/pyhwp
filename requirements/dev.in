@@ -4,7 +4,7 @@ coloredlogs
 jip
 jupyter
 lxml
-pip-tools >= 1.9.0
+pip-tools >= 1.10.1
 pycrypto
 pyside
 qtconsole
