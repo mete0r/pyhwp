@@ -6,6 +6,7 @@ ALL:=$(shell echo $(ALL))  # to remove line-feeds
 
 define REQUIREMENTS_FILES
 	requirements/dev.txt
+	requirements/lint.txt
 	requirements/test.txt
 	requirements.txt
 endef
@@ -22,8 +23,14 @@ define REQUIREMENTS_IN_TEST
 endef
 REQUIREMENTS_IN_TEST:=$(shell echo $(REQUIREMENTS_IN_TEST))
 
+define REQUIREMENTS_IN_LINT
+	requirements/lint.in
+endef
+REQUIREMENTS_IN_LINT:=$(shell echo $(REQUIREMENTS_IN_LINT))
+
 define REQUIREMENTS_IN_DEV
 	requirements/dev.in
+	requirements/lint.in
 	requirements/test.in
 	requirements.in
 endef
@@ -57,6 +64,9 @@ requirements.txt: $(REQUIREMENTS_IN)
 	$(VENV)	pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
 
 requirements/test.txt: $(REQUIREMENTS_IN_TEST)
+	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
+
+requirements/lint.txt: $(REQUIREMENTS_IN_LINT)
 	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
 
 requirements/dev.txt: $(REQUIREMENTS_IN_DEV)

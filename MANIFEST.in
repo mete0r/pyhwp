@@ -18,6 +18,8 @@ include requirements.in
 include requirements.txt
 include requirements/dev.in
 include requirements/dev.txt
+include requirements/lint.in
+include requirements/lint.txt
 include requirements/test.in
 include requirements/test.txt
 exclude samples
