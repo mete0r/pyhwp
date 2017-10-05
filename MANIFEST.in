@@ -16,10 +16,10 @@ include pyhwp/hwp5/xsl/*.xsl
 include pyhwp/hwp5/xsl/odt/*
 include requirements.in
 include requirements.txt
-include requirements-dev.in
-include requirements-dev.txt
-include requirements-test.in
-include requirements-test.txt
+include requirements/dev.in
+include requirements/dev.txt
+include requirements/test.in
+include requirements/test.txt
 exclude samples
 include stdeb.cfg
 include tox.ini

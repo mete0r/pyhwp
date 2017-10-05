@@ -5,8 +5,8 @@ endef
 ALL:=$(shell echo $(ALL))  # to remove line-feeds
 
 define REQUIREMENTS_FILES
-	requirements-dev.txt
-	requirements-test.txt
+	requirements/dev.txt
+	requirements/test.txt
 	requirements.txt
 endef
 REQUIREMENTS_FILES:=$(shell echo $(REQUIREMENTS_FILES))
@@ -17,14 +17,14 @@ endef
 REQUIREMENTS_IN:=$(shell echo $(REQUIREMENTS_IN))
 
 define REQUIREMENTS_IN_TEST
-	requirements-test.in
+	requirements/test.in
 	requirements.in
 endef
 REQUIREMENTS_IN_TEST:=$(shell echo $(REQUIREMENTS_IN_TEST))
 
 define REQUIREMENTS_IN_DEV
-	requirements-dev.in
-	requirements-test.in
+	requirements/dev.in
+	requirements/test.in
 	requirements.in
 endef
 REQUIREMENTS_IN_DEV:=$(shell echo $(REQUIREMENTS_IN_DEV))
@@ -51,15 +51,15 @@ bootstrap:
 
 .PHONY: update-requirements
 update-requirements: $(REQUIREMENTS_FILES)
-	$(VENV) pip-sync $(FIND_LINKS) $(PIP_NO_INDEX) requirements-dev.txt
+	$(VENV) pip-sync $(FIND_LINKS) $(PIP_NO_INDEX) requirements/dev.txt
 
 requirements.txt: $(REQUIREMENTS_IN)
 	$(VENV)	pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
 
-requirements-test.txt: $(REQUIREMENTS_IN_TEST)
+requirements/test.txt: $(REQUIREMENTS_IN_TEST)
 	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
 
-requirements-dev.txt: $(REQUIREMENTS_IN_DEV)
+requirements/dev.txt: $(REQUIREMENTS_IN_DEV)
 	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
 
 
