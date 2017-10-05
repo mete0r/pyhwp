@@ -52,6 +52,7 @@ class HwpSummaryInfoTextFormatter(object):
 
     def formatTextLines(self, hwpsummaryinfo):
         yield 'Title: {}'.format(hwpsummaryinfo.title)
+        yield 'Subject: {}'.format(hwpsummaryinfo.subject)
         yield 'Author: {}'.format(hwpsummaryinfo.author)
         yield 'Keywords: {}'.format(hwpsummaryinfo.keywords)
         yield 'Comments: {}'.format(hwpsummaryinfo.comments)

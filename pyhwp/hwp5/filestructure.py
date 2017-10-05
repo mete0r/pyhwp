@@ -426,6 +426,11 @@ class HwpSummaryInfo(VersionSensitiveItem):
         return self.propertySet[PIDSI_TITLE]
 
     @property
+    def subject(self):
+        from .msoleprops import PIDSI_SUBJECT
+        return self.propertySet[PIDSI_SUBJECT]
+
+    @property
     def author(self):
         from .msoleprops import PIDSI_AUTHOR
         return self.propertySet[PIDSI_AUTHOR]

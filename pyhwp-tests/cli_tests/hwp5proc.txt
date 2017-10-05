@@ -166,6 +166,7 @@ summaryinfo 명령
 
    $ hwp5proc summaryinfo samples/sample-5017.hwp
    Title: 제목입니다.
+   Subject: 주제입니다.
    Author: 지은이입니다.
    Keywords: 키워드입니다.
    Comments: 기타입니다.
