@@ -16,6 +16,8 @@ matrix:
   allow_failures:
     - python: "2.7"
       env: TOXENV=jy27
+    - python: "pypy"
+      env: TOXENV=pypy
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libxml2-utils xsltproc
