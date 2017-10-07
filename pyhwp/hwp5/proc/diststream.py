@@ -22,7 +22,7 @@ Usage::
 
     hwp5proc diststream
     hwp5proc diststream sha1 [--raw]
-    hwp5proc diststream key [[--raw]
+    hwp5proc diststream key [--raw]
     hwp5proc diststream [--loglevel=<loglevel>] [--logfile=<logfile>]
     hwp5proc diststream --help
 
