@@ -477,6 +477,30 @@ unpack 명령
    sample-5017/Scripts/JScriptVersion
 
 
+rawunz 명령
+-----------
+
+   $ hwp5proc rawunz --help
+    Deflate an headerless zlib-compressed stream
+   
+   Usage:
+       hwp5proc rawunz [--loglevel=<loglevel>] [--logfile=<logfile>]
+       hwp5proc rawunz --help
+   
+   Options:
+       -h --help               Show this screen
+          --loglevel=<level>   Set log level.
+          --logfile=<file>     Set log file.
+
+   $ rm -f Section0 Section0.rawz
+   $ hwp5proc cat --ole samples/sample-5017.hwp BodyText/Section0 > Section0.rawz
+   $ sha1sum Section0.rawz
+   1d2293ddee9f584b2294ee042b9587c12c071011  Section0.rawz
+   $ hwp5proc rawunz < Section0.rawz > Section0
+   $ sha1sum Section0
+   0c66f772894487ba06cd225ebc4871f552e07cf8  Section0
+
+
 diststream 명령
 ---------------
 
