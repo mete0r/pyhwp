@@ -26,14 +26,14 @@
 
    $ rm -rf sample-5017
    $ hwp5html samples/sample-5017.hwp
-   $ find sample-5017
+   $ find sample-5017 | sort
    sample-5017
-   sample-5017/styles.css
-   sample-5017/index.xhtml
    sample-5017/bindata
-   sample-5017/bindata/BIN0003.png
-   sample-5017/bindata/BIN0002.png
    sample-5017/bindata/BIN0002.jpg
+   sample-5017/bindata/BIN0002.png
+   sample-5017/bindata/BIN0003.png
+   sample-5017/index.xhtml
+   sample-5017/styles.css
 
    $ hwp5html samples/sample-5017.hwp --css
    body {
