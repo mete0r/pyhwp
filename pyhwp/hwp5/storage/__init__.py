@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import io
 
 
 def is_storage(item):
@@ -129,11 +130,8 @@ def unpack(stg, outbase):
             f = item.open()
             try:
                 outpath = outpath.replace('\x05', '_05')
-                outfile = file(outpath, 'wb')
-                try:
+                with io.open(outpath, 'wb') as outfile:
                     outfile.write(f.read())
-                finally:
-                    outfile.close()
             finally:
                 f.close()
 

@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from xml.etree import ElementTree as etree
+import io
 import logging
 
 
@@ -28,22 +29,22 @@ class XsltTestMixin(object):
 
         xsl = self.xsl
         xsl_path = self.id() + '.xsl'
-        with file(xsl_path, 'w') as f:
+        with io.open(xsl_path, 'w', encoding='utf-8') as f:
             f.write(xsl)
 
         inp = '<?xml version="1.0" encoding="utf-8"?><inp />'
         inp_path = self.id() + '.inp'
-        with file(inp_path, 'w') as f:
+        with io.open(inp_path, 'w', encoding='utf-8') as f:
             f.write(inp)
 
         out_path = self.id() + '.out'
 
         transform = self.xslt_compile(xsl_path)
         self.assertTrue(callable(transform))
-        with file(out_path, 'w') as f:
+        with io.open(out_path, 'wb') as f:
             transform(inp_path, f)
 
-        with file(out_path) as f:
+        with io.open(out_path, 'rb') as f:
             out_doc = etree.parse(f)
         self.assertEquals('out', out_doc.getroot().tag)
 
@@ -54,12 +55,12 @@ class XsltTestMixin(object):
 
         xsl = self.xsl
         xsl_path = self.id() + '.xsl'
-        with file(xsl_path, 'w') as f:
+        with io.open(xsl_path, 'w', encoding='utf-8') as f:
             f.write(xsl)
 
         inp = '<?xml version="1.0" encoding="utf-8"?><inp />'
         inp_path = self.id() + '.inp'
-        with file(inp_path, 'w') as f:
+        with io.open(inp_path, 'w', encoding='utf-8') as f:
             f.write(inp)
 
         out_path = self.id() + '.out'
@@ -67,6 +68,6 @@ class XsltTestMixin(object):
         result = self.xslt(xsl_path, inp_path, out_path)
         self.assertTrue('errors' not in result)
 
-        with file(out_path) as f:
+        with io.open(out_path, 'rb') as f:
             out_doc = etree.parse(f)
         self.assertEquals('out', out_doc.getroot().tag)

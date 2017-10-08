@@ -18,6 +18,7 @@
 #
 from __future__ import with_statement
 from contextlib import closing
+import io
 import logging
 import os.path
 
@@ -43,7 +44,7 @@ def is_enabled():
 
 def xslt(xsl_path, inp_path, out_path):
     transform = xslt_compile(xsl_path)
-    with file(out_path, 'w') as f:
+    with io.open(out_path, 'wb') as f:
         return transform(inp_path, f)
 
 

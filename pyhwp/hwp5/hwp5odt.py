@@ -48,6 +48,7 @@ from contextlib import closing
 from functools import partial
 from io import BytesIO
 import gettext
+import io
 import logging
 import os.path
 import sys
@@ -126,7 +127,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @property
     def transform_hwp5_to_styles(self):
         '''
-        >>> with file('styles.xml', 'w') as f:
+        >>> with io.open('styles.xml', 'wb') as f:
         ...     T.transform_hwp5_to_styles(hwp5file, f)
         '''
         transform_xhwp5 = self.transform_xhwp5_to_styles
@@ -135,7 +136,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @property
     def transform_hwp5_to_content(self):
         '''
-        >>> with file('content.xml', 'w') as f:
+        >>> with io.open('content.xml', 'wb') as f:
         ...     T.transform_hwp5_to_content(hwp5file, f)
         '''
         transform_xhwp5 = self.transform_xhwp5_to_content
@@ -144,7 +145,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @property
     def transform_hwp5_to_single_document(self):
         '''
-        >>> with file('transformed.fodt', 'w') as f:
+        >>> with io.open('transformed.fodt', 'wb') as f:
         ...     T.transform_hwp5_to_single_document(hwp5file, f)
         '''
         transform_xhwp5 = self.transform_xhwp5_to_single_document
@@ -169,7 +170,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @cached_property
     def transform_xhwp5_to_styles(self):
         '''
-        >>> with file('styles.xml', 'w') as f:
+        >>> with io.open('styles.xml', 'wb') as f:
         ...     T.transform_xhwp5_to_styles('input.xml', f)
         '''
         resource_path = RESOURCE_PATH_XSL_STYLE
@@ -178,7 +179,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @cached_property
     def transform_xhwp5_to_content(self):
         '''
-        >>> with file('content.xml', 'w') as f:
+        >>> with io.open('content.xml', 'wb') as f:
         ...     T.transform_xhwp5_to_content('input.xml', f)
         '''
         resource_path = RESOURCE_PATH_XSL_CONTENT
@@ -187,7 +188,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @cached_property
     def transform_xhwp5_to_single_document(self):
         '''
-        >>> with file('transformed.fodf', 'w') as f:
+        >>> with io.open('transformed.fodf', 'wb') as f:
         ...     T.transform_xhwp5_to_single_document('input.xml', f)
         '''
         resource_path = RESOURCE_PATH_XSL_SINGLE_DOCUMENT
@@ -268,7 +269,7 @@ class ODTPackage(object):
         self.zf = zipfile
 
     def insert_path(self, src_path, path, media_type):
-        with file(src_path, 'rb') as f:
+        with io.open(src_path, 'rb') as f:
             self.insert_stream(f, path, media_type)
 
     def insert_stream(self, f, path, media_type):

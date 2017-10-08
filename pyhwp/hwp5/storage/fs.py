@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import io
 
 
 class FileSystemStorage(object):
@@ -46,4 +47,4 @@ class FileSystemStream(object):
         self.path = path
 
     def open(self):
-        return file(self.path, 'rb')
+        return io.open(self.path, 'rb')

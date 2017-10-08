@@ -6,6 +6,7 @@ from io import BytesIO
 from unittest import TestCase
 from xml.etree import ElementTree
 import base64
+import io
 import pickle
 
 from hwp5 import binmodel
@@ -153,14 +154,11 @@ class TestHwp5File(TestBase):
         list(events)
 
     def test_xmlevents_dump(self):
-        outfile = file(self.id() + '.xml', 'w+')
-        try:
+        with io.open(self.id() + '.xml', 'wb+') as outfile:
             self.hwp5file.xmlevents().dump(outfile)
 
             outfile.seek(0)
             doc = ElementTree.parse(outfile)
-        finally:
-            outfile.close()
 
         self.assertEquals('HwpDoc', doc.getroot().tag)
 
@@ -254,11 +252,8 @@ class TestMatchFieldStartEnd(TestCase):
     def test_match_field_start_end(self):
 
         path = get_fixture_path('match-field-start-end.dat')
-        f = open(path, 'r')
-        try:
+        with io.open(path, 'rb') as f:
             records = pickle.load(f)
-        finally:
-            f.close()
 
         models = binmodel.parse_models(dict(), records)
         events = xmlmodel.prefix_binmodels_with_event(dict(), models)

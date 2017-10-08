@@ -42,6 +42,7 @@ from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
 import gettext
+import io
 import logging
 import os.path
 import shutil
@@ -115,11 +116,11 @@ class HTMLTransform(BaseTransform):
         >>> T.transform_xhwp5_to_dir('hwp5.xml', 'output')
         '''
         html_path = os.path.join(outdir, 'index.xhtml')
-        with file(html_path, 'w') as f:
+        with io.open(html_path, 'wb') as f:
             self.transform_xhwp5_to_xhtml(xhwp5path, f)
 
         css_path = os.path.join(outdir, 'styles.css')
-        with file(css_path, 'w') as f:
+        with io.open(css_path, 'wb') as f:
             self.transform_xhwp5_to_css(xhwp5path, f)
 
     def extract_bindata_dir(self, hwp5file, bindata_dir):
