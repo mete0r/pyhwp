@@ -70,12 +70,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
-from . import entrypoint
 from . import open_hwpfile
 from ..storage import open_storage_item
 
 
-@entrypoint(__doc__)
 def main(args):
     hwp5file = open_hwpfile(args)
     stream = open_storage_item(hwp5file, args['<stream>'])

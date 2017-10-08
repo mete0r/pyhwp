@@ -93,28 +93,20 @@ def init_logger(args):
         logger.addHandler(logging.StreamHandler())
 
 
-def entrypoint(rest_doc):
-    def wrapper(f):
-        def main(argv):
-            doc = rest_to_docopt(rest_doc)
-            args = docopt(doc, version=__version__, argv=argv)
-            init_logger(args)
-
-            try:
-                return f(args)
-            except InvalidHwp5FileError, e:
-                logger.error('%s', e)
-                return 1
-            except ParseError, e:
-                e.print_to_logger(logger)
-                return 1
-        return main
-    return wrapper
-
-
-subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
-               'records', 'models', 'find', 'xml', 'rawunz',
-               'diststream']
+subcommands = [
+    'version',
+    'header',
+    'summaryinfo',
+    'ls',
+    'cat',
+    'unpack',
+    'records',
+    'models',
+    'find',
+    'xml',
+    'rawunz',
+    'diststream',
+]
 
 
 version = '''hwp5proc (pyhwp) %s
@@ -152,7 +144,19 @@ def main():
 
     argv = [command] + args['<args>']
     mod = __import__('hwp5.proc.' + command, fromlist=['main'])
-    return mod.main(argv)
+    main = mod.main
+    doc = rest_to_docopt(mod.__doc__)
+    args = docopt(doc, version=__version__, argv=argv)
+    init_logger(args)
+
+    try:
+        return main(args)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        raise SystemExit(1)
+    except ParseError, e:
+        e.print_to_logger(logger)
+        raise SystemExit(1)
 
 
 def open_hwpfile(args):

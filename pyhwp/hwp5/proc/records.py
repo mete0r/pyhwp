@@ -82,11 +82,9 @@ from ..recordstream import RecordStream
 from ..recordstream import encode_record_header
 from ..recordstream import dump_record
 from ..storage import Open2Stream
-from . import entrypoint
 from . import parse_recordstream_name
 
 
-@entrypoint(__doc__)
 def main(args):
     filename = args['<hwp5file>']
     if filename:

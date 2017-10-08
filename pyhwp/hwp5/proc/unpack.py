@@ -54,11 +54,9 @@ from __future__ import unicode_literals
 import os.path
 
 from .. import storage
-from . import entrypoint
 from . import open_hwpfile
 
 
-@entrypoint(__doc__)
 def main(args):
     filename = args['<hwp5file>']
     hwp5file = open_hwpfile(args)

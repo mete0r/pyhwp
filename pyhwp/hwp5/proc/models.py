@@ -92,11 +92,9 @@ from ..dataio import hexdump
 from ..storage import Open2Stream
 from ..treeop import ENDEVENT
 from ..utils import generate_json_array
-from . import entrypoint
 from . import parse_recordstream_name
 
 
-@entrypoint(__doc__)
 def main(args):
     stream = stream_from_args(args)
     if args['--events']:

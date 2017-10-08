@@ -87,11 +87,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from ..storage import printstorage
-from . import entrypoint
 from . import open_hwpfile
 
 
-@entrypoint(__doc__)
 def main(args):
     hwpfile = open_hwpfile(args)
     printstorage(hwpfile)

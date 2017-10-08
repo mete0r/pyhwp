@@ -36,10 +36,8 @@ import sys
 import shutil
 
 from ..zlib_raw_codec import StreamReader
-from . import entrypoint
 
 
-@entrypoint(__doc__)
 def main(args):
     stream = StreamReader(sys.stdin)
     shutil.copyfileobj(stream, sys.stdout)

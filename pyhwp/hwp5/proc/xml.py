@@ -75,7 +75,6 @@ from ..utils import syntaxhighlight
 from ..utils import xmllint
 from ..xmldump_flat import xmldump_flat
 from ..xmlmodel import Hwp5File
-from . import entrypoint
 
 
 logger = logging.getLogger(__name__)
@@ -87,7 +86,6 @@ def xmldump_nested(hwp5file, output, embedbin=False, xml_declaration=True):
     dump(output)
 
 
-@entrypoint(__doc__)
 def main(args):
     ''' Transform <hwp5file> into an XML.
     '''

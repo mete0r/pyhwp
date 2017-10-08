@@ -55,13 +55,11 @@ from ..distdoc import decode
 from ..distdoc import decode_head_to_sha1
 from ..distdoc import decode_head_to_key
 from ..recordstream import read_record
-from . import entrypoint
 
 
 logger = logging.getLogger(__name__)
 
 
-@entrypoint(__doc__)
 def main(args):
 
     if args['sha1']:

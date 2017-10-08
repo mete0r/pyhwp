@@ -69,11 +69,9 @@ from ..binmodel import model_to_json
 from ..bintype import log_events
 from ..dataio import ParseError
 from ..tagids import tagnames
-from . import entrypoint
 from . import logger
 
 
-@entrypoint(__doc__)
 def main(args):
     filenames = filenames_from_args(args)
 

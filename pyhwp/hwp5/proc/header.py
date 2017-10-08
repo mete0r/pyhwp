@@ -36,10 +36,7 @@ from __future__ import unicode_literals
 import shutil
 import sys
 
-from . import entrypoint
 
-
-@entrypoint(__doc__)
 def main(args):
     from hwp5.filestructure import Hwp5File
     hwp5file = Hwp5File(args['<hwp5file>'])

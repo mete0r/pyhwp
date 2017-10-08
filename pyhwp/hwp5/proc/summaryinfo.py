@@ -37,10 +37,8 @@ import sys
 
 from ..filestructure import Hwp5File
 from ..summaryinfo import HwpSummaryInfoTextFormatter
-from . import entrypoint
 
 
-@entrypoint(__doc__)
 def main(args):
     formatter = HwpSummaryInfoTextFormatter()
     hwpfile = Hwp5File(args['<hwp5file>'])
