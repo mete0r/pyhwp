@@ -5,6 +5,7 @@ from hwp5 import recordstream as RS
 from hwp5.utils import cached_property
 from hwp5.importhelper import importjson
 
+
 class TestBase(test_filestructure.TestBase):
 
     @property
@@ -80,7 +81,7 @@ class TestRecordStream(TestBase):
         from hwp5.tagids import HWPTAG_PARA_HEADER
         section = self.bodytext.section(0)
         for group_idx, records in enumerate(section.records_treegrouped()):
-            #print group_idx, records[0]['seqno'], len(records)
+            # print group_idx, records[0]['seqno'], len(records)
             self.assertEquals(HWPTAG_PARA_HEADER, records[0]['tagid'])
 
     def test_records_treegrouped_as_iterable(self):

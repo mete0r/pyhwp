@@ -2,6 +2,8 @@
 from unittest import TestCase
 
 from hwp5.dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
+
+
 class TestArray(TestCase):
     def test_new(self):
         t1 = ARRAY(INT32, 3)
@@ -20,10 +22,12 @@ class TestArray(TestCase):
         a = INT32()
         self.assertRaises(Exception, setattr, a, 'randomattr', 1)
 
+
 class TestTypedAttributes(TestCase):
 
     def test_typed_struct_attributes(self):
         from hwp5.dataio import typed_struct_attributes
+
         class SomeRandomStruct(Struct):
             @staticmethod
             def attributes():
@@ -31,16 +35,19 @@ class TestTypedAttributes(TestCase):
                 yield BSTR, 'b'
                 yield ARRAY(INT32, 3), 'c'
 
-        attributes = dict(a=1, b=u'abc', c=(4,5,6))
-        typed_attributes = typed_struct_attributes(SomeRandomStruct, attributes, dict())
+        attributes = dict(a=1, b=u'abc', c=(4, 5, 6))
+        typed_attributes = typed_struct_attributes(
+            SomeRandomStruct, attributes, dict()
+        )
         typed_attributes = list(typed_attributes)
         expected = [dict(name='a', type=INT32, value=1),
                     dict(name='b', type=BSTR, value='abc'),
-                    dict(name='c', type=ARRAY(INT32, 3), value=(4,5,6))]
+                    dict(name='c', type=ARRAY(INT32, 3), value=(4, 5, 6))]
         self.assertEquals(expected, typed_attributes)
 
     def test_typed_struct_attributes_inherited(self):
         from hwp5.dataio import typed_struct_attributes
+
         class Hello(Struct):
             @staticmethod
             def attributes():
@@ -63,6 +70,7 @@ class TestTypedAttributes(TestCase):
 class TestStructType(TestCase):
     def test_assign_enum_flags_name(self):
         from hwp5.dataio import StructType, Enum, Flags, UINT16
+
         class Foo(object):
             __metaclass__ = StructType
             bar = Enum()
@@ -77,6 +85,7 @@ class TestStructType(TestCase):
 
         class A(object):
             __metaclass__ = StructType
+
             @classmethod
             def attributes(cls):
                 yield UINT8, 'uint8'
@@ -84,8 +93,10 @@ class TestStructType(TestCase):
                 yield UINT32, 'uint32'
 
         values = dict(uint8=8, uint16=16, uint32=32)
+
         def getvalue(member):
             return values[member['name']]
+
         context = dict()
         result = list(A.parse_members(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
@@ -98,8 +109,10 @@ class TestStructType(TestCase):
 
         def uint32_is_32(context, values):
             return values['uint32'] == 32
+
         class A(object):
             __metaclass__ = StructType
+
             @classmethod
             def attributes(cls):
                 yield UINT8, 'uint8'
@@ -108,8 +121,10 @@ class TestStructType(TestCase):
                 yield dict(type=UINT32, name='extra', condition=uint32_is_32)
 
         values = dict(uint8=8, uint16=16, uint32=32, extra=666)
+
         def getvalue(member):
             return values[member['name']]
+
         context = dict()
         result = list(A.parse_members(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
@@ -126,8 +141,10 @@ class TestStructType(TestCase):
             __metaclass__ = StructType
 
         value = dict()
+
         def getvalue(member):
             return value[member['name']]
+
         context = dict()
         result = list(A.parse_members_with_inherited(context, getvalue))
         self.assertEquals([], result)
@@ -139,6 +156,7 @@ class TestStructType(TestCase):
 
         class A(object):
             __metaclass__ = StructType
+
             @classmethod
             def attributes(cls):
                 yield UINT8, 'uint8'
@@ -154,8 +172,10 @@ class TestStructType(TestCase):
 
         value = dict(uint8=8, uint16=16, uint32=32,
                      int8=-1, int16=-16, int32=-32)
+
         def getvalue(member):
             return value[member['name']]
+
         context = dict()
         result = list(B.parse_members_with_inherited(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
@@ -171,7 +191,11 @@ class TestEnumType(TestCase):
     def test_enum(self):
         from hwp5.dataio import EnumType
         from hwp5.dataio import Enum
-        Foo = EnumType('Foo', (int,), dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4)))
+        Foo = EnumType(
+            'Foo',
+            (int,),
+            dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4))
+        )
 
         self.assertRaises(AttributeError, getattr, Foo, 'items')
         self.assertRaises(AttributeError, getattr, Foo, 'moreitems')
@@ -213,7 +237,7 @@ class TestEnumType(TestCase):
             self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
 
         # undefined value
-        #self.assertRaises(ValueError, Foo, 5)
+        # self.assertRaises(ValueError, Foo, 5)
 
         # undefined value: warning but not error
         undefined = Foo(5)
@@ -247,7 +271,7 @@ class TestFlags(TestCase):
         bit5 = ('bit5', (5, 5, int))
 
         x = list(_parse_flags_args([0, 1, long, 'bit01',
-                                    2, 3, 'bit23', 
+                                    2, 3, 'bit23',
                                     4, long, 'bit4',
                                     5, 'bit5']))
         self.assertEquals([bit01, bit23, bit4, bit5], x)
@@ -263,8 +287,11 @@ class TestFlags(TestCase):
         from hwp5.dataio import Flags
         from hwp5.dataio import Enum
         MyEnum = Enum(a=1, b=2)
-        MyFlags = Flags(UINT32, 0, 1, 'field0',
-                                2, 4, MyEnum, 'field2')
+        MyFlags = Flags(
+            UINT32,
+            0, 1, 'field0',
+            2, 4, MyEnum, 'field2'
+        )
         bitfields = MyFlags.bitfields
         f = bitfields['field0']
         self.assertEquals((0, 1, int),

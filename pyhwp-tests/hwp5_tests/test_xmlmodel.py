@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 import test_binmodel
+
 from hwp5.utils import cached_property
+from hwp5.xmlmodel import make_ranged_shapes
+from hwp5.xmlmodel import split_and_shape
 
 
 class TestBase(test_binmodel.TestBase):
@@ -61,7 +64,7 @@ class TestModelEventStream(TestBase):
     def test_modelevents(self):
         self.assertEquals(len(list(self.docinfo.models())) * 2,
                           len(list(self.docinfo.modelevents())))
-        #print len(list(self.docinfo.modelevents()))
+        # print len(list(self.docinfo.modelevents()))
 
 
 class TestDocInfo(TestBase):
@@ -75,7 +78,7 @@ class TestDocInfo(TestBase):
     def test_events(self):
         events = list(self.docinfo.events())
         self.assertEquals(136, len(events))
-        #print len(events)
+        # print len(events)
 
         # without embedbin, no <text> is embedded
         self.assertTrue('<text>' not in events[4][1][1]['bindata'])
@@ -149,9 +152,6 @@ class TestHwp5File(TestBase):
             outfile.close()
 
         self.assertEquals('HwpDoc', doc.getroot().tag)
-
-
-from hwp5.xmlmodel import make_ranged_shapes, split_and_shape
 
 
 class TestShapedText(TestCase):
@@ -273,7 +273,7 @@ class TestMatchFieldStartEnd(TestCase):
         path = get_fixture_path(name)
         hwp5file = xmlmodel.Hwp5File(path)
         xmlevents = hwp5file.bodytext.xmlevents()
-        #pprint(list(enumerate(xmlevents)))
+        # pprint(list(enumerate(xmlevents)))
 
         stack_fields = []
         for ev, model in xmlevents:

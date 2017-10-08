@@ -84,8 +84,10 @@ class TestHwp5DistDocStream(TestBase):
     @cached_property
     def jscriptversion(self):
         from hwp5.filestructure import Hwp5DistDocStream
-        return Hwp5DistDocStream(self.hwp5file_base['Scripts']['JScriptVersion'],
-                                 self.hwp5file_base.header.version)
+        return Hwp5DistDocStream(
+            self.hwp5file_base['Scripts']['JScriptVersion'],
+            self.hwp5file_base.header.version
+        )
 
     def test_head_record(self):
         from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
@@ -259,9 +261,9 @@ class TestHwp5File(TestBase):
         self.assertEquals(expected, str(prvtext)[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
-        #from hwp5.storage import ExtraItemStorage
-        #self.hwp5file_name = 'viewtext.hwp'
-        #self.assertTrue('Section0.tail' in ExtraItemStorage(self.viewtext))
+        # from hwp5.storage import ExtraItemStorage
+        # self.hwp5file_name = 'viewtext.hwp'
+        # self.assertTrue('Section0.tail' in ExtraItemStorage(self.viewtext))
         pass
 
     def test_unpack(self):
@@ -319,7 +321,10 @@ class TestSections(TestBase):
     @property
     def sections(self):
         from hwp5.filestructure import Sections
-        return Sections(self.hwp5file.stg['BodyText'], self.hwp5file.header.version)
+        return Sections(
+            self.hwp5file.stg['BodyText'],
+            self.hwp5file.header.version,
+        )
 
 
 class TestGeneratorReader(TestCase):

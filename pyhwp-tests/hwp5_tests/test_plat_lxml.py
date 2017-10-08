@@ -11,7 +11,8 @@ class TestPlatLxml(unittest.TestCase, XsltTestMixin, RelaxNGTestMixin):
         from hwp5.plat import _lxml
 
         try:
-            import lxml; lxml
+            import lxml
+            lxml
         except ImportError:
             self.assertFalse(_lxml.is_enabled())
         else:

@@ -44,19 +44,19 @@ class OleStorageTestMixin(object):
         from hwp5.storage import is_storage, is_stream
         olestg = self.olestg
         self.assertTrue(is_storage(olestg))
-        #self.assertEquals('', olestg.path)
+        # self.assertEquals('', olestg.path)
 
         docinfo = olestg['DocInfo']
         self.assertTrue(is_stream(docinfo))
-        #self.assertEquals('DocInfo', docinfo.path)
+        # self.assertEquals('DocInfo', docinfo.path)
 
         bodytext = olestg['BodyText']
         self.assertTrue(is_storage(bodytext))
-        #self.assertEquals('BodyText', bodytext.path)
+        # self.assertEquals('BodyText', bodytext.path)
 
         section = bodytext['Section0']
         self.assertTrue(is_stream(section))
-        #self.assertEquals('BodyText/Section0', section.path)
+        # self.assertEquals('BodyText/Section0', section.path)
 
         f = section.open()
         try:
@@ -86,8 +86,8 @@ class OleStorageTestMixin(object):
             return
         olestg = self.olestg
         gen = iter(olestg)
-        #import types
-        #self.assertTrue(isinstance(gen, types.GeneratorType))
+        # import types
+        # self.assertTrue(isinstance(gen, types.GeneratorType))
         expected = ['FileHeader', 'BodyText', 'BinData', 'Scripts',
                     'DocOptions', 'DocInfo', 'PrvText', 'PrvImage',
                     '\x05HwpSummaryInformation']
@@ -98,7 +98,7 @@ class OleStorageTestMixin(object):
             logger.warning('%s: skipped', self.id())
             return
         from hwp5.storage import is_storage
-        #from hwp5.storage.ole import OleStorage
+        # from hwp5.storage.ole import OleStorage
         olestg = self.olestg
 
         try:
@@ -112,7 +112,7 @@ class OleStorageTestMixin(object):
 
         bindata = olestg['BinData']
         self.assertTrue(is_storage(bindata))
-        #self.assertEquals('BinData', bindata.path)
+        # self.assertEquals('BinData', bindata.path)
 
         self.assertEquals(sorted(['BIN0002.jpg', 'BIN0002.png',
                                   'BIN0003.png']),

@@ -11,9 +11,10 @@ from hwp5.importhelper import importjson
 
 def TestContext(**ctx):
     ''' test context '''
-    if not 'version' in ctx:
+    if 'version' not in ctx:
         ctx['version'] = (5, 0, 0, 0)
     return ctx
+
 
 testcontext = TestContext()
 
@@ -427,7 +428,7 @@ class ShapeComponentTest(TestBase):
         from hwp5.binmodel import parse_model
         from hwp5.binmodel import GShapeObjectControl, ShapeComponent
 
-        #parent_record = self.control_gso_record
+        # parent_record = self.control_gso_record
 
         # if parent model is GShapeObjectControl
         parent_model = dict(type=GShapeObjectControl)
@@ -610,7 +611,7 @@ class HeaderFooterTest(TestBase):
                                unknown1=0,
                                paragraphs=1), child_model['content'])
         # TODO
-        #self.assertEquals('', child_context['stream'].read())
+        # self.assertEquals('', child_context['stream'].read())
 
 
 class ListHeaderTest(TestCase):
@@ -977,7 +978,7 @@ class TestModelStream(TestBase):
             self.assertEquals(Paragraph, leader['type'])
             # leader should be at top-level
             self.assertEquals(0, leader['level'])
-            #print idx, leader['record']['seqno'], len(paragraph_models)
+            # print idx, leader['record']['seqno'], len(paragraph_models)
 
     def test_model(self):
         model = self.docinfo.model(0)

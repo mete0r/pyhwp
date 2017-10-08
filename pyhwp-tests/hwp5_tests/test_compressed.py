@@ -34,7 +34,7 @@ class TestUncompress(TestCase):
         gen = decompress_gen(StringIO(self.compressed_data[2:]))
         self.assertEquals(self.original_data, ''.join(gen))
 
-        #print '-----'
+        # print '-----'
 
         from hwp5.compressed import decompress
 

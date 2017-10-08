@@ -2,6 +2,7 @@
 from unittest import TestCase
 from hwp5.storage import StorageWrapper
 
+
 class TestStorageWrapper(TestCase):
 
     @property
