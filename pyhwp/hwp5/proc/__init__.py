@@ -28,13 +28,13 @@ Usage::
        --version        Show version and copyright information.
     -h --help           Show help messages.
        --help-commands  Show available commands.
-
 '''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 import logging
 import os
+import sys
 
 from docopt import docopt
 
@@ -109,22 +109,44 @@ subcommands = [
 ]
 
 
-version = '''hwp5proc (pyhwp) %s
-Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
-License AGPLv3+: GNU Affero GPL version 3 or any later
+program = 'hwp5proc (pyhwp) {version}'.format(version=__version__)
+
+copyright = 'Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>'
+
+license = '''License AGPLv3+: GNU Affero GPL version 3 or any later
 <http://gnu.org/licenses/agpl.txt>.
 This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-Disclosure: This program has been developed in accordance with a public
+There is NO WARRANTY, to the extent permitted by law.'''
+
+disclosure = '''Disclosure: This program has been developed in accordance with a public
 document named "HWP Binary Specification 1.1" published by Hancom Inc.
-<http://www.hancom.co.kr>.'''
-version = version % __version__
+<http://www.hancom.co.kr>.'''  # noqa
+
+version = '''{program}
+{copyright}
+{license}
+{disclosure}'''.format(
+    program=program,
+    copyright=copyright,
+    license=license,
+    disclosure=disclosure,
+)
 
 help_commands = '''Available <command> values:
 
     ''' + '\n    '.join(subcommands) + '''
 
 See 'hwp5proc <command> --help' for more information on a specific command.'''
+
+
+def print_subcommands():
+    print('Available <command> values:')
+    print('')
+    for subcommand in subcommands:
+        print('    {}'.format(subcommand))
+    print('')
+    print('See \'hwp5proc <command> --help\' '
+          'for more information on a specific command.')
 
 
 def main():
@@ -134,12 +156,21 @@ def main():
     args = docopt(doc, version=version, help=False, options_first=True)
 
     if args['--help-commands']:
-        print(doc + help_commands)
+        print(doc)
+        print_subcommands()
         return 0
 
     command = args['<command>']
-    if command not in subcommands:
+    if command is None:
         print(doc.strip())
+        return 1
+
+    if command not in subcommands:
+        message = 'Unknown command: {}'
+        message = message.format(command)
+        message = '\n{}\n\n'.format(message)
+        sys.stderr.write(message)
+        print_subcommands()
         return 1
 
     argv = [command] + args['<args>']
