@@ -18,8 +18,9 @@
 #
 from __future__ import with_statement
 from contextlib import contextmanager
-import subprocess
+from subprocess import CalledProcessError
 import logging
+import subprocess
 
 
 logger = logging.getLogger(__name__)
@@ -29,14 +30,17 @@ enabled = None
 
 
 def xmllint_reachable():
-    from subprocess import Popen
     args = [executable, '--version']
     try:
-        p = Popen(args)
-    except:
+        subprocess.check_output(args)
+    except OSError:
+        return False
+    except CalledProcessError:
+        return False
+    except Exception as e:
+        logger.exception(e)
         return False
     else:
-        p.wait()
         return True
 
 
