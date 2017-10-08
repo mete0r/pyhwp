@@ -90,7 +90,7 @@ notebook:
 
 .PHONY: clitest
 clitest:
-	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt
+	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt pyhwp-tests/cli_tests/hwp5txt.txt
 
 
 .PHONY: install-jython
