@@ -18,16 +18,6 @@
 #
 
 
-def importStringIO():
-    ''' from cStringIO/StringIO import StringIO '''
-    try:
-        from cStringIO import StringIO
-        return StringIO
-    except:
-        from StringIO import StringIO
-        return StringIO
-
-
 def importjson():
     try:
         import json

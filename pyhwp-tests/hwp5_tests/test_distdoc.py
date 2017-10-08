@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from binascii import b2a_hex
 from hashlib import sha1
-from StringIO import StringIO
+from io import BytesIO
 import zlib
 
 from hwp5.filestructure import Hwp5DistDoc
@@ -55,7 +55,7 @@ class TestHwp5DistDocFunctions(TestBase):
                 return
             raise
         decompressed = zlib.decompress(decrypted, -15)
-        record = read_record(StringIO(decompressed), 0)
+        record = read_record(BytesIO(decompressed), 0)
         self.assertEquals(0, record['level'])
         self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
         self.assertEquals(22, record['size'])

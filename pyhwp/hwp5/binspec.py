@@ -32,11 +32,7 @@ Options::
 '''
 
 import logging
-from .importhelper import importStringIO
 import xml.etree.ElementTree as ET
-
-
-StringIO = importStringIO()
 
 
 logger = logging.getLogger(__name__)

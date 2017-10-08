@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 from unittest import TestCase
 
 from hwp5.storage import StorageWrapper
@@ -12,8 +12,8 @@ class TestStorageWrapper(TestCase):
 
     @property
     def storage(self):
-        return dict(FileHeader=StringIO('fileheader'),
-                    BinData={'BIN0001.jpg': StringIO('bin0001.jpg')})
+        return dict(FileHeader=BytesIO(b'fileheader'),
+                    BinData={'BIN0001.jpg': BytesIO(b'bin0001.jpg')})
 
     def test_iter(self):
         stg = StorageWrapper(self.storage)

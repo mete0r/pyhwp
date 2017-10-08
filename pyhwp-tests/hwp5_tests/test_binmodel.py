@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 from unittest import TestCase
 import binascii
 import pickle
@@ -63,17 +63,17 @@ testcontext = TestContext()
 
 class TestRecordParsing(TestCase):
     def test_init_record_parsing_context(self):
-        record = dict(tagid=HWPTAG_BEGIN, payload='abcd')
+        record = dict(tagid=HWPTAG_BEGIN, payload=b'abcd')
         context = init_record_parsing_context(testcontext, record)
 
         self.assertEquals(record, context['record'])
-        self.assertEquals('abcd', context['stream'].read())
+        self.assertEquals(b'abcd', context['stream'].read())
 
 
 class BinEmbeddedTest(TestCase):
     ctx = TestContext()
-    stream = StringIO(b'\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00'
-                      b'\x6a\x00\x70\x00\x67\x00')
+    stream = BytesIO(b'\x12\x04\xc0\x00\x01\x00\x02\x00\x03\x00'
+                     b'\x6a\x00\x70\x00\x67\x00')
 
     def testParse(self):
         record = read_records(self.stream).next()
@@ -286,10 +286,10 @@ class TableTest(TestBase):
 
     @property
     def stream(self):
-        return StringIO(b'G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00'    # noqa
-                        b'\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00'  # noqa
-                        b'\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00'  # noqa
-                        b'\x00\x00')
+        return BytesIO(b'G\x04\xc0\x02 lbt\x11#*\x08\x00\x00\x00\x00\x00\x00'
+                       b'\x00\x00\x06\x9e\x00\x00D\x10\x00\x00\x00\x00\x00\x00'
+                       b'\x1b\x01\x1b\x01\x1b\x01\x1b\x01\xed\xad\xa2V\x00\x00'
+                       b'\x00\x00')
 
     @cached_property
     def tablecontrol_record(self):
@@ -620,7 +620,7 @@ class ListHeaderTest(TestCase):
     record_bytes = (b'H\x08`\x02\x01\x00\x00\x00 \x00\x00\x00\x00\x00\x00\x00'
                     b'\x01\x00\x01\x00\x03O\x00\x00\x1a\x01\x00\x00\x8d\x00'
                     b'\x8d\x00\x8d\x00\x8d\x00\x01\x00\x03O\x00\x00')
-    stream = StringIO(record_bytes)
+    stream = BytesIO(record_bytes)
 
     def testParse(self):
         record = read_records(self.stream).next()
@@ -637,9 +637,9 @@ class ListHeaderTest(TestCase):
 
 class TableBodyTest(TestCase):
     ctx = TestContext(version=(5, 0, 1, 7))
-    stream = StringIO(b'M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00'
-                      b'\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01'
-                      b'\x00\x00\x00')
+    stream = BytesIO(b'M\x08\xa0\x01\x06\x00\x00\x04\x02\x00\x02\x00\x00\x00'
+                     b'\x8d\x00\x8d\x00\x8d\x00\x8d\x00\x02\x00\x02\x00\x01'
+                     b'\x00\x00\x00')
 
     def test_parse_model(self):
         record = read_records(self.stream).next()
@@ -717,7 +717,7 @@ class TableCaptionCellTest(TestCase):
                      b'\x03O\x00\x00')
 
     def testParsePass1(self):
-        stream = StringIO(self.records_bytes)
+        stream = BytesIO(self.records_bytes)
         records = list(read_records(stream))
         result = list(parse_models_intern(self.ctx, records))
 

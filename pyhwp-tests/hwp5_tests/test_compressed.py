@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 from unittest import TestCase
 import os
 import zlib
@@ -36,13 +36,13 @@ class TestUncompress(TestCase):
 
     def test_decompress(self):
 
-        gen = decompress_gen(StringIO(self.compressed_data[2:]))
+        gen = decompress_gen(BytesIO(self.compressed_data[2:]))
         self.assertEquals(self.original_data, b''.join(gen))
 
         # print '-----'
 
-        f = decompress(StringIO(self.compressed_data[2:]))
-        g = StringIO(self.original_data)
+        f = decompress(BytesIO(self.compressed_data[2:]))
+        g = BytesIO(self.original_data)
 
         self.assertEquals(f.read(2048), g.read(2048))
         self.assertEquals(f.read(1024), g.read(1024))

@@ -19,8 +19,6 @@
 import sys
 import struct
 import logging
-from .importhelper import importStringIO
-StringIO = importStringIO()
 
 
 logger = logging.getLogger(__name__)

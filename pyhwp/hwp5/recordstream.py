@@ -20,9 +20,7 @@ from .tagids import HWPTAG_BEGIN, tagnames
 from .dataio import UINT32, Eof
 from . import dataio
 from . import filestructure
-from .importhelper import importStringIO
 from hwp5.importhelper import importjson
-StringIO = importStringIO()
 
 
 def tagname(tagid):

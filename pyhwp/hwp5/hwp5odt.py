@@ -46,6 +46,7 @@ from __future__ import unicode_literals
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
+from io import BytesIO
 import gettext
 import logging
 import os.path
@@ -204,8 +205,7 @@ class ODTTransform(BaseTransform, ODFValidate):
             with self.transformed_content_at_temp(xhwp5path) as path:
                 odtpkg.insert_path(path, 'content.xml', 'text/xml')
 
-            from cStringIO import StringIO
-            rdf = StringIO()
+            rdf = BytesIO()
             manifest_rdf(rdf)
             rdf.seek(0)
             odtpkg.insert_stream(rdf, 'manifest.rdf',
@@ -283,8 +283,7 @@ class ODTPackage(object):
 
     def close(self):
 
-        from cStringIO import StringIO
-        manifest = StringIO()
+        manifest = BytesIO()
         manifest_xml(manifest, self.files)
         manifest.seek(0)
         self.zf.writestr('META-INF/manifest.xml', manifest.getvalue())
@@ -330,7 +329,7 @@ def manifest_xml(f, files):
 
 
 def manifest_rdf(f):
-    f.write('''<?xml version="1.0" encoding="utf-8"?>
+    f.write(b'''<?xml version="1.0" encoding="utf-8"?>
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#"
@@ -342,10 +341,6 @@ def manifest_rdf(f):
     <odf:ContentFile rdf:about="content.xml"/>
     <odf:StylesFile rdf:about="styles.xml"/>
 </rdf:RDF>''')
-
-
-def mimetype(f):
-    f.write('application/vnd.oasis.opendocument.text')
 
 
 def main():

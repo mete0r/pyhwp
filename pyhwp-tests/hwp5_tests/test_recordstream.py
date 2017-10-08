@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 
 from hwp5 import recordstream as RS
 from hwp5.importhelper import importjson
@@ -39,7 +39,7 @@ class TestRecord(TestBase):
     def test_dump_record(self):
         docinfo_stream = self.hwp5file['DocInfo']
         record = read_record(docinfo_stream.open(), 0)
-        stream = StringIO()
+        stream = BytesIO()
         dump_record(stream, record)
         stream.seek(0)
         record2 = read_record(stream, 0)

@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 from unittest import TestCase
 from xml.etree import ElementTree
 import base64
@@ -48,7 +48,7 @@ class TestBase(test_binmodel.TestBase):
 class TestXmlEvents(TestBase):
 
     def test_dump_quoteattr_cr(self):
-        sio = StringIO()
+        sio = BytesIO()
 
         context = dict()
         attrs = dict(char='\r')

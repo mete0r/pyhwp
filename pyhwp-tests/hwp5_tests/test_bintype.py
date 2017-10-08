@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 from unittest import TestCase
 
 from hwp5.binmodel import ParaTextChunks
@@ -537,7 +537,7 @@ class TestBinIO(TestCase):
     def test_resolve_values_from_stream(self):
         assertEquals = self.assertEquals
 
-        stream = StringIO('\x00\x01\x00\x02')
+        stream = BytesIO(b'\x00\x01\x00\x02')
         resolve_values = resolve_values_from_stream(stream)
 
         bin_item = dict(type=self.BasicStruct)
@@ -560,7 +560,7 @@ class TestBinIO(TestCase):
             def attributes():
                 yield BSTR, 'name'
 
-        stream = StringIO(b'\x02\x00\x00\x01\x00\x02')
+        stream = BytesIO(b'\x02\x00\x00\x01\x00\x02')
         resolve_values = resolve_values_from_stream(stream)
         bin_item = dict(type=StructWithBSTR)
         events = bintype_map_events(bin_item)
@@ -579,7 +579,7 @@ class TestBinIO(TestCase):
             def attributes():
                 yield ParaTextChunks, 'texts'
 
-        stream = StringIO(b'\x20\x00\x21\x00\x22\x00')
+        stream = BytesIO(b'\x20\x00\x21\x00\x22\x00')
         resolve_values = resolve_values_from_stream(stream)
         bin_item = dict(type=StructWithParaTextChunks)
         events = bintype_map_events(bin_item)
@@ -594,7 +594,7 @@ class TestBinIO(TestCase):
 
     def test_collect_values(self):
 
-        stream = StringIO(b'\x01\x00\x01\x01\x02\x01\x02\x00')
+        stream = BytesIO(b'\x01\x00\x01\x01\x02\x01\x02\x00')
         resolve_values = resolve_values_from_stream(stream)
 
         bin_item = dict(type=self.NestedStruct)
@@ -640,7 +640,7 @@ class TestReadEvents(TestCase):
         context = dict()
 
         # if a = 0
-        stream = StringIO(b'\x00\x00\x02\x00')
+        stream = BytesIO(b'\x00\x00\x02\x00')
         events = read_type_events(StructWithCondition, context, stream)
         a = dict(name='a', type=UINT16, value=0, bin_offset=0)
         c = dict(name='c', type=UINT16, value=2, bin_offset=2)
@@ -655,7 +655,7 @@ class TestReadEvents(TestCase):
         self.assertEquals('', stream.read())
 
         # if a = 1
-        stream = StringIO(b'\x01\x00\x0f\x00\x02\x00')
+        stream = BytesIO(b'\x01\x00\x0f\x00\x02\x00')
         events = read_type_events(StructWithCondition, context, stream)
         a = dict(name='a', type=UINT16, value=1, bin_offset=0)
         b = dict(name='b', type=UINT16, value=0xf, bin_offset=2)

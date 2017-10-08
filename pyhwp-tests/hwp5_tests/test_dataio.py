@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from StringIO import StringIO
+from io import BytesIO
 from unittest import TestCase
 import sys
 
@@ -325,7 +325,7 @@ class TestReadStruct(TestCase):
                 yield INT16, 'a'
             attributes = staticmethod(attributes)
 
-        stream = StringIO()
+        stream = BytesIO()
 
         record = dict()
         context = dict(record=record)
@@ -341,14 +341,14 @@ class TestReadStruct(TestCase):
 class TestBSTR(TestCase):
 
     def test_read(self):
-        f = StringIO(b'\x03\x00' + u'가나다'.encode('utf-16le'))
+        f = BytesIO(b'\x03\x00' + u'가나다'.encode('utf-16le'))
 
         s = BSTR.read(f)
         self.assertEquals(u'가나다', s)
 
         pua = u'\ub098\ub78f\u302e\ub9d0\u302f\uebd4\ubbf8\u302e'
         pua_utf16le = pua.encode('utf-16le')
-        f = StringIO(chr(len(pua)) + b'\x00' + pua_utf16le)
+        f = BytesIO(chr(len(pua)) + b'\x00' + pua_utf16le)
 
         jamo = BSTR.read(f)
         expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
