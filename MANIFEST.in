@@ -28,6 +28,8 @@ exclude samples
 include stdeb.cfg
 include tox.ini
 include tox.ini.in
+recursive-include pyhwp/hwp5/locale *.po
+recursive-include pyhwp/hwp5/locale *.pot
 prune buildouts
 prune docs
 prune etc

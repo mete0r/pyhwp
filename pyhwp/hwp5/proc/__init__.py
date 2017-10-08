@@ -32,6 +32,7 @@ Usage::
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+import gettext
 import logging
 import os
 import sys
@@ -49,7 +50,16 @@ from ..storage.ole import OleStorage
 from ..xmlmodel import Hwp5File
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
+
+locale_dir = os.path.join(os.path.dirname(__file__), '..', 'locale')
+locale_dir = os.path.abspath(locale_dir)
+t = gettext.translation('hwp5proc', locale_dir, fallback=True)
+if PY3:
+    _ = t.gettext
+else:
+    _ = t.ugettext
 
 
 def rest_to_docopt(doc):
@@ -113,14 +123,14 @@ program = 'hwp5proc (pyhwp) {version}'.format(version=__version__)
 
 copyright = 'Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>'
 
-license = '''License AGPLv3+: GNU Affero GPL version 3 or any later
+license = _('''License AGPLv3+: GNU Affero GPL version 3 or any later
 <http://gnu.org/licenses/agpl.txt>.
 This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.'''
+There is NO WARRANTY, to the extent permitted by law.''')
 
-disclosure = '''Disclosure: This program has been developed in accordance with a public
+disclosure = _('''Disclosure: This program has been developed in accordance with a public
 document named "HWP Binary Specification 1.1" published by Hancom Inc.
-<http://www.hancom.co.kr>.'''  # noqa
+<http://www.hancom.co.kr>.''')  # noqa
 
 version = '''{program}
 {copyright}
@@ -132,21 +142,15 @@ version = '''{program}
     disclosure=disclosure,
 )
 
-help_commands = '''Available <command> values:
-
-    ''' + '\n    '.join(subcommands) + '''
-
-See 'hwp5proc <command> --help' for more information on a specific command.'''
-
 
 def print_subcommands():
-    print('Available <command> values:')
+    print(_('Available <command> values:'))
     print('')
     for subcommand in subcommands:
         print('    {}'.format(subcommand))
     print('')
-    print('See \'hwp5proc <command> --help\' '
-          'for more information on a specific command.')
+    print(_('See \'hwp5proc <command> --help\' '
+            'for more information on a specific command.'))
 
 
 def main():
@@ -166,7 +170,7 @@ def main():
         return 1
 
     if command not in subcommands:
-        message = 'Unknown command: {}'
+        message = _('Unknown command: {}')
         message = message.format(command)
         message = '\n{}\n\n'.format(message)
         sys.stderr.write(message)

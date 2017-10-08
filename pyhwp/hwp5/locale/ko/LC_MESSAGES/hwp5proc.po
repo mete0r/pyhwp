@@ -1,0 +1,59 @@
+# Korean translations for pyhwp.
+# pyhwp 한국/조선어 번역
+# Copyright (C) 2017 mete0r@sarangbang.or.kr
+# This file is distributed under the same license as the pyhwp project.
+# mete0r <mete0r@sarangbang.or.kr>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pyhwp 0.1b9.dev0\n"
+"Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
+"POT-Creation-Date: 2017-10-09 00:54+0900\n"
+"PO-Revision-Date: 2017-10-09 00:41+0900\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ko\n"
+"Language-Team: ko <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.0\n"
+
+#: pyhwp/hwp5/proc/__init__.py:126
+msgid ""
+"License AGPLv3+: GNU Affero GPL version 3 or any later\n"
+"<http://gnu.org/licenses/agpl.txt>.\n"
+"This is free software: you are free to change and redistribute it.\n"
+"There is NO WARRANTY, to the extent permitted by law."
+msgstr ""
+"AGPLv3+ 사용허락조건: GNU Affero GPL version 3 혹은 그 이후 판본에 의거하여\n"
+"이 프로그램의 사용을 허락합니다.\n"
+"<http://gnu.org/licenses/agpl.txt>.\n"
+"이 프로그램은 자유 소프트웨어입니다: 자유롭게 변경하고 재배포할 수 있습니다.\n"
+"또한 이 프로그램은 아무런 보증 없이 제공됩니다. 이 프로그램을 사용하여\n"
+"발생한 결과에 대해 저자는 법률이 정한 바 외에는 아무런 책임을 지지 않습니다."
+
+#: pyhwp/hwp5/proc/__init__.py:131
+msgid ""
+"Disclosure: This program has been developed in accordance with a public\n"
+"document named \"HWP Binary Specification 1.1\" published by Hancom Inc.\n"
+"<http://www.hancom.co.kr>."
+msgstr ""
+"공개: 본 제품은 한글과컴퓨터의 한글 문서 파일(.hwp) 공개 문서를\n"
+"참고하여 개발하였습니다.\n"
+"<http://www.hancom.co.kr>."
+
+#: pyhwp/hwp5/proc/__init__.py:147
+msgid "Available <command> values:"
+msgstr "사용가능한 <command> 값:"
+
+#: pyhwp/hwp5/proc/__init__.py:152
+msgid ""
+"See 'hwp5proc <command> --help' for more information on a specific "
+"command."
+msgstr "각 명령의 상세 사용법을 보려면: hwp5proc <command> --help"
+
+#: pyhwp/hwp5/proc/__init__.py:173
+msgid "Unknown command: {}"
+msgstr "잘못된 명령: {}"
+
