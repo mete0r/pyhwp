@@ -83,6 +83,38 @@ requirements/dev.txt: $(REQUIREMENTS_IN_DEV)
 	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
 
 
+.PHONY: extract-messages
+extract-messages:
+	$(VENV) python setup.py extract_messages --input-paths=pyhwp/hwp5/proc --output-file=pyhwp/hwp5/locale/hwp5proc.pot
+	$(VENV) python setup.py extract_messages --input-paths=pyhwp/hwp5/hwp5html.py --output-file=pyhwp/hwp5/locale/hwp5html.pot
+	$(VENV) python setup.py extract_messages --input-paths=pyhwp/hwp5/hwp5odt.py --output-file=pyhwp/hwp5/locale/hwp5odt.pot
+	$(VENV) python setup.py extract_messages --input-paths=pyhwp/hwp5/hwp5txt.py --output-file=pyhwp/hwp5/locale/hwp5txt.pot
+	$(VENV) python setup.py extract_messages --input-paths=pyhwp/hwp5/hwp5view.py --output-file=pyhwp/hwp5/locale/hwp5view.pot
+
+.PHONY: init-catalog
+init-catalog:
+	$(VENV) python setup.py init_catalog --domain=hwp5proc --input-file=pyhwp/hwp5/locale/hwp5proc.pot --locale=ko
+	$(VENV) python setup.py init_catalog --domain=hwp5html --input-file=pyhwp/hwp5/locale/hwp5html.pot --locale=ko
+	$(VENV) python setup.py init_catalog --domain=hwp5odt --input-file=pyhwp/hwp5/locale/hwp5odt.pot --locale=ko
+	$(VENV) python setup.py init_catalog --domain=hwp5txt --input-file=pyhwp/hwp5/locale/hwp5txt.pot --locale=ko
+	$(VENV) python setup.py init_catalog --domain=hwp5view --input-file=pyhwp/hwp5/locale/hwp5view.pot --locale=ko
+
+.PHONY: update-catalog
+update-catalog:
+	$(VENV) python setup.py update_catalog --domain=hwp5proc --input-file=pyhwp/hwp5/locale/hwp5proc.pot
+	$(VENV) python setup.py update_catalog --domain=hwp5html --input-file=pyhwp/hwp5/locale/hwp5html.pot
+	$(VENV) python setup.py update_catalog --domain=hwp5odt --input-file=pyhwp/hwp5/locale/hwp5odt.pot
+	$(VENV) python setup.py update_catalog --domain=hwp5txt --input-file=pyhwp/hwp5/locale/hwp5txt.pot
+	$(VENV) python setup.py update_catalog --domain=hwp5view --input-file=pyhwp/hwp5/locale/hwp5view.pot
+
+.PHONY: compile-catalog
+compile-catalog:
+	$(VENV) python setup.py compile_catalog --domain=hwp5proc
+	$(VENV) python setup.py compile_catalog --domain=hwp5html
+	$(VENV) python setup.py compile_catalog --domain=hwp5odt
+	$(VENV) python setup.py compile_catalog --domain=hwp5txt
+	$(VENV) python setup.py compile_catalog --domain=hwp5view
+
 .PHONY: notebook
 notebook:
 	$(VENV)	jupyter notebook --notebook-dir=notebooks
@@ -90,7 +122,7 @@ notebook:
 
 .PHONY: clitest
 clitest:
-	$(VENV) env SAMPLES=samples clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt pyhwp-tests/cli_tests/hwp5txt.txt
+	$(VENV) env LANG=C clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt pyhwp-tests/cli_tests/hwp5txt.txt
 
 
 .PHONY: install-jython

@@ -46,8 +46,9 @@ from __future__ import unicode_literals
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
-import os.path
+import gettext
 import logging
+import os.path
 import sys
 
 from .errors import ImplementationNotAvailable
@@ -58,7 +59,15 @@ from .plat import get_relaxng_compile
 from .utils import cached_property
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
+locale_dir = os.path.join(os.path.dirname(__file__), 'locale')
+locale_dir = os.path.abspath(locale_dir)
+t = gettext.translation('hwp5odt', locale_dir, fallback=True)
+if PY3:
+    _ = t.gettext
+else:
+    _ = t.ugettext
 
 
 RESOURCE_PATH_RNG = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'

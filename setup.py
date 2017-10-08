@@ -17,7 +17,10 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import absolute_import
 from __future__ import print_function
+from distutils.command.build import build as _build
 import os.path
+import subprocess
+import sys
 
 
 def setupdir(f):
@@ -83,7 +86,36 @@ def get_install_requires():
     return requires
 
 
-setup_kwargs = {
+class build(_build):
+    def run(self):
+
+        #
+        # compile message catalogs
+        #
+        domains = [
+            'hwp5proc',
+            'hwp5html',
+            'hwp5odt',
+            'hwp5txt',
+            'hwp5view',
+        ]
+        for domain in domains:
+            args = [
+                sys.executable,
+                __file__,
+                'compile_catalog',
+                '--domain={}'.format(domain)
+                # ..other common options are provided by setup.cfg
+            ]
+            subprocess.check_call(args)
+
+        #
+        # process to normal build operations
+        #
+        _build.run(self)
+
+
+setup_info = {
 
     # basic information
 
@@ -107,7 +139,9 @@ setup_kwargs = {
 
     # packaging
 
-    'setup_requires': [],
+    'setup_requires': [
+        'babel',
+    ],
 
     'packages': [
         'hwp5',
@@ -131,8 +165,9 @@ setup_kwargs = {
             'VERSION.txt',
             'xsl/*.xsl',
             'xsl/odt/*.xsl',
-            'odf-relaxng/OpenDocument-v1.2-os-*.rng'
-        ]
+            'odf-relaxng/OpenDocument-v1.2-os-*.rng',
+            'locale/*/*/*.mo',
+        ],
     },
 
     # installation
@@ -157,7 +192,10 @@ setup_kwargs = {
 @setupdir
 def main():
     setuptools = import_setuptools()
-    setuptools.setup(**setup_kwargs)
+    setup_info['cmdclass'] = {
+        'build': build,
+    }
+    setuptools.setup(**setup_info)
 
 
 if __name__ == '__main__':

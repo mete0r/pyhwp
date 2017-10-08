@@ -41,8 +41,9 @@ from __future__ import unicode_literals
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
-import os.path
+import gettext
 import logging
+import os.path
 import shutil
 import sys
 
@@ -50,7 +51,15 @@ from .transforms import BaseTransform
 from .utils import cached_property
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
+locale_dir = os.path.join(os.path.dirname(__file__), 'locale')
+locale_dir = os.path.abspath(locale_dir)
+t = gettext.translation('hwp5html', locale_dir, fallback=True)
+if PY3:
+    _ = t.gettext
+else:
+    _ = t.ugettext
 
 
 RESOURCE_PATH_XSL_CSS = 'xsl/hwp5css.xsl'
