@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from unittest import TestCase
 import logging
+
 from hwp5.dataio import Struct
 from hwp5.dataio import INT32, BSTR
+from hwp5.treeop import STARTEVENT
+from hwp5.treeop import ENDEVENT
 from hwp5.xmlformat import element
+from hwp5.xmlformat import xmlattr_uniqnames
 
 
 class TestHello(TestCase):
     def test_hello(self):
-        from hwp5.treeop import STARTEVENT
-        from hwp5.treeop import ENDEVENT
 
         context = dict(logging=logging)
 
@@ -54,7 +59,6 @@ class TestHello(TestCase):
         self.assertEquals(expected, result)
 
     def test_xmlattr_uniqnames(self):
-        from hwp5.xmlformat import xmlattr_uniqnames
         a = [('a', 1), ('b', 2)]
         self.assertEquals([('a', 1), ('b', 2)], list(xmlattr_uniqnames(a)))
 

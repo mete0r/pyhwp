@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import io
 
 
 def get_fixture_path(filename):
@@ -8,4 +12,4 @@ def get_fixture_path(filename):
 
 def open_fixture(filename, *args, **kwargs):
     path = get_fixture_path(filename)
-    return open(path, *args, **kwargs)
+    return io.open(path, *args, **kwargs)

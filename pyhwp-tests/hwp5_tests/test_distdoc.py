@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from binascii import b2a_hex
 from hashlib import sha1
 from StringIO import StringIO
@@ -13,7 +16,7 @@ from hwp5.tagids import HWPTAG_PARA_HEADER
 import hwp5.distdoc
 import hwp5.compressed
 
-from hwp5_tests.test_filestructure import TestBase
+from .test_filestructure import TestBase
 
 
 class TestHwp5DistDocFunctions(TestBase):

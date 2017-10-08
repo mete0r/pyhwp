@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from xml.etree import ElementTree as etree
 import logging
 
 
@@ -40,7 +43,6 @@ class XsltTestMixin(object):
         with file(out_path, 'w') as f:
             transform(inp_path, f)
 
-        from xml.etree import ElementTree as etree
         with file(out_path) as f:
             out_doc = etree.parse(f)
         self.assertEquals('out', out_doc.getroot().tag)
@@ -65,7 +67,6 @@ class XsltTestMixin(object):
         result = self.xslt(xsl_path, inp_path, out_path)
         self.assertTrue('errors' not in result)
 
-        from xml.etree import ElementTree as etree
         with file(out_path) as f:
             out_doc = etree.parse(f)
         self.assertEquals('out', out_doc.getroot().tag)

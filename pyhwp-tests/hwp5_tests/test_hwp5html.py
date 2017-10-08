@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import closing
-import os
 import os.path
 import shutil
-import test_xmlmodel
+
+from hwp5.hwp5html import HTMLTransform
+from hwp5.plat import get_xslt
+from hwp5.storage.fs import FileSystemStorage
+
+from . import test_xmlmodel
 
 
 class TestBase(test_xmlmodel.TestBase):
@@ -21,7 +27,6 @@ class HtmlConvTest(TestBase):
 
     @property
     def xslt(self):
-        from hwp5.plat import get_xslt
         return get_xslt()
 
     @property
@@ -30,7 +35,6 @@ class HtmlConvTest(TestBase):
 
     @property
     def transform(self):
-        from hwp5.hwp5html import HTMLTransform
         return HTMLTransform()
 
     def create_xhwp5(self):
@@ -68,7 +72,6 @@ class HtmlConvTest(TestBase):
 
         bindata_stg = hwp5file['BinData']
 
-        from hwp5.storage.fs import FileSystemStorage
         self.assertEquals(set(bindata_stg),
                           set(FileSystemStorage(bindata_dir)))
 

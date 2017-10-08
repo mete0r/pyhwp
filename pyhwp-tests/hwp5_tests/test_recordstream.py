@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from StringIO import StringIO
 
-import test_filestructure
 from hwp5 import recordstream as RS
-from hwp5.utils import cached_property
 from hwp5.importhelper import importjson
+from hwp5.recordstream import RecordStream
+from hwp5.recordstream import dump_record
+from hwp5.recordstream import read_record
+from hwp5.recordstream import record_to_json
+from hwp5.storage import ExtraItemStorage
+from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
+from hwp5.tagids import HWPTAG_ID_MAPPINGS
+from hwp5.tagids import HWPTAG_PARA_HEADER
+from hwp5.utils import cached_property
+
+from . import test_filestructure
 
 
 class TestBase(test_filestructure.TestBase):
@@ -18,19 +31,14 @@ class TestBase(test_filestructure.TestBase):
 class TestRecord(TestBase):
 
     def test_read_record(self):
-        from hwp5.recordstream import read_record
-        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
         docinfo_stream = self.hwp5file['DocInfo']
 
         record = read_record(docinfo_stream.open(), 0)
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
 
     def test_dump_record(self):
-        from hwp5.recordstream import dump_record
-        from hwp5.recordstream import read_record
         docinfo_stream = self.hwp5file['DocInfo']
         record = read_record(docinfo_stream.open(), 0)
-        from StringIO import StringIO
         stream = StringIO()
         dump_record(stream, record)
         stream.seek(0)
@@ -42,7 +50,6 @@ class TestRecordStream(TestBase):
 
     @cached_property
     def docinfo(self):
-        from hwp5.recordstream import RecordStream
         return RecordStream(self.hwp5file_fs['DocInfo'],
                             self.hwp5file_fs.header.version)
 
@@ -50,12 +57,10 @@ class TestRecordStream(TestBase):
         self.assertEquals(67, len(list(self.docinfo.records())))
 
     def test_records_kwargs_treegroup(self):
-        from hwp5.tagids import HWPTAG_ID_MAPPINGS
         records = self.docinfo.records(treegroup=1)
         self.assertEquals(66, len(records))
         self.assertEquals(HWPTAG_ID_MAPPINGS, records[0]['tagid'])
 
-        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
         records = self.docinfo.records(treegroup=0)
         self.assertEquals(1, len(records))
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, records[0]['tagid'])
@@ -78,7 +83,6 @@ class TestRecordStream(TestBase):
         idmappings_treerecords = groups.next()
         self.assertEquals(66, len(idmappings_treerecords))
 
-        from hwp5.tagids import HWPTAG_PARA_HEADER
         section = self.bodytext.section(0)
         for group_idx, records in enumerate(section.records_treegrouped()):
             # print group_idx, records[0]['seqno'], len(records)
@@ -95,12 +99,10 @@ class TestRecordStream(TestBase):
         self.assertTrue(isinstance(group, list))
 
     def test_records_treegroup(self):
-        from hwp5.tagids import HWPTAG_ID_MAPPINGS
         records = self.docinfo.records_treegroup(1)
         self.assertEquals(66, len(records))
         self.assertEquals(HWPTAG_ID_MAPPINGS, records[0]['tagid'])
 
-        from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
         records = self.docinfo.records_treegroup(0)
         self.assertEquals(1, len(records))
         self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, records[0]['tagid'])
@@ -113,7 +115,6 @@ class TestRecordStream(TestBase):
 class TestHwp5File(TestBase):
 
     def test_if_hwp5file_contains_other_formats(self):
-        from hwp5.storage import ExtraItemStorage
         stg = ExtraItemStorage(self.hwp5file)
         self.assertTrue('DocInfo.records' in list(stg))
 
@@ -124,7 +125,6 @@ class TestHwp5File(TestBase):
         self.assertEquals(67, len(records))
 
     def test_bodytext(self):
-        from hwp5.storage import ExtraItemStorage
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, RS.Sections))
         stg = ExtraItemStorage(bodytext)
@@ -133,7 +133,6 @@ class TestHwp5File(TestBase):
 
 class TestJson(TestBase):
     def test_record_to_json(self):
-        from hwp5.recordstream import record_to_json
         simplejson = importjson()
         record = self.hwp5file.docinfo.records().next()
         json = record_to_json(record)

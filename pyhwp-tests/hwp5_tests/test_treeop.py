@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from unittest import TestCase
+
+from hwp5.treeop import STARTEVENT, ENDEVENT
+from hwp5.treeop import build_subtree
+from hwp5.treeop import iter_subevents
+from hwp5.treeop import prefix_ancestors_from_level
+from hwp5.treeop import tree_events
 
 
 class Test_ancestors_from_level(TestCase):
 
     def test_ancestors_from_level(self):
-
-        from hwp5.treeop import prefix_ancestors_from_level
 
         level_prefixed = [
             (0, 'a0'),
@@ -31,7 +38,6 @@ class Test_ancestors_from_level(TestCase):
         self.assertEquals(result.pop(0), ([None], 'c0'))
 
     def test_ancestors_from_level_from_nonzero_baselevel(self):
-        from hwp5.treeop import prefix_ancestors_from_level
         level_prefixed = [
             (7, 'a0'),  # baselevel 7
             (8, 'a0-a1'),
@@ -47,7 +53,6 @@ class Test_ancestors_from_level(TestCase):
         self.assertEquals(result.pop(0), ([None], 'b0'))
 
     def test_ancestors_from_level_fails_at_level_below_baselevel(self):
-        from hwp5.treeop import prefix_ancestors_from_level
         level_prefixed = [
             (7, 'a7'),  # baselevel 7
             (8, 'a7-a8'),
@@ -75,7 +80,6 @@ class Test_ancestors_from_level(TestCase):
             pass
 
     def test_ancestors_from_level_assert_fails_at_invalid_level_jump(self):
-        from hwp5.treeop import prefix_ancestors_from_level
 
         level_prefixed = [
             (0, 'a0'),
@@ -91,9 +95,6 @@ class Test_ancestors_from_level(TestCase):
 
 class TestTreeEvents(TestCase):
     def test_tree_events(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.treeop import build_subtree
-        from hwp5.treeop import tree_events
         event_prefixed_items = [(STARTEVENT, 'a'), (ENDEVENT, 'a')]
         rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))
         self.assertEquals('a', rootitem)
@@ -132,8 +133,6 @@ class TestTreeEvents(TestCase):
 class TestSubevents(TestCase):
 
     def test_iter_subevents(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.treeop import iter_subevents
 
         events = iter([(STARTEVENT, 'a'), (ENDEVENT, 'a')])
         events.next()

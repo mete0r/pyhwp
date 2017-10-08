@@ -1,5 +1,18 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import logging
+import os.path
+import shutil
+
+from hwp5.errors import InvalidOleStorageError
+from hwp5.storage import is_storage
+from hwp5.storage import is_stream
+from hwp5.storage import iter_storage_leafs
+from hwp5.storage import unpack
+
+from .fixtures import get_fixture_path
 
 
 logger = logging.getLogger(__name__)
@@ -11,7 +24,6 @@ class OleStorageTestMixin(object):
     OleStorage = None
 
     def get_fixture_file(self, filename):
-        from fixtures import get_fixture_path
         return get_fixture_path(filename)
 
     @property
@@ -27,8 +39,6 @@ class OleStorageTestMixin(object):
             logger.warning('%s: skipped', self.id())
             return
         OleStorage = self.OleStorage
-        from hwp5.errors import InvalidOleStorageError
-        from hwp5.storage import is_storage
 
         olestg = OleStorage(self.hwp5file_path)
         self.assertTrue(is_storage(olestg))
@@ -41,7 +51,6 @@ class OleStorageTestMixin(object):
         if self.OleStorage is None:
             logger.warning('%s: skipped', self.id())
             return
-        from hwp5.storage import is_storage, is_stream
         olestg = self.olestg
         self.assertTrue(is_storage(olestg))
         # self.assertEquals('', olestg.path)
@@ -97,8 +106,7 @@ class OleStorageTestMixin(object):
         if self.OleStorage is None:
             logger.warning('%s: skipped', self.id())
             return
-        from hwp5.storage import is_storage
-        # from hwp5.storage.ole import OleStorage
+
         olestg = self.olestg
 
         try:
@@ -146,7 +154,6 @@ class OleStorageTestMixin(object):
         if self.OleStorage is None:
             logger.warning('%s: skipped', self.id())
             return
-        from hwp5.storage import iter_storage_leafs
         result = iter_storage_leafs(self.olestg)
         expected = ['\x05HwpSummaryInformation', 'BinData/BIN0002.jpg',
                     'BinData/BIN0002.png', 'BinData/BIN0003.png',
@@ -159,10 +166,6 @@ class OleStorageTestMixin(object):
         if self.OleStorage is None:
             logger.warning('%s: skipped', self.id())
             return
-        from hwp5.storage import unpack
-        import shutil
-        import os
-        import os.path
 
         if os.path.exists('5017'):
             shutil.rmtree('5017')
