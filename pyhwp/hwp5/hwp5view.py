@@ -191,6 +191,7 @@ def runner_factory_pyside():
 def make_temporary_directory(*args, **kwargs):
     path = mkdtemp(*args, **kwargs)
     try:
+        logger.warning('temporary directory for contents: %s', path)
         yield path
     finally:
         shutil.rmtree(path)
