@@ -30,13 +30,16 @@ Options::
        --logfile=<file>    Set log file.
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
+from ..filestructure import Hwp5File
+from . import entrypoint
 
 
 @entrypoint(__doc__)
 def main(args):
-    from hwp5.filestructure import Hwp5File
     hwp5file = Hwp5File(args['<hwp5file>'])
     h = hwp5file.fileheader
-    # print h.signature.replace('\x00', ''),
-    print '%d.%d.%d.%d' % h.version
+    print('%d.%d.%d.%d' % h.version)

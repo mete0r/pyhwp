@@ -35,13 +35,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
+from ..filestructure import Hwp5File
 from ..summaryinfo import HwpSummaryInfoTextFormatter
 from . import entrypoint
 
 
 @entrypoint(__doc__)
 def main(args):
-    from hwp5.filestructure import Hwp5File
     formatter = HwpSummaryInfoTextFormatter()
     hwpfile = Hwp5File(args['<hwp5file>'])
     try:

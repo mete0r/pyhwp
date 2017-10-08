@@ -78,13 +78,22 @@ Example::
     $ hwp5proc models -V 5.0.1.7 < Section0.bin
 
 '''
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from itertools import islice
 import sys
 
-from hwp5.proc import entrypoint
-from hwp5.dataio import hexdump
-from hwp5.treeop import ENDEVENT
-from hwp5.binmodel import RecordModel
+from ..binmodel import Hwp5File
+from ..binmodel import ModelStream
+from ..binmodel import RecordModel
+from ..binmodel import model_to_json
+from ..dataio import hexdump
+from ..storage import Open2Stream
+from ..treeop import ENDEVENT
+from ..utils import generate_json_array
+from . import entrypoint
+from . import parse_recordstream_name
 
 
 @entrypoint(__doc__)
@@ -97,25 +106,25 @@ def main(args):
                 if item['type'] is RecordModel:
                     record = item['record']
                     fmt = '     %s Record %s level=%s %s'
-                    print fmt % (event.__name__,
+                    print(fmt % (event.__name__,
                                  record['seqno'],
                                  record['level'],
-                                 record['tagname'])
+                                 record['tagname']))
                     if event is ENDEVENT:
                         leftover = item['leftover']
-                        print '%04x' % leftover['offset']
+                        print('%04x' % leftover['offset'])
                         if len(leftover['bytes']):
-                            print ''
-                            print 'leftover:'
-                            print hexdump(leftover['bytes'])
-                        print '-' * 20
+                            print('')
+                            print('leftover:')
+                            print(hexdump(leftover['bytes']))
+                        print('-' * 20)
                 else:
-                    print '    ', event.__name__, type, item.get('name', '')
+                    print('    ', event.__name__, type, item.get('name', ''))
             else:
                 offset = item['bin_offset']
                 name = item.get('name', '-')
                 value = item.get('value', '-')
-                print '%04x' % offset, type, name, repr(value)
+                print('%04x' % offset, type, name, repr(value))
         return
 
     models_from_stream = models_from_args(args)
@@ -128,8 +137,6 @@ def main(args):
 def stream_from_args(args):
     filename = args['<hwp5file>']
     if filename:
-        from hwp5.binmodel import Hwp5File
-        from hwp5.proc import parse_recordstream_name
         streamname = args['<record-stream>']
         hwpfile = Hwp5File(filename)
         return parse_recordstream_name(hwpfile, streamname)
@@ -138,8 +145,6 @@ def stream_from_args(args):
         version = version.split('.')
         version = tuple(int(x) for x in version)
 
-        from hwp5.storage import Open2Stream
-        from hwp5.binmodel import ModelStream
         return ModelStream(Open2Stream(lambda: sys.stdin), version)
 
 
@@ -172,8 +177,6 @@ def print_models_from_args(args):
 
 
 def print_models_json(models):
-    from hwp5.binmodel import model_to_json
-    from hwp5.utils import generate_json_array
     jsonobjects = (model_to_json(model, sort_keys=True, indent=2)
                    for model in models)
     for s in generate_json_array(jsonobjects):
@@ -188,8 +191,9 @@ def print_models_with_print_model(print_model):
 
 
 def print_model_simple(model):
-    print '%04d' % model['seqno'],
-    print ' ' * model['level'] + model['type'].__name__
+    sys.stdout.write('%04d ' % model['seqno'])
+    sys.stdout.write(' ' * model['level'] + model['type'].__name__)
+    sys.stdout.write('\n')
 
 
 def print_model_with_format(fmt):

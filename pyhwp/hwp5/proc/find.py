@@ -56,19 +56,25 @@ incompletely::
     $ hwp5proc find --tag=HWPTAG_LIST_HEADER --incomplete --dump samples/*.hwp
 
 '''
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from itertools import ifilter
 from itertools import imap
 from functools import partial
-from hwp5.proc import entrypoint
 import sys
+
+from ..binmodel import Hwp5File
+from ..binmodel import model_to_json
+from ..bintype import log_events
+from ..dataio import ParseError
+from ..tagids import tagnames
+from . import entrypoint
+from . import logger
 
 
 @entrypoint(__doc__)
 def main(args):
-
-    from hwp5.dataio import ParseError
-
     filenames = filenames_from_args(args)
 
     conditions = list(conditions_from_args(args))
@@ -85,7 +91,6 @@ def main(args):
             for model in models:
                 print_model(model)
         except ParseError, e:
-            from hwp5.proc import logger
             logger.error('---- On processing %s:', filename)
             e.print_to_logger(logger)
 
@@ -101,8 +106,6 @@ def filenames_from_stdin(args):
 
 
 def conditions_from_args(args):
-
-    from hwp5.tagids import tagnames
 
     if args['--model']:
         def with_model_name(model):
@@ -129,7 +132,6 @@ def conditions_from_args(args):
 
 
 def hwp5file_models(filename):
-    from hwp5.binmodel import Hwp5File
     hwp5file = Hwp5File(filename)
     for model in flat_models(hwp5file):
         model['filename'] = filename
@@ -158,13 +160,11 @@ def printer_from_args(args):
 
     def print_model(model):
         printable_model = dict(model, type=model['type'].__name__)
-        print fmt % printable_model
+        print(fmt % printable_model)
         if dump:
-            from hwp5.binmodel import model_to_json
-            print model_to_json(model, sort_keys=True, indent=2)
+            print(model_to_json(model, sort_keys=True, indent=2))
 
             def print_log(fmt, *args):
-                print fmt % args
-            from hwp5.bintype import log_events
+                print(fmt % args)
             list(log_events(model['binevents'], print_log))
     return print_model

@@ -33,13 +33,24 @@ Options::
 
     --output=<file>     Output file
 '''
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import closing
 import logging
 import sys
 
-from .transforms import BaseTransform
+from docopt import docopt
+
+from . import __version__ as version
+from .dataio import ParseError
+from .errors import InvalidHwp5FileError
+from .proc import init_logger
+from .proc import rest_to_docopt
+from .utils import make_open_dest_file
 from .utils import cached_property
+from .transforms import BaseTransform
+from .xmlmodel import Hwp5File
 
 
 logger = logging.getLogger(__name__)
@@ -65,15 +76,6 @@ class TextTransform(BaseTransform):
 
 
 def main():
-    from docopt import docopt
-
-    from . import __version__ as version
-    from .dataio import ParseError
-    from .errors import InvalidHwp5FileError
-    from .proc import rest_to_docopt
-    from .proc import init_logger
-    from .utils import make_open_dest_file
-    from .xmlmodel import Hwp5File
 
     doc = rest_to_docopt(__doc__)
     args = docopt(doc, version=version)

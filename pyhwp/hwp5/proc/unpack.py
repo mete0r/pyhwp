@@ -48,15 +48,18 @@ Example::
     $ cat sample-5017/PrvText.utf8
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import os.path
+
+from .. import storage
+from . import entrypoint
+from . import open_hwpfile
 
 
 @entrypoint(__doc__)
 def main(args):
-    from hwp5 import storage
-    from hwp5.proc import open_hwpfile
-    import os.path
-
     filename = args['<hwp5file>']
     hwp5file = open_hwpfile(args)
 

@@ -30,7 +30,13 @@ Options::
        --logfile=<file>    Set log file.
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import shutil
+import sys
+
+from . import entrypoint
 
 
 @entrypoint(__doc__)
@@ -39,10 +45,6 @@ def main(args):
     hwp5file = Hwp5File(args['<hwp5file>'])
     f = hwp5file.header.open_text()
     try:
-        try:
-            for line in f:
-                print line,
-        finally:
-            f.close()
+        shutil.copyfileobj(f, sys.stdout)
     finally:
         hwp5file.close()
