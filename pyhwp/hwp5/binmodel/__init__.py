@@ -17,6 +17,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from io import BytesIO
+import json
 import logging
 
 from hwp5 import recordstream
@@ -130,7 +131,6 @@ from hwp5.binmodel.tagid99_shape_component_unknown import ShapeUnknown
 from hwp5.dataio import dumpbytes
 from hwp5.treeop import prefix_ancestors_from_level
 from hwp5.utils import JsonObjects
-from hwp5.importhelper import importjson
 
 # to suppress pyflake8 warning 'imported but not used'
 RecordModel
@@ -401,7 +401,6 @@ def get_extension_mro(cls, up_to_cls=None):
 
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
-    json = importjson()
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model

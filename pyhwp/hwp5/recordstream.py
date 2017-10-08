@@ -16,11 +16,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import json
+
 from .tagids import HWPTAG_BEGIN, tagnames
 from .dataio import UINT32, Eof
 from . import dataio
 from . import filestructure
-from hwp5.importhelper import importjson
 
 
 def tagname(tagid):
@@ -106,7 +107,6 @@ def link_records(records):
 def record_to_json(record, *args, **kwargs):
     ''' convert a record to json '''
     from .dataio import dumpbytes
-    json = importjson()
     record['payload'] = list(dumpbytes(record['payload']))
     return json.dumps(record, *args, **kwargs)
 

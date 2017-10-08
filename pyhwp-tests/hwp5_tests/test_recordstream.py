@@ -3,9 +3,9 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from io import BytesIO
+import json
 
 from hwp5 import recordstream as RS
-from hwp5.importhelper import importjson
 from hwp5.recordstream import RecordStream
 from hwp5.recordstream import dump_record
 from hwp5.recordstream import read_record
@@ -133,10 +133,9 @@ class TestHwp5File(TestBase):
 
 class TestJson(TestBase):
     def test_record_to_json(self):
-        simplejson = importjson()
         record = self.hwp5file.docinfo.records().next()
-        json = record_to_json(record)
-        jsonobject = simplejson.loads(json)
+        json_string = record_to_json(record)
+        jsonobject = json.loads(json_string)
         self.assertEquals(16, jsonobject['tagid'])
         self.assertEquals(0, jsonobject['level'])
         self.assertEquals(26, jsonobject['size'])
@@ -146,10 +145,9 @@ class TestJson(TestBase):
         self.assertEquals(0, jsonobject['seqno'])
         self.assertEquals('HWPTAG_DOCUMENT_PROPERTIES', jsonobject['tagname'])
 
-    def test_generate_simplejson_dumps(self):
-        simplejson = importjson()
+    def test_generate_json(self):
         records_json = self.hwp5file.docinfo.records_json()
-        json = ''.join(records_json.generate())
+        json_string = ''.join(records_json.generate())
 
-        jsonobject = simplejson.loads(json)
+        jsonobject = json.loads(json_string)
         self.assertEquals(67, len(jsonobject))

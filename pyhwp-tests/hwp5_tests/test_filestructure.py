@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from unittest import TestCase
+import json
 import os.path
 import shutil
 import zlib
@@ -18,7 +19,6 @@ from hwp5.filestructure import Hwp5FileBase
 from hwp5.filestructure import HwpFileHeader
 from hwp5.filestructure import PreviewText
 from hwp5.filestructure import Sections
-from hwp5.importhelper import importjson
 from hwp5.recordstream import read_record
 from hwp5.storage import ExtraItemStorage
 from hwp5.storage import is_storage
@@ -108,9 +108,8 @@ class TestHwp5DistDocStream(TestBase):
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
 
     def test_head_record_stream(self):
-        simplejson = importjson()
         stream = self.jscriptversion.head_record_stream()
-        record = simplejson.load(stream)
+        record = json.load(stream)
         self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
 
         # stream should have been exausted

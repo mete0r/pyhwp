@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from io import BytesIO
 from unittest import TestCase
 import binascii
+import json
 import pickle
 
 from hwp5.binmodel import BinData
@@ -39,7 +40,6 @@ from hwp5.dataio import Enum
 from hwp5.dataio import Flags
 from hwp5.dataio import UINT32
 from hwp5.dataio import WORD
-from hwp5.importhelper import importjson
 from hwp5.recordstream import Record
 from hwp5.recordstream import read_records
 from hwp5.tagids import HWPTAG_BEGIN
@@ -890,10 +890,9 @@ class TestControlData(TestBase):
 class TestModelJson(TestBase):
     def test_model_to_json(self):
         model = self.hwp5file.docinfo.model(0)
-        json = model_to_json(model)
+        json_string = model_to_json(model)
 
-        simplejson = importjson()
-        jsonobject = simplejson.loads(json)
+        jsonobject = json.loads(json_string)
         self.assertEquals('DocumentProperties', jsonobject['type'])
 
     def test_model_to_json_should_not_modify_input(self):
@@ -903,10 +902,9 @@ class TestModelJson(TestBase):
 
     def test_model_to_json_with_controlchar(self):
         model = self.hwp5file.bodytext.section(0).model(1)
-        json = model_to_json(model)
+        json_string = model_to_json(model)
 
-        simplejson = importjson()
-        jsonobject = simplejson.loads(json)
+        jsonobject = json.loads(json_string)
         self.assertEquals('ParaText', jsonobject['type'])
         self.assertEquals([[0, 8],
                            dict(code=2, param='\x00' * 8, chid='secd')],
@@ -916,18 +914,16 @@ class TestModelJson(TestBase):
 
         model = dict(type=RecordModel, content=[], payload='\x00\x01\x02\x03',
                      unparsed='\xff\xfe\xfd\xfc')
-        json = model_to_json(model)
+        json_string = model_to_json(model)
 
-        simplejson = importjson()
-        jsonobject = simplejson.loads(json)
+        jsonobject = json.loads(json_string)
         self.assertEquals(['ff fe fd fc'], jsonobject['unparsed'])
 
     def test_generate_models_json_array(self):
         models_json = self.hwp5file.bodytext.section(0).models_json()
         gen = models_json.generate()
 
-        simplejson = importjson()
-        json_array = simplejson.loads(''.join(gen))
+        json_array = json.loads(''.join(gen))
         self.assertEquals(128, len(json_array))
 
 
@@ -959,9 +955,8 @@ class TestModelStream(TestBase):
         self.assertEquals(10, model['seqno'])
 
     def test_models_json_open(self):
-        simplejson = importjson()
         f = self.docinfo.models_json().open()
         try:
-            self.assertEquals(67, len(simplejson.load(f)))
+            self.assertEquals(67, len(json.load(f)))
         finally:
             f.close()
