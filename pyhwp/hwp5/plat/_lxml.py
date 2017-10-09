@@ -16,7 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import contextmanager
 import io
 import logging
@@ -154,8 +156,7 @@ class RelaxNG:
         return self._validate(doc)
 
     def _validate(self, doc):
-        from os.path import basename
-        logger.info('_lxml.relaxng(%s) start', basename(self.rng_path))
+        logger.info('_lxml.relaxng(%s) start', os.path.basename(self.rng_path))
         try:
             valid = self.etree_relaxng.validate(doc)
         except Exception, e:
@@ -167,7 +168,10 @@ class RelaxNG:
                     logger.error('%s', error)
             return valid
         finally:
-            logger.info('_lxml.relaxng(%s) end', basename(self.rng_path))
+            logger.info(
+                '_lxml.relaxng(%s) end',
+                os.path.basename(self.rng_path)
+            )
 
 
 def errlog_to_dict(error):

@@ -16,7 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import io
+import os.path
 
 
 class FileSystemStorage(object):
@@ -26,11 +30,9 @@ class FileSystemStorage(object):
         self.path = path
 
     def __iter__(self):
-        import os
         return iter(sorted(os.listdir(self.path)))
 
     def __getitem__(self, name):
-        import os.path
         path = os.path.join(self.path, name)
         if os.path.isdir(path):
             return FileSystemStorage(path)

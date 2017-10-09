@@ -16,6 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from collections import deque
 from itertools import chain
 from pprint import pformat
@@ -23,34 +26,37 @@ from tempfile import TemporaryFile
 import base64
 import logging
 
-from hwp5.treeop import STARTEVENT, ENDEVENT
-from hwp5.treeop import prefix_event
-from hwp5.treeop import build_subtree
-from hwp5.treeop import tree_events
-from hwp5.treeop import tree_events_multi
-from hwp5.dataio import Struct
-from hwp5.filestructure import VERSION
-from hwp5 import binmodel
-from hwp5 import filestructure
-from hwp5.binmodel.controls import SectionDef
-from hwp5.binmodel.controls import TableControl
-from hwp5.binmodel.controls import GShapeObjectControl
-from hwp5.binmodel import BinData
-from hwp5.binmodel import ListHeader
-from hwp5.binmodel import Paragraph
-from hwp5.binmodel import Text
-from hwp5.binmodel import ShapeComponent
-from hwp5.binmodel import TableBody
-from hwp5.binmodel import TableCell
-from hwp5.binmodel import ParaText
-from hwp5.binmodel import ParaLineSeg
-from hwp5.binmodel import ParaCharShape
-from hwp5.binmodel import LineSeg
-from hwp5.binmodel import ParaRangeTag
-from hwp5.binmodel import Field
-from hwp5.binmodel import ControlChar
-from hwp5.binmodel import Control
+from . import binmodel
+from . import filestructure
+from .binmodel.controls import SectionDef
+from .binmodel.controls import TableControl
+from .binmodel.controls import GShapeObjectControl
+from .binmodel import BinData
+from .binmodel import ListHeader
+from .binmodel import Paragraph
+from .binmodel import Text
+from .binmodel import ShapeComponent
+from .binmodel import TableBody
+from .binmodel import TableCell
+from .binmodel import ParaText
+from .binmodel import ParaLineSeg
+from .binmodel import ParaCharShape
+from .binmodel import LineSeg
+from .binmodel import ParaRangeTag
+from .binmodel import Field
+from .binmodel import ControlChar
+from .binmodel import Control
 from .charsets import tokenize_unicode_by_lang
+from .dataio import Struct
+from .filestructure import VERSION
+from .treeop import STARTEVENT, ENDEVENT
+from .treeop import prefix_event
+from .treeop import build_subtree
+from .treeop import tree_events
+from .treeop import tree_events_multi
+from .xmlformat import startelement
+from .xmlformat import xmlevents_to_bytechunks
+
 
 logger = logging.getLogger(__name__)
 
@@ -540,7 +546,6 @@ def wrap_modelevents(wrapper_model, modelevents):
 
 
 def modelevents_to_xmlevents(modelevents):
-    from hwp5.xmlformat import startelement
     for event, (model, attributes, context) in modelevents:
         try:
             if event is STARTEVENT:
@@ -567,10 +572,13 @@ class XmlEvents(object):
         return modelevents_to_xmlevents(self.events)
 
     def bytechunks(self, xml_declaration=True, **kwargs):
-        from hwp5.xmlformat import xmlevents_to_bytechunks
         encoding = kwargs.get('xml_encoding', 'utf-8')
         if xml_declaration:
-            yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
+            yield '<?xml version="1.0" encoding="{}"?>\n'.format(
+                encoding
+            ).encode(
+                encoding
+            )
         bytechunks = xmlevents_to_bytechunks(self, encoding)
         for chunk in bytechunks:
             yield chunk

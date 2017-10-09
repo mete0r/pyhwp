@@ -16,22 +16,32 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from collections import deque
+from pprint import pprint
 import logging
+import struct
+import sys
 
-from hwp5.dataio import FlagsType
+from .dataio import BSTR
+from .dataio import FixedArrayType
+from .dataio import FlagsType
+from .dataio import ParseError
+from .dataio import SelectiveType
+from .dataio import StructType
+from .dataio import VariableLengthArrayType
+from .dataio import X_ARRAY
+from .dataio import readn
+from .treeop import STARTEVENT, ENDEVENT
+from .treeop import iter_subevents
 
 
 logger = logging.getLogger(__name__)
 
 
 def bintype_map_events(bin_item):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
-    from hwp5.dataio import StructType
-    from hwp5.dataio import FixedArrayType
-    from hwp5.dataio import VariableLengthArrayType
-    from hwp5.dataio import X_ARRAY
-    from hwp5.dataio import SelectiveType
-
     bin_type = bin_item['type']
     if isinstance(bin_type, StructType):
         yield STARTEVENT, bin_item
@@ -77,8 +87,6 @@ def bintype_map_events(bin_item):
 
 
 def filter_with_version(events, version):
-    from hwp5.treeop import STARTEVENT
-    from hwp5.treeop import iter_subevents
     for ev, item in events:
         required_version = item.get('version')
         if required_version is not None and version < required_version:
@@ -94,7 +102,6 @@ def filter_with_version(events, version):
 
 
 def make_items_immutable(events):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
     stack = []
     for ev, item in events:
         if ev is None:
@@ -150,7 +157,6 @@ class ERROREVENT(object):
 
 
 def static_to_mutable(events):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
     stack = []
     for ev, item in events:
         if ev is None:
@@ -164,7 +170,6 @@ def static_to_mutable(events):
 
 
 def pop_subevents(events_deque):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
     level = 0
     while len(events_deque) > 0:
         event, item = events_deque.popleft()
@@ -179,12 +184,6 @@ def pop_subevents(events_deque):
 
 
 def resolve_typedefs(typedef_events, context):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
-    from hwp5.dataio import X_ARRAY
-    from hwp5.dataio import VariableLengthArrayType
-    from hwp5.dataio import FixedArrayType
-    from hwp5.dataio import SelectiveType
-    from collections import deque
 
     array_types = (X_ARRAY, VariableLengthArrayType, FixedArrayType)
 
@@ -294,11 +293,6 @@ def evaluate_bin_values(events):
 
 
 def construct_composite_values(events):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
-    from hwp5.dataio import StructType
-    from hwp5.dataio import X_ARRAY
-    from hwp5.dataio import FixedArrayType
-    from hwp5.dataio import VariableLengthArrayType
 
     stack = []
 
@@ -332,7 +326,6 @@ def construct_composite_values(events):
 
 
 def log_events(events, log_fn):
-    from hwp5.treeop import STARTEVENT, ENDEVENT
     for ev, item in events:
         if ev in (STARTEVENT, ENDEVENT):
             fmt = ['%s:']
@@ -346,7 +339,7 @@ def log_events(events, log_fn):
 
         if 'name' in item:
             fmt.append('%r')
-            val.append(item['name'])
+            val.append(str(item['name']))
 
         if 'value' in item and ev is None:
             fmt.append('%r')
@@ -385,9 +378,6 @@ def resolve_values_from_stream(stream):
 
 
 def resolve_value_from_stream(item, stream):
-    import struct
-    from hwp5.dataio import readn
-    from hwp5.dataio import BSTR
     from hwp5.binmodel import ParaTextChunks
     from hwp5.binmodel import CHID
     if 'bin_type' in item:
@@ -438,7 +428,6 @@ def read_type_events(type, context, stream):
     for ev, item in events:
         yield ev, item
         if ev is ERROREVENT:
-            from hwp5.dataio import ParseError
             e = item['exception']
             msg = 'can\'t parse %s' % type
             pe = ParseError(msg)
@@ -451,7 +440,6 @@ def read_type_events(type, context, stream):
 
 
 def read_type_item(type, context, stream, binevents=None):
-    from hwp5.dataio import ParseError
     if binevents is None:
         binevents = []
     try:
@@ -469,7 +457,6 @@ def read_type(type, context, stream, binevents=None):
 
 def dump_events(events):
     def prefix_level(event_prefixed_items):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
         level = 0
         for ev, item in event_prefixed_items:
             if ev is STARTEVENT:
@@ -499,11 +486,12 @@ def dump_events(events):
     events = type_to_string(events)
     events = condition_to_string(events)
     for level, item in prefix_level(events):
+        indents = ''
         if level > 0:
             if level > 1:
-                print '  ' * (level - 2) + ' ',
-            print '-',
-        print item
+                indents = '  ' * (level - 2) + '  '
+            indents += '- '
+        print('{}{}'.format(indents, item))
 
 
 def main():
@@ -511,24 +499,20 @@ def main():
     logger.addHandler(logging.StreamHandler())
 
     import hwp5.binmodel
-    import sys
     name = sys.argv[1]
     type = getattr(hwp5.binmodel, name)
-    from pprint import pprint
     typedef_events = compile_type_definition(dict(type=type))
     pprint(typedef_events)
 
     context = {}
 
     def resolve_values(events):
-        from hwp5.dataio import FlagsType
         for ev, item in events:
             if ev is None:
-                print
+                print('')
                 for k, v in sorted(item.items()):
-                    print '-', k, ':', v
-                print '>>',
-                value = raw_input()
+                    print('- {} : {}'.format(k, v))
+                value = raw_input('>> ')
                 value = eval(value)
                 if isinstance(item['type'], FlagsType):
                     value = item['type'](value)
@@ -536,4 +520,4 @@ def main():
             yield ev, item
     events = eval_typedef_events(typedef_events, context, resolve_values)
     for ev, item in events:
-        print ev, item
+        print('{} {}'.format(ev, item))

@@ -16,6 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import re
+
 from hwp5.dataio import PrimitiveType
 from hwp5.dataio import UINT32
 from hwp5.dataio import UINT16
@@ -142,12 +147,11 @@ class ControlChar(object):
         for ch, name in cls.names.items():
             setattr(cls, name, ch)
     _populate = classmethod(_populate)
-    import re
-    regex = re.compile('[\x00-\x1f]\x00')
+    REGEX_CONTROL_CHAR = re.compile('[\x00-\x1f]\x00')
 
     def find(cls, data, start_idx):
         while True:
-            m = cls.regex.search(data, start_idx)
+            m = cls.REGEX_CONTROL_CHAR.search(data, start_idx)
             if m is not None:
                 i = m.start()
                 if i & 1 == 1:

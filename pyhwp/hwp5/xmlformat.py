@@ -16,27 +16,35 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from itertools import chain
+from xml.sax.saxutils import escape
+from xml.sax.saxutils import quoteattr
+import logging
 
 from hypua2jamo import codes2unicode
 
-from hwp5.filestructure import VERSION
-from hwp5.dataio import typed_struct_attributes
-from hwp5.dataio import Struct
-from hwp5.dataio import ArrayType
-from hwp5.dataio import FlagsType
-from hwp5.dataio import EnumType
-from hwp5.dataio import WCHAR
-from hwp5.dataio import HWPUNIT
-from hwp5.dataio import HWPUNIT16
-from hwp5.dataio import SHWPUNIT
-from hwp5.binmodel import COLORREF
-from hwp5.binmodel import BinStorageId
-from hwp5.binmodel import Margin
-from hwp5.binmodel import Text
-from hwp5.treeop import STARTEVENT
-from hwp5.treeop import ENDEVENT
-import logging
+from .filestructure import VERSION
+from .dataio import typed_struct_attributes
+from .dataio import Struct
+from .dataio import StructType
+from .dataio import ArrayType
+from .dataio import FlagsType
+from .dataio import EnumType
+from .dataio import WCHAR
+from .dataio import HWPUNIT
+from .dataio import HWPUNIT16
+from .dataio import SHWPUNIT
+from .binmodel import COLORREF
+from .binmodel import BinStorageId
+from .binmodel import Margin
+from .binmodel import Text
+from .treeop import STARTEVENT
+from .treeop import ENDEVENT
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -161,7 +169,6 @@ def separate_plainvalues(typed_attributes):
 
 
 def startelement(context, (model, attributes)):
-    from hwp5.dataio import StructType
     if isinstance(model, StructType):
         typed_attributes = ((v['name'], (v['type'], v['value']))
                             for v in typed_struct_attributes(model, attributes,
@@ -221,8 +228,11 @@ def element(context, (model, attributes)):
 
 
 def xmlevents_to_bytechunks(xmlevents, encoding='utf-8'):
-    from xml.sax.saxutils import escape
-    from xml.sax.saxutils import quoteattr
+    for textchunk in xmlevents_to_textchunks(xmlevents):
+        yield textchunk.encode(encoding)
+
+
+def xmlevents_to_textchunks(xmlevents):
     entities = {'\r': '&#13;',
                 '\n': '&#10;',
                 '\t': '&#9;'}
@@ -236,15 +246,11 @@ def xmlevents_to_bytechunks(xmlevents, encoding='utf-8'):
                 yield '='
                 v = quoteattr(v, entities)
                 v = v.replace('\x00', '')
-                if isinstance(v, unicode):
-                    v = v.encode(encoding)
                 yield v
             yield '>'
         elif event is Text:
             text = escape(item)
             text = text.replace('\x00', '')
-            if isinstance(text, unicode):
-                text = text.encode(encoding)
             yield text
         elif event is ENDEVENT:
             yield '</'

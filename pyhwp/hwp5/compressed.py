@@ -16,11 +16,14 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from io import BytesIO
 import codecs
 import zlib
 
-from hwp5.utils import GeneratorReader
+from .utils import GeneratorReader
 
 
 class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
