@@ -16,6 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from binascii import b2a_hex
 from functools import partial
 from subprocess import CalledProcessError
@@ -25,14 +28,14 @@ import os
 import subprocess
 import tempfile
 
-from hwp5.plat import olefileio
-from hwp5.plat import _lxml
-from hwp5.plat import xsltproc
-from hwp5.plat import xmllint
-from hwp5.plat import javax_transform
-from hwp5.plat import jython_poifs
-from hwp5.plat import _uno
-from hwp5.plat import gir_gsf
+from . import _lxml
+from . import _uno
+from . import gir_gsf
+from . import javax_transform
+from . import jython_poifs
+from . import olefileio
+from . import xmllint
+from . import xsltproc
 
 
 logger = logging.getLogger(__name__)

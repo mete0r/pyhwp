@@ -16,12 +16,21 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from itertools import islice
 import json
+import struct
 
-from .tagids import HWPTAG_BEGIN, tagnames
-from .dataio import UINT32, Eof
 from . import dataio
 from . import filestructure
+from .dataio import dumpbytes
+from .dataio import Eof
+from .dataio import UINT32
+from .tagids import HWPTAG_BEGIN
+from .tagids import tagnames
+from .utils import JsonObjects
 
 
 def tagname(tagid):
@@ -53,7 +62,6 @@ def decode_record_header(f):
 
 
 def encode_record_header(rec):
-    import struct
     size = len(rec['payload'])
     level = rec['level']
     tagid = rec['tagid']
@@ -106,13 +114,11 @@ def link_records(records):
 
 def record_to_json(record, *args, **kwargs):
     ''' convert a record to json '''
-    from .dataio import dumpbytes
     record['payload'] = list(dumpbytes(record['payload']))
     return json.dumps(record, *args, **kwargs)
 
 
 def nth(iterable, n, default=None):
-    from itertools import islice
     try:
         return islice(iterable, n, None).next()
     except StopIteration:
@@ -150,7 +156,6 @@ class RecordStream(filestructure.VersionSensitiveItem):
     def records(self, **kwargs):
         records = read_records(self.open())
         if 'range' in kwargs:
-            from itertools import islice
             range = kwargs['range']
             records = islice(records, range[0], range[1])
         elif 'treegroup' in kwargs:
@@ -163,7 +168,6 @@ class RecordStream(filestructure.VersionSensitiveItem):
         return nth(self.records(), idx)
 
     def records_json(self, **kwargs):
-        from .utils import JsonObjects
         records = self.records(**kwargs)
         return JsonObjects(records, record_to_json)
 

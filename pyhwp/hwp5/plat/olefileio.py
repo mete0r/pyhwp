@@ -16,8 +16,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
-from hwp5.utils import cached_property
+from ..errors import InvalidOleStorageError
+from ..utils import cached_property
 
 
 def is_enabled():
@@ -64,7 +68,6 @@ class OleStorage(OleStorageItem):
         if not hasattr(olefile, 'openstream'):
             from OleFileIO_PL import isOleFile
             if not isOleFile(olefile):
-                from hwp5.errors import InvalidOleStorageError
                 errormsg = 'Not an OLE2 Compound Binary File.'
                 raise InvalidOleStorageError(errormsg)
             from OleFileIO_PL import OleFileIO

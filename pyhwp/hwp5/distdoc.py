@@ -21,12 +21,15 @@
 Based on the algorithm described by Changwoo Ryu
 See https://groups.google.com/forum/#!topic/hwp-foss/d2KL2ypR89Q
 '''
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from io import BytesIO
 import logging
 
-from hwp5.recordstream import read_record
-from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
-from hwp5.plat import get_aes128ecb_decrypt
+from .plat import get_aes128ecb_decrypt
+from .recordstream import read_record
+from .tagids import HWPTAG_DISTRIBUTE_DOC_DATA
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +82,7 @@ def decode_head_to_sha1(record_payload):
             data[i] = data[i] ^ key
         n -= 1
 
-    decoded = ''.join(chr(x) for x in data)
+    decoded = b''.join(chr(x) for x in data)
     sha1offset = 4 + (seed & 0xf)
 
     ucs16le = decoded[sha1offset:sha1offset + 80]

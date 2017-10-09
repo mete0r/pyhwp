@@ -16,8 +16,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import logging
+
+from ..plat import get_olestorage_class
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +30,6 @@ logger = logging.getLogger(__name__)
 class OleStorage(object):
 
     def __init__(self, *args, **kwargs):
-        from hwp5.plat import get_olestorage_class
         impl_class = get_olestorage_class()
         assert impl_class is not None, 'no OleStorage implementation available'
         self.impl = impl_class(*args, **kwargs)

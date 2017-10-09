@@ -16,22 +16,25 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
-from hwp5.binmodel import ParaTextChunks
-from hwp5.binmodel import Text
-from hwp5.binmodel import ControlChar
-from hwp5.bintype import resolve_type_events
-from hwp5.bintype import resolve_values_from_stream
-from hwp5.treeop import STARTEVENT
-from hwp5.treeop import ENDEVENT
-from hwp5.xmlformat import xmlevents_to_bytechunks
-from hwp5.dataio import ArrayType
-from hwp5.dataio import StructType
-from hwp5.dataio import X_ARRAY
-from hwp5.dataio import SelectiveType
-from hwp5.dataio import FlagsType
-from hwp5.dataio import EnumType
+from .binmodel import ControlChar
+from .binmodel import ParaTextChunks
+from .binmodel import Text
+from .bintype import resolve_type_events
+from .bintype import resolve_values_from_stream
+from .dataio import ArrayType
+from .dataio import EnumType
+from .dataio import FlagsType
+from .dataio import SelectiveType
+from .dataio import StructType
+from .dataio import X_ARRAY
+from .filestructure import FileHeader
+from .treeop import ENDEVENT
+from .treeop import STARTEVENT
+from .xmlformat import xmlevents_to_bytechunks
 
 
 def xmldump_flat(hwp5file, output, xml_declaration=True):
@@ -55,7 +58,6 @@ def xmlevents_from_hwp5file(hwp5file):
         yield STARTEVENT, ('FileHeader', {
         })
         resolve_values = resolve_values_from_stream(f)
-        from hwp5.filestructure import FileHeader
         model_events = resolve_type_events(FileHeader, {}, resolve_values)
         for x in xmlevents_from_modelevents(model_events):
             yield x

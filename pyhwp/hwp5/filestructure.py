@@ -16,30 +16,39 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from io import BytesIO
 import logging
 
-from hwp5.utils import cached_property
-from hwp5.dataio import UINT32, Flags, Struct
-from hwp5.storage import ItemWrapper
-from hwp5.storage import StorageWrapper
-from hwp5.storage import ItemConversionStorage
-from hwp5.utils import transcoder
-from hwp5.utils import GeneratorReader
-from hwp5.compressed import decompress
+from .bintype import read_type
+from .compressed import decompress
+from .dataio import UINT32, Flags, Struct
+from .errors import InvalidOleStorageError
+from .errors import InvalidHwp5FileError
+from .storage import ItemWrapper
+from .storage import StorageWrapper
+from .storage import ItemConversionStorage
+from .storage import is_storage
+from .storage import is_stream
+from .storage.ole import OleStorage
 from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
+from .utils import GeneratorReader
+from .utils import cached_property
+from .utils import transcoder
 
 
 logger = logging.getLogger(__name__)
 
 
-HWP5_SIGNATURE = 'HWP Document File' + ('\x00' * 15)
+HWP5_SIGNATURE = b'HWP Document File' + (b'\x00' * 15)
 
 
 class BYTES(type):
     def __new__(mcs, size):
         decode = staticmethod(lambda bytes, *args, **kwargs: bytes)
-        return type.__new__(mcs, 'BYTES(%d)' % size, (str,),
+        return type.__new__(mcs, b'BYTES(%d)' % size, (str,),
                             dict(fixed_size=size, decode=decode))
 
 
@@ -77,8 +86,6 @@ class FileHeader(Struct):
 
 def is_hwp5file(filename):
     ''' Test whether it is an HWP format v5 file. '''
-    from hwp5.errors import InvalidOleStorageError
-    from hwp5.storage.ole import OleStorage
     try:
         olestg = OleStorage(filename)
     except InvalidOleStorageError:
@@ -109,7 +116,6 @@ class CompressedStream(ItemWrapper):
 class CompressedStorage(StorageWrapper):
     ''' decompress streams in the underlying storage '''
     def __getitem__(self, name):
-        from hwp5.storage import is_stream
         item = self.wrapped[name]
         if is_stream(item):
             return CompressedStream(item)
@@ -128,7 +134,6 @@ class PasswordProtectedStream(ItemWrapper):
 
 class PasswordProtectedStorage(StorageWrapper):
     def __getitem__(self, name):
-        from hwp5.storage import is_stream
         item = self.wrapped[name]
         if is_stream(item):
             return PasswordProtectedStream(item)
@@ -170,10 +175,6 @@ class Hwp5FileBase(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        from hwp5.errors import InvalidOleStorageError
-        from hwp5.errors import InvalidHwp5FileError
-        from hwp5.storage import is_storage
-        from hwp5.storage.ole import OleStorage
         if not is_storage(stg):
             try:
                 stg = OleStorage(stg)
@@ -348,7 +349,6 @@ class HwpFileHeader(object):
         self.open = item.open
 
     def to_dict(self):
-        from hwp5.bintype import read_type
         f = self.open()
         try:
             return read_type(FileHeader, dict(), f)
@@ -378,7 +378,7 @@ class HwpFileHeader(object):
         d['version'] = '%d.%d.%d.%d' % self.value['version']
         out = BytesIO()
         for k, v in sorted(d.items()):
-            print >> out, '%s: %s' % (k, v)
+            out.write('{}: {}\n'.format(k, v).encode('utf-8'))
         out.seek(0)
         return out
 
@@ -493,7 +493,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
         out = BytesIO()
         for line in self.plaintext_lines:
             line = line.encode('utf-8')
-            out.write(line + '\n')
+            out.write(line + b'\n')
         out.seek(0)
         return out
 
