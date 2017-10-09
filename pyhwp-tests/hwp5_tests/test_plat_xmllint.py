@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
-from mixin_relaxng import RelaxNGTestMixin
+
+from hwp5.plat import xmllint
+
+from .mixin_relaxng import RelaxNGTestMixin
 
 
 class TestPlatXmlLint(unittest.TestCase, RelaxNGTestMixin):
@@ -10,6 +15,5 @@ class TestPlatXmlLint(unittest.TestCase, RelaxNGTestMixin):
     relaxng_compile = None
 
     def setUp(self):
-        from hwp5.plat import xmllint
         if xmllint.is_enabled():
             self.relaxng = xmllint.relaxng

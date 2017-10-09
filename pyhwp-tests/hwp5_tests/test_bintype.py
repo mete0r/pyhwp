@@ -1,5 +1,25 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from io import BytesIO
 from unittest import TestCase
+
+from hwp5.binmodel import ParaTextChunks
+from hwp5.bintype import bintype_map_events
+from hwp5.bintype import construct_composite_values
+from hwp5.bintype import filter_with_version
+from hwp5.bintype import static_to_mutable
+from hwp5.bintype import read_type_events
+from hwp5.bintype import resolve_typedefs
+from hwp5.bintype import resolve_values_from_stream
+from hwp5.dataio import BSTR
+from hwp5.dataio import SelectiveType
+from hwp5.dataio import StructType
+from hwp5.dataio import UINT16
+from hwp5.dataio import X_ARRAY
+from hwp5.dataio import ref_member
+from hwp5.treeop import STARTEVENT, ENDEVENT
 
 
 class lazy_property(object):
@@ -18,8 +38,6 @@ class TestBinIO(TestCase):
 
     @lazy_property
     def BasicStruct(self):
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT16
 
         class BasicStruct(object):
             __metaclass__ = StructType
@@ -32,8 +50,6 @@ class TestBinIO(TestCase):
 
     @lazy_property
     def NestedStruct(self):
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT16
 
         class NestedStruct(object):
             __metaclass__ = StructType
@@ -46,9 +62,6 @@ class TestBinIO(TestCase):
         return NestedStruct
 
     def test_map_events(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
 
         bin_item = dict(type=self.BasicStruct)
         events = bintype_map_events(bin_item)
@@ -68,9 +81,6 @@ class TestBinIO(TestCase):
         self.assertEquals((ENDEVENT, bin_item), (ev, item))
 
     def test_map_events_nested(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
 
         bin_item = dict(type=self.NestedStruct)
         events = bintype_map_events(bin_item)
@@ -106,12 +116,6 @@ class TestBinIO(TestCase):
         self.assertEquals((ENDEVENT, bin_item), (ev, item))
 
     def test_map_struct_with_xarray(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import X_ARRAY
-        from hwp5.dataio import ref_member
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
 
         xarray_type = X_ARRAY(self.BasicStruct, ref_member('count'))
 
@@ -156,11 +160,6 @@ class TestBinIO(TestCase):
                           events.next())
 
     def test_filter_with_version(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import filter_with_version
 
         class StructWithVersion(object):
             __metaclass__ = StructType
@@ -188,14 +187,6 @@ class TestBinIO(TestCase):
         self.assertEquals((ENDEVENT, bin_item), events.next())
 
     def test_resolve_xarray(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import X_ARRAY
-        from hwp5.dataio import UINT16
-        from hwp5.dataio import ref_member
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_typedefs
 
         xarray_type = X_ARRAY(UINT16, ref_member('a'))
 
@@ -281,14 +272,6 @@ class TestBinIO(TestCase):
                           events.next())
 
     def test_resolve_xarray_struct(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import X_ARRAY
-        from hwp5.dataio import UINT16
-        from hwp5.dataio import ref_member
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_typedefs
 
         xarray_type = X_ARRAY(self.BasicStruct, ref_member('a'))
 
@@ -380,12 +363,6 @@ class TestBinIO(TestCase):
                           events.next())
 
     def test_resolve_conditional_simple(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_typedefs
 
         def if_a_is_1(context, values):
             return values['a'] == 1
@@ -437,12 +414,6 @@ class TestBinIO(TestCase):
                           events.next())
 
     def test_resolve_conditional_struct(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_typedefs
 
         def if_a_is_1(context, values):
             return values['a'] == 1
@@ -503,14 +474,6 @@ class TestBinIO(TestCase):
                           events.next())
 
     def test_resolve_selective_type(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import StructType
-        from hwp5.dataio import SelectiveType
-        from hwp5.dataio import ref_member
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import static_to_mutable
-        from hwp5.bintype import resolve_typedefs
 
         class StructWithSelectiveType(object):
             __metaclass__ = StructType
@@ -573,13 +536,8 @@ class TestBinIO(TestCase):
 
     def test_resolve_values_from_stream(self):
         assertEquals = self.assertEquals
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import resolve_values_from_stream
 
-        from StringIO import StringIO
-        stream = StringIO('\x00\x01\x00\x02')
+        stream = BytesIO(b'\x00\x01\x00\x02')
         resolve_values = resolve_values_from_stream(stream)
 
         bin_item = dict(type=self.BasicStruct)
@@ -595,9 +553,6 @@ class TestBinIO(TestCase):
                      events.next())
         assertEquals((ENDEVENT, bin_item), events.next())
 
-        from hwp5.dataio import StructType
-        from hwp5.dataio import BSTR
-
         class StructWithBSTR(object):
             __metaclass__ = StructType
 
@@ -605,7 +560,7 @@ class TestBinIO(TestCase):
             def attributes():
                 yield BSTR, 'name'
 
-        stream = StringIO('\x02\x00\x00\x01\x00\x02')
+        stream = BytesIO(b'\x02\x00\x00\x01\x00\x02')
         resolve_values = resolve_values_from_stream(stream)
         bin_item = dict(type=StructWithBSTR)
         events = bintype_map_events(bin_item)
@@ -617,8 +572,6 @@ class TestBinIO(TestCase):
                      events.next())
         assertEquals((ENDEVENT, bin_item), events.next())
 
-        from hwp5.binmodel import ParaTextChunks
-
         class StructWithParaTextChunks(object):
             __metaclass__ = StructType
 
@@ -626,7 +579,7 @@ class TestBinIO(TestCase):
             def attributes():
                 yield ParaTextChunks, 'texts'
 
-        stream = StringIO('\x20\x00\x21\x00\x22\x00')
+        stream = BytesIO(b'\x20\x00\x21\x00\x22\x00')
         resolve_values = resolve_values_from_stream(stream)
         bin_item = dict(type=StructWithParaTextChunks)
         events = bintype_map_events(bin_item)
@@ -640,14 +593,8 @@ class TestBinIO(TestCase):
         assertEquals((ENDEVENT, bin_item), events.next())
 
     def test_collect_values(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import UINT16
-        from hwp5.bintype import bintype_map_events
-        from hwp5.bintype import resolve_values_from_stream
-        from hwp5.bintype import construct_composite_values
-        from StringIO import StringIO
 
-        stream = StringIO('\x01\x00\x01\x01\x02\x01\x02\x00')
+        stream = BytesIO(b'\x01\x00\x01\x01\x02\x01\x02\x00')
         resolve_values = resolve_values_from_stream(stream)
 
         bin_item = dict(type=self.NestedStruct)
@@ -677,11 +624,6 @@ class TestBinIO(TestCase):
 
 class TestReadEvents(TestCase):
     def test_struct_with_condition(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.dataio import UINT16
-        from hwp5.dataio import StructType
-        from hwp5.bintype import read_type_events
-        from StringIO import StringIO
 
         def if_a_is_1(context, values):
             return values['a'] == 1
@@ -698,7 +640,7 @@ class TestReadEvents(TestCase):
         context = dict()
 
         # if a = 0
-        stream = StringIO('\x00\x00\x02\x00')
+        stream = BytesIO(b'\x00\x00\x02\x00')
         events = read_type_events(StructWithCondition, context, stream)
         a = dict(name='a', type=UINT16, value=0, bin_offset=0)
         c = dict(name='c', type=UINT16, value=2, bin_offset=2)
@@ -713,7 +655,7 @@ class TestReadEvents(TestCase):
         self.assertEquals('', stream.read())
 
         # if a = 1
-        stream = StringIO('\x01\x00\x0f\x00\x02\x00')
+        stream = BytesIO(b'\x01\x00\x0f\x00\x02\x00')
         events = read_type_events(StructWithCondition, context, stream)
         a = dict(name='a', type=UINT16, value=1, bin_offset=0)
         b = dict(name='b', type=UINT16, value=0xf, bin_offset=2)

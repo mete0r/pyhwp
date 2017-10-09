@@ -18,25 +18,6 @@
 #
 
 
-def importStringIO():
-    ''' from cStringIO/StringIO import StringIO '''
-    try:
-        from cStringIO import StringIO
-        return StringIO
-    except:
-        from StringIO import StringIO
-        return StringIO
-
-
-def importjson():
-    try:
-        import json
-        return json
-    except ImportError:
-        import simplejson
-        return simplejson
-
-
 def pkg_resources_filename(pkg_name, path):
     ''' the equivalent of pkg_resources.resource_filename() '''
     try:

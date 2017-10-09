@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
-from mixin_xslt import XsltTestMixin
+import sys
+
+from hwp5.plat import javax_transform
+
+from .mixin_xslt import XsltTestMixin
 
 
 class TestPlatJavaxTransform(unittest.TestCase, XsltTestMixin):
 
     def test_is_enabled(self):
-        from hwp5.plat import javax_transform
-        import sys
 
         if sys.platform.startswith('java'):
             self.assertTrue(javax_transform.is_enabled())
@@ -16,7 +20,6 @@ class TestPlatJavaxTransform(unittest.TestCase, XsltTestMixin):
             self.assertFalse(javax_transform.is_enabled())
 
     def setUp(self):
-        from hwp5.plat import javax_transform
         if javax_transform.is_enabled():
             self.xslt = javax_transform.xslt
             self.xslt_compile = javax_transform.xslt_compile

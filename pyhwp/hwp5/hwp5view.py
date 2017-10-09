@@ -38,6 +38,7 @@ from contextlib import closing
 from contextlib import contextmanager
 from tempfile import mkdtemp
 import gettext
+import io
 import logging
 import os.path
 import shutil
@@ -99,7 +100,7 @@ def runner_factory_gi():
     def runner(args, index_path, out_dir):
         base_uri = fspath2url(out_dir) + '/'
         # index_uri = fspath2url(index_path)
-        with file(index_path) as f:
+        with io.open(index_path, 'rb') as f:
             content = f.read()
 
         view = WebKit.WebView()

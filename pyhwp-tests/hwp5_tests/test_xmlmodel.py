@@ -1,14 +1,46 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from io import BytesIO
 from unittest import TestCase
-import test_binmodel
+from xml.etree import ElementTree
+import base64
+import io
+import pickle
+
+from hwp5 import binmodel
+from hwp5 import xmlmodel
+from hwp5 import treeop
+from hwp5.binmodel import BinData
+from hwp5.binmodel import ControlChar
+from hwp5.binmodel import PageDef
+from hwp5.binmodel import ParaCharShape
+from hwp5.binmodel import ParaLineSeg
+from hwp5.binmodel import ParaText
+from hwp5.binmodel import SectionDef
+from hwp5.tagids import HWPTAG_PARA_LINE_SEG
+from hwp5.treeop import STARTEVENT, ENDEVENT
 from hwp5.utils import cached_property
+from hwp5.xmlmodel import DocInfo
+from hwp5.xmlmodel import Hwp5File
+from hwp5.xmlmodel import ModelEventStream
+from hwp5.xmlmodel import Section
+from hwp5.xmlmodel import XmlEvents
+from hwp5.xmlmodel import embed_bindata
+from hwp5.xmlmodel import line_segmented
+from hwp5.xmlmodel import make_ranged_shapes
+from hwp5.xmlmodel import merge_paragraph_text_charshape_lineseg
+from hwp5.xmlmodel import split_and_shape
+
+from . import test_binmodel
+from .fixtures import get_fixture_path
 
 
 class TestBase(test_binmodel.TestBase):
 
     @cached_property
     def hwp5file_xml(self):
-        from hwp5.xmlmodel import Hwp5File
         return Hwp5File(self.olestg)
 
     hwp5file = hwp5file_xml
@@ -17,12 +49,7 @@ class TestBase(test_binmodel.TestBase):
 class TestXmlEvents(TestBase):
 
     def test_dump_quoteattr_cr(self):
-        from hwp5.xmlmodel import XmlEvents
-        from hwp5.importhelper import importStringIO
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.binmodel import ControlChar
-        StringIO = importStringIO()
-        sio = StringIO()
+        sio = BytesIO()
 
         context = dict()
         attrs = dict(char='\r')
@@ -35,9 +62,6 @@ class TestXmlEvents(TestBase):
         self.assertTrue('&#13;' in data)
 
     def test_bytechunks_quoteattr_cr(self):
-        from hwp5.xmlmodel import XmlEvents
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.binmodel import ControlChar
 
         context = dict()
         attrs = dict(char='\r')
@@ -54,34 +78,31 @@ class TestModelEventStream(TestBase):
 
     @cached_property
     def docinfo(self):
-        from hwp5.xmlmodel import ModelEventStream
         return ModelEventStream(self.hwp5file_bin['DocInfo'],
                                 self.hwp5file_bin.header.version)
 
     def test_modelevents(self):
         self.assertEquals(len(list(self.docinfo.models())) * 2,
                           len(list(self.docinfo.modelevents())))
-        #print len(list(self.docinfo.modelevents()))
+        # print len(list(self.docinfo.modelevents()))
 
 
 class TestDocInfo(TestBase):
 
     @cached_property
     def docinfo(self):
-        from hwp5.xmlmodel import DocInfo
         return DocInfo(self.hwp5file_bin['DocInfo'],
                        self.hwp5file_bin.header.version)
 
     def test_events(self):
         events = list(self.docinfo.events())
         self.assertEquals(136, len(events))
-        #print len(events)
+        # print len(events)
 
         # without embedbin, no <text> is embedded
         self.assertTrue('<text>' not in events[4][1][1]['bindata'])
 
     def test_events_with_embedbin(self):
-        import base64
         bindata = self.hwp5file_bin['BinData']
         events = list(self.docinfo.events(embedbin=bindata))
         self.assertTrue('<text>' in events[4][1][1]['bindata'])
@@ -93,9 +114,6 @@ class TestDocInfo(TestBase):
 class TestSection(TestBase):
 
     def test_events(self):
-        from hwp5.xmlmodel import Section
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.binmodel import SectionDef, PageDef
         section = Section(self.hwp5file_bin['BodyText']['Section0'],
                           self.hwp5file_bin.fileheader.version)
         events = list(section.events())
@@ -116,7 +134,6 @@ class TestSection(TestBase):
 class TestHwp5File(TestBase):
 
     def test_docinfo_class(self):
-        from hwp5.xmlmodel import DocInfo
         self.assertTrue(isinstance(self.hwp5file.docinfo, DocInfo))
 
     def test_events(self):
@@ -130,7 +147,6 @@ class TestHwp5File(TestBase):
         list(hwp5file.events(embedbin=True))
 
     def test_xmlevents(self):
-        from hwp5.treeop import STARTEVENT
         events = iter(self.hwp5file.xmlevents())
         ev = events.next()
         self.assertEquals((STARTEVENT,
@@ -138,20 +154,13 @@ class TestHwp5File(TestBase):
         list(events)
 
     def test_xmlevents_dump(self):
-        outfile = file(self.id() + '.xml', 'w+')
-        try:
+        with io.open(self.id() + '.xml', 'wb+') as outfile:
             self.hwp5file.xmlevents().dump(outfile)
 
             outfile.seek(0)
-            from xml.etree import ElementTree
             doc = ElementTree.parse(outfile)
-        finally:
-            outfile.close()
 
         self.assertEquals('HwpDoc', doc.getroot().tag)
-
-
-from hwp5.xmlmodel import make_ranged_shapes, split_and_shape
 
 
 class TestShapedText(TestCase):
@@ -198,7 +207,6 @@ class TestShapedText(TestCase):
 
 class TestLineSeg(TestCase):
     def test_line_segmented(self):
-        from hwp5.xmlmodel import line_segmented
         chunks = [((0, 3), None, 'aaa'), ((3, 6), None, 'bbb'),
                   ((6, 9), None, 'ccc'), ((9, 12), None, 'ddd')]
         linesegs = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
@@ -217,25 +225,23 @@ class TestDistributionBodyText(TestBase):
     hwp5file_name = 'viewtext.hwp'
 
     def test_issue33_missing_paralineseg(self):
-        from hwp5.tagids import HWPTAG_PARA_LINE_SEG
-        from hwp5.binmodel import ParaLineSeg
         section0 = self.hwp5file_bin.bodytext.section(0)
         tagids = set(model['tagid'] for model in section0.models())
         types = set(model['type'] for model in section0.models())
         self.assertTrue(HWPTAG_PARA_LINE_SEG not in tagids)
         self.assertTrue(ParaLineSeg not in types)
 
-        from hwp5.binmodel import ParaText, ParaCharShape
         paratext = self.hwp5file_bin.bodytext.section(0).model(1)
         self.assertEquals(ParaText, paratext['type'])
 
         paracharshape = self.bodytext.section(0).model(2)
         self.assertEquals(ParaCharShape, paracharshape['type'])
 
-        from hwp5.xmlmodel import merge_paragraph_text_charshape_lineseg as m
-        evs = m((paratext['type'], paratext['content'], dict()),
-                (paracharshape['type'], paracharshape['content'], dict()),
-                None)
+        evs = merge_paragraph_text_charshape_lineseg(
+            (paratext['type'], paratext['content'], dict()),
+            (paracharshape['type'], paracharshape['content'], dict()),
+            None
+        )
 
         # we can merge events without a problem
         list(evs)
@@ -244,16 +250,10 @@ class TestDistributionBodyText(TestBase):
 class TestMatchFieldStartEnd(TestCase):
 
     def test_match_field_start_end(self):
-        from hwp5 import binmodel, xmlmodel
-        from fixtures import get_fixture_path
 
         path = get_fixture_path('match-field-start-end.dat')
-        import pickle
-        f = open(path, 'r')
-        try:
+        with io.open(path, 'rb') as f:
             records = pickle.load(f)
-        finally:
-            f.close()
 
         models = binmodel.parse_models(dict(), records)
         events = xmlmodel.prefix_binmodels_with_event(dict(), models)
@@ -263,17 +263,12 @@ class TestMatchFieldStartEnd(TestCase):
         events = list(events)
 
     def test_issue144_fields_crossing_lineseg_boundary(self):
-        from hwp5 import xmlmodel
-        from hwp5 import treeop
-        from fixtures import get_fixture_path
-        from pprint import pprint
-        pprint
 
         name = 'issue144-fields-crossing-lineseg-boundary.hwp'
         path = get_fixture_path(name)
         hwp5file = xmlmodel.Hwp5File(path)
         xmlevents = hwp5file.bodytext.xmlevents()
-        #pprint(list(enumerate(xmlevents)))
+        # pprint(list(enumerate(xmlevents)))
 
         stack_fields = []
         for ev, model in xmlevents:
@@ -299,9 +294,6 @@ class TestMatchFieldStartEnd(TestCase):
 class TestEmbedBinData(TestBase):
 
     def test_embed_bindata(self):
-        from hwp5.treeop import STARTEVENT, ENDEVENT
-        from hwp5.binmodel import BinData
-        from hwp5.xmlmodel import embed_bindata
 
         bindata = dict(flags=BinData.Flags(BinData.StorageType.EMBEDDING),
                        bindata=dict(storage_id=2, ext='jpg'))

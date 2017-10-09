@@ -16,14 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from io import BytesIO
 import codecs
 import zlib
 
 from hwp5.utils import GeneratorReader
-from hwp5.importhelper import importStringIO
-
-
-StringIO = importStringIO()
 
 
 class ZLibIncrementalDecoder(codecs.IncrementalDecoder):
@@ -68,4 +65,4 @@ def decompress(stream):
         stream: a file-like readable
         returns a file-like readable
     '''
-    return StringIO(zlib.decompress(stream.read(), -15))  # without gzip header
+    return BytesIO(zlib.decompress(stream.read(), -15))  # without gzip header

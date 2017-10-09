@@ -21,14 +21,12 @@
 Based on the algorithm described by Changwoo Ryu
 See https://groups.google.com/forum/#!topic/hwp-foss/d2KL2ypR89Q
 '''
+from io import BytesIO
 import logging
 
 from hwp5.recordstream import read_record
 from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
-from hwp5.importhelper import importStringIO
 from hwp5.plat import get_aes128ecb_decrypt
-
-StringIO = importStringIO()
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +39,7 @@ def decode(stream):
     key = decode_head_to_key(distdoc_data)
     tail = stream.read()
     decrypted = decrypt_tail(key, tail)
-    return StringIO(decrypted)
+    return BytesIO(decrypted)
 
 
 class Random:

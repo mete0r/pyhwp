@@ -16,6 +16,8 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from io import BytesIO
+import json
 import logging
 
 from hwp5 import recordstream
@@ -26,7 +28,6 @@ from hwp5.bintype import resolve_values_from_stream
 from hwp5.dataio import ParseError
 from hwp5.bintype import ERROREVENT
 from hwp5.tagids import tagnames
-from hwp5.importhelper import importStringIO
 from hwp5.recordstream import nth
 from hwp5.binmodel._shared import tag_models
 from hwp5.binmodel._shared import RecordModel
@@ -130,7 +131,6 @@ from hwp5.binmodel.tagid99_shape_component_unknown import ShapeUnknown
 from hwp5.dataio import dumpbytes
 from hwp5.treeop import prefix_ancestors_from_level
 from hwp5.utils import JsonObjects
-from hwp5.importhelper import importjson
 
 # to suppress pyflake8 warning 'imported but not used'
 RecordModel
@@ -231,9 +231,6 @@ TableControl
 TCPSControl
 
 
-StringIO = importStringIO()
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -266,7 +263,7 @@ def init_record_parsing_context(base, record):
         :returns: new context
     '''
 
-    return dict(base, record=record, stream=StringIO(record['payload']))
+    return dict(base, record=record, stream=BytesIO(record['payload']))
 
 
 def parse_models(context, records):
@@ -404,7 +401,6 @@ def get_extension_mro(cls, up_to_cls=None):
 
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
-    json = importjson()
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model
@@ -464,7 +460,7 @@ class ModelStream(recordstream.RecordStream):
         context = dict(version=self.version)
 
         def resolve_values_from_record(record):
-            stream = StringIO(record['payload'])
+            stream = BytesIO(record['payload'])
             return resolve_values_from_stream(stream)
 
         for group_idx, records in enumerate(self.records_treegrouped()):
@@ -474,7 +470,7 @@ class ModelStream(recordstream.RecordStream):
                 if item['type'] is RecordModel:
                     if event is STARTEVENT:
                         record_frame = item['record']
-                        stream = StringIO(record_frame['payload'])
+                        stream = BytesIO(record_frame['payload'])
                         resolve_values = resolve_values_from_stream(stream)
                         item['stream'] = stream
                         item['resolve_values'] = resolve_values

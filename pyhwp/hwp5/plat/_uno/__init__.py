@@ -17,6 +17,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from __future__ import with_statement
+import io
 import logging
 
 
@@ -110,7 +111,7 @@ class XSLT(object):
         inp_stream = ucb.open_url(self.context, inp_url)
 
         out_path = os.path.abspath(out_path)
-        with file(out_path, 'w') as out_file:
+        with io.open(out_path, 'wb') as out_file:
             out_stream = OutputStreamToFileLike(out_file, dontclose=True)
 
             from com.sun.star.io import XStreamListener
@@ -170,7 +171,7 @@ def oless_from_filename(filename):
 
 
 def inputstream_from_filename(filename):
-    f = file(filename, 'rb')
+    f = io.open(filename, 'rb')
     from hwp5.plat._uno.adapters import InputStreamFromFileLike
     return InputStreamFromFileLike(f)
 

@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from io import BytesIO
 import logging
 
 from hwp5.utils import cached_property
@@ -23,7 +24,6 @@ from hwp5.dataio import UINT32, Flags, Struct
 from hwp5.storage import ItemWrapper
 from hwp5.storage import StorageWrapper
 from hwp5.storage import ItemConversionStorage
-from hwp5.importhelper import importStringIO
 from hwp5.utils import transcoder
 from hwp5.utils import GeneratorReader
 from hwp5.compressed import decompress
@@ -31,9 +31,6 @@ from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
 
 
 logger = logging.getLogger(__name__)
-
-
-StringIO = importStringIO()
 
 
 HWP5_SIGNATURE = 'HWP Document File' + ('\x00' * 15)
@@ -224,7 +221,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         return record['payload']
 
     def head_stream(self):
-        return StringIO(self.head())
+        return BytesIO(self.head())
 
     def head_sha1(self):
         from hwp5.distdoc import decode_head_to_sha1
@@ -250,7 +247,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         return decrypt_tail(key, tail)
 
     def tail_stream(self):
-        return StringIO(self.tail())
+        return BytesIO(self.tail())
 
 
 class Hwp5DistDocStorage(ItemConversionStorage):
@@ -379,7 +376,7 @@ class HwpFileHeader(object):
         d = FileHeader.Flags.dictvalue(self.value['flags'])
         d['signature'] = self.value['signature'][:len('HWP Document File')]
         d['version'] = '%d.%d.%d.%d' % self.value['version']
-        out = StringIO()
+        out = BytesIO()
         for k, v in sorted(d.items()):
             print >> out, '%s: %s' % (k, v)
         out.seek(0)
@@ -493,7 +490,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
         return formatter.formatTextLines(stream)
 
     def open_text(self):
-        out = StringIO()
+        out = BytesIO()
         for line in self.plaintext_lines:
             line = line.encode('utf-8')
             out.write(line + '\n')
