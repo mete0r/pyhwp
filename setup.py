@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2017 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2018 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -169,6 +169,8 @@ setup_info = {
             'locale/*/*/*.mo',
         ],
     },
+
+    'python_requires': '>=2.7, <3',
 
     # installation
 
