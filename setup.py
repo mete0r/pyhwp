@@ -170,6 +170,8 @@ setup_info = {
         ],
     },
 
+    'python_requires': '>=2.7, <3',
+
     # installation
 
     'zip_safe': False,
