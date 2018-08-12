@@ -8,6 +8,7 @@ include README.rst
 include buildout.cfg
 include classifiers.txt
 include ez_setup.py
+exclude notebooks
 include pyhwp/README.rst
 include pyhwp/hwp5/COPYING
 include pyhwp/hwp5/README
