@@ -6,6 +6,7 @@ CHANGES
 
 - Drop support for Python 2.5, 2.6.
 - Prefer 'olefile' to 'OleFileIO_PL'.
+- Fix 'Dutmal' control attribute names.
 
 
 0.1b8 (2014-11-03)
