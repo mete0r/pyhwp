@@ -43,7 +43,7 @@ jupyter-client==5.1.0     # via ipykernel, jupyter-console, notebook, qtconsole
 jupyter-console==5.2.0    # via jupyter
 jupyter-core==4.3.0       # via jupyter-client, nbconvert, nbformat, notebook, qtconsole
 jupyter==1.0.0
-lxml==3.8.0
+lxml==3.8.0 ; platform_python_implementation == "CPython"
 markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via flake8
 mistune==0.7.4            # via nbconvert
@@ -51,7 +51,7 @@ monotonic==1.3            # via humanfriendly
 nbconvert==5.3.1          # via jupyter, notebook
 nbformat==4.4.0           # via ipywidgets, nbconvert, notebook
 notebook==5.0.0           # via jupyter, widgetsnbextension
-olefile==0.44
+olefile==0.44 ; platform_python_implementation != "Jython"
 pandocfilters==1.4.2      # via nbconvert
 pathlib2==2.3.0           # via ipython, pickleshare
 pexpect==4.2.1            # via ipython
@@ -63,7 +63,7 @@ prompt-toolkit==1.0.15    # via ipython, jupyter-console
 ptyprocess==0.5.2         # via pexpect, terminado
 py==1.4.34                # via tox
 pycodestyle==2.3.1        # via flake8
-pycrypto==2.6.1
+pycrypto==2.6.1 ; platform_python_implementation == "CPython" and platform_system != "Windows"
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via ipython, jupyter-console, nbconvert, qtconsole, readme-renderer, restview, sphinx
 pyroma==2.2
