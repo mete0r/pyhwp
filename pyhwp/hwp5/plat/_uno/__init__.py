@@ -16,8 +16,14 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import io
 import logging
+import os.path
+
+from ...errors import InvalidOleStorageError
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +32,6 @@ enabled = False
 
 
 def is_enabled():
-    import os
     if 'PYHWP_PLAT_UNO' in os.environ:
         PYHWP_PLAT_UNO = os.environ['PYHWP_PLAT_UNO'].strip()
         try:
@@ -63,7 +68,6 @@ def XSLTTransformer(context, stylesheet_url, source_url, source_url_base):
     args = (NamedValue('StylesheetURL', stylesheet_url),
             NamedValue('SourceURL', source_url),
             NamedValue('SourceBaseURL', source_url_base))
-    import os
     select = os.environ.get('PYHWP_PLAT_UNO_XSLT', 'libxslt')
     logger.debug('PYHWP_PLAT_UNO_XSLT = %s', select)
     if select == 'jaxthelper':
@@ -78,7 +82,6 @@ def XSLTTransformer(context, stylesheet_url, source_url, source_url_base):
 class OneshotEvent(object):
 
     def __init__(self):
-        import os
         pin, pout = os.pipe()
         self.pin = os.fdopen(pin, 'r')
         self.pout = os.fdopen(pout, 'w')
@@ -99,7 +102,6 @@ class XSLT(object):
     def __call__(self, xsl_path, inp_path, out_path):
         import uno
         import unohelper
-        import os.path
         from hwp5.plat._uno import ucb
         from hwp5.plat._uno.adapters import OutputStreamToFileLike
         xsl_path = os.path.abspath(xsl_path)
@@ -110,7 +112,7 @@ class XSLT(object):
         inp_stream = ucb.open_url(self.context, inp_url)
 
         out_path = os.path.abspath(out_path)
-        with file(out_path, 'w') as out_file:
+        with io.open(out_path, 'wb') as out_file:
             out_stream = OutputStreamToFileLike(out_file, dontclose=True)
 
             from com.sun.star.io import XStreamListener
@@ -145,7 +147,6 @@ class XSLT(object):
             transformer.addListener(listener)
 
             transformer.start()
-            import os.path
             xsl_name = os.path.basename(xsl_path)
             logger.info('xslt.soffice(%s) start', xsl_name)
             try:
@@ -170,7 +171,7 @@ def oless_from_filename(filename):
 
 
 def inputstream_from_filename(filename):
-    f = file(filename, 'rb')
+    f = io.open(filename, 'rb')
     from hwp5.plat._uno.adapters import InputStreamFromFileLike
     return InputStreamFromFileLike(f)
 
@@ -196,7 +197,6 @@ class OleStorage(object):
             try:
                 self.oless.getElementNames()
             except:
-                from hwp5.errors import InvalidOleStorageError
                 errormsg = 'Not a valid OLE2 Compound Binary File.'
                 raise InvalidOleStorageError(errormsg)
         else:

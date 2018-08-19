@@ -1,2 +1,0 @@
-hypua2jamo >= 0.2
-docopt >= 0.6

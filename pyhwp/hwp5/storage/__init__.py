@@ -16,6 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import io
+import os.path
 
 
 def is_storage(item):
@@ -116,8 +121,6 @@ def unpack(stg, outbase):
         stg: an instance of Storage
         outbase: path to a directory in filesystem (should not end with '/')
     '''
-    import os
-    import os.path
     for name in stg:
         outpath = os.path.join(outbase, name)
         item = stg[name]
@@ -129,11 +132,8 @@ def unpack(stg, outbase):
             f = item.open()
             try:
                 outpath = outpath.replace('\x05', '_05')
-                outfile = file(outpath, 'wb')
-                try:
+                with io.open(outpath, 'wb') as outfile:
                     outfile.write(f.read())
-                finally:
-                    outfile.close()
             finally:
                 f.close()
 
@@ -159,4 +159,4 @@ def printstorage(stg, basepath=''):
         if is_storage(item):
             printstorage(item, path + '/')
         elif is_stream(item):
-            print path.encode('string_escape')
+            print(path.encode('unicode_escape'))

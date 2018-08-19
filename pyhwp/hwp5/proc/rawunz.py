@@ -29,16 +29,15 @@ Options::
        --loglevel=<level>   Set log level.
        --logfile=<file>     Set log file.
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import sys
+import shutil
+
+from ..zlib_raw_codec import StreamReader
 
 
-@entrypoint(__doc__)
 def main(args):
-    import sys
-    from hwp5.zlib_raw_codec import StreamReader
     stream = StreamReader(sys.stdin)
-    while True:
-        buf = stream.read(64)
-        if len(buf) == 0:
-            break
-        sys.stdout.write(buf)
+    shutil.copyfileobj(stream, sys.stdout)

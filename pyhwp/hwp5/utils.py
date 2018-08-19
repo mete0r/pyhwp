@@ -16,7 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import contextmanager
 from functools import partial
 import codecs
@@ -113,8 +115,8 @@ class GeneratorReader(object):
     ''' convert a string generator into file-like reader
 
         def gen():
-            yield 'hello'
-            yield 'world'
+            yield b'hello'
+            yield b'world'
 
         f = GeneratorReader(gen())
         assert 'hell' == f.read(4)
@@ -123,12 +125,12 @@ class GeneratorReader(object):
 
     def __init__(self, gen):
         self.gen = gen
-        self.buffer = ''
+        self.buffer = b''
 
     def read(self, size=None):
         if size is None:
-            d, self.buffer = self.buffer, ''
-            return d + ''.join(self.gen)
+            d, self.buffer = self.buffer, b''
+            return d + b''.join(self.gen)
 
         for data in self.gen:
             self.buffer += data
@@ -138,7 +140,7 @@ class GeneratorReader(object):
                 d, self.buffer = self.buffer[:size], self.buffer[size:]
                 return d
 
-        d, self.buffer = self.buffer, ''
+        d, self.buffer = self.buffer, b''
         return d
 
     def close(self):

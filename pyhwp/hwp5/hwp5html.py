@@ -35,12 +35,16 @@ Options::
 
     --output=<output>   Output file / directory
 '''
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
-import os.path
+import gettext
+import io
 import logging
+import os.path
 import shutil
 import sys
 
@@ -48,7 +52,15 @@ from .transforms import BaseTransform
 from .utils import cached_property
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
+locale_dir = os.path.join(os.path.dirname(__file__), 'locale')
+locale_dir = os.path.abspath(locale_dir)
+t = gettext.translation('hwp5html', locale_dir, fallback=True)
+if PY3:
+    _ = t.gettext
+else:
+    _ = t.ugettext
 
 
 RESOURCE_PATH_XSL_CSS = 'xsl/hwp5css.xsl'
@@ -80,7 +92,7 @@ class HTMLTransform(BaseTransform):
         with self.transformed_xhwp5_at_temp(hwp5file) as xhwp5path:
             self.transform_xhwp5_to_dir(xhwp5path, outdir)
 
-        bindata_dir = os.path.join(outdir, 'bindata')
+        bindata_dir = os.path.join(outdir, b'bindata')
         self.extract_bindata_dir(hwp5file, bindata_dir)
 
     @cached_property
@@ -103,12 +115,12 @@ class HTMLTransform(BaseTransform):
         '''
         >>> T.transform_xhwp5_to_dir('hwp5.xml', 'output')
         '''
-        html_path = os.path.join(outdir, 'index.xhtml')
-        with file(html_path, 'w') as f:
+        html_path = os.path.join(outdir, b'index.xhtml')
+        with io.open(html_path, 'wb') as f:
             self.transform_xhwp5_to_xhtml(xhwp5path, f)
 
-        css_path = os.path.join(outdir, 'styles.css')
-        with file(css_path, 'w') as f:
+        css_path = os.path.join(outdir, b'styles.css')
+        with io.open(css_path, 'wb') as f:
             self.transform_xhwp5_to_css(xhwp5path, f)
 
     def extract_bindata_dir(self, hwp5file, bindata_dir):

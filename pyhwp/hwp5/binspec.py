@@ -32,8 +32,6 @@ Options::
 '''
 
 import logging
-from .importhelper import importStringIO
-StringIO = importStringIO()
 import xml.etree.ElementTree as ET
 
 

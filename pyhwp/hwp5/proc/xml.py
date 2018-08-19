@@ -61,12 +61,20 @@ Example::
     $ xmllint --format sample-5017.xml
 
 '''
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from functools import partial
 import logging
 
-from hwp5.proc import entrypoint
-from hwp5.xmldump_flat import xmldump_flat
+from ..utils import make_open_dest_file
+from ..utils import wrap_open_dest_for_tty
+from ..utils import wrap_open_dest
+from ..utils import pager
+from ..utils import syntaxhighlight
+from ..utils import xmllint
+from ..xmldump_flat import xmldump_flat
+from ..xmlmodel import Hwp5File
 
 
 logger = logging.getLogger(__name__)
@@ -78,24 +86,22 @@ def xmldump_nested(hwp5file, output, embedbin=False, xml_declaration=True):
     dump(output)
 
 
-@entrypoint(__doc__)
 def main(args):
     ''' Transform <hwp5file> into an XML.
     '''
-    from hwp5.xmlmodel import Hwp5File
-    from ..utils import make_open_dest_file
-    from ..utils import wrap_open_dest_for_tty
-    from ..utils import wrap_open_dest
-    from ..utils import pager
-    from ..utils import syntaxhighlight
-    from ..utils import xmllint
 
     fmt = args['--format'] or 'nested'
     if fmt == 'flat':
-        xmldump = partial(xmldump_flat, xml_declaration=args['--no-xml-decl'])
+        xmldump = partial(
+            xmldump_flat,
+            xml_declaration=not args['--no-xml-decl']
+        )
     elif fmt == 'nested':
-        xmldump = partial(xmldump_nested, embedbin=args['--embedbin'],
-                          xml_declaration=args['--no-xml-decl'])
+        xmldump = partial(
+            xmldump_nested,
+            xml_declaration=not args['--no-xml-decl'],
+            embedbin=args['--embedbin'],
+        )
 
     open_dest = make_open_dest_file(args['--output'])
     open_dest = wrap_open_dest_for_tty(open_dest, [

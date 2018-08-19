@@ -30,20 +30,22 @@ Options::
        --logfile=<file>    Set log file.
 
 '''
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import sys
 
-from hwp5.proc import entrypoint
+from ..filestructure import Hwp5File
+from ..summaryinfo import HwpSummaryInfoTextFormatter
 
 
-@entrypoint(__doc__)
 def main(args):
-    from hwp5.filestructure import Hwp5File
+    formatter = HwpSummaryInfoTextFormatter()
     hwpfile = Hwp5File(args['<hwp5file>'])
     try:
-        f = hwpfile.summaryinfo.open_text()
-        try:
-            for line in f:
-                print line,
-        finally:
-            f.close()
+        for textline in formatter.formatTextLines(hwpfile.summaryinfo):
+            line = textline.encode('utf-8')
+            sys.stdout.write(line)
+            sys.stdout.write(b'\n')
     finally:
         hwpfile.close()

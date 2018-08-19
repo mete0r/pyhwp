@@ -16,32 +16,39 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from io import BytesIO
 import logging
 
-from hwp5.utils import cached_property
-from hwp5.dataio import UINT32, Flags, Struct
-from hwp5.storage import ItemWrapper
-from hwp5.storage import StorageWrapper
-from hwp5.storage import ItemConversionStorage
-from hwp5.importhelper import importStringIO
-from hwp5.utils import transcoder
-from hwp5.utils import GeneratorReader
-from hwp5.compressed import decompress
+from .bintype import read_type
+from .compressed import decompress
+from .dataio import UINT32, Flags, Struct
+from .errors import InvalidOleStorageError
+from .errors import InvalidHwp5FileError
+from .storage import ItemWrapper
+from .storage import StorageWrapper
+from .storage import ItemConversionStorage
+from .storage import is_storage
+from .storage import is_stream
+from .storage.ole import OleStorage
+from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
+from .utils import GeneratorReader
+from .utils import cached_property
+from .utils import transcoder
 
 
 logger = logging.getLogger(__name__)
 
 
-StringIO = importStringIO()
-
-
-HWP5_SIGNATURE = 'HWP Document File' + ('\x00' * 15)
+HWP5_SIGNATURE = b'HWP Document File' + (b'\x00' * 15)
 
 
 class BYTES(type):
     def __new__(mcs, size):
         decode = staticmethod(lambda bytes, *args, **kwargs: bytes)
-        return type.__new__(mcs, 'BYTES(%d)' % size, (str,),
+        return type.__new__(mcs, b'BYTES(%d)' % size, (str,),
                             dict(fixed_size=size, decode=decode))
 
 
@@ -79,8 +86,6 @@ class FileHeader(Struct):
 
 def is_hwp5file(filename):
     ''' Test whether it is an HWP format v5 file. '''
-    from hwp5.errors import InvalidOleStorageError
-    from hwp5.storage.ole import OleStorage
     try:
         olestg = OleStorage(filename)
     except InvalidOleStorageError:
@@ -111,7 +116,6 @@ class CompressedStream(ItemWrapper):
 class CompressedStorage(StorageWrapper):
     ''' decompress streams in the underlying storage '''
     def __getitem__(self, name):
-        from hwp5.storage import is_stream
         item = self.wrapped[name]
         if is_stream(item):
             return CompressedStream(item)
@@ -130,7 +134,6 @@ class PasswordProtectedStream(ItemWrapper):
 
 class PasswordProtectedStorage(StorageWrapper):
     def __getitem__(self, name):
-        from hwp5.storage import is_stream
         item = self.wrapped[name]
         if is_stream(item):
             return PasswordProtectedStream(item)
@@ -172,10 +175,6 @@ class Hwp5FileBase(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        from hwp5.errors import InvalidOleStorageError
-        from hwp5.errors import InvalidHwp5FileError
-        from hwp5.storage import is_storage
-        from hwp5.storage.ole import OleStorage
         if not is_storage(stg):
             try:
                 stg = OleStorage(stg)
@@ -223,7 +222,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         return record['payload']
 
     def head_stream(self):
-        return StringIO(self.head())
+        return BytesIO(self.head())
 
     def head_sha1(self):
         from hwp5.distdoc import decode_head_to_sha1
@@ -249,7 +248,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         return decrypt_tail(key, tail)
 
     def tail_stream(self):
-        return StringIO(self.tail())
+        return BytesIO(self.tail())
 
 
 class Hwp5DistDocStorage(ItemConversionStorage):
@@ -350,7 +349,6 @@ class HwpFileHeader(object):
         self.open = item.open
 
     def to_dict(self):
-        from hwp5.bintype import read_type
         f = self.open()
         try:
             return read_type(FileHeader, dict(), f)
@@ -378,9 +376,9 @@ class HwpFileHeader(object):
         d = FileHeader.Flags.dictvalue(self.value['flags'])
         d['signature'] = self.value['signature'][:len('HWP Document File')]
         d['version'] = '%d.%d.%d.%d' % self.value['version']
-        out = StringIO()
+        out = BytesIO()
         for k, v in sorted(d.items()):
-            print >> out, '%s: %s' % (k, v)
+            out.write('{}: {}\n'.format(k, v).encode('utf-8'))
         out.seek(0)
         return out
 
@@ -393,81 +391,109 @@ class HwpSummaryInfo(VersionSensitiveItem):
     def other_formats(self):
         return {'.txt': self.open_text}
 
-    def to_dict(self):
+    def getPropertySetStream(self):
+        from .msoleprops import PropertySetFormat
+        from .msoleprops import PropertySetStreamReader
+        from .summaryinfo import FMTID_HWP_SUMMARY_INFORMATION
+        from .summaryinfo import HWP_PROPERTIES
+
+        propertySetFormat = PropertySetFormat(
+            FMTID_HWP_SUMMARY_INFORMATION,
+            HWP_PROPERTIES
+        )
+        reader = PropertySetStreamReader([propertySetFormat])
         f = self.open()
-        from hwp5.msoleprops import MSOLEPropertySet
         try:
-            context = dict(version=self.version)
-            summaryinfo = MSOLEPropertySet.read(f, context)
-            return summaryinfo
+            return reader.read(f)
         finally:
             f.close()
 
-    value = cached_property(to_dict)
+    propertySetStream = cached_property(getPropertySetStream)
+
+    def getHwpSummaryInfoPropertySet(self):
+        stream = self.propertySetStream
+        if stream.clsid == CLSID_HWP_SUMMARY_INFORMATION:
+            return stream.propertysets[0]
+
+    propertySet = cached_property(getHwpSummaryInfoPropertySet)
 
     @property
-    def byteorder(self):
-        return self.value['byteorder']
+    def title(self):
+        from .msoleprops import PIDSI_TITLE
+        return self.propertySet[PIDSI_TITLE]
 
     @property
-    def format(self):
-        return self.value['format']
+    def subject(self):
+        from .msoleprops import PIDSI_SUBJECT
+        return self.propertySet[PIDSI_SUBJECT]
 
     @property
-    def os(self):
-        return self.value['os']
+    def author(self):
+        from .msoleprops import PIDSI_AUTHOR
+        return self.propertySet[PIDSI_AUTHOR]
 
     @property
-    def osversion(self):
-        return self.value['osversion']
+    def keywords(self):
+        from .msoleprops import PIDSI_KEYWORDS
+        return self.propertySet[PIDSI_KEYWORDS]
 
     @property
-    def clsid(self):
-        return self.value['clsid']
+    def comments(self):
+        from .msoleprops import PIDSI_COMMENTS
+        return self.propertySet[PIDSI_COMMENTS]
 
     @property
-    def sections(self):
-        for section in self.value['sections']:
-            formatid = section['formatid']
-            properties = section['properties']
-            yield formatid, properties
-
-    UNKNOWN_FMTID = '9fa2b660-1061-11d4-b4c6-006097c09d8c'
+    def lastSavedBy(self):
+        from .msoleprops import PIDSI_LASTAUTHOR
+        return self.propertySet[PIDSI_LASTAUTHOR]
 
     @property
-    def propertyset(self):
-        from uuid import UUID
-        for formatid, properties in self.sections:
-            if formatid == UUID(self.UNKNOWN_FMTID):
-                return properties
+    def revisionNumber(self):
+        from .msoleprops import PIDSI_REVNUMBER
+        return self.propertySet[PIDSI_REVNUMBER]
+
+    @property
+    def lastPrintedTime(self):
+        from .msoleprops import PIDSI_LASTPRINTED
+        return self.propertySet[PIDSI_LASTPRINTED]
+
+    @property
+    def createdTime(self):
+        from .msoleprops import PIDSI_CREATE_DTM
+        return self.propertySet[PIDSI_CREATE_DTM]
+
+    @property
+    def lastSavedTime(self):
+        from .msoleprops import PIDSI_LASTSAVE_DTM
+        return self.propertySet[PIDSI_LASTSAVE_DTM]
+
+    @property
+    def numberOfPages(self):
+        from .msoleprops import PIDSI_PAGECOUNT
+        return self.propertySet[PIDSI_PAGECOUNT]
+
+    @property
+    def dateString(self):
+        from .summaryinfo import HWPPIDSI_DATE_STR
+        return self.propertySet[HWPPIDSI_DATE_STR]
+
+    @property
+    def numberOfParagraphs(self):
+        from .summaryinfo import HWPPIDSI_PARACOUNT
+        return self.propertySet[HWPPIDSI_PARACOUNT]
 
     @property
     def plaintext_lines(self):
-
-        os_names = {
-            0: 'win16',
-            1: 'macos',
-            2: 'win32'
-        }
-
-        yield 'byteorder: 0x%x' % self.byteorder
-        yield 'clsid: %s' % self.clsid
-        yield 'format: %d' % self.format
-        yield 'os: %s %s' % (self.os, os_names.get(self.os, ''))
-        yield 'osversion: %d' % self.osversion
-
-        for formatid, properties in self.sections:
-            yield ('-- Section %s --' % formatid)
-            for prop_id, prop in properties.items():
-                prop_name = prop.get('name') or prop_id
-                prop_value = prop.get('value')
-                prop_str = u'%s: %s' % (prop_name, prop_value)
-                yield prop_str.encode('utf-8')
+        from .msoleprops import PropertySetStreamTextFormatter
+        stream = self.getPropertySetStream()
+        formatter = PropertySetStreamTextFormatter()
+        return formatter.formatTextLines(stream)
 
     def open_text(self):
-        out = StringIO()
+        out = BytesIO()
         for line in self.plaintext_lines:
-            out.write(line + '\n')
+            line = line.encode('utf-8')
+            out.write(line + b'\n')
         out.seek(0)
         return out
 

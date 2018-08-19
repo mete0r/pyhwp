@@ -16,9 +16,13 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
-import logging
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from subprocess import CalledProcessError
 from subprocess import Popen
+import logging
+import subprocess
 
 
 logger = logging.getLogger(__name__)
@@ -30,11 +34,15 @@ enabled = None
 def xslt_reachable():
     args = [executable, '--version']
     try:
-        p = Popen(args)
-    except:
+        subprocess.check_output(args)
+    except OSError:
+        return False
+    except CalledProcessError:
+        return False
+    except Exception as e:
+        logger.exception(e)
         return False
     else:
-        p.wait()
         return True
 
 

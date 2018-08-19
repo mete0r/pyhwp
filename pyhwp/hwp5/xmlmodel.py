@@ -16,6 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from collections import deque
 from itertools import chain
 from pprint import pformat
@@ -23,34 +26,37 @@ from tempfile import TemporaryFile
 import base64
 import logging
 
-from hwp5.treeop import STARTEVENT, ENDEVENT
-from hwp5.treeop import prefix_event
-from hwp5.treeop import build_subtree
-from hwp5.treeop import tree_events
-from hwp5.treeop import tree_events_multi
-from hwp5.dataio import Struct
-from hwp5.filestructure import VERSION
-from hwp5 import binmodel
-from hwp5 import filestructure
-from hwp5.binmodel.controls import SectionDef
-from hwp5.binmodel.controls import TableControl
-from hwp5.binmodel.controls import GShapeObjectControl
-from hwp5.binmodel import BinData
-from hwp5.binmodel import ListHeader
-from hwp5.binmodel import Paragraph
-from hwp5.binmodel import Text
-from hwp5.binmodel import ShapeComponent
-from hwp5.binmodel import TableBody
-from hwp5.binmodel import TableCell
-from hwp5.binmodel import ParaText
-from hwp5.binmodel import ParaLineSeg
-from hwp5.binmodel import ParaCharShape
-from hwp5.binmodel import LineSeg
-from hwp5.binmodel import ParaRangeTag
-from hwp5.binmodel import Field
-from hwp5.binmodel import ControlChar
-from hwp5.binmodel import Control
+from . import binmodel
+from . import filestructure
+from .binmodel.controls import SectionDef
+from .binmodel.controls import TableControl
+from .binmodel.controls import GShapeObjectControl
+from .binmodel import BinData
+from .binmodel import ListHeader
+from .binmodel import Paragraph
+from .binmodel import Text
+from .binmodel import ShapeComponent
+from .binmodel import TableBody
+from .binmodel import TableCell
+from .binmodel import ParaText
+from .binmodel import ParaLineSeg
+from .binmodel import ParaCharShape
+from .binmodel import LineSeg
+from .binmodel import ParaRangeTag
+from .binmodel import Field
+from .binmodel import ControlChar
+from .binmodel import Control
 from .charsets import tokenize_unicode_by_lang
+from .dataio import Struct
+from .filestructure import VERSION
+from .treeop import STARTEVENT, ENDEVENT
+from .treeop import prefix_event
+from .treeop import build_subtree
+from .treeop import tree_events
+from .treeop import tree_events_multi
+from .xmlformat import startelement
+from .xmlformat import xmlevents_to_bytechunks
+
 
 logger = logging.getLogger(__name__)
 
@@ -540,7 +546,6 @@ def wrap_modelevents(wrapper_model, modelevents):
 
 
 def modelevents_to_xmlevents(modelevents):
-    from hwp5.xmlformat import startelement
     for event, (model, attributes, context) in modelevents:
         try:
             if event is STARTEVENT:
@@ -567,10 +572,13 @@ class XmlEvents(object):
         return modelevents_to_xmlevents(self.events)
 
     def bytechunks(self, xml_declaration=True, **kwargs):
-        from hwp5.xmlformat import xmlevents_to_bytechunks
         encoding = kwargs.get('xml_encoding', 'utf-8')
         if xml_declaration:
-            yield '<?xml version="1.0" encoding="%s"?>\n' % encoding
+            yield '<?xml version="1.0" encoding="{}"?>\n'.format(
+                encoding
+            ).encode(
+                encoding
+            )
         bytechunks = xmlevents_to_bytechunks(self, encoding)
         for chunk in bytechunks:
             yield chunk
@@ -617,38 +625,93 @@ class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
 
 class HwpSummaryInfo(filestructure.HwpSummaryInfo, XmlEventsMixin):
 
-    class Property(Struct):
-        pass
-
     def events(self, **context):
-        content = dict(byteorder='%x' % self.byteorder,
-                       format=str(self.format),
-                       osversion=str(self.osversion),
-                       os=str(self.os),
-                       clsid=str(self.clsid))
+        generator = PropertySetStreamModelEventsGenerator(context)
+        events = generator.generateModelEvents(self.propertySetStream)
+        element = HwpSummaryInfo, {}, context
+        return wrap_modelevents(element, events)
 
-        summaryinfo = HwpSummaryInfo, content, context
 
-        events = prefix_binmodels_with_event(context, self.properties)
-        events = wrap_modelevents(summaryinfo, events)
-        for x in events:
-            yield x
+class PropertySetStreamModelEventsGenerator(object):
 
-    @property
-    def properties(self):
-        propertyset = filestructure.HwpSummaryInfo.propertyset.__get__(self)
-        for prop_id, prop in propertyset.items():
-            name = prop.get('name')
-            value = prop.get('value')
+    def __init__(self, context):
+        self.context = context
 
-            content = dict(id=prop_id)
-            if name:
-                content['name'] = name
-            if value:
-                content['value'] = unicode(value)
-            yield dict(level=0,
-                       type=self.Property,
-                       content=content)
+    def generateModelEvents(self, stream):
+        return self.getPropertySetStreamEvents(stream)
+
+    def getPropertySetStreamEvents(self, stream):
+        from .msoleprops import PropertySetStream
+        sectionEvents = [
+            self.getPropertySetEvents(propertyset)
+            for propertyset in stream.propertysets
+        ]
+        events = chain(*sectionEvents)
+
+        content = dict(
+            byte_order='{:04x}'.format(
+                stream.byteOrder,
+            ),
+            version=str(stream.version),
+            system_identifier='{:08x}'.format(
+                stream.systemIdentifier,
+            ),
+            clsid=str(stream.clsid)
+        )
+        element = PropertySetStream, content, self.context
+        return wrap_modelevents(element, events)
+
+    def getPropertySetEvents(self, propertyset):
+        from .msoleprops import PropertySet
+        propertyEvents = [
+            self.getPropertyEvents(property)
+            for property in sorted(
+                propertyset.properties,
+                key=lambda property: property.desc.offset
+            )
+        ]
+        events = chain(*propertyEvents)
+
+        content = dict(
+            fmtid=propertyset.fmtid,
+            offset=propertyset.desc.offset,
+        )
+        element = PropertySet, content, self.context
+        return wrap_modelevents(element, events)
+
+    def getPropertyEvents(self, property):
+        from .msoleprops import PID_DICTIONARY
+        from .msoleprops import Property
+        content = dict(
+            id=property.desc.id,
+            offset=property.desc.offset,
+        )
+        if property.idLabel is not None:
+            content['id_label'] = property.idLabel
+        if property.type is not None:
+            content['type'] = str(property.type.vt_type.__name__)
+            content['type_code'] = '0x{:04x}'.format(property.type.code)
+        if property.id == PID_DICTIONARY.id:
+            events = self.getDictionaryEvents(property.value)
+        else:
+            events = ()
+            content['value'] = property.value
+        element = Property, content, self.context
+        return wrap_modelevents(element, events)
+
+    def getDictionaryEvents(self, dictionary):
+        events = list(self.getDictionaryEntryEvents(entry)
+                      for entry in dictionary.entries)
+        return chain(*events)
+
+    def getDictionaryEntryEvents(self, entry):
+        from .msoleprops import DictionaryEntry
+        content = dict(
+            id=entry.id,
+            name=entry.name,
+        )
+        element = DictionaryEntry, content, self.context
+        return wrap_modelevents(element, ())
 
 
 class DocInfo(ModelEventStream):

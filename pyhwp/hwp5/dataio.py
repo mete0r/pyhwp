@@ -16,11 +16,16 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import sys
-import struct
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from array import array
+from binascii import b2a_hex
+from itertools import takewhile
+import inspect
 import logging
-from .importhelper import importStringIO
-StringIO = importStringIO()
+import struct
+import sys
 
 
 logger = logging.getLogger(__name__)
@@ -84,7 +89,7 @@ class PrimitiveType(type):
                 return s
             attrs['read'] = classmethod(read)
 
-        return type.__new__(mcs, name, bases, attrs)
+        return type.__new__(mcs, str(name), bases, attrs)
 
 
 def Primitive(name, basetype, binfmt, **attrs):
@@ -106,35 +111,32 @@ HWPUNIT = Primitive('HWPUNIT', long, '<I')
 SHWPUNIT = Primitive('SHWPUNIT', int, '<i')
 HWPUNIT16 = Primitive('HWPUNIT16', int, '<h')
 
-inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100
-hwp2inch = lambda x: x / 7200.0
-hwp2mm = lambda x: inch2mm(hwp2inch(x))
-hwp2pt = lambda x: int((x / 100.0) * 10 + 0.5) / 10.0
+inch2mm = lambda x: float(int(x * 25.4 * 100 + 0.5)) / 100  # noqa
+hwp2inch = lambda x: x / 7200.0  # noqa
+hwp2mm = lambda x: inch2mm(hwp2inch(x))  # noqa
+hwp2pt = lambda x: int((x / 100.0) * 10 + 0.5) / 10.0  # noqa
 
 
 class HexBytes(type):
     def __new__(mcs, size):
-        from binascii import b2a_hex
         decode = staticmethod(b2a_hex)
-        return type.__new__(mcs, 'HexBytes(%d)' % size, (str,),
+        return type.__new__(mcs, str('HexBytes(%d)' % size), (str,),
                             dict(fixed_size=size, decode=decode))
 
 
 def decode_uint16le_array_default(bytes):
-    from array import array
-    codes = array('H', bytes)
+    codes = array(str('H'), bytes)
     if sys.byteorder == 'big':
         codes.byteswap()
     return codes
 
 
 def decode_uint16le_array_in_jython(bytes):
-    from array import array
-    codes = array('h', bytes)
+    codes = array(str('h'), bytes)
     assert codes.itemsize == 2
     assert sys.byteorder == 'big'
     codes.byteswap()
-    codes = array('H', codes.tostring())
+    codes = array(str('H'), codes.tostring())
     assert codes.itemsize == 4
     return codes
 
@@ -214,7 +216,7 @@ class FlagsType(type):
                         for name in bitgroups.keys())
         attrs['dictvalue'] = dictvalue
 
-        return type.__new__(mcs, name, bases, attrs)
+        return type.__new__(mcs, str(name), bases, attrs)
 
 
 def _lex_flags_args(args):
@@ -344,7 +346,7 @@ class EnumType(type):
                 return '%s(%d)' % (enum_name, self)
         attrs['__repr__'] = __repr__
 
-        cls = type.__new__(mcs, enum_type_name, bases, attrs)
+        cls = type.__new__(mcs, str(enum_type_name), bases, attrs)
 
         for v, k in enumerate(items):
             setattr(cls, k, cls(v, k))
@@ -370,7 +372,8 @@ def Enum(*items, **moreitems):
 
 
 class CompoundType(type):
-    pass
+    def __new__(mcs, name, bases, attrs):
+        return type.__new__(mcs, str(name), bases, attrs)
 
 
 class ArrayType(CompoundType):
@@ -391,7 +394,7 @@ class FixedArrayType(ArrayType):
 
         attrs = dict(itemtype=itemtype, size=size)
         name = 'ARRAY(%s,%s)' % (itemtype.__name__, size)
-        cls = ArrayType.__new__(mcs, name, (tuple,), attrs)
+        cls = ArrayType.__new__(mcs, str(name), (tuple,), attrs)
         mcs.classes[key] = cls
         return cls
 
@@ -412,7 +415,7 @@ class VariableLengthArrayType(ArrayType):
 
         attrs = dict(itemtype=itemtype, counttype=counttype)
         name = 'N_ARRAY(%s,%s)' % (counttype.__name__, itemtype.__name__)
-        cls = ArrayType.__new__(mcs, name, (list,), attrs)
+        cls = ArrayType.__new__(mcs, str(name), (list,), attrs)
         mcs.classes[key] = cls
         return cls
 
@@ -421,15 +424,17 @@ N_ARRAY = VariableLengthArrayType
 
 
 def ref_member(member_name):
-    f = lambda context, values: values[member_name]
-    f.__doc__ = member_name
-    return f
+    def fn(context, values):
+        return values[member_name]
+    fn.__doc__ = member_name
+    return fn
 
 
 def ref_member_flag(member_name, bitfield_name):
-    f = lambda context, values: getattr(values[member_name], bitfield_name)
-    f.__doc__ = '%s.%s' % (member_name, bitfield_name)
-    return f
+    def fn(context, values):
+        return getattr(values[member_name], bitfield_name)
+    fn.__doc__ = '%s.%s' % (member_name, bitfield_name)
+    return fn
 
 
 class X_ARRAY(object):
@@ -566,8 +571,6 @@ class StructType(CompoundType):
                     yield member
 
     def parse_members_with_inherited(cls, context, getvalue, up_to_cls=None):
-        import inspect
-        from itertools import takewhile
         mro = inspect.getmro(cls)
         mro = takewhile(lambda cls: cls is not up_to_cls, mro)
         mro = list(cls for cls in mro if 'attributes' in cls.__dict__)

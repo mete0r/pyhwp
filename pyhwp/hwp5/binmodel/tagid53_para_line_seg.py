@@ -16,6 +16,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_PARA_LINE_SEG
 from hwp5.binmodel._shared import ref_parent_member

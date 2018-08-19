@@ -16,18 +16,62 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
-from hwp5.utils import cached_property
+from ..errors import InvalidOleStorageError
+from ..utils import cached_property
 
 
 def is_enabled():
     try:
-        import OleFileIO_PL
+        import olefile  # noqa
     except Exception:
-        return False
+        pass
     else:
-        OleFileIO_PL
         return True
+
+    try:
+        import OleFileIO_PL  # noqa
+    except ImportError:
+        pass
+    else:
+        return True
+
+    return False
+
+
+def import_isOleFile():
+    try:
+        from olefile import isOleFile
+    except ImportError:
+        pass
+    else:
+        return isOleFile
+
+    try:
+        from OleFileIO_PL import isOleFile
+    except ImportError:
+        pass
+    else:
+        return isOleFile
+
+
+def import_OleFileIO():
+    try:
+        from olefile import OleFileIO
+    except ImportError:
+        pass
+    else:
+        return OleFileIO
+
+    try:
+        from OleFileIO_PL import OleFileIO
+    except ImportError:
+        pass
+    else:
+        return OleFileIO
 
 
 class OleStorageItem(object):
@@ -62,12 +106,12 @@ class OleStorage(OleStorageItem):
 
     def __init__(self, olefile, path='', parent=None):
         if not hasattr(olefile, 'openstream'):
-            from OleFileIO_PL import isOleFile
+            isOleFile = import_isOleFile()
+            OleFileIO = import_OleFileIO()
+
             if not isOleFile(olefile):
-                from hwp5.errors import InvalidOleStorageError
                 errormsg = 'Not an OLE2 Compound Binary File.'
                 raise InvalidOleStorageError(errormsg)
-            from OleFileIO_PL import OleFileIO
             olefile = OleFileIO(olefile)
         OleStorageItem.__init__(self, olefile, path, parent)
 

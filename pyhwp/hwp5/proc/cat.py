@@ -65,14 +65,16 @@ Example::
     xmltemplate_storage: 0
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import sys
+
+from . import open_hwpfile
+from ..storage import open_storage_item
 
 
-@entrypoint(__doc__)
 def main(args):
-    from hwp5.proc import open_hwpfile
-    from hwp5.storage import open_storage_item
-    import sys
     hwp5file = open_hwpfile(args)
     stream = open_storage_item(hwp5file, args['<stream>'])
     f = stream.open()
@@ -86,7 +88,3 @@ def main(args):
     finally:
         if hasattr(f, 'close'):
             f.close()
-        # Without this, last part of the output
-        # can be truncated in Jython 2.5.3
-        # See #141
-        sys.stdout.close()

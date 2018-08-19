@@ -16,8 +16,11 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import contextmanager
+import io
 import logging
 import os.path
 import shutil
@@ -46,7 +49,7 @@ def xslt(xsl_path, inp_path, out_path):
     :param out_path: output path
     '''
     transform = xslt_compile(xsl_path)
-    with file(out_path, 'w') as f:
+    with io.open(out_path, 'wb') as f:
         return transform(inp_path, f)
 
 
@@ -64,7 +67,7 @@ class XSLT:
         '''
         from lxml import etree
 
-        with file(xsl_path) as xsl_file:
+        with io.open(xsl_path, 'rb') as xsl_file:
             xsl_doc = etree.parse(xsl_file)
 
         self.xsl_path = xsl_path
@@ -76,15 +79,15 @@ class XSLT:
         '''
         >>> T.transform('input.xml', 'output.xml')
         '''
-        with file(input) as inp_file:
-            with file(output, 'w') as out_file:
+        with io.open(input, 'rb') as inp_file:
+            with io.open(output, 'wb') as out_file:
                 return self._transform(inp_file, out_file)
 
     def transform_into_stream(self, input, output):
         '''
         >>> T.transform_into_stream('input.xml', sys.stdout)
         '''
-        with file(input) as inp_file:
+        with io.open(input, 'rb') as inp_file:
             return self._transform(inp_file, output)
 
     def _transform(self, input, output):
@@ -118,7 +121,7 @@ class RelaxNG:
     def __init__(self, rng_path):
         from lxml import etree
 
-        with file(rng_path) as rng_file:
+        with io.open(rng_path, 'rb') as rng_file:
             rng = etree.parse(rng_file)
 
         self.rng_path = rng_path
@@ -143,7 +146,7 @@ class RelaxNG:
 
     def validate(self, input):
         from lxml import etree
-        with file(input) as f:
+        with io.open(input, 'rb') as f:
             doc = etree.parse(f)
         return self._validate(doc)
 
@@ -153,8 +156,7 @@ class RelaxNG:
         return self._validate(doc)
 
     def _validate(self, doc):
-        from os.path import basename
-        logger.info('_lxml.relaxng(%s) start', basename(self.rng_path))
+        logger.info('_lxml.relaxng(%s) start', os.path.basename(self.rng_path))
         try:
             valid = self.etree_relaxng.validate(doc)
         except Exception, e:
@@ -166,7 +168,10 @@ class RelaxNG:
                     logger.error('%s', error)
             return valid
         finally:
-            logger.info('_lxml.relaxng(%s) end', basename(self.rng_path))
+            logger.info(
+                '_lxml.relaxng(%s) end',
+                os.path.basename(self.rng_path)
+            )
 
 
 def errlog_to_dict(error):

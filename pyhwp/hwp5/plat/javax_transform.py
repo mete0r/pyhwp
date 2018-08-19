@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2017 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -16,17 +16,20 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import closing
+import io
 import logging
 import os.path
+import sys
 
 
 logger = logging.getLogger(__name__)
 
 
 def is_enabled():
-    import sys
     if not sys.platform.startswith('java'):
         logger.info('%s: disabled', __name__)
         return False
@@ -43,7 +46,8 @@ def is_enabled():
 
 def xslt(xsl_path, inp_path, out_path):
     transform = xslt_compile(xsl_path)
-    return transform(inp_path, out_path)
+    with io.open(out_path, 'wb') as f:
+        return transform(inp_path, f)
 
 
 class XSLT:
