@@ -535,7 +535,7 @@ class Hwp5File(ItemConversionStorage):
             return self.with_version(self.bodytext_class)
         if name == 'PrvText':
             return PreviewText
-        if name == '\005HwpSummaryInformation' or or name == 'IHwpSummaryInformation':
+        if name == '\005HwpSummaryInformation' or name == 'IHwpSummaryInformation':
             return self.with_version(self.summaryinfo_class)
 
     def with_version(self, f):
