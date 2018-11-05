@@ -537,6 +537,7 @@ class Hwp5File(ItemConversionStorage):
             return PreviewText
         if name == '\005HwpSummaryInformation' or name == 'IHwpSummaryInformation':
             return self.with_version(self.summaryinfo_class)
+        
 
     def with_version(self, f):
         def wrapped(item):
