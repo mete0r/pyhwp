@@ -51,18 +51,11 @@ HWP_PROPERTIES = RESERVED_PROPERTIES + SUMMARY_INFORMATION_PROPERTIES + (
 class HwpSummaryInfoTextFormatter(object):
 
     def formatTextLines(self, hwpsummaryinfo):
-        yield 'Title: {}'.format(hwpsummaryinfo.title)
-        yield 'Subject: {}'.format(hwpsummaryinfo.subject)
-        yield 'Author: {}'.format(hwpsummaryinfo.author)
-        yield 'Keywords: {}'.format(hwpsummaryinfo.keywords)
-        yield 'Comments: {}'.format(hwpsummaryinfo.comments)
-        yield 'Last saved by: {}'.format(hwpsummaryinfo.lastSavedBy)
-        yield 'Revision Number: {}'.format(hwpsummaryinfo.revisionNumber)
-        yield 'Last Printed at: {}'.format(hwpsummaryinfo.lastPrintedTime)
-        yield 'Created at: {}'.format(hwpsummaryinfo.createdTime)
-        yield 'Last saved at: {}'.format(hwpsummaryinfo.lastSavedTime)
-        yield 'Number of pages: {}'.format(hwpsummaryinfo.numberOfPages)
-        yield 'Date: {}'.format(hwpsummaryinfo.dateString)
-        yield 'Number of paragraphs: {}'.format(
-            hwpsummaryinfo.numberOfParagraphs
-        )
+        result = {"Title":hwpsummaryinfo.title, "Subject":hwpsummaryinfo.subject,
+                  "Author":hwpsummaryinfo.author, "Keywords":hwpsummaryinfo.keywords,
+                  "Comments":hwpsummaryinfo.comments, "Last saved by":hwpsummaryinfo.lastSavedBy,
+                  "Revision Number":hwpsummaryinfo.revisionNumber, "Last Printed at":str(hwpsummaryinfo.lastPrintedTime.datetime),
+                  "Created at":str(hwpsummaryinfo.createdTime.datetime), "Last saved at":str(hwpsummaryinfo.lastSavedTime.datetime),
+                  "Number of pages":hwpsummaryinfo.numberOfPages, "Date":hwpsummaryinfo.dateString,
+                  "Number of paragraphs":hwpsummaryinfo.numberOfParagraphs}
+        yield str(result)
