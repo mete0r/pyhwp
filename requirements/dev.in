@@ -9,7 +9,7 @@ pycrypto
 pyside
 qtconsole
 restview
-tox
+tox >= 3.7.0
 wheel
 zc.buildout
 zest.releaser
