@@ -120,6 +120,10 @@ notebook:
 	$(VENV)	jupyter notebook --notebook-dir=notebooks
 
 
+.PHONY: test
+test:
+	$(VENV) tox --parallel 2 -e py27,pypy
+
 .PHONY: clitest
 clitest:
 	$(VENV) env LANG=C clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt pyhwp-tests/cli_tests/hwp5txt.txt
