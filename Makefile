@@ -29,7 +29,7 @@ define REQUIREMENTS_IN_LINT
 endef
 REQUIREMENTS_IN_LINT:=$(shell echo $(REQUIREMENTS_IN_LINT))
 
-define REQUIREMENTS_DOCS
+define REQUIREMENTS_IN_DOCS
 	requirements/docs.in
 endef
 REQUIREMENTS_IN_DOCS:=$(shell echo $(REQUIREMENTS_IN_DOCS))
