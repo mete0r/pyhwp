@@ -124,6 +124,13 @@ notebook:
 test:
 	$(VENV) tox --parallel 2 -e py27,pypy
 
+.PHONY: test-report
+test-report:
+	$(VENV) coverage combine .tox/*/tmp
+	$(VENV) coverage report
+	$(VENV) coverage html
+	$(VENV) coverage xml
+
 .PHONY: clitest
 clitest:
 	$(VENV) env LANG=C clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt pyhwp-tests/cli_tests/hwp5txt.txt
