@@ -3,4 +3,3 @@ docopt >= 0.6
 hypua2jamo >= 0.4.4
 lxml ; platform_python_implementation == "CPython"
 olefile >= 0.43 ; platform_python_implementation != "Jython"
-pycrypto ; platform_python_implementation == "CPython" and platform_system != "Windows"

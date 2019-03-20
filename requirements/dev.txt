@@ -69,7 +69,6 @@ ptyprocess==0.5.2         # via pexpect, terminado
 py==1.4.34                # via tox
 pycodestyle==2.3.1        # via flake8
 pycparser==2.19           # via cffi
-pycrypto==2.6.1 ; platform_python_implementation == "CPython" and platform_system != "Windows"
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via ipython, jupyter-console, nbconvert, qtconsole, readme-renderer, restview, sphinx
 pyroma==2.2

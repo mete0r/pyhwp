@@ -26,7 +26,6 @@ Requirements
 
 - CPython 2.7, Jython 2.7 or PyPy >= 2.0.2
 - `lxml <https://pypi.org/project/lxml>`_ (optional)
-- `pycrypto <https://pypi.org/project/pycrypto>`_ (optional)
 
 Documentation & Development
 ---------------------------

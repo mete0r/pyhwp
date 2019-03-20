@@ -111,11 +111,6 @@ def get_aes128ecb_decrypt():
         pass
 
     try:
-        return get_aes128ecb_decrypt_pycrypto()
-    except Exception:
-        pass
-
-    try:
         return get_aes128ecb_decrypt_javax()
     except Exception:
         pass
@@ -139,16 +134,6 @@ def get_aes128ecb_decrypt_cryptography():
         cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
         decryptor = cipher.decryptor()
         return decryptor.update(ciphertext) + decryptor.finalize()
-
-    return decrypt
-
-
-def get_aes128ecb_decrypt_pycrypto():
-    from Crypto.Cipher import AES
-
-    def decrypt(key, ciphertext):
-        cipher = AES.new(key, AES.MODE_ECB)
-        return cipher.decrypt(ciphertext)
 
     return decrypt
 
