@@ -47,13 +47,7 @@ class TestHwp5DistDocFunctions(TestBase):
 
         key = section.head_key()
         tail = section.tail()
-        try:
-            decrypted = decrypt_tail(key, tail)
-        except NotImplementedError, e:
-            if e.message == 'aes128ecb_decrypt':
-                # skip this test
-                return
-            raise
+        decrypted = decrypt_tail(key, tail)
         decompressed = zlib.decompress(decrypted, -15)
         record = read_record(BytesIO(decompressed), 0)
         self.assertEquals(0, record['level'])
@@ -65,13 +59,7 @@ class TestHwp5DistDocFunctions(TestBase):
     def test_distdoc_decode(self):
         section = self.section
 
-        try:
-            stream = hwp5.distdoc.decode(section.wrapped.open())
-        except NotImplementedError, e:
-            if e.message == 'aes128ecb_decrypt':
-                # skip this test
-                return
-            raise
+        stream = hwp5.distdoc.decode(section.wrapped.open())
         stream = hwp5.compressed.decompress(stream)
         record = read_record(stream, 0)
         self.assertEquals(0, record['level'])
