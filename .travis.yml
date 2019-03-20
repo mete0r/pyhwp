@@ -23,7 +23,7 @@ before_install:
   - sudo apt-get install -y libxml2-utils xsltproc
 install:
   - pip install -U setuptools pip wheel jip
-  - pip install -U zc.buildout tox
+  - pip install -U zc.buildout tox python-coveralls
   - buildout
   - tox --version
   - sort --version
