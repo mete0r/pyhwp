@@ -31,3 +31,7 @@ install:
   - if [ "$TOXENV" == "jy27" ]; then make install-jython; fi
 script:
   - tox
+after_success:
+  - coverage combine .tox/*/tmp
+  - coverage report
+  - coveralls
