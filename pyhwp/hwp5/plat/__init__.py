@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2015,2019 mete0r <mete0r@sarangbang.or.kr>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -106,7 +106,7 @@ def get_olestorage_class():
 
 def get_aes128ecb_decrypt():
     try:
-        return get_aes128ecb_decrypt_pycrypto()
+        return get_aes128ecb_decrypt_cryptography()
     except Exception:
         pass
 
@@ -123,12 +123,17 @@ def get_aes128ecb_decrypt():
     raise NotImplementedError('aes128ecb_decrypt')
 
 
-def get_aes128ecb_decrypt_pycrypto():
-    from Crypto.Cipher import AES
+def get_aes128ecb_decrypt_cryptography():
+    from cryptography.hazmat.primitives.ciphers import Cipher
+    from cryptography.hazmat.primitives.ciphers import algorithms
+    from cryptography.hazmat.primitives.ciphers import modes
+    from cryptography.hazmat.backends import default_backend
 
     def decrypt(key, ciphertext):
-        cipher = AES.new(key, AES.MODE_ECB)
-        return cipher.decrypt(ciphertext)
+        backend = default_backend()
+        cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
+        decryptor = cipher.decryptor()
+        return decryptor.update(ciphertext) + decryptor.finalize()
 
     return decrypt
 

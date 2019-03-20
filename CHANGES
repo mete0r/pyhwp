@@ -4,7 +4,8 @@ CHANGES
 0.1b11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Remove dependency on PyCrypto.
+- Add dependency on cryptography.
 
 
 0.1b10 (2019-03-21)

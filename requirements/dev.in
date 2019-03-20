@@ -5,7 +5,6 @@ jip
 jupyter
 lxml
 pip-tools >= 2.0.2
-pycrypto
 pyside
 qtconsole
 restview
