@@ -4,8 +4,10 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+cffi==1.12.2              # via hypua2jamo
 docopt==0.6.2
-hypua2jamo==0.3
+hypua2jamo==0.4.4
 lxml==4.2.4 ; platform_python_implementation == "CPython"
 olefile==0.44 ; platform_python_implementation != "Jython"
+pycparser==2.19           # via cffi
 pycrypto==2.6.1 ; platform_python_implementation == "CPython" and platform_system != "Windows"

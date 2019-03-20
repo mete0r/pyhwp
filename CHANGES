@@ -9,6 +9,7 @@ CHANGES
 - Fix 'Dutmal' control attribute names.
 - hwp5html: represent path names in bytes
 - Declare some dependencies with environment markers: olefile, lxml, pycrypto
+- Update dependency on hypua2jamo >= 0.4.4
 
 
 0.1b9 (2016-02-26)

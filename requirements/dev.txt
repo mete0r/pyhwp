@@ -11,6 +11,7 @@ backports-abc==0.5        # via tornado
 backports.shutil-get-terminal-size==1.0.0  # via ipython
 bleach==2.0.0             # via nbconvert, readme-renderer
 certifi==2017.7.27.1      # via requests, tornado
+cffi==1.12.2              # via hypua2jamo
 chardet==3.0.4            # via requests
 check-manifest==0.35
 click==6.7                # via pip-tools, sphinx-intl
@@ -30,7 +31,7 @@ functools32==3.2.3.post2  # via jsonschema
 future==0.16.0            # via commonmark
 html5lib==0.999999999     # via bleach
 humanfriendly==4.4.1      # via coloredlogs
-hypua2jamo==0.3
+hypua2jamo==0.4.4
 idna==2.6                 # via requests
 imagesize==0.7.1          # via sphinx
 ipykernel==4.6.1          # via ipywidgets, jupyter, jupyter-console, notebook, qtconsole
@@ -64,6 +65,7 @@ prompt-toolkit==1.0.15    # via ipython, jupyter-console
 ptyprocess==0.5.2         # via pexpect, terminado
 py==1.4.34                # via tox
 pycodestyle==2.3.1        # via flake8
+pycparser==2.19           # via cffi
 pycrypto==2.6.1 ; platform_python_implementation == "CPython" and platform_system != "Windows"
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via ipython, jupyter-console, nbconvert, qtconsole, readme-renderer, restview, sphinx
