@@ -7,6 +7,8 @@
 alabaster==0.7.10
 argcomplete==1.9.2
 asn1crypto==0.24.0        # via cryptography
+atomicwrites==1.3.0       # via pytest
+attrs==19.1.0             # via pytest
 babel==2.5.0
 backports-abc==0.5        # via tornado
 backports.shutil-get-terminal-size==1.0.0  # via ipython
@@ -20,6 +22,7 @@ colorama==0.3.9           # via zest.releaser
 coloredlogs==7.3
 commonmark==0.7.4         # via sphinx-argparse
 configparser==3.5.0       # via entrypoints, flake8
+coverage==4.5.3
 cryptography==2.6.1 ; platform_python_implementation != "Jython"
 decorator==4.1.2          # via ipython, traitlets
 docopt==0.6.2
@@ -29,6 +32,7 @@ enum34==1.1.6             # via cryptography, flake8, traitlets
 filelock==3.0.10          # via tox
 first==2.0.1              # via pip-tools
 flake8==3.4.1
+funcsigs==1.0.2           # via pytest
 functools32==3.2.3.post2  # via jsonschema
 future==0.16.0            # via commonmark
 html5lib==0.999999999     # via bleach
@@ -53,26 +57,28 @@ markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via flake8
 mistune==0.7.4            # via nbconvert
 monotonic==1.5            # via humanfriendly
+more-itertools==5.0.0     # via pytest
 nbconvert==5.3.1          # via jupyter, notebook
 nbformat==4.4.0           # via ipywidgets, nbconvert, notebook
 notebook==5.0.0           # via jupyter, widgetsnbextension
 olefile==0.44 ; platform_python_implementation != "Jython"
 pandocfilters==1.4.2      # via nbconvert
-pathlib2==2.3.0           # via ipython, pickleshare
+pathlib2==2.3.0           # via ipython, pickleshare, pytest
 pexpect==4.2.1            # via ipython
 pickleshare==0.7.4        # via ipython
 pip-tools==2.0.2
 pkginfo==1.4.1            # via twine
-pluggy==0.5.2             # via tox
+pluggy==0.9.0             # via pytest, tox
 prompt-toolkit==1.0.15    # via ipython, jupyter-console
 ptyprocess==0.5.2         # via pexpect, terminado
-py==1.4.34                # via tox
+py==1.8.0                 # via pytest, tox
 pycodestyle==2.3.1        # via flake8
 pycparser==2.19           # via cffi
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via ipython, jupyter-console, nbconvert, qtconsole, readme-renderer, restview, sphinx
 pyroma==2.2
 pyside==1.2.4
+pytest==4.3.1
 python-dateutil==2.6.1    # via jupyter-client
 pytz==2017.2              # via babel
 pyzmq==16.0.2             # via jupyter-client
@@ -85,7 +91,7 @@ restview==2.7.0
 scandir==1.5              # via pathlib2
 simplegeneric==0.8.1      # via ipython
 singledispatch==3.4.0.3   # via tornado
-six==1.11.0               # via bleach, cryptography, html5lib, pathlib2, pip-tools, prompt-toolkit, python-dateutil, readme-renderer, singledispatch, sphinx, sphinx-intl, tox, traitlets, zest.releaser, zope.testrunner
+six==1.11.0               # via bleach, cryptography, html5lib, more-itertools, pathlib2, pip-tools, prompt-toolkit, pytest, python-dateutil, readme-renderer, singledispatch, sphinx, sphinx-intl, tox, traitlets, zest.releaser
 snowballstemmer==1.2.1    # via sphinx
 sphinx-argparse==0.2.1
 sphinx-intl==0.9.9
@@ -108,6 +114,4 @@ wheel==0.30.0
 widgetsnbextension==3.0.2  # via ipywidgets
 zc.buildout==2.9.4
 zest.releaser==6.12.4
-zope.exceptions==4.1.0    # via zope.testrunner
-zope.interface==4.4.2     # via repoze.sphinx.autointerface, zope.exceptions, zope.testrunner
-zope.testrunner==4.7.0
+zope.interface==4.4.2     # via repoze.sphinx.autointerface

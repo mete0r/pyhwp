@@ -1,1 +1,2 @@
-zope.testrunner
+coverage
+pytest

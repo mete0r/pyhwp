@@ -23,7 +23,7 @@ before_install:
   - sudo apt-get install -y libxml2-utils xsltproc
 install:
   - pip install -U setuptools pip wheel jip
-  - pip install -U zc.buildout tox
+  - pip install -U zc.buildout tox coverage python-coveralls
   - buildout
   - tox --version
   - sort --version
@@ -31,3 +31,7 @@ install:
   - if [ "$TOXENV" == "jy27" ]; then make install-jython; fi
 script:
   - tox
+after_success:
+  - coverage combine .tox/*/tmp
+  - coverage report
+  - coveralls
