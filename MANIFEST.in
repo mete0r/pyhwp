@@ -1,3 +1,4 @@
+include .coveragerc
 include CHANGES
 include COPYING
 include LICENSE
