@@ -166,6 +166,7 @@ summaryinfo 명령
 
    $ hwp5proc summaryinfo samples/sample-5017.hwp
    Title: 제목입니다.
+   Subject: 주제입니다.
    Author: 지은이입니다.
    Keywords: 키워드입니다.
    Comments: 기타입니다.
@@ -474,6 +475,70 @@ unpack 명령
    sample-5017/PrvText.utf8
    sample-5017/Scripts/DefaultJScript
    sample-5017/Scripts/JScriptVersion
+
+
+rawunz 명령
+-----------
+
+   $ hwp5proc rawunz --help
+    Deflate an headerless zlib-compressed stream
+   
+   Usage:
+       hwp5proc rawunz [--loglevel=<loglevel>] [--logfile=<logfile>]
+       hwp5proc rawunz --help
+   
+   Options:
+       -h --help               Show this screen
+          --loglevel=<level>   Set log level.
+          --logfile=<file>     Set log file.
+
+   $ rm -f Section0 Section0.rawz
+   $ hwp5proc cat --ole samples/sample-5017.hwp BodyText/Section0 > Section0.rawz
+   $ sha1sum Section0.rawz
+   1d2293ddee9f584b2294ee042b9587c12c071011  Section0.rawz
+   $ hwp5proc rawunz < Section0.rawz > Section0
+   $ sha1sum Section0
+   0c66f772894487ba06cd225ebc4871f552e07cf8  Section0
+
+
+diststream 명령
+---------------
+
+   $ hwp5proc diststream --help
+    Decode distribute doc stream.
+   
+   Usage:
+       hwp5proc diststream
+       hwp5proc diststream sha1 [--raw]
+       hwp5proc diststream key [--raw]
+       hwp5proc diststream [--loglevel=<loglevel>] [--logfile=<logfile>]
+       hwp5proc diststream --help
+   
+   Options:
+       -h --help               Show this screen
+          --loglevel=<level>   Set log level.
+          --logfile=<file>     Set log file.
+   
+   Example:
+       $ hwp5proc cat --ole samples/viewtext.hwp ViewText/Section0
+         | tee Section0.zraw.aes128ecb | hwp5proc diststream | tee Section0.zraw
+         | hwp5proc rawunz > Section0
+   
+       $ hwp5proc diststream sha1 < Section0.zraw.aes128ecb
+       $ echo -n '12345' | sha1sum
+
+   $ rm -f Section0 Section.zraw Section0.zraw.aes128ecb
+   $ hwp5proc cat --ole samples/viewtext.hwp ViewText/Section0 > Section0.zraw.aes128ecb
+   $ sha1sum Section0.zraw.aes128ecb
+   afb6223d49748dec0f1fb3ccf720918ea1a31ec5  Section0.zraw.aes128ecb
+   $ hwp5proc diststream < Section0.zraw.aes128ecb > Section0.zraw
+   $ sha1sum Section0.zraw
+   77150206051a11c68ec61353b9d7cf3a0dd63ec8  Section0.zraw
+   $ hwp5proc rawunz < Section0.zraw > Section0
+   $ sha1sum Section0
+   75d6750ad7ad45edc9c1abae2060b8d1c404f6df  Section0
+   $ hwp5proc diststream sha1 < Section0.zraw.aes128ecb  #=> --regex ^8cb2237d0679ca88db6464eac60da96345513964$
+   $ hwp5proc diststream key < Section0.zraw.aes128ecb   #=> --regex ^38004300420032003200330037004400$
 
 records 명령
 ------------

@@ -16,6 +16,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import os.path
+
+from ..errors import InvalidOleStorageError
 
 
 def is_enabled():
@@ -35,14 +41,12 @@ class OleStorage(object):
     '''
 
     def __init__(self, olefile):
-        from hwp5.errors import InvalidOleStorageError
         from java.io import FileInputStream
         from java.io import IOException
         from org.apache.poi.poifs.filesystem import POIFSFileSystem
         from org.apache.poi.poifs.filesystem import DirectoryEntry
 
         if isinstance(olefile, basestring):
-            import os.path
             path = os.path.abspath(olefile)
             fis = FileInputStream(path)
             try:

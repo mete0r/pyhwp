@@ -82,12 +82,14 @@ Example: List virtual streams too::
     Scripts/JScriptVersion
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
+from ..storage import printstorage
+from . import open_hwpfile
 
 
-@entrypoint(__doc__)
 def main(args):
-    from hwp5.storage import printstorage
-    from hwp5.proc import open_hwpfile
     hwpfile = open_hwpfile(args)
     printstorage(hwpfile)

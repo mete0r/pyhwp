@@ -8,6 +8,7 @@ include README.rst
 include buildout.cfg
 include classifiers.txt
 include ez_setup.py
+exclude notebooks
 include pyhwp/README.rst
 include pyhwp/hwp5/COPYING
 include pyhwp/hwp5/README
@@ -16,14 +17,20 @@ include pyhwp/hwp5/xsl/*.xsl
 include pyhwp/hwp5/xsl/odt/*
 include requirements.in
 include requirements.txt
-include requirements-dev.in
-include requirements-dev.txt
-include requirements-test.in
-include requirements-test.txt
+include requirements/dev.in
+include requirements/dev.txt
+include requirements/docs.in
+include requirements/docs.txt
+include requirements/lint.in
+include requirements/lint.txt
+include requirements/test.in
+include requirements/test.txt
 exclude samples
 include stdeb.cfg
 include tox.ini
 include tox.ini.in
+recursive-include pyhwp/hwp5/locale *.po
+recursive-include pyhwp/hwp5/locale *.pot
 prune buildouts
 prune docs
 prune etc

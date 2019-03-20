@@ -16,6 +16,9 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import codecs
 import zlib  # this codec needs the optional zlib module !
 
@@ -74,7 +77,7 @@ class IncrementalDecoder(codecs.IncrementalDecoder):
             if len(input) > 0:
                 d = self.decompressobj.decompress(input)
             else:
-                d = ''
+                d = b''
             return d + self.decompressobj.flush()
         else:
             return self.decompressobj.decompress(input)
@@ -98,14 +101,14 @@ class StreamReader(object):
         assert errors == 'strict'
         self.stream = stream
         self.decoder = IncrementalDecoder(errors)
-        self.buffer = ''
+        self.buffer = b''
         self.offset = 0
 
     def read(self, size=-1):
         if size < 0:
             c = self.stream.read()
             d = self.buffer + self.decoder.decode(c, True)
-            self.buffer = ''
+            self.buffer = b''
             self.offset += len(d)
             return d
 
@@ -119,7 +122,7 @@ class StreamReader(object):
 
             if final:
                 d = self.buffer
-                self.buffer = ''
+                self.buffer = b''
                 self.offset += len(d)
                 return d
 

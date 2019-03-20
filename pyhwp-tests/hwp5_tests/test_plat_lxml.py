@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
-from mixin_xslt import XsltTestMixin
-from mixin_relaxng import RelaxNGTestMixin
+
+from hwp5.plat import _lxml
+
+from .mixin_xslt import XsltTestMixin
+from .mixin_relaxng import RelaxNGTestMixin
 
 
 class TestPlatLxml(unittest.TestCase, XsltTestMixin, RelaxNGTestMixin):
 
     def test_is_enabled(self):
-        from hwp5.plat import _lxml
 
         try:
-            import lxml; lxml
+            import lxml
+            lxml
         except ImportError:
             self.assertFalse(_lxml.is_enabled())
         else:
             self.assertTrue(_lxml.is_enabled())
 
     def setUp(self):
-        from hwp5.plat import _lxml
         if _lxml.is_enabled():
             self.xslt = _lxml.xslt
             self.xslt_compile = _lxml.xslt_compile

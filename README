@@ -12,7 +12,7 @@ Features
 Installation
 ------------
 
-from `pypi <http://pypi.python.org/pypi/pyhwp>`_::
+from `pypi <http://pypi.org/project/pyhwp>`_::
 
    virtualenv pyhwp
    pyhwp/bin/pip install --pre pyhwp  # Install pyhwp into a virtualenv directory
@@ -24,9 +24,9 @@ Or::
 Requirements
 ------------
 
-- CPython 2.5, 2.6, 2.7, Jython 2.5.3 or PyPy 2.0.2
-- `setuptools <http://pypi.python.org/pypi/setuptools>`_
-- `pycrypto <https://pypi.python.org/pypi/pycrypto>`_ (optional, to decode distribution docs)
+- CPython 2.7, Jython 2.7 or PyPy >= 2.0.2
+- `lxml <https://pypi.org/project/lxml>`_ (optional)
+- `pycrypto <https://pypi.org/project/pycrypto>`_ (optional)
 
 Documentation & Development
 ---------------------------
@@ -45,7 +45,7 @@ Maintainer: `mete0r <https://github.com/mete0r>`_
 License
 -------
 
-Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
+Copyright (C) 2010-2018 mete0r <mete0r@sarangbang.or.kr>
 
 .. image:: http://www.gnu.org/graphics/agplv3-155x51.png
 

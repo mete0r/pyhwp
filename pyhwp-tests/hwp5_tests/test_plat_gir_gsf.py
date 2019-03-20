@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from unittest import TestCase
 
 from hwp5.plat import gir_gsf
 
-from hwp5_tests.fixtures import get_fixture_path
-from hwp5_tests.mixin_olestg import OleStorageTestMixin
+from .fixtures import get_fixture_path
+from .mixin_olestg import OleStorageTestMixin
 
 
 def skip_if_disabled(f):
@@ -40,6 +43,5 @@ class TestGirGsf(TestCase):
 class TestOleStorageGirGsf(TestCase, OleStorageTestMixin):
 
     def setUp(self):
-        from hwp5.plat import gir_gsf
         if gir_gsf.is_enabled():
             self.OleStorage = gir_gsf.OleStorage

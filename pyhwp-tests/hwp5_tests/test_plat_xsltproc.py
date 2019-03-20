@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 import unittest
-from mixin_xslt import XsltTestMixin
+
+from hwp5.plat import xsltproc
+
+from .mixin_xslt import XsltTestMixin
 
 
 class TestPlatXsltProc(unittest.TestCase, XsltTestMixin):
@@ -10,6 +15,5 @@ class TestPlatXsltProc(unittest.TestCase, XsltTestMixin):
     xslt_compile = None
 
     def setUp(self):
-        from hwp5.plat import xsltproc
         if xsltproc.is_enabled():
             self.xslt = xsltproc.xslt

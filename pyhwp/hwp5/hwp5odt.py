@@ -40,12 +40,17 @@ Options::
 
     --output=<file>     Output file.
 '''
-from __future__ import with_statement
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
-import os.path
+from io import BytesIO
+import gettext
+import io
 import logging
+import os.path
 import sys
 
 from .errors import ImplementationNotAvailable
@@ -56,7 +61,15 @@ from .plat import get_relaxng_compile
 from .utils import cached_property
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
+locale_dir = os.path.join(os.path.dirname(__file__), 'locale')
+locale_dir = os.path.abspath(locale_dir)
+t = gettext.translation('hwp5odt', locale_dir, fallback=True)
+if PY3:
+    _ = t.gettext
+else:
+    _ = t.ugettext
 
 
 RESOURCE_PATH_RNG = 'odf-relaxng/OpenDocument-v1.2-os-schema.rng'
@@ -114,7 +127,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @property
     def transform_hwp5_to_styles(self):
         '''
-        >>> with file('styles.xml', 'w') as f:
+        >>> with io.open('styles.xml', 'wb') as f:
         ...     T.transform_hwp5_to_styles(hwp5file, f)
         '''
         transform_xhwp5 = self.transform_xhwp5_to_styles
@@ -123,7 +136,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @property
     def transform_hwp5_to_content(self):
         '''
-        >>> with file('content.xml', 'w') as f:
+        >>> with io.open('content.xml', 'wb') as f:
         ...     T.transform_hwp5_to_content(hwp5file, f)
         '''
         transform_xhwp5 = self.transform_xhwp5_to_content
@@ -132,7 +145,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @property
     def transform_hwp5_to_single_document(self):
         '''
-        >>> with file('transformed.fodt', 'w') as f:
+        >>> with io.open('transformed.fodt', 'wb') as f:
         ...     T.transform_hwp5_to_single_document(hwp5file, f)
         '''
         transform_xhwp5 = self.transform_xhwp5_to_single_document
@@ -157,7 +170,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @cached_property
     def transform_xhwp5_to_styles(self):
         '''
-        >>> with file('styles.xml', 'w') as f:
+        >>> with io.open('styles.xml', 'wb') as f:
         ...     T.transform_xhwp5_to_styles('input.xml', f)
         '''
         resource_path = RESOURCE_PATH_XSL_STYLE
@@ -166,7 +179,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @cached_property
     def transform_xhwp5_to_content(self):
         '''
-        >>> with file('content.xml', 'w') as f:
+        >>> with io.open('content.xml', 'wb') as f:
         ...     T.transform_xhwp5_to_content('input.xml', f)
         '''
         resource_path = RESOURCE_PATH_XSL_CONTENT
@@ -175,7 +188,7 @@ class ODTTransform(BaseTransform, ODFValidate):
     @cached_property
     def transform_xhwp5_to_single_document(self):
         '''
-        >>> with file('transformed.fodf', 'w') as f:
+        >>> with io.open('transformed.fodf', 'wb') as f:
         ...     T.transform_xhwp5_to_single_document('input.xml', f)
         '''
         resource_path = RESOURCE_PATH_XSL_SINGLE_DOCUMENT
@@ -193,8 +206,7 @@ class ODTTransform(BaseTransform, ODFValidate):
             with self.transformed_content_at_temp(xhwp5path) as path:
                 odtpkg.insert_path(path, 'content.xml', 'text/xml')
 
-            from cStringIO import StringIO
-            rdf = StringIO()
+            rdf = BytesIO()
             manifest_rdf(rdf)
             rdf.seek(0)
             odtpkg.insert_stream(rdf, 'manifest.rdf',
@@ -257,7 +269,7 @@ class ODTPackage(object):
         self.zf = zipfile
 
     def insert_path(self, src_path, path, media_type):
-        with file(src_path, 'rb') as f:
+        with io.open(src_path, 'rb') as f:
             self.insert_stream(f, path, media_type)
 
     def insert_stream(self, f, path, media_type):
@@ -272,8 +284,7 @@ class ODTPackage(object):
 
     def close(self):
 
-        from cStringIO import StringIO
-        manifest = StringIO()
+        manifest = BytesIO()
         manifest_xml(manifest, self.files)
         manifest.seek(0)
         self.zf.writestr('META-INF/manifest.xml', manifest.getvalue())
@@ -319,7 +330,7 @@ def manifest_xml(f, files):
 
 
 def manifest_rdf(f):
-    f.write('''<?xml version="1.0" encoding="utf-8"?>
+    f.write(b'''<?xml version="1.0" encoding="utf-8"?>
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#"
@@ -331,10 +342,6 @@ def manifest_rdf(f):
     <odf:ContentFile rdf:about="content.xml"/>
     <odf:StylesFile rdf:about="styles.xml"/>
 </rdf:RDF>''')
-
-
-def mimetype(f):
-    f.write('application/vnd.oasis.opendocument.text')
 
 
 def main():

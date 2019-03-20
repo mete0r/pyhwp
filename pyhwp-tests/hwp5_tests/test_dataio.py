@@ -1,7 +1,32 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from io import BytesIO
 from unittest import TestCase
+import sys
 
-from hwp5.dataio import INT32, ARRAY, N_ARRAY, BSTR, Struct
+from hwp5.bintype import read_type
+from hwp5.dataio import ARRAY, N_ARRAY
+from hwp5.dataio import BSTR
+from hwp5.dataio import BYTE
+from hwp5.dataio import Enum
+from hwp5.dataio import EnumType
+from hwp5.dataio import Flags
+from hwp5.dataio import INT8
+from hwp5.dataio import INT16
+from hwp5.dataio import INT32
+from hwp5.dataio import UINT8
+from hwp5.dataio import UINT16
+from hwp5.dataio import UINT32
+from hwp5.dataio import ParseError
+from hwp5.dataio import Struct
+from hwp5.dataio import StructType
+from hwp5.dataio import decode_utf16le_with_hypua
+from hwp5.dataio import typed_struct_attributes
+from hwp5.dataio import _parse_flags_args
+
+
 class TestArray(TestCase):
     def test_new(self):
         t1 = ARRAY(INT32, 3)
@@ -20,10 +45,11 @@ class TestArray(TestCase):
         a = INT32()
         self.assertRaises(Exception, setattr, a, 'randomattr', 1)
 
+
 class TestTypedAttributes(TestCase):
 
     def test_typed_struct_attributes(self):
-        from hwp5.dataio import typed_struct_attributes
+
         class SomeRandomStruct(Struct):
             @staticmethod
             def attributes():
@@ -31,16 +57,18 @@ class TestTypedAttributes(TestCase):
                 yield BSTR, 'b'
                 yield ARRAY(INT32, 3), 'c'
 
-        attributes = dict(a=1, b=u'abc', c=(4,5,6))
-        typed_attributes = typed_struct_attributes(SomeRandomStruct, attributes, dict())
+        attributes = dict(a=1, b=u'abc', c=(4, 5, 6))
+        typed_attributes = typed_struct_attributes(
+            SomeRandomStruct, attributes, dict()
+        )
         typed_attributes = list(typed_attributes)
         expected = [dict(name='a', type=INT32, value=1),
                     dict(name='b', type=BSTR, value='abc'),
-                    dict(name='c', type=ARRAY(INT32, 3), value=(4,5,6))]
+                    dict(name='c', type=ARRAY(INT32, 3), value=(4, 5, 6))]
         self.assertEquals(expected, typed_attributes)
 
     def test_typed_struct_attributes_inherited(self):
-        from hwp5.dataio import typed_struct_attributes
+
         class Hello(Struct):
             @staticmethod
             def attributes():
@@ -62,7 +90,7 @@ class TestTypedAttributes(TestCase):
 
 class TestStructType(TestCase):
     def test_assign_enum_flags_name(self):
-        from hwp5.dataio import StructType, Enum, Flags, UINT16
+
         class Foo(object):
             __metaclass__ = StructType
             bar = Enum()
@@ -72,11 +100,10 @@ class TestStructType(TestCase):
         self.assertEquals('baz', Foo.baz.__name__)
 
     def test_parse_members(self):
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT8, UINT16, UINT32
 
         class A(object):
             __metaclass__ = StructType
+
             @classmethod
             def attributes(cls):
                 yield UINT8, 'uint8'
@@ -84,8 +111,10 @@ class TestStructType(TestCase):
                 yield UINT32, 'uint32'
 
         values = dict(uint8=8, uint16=16, uint32=32)
+
         def getvalue(member):
             return values[member['name']]
+
         context = dict()
         result = list(A.parse_members(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
@@ -93,13 +122,13 @@ class TestStructType(TestCase):
                            dict(name='uint32', type=UINT32, value=32)], result)
 
     def test_parse_members_condition(self):
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT8, UINT16, UINT32
 
         def uint32_is_32(context, values):
             return values['uint32'] == 32
+
         class A(object):
             __metaclass__ = StructType
+
             @classmethod
             def attributes(cls):
                 yield UINT8, 'uint8'
@@ -108,8 +137,10 @@ class TestStructType(TestCase):
                 yield dict(type=UINT32, name='extra', condition=uint32_is_32)
 
         values = dict(uint8=8, uint16=16, uint32=32, extra=666)
+
         def getvalue(member):
             return values[member['name']]
+
         context = dict()
         result = list(A.parse_members(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
@@ -120,25 +151,24 @@ class TestStructType(TestCase):
                           result)
 
     def test_parse_members_empty(self):
-        from hwp5.dataio import StructType
 
         class A(object):
             __metaclass__ = StructType
 
         value = dict()
+
         def getvalue(member):
             return value[member['name']]
+
         context = dict()
         result = list(A.parse_members_with_inherited(context, getvalue))
         self.assertEquals([], result)
 
     def test_parse_members_inherited(self):
-        from hwp5.dataio import StructType
-        from hwp5.dataio import UINT8, UINT16, UINT32
-        from hwp5.dataio import INT8, INT16, INT32
 
         class A(object):
             __metaclass__ = StructType
+
             @classmethod
             def attributes(cls):
                 yield UINT8, 'uint8'
@@ -154,8 +184,10 @@ class TestStructType(TestCase):
 
         value = dict(uint8=8, uint16=16, uint32=32,
                      int8=-1, int16=-16, int32=-32)
+
         def getvalue(member):
             return value[member['name']]
+
         context = dict()
         result = list(B.parse_members_with_inherited(context, getvalue))
         self.assertEquals([dict(name='uint8', type=UINT8, value=8),
@@ -169,9 +201,11 @@ class TestStructType(TestCase):
 
 class TestEnumType(TestCase):
     def test_enum(self):
-        from hwp5.dataio import EnumType
-        from hwp5.dataio import Enum
-        Foo = EnumType('Foo', (int,), dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4)))
+        Foo = EnumType(
+            b'Foo',
+            (int,),
+            dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4))
+        )
 
         self.assertRaises(AttributeError, getattr, Foo, 'items')
         self.assertRaises(AttributeError, getattr, Foo, 'moreitems')
@@ -206,14 +240,13 @@ class TestEnumType(TestCase):
 
         # frozen attribute set
         self.assertRaises(AttributeError, setattr, Foo(0), 'bar', 0)
-        import sys
         if sys.platform.startswith('java'):  # Jython 2.5.3
             self.assertRaises(TypeError, setattr, Foo(0), 'name', 'a')
         else:
             self.assertRaises(AttributeError, setattr, Foo(0), 'name', 'a')
 
         # undefined value
-        #self.assertRaises(ValueError, Foo, 5)
+        # self.assertRaises(ValueError, Foo, 5)
 
         # undefined value: warning but not error
         undefined = Foo(5)
@@ -230,7 +263,6 @@ class TestEnumType(TestCase):
 
 class TestFlags(TestCase):
     def test_parse_args(self):
-        from hwp5.dataio import _parse_flags_args
         x = list(_parse_flags_args([0, 1, long, 'bit01']))
         bit01 = ('bit01', (0, 1, long))
         self.assertEquals([bit01], x)
@@ -247,24 +279,22 @@ class TestFlags(TestCase):
         bit5 = ('bit5', (5, 5, int))
 
         x = list(_parse_flags_args([0, 1, long, 'bit01',
-                                    2, 3, 'bit23', 
+                                    2, 3, 'bit23',
                                     4, long, 'bit4',
                                     5, 'bit5']))
         self.assertEquals([bit01, bit23, bit4, bit5], x)
 
     def test_basetype(self):
-        from hwp5.dataio import UINT32
-        from hwp5.dataio import Flags
         MyFlags = Flags(UINT32)
         self.assertEquals(UINT32, MyFlags.basetype)
 
     def test_bitfields(self):
-        from hwp5.dataio import UINT32
-        from hwp5.dataio import Flags
-        from hwp5.dataio import Enum
         MyEnum = Enum(a=1, b=2)
-        MyFlags = Flags(UINT32, 0, 1, 'field0',
-                                2, 4, MyEnum, 'field2')
+        MyFlags = Flags(
+            UINT32,
+            0, 1, 'field0',
+            2, 4, MyEnum, 'field2'
+        )
         bitfields = MyFlags.bitfields
         f = bitfields['field0']
         self.assertEquals((0, 1, int),
@@ -275,8 +305,6 @@ class TestFlags(TestCase):
 
     @property
     def ByteFlags(self):
-        from hwp5.dataio import BYTE
-        from hwp5.dataio import Flags
         return Flags(BYTE,
                      0, 3, 'low',
                      4, 7, 'high')
@@ -290,9 +318,6 @@ class TestFlags(TestCase):
 class TestReadStruct(TestCase):
 
     def test_read_parse_error(self):
-        from hwp5.dataio import Struct
-        from hwp5.dataio import INT16
-        from hwp5.dataio import ParseError
 
         class Foo(Struct):
 
@@ -300,10 +325,8 @@ class TestReadStruct(TestCase):
                 yield INT16, 'a'
             attributes = staticmethod(attributes)
 
-        from StringIO import StringIO
-        stream = StringIO()
+        stream = BytesIO()
 
-        from hwp5.bintype import read_type
         record = dict()
         context = dict(record=record)
         try:
@@ -318,17 +341,14 @@ class TestReadStruct(TestCase):
 class TestBSTR(TestCase):
 
     def test_read(self):
-        from hwp5.dataio import BSTR
-
-        from StringIO import StringIO
-        f = StringIO('\x03\x00' + u'가나다'.encode('utf-16le'))
+        f = BytesIO(b'\x03\x00' + u'가나다'.encode('utf-16le'))
 
         s = BSTR.read(f)
         self.assertEquals(u'가나다', s)
 
         pua = u'\ub098\ub78f\u302e\ub9d0\u302f\uebd4\ubbf8\u302e'
         pua_utf16le = pua.encode('utf-16le')
-        f = StringIO(chr(len(pua)) + '\x00' + pua_utf16le)
+        f = BytesIO(chr(len(pua)) + b'\x00' + pua_utf16le)
 
         jamo = BSTR.read(f)
         expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
@@ -338,8 +358,6 @@ class TestBSTR(TestCase):
 class TestDecodeUTF16LEPUA(TestCase):
 
     def test_decode(self):
-        from hwp5.dataio import decode_utf16le_with_hypua
-
         expected = u'가나다'
         bytes = expected.encode('utf-16le')
         u = decode_utf16le_with_hypua(bytes)

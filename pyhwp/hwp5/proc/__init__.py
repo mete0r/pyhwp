@@ -28,17 +28,38 @@ Usage::
        --version        Show version and copyright information.
     -h --help           Show help messages.
        --help-commands  Show available commands.
-
 '''
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import gettext
 import logging
 import os
+import sys
 
 from docopt import docopt
 
-import hwp5
+from .. import __version__
+from ..dataio import ParseError
+from ..errors import InvalidHwp5FileError
+from ..plat import xsltproc
+from ..plat import xmllint
+from ..storage import ExtraItemStorage
+from ..storage import open_storage_item
+from ..storage.ole import OleStorage
+from ..xmlmodel import Hwp5File
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
+
+locale_dir = os.path.join(os.path.dirname(__file__), '..', 'locale')
+locale_dir = os.path.abspath(locale_dir)
+t = gettext.translation('hwp5proc', locale_dir, fallback=True)
+if PY3:
+    _ = t.gettext
+else:
+    _ = t.ugettext
 
 
 def rest_to_docopt(doc):
@@ -48,8 +69,6 @@ def rest_to_docopt(doc):
 
 
 def init_with_environ():
-    from ..plat import xsltproc
-    from ..plat import xmllint
     if 'PYHWP_XSLTPROC' in os.environ:
         xsltproc.executable = os.environ['PYHWP_XSLTPROC']
         xsltproc.enable()
@@ -60,7 +79,6 @@ def init_with_environ():
 
 
 def init_logger(args):
-    import os
     logger = logging.getLogger('hwp5')
 
     loglevel = args.get('--loglevel', None)
@@ -85,53 +103,54 @@ def init_logger(args):
         logger.addHandler(logging.StreamHandler())
 
 
-def entrypoint(rest_doc):
-    def wrapper(f):
-        def main(argv):
-            from docopt import docopt
-            from hwp5 import __version__
-            from hwp5.errors import InvalidHwp5FileError
-            from hwp5.dataio import ParseError
-            from hwp5.proc import rest_to_docopt
-            from hwp5.proc import init_logger
-
-            doc = rest_to_docopt(rest_doc)
-            args = docopt(doc, version=__version__, argv=argv)
-            init_logger(args)
-
-            try:
-                return f(args)
-            except InvalidHwp5FileError, e:
-                logger.error('%s', e)
-                return 1
-            except ParseError, e:
-                e.print_to_logger(logger)
-                return 1
-        return main
-    return wrapper
+subcommands = [
+    'version',
+    'header',
+    'summaryinfo',
+    'ls',
+    'cat',
+    'unpack',
+    'records',
+    'models',
+    'find',
+    'xml',
+    'rawunz',
+    'diststream',
+]
 
 
-subcommands = ['version', 'header', 'summaryinfo', 'ls', 'cat', 'unpack',
-               'records', 'models', 'find', 'xml', 'rawunz',
-               'diststream']
+program = 'hwp5proc (pyhwp) {version}'.format(version=__version__)
 
+copyright = 'Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>'
 
-version = '''hwp5proc (pyhwp) %s
-Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
-License AGPLv3+: GNU Affero GPL version 3 or any later
+license = _('''License AGPLv3+: GNU Affero GPL version 3 or any later
 <http://gnu.org/licenses/agpl.txt>.
 This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-Disclosure: This program has been developed in accordance with a public
+There is NO WARRANTY, to the extent permitted by law.''')
+
+disclosure = _('''Disclosure: This program has been developed in accordance with a public
 document named "HWP Binary Specification 1.1" published by Hancom Inc.
-<http://www.hancom.co.kr>.'''
-version = version % hwp5.__version__
+<http://www.hancom.co.kr>.''')  # noqa
 
-help_commands = '''Available <command> values:
+version = '''{program}
+{copyright}
+{license}
+{disclosure}'''.format(
+    program=program,
+    copyright=copyright,
+    license=license,
+    disclosure=disclosure,
+)
 
-    ''' + '\n    '.join(subcommands) + '''
 
-See 'hwp5proc <command> --help' for more information on a specific command.'''
+def print_subcommands():
+    print(_('Available <command> values:'))
+    print('')
+    for subcommand in subcommands:
+        print('    {}'.format(subcommand))
+    print('')
+    print(_('See \'hwp5proc <command> --help\' '
+            'for more information on a specific command.'))
 
 
 def main():
@@ -141,24 +160,41 @@ def main():
     args = docopt(doc, version=version, help=False, options_first=True)
 
     if args['--help-commands']:
-        print doc,
-        print help_commands
+        print(doc)
+        print_subcommands()
         return 0
 
     command = args['<command>']
-    if command not in subcommands:
+    if command is None:
         print(doc.strip())
+        return 1
+
+    if command not in subcommands:
+        message = _('Unknown command: {}')
+        message = message.format(command)
+        message = '\n{}\n\n'.format(message)
+        sys.stderr.write(message)
+        print_subcommands()
         return 1
 
     argv = [command] + args['<args>']
     mod = __import__('hwp5.proc.' + command, fromlist=['main'])
-    return mod.main(argv)
+    main = mod.main
+    doc = rest_to_docopt(mod.__doc__)
+    args = docopt(doc, version=__version__, argv=argv)
+    init_logger(args)
+
+    try:
+        return main(args)
+    except InvalidHwp5FileError, e:
+        logger.error('%s', e)
+        raise SystemExit(1)
+    except ParseError, e:
+        e.print_to_logger(logger)
+        raise SystemExit(1)
 
 
 def open_hwpfile(args):
-    from hwp5.xmlmodel import Hwp5File
-    from hwp5.storage import ExtraItemStorage
-    from hwp5.storage.ole import OleStorage
     filename = args['<hwp5file>']
     if args['--ole']:
         hwpfile = OleStorage(filename)
@@ -170,7 +206,6 @@ def open_hwpfile(args):
 
 
 def parse_recordstream_name(hwpfile, streamname):
-    from hwp5.storage import open_storage_item
     if streamname == 'docinfo':
         return hwpfile.docinfo
     segments = streamname.split('/')

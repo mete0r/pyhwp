@@ -1,0 +1,19 @@
+# Translations template for pyhwp.
+# Copyright (C) 2017 mete0r@sarangbang.or.kr
+# This file is distributed under the same license as the pyhwp project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: pyhwp 0.1b9.dev0\n"
+"Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
+"POT-Creation-Date: 2017-10-09 00:54+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.0\n"
+

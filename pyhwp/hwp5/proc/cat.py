@@ -65,14 +65,16 @@ Example::
     xmltemplate_storage: 0
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import sys
+
+from . import open_hwpfile
+from ..storage import open_storage_item
 
 
-@entrypoint(__doc__)
 def main(args):
-    from hwp5.proc import open_hwpfile
-    from hwp5.storage import open_storage_item
-    import sys
     hwp5file = open_hwpfile(args)
     stream = open_storage_item(hwp5file, args['<stream>'])
     f = stream.open()

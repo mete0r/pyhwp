@@ -16,16 +16,26 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from binascii import b2a_hex
 from functools import partial
+from subprocess import CalledProcessError
+from subprocess import Popen
 import logging
-from hwp5.plat import olefileio
-from hwp5.plat import _lxml
-from hwp5.plat import xsltproc
-from hwp5.plat import xmllint
-from hwp5.plat import javax_transform
-from hwp5.plat import jython_poifs
-from hwp5.plat import _uno
-from hwp5.plat import gir_gsf
+import os
+import subprocess
+import tempfile
+
+from . import _lxml
+from . import _uno
+from . import gir_gsf
+from . import javax_transform
+from . import jython_poifs
+from . import olefileio
+from . import xmllint
+from . import xsltproc
 
 
 logger = logging.getLogger(__name__)
@@ -105,6 +115,11 @@ def get_aes128ecb_decrypt():
     except Exception:
         pass
 
+    try:
+        return get_aes128ecb_decrypt_openssl()
+    except Exception:
+        pass
+
     raise NotImplementedError('aes128ecb_decrypt')
 
 
@@ -130,3 +145,54 @@ def get_aes128ecb_decrypt_javax():
         return decrypted.tostring()
 
     return decrypt
+
+
+def get_aes128ecb_decrypt_openssl():
+    if not openssl_reachable():
+        raise NotImplementedError()
+
+    def decrypt(key, ciphertext):
+        fd, name = tempfile.mkstemp()
+        fp = os.fdopen(fd, 'wb')
+        try:
+            fp.write(ciphertext)
+        finally:
+            fp.close()
+
+        args = [
+            'openssl',
+            'enc',
+            '-d',
+            '-in',
+            name,
+            '-aes-128-ecb',
+            '-K',
+            b2a_hex(key),
+            '-nopad',
+        ]
+        try:
+            p = Popen(args, stdout=subprocess.PIPE)
+            try:
+                return p.stdout.read()
+            finally:
+                p.wait()
+                p.stdout.close()
+        finally:
+            os.unlink(name)
+
+    return decrypt
+
+
+def openssl_reachable():
+    args = ['openssl', 'version']
+    try:
+        subprocess.check_output(args)
+    except OSError:
+        return False
+    except CalledProcessError:
+        return False
+    except Exception as e:
+        logger.exception(e)
+        return False
+    else:
+        return True

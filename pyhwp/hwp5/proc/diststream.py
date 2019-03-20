@@ -22,7 +22,7 @@ Usage::
 
     hwp5proc diststream
     hwp5proc diststream sha1 [--raw]
-    hwp5proc diststream key [[--raw]
+    hwp5proc diststream key [--raw]
     hwp5proc diststream [--loglevel=<loglevel>] [--logfile=<logfile>]
     hwp5proc diststream --help
 
@@ -42,24 +42,25 @@ Example::
     $ echo -n '12345' | sha1sum
 
 '''
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from binascii import b2a_hex
 from binascii import a2b_hex
 import logging
+import shutil
+import sys
 
-from hwp5.proc import entrypoint
-from hwp5.distdoc import decode
-from hwp5.distdoc import decode_head_to_sha1
-from hwp5.distdoc import decode_head_to_key
-from hwp5.recordstream import read_record
+from ..distdoc import decode
+from ..distdoc import decode_head_to_sha1
+from ..distdoc import decode_head_to_key
+from ..recordstream import read_record
 
 
 logger = logging.getLogger(__name__)
 
 
-@entrypoint(__doc__)
 def main(args):
-    import sys
-    import shutil
 
     if args['sha1']:
         head = read_record(sys.stdin, 0)

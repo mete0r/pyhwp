@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 from unittest import TestCase
-from mixin_olestg import OleStorageTestMixin
+
+from hwp5.storage.ole import OleStorage
+
+from .fixtures import get_fixture_path
+from .fixtures import open_fixture
+from .mixin_olestg import OleStorageTestMixin
 
 
 class TestBase(TestCase):
@@ -8,11 +16,9 @@ class TestBase(TestCase):
     hwp5file_name = 'sample-5017.hwp'
 
     def get_fixture_file(self, filename):
-        from fixtures import get_fixture_path
         return get_fixture_path(filename)
 
     def open_fixture(self, filename, *args, **kwargs):
-        from fixtures import open_fixture
         return open_fixture(filename, *args, **kwargs)
 
     @property
@@ -21,12 +27,10 @@ class TestBase(TestCase):
 
     @property
     def olestg(self):
-        from hwp5.storage.ole import OleStorage
         return OleStorage(self.hwp5file_path)
 
 
 class TestOleStorage(TestCase, OleStorageTestMixin):
 
     def setUp(self):
-        from hwp5.storage.ole import OleStorage
         self.OleStorage = OleStorage

@@ -72,22 +72,26 @@ Example::
     $ hwp5proc records < tmp.rec
 
 '''
-from hwp5.proc import entrypoint
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import sys
+
+from ..recordstream import Hwp5File
+from ..recordstream import RecordStream
+from ..recordstream import encode_record_header
+from ..recordstream import dump_record
+from ..storage import Open2Stream
+from . import parse_recordstream_name
 
 
-@entrypoint(__doc__)
 def main(args):
-    import sys
     filename = args['<hwp5file>']
     if filename:
-        from hwp5.recordstream import Hwp5File
-        from hwp5.proc import parse_recordstream_name
         hwpfile = Hwp5File(filename)
         streamname = args['<record-stream>']
         stream = parse_recordstream_name(hwpfile, streamname)
     else:
-        from hwp5.storage import Open2Stream
-        from hwp5.recordstream import RecordStream
         stream = RecordStream(Open2Stream(lambda: sys.stdin), None)
 
     opts = dict()
@@ -104,14 +108,15 @@ def main(args):
 
     if args['--simple']:
         for record in stream.records(**opts):
-            print '%04d' % record['seqno'],
-            print '  ' * record['level'], record['tagname']
+            sys.stdout.write('{:04d} {} {}\n'.format(
+                record['seqno'],
+                '  ' * record['level'],
+                record['tagname'],
+            ))
     elif args['--raw']:
-        from hwp5.recordstream import dump_record
         for record in stream.records(**opts):
             dump_record(sys.stdout, record)
     elif args['--raw-header']:
-        from hwp5.recordstream import encode_record_header
         for record in stream.records(**opts):
             hdr = encode_record_header(record)
             sys.stdout.write(hdr)

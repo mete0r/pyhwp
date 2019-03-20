@@ -16,25 +16,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
-
-def importStringIO():
-    ''' from cStringIO/StringIO import StringIO '''
-    try:
-        from cStringIO import StringIO
-        return StringIO
-    except:
-        from StringIO import StringIO
-        return StringIO
-
-
-def importjson():
-    try:
-        import json
-        return json
-    except ImportError:
-        import simplejson
-        return simplejson
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+import os.path
 
 
 def pkg_resources_filename(pkg_name, path):
@@ -51,7 +36,6 @@ def pkg_resources_filename_fallback(pkg_name, path):
     ''' a fallback implementation of pkg_resources_filename() '''
     pkg_module = __import__(pkg_name)
     pkg_name = pkg_name.split('.')
-    import os.path
     for x in pkg_name[1:]:
         pkg_module = getattr(pkg_module, x)
     pkg_dir = os.path.dirname(pkg_module.__file__)

@@ -16,6 +16,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
 from hwp5.binmodel.controlchar import CHID
 from hwp5.dataio import Enum
 from hwp5.dataio import Flags
@@ -35,10 +39,10 @@ class Dutmal(Control):
         yield BSTR, 'maintext'
         yield BSTR, 'subtext'
         yield Flags(UINT32,
-                    0, 31, cls.Position, 'position'), 'position'
+                    0, 31, cls.Position, 'position'), 'position-flags'
         yield UINT32, 'fsizeratio'
         yield UINT32, 'option'
         yield UINT32, 'stylenumber'
         yield Flags(UINT32,
-                    0, 31, cls.Align, 'align'), 'align'
+                    0, 31, cls.Align, 'align'), 'align-flags'
     attributes = classmethod(attributes)

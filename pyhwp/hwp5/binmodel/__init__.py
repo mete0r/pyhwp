@@ -16,121 +16,127 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from io import BytesIO
+from itertools import takewhile
+import json
 import logging
+import inspect
 
-from hwp5 import recordstream
-from hwp5.treeop import STARTEVENT
-from hwp5.treeop import ENDEVENT
-from hwp5.bintype import resolve_type_events
-from hwp5.bintype import resolve_values_from_stream
-from hwp5.dataio import ParseError
-from hwp5.bintype import ERROREVENT
-from hwp5.tagids import tagnames
-from hwp5.importhelper import importStringIO
-from hwp5.recordstream import nth
-from hwp5.binmodel._shared import tag_models
-from hwp5.binmodel._shared import RecordModel
-from hwp5.binmodel._shared import BinStorageId
-from hwp5.binmodel._shared import COLORREF
-from hwp5.binmodel._shared import Margin
-from hwp5.binmodel.controlchar import CHID
-from hwp5.binmodel.controlchar import ControlChar
-from hwp5.binmodel.tagid16_document_properties import DocumentProperties
-from hwp5.binmodel.tagid17_id_mappings import IdMappings
-from hwp5.binmodel.tagid18_bin_data import BinData
-from hwp5.binmodel.tagid20_border_fill import BorderFill
-from hwp5.binmodel.tagid19_face_name import FaceName
-from hwp5.binmodel.tagid21_char_shape import CharShape
-from hwp5.binmodel.tagid21_char_shape import LanguageStruct
-from hwp5.binmodel.tagid22_tab_def import TabDef
-from hwp5.binmodel.tagid23_numbering import Numbering
-from hwp5.binmodel.tagid24_bullet import Bullet
-from hwp5.binmodel.tagid25_para_shape import ParaShape
-from hwp5.binmodel.tagid26_style import Style
-from hwp5.binmodel.tagid27_doc_data import DocData
-from hwp5.binmodel.tagid28_distribute_doc_data import DistributeDocData
-from hwp5.binmodel.tagid30_compatible_document import CompatibleDocument
-from hwp5.binmodel.tagid31_layout_compatibility import LayoutCompatibility
-from hwp5.binmodel.tagid32_unknown import TagModel32
-from hwp5.binmodel.tagid50_para_header import Paragraph
-from hwp5.binmodel.tagid51_para_text import ParaText
-from hwp5.binmodel.tagid51_para_text import ParaTextChunks
-from hwp5.binmodel.tagid52_para_char_shape import ParaCharShape
-from hwp5.binmodel.tagid53_para_line_seg import ParaLineSeg
-from hwp5.binmodel.tagid53_para_line_seg import ParaLineSegList
-from hwp5.binmodel.tagid53_para_line_seg import LineSeg
-from hwp5.binmodel.tagid54_para_range_tag import ParaRangeTag
-from hwp5.binmodel.tagid55_ctrl_header import Control
-from hwp5.binmodel.controls.bookmark_control import BookmarkControl
-from hwp5.binmodel.controls.columns_def import ColumnsDef
-from hwp5.binmodel.controls.common_controls import CommonControl
-from hwp5.binmodel.controls.dutmal import Dutmal
-from hwp5.binmodel.controls.field import Field
-from hwp5.binmodel.controls.field import FieldUnknown
-from hwp5.binmodel.controls.field import FieldDate
-from hwp5.binmodel.controls.field import FieldDocDate
-from hwp5.binmodel.controls.field import FieldPath
-from hwp5.binmodel.controls.field import FieldBookmark
-from hwp5.binmodel.controls.field import FieldMailMerge
-from hwp5.binmodel.controls.field import FieldCrossRef
-from hwp5.binmodel.controls.field import FieldFormula
-from hwp5.binmodel.controls.field import FieldClickHere
-from hwp5.binmodel.controls.field import FieldClickHereData
-from hwp5.binmodel.controls.field import FieldSummary
-from hwp5.binmodel.controls.field import FieldUserInfo
-from hwp5.binmodel.controls.field import FieldHyperLink
-from hwp5.binmodel.controls.field import FieldMemo
-from hwp5.binmodel.controls.field import FieldPrivateInfoSecurity
-from hwp5.binmodel.controls.gshape_object_control import GShapeObjectControl
-from hwp5.binmodel.controls.header_footer import HeaderFooter
-from hwp5.binmodel.controls.header_footer import Header
-from hwp5.binmodel.controls.header_footer import Footer
-from hwp5.binmodel.controls.hidden_comment import HiddenComment
-from hwp5.binmodel.controls.index_marker import IndexMarker
-from hwp5.binmodel.controls.note import Note
-from hwp5.binmodel.controls.note import FootNote
-from hwp5.binmodel.controls.note import EndNote
-from hwp5.binmodel.controls.numbering import AutoNumbering
-from hwp5.binmodel.controls.numbering import NewNumbering
-from hwp5.binmodel.controls.page_hide import PageHide
-from hwp5.binmodel.controls.page_number_position import PageNumberPosition
-from hwp5.binmodel.controls.page_odd_even import PageOddEven
-from hwp5.binmodel.controls.section_def import SectionDef
-from hwp5.binmodel.controls.table_control import TableControl
-from hwp5.binmodel.controls.tcps_control import TCPSControl
-from hwp5.binmodel.tagid56_list_header import ListHeader
-from hwp5.binmodel.tagid56_list_header import TableCaption
-from hwp5.binmodel.tagid56_list_header import TableCell
-from hwp5.binmodel.tagid56_list_header import TextboxParagraphList
-from hwp5.binmodel.tagid56_list_header import HeaderParagraphList
-from hwp5.binmodel.tagid56_list_header import FooterParagraphList
-from hwp5.binmodel.tagid57_page_def import PageDef
-from hwp5.binmodel.tagid58_footnote_shape import FootnoteShape
-from hwp5.binmodel.tagid59_page_border_fill import PageBorderFill
-from hwp5.binmodel.tagid60_shape_component import ShapeComponent
-from hwp5.binmodel.tagid61_table import TableBody
-from hwp5.binmodel.tagid62_shape_component_line import ShapeLine
-from hwp5.binmodel.tagid63_shape_component_rectangle import ShapeRectangle
-from hwp5.binmodel.tagid64_shape_component_ellipse import ShapeEllipse
-from hwp5.binmodel.tagid65_shape_component_arc import ShapeArc
-from hwp5.binmodel.tagid66_shape_component_polygon import ShapePolygon
-from hwp5.binmodel.tagid67_shape_component_curve import ShapeCurve
-from hwp5.binmodel.tagid68_shape_component_ole import ShapeOLE
-from hwp5.binmodel.tagid69_shape_component_picture import ShapePicture
-from hwp5.binmodel.tagid70_shape_component_container import ShapeContainer
-from hwp5.binmodel.tagid71_ctrl_data import ControlData
-from hwp5.binmodel.tagid72_ctrl_eqedit import EqEdit
-from hwp5.binmodel.tagid74_shape_component_textart import ShapeTextArt
-from hwp5.binmodel.tagid75_form_object import FormObject
-from hwp5.binmodel.tagid76_memo_shape import MemoShape
-from hwp5.binmodel.tagid77_memo_list import MemoList
-from hwp5.binmodel.tagid78_forbidden_char import ForbiddenChar
-from hwp5.binmodel.tagid79_chart_data import ChartData
-from hwp5.binmodel.tagid99_shape_component_unknown import ShapeUnknown
-from hwp5.dataio import dumpbytes
-from hwp5.treeop import prefix_ancestors_from_level
-from hwp5.utils import JsonObjects
-from hwp5.importhelper import importjson
+from .. import recordstream
+from ..bintype import ERROREVENT
+from ..bintype import resolve_type_events
+from ..bintype import resolve_values_from_stream
+from ..dataio import ParseError
+from ..dataio import dumpbytes
+from ..recordstream import nth
+from ..tagids import tagnames
+from ..treeop import STARTEVENT
+from ..treeop import ENDEVENT
+from ..treeop import prefix_ancestors_from_level
+from ..utils import JsonObjects
+
+from ._shared import tag_models
+from ._shared import RecordModel
+from ._shared import BinStorageId
+from ._shared import COLORREF
+from ._shared import Margin
+from .controlchar import CHID
+from .controlchar import ControlChar
+from .tagid16_document_properties import DocumentProperties
+from .tagid17_id_mappings import IdMappings
+from .tagid18_bin_data import BinData
+from .tagid20_border_fill import BorderFill
+from .tagid19_face_name import FaceName
+from .tagid21_char_shape import CharShape
+from .tagid21_char_shape import LanguageStruct
+from .tagid22_tab_def import TabDef
+from .tagid23_numbering import Numbering
+from .tagid24_bullet import Bullet
+from .tagid25_para_shape import ParaShape
+from .tagid26_style import Style
+from .tagid27_doc_data import DocData
+from .tagid28_distribute_doc_data import DistributeDocData
+from .tagid30_compatible_document import CompatibleDocument
+from .tagid31_layout_compatibility import LayoutCompatibility
+from .tagid32_unknown import TagModel32
+from .tagid50_para_header import Paragraph
+from .tagid51_para_text import ParaText
+from .tagid51_para_text import ParaTextChunks
+from .tagid52_para_char_shape import ParaCharShape
+from .tagid53_para_line_seg import ParaLineSeg
+from .tagid53_para_line_seg import ParaLineSegList
+from .tagid53_para_line_seg import LineSeg
+from .tagid54_para_range_tag import ParaRangeTag
+from .tagid55_ctrl_header import Control
+from .controls.bookmark_control import BookmarkControl
+from .controls.columns_def import ColumnsDef
+from .controls.common_controls import CommonControl
+from .controls.dutmal import Dutmal
+from .controls.field import Field
+from .controls.field import FieldUnknown
+from .controls.field import FieldDate
+from .controls.field import FieldDocDate
+from .controls.field import FieldPath
+from .controls.field import FieldBookmark
+from .controls.field import FieldMailMerge
+from .controls.field import FieldCrossRef
+from .controls.field import FieldFormula
+from .controls.field import FieldClickHere
+from .controls.field import FieldClickHereData
+from .controls.field import FieldSummary
+from .controls.field import FieldUserInfo
+from .controls.field import FieldHyperLink
+from .controls.field import FieldMemo
+from .controls.field import FieldPrivateInfoSecurity
+from .controls.gshape_object_control import GShapeObjectControl
+from .controls.header_footer import HeaderFooter
+from .controls.header_footer import Header
+from .controls.header_footer import Footer
+from .controls.hidden_comment import HiddenComment
+from .controls.index_marker import IndexMarker
+from .controls.note import Note
+from .controls.note import FootNote
+from .controls.note import EndNote
+from .controls.numbering import AutoNumbering
+from .controls.numbering import NewNumbering
+from .controls.page_hide import PageHide
+from .controls.page_number_position import PageNumberPosition
+from .controls.page_odd_even import PageOddEven
+from .controls.section_def import SectionDef
+from .controls.table_control import TableControl
+from .controls.tcps_control import TCPSControl
+from .tagid56_list_header import ListHeader
+from .tagid56_list_header import TableCaption
+from .tagid56_list_header import TableCell
+from .tagid56_list_header import TextboxParagraphList
+from .tagid56_list_header import HeaderParagraphList
+from .tagid56_list_header import FooterParagraphList
+from .tagid57_page_def import PageDef
+from .tagid58_footnote_shape import FootnoteShape
+from .tagid59_page_border_fill import PageBorderFill
+from .tagid60_shape_component import ShapeComponent
+from .tagid61_table import TableBody
+from .tagid62_shape_component_line import ShapeLine
+from .tagid63_shape_component_rectangle import ShapeRectangle
+from .tagid64_shape_component_ellipse import ShapeEllipse
+from .tagid65_shape_component_arc import ShapeArc
+from .tagid66_shape_component_polygon import ShapePolygon
+from .tagid67_shape_component_curve import ShapeCurve
+from .tagid68_shape_component_ole import ShapeOLE
+from .tagid69_shape_component_picture import ShapePicture
+from .tagid70_shape_component_container import ShapeContainer
+from .tagid71_ctrl_data import ControlData
+from .tagid72_ctrl_eqedit import EqEdit
+from .tagid74_shape_component_textart import ShapeTextArt
+from .tagid75_form_object import FormObject
+from .tagid76_memo_shape import MemoShape
+from .tagid77_memo_list import MemoList
+from .tagid78_forbidden_char import ForbiddenChar
+from .tagid79_chart_data import ChartData
+from .tagid99_shape_component_unknown import ShapeUnknown
 
 # to suppress pyflake8 warning 'imported but not used'
 RecordModel
@@ -231,9 +237,6 @@ TableControl
 TCPSControl
 
 
-StringIO = importStringIO()
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -266,7 +269,7 @@ def init_record_parsing_context(base, record):
         :returns: new context
     '''
 
-    return dict(base, record=record, stream=StringIO(record['payload']))
+    return dict(base, record=record, stream=BytesIO(record['payload']))
 
 
 def parse_models(context, records):
@@ -393,8 +396,6 @@ def resolve_model_events(context, model):
 
 
 def get_extension_mro(cls, up_to_cls=None):
-    import inspect
-    from itertools import takewhile
     mro = inspect.getmro(cls)
     mro = takewhile(lambda cls: cls is not up_to_cls, mro)
     mro = list(cls for cls in mro if 'attributes' in cls.__dict__)
@@ -404,7 +405,6 @@ def get_extension_mro(cls, up_to_cls=None):
 
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
-    json = importjson()
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model
@@ -464,7 +464,7 @@ class ModelStream(recordstream.RecordStream):
         context = dict(version=self.version)
 
         def resolve_values_from_record(record):
-            stream = StringIO(record['payload'])
+            stream = BytesIO(record['payload'])
             return resolve_values_from_stream(stream)
 
         for group_idx, records in enumerate(self.records_treegrouped()):
@@ -474,7 +474,7 @@ class ModelStream(recordstream.RecordStream):
                 if item['type'] is RecordModel:
                     if event is STARTEVENT:
                         record_frame = item['record']
-                        stream = StringIO(record_frame['payload'])
+                        stream = BytesIO(record_frame['payload'])
                         resolve_values = resolve_values_from_stream(stream)
                         item['stream'] = stream
                         item['resolve_values'] = resolve_values
