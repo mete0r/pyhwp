@@ -5,6 +5,7 @@ CHANGES
 -------------------
 
 - Remove dependency on PyCrypto.
+  - [CVE-2013-7458], [CVE-2018-6594]
 - Add dependency on cryptography.
 
 
