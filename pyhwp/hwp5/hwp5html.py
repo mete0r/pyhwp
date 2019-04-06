@@ -92,7 +92,7 @@ class HTMLTransform(BaseTransform):
         with self.transformed_xhwp5_at_temp(hwp5file) as xhwp5path:
             self.transform_xhwp5_to_dir(xhwp5path, outdir)
 
-        bindata_dir = os.path.join(outdir, b'bindata')
+        bindata_dir = os.path.join(outdir, 'bindata')
         self.extract_bindata_dir(hwp5file, bindata_dir)
 
     @cached_property
@@ -115,11 +115,11 @@ class HTMLTransform(BaseTransform):
         '''
         >>> T.transform_xhwp5_to_dir('hwp5.xml', 'output')
         '''
-        html_path = os.path.join(outdir, b'index.xhtml')
+        html_path = os.path.join(outdir, 'index.xhtml')
         with io.open(html_path, 'wb') as f:
             self.transform_xhwp5_to_xhtml(xhwp5path, f)
 
-        css_path = os.path.join(outdir, b'styles.css')
+        css_path = os.path.join(outdir, 'styles.css')
         with io.open(css_path, 'wb') as f:
             self.transform_xhwp5_to_css(xhwp5path, f)
 
@@ -171,9 +171,9 @@ def main():
         with closing(Hwp5File(hwp5path)) as hwp5file:
             with open_dest() as dest:
                 transform(hwp5file, dest)
-    except ParseError, e:
+    except ParseError as e:
         e.print_to_logger(logger)
-    except InvalidHwp5FileError, e:
+    except InvalidHwp5FileError as e:
         logger.error('%s', e)
         sys.exit(1)
 

@@ -37,11 +37,19 @@ import shutil
 import sys
 
 
+PY2 = sys.version_info.major == 2
+
+
 def main(args):
+    if PY2:
+        output_fp = sys.stdout
+    else:
+        output_fp = sys.stdout.buffer
+
     from hwp5.filestructure import Hwp5File
     hwp5file = Hwp5File(args['<hwp5file>'])
     f = hwp5file.header.open_text()
     try:
-        shutil.copyfileobj(f, sys.stdout)
+        shutil.copyfileobj(f, output_fp)
     finally:
         hwp5file.close()

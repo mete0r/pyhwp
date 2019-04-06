@@ -20,6 +20,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from six import with_metaclass
+
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_PARA_CHAR_SHAPE
 from hwp5.dataio import ArrayType
@@ -42,8 +44,8 @@ class ParaCharShape(RecordModel):
     attributes = staticmethod(attributes)
 
 
-class ParaCharShapeList(list):
-    __metaclass__ = ArrayType
+class ParaCharShapeList(with_metaclass(ArrayType, list)):
+
     itemtype = ARRAY(UINT16, 2)
 
     def read(cls, f, context):

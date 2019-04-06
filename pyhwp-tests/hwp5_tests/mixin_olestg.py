@@ -53,24 +53,24 @@ class OleStorageTestMixin(object):
             return
         olestg = self.olestg
         self.assertTrue(is_storage(olestg))
-        # self.assertEquals('', olestg.path)
+        # self.assertEqual('', olestg.path)
 
         docinfo = olestg['DocInfo']
         self.assertTrue(is_stream(docinfo))
-        # self.assertEquals('DocInfo', docinfo.path)
+        # self.assertEqual('DocInfo', docinfo.path)
 
         bodytext = olestg['BodyText']
         self.assertTrue(is_storage(bodytext))
-        # self.assertEquals('BodyText', bodytext.path)
+        # self.assertEqual('BodyText', bodytext.path)
 
         section = bodytext['Section0']
         self.assertTrue(is_stream(section))
-        # self.assertEquals('BodyText/Section0', section.path)
+        # self.assertEqual('BodyText/Section0', section.path)
 
         f = section.open()
         try:
             data = f.read()
-            self.assertEquals(1529, len(data))
+            self.assertEqual(1529, len(data))
         finally:
             f.close()
 
@@ -100,7 +100,7 @@ class OleStorageTestMixin(object):
         expected = ['FileHeader', 'BodyText', 'BinData', 'Scripts',
                     'DocOptions', 'DocInfo', 'PrvText', 'PrvImage',
                     '\x05HwpSummaryInformation']
-        self.assertEquals(sorted(expected), sorted(gen))
+        self.assertEqual(sorted(expected), sorted(gen))
 
     def test_getitem(self):
         if self.OleStorage is None:
@@ -120,9 +120,9 @@ class OleStorageTestMixin(object):
 
         bindata = olestg['BinData']
         self.assertTrue(is_storage(bindata))
-        # self.assertEquals('BinData', bindata.path)
+        # self.assertEqual('BinData', bindata.path)
 
-        self.assertEquals(sorted(['BIN0002.jpg', 'BIN0002.png',
+        self.assertEqual(sorted(['BIN0002.jpg', 'BIN0002.png',
                                   'BIN0003.png']),
                           sorted(iter(bindata)))
 
@@ -142,13 +142,13 @@ class OleStorageTestMixin(object):
         stream2 = fileheader.open()
 
         x = stream1.read(4)
-        self.assertEquals(4, len(x))
-        self.assertEquals(4, stream1.tell())
+        self.assertEqual(4, len(x))
+        self.assertEqual(4, stream1.tell())
 
-        self.assertEquals(0, stream2.tell())
+        self.assertEqual(0, stream2.tell())
 
         stream1.seek(0)
-        self.assertEquals(0, stream1.tell())
+        self.assertEqual(0, stream1.tell())
 
     def test_iter_storage_leafs(self):
         if self.OleStorage is None:
@@ -160,7 +160,7 @@ class OleStorageTestMixin(object):
                     'BodyText/Section0', 'DocInfo', 'DocOptions/_LinkDoc',
                     'FileHeader', 'PrvImage', 'PrvText',
                     'Scripts/DefaultJScript', 'Scripts/JScriptVersion']
-        self.assertEquals(sorted(expected), sorted(result))
+        self.assertEqual(sorted(expected), sorted(result))
 
     def test_unpack(self):
         if self.OleStorage is None:

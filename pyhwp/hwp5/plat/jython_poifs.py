@@ -20,8 +20,14 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 import os.path
+import sys
 
 from ..errors import InvalidOleStorageError
+
+
+PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
 
 
 def is_enabled():
@@ -51,7 +57,7 @@ class OleStorage(object):
             fis = FileInputStream(path)
             try:
                 fs = POIFSFileSystem(fis)
-            except IOException, e:
+            except IOException as e:
                 raise InvalidOleStorageError(e.getMessage())
             entry = fs.getRoot()
         elif isinstance(olefile, DirectoryEntry):

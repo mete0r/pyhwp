@@ -25,6 +25,7 @@ from pprint import pformat
 from tempfile import TemporaryFile
 import base64
 import logging
+import sys
 
 from . import binmodel
 from . import filestructure
@@ -56,6 +57,12 @@ from .treeop import tree_events
 from .treeop import tree_events_multi
 from .xmlformat import startelement
 from .xmlformat import xmlevents_to_bytechunks
+
+
+PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
+    unichr = chr
 
 
 logger = logging.getLogger(__name__)
@@ -94,7 +101,10 @@ def make_ranged_shapes(shapes):
 
 
 def split_and_shape(chunks, ranged_shapes):
-    (chunk_start, chunk_end), chunk_attr, chunk = chunks.next()
+    try:
+        (chunk_start, chunk_end), chunk_attr, chunk = next(chunks)
+    except StopIteration:
+        return
     for (shape_start, shape_end), shape in ranged_shapes:
         while True:
             # case 0: chunk has left intersection
@@ -117,20 +127,23 @@ def split_and_shape(chunks, ranged_shapes):
             if shape_end < chunk_end:           # (2)
                 prev = ((chunk_start, shape_end),
                         chunk[:shape_end - chunk_start])
-                next = ((shape_end, chunk_end),
+                nexT = ((shape_end, chunk_end),
                         chunk[shape_end - chunk_start:])
                 (chunk_start, chunk_end), chunk = prev
             else:
-                next = None
+                nexT = None
 
             assert chunk_end <= shape_end       # by (2)
             yield (chunk_start, chunk_end), (shape, chunk_attr), chunk
 
-            if next is not None:
-                (chunk_start, chunk_end), chunk = next
+            if nexT is not None:
+                (chunk_start, chunk_end), chunk = nexT
                 continue
 
-            (chunk_start, chunk_end), chunk_attr, chunk = chunks.next()
+            try:
+                (chunk_start, chunk_end), chunk_attr, chunk = next(chunks)
+            except StopIteration:
+                return
 
 
 def line_segmented(chunks, ranged_linesegs):
@@ -341,7 +354,7 @@ def meci_controlchar(event, stack, item, attributes):
             tev = tree_events(*control_subtree)
             # to evade the Control/STARTEVENT trigger
             # in parse_models_pass3()
-            yield tev.next()
+            yield next(tev)
 
             for k in make_extended_controls_inline(tev, stack):
                 yield k
@@ -516,6 +529,7 @@ def embed_bindata(event_prefixed_mac, bindata):
                 finally:
                     bin_stream.close()
                 b64 = base64.b64encode(binary)
+                b64 = b64.decode('ascii')
                 truncated = []
                 while b64:
                     if len(b64) > 64:

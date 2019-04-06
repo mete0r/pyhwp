@@ -21,6 +21,12 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import io
 import os.path
+import sys
+
+
+PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
 
 
 def is_storage(item):
@@ -159,4 +165,4 @@ def printstorage(stg, basepath=''):
         if is_storage(item):
             printstorage(item, path + '/')
         elif is_stream(item):
-            print(path.encode('unicode_escape'))
+            print(path.encode('unicode_escape').decode('utf-8'))

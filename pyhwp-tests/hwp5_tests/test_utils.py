@@ -16,38 +16,27 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Deflate an headerless zlib-compressed stream
-
-Usage::
-
-    hwp5proc rawunz [--loglevel=<loglevel>] [--logfile=<logfile>]
-    hwp5proc rawunz --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-import sys
-import shutil
+from unittest import TestCase
 
-from ..zlib_raw_codec import StreamReader
-
-
-PY2 = sys.version_info.major == 2
+from hwp5.utils import unicode_escape
+from hwp5.utils import unicode_unescape
 
 
-def main(args):
-    if PY2:
-        input_fp = sys.stdin
-        output_fp = sys.stdout
-    else:
-        input_fp = sys.stdin.buffer
-        output_fp = sys.stdout.buffer
+class UnicodeEscapeTest(TestCase):
 
-    stream = StreamReader(input_fp)
-    shutil.copyfileobj(stream, output_fp)
+    def test_escape(self):
+        s = '\x05HwpSummaryInfo'
+        self.assertEqual(
+            '\\x05HwpSummaryInfo',
+            unicode_escape(s),
+        )
+
+    def test_unescape(self):
+        s = '\\x05HwpSummaryInfo'
+        self.assertEqual(
+            '\x05HwpSummaryInfo',
+            unicode_unescape(s),
+        )

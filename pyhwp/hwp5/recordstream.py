@@ -120,7 +120,7 @@ def record_to_json(record, *args, **kwargs):
 
 def nth(iterable, n, default=None):
     try:
-        return islice(iterable, n, None).next()
+        return next(islice(iterable, n, None))
     except StopIteration:
         return default
 
@@ -131,7 +131,7 @@ def group_records_by_toplevel(records, group_as_list=True):
     context = dict()
 
     try:
-        context['top'] = records.next()
+        context['top'] = next(records)
     except StopIteration:
         return
 

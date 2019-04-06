@@ -336,7 +336,7 @@ class TestCase(unittest.TestCase):
         tested_value = context.xpath(tested, namespaces=context.nsmap)
         logger.info(' '*7+'- expected: %r', expected_value)
         logger.info(' '*7+'- tested: %r', tested_value)
-        self.assertEquals(expected_value, tested_value)
+        self.assertEqual(expected_value, tested_value)
 
     def expect_text(self, text):
         sourceline = self.sourceline
@@ -344,7 +344,7 @@ class TestCase(unittest.TestCase):
 
         logger.info('%5s: expecting text: %r', sourceline, text)
 
-        self.assertEquals(text, context.text)
+        self.assertEqual(text, context.text)
 
     def expect_shell(self):
         xpath_inspect(self.context, None, None)

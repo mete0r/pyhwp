@@ -186,10 +186,10 @@ def main():
 
     try:
         return main(args)
-    except InvalidHwp5FileError, e:
+    except InvalidHwp5FileError as e:
         logger.error('%s', e)
         raise SystemExit(1)
-    except ParseError, e:
+    except ParseError as e:
         e.print_to_logger(logger)
         raise SystemExit(1)
 

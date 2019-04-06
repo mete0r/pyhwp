@@ -32,19 +32,19 @@ class TestUncompress(TestCase):
         data += dec.decode(compressed_data[2048 + 1024:2048 + 1024 + 4096])
         data += dec.decode(compressed_data[2048 + 1024 + 4096:], True)
 
-        self.assertEquals(self.original_data, data)
+        self.assertEqual(self.original_data, data)
 
     def test_decompress(self):
 
         gen = decompress_gen(BytesIO(self.compressed_data[2:]))
-        self.assertEquals(self.original_data, b''.join(gen))
+        self.assertEqual(self.original_data, b''.join(gen))
 
         # print '-----'
 
         f = decompress(BytesIO(self.compressed_data[2:]))
         g = BytesIO(self.original_data)
 
-        self.assertEquals(f.read(2048), g.read(2048))
-        self.assertEquals(f.read(1024), g.read(1024))
-        self.assertEquals(f.read(4096), g.read(4096))
-        self.assertEquals(f.read(), g.read())
+        self.assertEqual(f.read(2048), g.read(2048))
+        self.assertEqual(f.read(1024), g.read(1024))
+        self.assertEqual(f.read(4096), g.read(4096))
+        self.assertEqual(f.read(), g.read())

@@ -278,7 +278,7 @@
          </text:p>
          <text:p text:style-name="Paragraph-26">
            <text:span>&#xB2E4;&#xC74C; &#xD398;&#xC774;&#xC9C0;</text:span>
-           <draw:frame draw:style-name="Shape-2" draw:transform=" translate (0mm 0mm) matrix (0.743494423792 0.0 0.0 0.743494423792 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) translate (0mm 0mm)" draw:z-index="4" svg:height="5.69mm" svg:width="5.69mm" text:anchor-type="as-char">
+           <draw:frame draw:style-name="Shape-2" draw:transform=" translate (0mm 0mm) matrix (0.7434944237918215 0.0 0.0 0.7434944237918215 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) translate (0mm 0mm)" draw:z-index="4" svg:height="5.69mm" svg:width="5.69mm" text:anchor-type="as-char">
              <draw:image xlink:actuate="onLoad" xlink:href="bindata/BIN0003.png" xlink:show="embed" xlink:type="simple"/>
            </draw:frame>
          </text:p>
@@ -1041,7 +1041,7 @@
          </text:p>
          <text:p text:style-name="Paragraph-26">
            <text:span>&#xB2E4;&#xC74C; &#xD398;&#xC774;&#xC9C0;</text:span>
-           <draw:frame draw:style-name="Shape-2" draw:transform=" translate (0mm 0mm) matrix (0.743494423792 0.0 0.0 0.743494423792 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) translate (0mm 0mm)" draw:z-index="4" svg:height="5.69mm" svg:width="5.69mm" text:anchor-type="as-char">
+           <draw:frame draw:style-name="Shape-2" draw:transform=" translate (0mm 0mm) matrix (0.7434944237918215 0.0 0.0 0.7434944237918215 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) matrix (1.0 0.0 0.0 1.0 0mm 0mm) translate (0mm 0mm)" draw:z-index="4" svg:height="5.69mm" svg:width="5.69mm" text:anchor-type="as-char">
              <draw:image>
                <office:binary-data>
    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5

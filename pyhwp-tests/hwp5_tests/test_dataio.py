@@ -6,6 +6,8 @@ from io import BytesIO
 from unittest import TestCase
 import sys
 
+from six import add_metaclass
+
 from hwp5.bintype import read_type
 from hwp5.dataio import ARRAY, N_ARRAY
 from hwp5.dataio import BSTR
@@ -25,6 +27,12 @@ from hwp5.dataio import StructType
 from hwp5.dataio import decode_utf16le_with_hypua
 from hwp5.dataio import typed_struct_attributes
 from hwp5.dataio import _parse_flags_args
+
+
+PY3 = sys.version_info.major == 3
+if PY3:
+    long = int
+    unicode = str
 
 
 class TestArray(TestCase):
@@ -65,7 +73,7 @@ class TestTypedAttributes(TestCase):
         expected = [dict(name='a', type=INT32, value=1),
                     dict(name='b', type=BSTR, value='abc'),
                     dict(name='c', type=ARRAY(INT32, 3), value=(4, 5, 6))]
-        self.assertEquals(expected, typed_attributes)
+        self.assertEqual(expected, typed_attributes)
 
     def test_typed_struct_attributes_inherited(self):
 
@@ -85,24 +93,24 @@ class TestTypedAttributes(TestCase):
         expected = [dict(name='a', type=INT32, value=1),
                     dict(name='b', type=BSTR, value='abc'),
                     dict(name='c', type=tuple, value=(2, 2))]
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
 
 class TestStructType(TestCase):
     def test_assign_enum_flags_name(self):
 
+        @add_metaclass(StructType)
         class Foo(object):
-            __metaclass__ = StructType
             bar = Enum()
             baz = Flags(UINT16)
-        self.assertEquals('bar', Foo.bar.__name__)
-        self.assertEquals(Foo, Foo.bar.scoping_struct)
-        self.assertEquals('baz', Foo.baz.__name__)
+        self.assertEqual('bar', Foo.bar.__name__)
+        self.assertEqual(Foo, Foo.bar.scoping_struct)
+        self.assertEqual('baz', Foo.baz.__name__)
 
     def test_parse_members(self):
 
+        @add_metaclass(StructType)
         class A(object):
-            __metaclass__ = StructType
 
             @classmethod
             def attributes(cls):
@@ -117,17 +125,17 @@ class TestStructType(TestCase):
 
         context = dict()
         result = list(A.parse_members(context, getvalue))
-        self.assertEquals([dict(name='uint8', type=UINT8, value=8),
-                           dict(name='uint16', type=UINT16, value=16),
-                           dict(name='uint32', type=UINT32, value=32)], result)
+        self.assertEqual([dict(name='uint8', type=UINT8, value=8),
+                          dict(name='uint16', type=UINT16, value=16),
+                          dict(name='uint32', type=UINT32, value=32)], result)
 
     def test_parse_members_condition(self):
 
         def uint32_is_32(context, values):
             return values['uint32'] == 32
 
+        @add_metaclass(StructType)
         class A(object):
-            __metaclass__ = StructType
 
             @classmethod
             def attributes(cls):
@@ -143,17 +151,18 @@ class TestStructType(TestCase):
 
         context = dict()
         result = list(A.parse_members(context, getvalue))
-        self.assertEquals([dict(name='uint8', type=UINT8, value=8),
-                           dict(name='uint16', type=UINT16, value=16),
-                           dict(name='uint32', type=UINT32, value=32),
-                           dict(name='extra', type=UINT32, value=666,
-                                condition=uint32_is_32)],
-                          result)
+        self.assertEqual([dict(name='uint8', type=UINT8, value=8),
+                          dict(name='uint16', type=UINT16, value=16),
+                          dict(name='uint32', type=UINT32, value=32),
+                          dict(name='extra', type=UINT32, value=666,
+                               condition=uint32_is_32)],
+                         result)
 
     def test_parse_members_empty(self):
 
+        @add_metaclass(StructType)
         class A(object):
-            __metaclass__ = StructType
+            pass
 
         value = dict()
 
@@ -162,12 +171,12 @@ class TestStructType(TestCase):
 
         context = dict()
         result = list(A.parse_members_with_inherited(context, getvalue))
-        self.assertEquals([], result)
+        self.assertEqual([], result)
 
     def test_parse_members_inherited(self):
 
+        @add_metaclass(StructType)
         class A(object):
-            __metaclass__ = StructType
 
             @classmethod
             def attributes(cls):
@@ -190,19 +199,19 @@ class TestStructType(TestCase):
 
         context = dict()
         result = list(B.parse_members_with_inherited(context, getvalue))
-        self.assertEquals([dict(name='uint8', type=UINT8, value=8),
-                           dict(name='uint16', type=UINT16, value=16),
-                           dict(name='uint32', type=UINT32, value=32),
-                           dict(name='int8', type=INT8, value=-1),
-                           dict(name='int16', type=INT16, value=-16),
-                           dict(name='int32', type=INT32, value=-32)],
-                          result)
+        self.assertEqual([dict(name='uint8', type=UINT8, value=8),
+                          dict(name='uint16', type=UINT16, value=16),
+                          dict(name='uint32', type=UINT32, value=32),
+                          dict(name='int8', type=INT8, value=-1),
+                          dict(name='int16', type=INT16, value=-16),
+                          dict(name='int32', type=INT32, value=-32)],
+                         result)
 
 
 class TestEnumType(TestCase):
     def test_enum(self):
         Foo = EnumType(
-            b'Foo',
+            str('Foo'),
             (int,),
             dict(items=['a', 'b', 'c'], moreitems=dict(d=1, e=4))
         )
@@ -211,11 +220,11 @@ class TestEnumType(TestCase):
         self.assertRaises(AttributeError, getattr, Foo, 'moreitems')
 
         # class members
-        self.assertEquals(0, Foo.a)
-        self.assertEquals(1, Foo.b)
-        self.assertEquals(2, Foo.c)
-        self.assertEquals(1, Foo.d)
-        self.assertEquals(4, Foo.e)
+        self.assertEqual(0, Foo.a)
+        self.assertEqual(1, Foo.b)
+        self.assertEqual(2, Foo.c)
+        self.assertEqual(1, Foo.d)
+        self.assertEqual(4, Foo.e)
         self.assertTrue(isinstance(Foo.a, Foo))
 
         # same instances
@@ -226,17 +235,17 @@ class TestEnumType(TestCase):
         self.assertTrue(Foo(0) is not 0)
 
         # instance names
-        self.assertEquals('a', Foo.a.name)
-        self.assertEquals('b', Foo.b.name)
+        self.assertEqual('a', Foo.a.name)
+        self.assertEqual('b', Foo.b.name)
 
         # aliases
-        self.assertEquals('b', Foo.d.name)
+        self.assertEqual('b', Foo.d.name)
         self.assertTrue(Foo.b is Foo.d)
 
         # repr
-        self.assertEquals('Foo.a', repr(Foo(0)))
-        self.assertEquals('Foo.b', repr(Foo(1)))
-        self.assertEquals('Foo.e', repr(Foo(4)))
+        self.assertEqual('Foo.a', repr(Foo(0)))
+        self.assertEqual('Foo.b', repr(Foo(1)))
+        self.assertEqual('Foo.e', repr(Foo(4)))
 
         # frozen attribute set
         self.assertRaises(AttributeError, setattr, Foo(0), 'bar', 0)
@@ -251,8 +260,8 @@ class TestEnumType(TestCase):
         # undefined value: warning but not error
         undefined = Foo(5)
         self.assertTrue(isinstance(undefined, Foo))
-        self.assertEquals(None, undefined.name)
-        self.assertEquals('Foo(5)', repr(undefined))
+        self.assertEqual(None, undefined.name)
+        self.assertEqual('Foo(5)', repr(undefined))
 
         # can't define anymore
         self.assertRaises(TypeError, Foo, 5, 'f')
@@ -265,15 +274,15 @@ class TestFlags(TestCase):
     def test_parse_args(self):
         x = list(_parse_flags_args([0, 1, long, 'bit01']))
         bit01 = ('bit01', (0, 1, long))
-        self.assertEquals([bit01], x)
+        self.assertEqual([bit01], x)
 
         x = list(_parse_flags_args([2, 3, 'bit23']))
         bit23 = ('bit23', (2, 3, int))
-        self.assertEquals([bit23], x)
+        self.assertEqual([bit23], x)
 
         x = list(_parse_flags_args([4, long, 'bit4']))
         bit4 = ('bit4', (4, 4, long))
-        self.assertEquals([bit4], x)
+        self.assertEqual([bit4], x)
 
         x = list(_parse_flags_args([5, 'bit5']))
         bit5 = ('bit5', (5, 5, int))
@@ -282,11 +291,11 @@ class TestFlags(TestCase):
                                     2, 3, 'bit23',
                                     4, long, 'bit4',
                                     5, 'bit5']))
-        self.assertEquals([bit01, bit23, bit4, bit5], x)
+        self.assertEqual([bit01, bit23, bit4, bit5], x)
 
     def test_basetype(self):
         MyFlags = Flags(UINT32)
-        self.assertEquals(UINT32, MyFlags.basetype)
+        self.assertEqual(UINT32, MyFlags.basetype)
 
     def test_bitfields(self):
         MyEnum = Enum(a=1, b=2)
@@ -297,11 +306,11 @@ class TestFlags(TestCase):
         )
         bitfields = MyFlags.bitfields
         f = bitfields['field0']
-        self.assertEquals((0, 1, int),
-                          (f.lsb, f.msb, f.valuetype))
+        self.assertEqual((0, 1, int),
+                         (f.lsb, f.msb, f.valuetype))
         f = bitfields['field2']
-        self.assertEquals((2, 4, MyEnum),
-                          (f.lsb, f.msb, f.valuetype))
+        self.assertEqual((2, 4, MyEnum),
+                         (f.lsb, f.msb, f.valuetype))
 
     @property
     def ByteFlags(self):
@@ -311,8 +320,8 @@ class TestFlags(TestCase):
 
     def test_dictvalue(self):
         flags = self.ByteFlags(0xf0)
-        self.assertEquals(dict(low=0, high=0xf),
-                          flags.dictvalue())
+        self.assertEqual(dict(low=0, high=0xf),
+                         flags.dictvalue())
 
 
 class TestReadStruct(TestCase):
@@ -332,10 +341,10 @@ class TestReadStruct(TestCase):
         try:
             read_type(Foo, context, stream)
             assert False, 'ParseError expected'
-        except ParseError, e:
-            self.assertEquals(Foo, e.binevents[0][1]['type'])
-            self.assertEquals('a', e.binevents[-1][1]['name'])
-            self.assertEquals(0, e.offset)
+        except ParseError as e:
+            self.assertEqual(Foo, e.binevents[0][1]['type'])
+            self.assertEqual('a', e.binevents[-1][1]['name'])
+            self.assertEqual(0, e.offset)
 
 
 class TestBSTR(TestCase):
@@ -344,15 +353,19 @@ class TestBSTR(TestCase):
         f = BytesIO(b'\x03\x00' + u'가나다'.encode('utf-16le'))
 
         s = BSTR.read(f)
-        self.assertEquals(u'가나다', s)
+        self.assertEqual(u'가나다', s)
 
         pua = u'\ub098\ub78f\u302e\ub9d0\u302f\uebd4\ubbf8\u302e'
         pua_utf16le = pua.encode('utf-16le')
-        f = BytesIO(chr(len(pua)) + b'\x00' + pua_utf16le)
+        if PY3:
+            lengthbyte = bytes([len(pua)])
+        else:
+            lengthbyte = chr(len(pua))
+        f = BytesIO(lengthbyte + b'\x00' + pua_utf16le)
 
         jamo = BSTR.read(f)
         expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
-        self.assertEquals(expected, jamo)
+        self.assertEqual(expected, jamo)
 
 
 class TestDecodeUTF16LEPUA(TestCase):
@@ -361,4 +374,4 @@ class TestDecodeUTF16LEPUA(TestCase):
         expected = u'가나다'
         bytes = expected.encode('utf-16le')
         u = decode_utf16le_with_hypua(bytes)
-        self.assertEquals(expected, u)
+        self.assertEqual(expected, u)

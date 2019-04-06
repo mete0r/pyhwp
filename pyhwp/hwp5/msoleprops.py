@@ -674,4 +674,4 @@ def uuid_from_bytes_tuple(t):
 
 
 def nullterminated_string(bs):
-    return b''.join(chr(x) for x in bs)[:-1]
+    return ''.join(chr(x) for x in bs)[:-1]

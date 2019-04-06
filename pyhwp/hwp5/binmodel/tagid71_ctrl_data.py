@@ -20,6 +20,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from six import with_metaclass
+
 from hwp5.binmodel._shared import RecordModelType
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_CTRL_DATA
@@ -39,10 +41,9 @@ class ControlDataType(RecordModelType):
         return cls
 
 
-class ControlData(RecordModel):
+class ControlData(with_metaclass(ControlDataType, RecordModel)):
     ''' 4.2.8. 컨트롤 임의의 데이터 '''
 
-    __metaclass__ = ControlDataType
     tagid = HWPTAG_CTRL_DATA
 
     extension_types = control_data_models

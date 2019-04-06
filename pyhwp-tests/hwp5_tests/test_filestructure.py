@@ -10,7 +10,6 @@ import zlib
 
 from hwp5 import filestructure as FS
 from hwp5.errors import InvalidHwp5FileError
-from hwp5.filestructure import GeneratorReader
 from hwp5.filestructure import Hwp5DistDoc
 from hwp5.filestructure import Hwp5DistDocStream
 from hwp5.filestructure import Hwp5DistDocStorage
@@ -29,6 +28,7 @@ from hwp5.tagids import HWPTAG_DISTRIBUTE_DOC_DATA
 from hwp5.tagids import HWPTAG_DOCUMENT_PROPERTIES
 from hwp5.tagids import HWPTAG_PARA_HEADER
 from hwp5.utils import cached_property
+from hwp5.utils import GeneratorReader
 from . import test_ole
 
 
@@ -105,31 +105,31 @@ class TestHwp5DistDocStream(TestBase):
 
     def test_head_record(self):
         record = self.jscriptversion.head_record()
-        self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
+        self.assertEqual(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
 
     def test_head_record_stream(self):
         stream = self.jscriptversion.head_record_stream()
         record = json.load(stream)
-        self.assertEquals(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
+        self.assertEqual(HWPTAG_DISTRIBUTE_DOC_DATA, record['tagid'])
 
         # stream should have been exausted
-        self.assertEquals('', stream.read(1))
+        self.assertEqual('', stream.read(1))
 
     def test_head(self):
         head = self.jscriptversion.head()
-        self.assertEquals(256, len(head))
+        self.assertEqual(256, len(head))
 
     def test_head_stream(self):
         head_stream = self.jscriptversion.head_stream()
-        self.assertEquals(256, len(head_stream.read()))
+        self.assertEqual(256, len(head_stream.read()))
 
     def test_tail(self):
         tail = self.jscriptversion.tail()
-        self.assertEquals(16, len(tail))
+        self.assertEqual(16, len(tail))
 
     def test_tail_stream(self):
         tail_stream = self.jscriptversion.tail_stream()
-        self.assertEquals(16, len(tail_stream.read()))
+        self.assertEqual(16, len(tail_stream.read()))
 
 
 class TestHwp5DistDicStorage(TestBase):
@@ -175,8 +175,8 @@ class TestCompressedStorage(TestBase):
         f = item.open()
         try:
             data = f.read()
-            self.assertEquals(b'\xff\xd8\xff\xe0', data[0:4])
-            self.assertEquals(15895, len(data))
+            self.assertEqual(b'\xff\xd8\xff\xe0', data[0:4])
+            self.assertEqual(15895, len(data))
         finally:
             f.close()
 
@@ -201,18 +201,18 @@ class TestHwp5Compression(TestBase):
 
     def test_docinfo_decompressed(self):
         record = read_record(self.docinfo, 0)
-        self.assertEquals(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
+        self.assertEqual(HWPTAG_DOCUMENT_PROPERTIES, record['tagid'])
 
     def test_bodytext_decompressed(self):
         record = read_record(self.bodytext['Section0'].open(), 0)
-        self.assertEquals(HWPTAG_PARA_HEADER, record['tagid'])
+        self.assertEqual(HWPTAG_PARA_HEADER, record['tagid'])
 
     def test_scripts_version(self):
         hwp5file = self.hwp5file_compressed
         self.assertFalse(hwp5file.header.flags.distributable)
 
         JScriptVersion = self.scripts['JScriptVersion'].open().read()
-        self.assertEquals(8, len(JScriptVersion))
+        self.assertEqual(8, len(JScriptVersion))
 
 
 class TestHwp5File(TestBase):
@@ -235,11 +235,11 @@ class TestHwp5File(TestBase):
         hwp5file = Hwp5File(fs)
         fileheader = hwp5file['FileHeader']
         self.assertTrue(fileheader is not None)
-        self.assertEquals((5, 0, 1, 7), fileheader.version)
+        self.assertEqual((5, 0, 1, 7), fileheader.version)
 
     def test_fileheader(self):
         fileheader = self.hwp5file.header
-        self.assertEquals((5, 0, 1, 7), fileheader.version)
+        self.assertEqual((5, 0, 1, 7), fileheader.version)
         self.assertTrue(fileheader.flags.compressed)
 
     def test_getitem_storage_classes(self):
@@ -251,8 +251,8 @@ class TestHwp5File(TestBase):
     def test_prv_text(self):
         prvtext = self.hwp5file['PrvText']
         self.assertTrue(isinstance(prvtext, PreviewText))
-        expected = b'한글 2005 예제 파일입니다.'
-        self.assertEquals(expected, str(prvtext)[0:len(expected)])
+        expected = '한글 2005 예제 파일입니다.'
+        self.assertEqual(expected, prvtext.text[0:len(expected)])
 
     def test_distdoc_layer_inserted(self):
         # self.hwp5file_name = 'viewtext.hwp'
@@ -297,12 +297,12 @@ class TestHwp5File(TestBase):
             docinfo.close()
 
         docinfo = self.olestg['DocInfo']
-        self.assertEquals(zlib.decompress(docinfo.open().read(), -15), data)
+        self.assertEqual(zlib.decompress(docinfo.open().read(), -15), data)
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
         self.assertTrue(isinstance(bodytext, FS.Sections))
-        self.assertEquals(['Section0'], list(bodytext))
+        self.assertEqual(['Section0'], list(bodytext))
 
 
 class TestSections(TestBase):
@@ -318,26 +318,26 @@ class TestSections(TestBase):
 class TestGeneratorReader(TestCase):
     def test_generator_reader(self):
         def data():
-            yield 'Hello world'
-            yield 'my name is'
-            yield 'gen'
-            yield 'reader'
+            yield b'Hello world'
+            yield b'my name is'
+            yield b'gen'
+            yield b'reader'
 
         f = GeneratorReader(data())
-        self.assertEquals('Hel', f.read(3))
-        self.assertEquals('lo wor', f.read(6))
-        self.assertEquals('ldmy ', f.read(5))
-        self.assertEquals('name isgenre', f.read(12))
-        self.assertEquals('ader', f.read())
+        self.assertEqual(b'Hel', f.read(3))
+        self.assertEqual(b'lo wor', f.read(6))
+        self.assertEqual(b'ldmy ', f.read(5))
+        self.assertEqual(b'name isgenre', f.read(12))
+        self.assertEqual(b'ader', f.read())
 
         f = GeneratorReader(data())
-        self.assertEquals('Hel', f.read(3))
-        self.assertEquals('lo wor', f.read(6))
-        self.assertEquals('ldmy ', f.read(5))
-        self.assertEquals('name isgenreader', f.read())
+        self.assertEqual(b'Hel', f.read(3))
+        self.assertEqual(b'lo wor', f.read(6))
+        self.assertEqual(b'ldmy ', f.read(5))
+        self.assertEqual(b'name isgenreader', f.read())
 
         f = GeneratorReader(data())
-        self.assertEquals('Hel', f.read(3))
-        self.assertEquals('lo wor', f.read(6))
-        self.assertEquals('ldmy ', f.read(5))
-        self.assertEquals('name isgenreader', f.read(1000))
+        self.assertEqual(b'Hel', f.read(3))
+        self.assertEqual(b'lo wor', f.read(6))
+        self.assertEqual(b'ldmy ', f.read(5))
+        self.assertEqual(b'name isgenreader', f.read(1000))

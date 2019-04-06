@@ -102,8 +102,8 @@ def main():
         with closing(Hwp5File(hwp5path)) as hwp5file:
             with open_dest() as dest:
                 transform(hwp5file, dest)
-    except ParseError, e:
+    except ParseError as e:
         e.print_to_logger(logger)
-    except InvalidHwp5FileError, e:
+    except InvalidHwp5FileError as e:
         logger.error('%s', e)
         sys.exit(1)

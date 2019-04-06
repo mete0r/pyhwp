@@ -47,7 +47,7 @@ class TestZipFile(unittest.TestCase, StorageTestMixin):
             folder.file('new-file').put(path)
         with self.get_fixture_folder() as folder:
             with folder['new-file'].open() as f:
-                self.assertEquals('new-file-content', f.read())
+                self.assertEqual('new-file-content', f.read())
 
     def create_fixture_storage(self):
         return _zipfile.ZipFileStorage(self.zipfile_path, 'w')
@@ -82,7 +82,7 @@ class TestZipFile(unittest.TestCase, StorageTestMixin):
         from oxt_tool.storage._zipfile import zipfile_nodes
         with self.create_fixture_zipfile() as zipfile:
             nodes = dict(zipfile_nodes(zipfile))
-            self.assertEquals(set(['foo',
+            self.assertEqual(set(['foo',
                                    os.path.join('foo', 'bar'),
                                    os.path.join('foo', 'bar.txt'),
                                    os.path.join('foo', 'baz.txt'),
