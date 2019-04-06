@@ -14,8 +14,6 @@ matrix:
     - python: "2.7"
       env: TOXENV=jy27
   allow_failures:
-    - python: "pypy"
-      env: TOXENV=pypy
     - python: "2.7"
       env: TOXENV=jy27
 before_install:
