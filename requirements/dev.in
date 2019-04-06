@@ -10,5 +10,5 @@ qtconsole
 restview
 tox >= 3.7.0
 wheel
-zc.buildout
+zc.buildout >= 2.13.1
 zest.releaser
