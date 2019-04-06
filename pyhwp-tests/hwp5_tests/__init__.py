@@ -1,3 +1,6 @@
+from __future__ import print_function
+
+
 def test_suite():
     from unittest import defaultTestLoader as TL
     from unittest import TestSuite as TS
@@ -27,9 +30,8 @@ def test_suite():
     # should not be checked in the source code repository
     try:
         import localtest
-    except ImportError, e:
-        print 'localtest import failed: ', e
-        pass
+    except ImportError as e:
+        print('localtest import failed: ', e)
     else:
         tests[0:0] = [localtest]
 

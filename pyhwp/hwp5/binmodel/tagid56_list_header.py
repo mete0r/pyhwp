@@ -20,6 +20,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from six import with_metaclass
+
 from hwp5.binmodel._shared import RecordModelType
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_LIST_HEADER
@@ -55,10 +57,9 @@ class ListHeaderType(RecordModelType):
         return cls
 
 
-class ListHeader(RecordModel):
+class ListHeader(with_metaclass(ListHeaderType, RecordModel)):
     ''' 4.2.7. 문단 리스트 헤더 '''
 
-    __metaclass__ = ListHeaderType
     tagid = HWPTAG_LIST_HEADER
 
     VAlign = Enum(TOP=0, MIDDLE=1, BOTTOM=2)

@@ -21,6 +21,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from io import BytesIO
 import logging
+import sys
 
 from .bintype import read_type
 from .compressed import decompress
@@ -30,13 +31,16 @@ from .errors import InvalidHwp5FileError
 from .storage import ItemWrapper
 from .storage import StorageWrapper
 from .storage import ItemConversionStorage
-from .storage import is_storage
 from .storage import is_stream
 from .storage.ole import OleStorage
 from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
-from .utils import GeneratorReader
+from .utils import GeneratorTextReader
 from .utils import cached_property
 from .utils import transcoder
+
+PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
 
 
 logger = logging.getLogger(__name__)
@@ -48,16 +52,20 @@ HWP5_SIGNATURE = b'HWP Document File' + (b'\x00' * 15)
 class BYTES(type):
     def __new__(mcs, size):
         decode = staticmethod(lambda bytes, *args, **kwargs: bytes)
-        return type.__new__(mcs, b'BYTES(%d)' % size, (str,),
+        return type.__new__(mcs, str('BYTES(%d)') % size, (str,),
                             dict(fixed_size=size, decode=decode))
 
 
 class VERSION(object):
     fixed_size = 4
 
-    def decode(cls, bytes):
-        return (ord(bytes[3]), ord(bytes[2]),
-                ord(bytes[1]), ord(bytes[0]))
+    if PY3:
+        def decode(cls, bytes):
+            return (bytes[3], bytes[2], bytes[1], bytes[0])
+    else:
+        def decode(cls, bytes):
+            return (ord(bytes[3]), ord(bytes[2]),
+                    ord(bytes[1]), ord(bytes[0]))
     decode = classmethod(decode)
 
 
@@ -175,7 +183,7 @@ class Hwp5FileBase(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        if not is_storage(stg):
+        if isinstance(stg, basestring):
             try:
                 stg = OleStorage(stg)
             except InvalidOleStorageError:
@@ -215,7 +223,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
         from .recordstream import record_to_json
         record = self.head_record()
         json = record_to_json(record)
-        return GeneratorReader(iter([json]))
+        return GeneratorTextReader(iter([json]))
 
     def head(self):
         record = self.head_record()
@@ -299,8 +307,23 @@ class PreviewText(object):
 
     utf8 = cached_property(get_utf8)
 
+    def get_text(self):
+        fp = self.open()
+        try:
+            data = fp.read()
+        finally:
+            fp.close()
+        return data.decode('utf-16le')
+
+    text = cached_property(get_text)
+
     def __str__(self):
+        if PY3:
+            return self.text
         return self.utf8
+
+    def __unicode__(self):
+        return self.text
 
 
 class Sections(ItemConversionStorage):
@@ -373,8 +396,12 @@ class HwpFileHeader(object):
     flags = cached_property(get_flags)
 
     def open_text(self):
+        signature = self.value['signature']
+        signature = signature.decode('latin1')
+        signature = signature[:len('HWP Document File')]
+
         d = FileHeader.Flags.dictvalue(self.value['flags'])
-        d['signature'] = self.value['signature'][:len('HWP Document File')]
+        d['signature'] = signature
         d['version'] = '%d.%d.%d.%d' % self.value['version']
         out = BytesIO()
         for k, v in sorted(d.items()):

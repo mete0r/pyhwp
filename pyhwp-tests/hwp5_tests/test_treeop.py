@@ -29,13 +29,13 @@ class Test_ancestors_from_level(TestCase):
         result = list((list(ancestors), item)
                       for ancestors, item in ancestors_prefixed)
 
-        self.assertEquals(result.pop(0), ([None], 'a0'))
-        self.assertEquals(result.pop(0), ([None], 'b0'))
-        self.assertEquals(result.pop(0), ([None, 'b0'], 'b0-a1'))
-        self.assertEquals(result.pop(0), ([None, 'b0', 'b0-a1'], 'b0-a1-a2'))
-        self.assertEquals(result.pop(0), ([None, 'b0'], 'b0-b1'))
-        self.assertEquals(result.pop(0), ([None, 'b0', 'b0-b1'], 'b0-b1-b2'))
-        self.assertEquals(result.pop(0), ([None], 'c0'))
+        self.assertEqual(result.pop(0), ([None], 'a0'))
+        self.assertEqual(result.pop(0), ([None], 'b0'))
+        self.assertEqual(result.pop(0), ([None, 'b0'], 'b0-a1'))
+        self.assertEqual(result.pop(0), ([None, 'b0', 'b0-a1'], 'b0-a1-a2'))
+        self.assertEqual(result.pop(0), ([None, 'b0'], 'b0-b1'))
+        self.assertEqual(result.pop(0), ([None, 'b0', 'b0-b1'], 'b0-b1-b2'))
+        self.assertEqual(result.pop(0), ([None], 'c0'))
 
     def test_ancestors_from_level_from_nonzero_baselevel(self):
         level_prefixed = [
@@ -47,10 +47,10 @@ class Test_ancestors_from_level(TestCase):
         ancestors_prefixed = prefix_ancestors_from_level(level_prefixed)
         result = list((list(ancestors), item)
                       for ancestors, item in ancestors_prefixed)
-        self.assertEquals(result.pop(0), ([None], 'a0'))
-        self.assertEquals(result.pop(0), ([None, 'a0'], 'a0-a1'))
-        self.assertEquals(result.pop(0), ([None, 'a0', 'a0-a1'], 'a0-a1-a2'))
-        self.assertEquals(result.pop(0), ([None], 'b0'))
+        self.assertEqual(result.pop(0), ([None], 'a0'))
+        self.assertEqual(result.pop(0), ([None, 'a0'], 'a0-a1'))
+        self.assertEqual(result.pop(0), ([None, 'a0', 'a0-a1'], 'a0-a1-a2'))
+        self.assertEqual(result.pop(0), ([None], 'b0'))
 
     def test_ancestors_from_level_fails_at_level_below_baselevel(self):
         level_prefixed = [
@@ -97,8 +97,8 @@ class TestTreeEvents(TestCase):
     def test_tree_events(self):
         event_prefixed_items = [(STARTEVENT, 'a'), (ENDEVENT, 'a')]
         rootitem, childs = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals('a', rootitem)
-        self.assertEquals(0, len(childs))
+        self.assertEqual('a', rootitem)
+        self.assertEqual(0, len(childs))
 
         event_prefixed_items = [
             (STARTEVENT, 'a'),
@@ -106,7 +106,7 @@ class TestTreeEvents(TestCase):
             (ENDEVENT, 'b'),
             (ENDEVENT, 'a')
         ]
-        self.assertEquals(
+        self.assertEqual(
             ('a', [('b', [])]),
             build_subtree(iter(event_prefixed_items[1:]))
         )
@@ -121,13 +121,13 @@ class TestTreeEvents(TestCase):
         ]
 
         result = build_subtree(iter(event_prefixed_items[1:]))
-        self.assertEquals(
+        self.assertEqual(
             ('a', [('b', [('c', []), ('d', [])])]),
             result
         )
 
         back = list(tree_events(*result))
-        self.assertEquals(event_prefixed_items, back)
+        self.assertEqual(event_prefixed_items, back)
 
 
 class TestSubevents(TestCase):
@@ -135,21 +135,21 @@ class TestSubevents(TestCase):
     def test_iter_subevents(self):
 
         events = iter([(STARTEVENT, 'a'), (ENDEVENT, 'a')])
-        events.next()
+        next(events)
         subevents = iter_subevents(events)
-        self.assertEquals([(ENDEVENT, 'a')], list(subevents))
+        self.assertEqual([(ENDEVENT, 'a')], list(subevents))
 
         events = iter([(STARTEVENT, 'a'),
                        (STARTEVENT, 'b'),
                        (None, 'c'),
                        (ENDEVENT, 'b'),
                        (ENDEVENT, 'a')])
-        events.next()
+        next(events)
         subevents = iter_subevents(events)
-        self.assertEquals([(STARTEVENT, 'b'),
-                           (None, 'c'),
-                           (ENDEVENT, 'b'),
-                           (ENDEVENT, 'a')], list(subevents))
+        self.assertEqual([(STARTEVENT, 'b'),
+                          (None, 'c'),
+                          (ENDEVENT, 'b'),
+                          (ENDEVENT, 'a')], list(subevents))
 
         events = iter([(STARTEVENT, 'a'),
                        (None, 'c'),
@@ -157,10 +157,10 @@ class TestSubevents(TestCase):
                        (STARTEVENT, 'b'),
                        (None, 'd'),
                        (ENDEVENT, 'b')])
-        events.next()
+        next(events)
         subevents = iter_subevents(events)
-        self.assertEquals([(None, 'c'),
-                           (ENDEVENT, 'a')], list(subevents))
-        self.assertEquals([(STARTEVENT, 'b'),
-                           (None, 'd'),
-                           (ENDEVENT, 'b')], list(events))
+        self.assertEqual([(None, 'c'),
+                          (ENDEVENT, 'a')], list(subevents))
+        self.assertEqual([(STARTEVENT, 'b'),
+                          (None, 'd'),
+                          (ENDEVENT, 'b')], list(events))

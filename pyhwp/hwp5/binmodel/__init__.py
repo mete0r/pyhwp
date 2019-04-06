@@ -249,7 +249,7 @@ class Text(object):
 
 
 def _check_tag_models():
-    for tagid, name in tagnames.iteritems():
+    for tagid, name in tagnames.items():
         assert tagid in tag_models, 'RecordModel for %s is missing!' % name
 
 
@@ -403,8 +403,17 @@ def get_extension_mro(cls, up_to_cls=None):
     return mro
 
 
+class ModelJsonEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return obj.decode('latin1')
+        return json.JSONEncoder.default(self, obj)
+
+
 def model_to_json(model, *args, **kwargs):
     ''' convert a model to json '''
+    kwargs['cls'] = ModelJsonEncoder
     model = dict(model)
     model['type'] = model['type'].__name__
     record = model

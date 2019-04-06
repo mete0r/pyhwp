@@ -29,7 +29,7 @@ class StorageTestMixin(object):
 
     def test_folder_iterate(self):
         with self.create_fixture_folder() as folder:
-            self.assertEquals(set(['bar.txt', 'baz.txt', 'bar']),
+            self.assertEqual(set(['bar.txt', 'baz.txt', 'bar']),
                               set(folder))
 
     def test_folder_getitem(self):
@@ -49,7 +49,7 @@ class StorageTestMixin(object):
             try:
                 self.assertTrue(hasattr(f, '__enter__'))
                 self.assertTrue(hasattr(f, '__exit__'))
-                self.assertEquals('Hello', f.read())
+                self.assertEqual('Hello', f.read())
             finally:
                 f.close()
 
@@ -67,7 +67,7 @@ class StorageTestMixin(object):
         with self.get_fixture_folder() as folder:
             f = folder['bar.txt'].open()
             try:
-                self.assertEquals('Hello World', f.read())
+                self.assertEqual('Hello World', f.read())
             finally:
                 f.close()
 
@@ -86,7 +86,7 @@ class StorageTestMixin(object):
             node = folder['new-file.txt']
             f = node.open()
             try:
-                self.assertEquals('new-file-contents',
+                self.assertEqual('new-file-contents',
                                   f.read())
             finally:
                 f.close()
@@ -112,10 +112,10 @@ class StorageTestMixin(object):
     def test_resolve_path(self):
         with self.create_fixture_folder() as folder:
             res = resolve_path(folder, '')
-            self.assertEquals(folder, res)
+            self.assertEqual(folder, res)
 
             res = resolve_path(folder, '/')
-            self.assertEquals(folder, res)
+            self.assertEqual(folder, res)
 
     def test_makedirs(self):
         import os.path
@@ -124,7 +124,7 @@ class StorageTestMixin(object):
         path = os.path.join(dirname, 'marker')
         with self.create_fixture_folder() as folder:
             res = makedirs(folder, '')
-            self.assertEquals(folder, res)
+            self.assertEqual(folder, res)
 
             fld = makedirs(folder, dirname)
             with fld.file('marker').open('w') as f:
@@ -132,7 +132,7 @@ class StorageTestMixin(object):
         with self.get_fixture_folder() as folder:
             node = resolve_path(folder, path)
             with node.open() as f:
-                self.assertEquals(dirname, f.read())
+                self.assertEqual(dirname, f.read())
 
         dirname = os.path.join(dirname, '2')
         path = os.path.join(dirname, 'marker')
@@ -143,7 +143,7 @@ class StorageTestMixin(object):
         with self.get_fixture_folder() as folder:
             node = resolve_path(folder, path)
             with node.open() as f:
-                self.assertEquals(dirname, f.read())
+                self.assertEqual(dirname, f.read())
 
         # on existing non-folder
         dirname = 'bar.txt'
@@ -163,7 +163,7 @@ class StorageTestMixin(object):
             except:
                 pass
         with self.get_fixture_folder() as folder:
-            self.assertEquals(None, resolve_path(folder, dirname))
+            self.assertEqual(None, resolve_path(folder, dirname))
 
     def test_makedirs_to_file(self):
         import os.path
@@ -188,7 +188,7 @@ class StorageTestMixin(object):
         with self.get_fixture_folder() as folder:
             node = folder['new-file']
             with node.open() as f:
-                self.assertEquals(data, f.read())
+                self.assertEqual(data, f.read())
 
     def test_file_get(self):
         path = self.id() + '.got'
@@ -196,7 +196,7 @@ class StorageTestMixin(object):
             node = folder['bar.txt']
             get_file(node, path)
         with file(path) as f:
-            self.assertEquals('Hello', f.read())
+            self.assertEqual('Hello', f.read())
 
     def test_openable_path_on_filesystem(self):
         with self.create_fixture_folder() as folder:
@@ -205,13 +205,13 @@ class StorageTestMixin(object):
             node = folder['new-file']
             with openable_path_on_filesystem(node) as path:
                 with file(path) as f:
-                    self.assertEquals('new-content', f.read())
+                    self.assertEqual('new-content', f.read())
 
             with openable_path_on_filesystem(node, writeback=True) as path:
                 with file(path, 'w') as f:
                     f.write('modified-content')
             with node.open() as f:
-                self.assertEquals('modified-content', f.read())
+                self.assertEqual('modified-content', f.read())
 
     def test_file_copy(self):
         with self.create_fixture_folder() as testee:
@@ -227,12 +227,12 @@ class StorageTestMixin(object):
             # zipfile to testee
             copy_file(zfs['from-zipfile'], testee.file('from-zipfile'))
             with testee['from-zipfile'].open() as f:
-                self.assertEquals('copied-from-zipfile', f.read())
+                self.assertEqual('copied-from-zipfile', f.read())
 
             # testee to zipfile
             copy_file(testee['bar.txt'], zfs.file('from-testee'))
             with zfs['from-testee'].open() as f:
-                self.assertEquals('Hello', f.read())
+                self.assertEqual('Hello', f.read())
 
             #
             # copy from/to filesystem
@@ -251,9 +251,9 @@ class StorageTestMixin(object):
             # fs to testee
             copy_file(fss['from-fs'], testee.file('from-fs'))
             with testee['from-fs'].open() as f:
-                self.assertEquals('copied-from-fs', f.read())
+                self.assertEqual('copied-from-fs', f.read())
 
             # testee to fs
             copy_file(testee['bar.txt'], fss.file('from-testee'))
             with fss['from-testee'].open() as f:
-                self.assertEquals('Hello', f.read())
+                self.assertEqual('Hello', f.read())

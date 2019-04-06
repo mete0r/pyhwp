@@ -22,8 +22,14 @@ from __future__ import unicode_literals
 import io
 import logging
 import os.path
+import sys
 
 from ...errors import InvalidOleStorageError
+
+
+PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
 
 
 logger = logging.getLogger(__name__)

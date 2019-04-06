@@ -76,6 +76,6 @@ tagnames = {
     # ...
     HWPTAG_BEGIN + 99: 'HWPTAG_SHAPE_COMPONENT_UNKNOWN',
 }
-for k, v in tagnames.iteritems():
+for k, v in tagnames.items():
     globals()[v] = k
 del k, v

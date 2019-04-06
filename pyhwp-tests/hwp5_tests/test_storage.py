@@ -18,9 +18,9 @@ class TestStorageWrapper(TestCase):
     def test_iter(self):
         stg = StorageWrapper(self.storage)
         expected = ['FileHeader', 'BinData']
-        self.assertEquals(sorted(expected), sorted(iter(stg)))
+        self.assertEqual(sorted(expected), sorted(iter(stg)))
 
     def test_getitem(self):
         stg = StorageWrapper(self.storage)
-        self.assertEquals('fileheader', stg['FileHeader'].read())
-        self.assertEquals('bin0001.jpg', stg['BinData']['BIN0001.jpg'].read())
+        self.assertEqual(b'fileheader', stg['FileHeader'].read())
+        self.assertEqual(b'bin0001.jpg', stg['BinData']['BIN0001.jpg'].read())

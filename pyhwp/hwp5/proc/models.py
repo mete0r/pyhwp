@@ -92,7 +92,11 @@ from ..dataio import hexdump
 from ..storage import Open2Stream
 from ..treeop import ENDEVENT
 from ..utils import generate_json_array
+from ..utils import unicode_unescape
 from . import parse_recordstream_name
+
+
+PY2 = sys.version_info.major == 2
 
 
 def main(args):
@@ -143,7 +147,12 @@ def stream_from_args(args):
         version = version.split('.')
         version = tuple(int(x) for x in version)
 
-        return ModelStream(Open2Stream(lambda: sys.stdin), version)
+        if PY2:
+            stdin_binary = sys.stdin
+        else:
+            stdin_binary = sys.stdin.buffer
+
+        return ModelStream(Open2Stream(lambda: stdin_binary), version)
 
 
 def models_from_args(args):
@@ -167,7 +176,7 @@ def print_models_from_args(args):
 
     if args['--format']:
         fmt = args['--format']
-        fmt = fmt.decode('string_escape')
+        fmt = unicode_unescape(fmt)
         print_model = print_model_with_format(fmt)
         return print_models_with_print_model(print_model)
 

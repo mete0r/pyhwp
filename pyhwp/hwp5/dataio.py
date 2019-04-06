@@ -27,6 +27,17 @@ import logging
 import struct
 import sys
 
+from six import with_metaclass
+
+
+PY3 = sys.version_info.major == 3
+
+
+if PY3:
+    long = int
+    unicode = str
+    basestring = str
+
 
 logger = logging.getLogger(__name__)
 
@@ -148,8 +159,7 @@ else:
     decode_uint16le_array = decode_uint16le_array_default
 
 
-class BSTR(unicode):
-    __metaclass__ = PrimitiveType
+class BSTR(with_metaclass(PrimitiveType, unicode)):
 
     def read(f):
         size = UINT16.read(f)
@@ -202,7 +212,7 @@ class FlagsType(type):
         bases = (basetype.basetype,)
 
         bitgroups = dict((k, BitGroupDescriptor(v))
-                         for k, v in attrs.iteritems())
+                         for k, v in attrs.items())
 
         attrs = dict(bitgroups)
         attrs['__name__'] = name
@@ -236,14 +246,14 @@ def _parse_flags_args(args):
         while True:
             # lsb
             try:
-                idx, lsb = args.next()
+                idx, lsb = next(args)
             except StopIteration:
                 break
             assert isinstance(lsb, int), ('#%d arg is expected to be'
                                           'a int: %s' % (idx, repr(lsb)))
 
             # msb (default: lsb)
-            idx, x = args.next()
+            idx, x = next(args)
             if isinstance(x, int):
                 msb = x
             elif isinstance(x, (type, basestring)):
@@ -253,7 +263,7 @@ def _parse_flags_args(args):
                 assert False, '#%d arg is unexpected type: %s' % (idx, repr(x))
 
             # type (default: int)
-            idx, x = args.next()
+            idx, x = next(args)
             assert not isinstance(x, int), ('#%d args is expected to be a type'
                                             'or name: %s' % (idx, repr(x)))
             if isinstance(x, type):
@@ -265,7 +275,7 @@ def _parse_flags_args(args):
                 assert False, '#%d arg is unexpected type: %s' % (idx, repr(x))
 
             # name
-            idx, name = args.next()
+            idx, name = next(args)
             assert isinstance(name, basestring), ('#%d args is expected to be '
                                                   'a name: %s' % (idx,
                                                                   repr(name)))
@@ -350,7 +360,7 @@ class EnumType(type):
 
         for v, k in enumerate(items):
             setattr(cls, k, cls(v, k))
-        for k, v in moreitems.iteritems():
+        for k, v in moreitems.items():
             setattr(cls, k, cls(v, k))
 
         cls.names = set(instances_by_name.keys())
@@ -526,7 +536,7 @@ def typed_struct_attributes(struct, attributes, context):
         yield member
 
     # remnants
-    for name, value in attributes.iteritems():
+    for name, value in attributes.items():
         yield dict(name=name, type=type(value), value=value)
 
 
@@ -539,7 +549,7 @@ class StructType(CompoundType):
                        else member
                        for member in cls.attributes())
             cls.members = list(members)
-        for k, v in attrs.iteritems():
+        for k, v in attrs.items():
             if isinstance(v, EnumType):
                 v.__name__ = k
                 v.scoping_struct = cls
@@ -563,7 +573,7 @@ class StructType(CompoundType):
                 if condition_func is None or condition_func(context, values):
                     try:
                         value = getvalue(member)
-                    except ParseError, e:
+                    except ParseError as e:
                         tracepoint = dict(model=cls, member=member['name'])
                         e.parse_stack_traces.append(tracepoint)
                         raise
@@ -580,11 +590,16 @@ class StructType(CompoundType):
                 yield member
 
 
-class Struct(object):
-    __metaclass__ = StructType
+class Struct(with_metaclass(StructType, object)):
+    pass
 
 
 def dumpbytes(data, crust=False):
+    if PY3:
+        _ord = int
+    else:
+        _ord = ord
+
     offsbase = 0
     if crust:
         yield '\t 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F'
@@ -593,7 +608,7 @@ def dumpbytes(data, crust=False):
             line = '%05x0: ' % offsbase
         else:
             line = ''
-        line += ' '.join(['%02x' % ord(ch) for ch in data[0:16]])
+        line += ' '.join(['%02x' % _ord(ch) for ch in data[0:16]])
         yield line
         data = data[16:]
         offsbase += 1
@@ -602,7 +617,7 @@ def dumpbytes(data, crust=False):
         line = '%05x0: ' % offsbase
     else:
         line = ''
-    line += ' '.join(['%02x' % ord(ch) for ch in data])
+    line += ' '.join(['%02x' % _ord(ch) for ch in data])
     yield line
 
 

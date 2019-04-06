@@ -57,24 +57,31 @@ from ..distdoc import decode_head_to_key
 from ..recordstream import read_record
 
 
+PY2 = sys.version_info.major == 2
 logger = logging.getLogger(__name__)
 
 
 def main(args):
+    if PY2:
+        input_fp = sys.stdin
+        output_fp = sys.stdout
+    else:
+        input_fp = sys.stdin.buffer
+        output_fp = sys.stdout.buffer
 
     if args['sha1']:
-        head = read_record(sys.stdin, 0)
+        head = read_record(input_fp, 0)
         sha1ucs16le = decode_head_to_sha1(head['payload'])
         sha1 = a2b_hex(sha1ucs16le.decode('utf-16le'))
         if not args['--raw']:
             sha1 = b2a_hex(sha1)
-        sys.stdout.write(sha1)
+        output_fp.write(sha1)
     elif args['key']:
-        head = read_record(sys.stdin, 0)
+        head = read_record(input_fp, 0)
         key = decode_head_to_key(head['payload'])
         if not args['--raw']:
             key = b2a_hex(key)
-        sys.stdout.write(key)
+        output_fp.write(key)
     else:
-        result = decode(sys.stdin)
-        shutil.copyfileobj(result, sys.stdout)
+        result = decode(input_fp)
+        shutil.copyfileobj(result, output_fp)

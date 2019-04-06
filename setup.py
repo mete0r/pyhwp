@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from distutils.command.build import build as _build
+import io
 import os.path
 import subprocess
 import sys
@@ -55,7 +56,7 @@ def import_setuptools():
 
 @setupdir
 def readfile(filename):
-    with file(filename) as f:
+    with io.open(filename, 'r', encoding='utf-8') as f:
         return f.read()
 
 
@@ -170,7 +171,7 @@ setup_info = {
         ],
     },
 
-    'python_requires': '>=2.7, <3',
+    # 'python_requires': '>=2.7, <3',
 
     # installation
 

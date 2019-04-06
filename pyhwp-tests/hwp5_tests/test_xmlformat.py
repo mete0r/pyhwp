@@ -42,7 +42,7 @@ class TestHello(TestCase):
                 (ENDEVENT, 'SomeStruct'),
                 (ENDEVENT, 'SomeStruct2'),
                 ]
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
         result = element(
             context,
@@ -56,11 +56,11 @@ class TestHello(TestCase):
                 (ENDEVENT, 'dict'),
                 (ENDEVENT, 'SomeStruct')
                 ]
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
     def test_xmlattr_uniqnames(self):
         a = [('a', 1), ('b', 2)]
-        self.assertEquals([('a', 1), ('b', 2)], list(xmlattr_uniqnames(a)))
+        self.assertEqual([('a', 1), ('b', 2)], list(xmlattr_uniqnames(a)))
 
         a = [('a', 1), ('a', 2)]
         result = xmlattr_uniqnames(a)

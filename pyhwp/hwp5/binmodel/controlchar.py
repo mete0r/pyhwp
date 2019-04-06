@@ -20,6 +20,9 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 import re
+import sys
+
+from six import with_metaclass
 
 from hwp5.dataio import PrimitiveType
 from hwp5.dataio import UINT32
@@ -27,8 +30,12 @@ from hwp5.dataio import UINT16
 from hwp5.dataio import UINT8
 
 
-class CHID(str):
-    __metaclass__ = PrimitiveType
+PY3 = sys.version_info.major == 3
+if PY3:
+    unichr = chr
+
+
+class CHID(with_metaclass(PrimitiveType, str)):
 
     fixed_size = 4
 
@@ -100,7 +107,15 @@ class CHID(str):
     FIELD_PRIVATE_INFO_SECURITY = '%cpr'
 
     def decode(bytes, context=None):
-        return bytes[3] + bytes[2] + bytes[1] + bytes[0]
+        if PY3:
+            return (
+                chr(bytes[3]) +
+                chr(bytes[2]) +
+                chr(bytes[1]) +
+                chr(bytes[0])
+            )
+        else:
+            return bytes[3] + bytes[2] + bytes[1] + bytes[0]
     decode = staticmethod(decode)
 
 
@@ -147,7 +162,7 @@ class ControlChar(object):
         for ch, name in cls.names.items():
             setattr(cls, name, ch)
     _populate = classmethod(_populate)
-    REGEX_CONTROL_CHAR = re.compile('[\x00-\x1f]\x00')
+    REGEX_CONTROL_CHAR = re.compile(b'[\x00-\x1f]\x00')
 
     def find(cls, data, start_idx):
         while True:
@@ -157,7 +172,10 @@ class ControlChar(object):
                 if i & 1 == 1:
                     start_idx = i + 1
                     continue
-                char = unichr(ord(data[i]))
+                if PY3:
+                    char = unichr(data[i])
+                else:
+                    char = unichr(ord(data[i]))
                 size = cls.kinds[char].size
                 return i, i + (size * 2)
             data_len = len(data)

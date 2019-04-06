@@ -7,7 +7,6 @@ from unittest import TestCase
 from xml.etree import ElementTree
 import base64
 import io
-import pickle
 
 from hwp5 import binmodel
 from hwp5 import xmlmodel
@@ -59,7 +58,7 @@ class TestXmlEvents(TestBase):
         xmlevents.dump(sio)
 
         data = sio.getvalue()
-        self.assertTrue('&#13;' in data)
+        self.assertTrue(b'&#13;' in data)
 
     def test_bytechunks_quoteattr_cr(self):
 
@@ -69,9 +68,9 @@ class TestXmlEvents(TestBase):
         modelevents = [(STARTEVENT, item),
                        (ENDEVENT, item)]
         xmlevents = XmlEvents(iter(modelevents))
-        xml = ''.join(xmlevents.bytechunks())
+        xml = b''.join(xmlevents.bytechunks())
 
-        self.assertTrue('&#13;' in xml)
+        self.assertTrue(b'&#13;' in xml)
 
 
 class TestModelEventStream(TestBase):
@@ -82,8 +81,8 @@ class TestModelEventStream(TestBase):
                                 self.hwp5file_bin.header.version)
 
     def test_modelevents(self):
-        self.assertEquals(len(list(self.docinfo.models())) * 2,
-                          len(list(self.docinfo.modelevents())))
+        self.assertEqual(len(list(self.docinfo.models())) * 2,
+                         len(list(self.docinfo.modelevents())))
         # print len(list(self.docinfo.modelevents()))
 
 
@@ -96,7 +95,7 @@ class TestDocInfo(TestBase):
 
     def test_events(self):
         events = list(self.docinfo.events())
-        self.assertEquals(136, len(events))
+        self.assertEqual(136, len(events))
         # print len(events)
 
         # without embedbin, no <text> is embedded
@@ -106,9 +105,9 @@ class TestDocInfo(TestBase):
         bindata = self.hwp5file_bin['BinData']
         events = list(self.docinfo.events(embedbin=bindata))
         self.assertTrue('<text>' in events[4][1][1]['bindata'])
-        self.assertEquals(bindata['BIN0002.jpg'].open().read(),
-                          base64.b64decode(events[4][1][1]
-                                           ['bindata']['<text>']))
+        self.assertEqual(bindata['BIN0002.jpg'].open().read(),
+                         base64.b64decode(events[4][1][1]
+                                          ['bindata']['<text>']))
 
 
 class TestSection(TestBase):
@@ -118,17 +117,17 @@ class TestSection(TestBase):
                           self.hwp5file_bin.fileheader.version)
         events = list(section.events())
         ev, (tag, attrs, ctx) = events[0]
-        self.assertEquals((STARTEVENT, SectionDef), (ev, tag))
+        self.assertEqual((STARTEVENT, SectionDef), (ev, tag))
         self.assertFalse('section-id' in attrs)
 
         ev, (tag, attrs, ctx) = events[1]
-        self.assertEquals((STARTEVENT, PageDef), (ev, tag))
+        self.assertEqual((STARTEVENT, PageDef), (ev, tag))
 
         ev, (tag, attrs, ctx) = events[2]
-        self.assertEquals((ENDEVENT, PageDef), (ev, tag))
+        self.assertEqual((ENDEVENT, PageDef), (ev, tag))
 
         ev, (tag, attrs, ctx) = events[-1]
-        self.assertEquals((ENDEVENT, SectionDef), (ev, tag))
+        self.assertEqual((ENDEVENT, SectionDef), (ev, tag))
 
 
 class TestHwp5File(TestBase):
@@ -148,9 +147,9 @@ class TestHwp5File(TestBase):
 
     def test_xmlevents(self):
         events = iter(self.hwp5file.xmlevents())
-        ev = events.next()
-        self.assertEquals((STARTEVENT,
-                           ('HwpDoc', dict(version='5.0.1.7'))), ev)
+        ev = next(events)
+        self.assertEqual((STARTEVENT,
+                          ('HwpDoc', dict(version='5.0.1.7'))), ev)
         list(events)
 
     def test_xmlevents_dump(self):
@@ -160,15 +159,15 @@ class TestHwp5File(TestBase):
             outfile.seek(0)
             doc = ElementTree.parse(outfile)
 
-        self.assertEquals('HwpDoc', doc.getroot().tag)
+        self.assertEqual('HwpDoc', doc.getroot().tag)
 
 
 class TestShapedText(TestCase):
     def test_make_shape_range(self):
         charshapes = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
         ranged_shapes = make_ranged_shapes(charshapes)
-        self.assertEquals([((0, 4), 'A'), ((4, 6), 'B'), ((6, 10), 'C'),
-                           ((10, 0x7fffffff), 'D')], list(ranged_shapes))
+        self.assertEqual([((0, 4), 'A'), ((4, 6), 'B'), ((6, 10), 'C'),
+                          ((10, 0x7fffffff), 'D')], list(ranged_shapes))
 
     def test_split(self):
         chunks = [((0, 3), None, 'aaa'), ((3, 6), None, 'bbb'),
@@ -177,7 +176,7 @@ class TestShapedText(TestCase):
         shaped_chunks = split_and_shape(iter(chunks),
                                         make_ranged_shapes(charshapes))
         shaped_chunks = list(shaped_chunks)
-        self.assertEquals([
+        self.assertEqual([
             ((0, 3), ('A', None), 'aaa'),
             ((3, 4), ('A', None), 'b'),
             ((4, 6), ('B', None), 'bb'),
@@ -192,12 +191,12 @@ class TestShapedText(TestCase):
         linesegs = [(0, 'A'), (51, 'B'), (103, 'C')]
         shaped = split_and_shape(iter(chunks), make_ranged_shapes(charshapes))
         shaped = list(shaped)
-        self.assertEquals([((0, 3), ('a', None), 'xxx'),
-                           ((3, 5), ('b', None), 'xx'),
-                           ((5, 112), ('c', None), 'x' * 107)], shaped)
+        self.assertEqual([((0, 3), ('a', None), 'xxx'),
+                          ((3, 5), ('b', None), 'xx'),
+                          ((5, 112), ('c', None), 'x' * 107)], shaped)
         lines = split_and_shape(iter(shaped), make_ranged_shapes(linesegs))
         lines = list(lines)
-        self.assertEquals([
+        self.assertEqual([
             ((0, 3), ('A', ('a', None)), 'xxx'),
             ((3, 5), ('A', ('b', None)), 'xx'),
             ((5, 51), ('A', ('c', None)), 'x' * (51 - 5)),
@@ -212,12 +211,12 @@ class TestLineSeg(TestCase):
         linesegs = [(0, 'A'), (4, 'B'), (6, 'C'), (10, 'D')]
         lines = line_segmented(iter(chunks), make_ranged_shapes(linesegs))
         lines = list(lines)
-        self.assertEquals([('A', [((0, 3), None, 'aaa'),
-                                  ((3, 4), None, 'b')]),
-                           ('B', [((4, 6), None, 'bb')]),
-                           ('C', [((6, 9), None, 'ccc'),
-                                  ((9, 10), None, 'd')]),
-                           ('D', [((10, 12), None, 'dd')])], lines)
+        self.assertEqual([('A', [((0, 3), None, 'aaa'),
+                                 ((3, 4), None, 'b')]),
+                          ('B', [((4, 6), None, 'bb')]),
+                          ('C', [((6, 9), None, 'ccc'),
+                                 ((9, 10), None, 'd')]),
+                          ('D', [((10, 12), None, 'dd')])], lines)
 
 
 class TestDistributionBodyText(TestBase):
@@ -232,10 +231,10 @@ class TestDistributionBodyText(TestBase):
         self.assertTrue(ParaLineSeg not in types)
 
         paratext = self.hwp5file_bin.bodytext.section(0).model(1)
-        self.assertEquals(ParaText, paratext['type'])
+        self.assertEqual(ParaText, paratext['type'])
 
         paracharshape = self.bodytext.section(0).model(2)
-        self.assertEquals(ParaCharShape, paracharshape['type'])
+        self.assertEqual(ParaCharShape, paracharshape['type'])
 
         evs = merge_paragraph_text_charshape_lineseg(
             (paratext['type'], paratext['content'], dict()),
@@ -251,9 +250,37 @@ class TestMatchFieldStartEnd(TestCase):
 
     def test_match_field_start_end(self):
 
-        path = get_fixture_path('match-field-start-end.dat')
-        with io.open(path, 'rb') as f:
-            records = pickle.load(f)
+        records = \
+            [{'level': 2,
+              'payload': b'\x1c\x00\x00\x00\x18\x00\x00\x00\x04\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x80',  # noqa
+              'seqno': 196,
+              'size': 22,
+              'tagid': 66,
+              'tagname': 'HWPTAG_PARA_HEADER'},
+             {'level': 3,
+              'payload': b'\x04\x00umf\x08\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x03\x00umf%\x00\x00\x00\x00\x00\x00\x00\x00\x03\x002\x009\x009\x00\x04\x00umf\x08\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\r\x00',  # noqa
+              'seqno': 197,
+              'size': 56,
+              'tagid': 67,
+              'tagname': 'HWPTAG_PARA_TEXT'},
+             {'level': 3,
+              'payload': b'\x00\x00\x00\x00\x13\x00\x00\x00',
+              'seqno': 198,
+              'size': 8,
+              'tagid': 68,
+              'tagname': b'HWPTAG_PARA_CHAR_SHAPE'},
+             {'level': 3,
+              'payload': b'\x00\x00\x00\x00\x00\x00\x00\x00\x14\x05\x00\x00\x14\x05\x00\x00Q\x04\x00\x00\xfc\xfe\xff\xff\x00\x00\x00\x00X\x0b\x00\x00\x00\x00\x06\x00',  # noqa
+              'seqno': 199,
+              'size': 36,
+              'tagid': 69,
+              'tagname': 'HWPTAG_PARA_LINE_SEG'},
+             {'level': 3,
+              'payload': b'umf%\x00\x00\x00\x00\x08\x15\x00=\x00S\x00U\x00M\x00(\x00R\x00I\x00G\x00H\x00T\x00)\x00?\x00?\x00%\x00g\x00,\x00;\x00;\x002\x009\x009\x00P\x89\xa0z\x00\x00\x00\x00',  # noqa
+              'seqno': 200,
+              'size': 61,
+              'tagid': 71,
+              'tagname': 'HWPTAG_CTRL_HEADER'}]
 
         models = binmodel.parse_models(dict(), records)
         events = xmlmodel.prefix_binmodels_with_event(dict(), models)

@@ -2160,7 +2160,7 @@ xml 명령
                    <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                    <Array name="scalerotations">
                      <ScaleRotationMatrix>
-                       <Matrix a="0.743494423792" attribute-name="scaler" b="0.0" c="0.0" d="0.743494423792" e="0.0" f="0.0"/>
+                       <Matrix a="0.7434944237918215" attribute-name="scaler" b="0.0" c="0.0" d="0.7434944237918215" e="0.0" f="0.0"/>
                        <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                      </ScaleRotationMatrix>
                    </Array>
@@ -3046,7 +3046,7 @@ xml 명령
                    <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                    <Array name="scalerotations">
                      <ScaleRotationMatrix>
-                       <Matrix a="0.743494423792" attribute-name="scaler" b="0.0" c="0.0" d="0.743494423792" e="0.0" f="0.0"/>
+                       <Matrix a="0.7434944237918215" attribute-name="scaler" b="0.0" c="0.0" d="0.7434944237918215" e="0.0" f="0.0"/>
                        <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                      </ScaleRotationMatrix>
                    </Array>

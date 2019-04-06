@@ -69,7 +69,7 @@ def decode_head_to_sha1(record_payload):
     if len(record_payload) != 256:
         raise ValueError('payload size must be 256 bytes')
 
-    data = list(ord(x) for x in record_payload)
+    data = bytearray(record_payload)
     seed = data[3] << 24 | data[2] << 16 | data[1] << 8 | data[0]
     random = Random(seed)
 
@@ -82,7 +82,8 @@ def decode_head_to_sha1(record_payload):
             data[i] = data[i] ^ key
         n -= 1
 
-    decoded = b''.join(chr(x) for x in data)
+    # decoded = b''.join(chr(x) for x in data)
+    decoded = data
     sha1offset = 4 + (seed & 0xf)
 
     ucs16le = decoded[sha1offset:sha1offset + 80]

@@ -62,6 +62,9 @@ from .utils import cached_property
 
 
 PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
+    unicode = str
 logger = logging.getLogger(__name__)
 locale_dir = os.path.join(os.path.dirname(__file__), 'locale')
 locale_dir = os.path.abspath(locale_dir)
@@ -273,14 +276,10 @@ class ODTPackage(object):
             self.insert_stream(f, path, media_type)
 
     def insert_stream(self, f, path, media_type):
-        if isinstance(path, unicode):
-            path_bytes = path.encode('utf-8')
-            path_unicode = path
-        else:
-            path_bytes = path
-            path_unicode = unicode(path)
-        self.zf.writestr(path_bytes, f.read())
-        self.files.append(dict(full_path=path_unicode, media_type=media_type))
+        if not isinstance(path, unicode):
+            path = path.decode('utf-8')
+        self.zf.writestr(path, f.read())
+        self.files.append(dict(full_path=path, media_type=media_type))
 
     def close(self):
 
@@ -303,7 +302,7 @@ def manifest_xml(f, files):
     xml.startPrefixMapping(prefix, uri)
 
     def startElement(name, attrs):
-        attrs = dict(((uri, n), v) for n, v in attrs.iteritems())
+        attrs = dict(((uri, n), v) for n, v in attrs.items())
         xml.startElementNS((uri, name), prefix + ':' + name, attrs)
 
     def endElement(name):
@@ -312,7 +311,7 @@ def manifest_xml(f, files):
     def file_entry(full_path, media_type, **kwargs):
         attrs = {'media-type': media_type, 'full-path': full_path}
         attrs.update(dict((n.replace('_', '-'), v)
-                          for n, v in kwargs.iteritems()))
+                          for n, v in kwargs.items()))
         startElement('file-entry', attrs)
         endElement('file-entry')
 
@@ -389,9 +388,9 @@ def main():
         with closing(Hwp5File(hwp5path)) as hwp5file:
             with open_dest() as dest:
                 transform(hwp5file, dest)
-    except ParseError, e:
+    except ParseError as e:
         e.print_to_logger(logger)
-    except InvalidHwp5FileError, e:
+    except InvalidHwp5FileError as e:
         logger.error('%s', e)
         sys.exit(1)
 
