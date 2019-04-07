@@ -1,7 +1,13 @@
 CHANGES
 =======
 
-0.1b11 (unreleased)
+0.1b12 (unreleased)
+-------------------
+
+- Nothing changed yet.
+
+
+0.1b11 (2019-03-21)
 -------------------
 
 - Remove dependency on PyCrypto.
