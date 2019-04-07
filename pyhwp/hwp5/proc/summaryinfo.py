@@ -39,13 +39,21 @@ from ..filestructure import Hwp5File
 from ..summaryinfo import HwpSummaryInfoTextFormatter
 
 
+PY2 = sys.version_info.major == 2
+
+
 def main(args):
+    if PY2:
+        output_fp = sys.stdout
+    else:
+        output_fp = sys.stdout.buffer
+
     formatter = HwpSummaryInfoTextFormatter()
     hwpfile = Hwp5File(args['<hwp5file>'])
     try:
         for textline in formatter.formatTextLines(hwpfile.summaryinfo):
             line = textline.encode('utf-8')
-            sys.stdout.write(line)
-            sys.stdout.write(b'\n')
+            output_fp.write(line)
+            output_fp.write(b'\n')
     finally:
         hwpfile.close()

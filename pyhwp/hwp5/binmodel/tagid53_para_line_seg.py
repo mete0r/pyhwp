@@ -20,6 +20,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from six import with_metaclass
+
 from hwp5.binmodel._shared import RecordModel
 from hwp5.tagids import HWPTAG_PARA_LINE_SEG
 from hwp5.binmodel._shared import ref_parent_member
@@ -68,8 +70,8 @@ class ParaLineSeg(RecordModel):
     attributes = classmethod(attributes)
 
 
-class ParaLineSegList(list):
-    __metaclass__ = ArrayType
+class ParaLineSegList(with_metaclass(ArrayType, list)):
+
     itemtype = LineSeg
 
     def read(cls, f, context):
@@ -78,15 +80,14 @@ class ParaLineSegList(list):
     read = classmethod(read)
 
     def decode(cls, context, payload):
-        from itertools import izip
         import struct
         unitfmt = 'iiiiiiiiHH'
         unitsize = struct.calcsize('<' + unitfmt)
-        unitcount = len(payload) / unitsize
+        unitcount = len(payload) // unitsize
         values = struct.unpack('<' + unitfmt * unitcount, payload)
         names = ['chpos', 'y', 'height', 'height2', 'height85', 'space_below',
                  'x', 'width', 'a8', 'flags']
-        x = list(dict(izip(names, tuple(values[i * 10:i * 10 + 10])))
+        x = list(dict(zip(names, tuple(values[i * 10:i * 10 + 10])))
                  for i in range(0, unitcount))
         for d in x:
             d['flags'] = LineSeg.Flags(d['flags'])

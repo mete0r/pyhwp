@@ -65,7 +65,7 @@ try:
         def wrapper(*args, **kwargs):
             try:
                 return f(*args, **kwargs)
-            except Exception, e:
+            except Exception as e:
                 logger.exception(e)
                 raise
         return wrapper
@@ -126,7 +126,7 @@ try:
             desc = propseq_to_dict(mediadesc)
 
             logger.debug('mediadesc: %s', str(desc.keys()))
-            for k, v in desc.iteritems():
+            for k, v in desc.items():
                 logger.debug('%s: %s', k, str(v))
 
             statusindicator = desc.get('StatusIndicator')
@@ -135,10 +135,10 @@ try:
             hwpfile = HwpFileFromInputStream(inputstream)
             try:
                 load_hwp5file_into_doc(hwpfile, self.target, statusindicator)
-            except ParseError, e:
+            except ParseError as e:
                 e.print_to_logger(logger)
                 return False
-            except Exception, e:
+            except Exception as e:
                 logger.exception(e)
                 return False
             else:
@@ -195,7 +195,7 @@ try:
             svm = context.ServiceManager
             detector = svm.createInstanceWithContext('hwp5.Detector', context)
             typename, mediadesc2 = detector.detect(mediadesc)
-            self.assertEquals('hwp5', typename)
+            self.assertEqual('hwp5', typename)
 
     class ImporterTest(TestCase):
 
@@ -253,14 +253,14 @@ try:
 
             paragraph_portions = paragraphs[0].createEnumeration()
             paragraph_portions = xenumeration_list(paragraph_portions)
-            self.assertEquals(u'한글 ', paragraph_portions[0].getString())
+            self.assertEqual(u'한글 ', paragraph_portions[0].getString())
 
             paragraph_portions = paragraphs[16].createEnumeration()
             paragraph_portions = xenumeration_list(paragraph_portions)
             contents = paragraph_portions[1].createContentEnumeration('com.sun.star.text.TextContent')
             contents = xenumeration_list(contents)
-            self.assertEquals('image/x-vclgraphic', contents[0].Bitmap.MimeType)
-            #self.assertEquals('vnd.sun.star.Package:bindata/BIN0003.png',
+            self.assertEqual('image/x-vclgraphic', contents[0].Bitmap.MimeType)
+            #self.assertEqual('vnd.sun.star.Package:bindata/BIN0003.png',
             #                  contents[0].GraphicStreamURL)
 
             graphics = doc.getGraphicObjects()
@@ -270,6 +270,6 @@ try:
             frames = doc.getTextFrames()
             frames = xenumeration_list(frames.createEnumeration())
             logger.debug('frames: %s', frames)
-except Exception, e:
+except Exception as e:
     logger.exception(e)
     raise

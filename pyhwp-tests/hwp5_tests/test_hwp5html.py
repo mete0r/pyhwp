@@ -70,7 +70,7 @@ class HtmlConvTest(TestBase):
 
         bindata_stg = hwp5file['BinData']
 
-        self.assertEquals(set(bindata_stg),
+        self.assertEqual(set(bindata_stg),
                           set(FileSystemStorage(bindata_dir)))
 
     def test_extract_bindata_dir_without_bindata(self):

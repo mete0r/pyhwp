@@ -278,7 +278,7 @@ def inputstream_is_hwp5file(inputstream):
 
         from hwp5.filestructure import storage_is_hwp5file
         return storage_is_hwp5file(adapter)
-    except Exception, e:
+    except Exception as e:
         logger.exception(e)
         return False
 

@@ -14,21 +14,21 @@ class PackageTest(unittest.TestCase):
     def test_package_name_from_desc(self):
         from oxt_tool.package import package_name_from_desc
         desc = Description(identifier='pyhwp.example', version='')
-        self.assertEquals('pyhwp.example.oxt', package_name_from_desc(desc))
+        self.assertEqual('pyhwp.example.oxt', package_name_from_desc(desc))
         desc.version = '0.1'
-        self.assertEquals('pyhwp.example-0.1.oxt', package_name_from_desc(desc))
+        self.assertEqual('pyhwp.example-0.1.oxt', package_name_from_desc(desc))
 
     def test_make_output_path(self):
         from oxt_tool.package import make_output_path
 
-        self.assertEquals('abc.oxt', make_output_path('abc.oxt'))
-        self.assertEquals('./abc.oxt', make_output_path('./abc.oxt'))
-        self.assertEquals('abc/def.oxt', make_output_path('abc/def.oxt'))
+        self.assertEqual('abc.oxt', make_output_path('abc.oxt'))
+        self.assertEqual('./abc.oxt', make_output_path('./abc.oxt'))
+        self.assertEqual('abc/def.oxt', make_output_path('abc/def.oxt'))
 
         desc = Description(identifier='example', version='0.1')
-        self.assertEquals('example-0.1.oxt', make_output_path('', desc))
-        self.assertEquals('./example-0.1.oxt', make_output_path('.', desc))
-        self.assertEquals('abc/example-0.1.oxt', make_output_path('abc/', desc))
+        self.assertEqual('example-0.1.oxt', make_output_path('', desc))
+        self.assertEqual('./example-0.1.oxt', make_output_path('.', desc))
+        self.assertEqual('abc/example-0.1.oxt', make_output_path('abc/', desc))
 
         dirpath = self.id()
         import shutil
@@ -36,7 +36,7 @@ class PackageTest(unittest.TestCase):
         if os.path.exists(dirpath):
             shutil.rmtree(dirpath)
         os.mkdir(dirpath)
-        self.assertEquals(os.path.join(dirpath, 'example-0.1.oxt'),
+        self.assertEqual(os.path.join(dirpath, 'example-0.1.oxt'),
                           make_output_path(dirpath, desc))
 
 
@@ -93,4 +93,4 @@ class BuildPackageTest(unittest.TestCase):
 
         with open_storage(oxt_path) as pkg:
             with resolve_path(pkg, 'COPYING').open() as f:
-                self.assertEquals('GNU AGPL', f.read())
+                self.assertEqual('GNU AGPL', f.read())

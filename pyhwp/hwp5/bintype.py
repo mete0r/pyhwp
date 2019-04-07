@@ -370,7 +370,7 @@ def resolve_values_from_stream(stream):
                 item['bin_offset'] = stream.tell()
                 try:
                     item['value'] = resolve_value_from_stream(item, stream)
-                except Exception, e:
+                except Exception as e:
                     item['exception'] = e
                     ev = ERROREVENT
             yield ev, item
@@ -444,7 +444,7 @@ def read_type_item(type, context, stream, binevents=None):
         binevents = []
     try:
         binevents.extend(read_type_events(type, context, stream))
-    except ParseError, e:
+    except ParseError as e:
         e.binevents = binevents
         raise
     return binevents[-1][1]

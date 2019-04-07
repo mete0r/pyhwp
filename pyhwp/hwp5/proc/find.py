@@ -59,9 +59,8 @@ incompletely::
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from itertools import ifilter
-from itertools import imap
 from functools import partial
+import itertools
 import sys
 
 from ..binmodel import Hwp5File
@@ -70,6 +69,15 @@ from ..bintype import log_events
 from ..dataio import ParseError
 from ..tagids import tagnames
 from . import logger
+
+
+PY2 = sys.version_info.major == 2
+if PY2:
+    ifilter = itertools.ifilter
+    imap = itertools.imap
+else:
+    ifilter = filter
+    imap = map
 
 
 def main(args):
@@ -88,7 +96,7 @@ def main(args):
             models = filter_conditions(models)
             for model in models:
                 print_model(model)
-        except ParseError, e:
+        except ParseError as e:
             logger.error('---- On processing %s:', filename)
             e.print_to_logger(logger)
 

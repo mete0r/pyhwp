@@ -34,8 +34,8 @@ def xenumeration_list(xenum):
 def dict_to_propseq(d):
     from com.sun.star.beans import PropertyValue
     DIRECT_VALUE = uno.Enum('com.sun.star.beans.PropertyState', 'DIRECT_VALUE')
-    return tuple(PropertyValue(k, 0, unofy_value(v), DIRECT_VALUE)
-                 for k, v in d.iteritems())
+    return tuple(PropertyValue(k, 0, unofy_value(d[k]), DIRECT_VALUE)
+                 for k in d)
 
 
 def propseq_to_dict(propvalues):

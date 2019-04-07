@@ -57,4 +57,4 @@ class TestODTTransform(TestCase):
         zf = ZipFile(self.odt_path)
         data2 = zf.read('bindata/BIN0002.jpg')
 
-        self.assertEquals(data1, data2)
+        self.assertEqual(data1, data2)

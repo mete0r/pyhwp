@@ -23,8 +23,7 @@ from itertools import chain
 from xml.sax.saxutils import escape
 from xml.sax.saxutils import quoteattr
 import logging
-
-from hypua2jamo import codes2unicode
+import sys
 
 from .filestructure import VERSION
 from .dataio import typed_struct_attributes
@@ -45,12 +44,21 @@ from .treeop import STARTEVENT
 from .treeop import ENDEVENT
 
 
+PY3 = sys.version_info.major == 3
+if PY3:
+    basestring = str
+    unichr = chr
+
+
 logger = logging.getLogger(__name__)
 
 
 def xmlattrval(value):
     if isinstance(value, basestring):
         return value
+    elif isinstance(value, float):
+        # https://stackoverflow.com/questions/25898733/why-does-strfloat-return-more-digits-in-python-3-than-python-2
+        return repr(value)
     elif isinstance(type(value), EnumType):
         return value.name.lower() if value.name else str(int(value))
     elif isinstance(value, type):
@@ -59,13 +67,14 @@ def xmlattrval(value):
         return str(value)
 
 
-def expanded_xmlattribute((name, (t, value))):
+def expanded_xmlattribute(ntv):
+    name, (t, value) = ntv
     if isinstance(t, FlagsType):
         fmt = '%0'
         fmt += '%d' % (t.basetype.fixed_size * 2)
         fmt += 'X'
         yield name, fmt % int(value)
-        for k, v in t.dictvalue(t(value)).iteritems():
+        for k, v in t.dictvalue(t(value)).items():
             yield k, xmlattrval(v)
     elif t is Margin:
         for pos in ('left', 'right', 'top', 'bottom'):
@@ -83,7 +92,7 @@ def expanded_xmlattribute((name, (t, value))):
             if value in PUA_SYMBOLS:
                 yield name, PUA_SYMBOLS[value]
             else:
-                yield name, codes2unicode([value])
+                yield name, unichr(value)
     elif t is BinStorageId:
         yield name, 'BIN%04X' % value
     else:
@@ -131,7 +140,7 @@ def xmlattr_uniqnames(attrs):
 
 
 def xmlattributes_for_plainvalues(context, plainvalues):
-    ntvs = plainvalues.iteritems()
+    ntvs = plainvalues.items()
     ntvs = chain(*(expanded_xmlattribute(ntv) for ntv in ntvs))
     return dict(xmlattr_uniqnames(xmlattr_dashednames(ntvs)))
 
@@ -160,7 +169,7 @@ def separate_plainvalues(typed_attributes):
                 d.append(named_item)
             else:
                 p[name] = item
-        except Exception, e:
+        except Exception as e:
             logger.error('%s', (name, t, value))
             logger.error('%s', t.__dict__)
             logger.exception(e)
@@ -168,14 +177,15 @@ def separate_plainvalues(typed_attributes):
     return d, p
 
 
-def startelement(context, (model, attributes)):
+def startelement(context, ma):
+    model, attributes = ma
     if isinstance(model, StructType):
         typed_attributes = ((v['name'], (v['type'], v['value']))
                             for v in typed_struct_attributes(model, attributes,
                                                              context))
     else:
         typed_attributes = ((k, (type(v), v))
-                            for k, v in attributes.iteritems())
+                            for k, v in attributes.items())
 
     typed_attributes, plainvalues = separate_plainvalues(typed_attributes)
 
@@ -221,8 +231,9 @@ def startelement(context, (model, attributes)):
                 assert False, (_value, _type)
 
 
-def element(context, (model, attributes)):
-    for x in startelement(context, (model, attributes)):
+def element(context, ma):
+    model, attributes = ma
+    for x in startelement(context, ma):
         yield x
     yield ENDEVENT, model.__name__
 

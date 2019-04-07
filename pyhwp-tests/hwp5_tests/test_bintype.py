@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 from io import BytesIO
 from unittest import TestCase
 
+from six import add_metaclass
+
 from hwp5.binmodel import ParaTextChunks
 from hwp5.bintype import bintype_map_events
 from hwp5.bintype import construct_composite_values
@@ -39,8 +41,8 @@ class TestBinIO(TestCase):
     @lazy_property
     def BasicStruct(self):
 
+        @add_metaclass(StructType)
         class BasicStruct(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -51,8 +53,8 @@ class TestBinIO(TestCase):
     @lazy_property
     def NestedStruct(self):
 
+        @add_metaclass(StructType)
         class NestedStruct(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -66,61 +68,61 @@ class TestBinIO(TestCase):
         bin_item = dict(type=self.BasicStruct)
         events = bintype_map_events(bin_item)
 
-        ev, item = events.next()
-        self.assertEquals((STARTEVENT, bin_item), (ev, item))
+        ev, item = next(events)
+        self.assertEqual((STARTEVENT, bin_item), (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((ENDEVENT, bin_item), (ev, item))
+        ev, item = next(events)
+        self.assertEqual((ENDEVENT, bin_item), (ev, item))
 
     def test_map_events_nested(self):
 
         bin_item = dict(type=self.NestedStruct)
         events = bintype_map_events(bin_item)
 
-        ev, item = events.next()
-        self.assertEquals((STARTEVENT, bin_item), (ev, item))
+        ev, item = next(events)
+        self.assertEqual((STARTEVENT, bin_item), (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((STARTEVENT, dict(name='s', type=self.BasicStruct)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((STARTEVENT, dict(name='s', type=self.BasicStruct)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((ENDEVENT, dict(name='s', type=self.BasicStruct)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((ENDEVENT, dict(name='s', type=self.BasicStruct)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          (ev, item))
+        ev, item = next(events)
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         (ev, item))
 
-        ev, item = events.next()
-        self.assertEquals((ENDEVENT, bin_item), (ev, item))
+        ev, item = next(events)
+        self.assertEqual((ENDEVENT, bin_item), (ev, item))
 
     def test_map_struct_with_xarray(self):
 
         xarray_type = X_ARRAY(self.BasicStruct, ref_member('count'))
 
+        @add_metaclass(StructType)
         class StructWithXArray(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -129,40 +131,40 @@ class TestBinIO(TestCase):
                            name='items')
         bin_item = dict(type=StructWithXArray)
         events = bintype_map_events(bin_item)
-        self.assertEquals((STARTEVENT,
-                           bin_item),
-                          events.next())
-        self.assertEquals((None,
-                           dict(type=UINT16, name='count')),
-                          events.next())
-        self.assertEquals((STARTEVENT,
-                           dict(type=xarray_type,
-                                name='items')),
-                          events.next())
-        self.assertEquals((STARTEVENT,
-                           dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None,
-                           dict(type=UINT16, name='a')),
-                          events.next())
-        self.assertEquals((None,
-                           dict(type=UINT16, name='b')),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(type=xarray_type,
-                                name='items')),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           bin_item),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          bin_item),
+                         next(events))
+        self.assertEqual((None,
+                          dict(type=UINT16, name='count')),
+                         next(events))
+        self.assertEqual((STARTEVENT,
+                          dict(type=xarray_type,
+                               name='items')),
+                         next(events))
+        self.assertEqual((STARTEVENT,
+                          dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None,
+                          dict(type=UINT16, name='a')),
+                         next(events))
+        self.assertEqual((None,
+                          dict(type=UINT16, name='b')),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(type=xarray_type,
+                               name='items')),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          bin_item),
+                         next(events))
 
     def test_filter_with_version(self):
 
+        @add_metaclass(StructType)
         class StructWithVersion(object):
-            __metaclass__ = StructType
 
             @classmethod
             def attributes(cls):
@@ -174,24 +176,24 @@ class TestBinIO(TestCase):
         events = bintype_map_events(bin_item)
         events = filter_with_version(events, (5, 0, 0, 0))
 
-        self.assertEquals((STARTEVENT, bin_item), events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)), events.next())
-        self.assertEquals((ENDEVENT, bin_item), events.next())
+        self.assertEqual((STARTEVENT, bin_item), next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)), next(events))
+        self.assertEqual((ENDEVENT, bin_item), next(events))
 
         events = bintype_map_events(bin_item)
         events = filter_with_version(events, (5, 0, 2, 4))
-        self.assertEquals((STARTEVENT, bin_item), events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)), events.next())
-        self.assertEquals((None, dict(name='b', type=UINT16,
-                                      version=(5, 0, 2, 4))), events.next())
-        self.assertEquals((ENDEVENT, bin_item), events.next())
+        self.assertEqual((STARTEVENT, bin_item), next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)), next(events))
+        self.assertEqual((None, dict(name='b', type=UINT16,
+                                     version=(5, 0, 2, 4))), next(events))
+        self.assertEqual((ENDEVENT, bin_item), next(events))
 
     def test_resolve_xarray(self):
 
         xarray_type = X_ARRAY(UINT16, ref_member('a'))
 
+        @add_metaclass(StructType)
         class StructWithXArray(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -204,79 +206,79 @@ class TestBinIO(TestCase):
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals((STARTEVENT, struct), (ev, struct))
-        self.assertEquals((None,
-                           dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual((STARTEVENT, struct), (ev, struct))
+        self.assertEqual((None,
+                          dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=0)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b',
-                                count=0,
-                                type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b',
-                                count=0,
-                                type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT, struct),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b',
+                               count=0,
+                               type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b',
+                               count=0,
+                               type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT, struct),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals((STARTEVENT, struct), (ev, struct))
-        self.assertEquals((None,
-                           dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual((STARTEVENT, struct), (ev, struct))
+        self.assertEqual((None,
+                          dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=1)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b',
-                                count=1,
-                                type=xarray_type)),
-                          events.next())
-        self.assertEquals((None, dict(type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b',
-                                count=1,
-                                type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT, struct),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b',
+                               count=1,
+                               type=xarray_type)),
+                         next(events))
+        self.assertEqual((None, dict(type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b',
+                               count=1,
+                               type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT, struct),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals((STARTEVENT, struct), (ev, struct))
-        self.assertEquals((None,
-                           dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual((STARTEVENT, struct), (ev, struct))
+        self.assertEqual((None,
+                          dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=2)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b',
-                                count=2,
-                                type=xarray_type)),
-                          events.next())
-        self.assertEquals((None, dict(type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b',
-                                count=2,
-                                type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT, struct),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b',
+                               count=2,
+                               type=xarray_type)),
+                         next(events))
+        self.assertEqual((None, dict(type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b',
+                               count=2,
+                               type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT, struct),
+                         next(events))
 
     def test_resolve_xarray_struct(self):
 
         xarray_type = X_ARRAY(self.BasicStruct, ref_member('a'))
 
+        @add_metaclass(StructType)
         class StructWithXArray(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -289,86 +291,86 @@ class TestBinIO(TestCase):
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals((STARTEVENT, struct), (ev, struct))
-        self.assertEquals((None,
-                           dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual((STARTEVENT, struct), (ev, struct))
+        self.assertEqual((None,
+                          dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=0)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b', count=0, type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b', count=0, type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT, struct),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b', count=0, type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b', count=0, type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT, struct),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals((STARTEVENT, struct), (ev, struct))
-        self.assertEquals((None,
-                           dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual((STARTEVENT, struct), (ev, struct))
+        self.assertEqual((None,
+                          dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=1)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b', count=1, type=xarray_type)),
-                          events.next())
-        self.assertEquals((STARTEVENT, dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT, dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b', count=1, type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT, struct),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b', count=1, type=xarray_type)),
+                         next(events))
+        self.assertEqual((STARTEVENT, dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT, dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b', count=1, type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT, struct),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals((STARTEVENT, struct), (ev, struct))
-        self.assertEquals((None,
-                           dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual((STARTEVENT, struct), (ev, struct))
+        self.assertEqual((None,
+                          dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=2)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b', count=2, type=xarray_type)),
-                          events.next())
-        self.assertEquals((STARTEVENT, dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT, dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((STARTEVENT, dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT, dict(type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b', count=2, type=xarray_type)),
-                          events.next())
-        self.assertEquals((ENDEVENT, struct),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b', count=2, type=xarray_type)),
+                         next(events))
+        self.assertEqual((STARTEVENT, dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT, dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((STARTEVENT, dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT, dict(type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b', count=2, type=xarray_type)),
+                         next(events))
+        self.assertEqual((ENDEVENT, struct),
+                         next(events))
 
     def test_resolve_conditional_simple(self):
 
         def if_a_is_1(context, values):
             return values['a'] == 1
 
+        @add_metaclass(StructType)
         class StructWithCondition(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -381,45 +383,45 @@ class TestBinIO(TestCase):
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals(STARTEVENT, ev)
-        self.assertEquals(StructWithCondition, struct['type'])
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual(STARTEVENT, ev)
+        self.assertEqual(StructWithCondition, struct['type'])
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=0)
-        self.assertEquals((None, dict(name='c', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(struct,
-                                value=dict(a=0))),
-                          events.next())
+        self.assertEqual((None, dict(name='c', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(struct,
+                               value=dict(a=0))),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals(STARTEVENT, ev)
-        self.assertEquals(StructWithCondition, struct['type'])
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual(STARTEVENT, ev)
+        self.assertEqual(StructWithCondition, struct['type'])
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=1)
-        self.assertEquals((None,
-                           dict(name='b',
-                                type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='c', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(struct,
-                                value=dict(a=1))),
-                          events.next())
+        self.assertEqual((None,
+                          dict(name='b',
+                               type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='c', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(struct,
+                               value=dict(a=1))),
+                         next(events))
 
     def test_resolve_conditional_struct(self):
 
         def if_a_is_1(context, values):
             return values['a'] == 1
 
+        @add_metaclass(StructType)
         class StructWithCondition(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -433,50 +435,50 @@ class TestBinIO(TestCase):
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals(STARTEVENT, ev)
-        self.assertEquals(StructWithCondition, struct['type'])
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual(STARTEVENT, ev)
+        self.assertEqual(StructWithCondition, struct['type'])
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=0)
-        self.assertEquals((None, dict(name='c', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(struct,
-                                value=dict(a=0))),
-                          events.next())
+        self.assertEqual((None, dict(name='c', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(struct,
+                               value=dict(a=0))),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals(STARTEVENT, ev)
-        self.assertEquals(StructWithCondition, struct['type'])
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual(STARTEVENT, ev)
+        self.assertEqual(StructWithCondition, struct['type'])
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=1)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b',
-                                type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b',
-                                type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='c', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(struct,
-                                value=dict(a=1))),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b',
+                               type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b',
+                               type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='c', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(struct,
+                               value=dict(a=1))),
+                         next(events))
 
     def test_resolve_selective_type(self):
 
+        @add_metaclass(StructType)
         class StructWithSelectiveType(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -492,50 +494,50 @@ class TestBinIO(TestCase):
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals(STARTEVENT, ev)
-        self.assertEquals(StructWithSelectiveType, struct['type'])
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual(STARTEVENT, ev)
+        self.assertEqual(StructWithSelectiveType, struct['type'])
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=0)
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='c', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(struct,
-                                value=dict(a=0))),
-                          events.next())
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='c', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(struct,
+                               value=dict(a=0))),
+                         next(events))
 
         events = static_to_mutable(iter(static_events))
         events = resolve_typedefs(events, dict())
-        ev, struct = events.next()
-        self.assertEquals(STARTEVENT, ev)
-        self.assertEquals(StructWithSelectiveType, struct['type'])
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
+        ev, struct = next(events)
+        self.assertEqual(STARTEVENT, ev)
+        self.assertEqual(StructWithSelectiveType, struct['type'])
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
         struct['value'] = dict(a=1)
-        self.assertEquals((STARTEVENT,
-                           dict(name='b',
-                                type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='a', type=UINT16)),
-                          events.next())
-        self.assertEquals((None, dict(name='b', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(name='b',
-                                type=self.BasicStruct)),
-                          events.next())
-        self.assertEquals((None, dict(name='c', type=UINT16)),
-                          events.next())
-        self.assertEquals((ENDEVENT,
-                           dict(struct,
-                                value=dict(a=1))),
-                          events.next())
+        self.assertEqual((STARTEVENT,
+                          dict(name='b',
+                               type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='a', type=UINT16)),
+                         next(events))
+        self.assertEqual((None, dict(name='b', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(name='b',
+                               type=self.BasicStruct)),
+                         next(events))
+        self.assertEqual((None, dict(name='c', type=UINT16)),
+                         next(events))
+        self.assertEqual((ENDEVENT,
+                          dict(struct,
+                               value=dict(a=1))),
+                         next(events))
 
     def test_resolve_values_from_stream(self):
-        assertEquals = self.assertEquals
+        assertEqual = self.assertEqual
 
         stream = BytesIO(b'\x00\x01\x00\x02')
         resolve_values = resolve_values_from_stream(stream)
@@ -544,17 +546,17 @@ class TestBinIO(TestCase):
         events = bintype_map_events(bin_item)
         events = resolve_values(events)
 
-        assertEquals((STARTEVENT, bin_item), events.next())
-        assertEquals((None,
-                      dict(name='a', type=UINT16, bin_offset=0, value=256)),
-                     events.next())
-        assertEquals((None,
-                      dict(name='b', type=UINT16, bin_offset=2, value=512)),
-                     events.next())
-        assertEquals((ENDEVENT, bin_item), events.next())
+        assertEqual((STARTEVENT, bin_item), next(events))
+        assertEqual((None,
+                     dict(name='a', type=UINT16, bin_offset=0, value=256)),
+                    next(events))
+        assertEqual((None,
+                     dict(name='b', type=UINT16, bin_offset=2, value=512)),
+                    next(events))
+        assertEqual((ENDEVENT, bin_item), next(events))
 
+        @add_metaclass(StructType)
         class StructWithBSTR(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -565,15 +567,15 @@ class TestBinIO(TestCase):
         bin_item = dict(type=StructWithBSTR)
         events = bintype_map_events(bin_item)
         events = resolve_values(events)
-        assertEquals((STARTEVENT, bin_item), events.next())
-        assertEquals((None,
-                      dict(name='name', type=BSTR, bin_offset=0,
-                           value=u'\u0100\u0200')),
-                     events.next())
-        assertEquals((ENDEVENT, bin_item), events.next())
+        assertEqual((STARTEVENT, bin_item), next(events))
+        assertEqual((None,
+                     dict(name='name', type=BSTR, bin_offset=0,
+                          value=u'\u0100\u0200')),
+                    next(events))
+        assertEqual((ENDEVENT, bin_item), next(events))
 
+        @add_metaclass(StructType)
         class StructWithParaTextChunks(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -584,13 +586,13 @@ class TestBinIO(TestCase):
         bin_item = dict(type=StructWithParaTextChunks)
         events = bintype_map_events(bin_item)
         events = resolve_values(events)
-        assertEquals((STARTEVENT, bin_item), events.next())
-        assertEquals((None,
-                      dict(name='texts', type=ParaTextChunks,
-                           bin_offset=0,
-                           value=[((0, 3), u'\u0020\u0021\u0022')])),
-                     events.next())
-        assertEquals((ENDEVENT, bin_item), events.next())
+        assertEqual((STARTEVENT, bin_item), next(events))
+        assertEqual((None,
+                     dict(name='texts', type=ParaTextChunks,
+                          bin_offset=0,
+                          value=[((0, 3), u'\u0020\u0021\u0022')])),
+                    next(events))
+        assertEqual((ENDEVENT, bin_item), next(events))
 
     def test_collect_values(self):
 
@@ -610,16 +612,16 @@ class TestBinIO(TestCase):
                  value=dict(a=0x101, b=0x102))
         x = dict(type=self.NestedStruct,
                  value=dict(a=1, s=dict(a=0x101, b=0x102), b=2))
-        self.assertEquals((STARTEVENT, bin_item), events.next())
-        self.assertEquals((None, a), events.next())
-        self.assertEquals((STARTEVENT, dict(name='s', type=self.BasicStruct,
-                                            value=dict())),
-                          events.next())
-        self.assertEquals((None, s_a), events.next())
-        self.assertEquals((None, s_b), events.next())
-        self.assertEquals((ENDEVENT, s), events.next())
-        self.assertEquals((None, b), events.next())
-        self.assertEquals((ENDEVENT, x), events.next())
+        self.assertEqual((STARTEVENT, bin_item), next(events))
+        self.assertEqual((None, a), next(events))
+        self.assertEqual((STARTEVENT, dict(name='s', type=self.BasicStruct,
+                                           value=dict())),
+                         next(events))
+        self.assertEqual((None, s_a), next(events))
+        self.assertEqual((None, s_b), next(events))
+        self.assertEqual((ENDEVENT, s), next(events))
+        self.assertEqual((None, b), next(events))
+        self.assertEqual((ENDEVENT, x), next(events))
 
 
 class TestReadEvents(TestCase):
@@ -628,8 +630,8 @@ class TestReadEvents(TestCase):
         def if_a_is_1(context, values):
             return values['a'] == 1
 
+        @add_metaclass(StructType)
         class StructWithCondition(object):
-            __metaclass__ = StructType
 
             @staticmethod
             def attributes():
@@ -644,15 +646,15 @@ class TestReadEvents(TestCase):
         events = read_type_events(StructWithCondition, context, stream)
         a = dict(name='a', type=UINT16, value=0, bin_offset=0)
         c = dict(name='c', type=UINT16, value=2, bin_offset=2)
-        self.assertEquals((STARTEVENT, dict(type=StructWithCondition,
-                                            value=dict())),
-                          events.next())
-        self.assertEquals((None, a), events.next())
-        self.assertEquals((None, c), events.next())
-        self.assertEquals((ENDEVENT, dict(type=StructWithCondition,
-                                          value=dict(a=0, c=2))),
-                          events.next())
-        self.assertEquals('', stream.read())
+        self.assertEqual((STARTEVENT, dict(type=StructWithCondition,
+                                           value=dict())),
+                         next(events))
+        self.assertEqual((None, a), next(events))
+        self.assertEqual((None, c), next(events))
+        self.assertEqual((ENDEVENT, dict(type=StructWithCondition,
+                                         value=dict(a=0, c=2))),
+                         next(events))
+        self.assertEqual(b'', stream.read())
 
         # if a = 1
         stream = BytesIO(b'\x01\x00\x0f\x00\x02\x00')
@@ -662,11 +664,11 @@ class TestReadEvents(TestCase):
         c = dict(name='c', type=UINT16, value=2, bin_offset=4)
         x = dict(type=StructWithCondition,
                  value=dict(a=1, b=0xf, c=2))
-        self.assertEquals((STARTEVENT, dict(type=StructWithCondition,
-                                            value={})),
-                          events.next())
-        self.assertEquals((None, a), events.next())
-        self.assertEquals((None, b), events.next())
-        self.assertEquals((None, c), events.next())
-        self.assertEquals((ENDEVENT, x), events.next())
-        self.assertEquals('', stream.read())
+        self.assertEqual((STARTEVENT, dict(type=StructWithCondition,
+                                           value={})),
+                         next(events))
+        self.assertEqual((None, a), next(events))
+        self.assertEqual((None, b), next(events))
+        self.assertEqual((None, c), next(events))
+        self.assertEqual((ENDEVENT, x), next(events))
+        self.assertEqual(b'', stream.read())

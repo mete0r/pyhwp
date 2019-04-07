@@ -74,7 +74,15 @@ from . import open_hwpfile
 from ..storage import open_storage_item
 
 
+PY2 = sys.version_info.major == 2
+
+
 def main(args):
+    if PY2:
+        output_fp = sys.stdout
+    else:
+        output_fp = sys.stdout.buffer
+
     hwp5file = open_hwpfile(args)
     stream = open_storage_item(hwp5file, args['<stream>'])
     f = stream.open()
@@ -82,7 +90,7 @@ def main(args):
         while True:
             data = f.read(4096)
             if data:
-                sys.stdout.write(data)
+                output_fp.write(data)
             else:
                 return
     finally:

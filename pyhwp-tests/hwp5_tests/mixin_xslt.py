@@ -46,7 +46,7 @@ class XsltTestMixin(object):
 
         with io.open(out_path, 'rb') as f:
             out_doc = etree.parse(f)
-        self.assertEquals('out', out_doc.getroot().tag)
+        self.assertEqual('out', out_doc.getroot().tag)
 
     def test_xslt(self):
         if self.xslt is None:
@@ -70,4 +70,4 @@ class XsltTestMixin(object):
 
         with io.open(out_path, 'rb') as f:
             out_doc = etree.parse(f)
-        self.assertEquals('out', out_doc.getroot().tag)
+        self.assertEqual('out', out_doc.getroot().tag)

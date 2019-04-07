@@ -80,6 +80,22 @@ def init_with_environ():
 
 def init_logger(args):
     logger = logging.getLogger('hwp5')
+    try:
+        from colorlog import ColoredFormatter
+    except ImportError:
+        formatter = None
+    else:
+        formatter = ColoredFormatter(
+            '%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s',
+            datefmt=None, reset=True,
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'red'
+            }
+        )
 
     loglevel = args.get('--loglevel', None)
     if not loglevel:
@@ -98,9 +114,12 @@ def init_logger(args):
     if not logfile:
         logfile = os.environ.get('PYHWP_LOGFILE')
     if logfile:
-        logger.addHandler(logging.FileHandler(logfile))
+        handler = logging.FileHandler(logfile)
     else:
-        logger.addHandler(logging.StreamHandler())
+        handler = logging.StreamHandler()
+    if formatter:
+        handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
 
 subcommands = [
@@ -186,10 +205,10 @@ def main():
 
     try:
         return main(args)
-    except InvalidHwp5FileError, e:
+    except InvalidHwp5FileError as e:
         logger.error('%s', e)
         raise SystemExit(1)
-    except ParseError, e:
+    except ParseError as e:
         e.print_to_logger(logger)
         raise SystemExit(1)
 

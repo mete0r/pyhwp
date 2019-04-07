@@ -33,6 +33,7 @@ import tempfile
 from .importhelper import pkg_resources_filename
 
 
+PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
 
 
@@ -88,11 +89,45 @@ class JsonObjects(object):
         return generate_json_array(tokens)
 
     def open(self, **kwargs):
-        return GeneratorReader(self.generate(**kwargs))
+        chunks = self.generate(**kwargs)
+        chunks = (chunk.encode('utf-8') for chunk in chunks)
+        return GeneratorReader(chunks)
 
     def dump(self, outfile, **kwargs):
         for s in self.generate(**kwargs):
             outfile.write(s)
+
+
+def unicode_escape(s):
+    '''
+    Escape a string.
+
+    :param s:
+        a string to escape
+    :type s:
+        unicode
+    :returns:
+        escaped string
+    :rtype:
+        unicode
+    '''
+    return s.encode('unicode_escape').decode('utf-8')
+
+
+def unicode_unescape(s):
+    '''
+    Unescape a string.
+
+    :param s:
+        a string to unescape
+    :type s:
+        unicode
+    :returns:
+        unescaped string
+    :rtype:
+        unicode
+    '''
+    return s.encode('utf-8').decode('unicode_escape')
 
 
 def transcode(backend_stream, backend_encoding, frontend_encoding,
@@ -147,6 +182,44 @@ class GeneratorReader(object):
         self.gen = self.buffer = None
 
 
+class GeneratorTextReader(object):
+    ''' convert a string generator into file-like reader
+
+        def gen():
+            yield 'hello'
+            yield 'world'
+
+        f = GeneratorTextReader(gen())
+        assert 'hell' == f.read(4)
+        assert 'oworld' == f.read()
+    '''
+
+    def __init__(self, gen):
+        self.gen = gen
+        self.buffer = ''
+
+    def read(self, size=None):
+        if size is None:
+            d = self.buffer
+            self.buffer = ''
+            return d + ''.join(self.gen)
+
+        for data in self.gen:
+            self.buffer += data
+            bufsize = len(self.buffer)
+            if bufsize >= size:
+                size = min(bufsize, size)
+                d, self.buffer = self.buffer[:size], self.buffer[size:]
+                return d
+
+        d = self.buffer
+        self.buffer = ''
+        return d
+
+    def close(self):
+        self.gen = self.buffer = None
+
+
 @contextmanager
 def hwp5_resources_path(res_path):
     try:
@@ -171,14 +244,20 @@ def make_open_dest_file(path):
     if path:
         @contextmanager
         def open_dest_path():
-            with open(path, 'w') as f:
+            with open(path, 'wb') as f:
                 yield f
         return open_dest_path
     else:
-        @contextmanager
-        def open_stdout():
-            yield sys.stdout
-        return open_stdout
+        if PY3:
+            @contextmanager
+            def open_stdout():
+                yield sys.stdout.buffer
+            return open_stdout
+        else:
+            @contextmanager
+            def open_stdout():
+                yield sys.stdout
+            return open_stdout
 
 
 def wrap_open_dest_for_tty(open_dest, wrappers):
@@ -225,13 +304,13 @@ def output_thru_subprocess(cmd):
         logger.debug('%r', cmd)
         try:
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=output)
-        except Exception, e:
+        except Exception as e:
             logger.error('%r: %s', ' '.join(cmd), e)
             yield output
         else:
             try:
                 yield p.stdin
-            except IOError, e:
+            except IOError as e:
                 import errno
                 if e.errno != errno.EPIPE:
                     raise
@@ -260,7 +339,7 @@ def xmllint(c14n=False, encode=None, format=False, nonet=True):
 def syntaxhighlight(mimetype):
     try:
         return syntaxhighlight_pygments(mimetype)
-    except Exception, e:
+    except Exception as e:
         logger.info(e)
         return null_contextmanager_filter
 
@@ -337,6 +416,6 @@ def mkstemp_open(*args, **kwargs):
 def unlink_or_warning(path):
     try:
         os.unlink(path)
-    except Exception, e:
+    except Exception as e:
         logger.exception(e)
         logger.warning('%s cannot be deleted', path)

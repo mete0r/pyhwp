@@ -531,7 +531,7 @@ diststream 명령
    $ hwp5proc cat --ole samples/viewtext.hwp ViewText/Section0 > Section0.zraw.aes128ecb
    $ sha1sum Section0.zraw.aes128ecb
    afb6223d49748dec0f1fb3ccf720918ea1a31ec5  Section0.zraw.aes128ecb
-   $ hwp5proc diststream < Section0.zraw.aes128ecb > Section0.zraw
+   $ hwp5proc diststream < Section0.zraw.aes128ecb > Section0.zraw 2>/dev/null
    $ sha1sum Section0.zraw
    77150206051a11c68ec61353b9d7cf3a0dd63ec8  Section0.zraw
    $ hwp5proc rawunz < Section0.zraw > Section0
@@ -1948,14 +1948,23 @@ xml 명령
              <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="7752">
                <Text charshape-id="1" lang="ko">본문 </Text>
                <Text charshape-id="5" lang="ko">내용</Text>
-               <Text charshape-id="1" lang="ko">입니다. 본 문서는 ᄒᆞᆫ글 워드 프로세서의 파일 저장 형식 중, ᄒᆞᆫ글 2002</Text>
+               <Text charshape-id="1" lang="ko">입니다. 본 문서는 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 워드 프로세서의 파일 저장 형식 중, </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 2002 이후 </Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="51" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="9352">
-               <Text charshape-id="1" lang="ko"> 이후 제품에서 사용되는 ᄒᆞᆫ글 문서 파일 형식 5.0 및 ᄒᆞᆫ글 97 문서 파일 형식, </Text>
+               <Text charshape-id="1" lang="ko">제품에서 사용되는 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 문서 파일 형식 5.0 및 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 97 문서 파일 형식, </Text>
+               <Text charshape-id="1" lang="en">HWPML</Text>
+               <Text charshape-id="1" lang="ko">에 관</Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="103" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="10952">
-               <Text charshape-id="1" lang="en">HWPML</Text>
-               <Text charshape-id="1" lang="ko">에 관하여 설명한다.</Text>
+               <Text charshape-id="1" lang="ko">하여 설명한다.</Text>
                <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
              </LineSeg>
            </Paragraph>
@@ -2099,15 +2108,19 @@ xml 명령
              <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="41275">
                <Text charshape-id="1" lang="ko">본 </Text>
                <Text charshape-id="6" lang="ko">문서</Text>
-               <Text charshape-id="1" lang="ko">는 먼저 ᄒᆞᆫ글 문서 파일 형식 5.0에 관하여 설명한 후, ᄒᆞᆫ글 97 </Text>
+               <Text charshape-id="1" lang="ko">는 먼저 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 문서 파일 형식 5.0에 관하여 설명한 후, </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 97 문서 파</Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="47" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="42875">
-               <Text charshape-id="1" lang="ko">문서 파일 형식, </Text>
+               <Text charshape-id="1" lang="ko">일 형식, </Text>
                <Text charshape-id="1" lang="en">HWPML</Text>
-               <Text charshape-id="1" lang="ko">에 관하여 설명한다. 각 형식에 대한 설명은 문서 파일 형식 내</Text>
+               <Text charshape-id="1" lang="ko">에 관하여 설명한다. 각 형식에 대한 설명은 문서 파일 형식 내의 주요</Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="97" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="44475">
-               <Text charshape-id="1" lang="ko">의 주요한 자료 형식 및 파일 구조, 레코드 구조에 대해서 설명한다.</Text>
+               <Text charshape-id="1" lang="ko">한 자료 형식 및 파일 구조, 레코드 구조에 대해서 설명한다.</Text>
                <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
              </LineSeg>
            </Paragraph>
@@ -2160,7 +2173,7 @@ xml 명령
                    <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                    <Array name="scalerotations">
                      <ScaleRotationMatrix>
-                       <Matrix a="0.743494423792" attribute-name="scaler" b="0.0" c="0.0" d="0.743494423792" e="0.0" f="0.0"/>
+                       <Matrix a="0.7434944237918215" attribute-name="scaler" b="0.0" c="0.0" d="0.7434944237918215" e="0.0" f="0.0"/>
                        <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                      </ScaleRotationMatrix>
                    </Array>
@@ -2834,14 +2847,23 @@ xml 명령
              <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="7752">
                <Text charshape-id="1" lang="ko">본문 </Text>
                <Text charshape-id="5" lang="ko">내용</Text>
-               <Text charshape-id="1" lang="ko">입니다. 본 문서는 ᄒᆞᆫ글 워드 프로세서의 파일 저장 형식 중, ᄒᆞᆫ글 2002</Text>
+               <Text charshape-id="1" lang="ko">입니다. 본 문서는 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 워드 프로세서의 파일 저장 형식 중, </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 2002 이후 </Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="51" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="9352">
-               <Text charshape-id="1" lang="ko"> 이후 제품에서 사용되는 ᄒᆞᆫ글 문서 파일 형식 5.0 및 ᄒᆞᆫ글 97 문서 파일 형식, </Text>
+               <Text charshape-id="1" lang="ko">제품에서 사용되는 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 문서 파일 형식 5.0 및 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 97 문서 파일 형식, </Text>
+               <Text charshape-id="1" lang="en">HWPML</Text>
+               <Text charshape-id="1" lang="ko">에 관</Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="103" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="10952">
-               <Text charshape-id="1" lang="en">HWPML</Text>
-               <Text charshape-id="1" lang="ko">에 관하여 설명한다.</Text>
+               <Text charshape-id="1" lang="ko">하여 설명한다.</Text>
                <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
              </LineSeg>
            </Paragraph>
@@ -2985,15 +3007,19 @@ xml 명령
              <LineSeg bullet="0" chpos="0" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="41275">
                <Text charshape-id="1" lang="ko">본 </Text>
                <Text charshape-id="6" lang="ko">문서</Text>
-               <Text charshape-id="1" lang="ko">는 먼저 ᄒᆞᆫ글 문서 파일 형식 5.0에 관하여 설명한 후, ᄒᆞᆫ글 97 </Text>
+               <Text charshape-id="1" lang="ko">는 먼저 </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 문서 파일 형식 5.0에 관하여 설명한 후, </Text>
+               <Text charshape-id="1" lang="other"></Text>
+               <Text charshape-id="1" lang="ko">글 97 문서 파</Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="47" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="42875">
-               <Text charshape-id="1" lang="ko">문서 파일 형식, </Text>
+               <Text charshape-id="1" lang="ko">일 형식, </Text>
                <Text charshape-id="1" lang="en">HWPML</Text>
-               <Text charshape-id="1" lang="ko">에 관하여 설명한다. 각 형식에 대한 설명은 문서 파일 형식 내</Text>
+               <Text charshape-id="1" lang="ko">에 관하여 설명한다. 각 형식에 대한 설명은 문서 파일 형식 내의 주요</Text>
              </LineSeg>
              <LineSeg bullet="0" chpos="97" height="1000" height-baseline="850" height-text="1000" indented="0" line-head="1" line-tail="1" lineseg-flags="00060000" space-below="600" width="41020" x="1500" y="44475">
-               <Text charshape-id="1" lang="ko">의 주요한 자료 형식 및 파일 구조, 레코드 구조에 대해서 설명한다.</Text>
+               <Text charshape-id="1" lang="ko">한 자료 형식 및 파일 구조, 레코드 구조에 대해서 설명한다.</Text>
                <ControlChar char="&#13;" charshape-id="1" code="13" kind="CHAR" name="PARAGRAPH_BREAK"/>
              </LineSeg>
            </Paragraph>
@@ -3046,7 +3072,7 @@ xml 명령
                    <Matrix a="1.0" attribute-name="translation" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                    <Array name="scalerotations">
                      <ScaleRotationMatrix>
-                       <Matrix a="0.743494423792" attribute-name="scaler" b="0.0" c="0.0" d="0.743494423792" e="0.0" f="0.0"/>
+                       <Matrix a="0.7434944237918215" attribute-name="scaler" b="0.0" c="0.0" d="0.7434944237918215" e="0.0" f="0.0"/>
                        <Matrix a="1.0" attribute-name="rotator" b="0.0" c="0.0" d="1.0" e="0.0" f="0.0"/>
                      </ScaleRotationMatrix>
                    </Array>

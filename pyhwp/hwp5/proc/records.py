@@ -85,7 +85,17 @@ from ..storage import Open2Stream
 from . import parse_recordstream_name
 
 
+PY2 = sys.version_info.major == 2
+
+
 def main(args):
+    if PY2:
+        stdout_text = sys.stdout
+        stdout_binary = sys.stdout
+    else:
+        stdout_text = sys.stdout
+        stdout_binary = sys.stdout.buffer
+
     filename = args['<hwp5file>']
     if filename:
         hwpfile = Hwp5File(filename)
@@ -108,20 +118,20 @@ def main(args):
 
     if args['--simple']:
         for record in stream.records(**opts):
-            sys.stdout.write('{:04d} {} {}\n'.format(
+            stdout_text.write('{:04d} {} {}\n'.format(
                 record['seqno'],
                 '  ' * record['level'],
                 record['tagname'],
             ))
     elif args['--raw']:
         for record in stream.records(**opts):
-            dump_record(sys.stdout, record)
+            dump_record(stdout_binary, record)
     elif args['--raw-header']:
         for record in stream.records(**opts):
             hdr = encode_record_header(record)
-            sys.stdout.write(hdr)
+            stdout_binary.write(hdr)
     elif args['--raw-payload']:
         for record in stream.records(**opts):
-            sys.stdout.write(record['payload'])
+            stdout_binary.write(record['payload'])
     else:
-        stream.records_json(**opts).dump(sys.stdout)
+        stream.records_json(**opts).dump(stdout_text)

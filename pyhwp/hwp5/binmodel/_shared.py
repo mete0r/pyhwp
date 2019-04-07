@@ -22,6 +22,8 @@ from __future__ import unicode_literals
 
 import logging
 
+from six import with_metaclass
+
 from hwp5.dataio import StructType
 from hwp5.dataio import Struct
 from hwp5.dataio import Enum
@@ -55,16 +57,15 @@ class RecordModelType(StructType):
         return cls
 
 
-class RecordModel(object):
-    __metaclass__ = RecordModelType
+class RecordModel(with_metaclass(RecordModelType, object)):
+    pass
 
 
 class BinStorageId(UINT16):
     pass
 
 
-class COLORREF(int):
-    __metaclass__ = PrimitiveType
+class COLORREF(with_metaclass(PrimitiveType, int)):
     binfmt = INT32.binfmt
     never_instantiate = False
 

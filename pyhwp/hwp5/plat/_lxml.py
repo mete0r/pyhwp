@@ -24,9 +24,13 @@ import io
 import logging
 import os.path
 import shutil
+import sys
 import tempfile
 
 from ..errors import ValidationFailed
+
+
+PY3 = sys.version_info.major == 3
 
 
 logger = logging.getLogger(__name__)
@@ -91,6 +95,8 @@ class XSLT:
             return self._transform(inp_file, output)
 
     def _transform(self, input, output):
+        # input, output: binary stream
+
         from lxml import etree
         source = etree.parse(input)
         logger.info('_lxml.xslt(%s) start',
@@ -98,7 +104,9 @@ class XSLT:
         result = self.etree_xslt(source, **self.params)
         logger.info('_lxml.xslt(%s) end',
                     os.path.basename(self.xsl_path))
-        output.write(str(result))
+        # https://lxml.de/1.3/FAQ.html#what-is-the-difference-between-str-xslt-doc-and-xslt-doc-write
+        result = bytes(result)
+        output.write(result)
         return dict()
 
 
@@ -131,7 +139,7 @@ class RelaxNG:
     def validating_output(self, output):
         fd, name = tempfile.mkstemp()
         try:
-            with os.fdopen(fd, 'w+') as f:
+            with os.fdopen(fd, 'wb+') as f:
                 yield f
                 f.seek(0)
                 if not self.validate_stream(f):
@@ -141,7 +149,7 @@ class RelaxNG:
         finally:
             try:
                 os.unlink(name)
-            except Exception, e:
+            except Exception as e:
                 logger.warning('%s: can\'t unlink %s', e, name)
 
     def validate(self, input):
@@ -159,7 +167,7 @@ class RelaxNG:
         logger.info('_lxml.relaxng(%s) start', os.path.basename(self.rng_path))
         try:
             valid = self.etree_relaxng.validate(doc)
-        except Exception, e:
+        except Exception as e:
             logger.exception(e)
             raise
         else:

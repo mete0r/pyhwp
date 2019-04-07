@@ -42,14 +42,14 @@ class OleStorageAdapterTest(TestBase):
 
         fileheader = adapter['FileHeader']
         fileheader = HwpFileHeader(fileheader)
-        self.assertEquals((5, 0, 1, 7), fileheader.version)
-        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
+        self.assertEqual((5, 0, 1, 7), fileheader.version)
+        self.assertEqual(HWP5_SIGNATURE, fileheader.signature)
 
         # reopen (just being careful)
         fileheader = adapter['FileHeader']
         fileheader = HwpFileHeader(fileheader)
-        self.assertEquals((5, 0, 1, 7), fileheader.version)
-        self.assertEquals(HWP5_SIGNATURE, fileheader.signature)
+        self.assertEqual((5, 0, 1, 7), fileheader.version)
+        self.assertEqual(HWP5_SIGNATURE, fileheader.signature)
 
 
 class HwpFileFromInputStreamTest(TestBase):
@@ -60,7 +60,7 @@ class HwpFileFromInputStreamTest(TestBase):
         with self.open_fixture('sample-5017.hwp', 'rb') as f:
             inputstream = InputStreamFromFileLike(f)
             hwpfile = HwpFileFromInputStream(inputstream)
-            self.assertEquals((5, 0, 1, 7), hwpfile.fileheader.version)
+            self.assertEqual((5, 0, 1, 7), hwpfile.fileheader.version)
 
 
 class StorageFromInputStreamTest(TestBase):
@@ -87,7 +87,7 @@ class StorageFromInputStreamTest(TestBase):
             try:
                 self.assertTrue(uno.getTypeByName('com.sun.star.embed.XStorage')
                                 in storage.Types)
-                self.assertEquals(set(['abc.txt']), set(storage.ElementNames))
+                self.assertEqual(set(['abc.txt']), set(storage.ElementNames))
             finally:
                 storage.dispose()
 
@@ -100,7 +100,7 @@ class TypedetectTest(TestBase):
         with self.open_fixture('sample-5017.hwp', 'rb') as f:
             inputstream = InputStreamFromFileLike(f, dontclose=True)
             self.assertTrue(inputstream_is_hwp5file(inputstream))
-            self.assertEquals('hwp5', typedetect(inputstream))
+            self.assertEqual('hwp5', typedetect(inputstream))
 
 
 class LoadHwp5FileTest(TestBase):
@@ -141,12 +141,12 @@ class LoadHwp5FileTest(TestBase):
         p = paragraphs[0]
         text_portions = list(self.get_text_portions(p))
         tp = text_portions[0]
-        self.assertEquals('Text', tp.TextPortionType)
-        self.assertEquals(u'한글 ', tp.String)
+        self.assertEqual('Text', tp.TextPortionType)
+        self.assertEqual(u'한글 ', tp.String)
 
         p = paragraphs[-1]
         tp = list(self.get_text_portions(p))[-1]
-        self.assertEquals('Frame', tp.TextPortionType)
+        self.assertEqual('Frame', tp.TextPortionType)
         tc = list(self.get_text_contents(tp))[-1]
         self.assertTrue('com.sun.star.drawing.GraphicObjectShape' in
                         tc.SupportedServiceNames)
@@ -158,26 +158,26 @@ class LoadHwp5FileTest(TestBase):
         drawpage = doc.getDrawPage()
         shapes = list(unokit.util.enumerate(drawpage))
 
-        self.assertEquals(2, len(shapes))
+        self.assertEqual(2, len(shapes))
 
-        self.assertEquals(1, shapes[0].Graphic.GraphicType)
-        self.assertEquals('image/jpeg', shapes[0].Graphic.MimeType)
-        self.assertEquals(2, shapes[0].Bitmap.GraphicType)
-        self.assertEquals('image/x-vclgraphic', shapes[0].Bitmap.MimeType)
-        self.assertEquals(28254, len(shapes[0].Bitmap.DIB))
+        self.assertEqual(1, shapes[0].Graphic.GraphicType)
+        self.assertEqual('image/jpeg', shapes[0].Graphic.MimeType)
+        self.assertEqual(2, shapes[0].Bitmap.GraphicType)
+        self.assertEqual('image/x-vclgraphic', shapes[0].Bitmap.MimeType)
+        self.assertEqual(28254, len(shapes[0].Bitmap.DIB))
         self.assertTrue(shapes[0].GraphicURL.startswith('vnd.sun.star.GraphicObject:'))
         print shapes[0].GraphicURL
-        #self.assertEquals('vnd.sun.star.GraphicObject:10000000000001F40000012C1F9CCF04',
+        #self.assertEqual('vnd.sun.star.GraphicObject:10000000000001F40000012C1F9CCF04',
         #                  shapes[0].GraphicURL)
-        self.assertEquals(None, shapes[0].GraphicStreamURL)
+        self.assertEqual(None, shapes[0].GraphicStreamURL)
 
-        self.assertEquals(1, shapes[1].Graphic.GraphicType)
-        self.assertEquals('image/png', shapes[1].Graphic.MimeType)
-        self.assertEquals(2, shapes[1].Bitmap.GraphicType)
-        self.assertEquals('image/x-vclgraphic', shapes[1].Bitmap.MimeType)
-        self.assertEquals(374, len(shapes[1].Bitmap.DIB))
+        self.assertEqual(1, shapes[1].Graphic.GraphicType)
+        self.assertEqual('image/png', shapes[1].Graphic.MimeType)
+        self.assertEqual(2, shapes[1].Bitmap.GraphicType)
+        self.assertEqual('image/x-vclgraphic', shapes[1].Bitmap.MimeType)
+        self.assertEqual(374, len(shapes[1].Bitmap.DIB))
         self.assertTrue(shapes[1].GraphicURL.startswith('vnd.sun.star.GraphicObject:'))
         print shapes[1].GraphicURL
-        #self.assertEquals('vnd.sun.star.GraphicObject:1000020100000010000000108F049D12',
+        #self.assertEqual('vnd.sun.star.GraphicObject:1000020100000010000000108F049D12',
         #                  shapes[1].GraphicURL)
-        self.assertEquals(None, shapes[1].GraphicStreamURL)
+        self.assertEqual(None, shapes[1].GraphicStreamURL)

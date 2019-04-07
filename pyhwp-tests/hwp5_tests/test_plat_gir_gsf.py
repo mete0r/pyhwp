@@ -33,7 +33,7 @@ class TestGirGsf(TestCase):
         gsfole = gir_gsf.open(self.sample_path)
 
         children = list(gir_gsf.listdir(gsfole))
-        self.assertEquals(set(['BinData', 'DocInfo', 'PrvText',
+        self.assertEqual(set(['BinData', 'DocInfo', 'PrvText',
                                'Scripts', 'BodyText', 'PrvImage',
                                'DocOptions', 'FileHeader',
                                '\x05HwpSummaryInformation']),
