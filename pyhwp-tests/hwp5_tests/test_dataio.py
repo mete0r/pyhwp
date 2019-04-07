@@ -364,7 +364,7 @@ class TestBSTR(TestCase):
         f = BytesIO(lengthbyte + b'\x00' + pua_utf16le)
 
         jamo = BSTR.read(f)
-        expected = u'\ub098\ub78f\u302e\ub9d0\u302f\u110a\u119e\ubbf8\u302e'
+        expected = u'\ub098\ub78f\u302e\ub9d0\u302f\uebd4\ubbf8\u302e'
         self.assertEqual(expected, jamo)
 
 

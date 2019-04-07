@@ -25,8 +25,6 @@ from xml.sax.saxutils import quoteattr
 import logging
 import sys
 
-from hypua2jamo import codes2unicode
-
 from .filestructure import VERSION
 from .dataio import typed_struct_attributes
 from .dataio import Struct
@@ -49,6 +47,7 @@ from .treeop import ENDEVENT
 PY3 = sys.version_info.major == 3
 if PY3:
     basestring = str
+    unichr = chr
 
 
 logger = logging.getLogger(__name__)
@@ -93,7 +92,7 @@ def expanded_xmlattribute(ntv):
             if value in PUA_SYMBOLS:
                 yield name, PUA_SYMBOLS[value]
             else:
-                yield name, codes2unicode([value])
+                yield name, unichr(value)
     elif t is BinStorageId:
         yield name, 'BIN%04X' % value
     else:

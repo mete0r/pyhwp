@@ -177,9 +177,7 @@ def decode_utf16le_with_hypua(bytes):
     :param bytes: utf-16le encoded bytes with Hanyang-PUA codes
     :returns: a unicode string with Hangul Jamo codes
     '''
-    from hypua2jamo import codes2unicode
-    codes = decode_uint16le_array(bytes)
-    return codes2unicode(codes.tolist())
+    return bytes.decode('utf-16le')
 
 
 class BitGroupDescriptor(object):

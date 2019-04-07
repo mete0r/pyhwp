@@ -14,7 +14,7 @@ backports-abc==0.5        # via tornado
 backports.shutil-get-terminal-size==1.0.0  # via ipython
 bleach==2.0.0             # via nbconvert, readme-renderer
 certifi==2017.7.27.1      # via requests, tornado
-cffi==1.12.2              # via cryptography, hypua2jamo
+cffi==1.12.2              # via cryptography
 chardet==3.0.4            # via requests
 check-manifest==0.35
 click==6.7                # via pip-tools, sphinx-intl
@@ -36,7 +36,6 @@ funcsigs==1.0.2           # via pytest
 functools32==3.2.3.post2  # via jsonschema
 future==0.16.0            # via commonmark
 html5lib==0.999999999     # via bleach
-hypua2jamo==0.4.4
 idna==2.6                 # via requests
 imagesize==0.7.1          # via sphinx
 ipaddress==1.0.22         # via cryptography

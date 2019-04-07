@@ -5,11 +5,10 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 asn1crypto==0.24.0        # via cryptography
-cffi==1.12.2              # via cryptography, hypua2jamo
+cffi==1.12.2              # via cryptography
 cryptography==2.6.1 ; platform_python_implementation != "Jython"
 docopt==0.6.2
 enum34==1.1.6             # via cryptography
-hypua2jamo==0.4.4
 ipaddress==1.0.22         # via cryptography
 lxml==4.2.4 ; platform_python_implementation != "Jython"
 olefile==0.44 ; platform_python_implementation != "Jython"
