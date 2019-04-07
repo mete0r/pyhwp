@@ -4,7 +4,10 @@ CHANGES
 0.1b12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add Python 3.x support.
+- Add an optional dependency on colorlog for colorful logging
+- Remove dependency on hypua2jamo, resulting no automatic conversion of
+  Hanyang PUA to Hangul Jamo
 
 
 0.1b11 (2019-03-21)
