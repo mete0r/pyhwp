@@ -16,19 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Deflate an headerless zlib-compressed stream
-
-Usage::
-
-    hwp5proc rawunz [--loglevel=<loglevel>] [--logfile=<logfile>]
-    hwp5proc rawunz --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -51,3 +38,17 @@ def main(args):
 
     stream = StreamReader(input_fp)
     shutil.copyfileobj(stream, output_fp)
+
+
+def rawunz_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'rawunz',
+        help=_(
+            'Deflate an headerless zlib-compressed stream'
+        ),
+        description=_(
+            'Deflate an headerless zlib-compressed stream'
+        ),
+    )
+    parser.set_defaults(func=main)
+    return parser

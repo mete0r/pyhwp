@@ -1,77 +1,38 @@
 프로그램 설명 및 사용법을 간단하게 표시한다::
 
-   $ hwp5proc
-   Do various operations on HWPv5 files.
-   
-   Usage:
-       hwp5proc <command> [<args>...]
-       hwp5proc [--version]
-       hwp5proc [--help]
-       hwp5proc [--help-commands]
-   
-          --version        Show version and copyright information.
-       -h --help           Show help messages.
-          --help-commands  Show available commands.
-
    $ hwp5proc --help
+   usage: hwp5proc [-h] [--loglevel LOGLEVEL] [--logfile LOGFILE]
+                   {version,header,summaryinfo,ls,cat,unpack,records,models,find,xml,rawunz,diststream}
+                   ...
+   
    Do various operations on HWPv5 files.
    
-   Usage:
-       hwp5proc <command> [<args>...]
-       hwp5proc [--version]
-       hwp5proc [--help]
-       hwp5proc [--help-commands]
+   optional arguments:
+     -h, --help            show this help message and exit
+     --loglevel LOGLEVEL   Set log level.
+     --logfile LOGFILE     Set log file.
    
-          --version        Show version and copyright information.
-       -h --help           Show help messages.
-          --help-commands  Show available commands.
-
-프로그램 판본 및 사용허가 조건을 확인하려면 ``--version`` 옵션을 사용한다::
-
-   $ hwp5proc --version | head -n 1 | cut -d ' ' -f 1,2    #=> hwp5proc (pyhwp)
-   $ hwp5proc --version | head -n 1 | cut -d ' ' -f 3      #=> --regex 0.1b.*
-   $ hwp5proc --version | tail -n +2
-   Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>
-   License AGPLv3+: GNU Affero GPL version 3 or any later
-   <http://gnu.org/licenses/agpl.txt>.
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
-   Disclosure: This program has been developed in accordance with a public
-   document named "HWP Binary Specification 1.1" published by Hancom Inc.
-   <http://www.hancom.co.kr>.
+   subcommands:
+     valid subcommands
+   
+     {version,header,summaryinfo,ls,cat,unpack,records,models,find,xml,rawunz,diststream}
+       version             Print the file format version of .hwp files.
+       header              Print file headers of .hwp files.
+       summaryinfo         Print summary informations of .hwp files.
+       ls                  List streams in .hwp files.
+       cat                 Extract out internal streams of .hwp files
+       unpack              Extract out internal streams of .hwp files into a
+                           directory.
+       records             Print the record structure of .hwp file record
+                           streams.
+       models              Print parsed binary models of .hwp file record
+                           streams.
+       find                Find record models with specified predicates.
+       xml                 Transform .hwp files into an XML.
+       rawunz              Deflate an headerless zlib-compressed stream
+       diststream          Decode a distribute document stream.
 
 hwp5proc 은 여러 하위 명령으로 이루어져 있다.
-지원하는 하위 명령들을 확인하려면::
-
-   $ hwp5proc --help-commands
-   Do various operations on HWPv5 files.
-   
-   Usage:
-       hwp5proc <command> [<args>...]
-       hwp5proc [--version]
-       hwp5proc [--help]
-       hwp5proc [--help-commands]
-   
-          --version        Show version and copyright information.
-       -h --help           Show help messages.
-          --help-commands  Show available commands.
-   
-   Available <command> values:
-   
-       version
-       header
-       summaryinfo
-       ls
-       cat
-       unpack
-       records
-       models
-       find
-       xml
-       rawunz
-       diststream
-   
-   See 'hwp5proc <command> --help' for more information on a specific command.
 
 ------------
 version 명령
@@ -79,22 +40,16 @@ version 명령
 
 사용법::
 
-   $ hwp5proc version
-   Usage:
-       hwp5proc version [options] <hwp5file>
-       hwp5proc version --help
-
    $ hwp5proc version --help
-   Print HWP file format version of <hwp5file>.
+   usage: hwp5proc version [-h] <hwp5file>
    
-   Usage:
-       hwp5proc version [options] <hwp5file>
-       hwp5proc version --help
+   Print the file format version of <hwp5file>.
    
-   Options:
-       -h --help              Show this screen
-          --loglevel=<level>  Set log level.
-          --logfile=<file>    Set log file.
+   positional arguments:
+     <hwp5file>  .hwp file to analyze
+   
+   optional arguments:
+     -h, --help  show this help message and exit
 
 HWPv5 파일의 파일 포맷 버젼을 확인한다::
 
@@ -107,22 +62,16 @@ header 명령
 
 사용법::
 
-   $ hwp5proc header
-   Usage:
-       hwp5proc header [options] <hwp5file>
-       hwp5proc header -h
-
    $ hwp5proc header --help
-    Print HWP file header.
+   usage: hwp5proc header [-h] <hwp5file>
    
-   Usage:
-       hwp5proc header [options] <hwp5file>
-       hwp5proc header -h
+   Print the file header of <hwp5file>.
    
-   Options:
-       -h --help              Show this screen
-          --loglevel=<level>  Set log level.
-          --logfile=<file>    Set log file.
+   positional arguments:
+     <hwp5file>  .hwp file to analyze
+   
+   optional arguments:
+     -h, --help  show this help message and exit
 
    $ hwp5proc header samples/sample-5017.hwp
    ccl: 0
@@ -147,22 +96,16 @@ summaryinfo 명령
 
 사용법::
 
-   $ hwp5proc summaryinfo
-   Usage:
-       hwp5proc summaryinfo [options] <hwp5file>
-       hwp5proc summaryinfo --help
-
    $ hwp5proc summaryinfo --help
-    Print summary information of <hwp5file>.
+   usage: hwp5proc summaryinfo [-h] <hwp5file>
    
-   Usage:
-       hwp5proc summaryinfo [options] <hwp5file>
-       hwp5proc summaryinfo --help
+   Print the summary information of <hwp5file>.
    
-   Options:
-       -h --help              Show this screen
-          --loglevel=<level>  Set log level.
-          --logfile=<file>    Set log file.
+   positional arguments:
+     <hwp5file>  .hwp file to analyze
+   
+   optional arguments:
+     -h, --help  show this help message and exit
 
    $ hwp5proc summaryinfo samples/sample-5017.hwp
    Title: 제목입니다.
@@ -185,74 +128,20 @@ ls 명령
 
 사용법::
 
-   $ hwp5proc ls
-   Usage:
-       hwp5proc ls [--loglevel=<loglevel>] [--logfile=<logfile>]
-                   [--vstreams | --ole]
-                   <hwp5file>
-       hwp5proc ls --help
-
    $ hwp5proc ls --help
-    List streams in the <hwp5file>.
+   usage: hwp5proc ls [-h] [--vstreams | --ole] <hwp5file>
    
-   Usage:
-       hwp5proc ls [--loglevel=<loglevel>] [--logfile=<logfile>]
-                   [--vstreams | --ole]
-                   <hwp5file>
-       hwp5proc ls --help
+   List streams in the <hwp5file>.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   positional arguments:
+     <hwp5file>  .hwp file to analyze
    
-          --vstreams           Process with virtual streams (i.e. parsed/converted
-                               form of real streams)
-          --ole                Treat <hwpfile> as an OLE Compound File. As a
-                               result, some streams will be presented as-is. (i.e.
-                               not decompressed)
-   
-   Example: List without virtual streams:
-       $ hwp5proc ls sample/sample-5017.hwp
-   
-       \x05HwpSummaryInformation
-       BinData/BIN0002.jpg
-       BinData/BIN0002.png
-       BinData/BIN0003.png
-       BodyText/Section0
-       DocInfo
-       DocOptions/_LinkDoc
-       FileHeader
-       PrvImage
-       PrvText
-       Scripts/DefaultJScript
-       Scripts/JScriptVersion
-   
-   Example: List virtual streams too:
-       $ hwp5proc ls --vstreams sample/sample-5017.hwp
-   
-       \x05HwpSummaryInformation
-       \x05HwpSummaryInformation.txt
-       BinData/BIN0002.jpg
-       BinData/BIN0002.png
-       BinData/BIN0003.png
-       BodyText/Section0
-       BodyText/Section0.models
-       BodyText/Section0.records
-       BodyText/Section0.xml
-       BodyText.xml
-       DocInfo
-       DocInfo.models
-       DocInfo.records
-       DocInfo.xml
-       DocOptions/_LinkDoc
-       FileHeader
-       FileHeader.txt
-       PrvImage
-       PrvText
-       PrvText.utf8
-       Scripts/DefaultJScript
-       Scripts/JScriptVersion
+   optional arguments:
+     -h, --help  show this help message and exit
+     --vstreams  Process with virtual streams (i.e. parsed/converted form of real
+                 streams)
+     --ole       Treat <hwp5file> as an OLE Compound File. As a result, some
+                 streams will be presented as-is. (i.e. not decompressed)
 
    $ hwp5proc ls samples/sample-5017.hwp
    \x05HwpSummaryInformation
@@ -296,58 +185,21 @@ ls 명령
 cat 명령
 --------
 
-   $ hwp5proc cat
-   Usage:
-       hwp5proc cat [--loglevel=<loglevel>] [--logfile=<logfile>]
-                    [--vstreams | --ole]
-                    <hwp5file> <stream>
-       hwp5proc cat --help
-
    $ hwp5proc cat --help
-    Extract out the specified stream in the <hwp5file> to the standard output.
+   usage: hwp5proc cat [-h] [--vstreams | --ole] <hwp5file> <stream>
    
-   Usage:
-       hwp5proc cat [--loglevel=<loglevel>] [--logfile=<logfile>]
-                    [--vstreams | --ole]
-                    <hwp5file> <stream>
-       hwp5proc cat --help
+   Extract out the specified stream in the <hwp5file> to the standard output.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   positional arguments:
+     <hwp5file>  .hwp file to analyze
+     <stream>    Internal path of a stream to extract
    
-          --vstreams           Process with virtual streams (i.e. parsed/converted
-                               form of real streams)
-          --ole                Treat <hwpfile> as an OLE Compound File. As a
-                               result, some streams will be presented as-is. (i.e.
-                               not decompressed)
-   
-   Example:
-       $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg | file -
-   
-       $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg > BIN0002.jpg
-   
-       $ hwp5proc cat samples/sample-5017.hwp PrvText | iconv -f utf-16le -t utf-8
-   
-       $ hwp5proc cat --vstreams samples/sample-5017.hwp PrvText.utf8
-   
-       $ hwp5proc cat --vstreams samples/sample-5017.hwp FileHeader.txt
-   
-       ccl: 0
-       cert_drm: 0
-       cert_encrypted: 0
-       cert_signature_extra: 0
-       cert_signed: 0
-       compressed: 1
-       distributable: 0
-       drm: 0
-       history: 0
-       password: 0
-       script: 0
-       signature: HWP Document File
-       version: 5.0.1.7
-       xmltemplate_storage: 0
+   optional arguments:
+     -h, --help  show this help message and exit
+     --vstreams  Process with virtual streams (i.e. parsed/converted form of real
+                 streams)
+     --ole       Treat <hwp5file> as an OLE Compound File. As a result, some
+                 streams will be presented as-is. (i.e. not decompressed)
 
    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg | file --mime-type -
    /dev/stdin: image/jpeg
@@ -399,40 +251,21 @@ cat 명령
 unpack 명령
 -----------
 
-   $ hwp5proc unpack
-   Usage:
-       hwp5proc unpack [--loglevel=<loglevel>] [--logfile=<logfile>]
-                       [--vstreams | --ole]
-                       <hwp5file> [<out-directory>]
-       hwp5proc unpack --help
-
    $ hwp5proc unpack --help
-    Extract out streams in the specified <hwp5file> to a directory.
+   usage: hwp5proc unpack [-h] [--vstreams | --ole] <hwp5file> [<out-directory>]
    
-   Usage:
-       hwp5proc unpack [--loglevel=<loglevel>] [--logfile=<logfile>]
-                       [--vstreams | --ole]
-                       <hwp5file> [<out-directory>]
-       hwp5proc unpack --help
+   Extract out streams in the specified <hwp5file> to a directory.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   positional arguments:
+     <hwp5file>       .hwp file to analyze
+     <out-directory>  Output directory
    
-          --vstreams           Process with virtual streams (i.e. parsed/converted
-                               form of real streams)
-          --ole                Treat <hwpfile> as an OLE Compound File. As a
-                               result, some streams will be presented as-is. (i.e.
-                               not decompressed)
-   
-   Example:
-       $ hwp5proc unpack samples/sample-5017.hwp
-       $ ls sample-5017
-   
-   Example:
-       $ hwp5proc unpack --vstreams samples/sample-5017.hwp
-       $ cat sample-5017/PrvText.utf8
+   optional arguments:
+     -h, --help       show this help message and exit
+     --vstreams       Process with virtual streams (i.e. parsed/converted form of
+                      real streams)
+     --ole            Treat <hwp5file> as an OLE Compound File. As a result, some
+                      streams will be presented as-is. (i.e. not decompressed)
 
    $ rm -rf sample-5017
    $ hwp5proc unpack samples/sample-5017.hwp
@@ -481,16 +314,12 @@ rawunz 명령
 -----------
 
    $ hwp5proc rawunz --help
-    Deflate an headerless zlib-compressed stream
+   usage: hwp5proc rawunz [-h]
    
-   Usage:
-       hwp5proc rawunz [--loglevel=<loglevel>] [--logfile=<logfile>]
-       hwp5proc rawunz --help
+   Deflate an headerless zlib-compressed stream
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   optional arguments:
+     -h, --help  show this help message and exit
 
    $ rm -f Section0 Section0.rawz
    $ hwp5proc cat --ole samples/sample-5017.hwp BodyText/Section0 > Section0.rawz
@@ -505,27 +334,15 @@ diststream 명령
 ---------------
 
    $ hwp5proc diststream --help
-    Decode distribute doc stream.
+   usage: hwp5proc diststream [-h] [--sha1 | --key] [--raw]
    
-   Usage:
-       hwp5proc diststream
-       hwp5proc diststream sha1 [--raw]
-       hwp5proc diststream key [--raw]
-       hwp5proc diststream [--loglevel=<loglevel>] [--logfile=<logfile>]
-       hwp5proc diststream --help
+   Decode a distribute document stream.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
-   
-   Example:
-       $ hwp5proc cat --ole samples/viewtext.hwp ViewText/Section0
-         | tee Section0.zraw.aes128ecb | hwp5proc diststream | tee Section0.zraw
-         | hwp5proc rawunz > Section0
-   
-       $ hwp5proc diststream sha1 < Section0.zraw.aes128ecb
-       $ echo -n '12345' | sha1sum
+   optional arguments:
+     -h, --help  show this help message and exit
+     --sha1      Print SHA-1 value for decryption.
+     --key       Print decrypted key.
+     --raw       Print raw binary objects as is.
 
    $ rm -f Section0 Section.zraw Section0.zraw.aes128ecb
    $ hwp5proc cat --ole samples/viewtext.hwp ViewText/Section0 > Section0.zraw.aes128ecb
@@ -537,61 +354,37 @@ diststream 명령
    $ hwp5proc rawunz < Section0.zraw > Section0
    $ sha1sum Section0
    75d6750ad7ad45edc9c1abae2060b8d1c404f6df  Section0
-   $ hwp5proc diststream sha1 < Section0.zraw.aes128ecb  #=> --regex ^8cb2237d0679ca88db6464eac60da96345513964$
-   $ hwp5proc diststream key < Section0.zraw.aes128ecb   #=> --regex ^38004300420032003200330037004400$
+   $ hwp5proc diststream --sha1 < Section0.zraw.aes128ecb  #=> --regex ^8cb2237d0679ca88db6464eac60da96345513964$
+   $ hwp5proc diststream --key < Section0.zraw.aes128ecb   #=> --regex ^38004300420032003200330037004400$
 
 records 명령
 ------------
 
    $ hwp5proc records --help
-    Print the record structure.
+   usage: hwp5proc records [-h]
+                           [--simple | --json | --raw | --raw-header | --raw-payload]
+                           [--range <range> | --treegroup <treegroup>]
+                           [<hwp5file>] [<record-stream>]
    
-   Usage:
-       hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
-                        [--treegroup=<treegroup> | --range=<range>]
-                        [--loglevel=<loglevel>] [--logfile=<logfile>]
-                        <hwp5file> <record-stream>
-       hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
-                        [--treegroup=<treegroup> | --range=<range>]
-                        [--loglevel=<loglevel>] [--logfile=<logfile>]
-       hwp5proc records --help
+   Print the record structure of the specified stream.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   positional arguments:
+     <hwp5file>            .hwp file to analyze
+     <record-stream>       Record-structured internal streams. (e.g. DocInfo,
+                           BodyText/*)
    
-          --simple             Print records as simple tree
-          --json               Print records as json
-          --raw                Print records as is
-          --raw-header         Print record headers as is
-          --raw-payload        Print record payloads as is
-   
-          --range=<range>      Print records specified in the <range>.
-          --treegroup=<treegroup>
-                               Print records specified in the <treegroup>.
-   
-       <hwp5file>              HWPv5 files (*.hwp)
-       <record-stream>         Record-structured internal streams.
-                               (e.g. DocInfo, BodyText/*)
-       <range>                 Specifies the range of the records.
-                                N-M means "from the record N to M-1 (excluding M)"
-                                N means just the record N
-       <treegroup>             Specifies the N-th subtree of the record structure.
-   
-   Example:
-       $ hwp5proc records samples/sample-5017.hwp DocInfo
-   
-   Example:
-       $ hwp5proc records samples/sample-5017.hwp DocInfo --range=0-2
-   
-   If neither <hwp5file> nor <record-stream> is specified, the record stream is
-   read from the standard input with an assumption that the input is in the format
-   version specified by -V option.
-   
-   Example:
-       $ hwp5proc records --raw samples/sample-5017.hwp DocInfo --range=0-2 > tmp.rec
-       $ hwp5proc records < tmp.rec
+   optional arguments:
+     -h, --help            show this help message and exit
+     --simple              Print records as simple tree
+     --json                Print records as json
+     --raw                 Print records as is
+     --raw-header          Print record headers as is
+     --raw-payload         Print record payloads as is
+     --range <range>       Specifies the range of the records. N-M means "from
+                           the record N to M-1 (excluding M)" N means just the
+                           record N
+     --treegroup <treegroup>
+                           Specifies the N-th subtree of the record structure.
 
    $ hwp5proc records samples/sample-5017.hwp DocInfo | jq .[66]
    {
@@ -633,69 +426,31 @@ records 명령
 models 명령
 -----------
 
-   $ hwp5proc models
-   Usage:
-       hwp5proc models [--simple | --json | --format=<format> | --events]
-                       [--treegroup=<treegroup> | --seqno=<seqno>]
-                       [--loglevel=<loglevel>] [--logfile=<logfile>]
-                       (<hwp5file> <record-stream> | -V <version>)
-       hwp5proc models --help
-
    $ hwp5proc models --help
-    Print parsed binary models in the specified <record-stream>.
+   usage: hwp5proc models [-h] [--file-format-version <version>]
+                          [--simple | --json | --format <format> | --events]
+                          [--treegroup <treegroup> | --seqno <treegroup>]
+                          [<hwp5file>] [<record-stream>]
    
-   Usage:
-       hwp5proc models [--simple | --json | --format=<format> | --events]
-                       [--treegroup=<treegroup> | --seqno=<seqno>]
-                       [--loglevel=<loglevel>] [--logfile=<logfile>]
-                       (<hwp5file> <record-stream> | -V <version>)
-       hwp5proc models --help
+   Print parsed binary models in the specified <record-stream>.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   positional arguments:
+     <hwp5file>            .hwp file to analyze
+     <record-stream>       Record-structured internal streams. (e.g. DocInfo,
+                           BodyText/*)
    
-          --simple             Print records as simple tree
-          --json               Print records as json
-          --format=<format>    Print records as formatted
-   
-          --treegroup=<treegroup>
-                               Print records in the <treegroup>.
-                               <treegroup> specifies the N-th subtree of the
-                               record structure.
-          --seqno=<seqno>      Print a model of <seqno>-th record
-   
-       -V <version>, --file-format-version=<version>
-                               Specifies HWPv5 file format version
-   
-       <hwp5file>              HWPv5 files (*.hwp)
-       <record-stream>         Record-structured internal streams.
-                               (e.g. DocInfo, BodyText/*)
-   
-   Example:
-       $ hwp5proc models samples/sample-5017.hwp DocInfo
-       $ hwp5proc models samples/sample-5017.hwp BodyText/Section0
-   
-       $ hwp5proc models samples/sample-5017.hwp docinfo
-       $ hwp5proc models samples/sample-5017.hwp bodytext/0
-   
-   Example:
-       $ hwp5proc models --simple samples/sample-5017.hwp bodytext/0
-       $ hwp5proc models --format='%(level)s %(tagname)s\n' \
-               samples/sample-5017.hwp bodytext/0
-   
-   Example:
-       $ hwp5proc models --simple --treegroup=1 samples/sample-5017.hwp bodytext/0
-       $ hwp5proc models --simple --seqno=4 samples/sample-5017.hwp bodytext/0
-   
-   If neither <hwp5file> nor <record-stream> is specified, the record stream is
-   read from the standard input with an assumption that the input is in the format
-   version specified by -V option.
-   
-   Example:
-       $ hwp5proc cat samples/sample-5017.hwp BodyText/Section0 > Section0.bin
-       $ hwp5proc models -V 5.0.1.7 < Section0.bin
+   optional arguments:
+     -h, --help            show this help message and exit
+     --file-format-version <version>, -V <version>
+                           Specifies HWPv5 file format version of the standard
+                           input stream
+     --simple              Print records as simple tree
+     --json                Print records as json
+     --format <format>     Print records formatted
+     --events              Print records as events
+     --treegroup <treegroup>
+                           Specifies the N-th subtree of the record structure.
+     --seqno <treegroup>   Print a model of <seqno>-th record
 
    $ hwp5proc models samples/sample-5017.hwp DocInfo | jq .[66]
    {
@@ -1071,48 +826,25 @@ models 명령
 find 명령
 ---------
 
-   $ hwp5proc find
-   Usage:
-       hwp5proc find [--model=<model-name> | --tag=<hwptag>]
-                     [--incomplete] [--dump] [--format=<format>]
-                     [--loglevel=<loglevel>] [--logfile=<logfile>]
-                     (--from-stdin | <hwp5files>...)
-       hwp5proc find --help
    $ hwp5proc find --help
-    Find record models with specified predicates.
+   usage: hwp5proc find [-h] [--from-stdin]
+                        [--model <model-name> | --tag <hwptag>] [--incomplete]
+                        [--format <format>] [--dump]
+                        [<hwp5files> [<hwp5files> ...]]
    
-   Usage:
-       hwp5proc find [--model=<model-name> | --tag=<hwptag>]
-                     [--incomplete] [--dump] [--format=<format>]
-                     [--loglevel=<loglevel>] [--logfile=<logfile>]
-                     (--from-stdin | <hwp5files>...)
-       hwp5proc find --help
+   Find record models with specified predicates.
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
+   positional arguments:
+     <hwp5files>           .hwp files to analyze
    
-          --from-stdin         get filenames fro stdin
-   
-          --model=<model-name> filter with record model name
-          --tag=<hwptag>       filter with record HWPTAG
-          --incomplete         filter with incompletely parsed content
-   
-          --format=<format>    record output format
-                               %(filename)s %(stream)s %(seqno)s %(type)s
-          --dump               dump record
-   
-       <hwp5files>...          HWPv5 files (*.hwp)
-   
-   Example: Find paragraphs:
-       $ hwp5proc find --model=Paragraph samples/*.hwp
-       $ hwp5proc find --tag=HWPTAG_PARA_TEXT samples/*.hwp
-       $ hwp5proc find --tag=66 samples/*.hwp
-   
-   Example: Find and dump records of HWPTAG_LIST_HEADER which is parsed
-   incompletely:
-       $ hwp5proc find --tag=HWPTAG_LIST_HEADER --incomplete --dump samples/*.hwp
+   optional arguments:
+     -h, --help            show this help message and exit
+     --from-stdin          get filenames from stdin
+     --model <model-name>  filter with record model name
+     --tag <hwptag>        filter with record HWPTAG
+     --incomplete          filter with incompletely parsed content
+     --format <format>     record output format
+     --dump                dump record
 
    $ hwp5proc find --model=Paragraph samples/charshape.hwp samples/parashape.hwp
    samples/charshape.hwp BodyText/Section0 0 HWPTAG_PARA_HEADER Paragraph
@@ -1603,56 +1335,24 @@ find 명령
 xml 명령
 --------
 
-   $ hwp5proc xml
-   Usage:
-       hwp5proc xml [--embedbin]
-                    [--no-xml-decl]
-                    [--output=<file>]
-                    [--format=<format>]
-                    [--no-validate-wellformed]
-                    [--loglevel=<loglevel>] [--logfile=<logfile>]
-                    <hwp5file>
-       hwp5proc xml --help
-
    $ hwp5proc xml --help
-    Transform an HWPv5 file into an XML.
+   usage: hwp5proc xml [-h] [--embedbin] [--no-xml-decl] [--output <file>]
+                       [--format <format>] [--no-validate-wellformed]
+                       <hwp5file>
    
-   .. note:
-      This command is experimental. Its output format is subject to change at any
-      time.
+   Transform <hwp5file> into an XML.
    
-   Usage:
-       hwp5proc xml [--embedbin]
-                    [--no-xml-decl]
-                    [--output=<file>]
-                    [--format=<format>]
-                    [--no-validate-wellformed]
-                    [--loglevel=<loglevel>] [--logfile=<logfile>]
-                    <hwp5file>
-       hwp5proc xml --help
+   positional arguments:
+     <hwp5file>            .hwp file to analyze
    
-   Options:
-       -h --help               Show this screen
-          --loglevel=<level>   Set log level.
-          --logfile=<file>     Set log file.
-   
-          --embedbin           Embed BinData/* streams in the output XML.
-          --no-xml-decl        Don't output <?xml ... ?> XML declaration.
-          --output=<file>      Output filename.
-   
-       <hwp5file>              HWPv5 files (*.hwp)
-       <format>                "flat", "nested" (default: "nested")
-   
-   Example:
-       $ hwp5proc xml samples/sample-5017.hwp > sample-5017.xml
-       $ xmllint --format sample-5017.xml
-   
-   With --embedbin option, you can embed base64-encoded BinData/* files in
-   the output XML.
-   
-   Example:
-       $ hwp5proc xml --embedbin samples/sample-5017.hwp > sample-5017.xml
-       $ xmllint --format sample-5017.xml
+   optional arguments:
+     -h, --help            show this help message and exit
+     --embedbin            Embed BinData/* streams in the output XML.
+     --no-xml-decl         Do not output <?xml ... ?> XML declaration.
+     --output <file>       Output filename.
+     --format <format>     "flat", "nested" (default: "nested")
+     --no-validate-wellformed
+                           Do not validate well-formedness of output.
 
    $ hwp5proc xml samples/sample-5017.hwp | xmllint --format -
    <?xml version="1.0" encoding="utf-8"?>

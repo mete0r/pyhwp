@@ -16,33 +16,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-'''HWPv5 to ODT converter
-
-Usage::
-
-    hwp5odt [options] [--embed-image] <hwp5file>
-    hwp5odt [options] --styles <hwp5file>
-    hwp5odt [options] --content [--embed-image] <hwp5file>
-    hwp5odt [options] --document [--no-embed-image] <hwp5file>
-    hwp5odt -h | --help
-    hwp5odt --version
-
-Options::
-
-    -h --help           Show this screen
-    --version           Show version
-    --loglevel=<level>  Set log level.
-    --logfile=<file>    Set log file.
-
-    --document          Produce single OpenDocument XML file (.fodt)
-    --styles            Produce *.styles.xml
-    --content           Produce *.content.xml
-
-    --output=<file>     Output file.
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from argparse import ArgumentParser
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
@@ -53,6 +30,8 @@ import logging
 import os.path
 import sys
 
+from . import __version__ as version
+from .cli import init_logger
 from .errors import ImplementationNotAvailable
 from .utils import mkstemp_open
 from .utils import hwp5_resources_path
@@ -344,43 +323,39 @@ def manifest_rdf(f):
 
 
 def main():
-    from docopt import docopt
-
-    from . import __version__ as version
-    from .proc import rest_to_docopt
-    from .proc import init_logger
     from .dataio import ParseError
     from .errors import InvalidHwp5FileError
     from .proc import init_with_environ
     from .utils import make_open_dest_file
     from .xmlmodel import Hwp5File
 
-    doc = rest_to_docopt(__doc__)
-    args = docopt(doc, version=version)
+    argparser = main_argparser()
+    args = argparser.parse_args()
     init_logger(args)
+
     init_with_environ()
 
-    hwp5path = args['<hwp5file>']
+    hwp5path = args.hwp5file
 
     odt_transform = ODTTransform()
 
-    open_dest = make_open_dest_file(args['--output'])
-    if args['--document']:
-        odt_transform.embedbin = not args['--no-embed-image']
+    open_dest = make_open_dest_file(args.output)
+    if args.document:
+        odt_transform.embedbin = not args.no_embed_image
         transform = odt_transform.transform_hwp5_to_single_document
         open_dest = wrap_for_xml(open_dest)
-    elif args['--styles']:
-        odt_transform.embedbin = args['--embed-image']
+    elif args.styles:
+        odt_transform.embedbin = args.embed_image
         transform = odt_transform.transform_hwp5_to_styles
         open_dest = wrap_for_xml(open_dest)
-    elif args['--content']:
-        odt_transform.embedbin = args['--embed-image']
+    elif args.content:
+        odt_transform.embedbin = args.embed_image
         transform = odt_transform.transform_hwp5_to_content
         open_dest = wrap_for_xml(open_dest)
     else:
-        odt_transform.embedbin = args['--embed-image']
+        odt_transform.embedbin = args.embed_image
         transform = odt_transform.transform_hwp5_to_package
-        dest_path = args['--output']
+        dest_path = args.output
         dest_path = dest_path or replace_ext(hwp5path, '.odt')
         open_dest = partial(open_odtpkg, dest_path)
 
@@ -393,6 +368,63 @@ def main():
     except InvalidHwp5FileError as e:
         logger.error('%s', e)
         sys.exit(1)
+
+
+def main_argparser():
+    parser = ArgumentParser(
+        prog='hwp5odt',
+        description=_('HWPv5 to odt converter'),
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='%(prog)s {}'.format(version)
+    )
+    parser.add_argument(
+        '--loglevel',
+        help=_('Set log level.'),
+    )
+    parser.add_argument(
+        '--logfile',
+        help=_('Set log file.'),
+    )
+    parser.add_argument(
+        '--output',
+        help=_('Output file'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to convert'),
+    )
+    generator_group = parser.add_mutually_exclusive_group()
+    generator_group.add_argument(
+        '--styles',
+        action='store_true',
+        help=_('Generate styles.xml'),
+    )
+    generator_group.add_argument(
+        '--content',
+        action='store_true',
+        help=_('Generate content.xml'),
+    )
+    generator_group.add_argument(
+        '--document',
+        action='store_true',
+        help=_('Generate .fodt'),
+    )
+    embedimage = parser.add_mutually_exclusive_group()
+    embedimage.add_argument(
+        '--embed-image',
+        action='store_true',
+        help=_('Embed images in output xml.'),
+    )
+    embedimage.add_argument(
+        '--no-embed-image',
+        action='store_true',
+        help=_('Do not embed images in output xml.'),
+    )
+    return parser
 
 
 def replace_ext(path, ext):

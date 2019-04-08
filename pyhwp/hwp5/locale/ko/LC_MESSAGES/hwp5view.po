@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1b9.dev0\n"
 "Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
-"POT-Creation-Date: 2017-10-09 02:08+0900\n"
+"POT-Creation-Date: 2019-04-10 22:55+0900\n"
 "PO-Revision-Date: 2017-10-09 02:08+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -17,4 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
+
+#: pyhwp/hwp5/hwp5view.py:81
+msgid "HWPv5 viewer (Experimental, gtk only)"
+msgstr "HWPv5 뷰어 (실험적, GTK만 지원)"
+
+#: pyhwp/hwp5/hwp5view.py:92
+msgid "Set log level."
+msgstr "로그 수준 지정"
+
+#: pyhwp/hwp5/hwp5view.py:96
+msgid "Set log file."
+msgstr "로그 파일 지정"
+
+#: pyhwp/hwp5/hwp5view.py:101
+msgid ".hwp file to view"
+msgstr "표시할 .hwp 파일"
 

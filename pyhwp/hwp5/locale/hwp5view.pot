@@ -1,14 +1,14 @@
 # Translations template for pyhwp.
-# Copyright (C) 2017 mete0r@sarangbang.or.kr
+# Copyright (C) 2019 mete0r@sarangbang.or.kr
 # This file is distributed under the same license as the pyhwp project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: pyhwp 0.1b9.dev0\n"
+"Project-Id-Version: pyhwp 0.1b13.dev0\n"
 "Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
-"POT-Creation-Date: 2017-10-09 02:08+0900\n"
+"POT-Creation-Date: 2019-04-10 22:55+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,4 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
+
+#: pyhwp/hwp5/hwp5view.py:81
+msgid "HWPv5 viewer (Experimental, gtk only)"
+msgstr ""
+
+#: pyhwp/hwp5/hwp5view.py:92
+msgid "Set log level."
+msgstr ""
+
+#: pyhwp/hwp5/hwp5view.py:96
+msgid "Set log file."
+msgstr ""
+
+#: pyhwp/hwp5/hwp5view.py:101
+msgid ".hwp file to view"
+msgstr ""
 

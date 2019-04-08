@@ -16,68 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Print parsed binary models in the specified <record-stream>.
-
-Usage::
-
-    hwp5proc models [--simple | --json | --format=<format> | --events]
-                    [--treegroup=<treegroup> | --seqno=<seqno>]
-                    [--loglevel=<loglevel>] [--logfile=<logfile>]
-                    (<hwp5file> <record-stream> | -V <version>)
-    hwp5proc models --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-
-       --simple             Print records as simple tree
-       --json               Print records as json
-       --format=<format>    Print records as formatted
-
-       --treegroup=<treegroup>
-                            Print records in the <treegroup>.
-                            <treegroup> specifies the N-th subtree of the
-                            record structure.
-       --seqno=<seqno>      Print a model of <seqno>-th record
-
-    -V <version>, --file-format-version=<version>
-                            Specifies HWPv5 file format version
-
-    <hwp5file>              HWPv5 files (*.hwp)
-    <record-stream>         Record-structured internal streams.
-                            (e.g. DocInfo, BodyText/*)
-
-Example::
-
-    $ hwp5proc models samples/sample-5017.hwp DocInfo
-    $ hwp5proc models samples/sample-5017.hwp BodyText/Section0
-
-    $ hwp5proc models samples/sample-5017.hwp docinfo
-    $ hwp5proc models samples/sample-5017.hwp bodytext/0
-
-Example::
-
-    $ hwp5proc models --simple samples/sample-5017.hwp bodytext/0
-    $ hwp5proc models --format='%(level)s %(tagname)s\\n' \\
-            samples/sample-5017.hwp bodytext/0
-
-Example::
-
-    $ hwp5proc models --simple --treegroup=1 samples/sample-5017.hwp bodytext/0
-    $ hwp5proc models --simple --seqno=4 samples/sample-5017.hwp bodytext/0
-
-If neither <hwp5file> nor <record-stream> is specified, the record stream is
-read from the standard input with an assumption that the input is in the format
-version specified by -V option.
-
-Example::
-
-    $ hwp5proc cat samples/sample-5017.hwp BodyText/Section0 > Section0.bin
-    $ hwp5proc models -V 5.0.1.7 < Section0.bin
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -101,7 +39,7 @@ PY2 = sys.version_info.major == 2
 
 def main(args):
     stream = stream_from_args(args)
-    if args['--events']:
+    if args.events:
         for event, item in stream.parse_model_events():
             type = item['type'].__name__
             if event is not None:
@@ -136,14 +74,96 @@ def main(args):
     print_models(models)
 
 
+def models_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'models',
+        help=_(
+            'Print parsed binary models of .hwp file record streams.'
+        ),
+        description=_(
+            'Print parsed binary models in the specified <record-stream>.'
+        ),
+    )
+    parser.add_argument(
+        'hwp5file',
+        nargs='?',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    parser.add_argument(
+        'record_stream',
+        nargs='?',
+        metavar='<record-stream>',
+        help=_(
+            'Record-structured internal streams.\n'
+            '(e.g. DocInfo, BodyText/*)\n'
+        ),
+    )
+    parser.add_argument(
+        '--file-format-version',
+        '-V',
+        metavar='<version>',
+        help=_(
+            'Specifies HWPv5 file format version of the standard input stream'
+        ),
+    )
+    output_formats = parser.add_mutually_exclusive_group()
+    output_formats.add_argument(
+        '--simple',
+        action='store_true',
+        help=_(
+            'Print records as simple tree'
+        )
+    )
+    output_formats.add_argument(
+        '--json',
+        action='store_true',
+        help=_(
+            'Print records as json'
+        )
+    )
+    output_formats.add_argument(
+        '--format',
+        metavar='<format>',
+        help=_(
+            'Print records formatted'
+        )
+    )
+    output_formats.add_argument(
+        '--events',
+        action='store_true',
+        help=_(
+            'Print records as events'
+        )
+    )
+    subset = parser.add_mutually_exclusive_group()
+    subset.add_argument(
+        '--treegroup',
+        metavar='<treegroup>',
+        help=_(
+            'Specifies the N-th subtree of the record structure.'
+        )
+    )
+    subset.add_argument(
+        '--seqno',
+        metavar='<treegroup>',
+        help=_(
+            'Print a model of <seqno>-th record'
+        )
+    )
+    parser.set_defaults(func=main)
+    return parser
+
+
 def stream_from_args(args):
-    filename = args['<hwp5file>']
+    filename = args.hwp5file
     if filename:
-        streamname = args['<record-stream>']
+        # TODO: args.record_stream is None
+        streamname = args.record_stream
         hwpfile = Hwp5File(filename)
         return parse_recordstream_name(hwpfile, streamname)
     else:
-        version = args['--file-format-version'] or '5.0.0.0'
+        version = args.file_format_version or '5.0.0.0'
         version = version.split('.')
         version = tuple(int(x) for x in version)
 
@@ -157,12 +177,12 @@ def stream_from_args(args):
 
 def models_from_args(args):
 
-    if args['--treegroup']:
-        treegroup = int(args['--treegroup'])
+    if args.treegroup:
+        treegroup = int(args.treegroup)
         return lambda stream: stream.models(treegroup=treegroup)
 
-    if args['--seqno']:
-        seqno = int(args['--seqno'])
+    if args.seqno:
+        seqno = int(args.seqno)
         return lambda stream: islice(stream.models(),
                                      seqno, seqno + 1)
 
@@ -171,11 +191,11 @@ def models_from_args(args):
 
 def print_models_from_args(args):
 
-    if args['--simple']:
+    if args.simple:
         return print_models_with_print_model(print_model_simple)
 
-    if args['--format']:
-        fmt = args['--format']
+    if args.format:
+        fmt = args.format
         fmt = unicode_unescape(fmt)
         print_model = print_model_with_format(fmt)
         return print_models_with_print_model(print_model)

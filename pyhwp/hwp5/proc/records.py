@@ -16,62 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Print the record structure.
-
-Usage::
-
-    hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
-                     [--treegroup=<treegroup> | --range=<range>]
-                     [--loglevel=<loglevel>] [--logfile=<logfile>]
-                     <hwp5file> <record-stream>
-    hwp5proc records [--simple | --json | --raw | --raw-header | --raw-payload]
-                     [--treegroup=<treegroup> | --range=<range>]
-                     [--loglevel=<loglevel>] [--logfile=<logfile>]
-    hwp5proc records --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-
-       --simple             Print records as simple tree
-       --json               Print records as json
-       --raw                Print records as is
-       --raw-header         Print record headers as is
-       --raw-payload        Print record payloads as is
-
-       --range=<range>      Print records specified in the <range>.
-       --treegroup=<treegroup>
-                            Print records specified in the <treegroup>.
-
-    <hwp5file>              HWPv5 files (*.hwp)
-    <record-stream>         Record-structured internal streams.
-                            (e.g. DocInfo, BodyText/*)
-    <range>                 Specifies the range of the records.
-                             N-M means "from the record N to M-1 (excluding M)"
-                             N means just the record N
-    <treegroup>             Specifies the N-th subtree of the record structure.
-
-Example::
-
-    $ hwp5proc records samples/sample-5017.hwp DocInfo
-
-Example::
-
-    $ hwp5proc records samples/sample-5017.hwp DocInfo --range=0-2
-
-If neither <hwp5file> nor <record-stream> is specified, the record stream is
-read from the standard input with an assumption that the input is in the format
-version specified by -V option.
-
-Example::
-
-    $ hwp5proc records --raw samples/sample-5017.hwp DocInfo --range=0-2 \
-> tmp.rec
-    $ hwp5proc records < tmp.rec
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -96,42 +40,125 @@ def main(args):
         stdout_text = sys.stdout
         stdout_binary = sys.stdout.buffer
 
-    filename = args['<hwp5file>']
+    filename = args.hwp5file
     if filename:
         hwpfile = Hwp5File(filename)
-        streamname = args['<record-stream>']
+        # TODO: args.record_stream is None
+        streamname = args.record_stream
         stream = parse_recordstream_name(hwpfile, streamname)
     else:
         stream = RecordStream(Open2Stream(lambda: sys.stdin), None)
 
     opts = dict()
-    rng = args['--range']
+    rng = args.range
     if rng:
         rng = rng.split('-', 1)
         rng = tuple(int(x) for x in rng)
         if len(rng) == 1:
             rng = (rng[0], rng[0] + 1)
         opts['range'] = rng
-    treegroup = args['--treegroup']
+    treegroup = args.treegroup
     if treegroup is not None:
         opts['treegroup'] = int(treegroup)
 
-    if args['--simple']:
+    if args.simple:
         for record in stream.records(**opts):
             stdout_text.write('{:04d} {} {}\n'.format(
                 record['seqno'],
                 '  ' * record['level'],
                 record['tagname'],
             ))
-    elif args['--raw']:
+    elif args.raw:
         for record in stream.records(**opts):
             dump_record(stdout_binary, record)
-    elif args['--raw-header']:
+    elif args.raw_header:
         for record in stream.records(**opts):
             hdr = encode_record_header(record)
             stdout_binary.write(hdr)
-    elif args['--raw-payload']:
+    elif args.raw_payload:
         for record in stream.records(**opts):
             stdout_binary.write(record['payload'])
     else:
         stream.records_json(**opts).dump(stdout_text)
+
+
+def records_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'records',
+        help=_(
+            'Print the record structure of .hwp file record streams.'
+        ),
+        description=_(
+            'Print the record structure of the specified stream.'
+        ),
+    )
+    parser.add_argument(
+        'hwp5file',
+        nargs='?',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    parser.add_argument(
+        'record_stream',
+        nargs='?',
+        metavar='<record-stream>',
+        help=_(
+            'Record-structured internal streams.\n'
+            '(e.g. DocInfo, BodyText/*)\n'
+        ),
+    )
+    output_formats = parser.add_mutually_exclusive_group()
+    output_formats.add_argument(
+        '--simple',
+        action='store_true',
+        help=_(
+            'Print records as simple tree'
+        )
+    )
+    output_formats.add_argument(
+        '--json',
+        action='store_true',
+        help=_(
+            'Print records as json'
+        )
+    )
+    output_formats.add_argument(
+        '--raw',
+        action='store_true',
+        help=_(
+            'Print records as is'
+        )
+    )
+    output_formats.add_argument(
+        '--raw-header',
+        action='store_true',
+        help=_(
+            'Print record headers as is'
+        )
+    )
+    output_formats.add_argument(
+        '--raw-payload',
+        action='store_true',
+        help=_(
+            'Print record payloads as is'
+        )
+    )
+    subset = parser.add_mutually_exclusive_group()
+    subset.add_argument(
+        '--range',
+        metavar='<range>',
+        help=_(
+            'Specifies the range of the records.\n'
+            'N-M means "from the record N to M-1 (excluding M)"\n'
+            'N means just the record N\n'
+        )
+    )
+    subset.add_argument(
+        '--treegroup',
+        metavar='<treegroup>',
+        help=_(
+            'Specifies the N-th subtree of the record structure.'
+        )
+    )
+    parser.set_defaults(func=main)
+    return parser

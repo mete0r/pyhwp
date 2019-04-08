@@ -1,28 +1,21 @@
-   $ hwp5html
-   Usage:
-       hwp5html [options] <hwp5file>
-       hwp5html [options] <hwp5file> --html
-       hwp5html [options] <hwp5file> --css
-       hwp5html -h | --help
-       hwp5html --version
-
    $ hwp5html --help
+   usage: hwp5html [-h] [--version] [--loglevel LOGLEVEL] [--logfile LOGFILE]
+                   [--output OUTPUT] [--css | --html]
+                   <hwp5file>
+   
    HWPv5 to HTML converter
    
-   Usage:
-       hwp5html [options] <hwp5file>
-       hwp5html [options] <hwp5file> --html
-       hwp5html [options] <hwp5file> --css
-       hwp5html -h | --help
-       hwp5html --version
+   positional arguments:
+     <hwp5file>           .hwp file to convert
    
-   Options:
-       -h --help           Show this screen
-       --version           Show version
-       --loglevel=<level>  Set log level.
-       --logfile=<file>    Set log file.
-   
-       --output=<output>   Output file / directory
+   optional arguments:
+     -h, --help           show this help message and exit
+     --version            show program's version number and exit
+     --loglevel LOGLEVEL  Set log level.
+     --logfile LOGFILE    Set log file.
+     --output OUTPUT      Output file
+     --css                Generate CSS
+     --html               Generate HTML
 
    $ rm -rf sample-5017
    $ hwp5html samples/sample-5017.hwp

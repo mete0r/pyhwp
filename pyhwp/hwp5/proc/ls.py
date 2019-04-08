@@ -87,9 +87,41 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from ..storage import printstorage
-from . import open_hwpfile
+from ..cli import open_hwpfile
 
 
 def main(args):
     hwpfile = open_hwpfile(args)
     printstorage(hwpfile)
+
+
+def ls_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'ls',
+        help=_('List streams in .hwp files.'),
+        description=_('List streams in the <hwp5file>.'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    mutex_group = parser.add_mutually_exclusive_group()
+    mutex_group.add_argument(
+        '--vstreams',
+        action='store_true',
+        help=_(
+            'Process with virtual streams (i.e. parsed/converted form of '
+            'real streams)'
+        )
+    )
+    mutex_group.add_argument(
+        '--ole',
+        action='store_true',
+        help=_(
+            'Treat <hwp5file> as an OLE Compound File. As a result, '
+            'some streams will be presented as-is. (i.e. not decompressed)'
+        )
+    )
+    parser.set_defaults(func=main)
+    return parser

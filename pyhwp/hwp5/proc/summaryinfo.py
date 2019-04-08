@@ -16,20 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Print summary information of <hwp5file>.
-
-Usage::
-
-    hwp5proc summaryinfo [options] <hwp5file>
-    hwp5proc summaryinfo --help
-
-Options::
-
-    -h --help              Show this screen
-       --loglevel=<level>  Set log level.
-       --logfile=<file>    Set log file.
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -49,7 +35,7 @@ def main(args):
         output_fp = sys.stdout.buffer
 
     formatter = HwpSummaryInfoTextFormatter()
-    hwpfile = Hwp5File(args['<hwp5file>'])
+    hwpfile = Hwp5File(args.hwp5file)
     try:
         for textline in formatter.formatTextLines(hwpfile.summaryinfo):
             line = textline.encode('utf-8')
@@ -57,3 +43,22 @@ def main(args):
             output_fp.write(b'\n')
     finally:
         hwpfile.close()
+
+
+def summaryinfo_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'summaryinfo',
+        help=_(
+            'Print summary informations of .hwp files.'
+        ),
+        description=_(
+            'Print the summary information of <hwp5file>.'
+        ),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    parser.set_defaults(func=main)
+    return parser

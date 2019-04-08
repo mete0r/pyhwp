@@ -1,14 +1,14 @@
 # Translations template for pyhwp.
-# Copyright (C) 2017 mete0r@sarangbang.or.kr
+# Copyright (C) 2019 mete0r@sarangbang.or.kr
 # This file is distributed under the same license as the pyhwp project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: pyhwp 0.1b9.dev0\n"
+"Project-Id-Version: pyhwp 0.1b13.dev0\n"
 "Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
-"POT-Creation-Date: 2017-10-09 00:54+0900\n"
+"POT-Creation-Date: 2019-04-10 22:55+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
 
-#: pyhwp/hwp5/proc/__init__.py:126
+#: pyhwp/hwp5/proc/__init__.py:75
 msgid ""
 "License AGPLv3+: GNU Affero GPL version 3 or any later\n"
 "<http://gnu.org/licenses/agpl.txt>.\n"
@@ -25,24 +25,255 @@ msgid ""
 "There is NO WARRANTY, to the extent permitted by law."
 msgstr ""
 
-#: pyhwp/hwp5/proc/__init__.py:131
+#: pyhwp/hwp5/proc/__init__.py:80
 msgid ""
 "Disclosure: This program has been developed in accordance with a public\n"
 "document named \"HWP Binary Specification 1.1\" published by Hancom Inc.\n"
 "<http://www.hancom.co.kr>."
 msgstr ""
 
-#: pyhwp/hwp5/proc/__init__.py:147
-msgid "Available <command> values:"
+#: pyhwp/hwp5/proc/__init__.py:127
+msgid "Do various operations on HWPv5 files."
 msgstr ""
 
-#: pyhwp/hwp5/proc/__init__.py:152
+#: pyhwp/hwp5/proc/__init__.py:131
+msgid "Set log level."
+msgstr ""
+
+#: pyhwp/hwp5/proc/__init__.py:135
+msgid "Set log file."
+msgstr ""
+
+#: pyhwp/hwp5/proc/__init__.py:138
+msgid "subcommands"
+msgstr ""
+
+#: pyhwp/hwp5/proc/__init__.py:139
+msgid "valid subcommands"
+msgstr ""
+
+#: pyhwp/hwp5/proc/cat.py:55
+msgid "Extract out internal streams of .hwp files"
+msgstr ""
+
+#: pyhwp/hwp5/proc/cat.py:58
+msgid "Extract out the specified stream in the <hwp5file> to the standard output."
+msgstr ""
+
+#: pyhwp/hwp5/proc/cat.py:66 pyhwp/hwp5/proc/header.py:53
+#: pyhwp/hwp5/proc/ls.py:107 pyhwp/hwp5/proc/models.py:91
+#: pyhwp/hwp5/proc/records.py:99 pyhwp/hwp5/proc/summaryinfo.py:61
+#: pyhwp/hwp5/proc/unpack.py:54 pyhwp/hwp5/proc/version.py:45
+#: pyhwp/hwp5/proc/xml.py:91
+msgid ".hwp file to analyze"
+msgstr ""
+
+#: pyhwp/hwp5/proc/cat.py:71
+msgid "Internal path of a stream to extract"
+msgstr ""
+
+#: pyhwp/hwp5/proc/cat.py:77 pyhwp/hwp5/proc/ls.py:113
+#: pyhwp/hwp5/proc/unpack.py:66
+msgid "Process with virtual streams (i.e. parsed/converted form of real streams)"
+msgstr ""
+
+#: pyhwp/hwp5/proc/cat.py:85 pyhwp/hwp5/proc/ls.py:121
+#: pyhwp/hwp5/proc/unpack.py:74
 msgid ""
-"See 'hwp5proc <command> --help' for more information on a specific "
-"command."
+"Treat <hwp5file> as an OLE Compound File. As a result, some streams will "
+"be presented as-is. (i.e. not decompressed)"
 msgstr ""
 
-#: pyhwp/hwp5/proc/__init__.py:173
-msgid "Unknown command: {}"
+#: pyhwp/hwp5/proc/diststream.py:93 pyhwp/hwp5/proc/diststream.py:96
+msgid "Decode a distribute document stream."
+msgstr ""
+
+#: pyhwp/hwp5/proc/diststream.py:104
+msgid "Print SHA-1 value for decryption."
+msgstr ""
+
+#: pyhwp/hwp5/proc/diststream.py:109
+msgid "Print decrypted key."
+msgstr ""
+
+#: pyhwp/hwp5/proc/diststream.py:114
+msgid "Print raw binary objects as is."
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:107 pyhwp/hwp5/proc/find.py:110
+msgid "Find record models with specified predicates."
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:118
+msgid ".hwp files to analyze"
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:123
+msgid "get filenames from stdin"
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:129
+msgid "filter with record model name"
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:136
+msgid "filter with record HWPTAG"
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:143
+msgid "filter with incompletely parsed content"
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:148
+msgid "record output format"
+msgstr ""
+
+#: pyhwp/hwp5/proc/find.py:155
+msgid "dump record"
+msgstr ""
+
+#: pyhwp/hwp5/proc/header.py:47
+msgid "Print file headers of .hwp files."
+msgstr ""
+
+#: pyhwp/hwp5/proc/header.py:48
+msgid "Print the file header of <hwp5file>."
+msgstr ""
+
+#: pyhwp/hwp5/proc/ls.py:101
+msgid "List streams in .hwp files."
+msgstr ""
+
+#: pyhwp/hwp5/proc/ls.py:102
+msgid "List streams in the <hwp5file>."
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:80
+msgid "Print parsed binary models of .hwp file record streams."
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:83
+msgid "Print parsed binary models in the specified <record-stream>."
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:97 pyhwp/hwp5/proc/records.py:105
+msgid ""
+"Record-structured internal streams.\n"
+"(e.g. DocInfo, BodyText/*)\n"
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:106
+msgid "Specifies HWPv5 file format version of the standard input stream"
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:114 pyhwp/hwp5/proc/records.py:114
+msgid "Print records as simple tree"
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:121 pyhwp/hwp5/proc/records.py:121
+msgid "Print records as json"
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:128
+msgid "Print records formatted"
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:135
+msgid "Print records as events"
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:143 pyhwp/hwp5/proc/records.py:159
+msgid "Specifies the N-th subtree of the record structure."
+msgstr ""
+
+#: pyhwp/hwp5/proc/models.py:150
+msgid "Print a model of <seqno>-th record"
+msgstr ""
+
+#: pyhwp/hwp5/proc/rawunz.py:46 pyhwp/hwp5/proc/rawunz.py:49
+msgid "Deflate an headerless zlib-compressed stream"
+msgstr ""
+
+#: pyhwp/hwp5/proc/records.py:88
+msgid "Print the record structure of .hwp file record streams."
+msgstr ""
+
+#: pyhwp/hwp5/proc/records.py:91
+msgid "Print the record structure of the specified stream."
+msgstr ""
+
+#: pyhwp/hwp5/proc/records.py:128
+msgid "Print records as is"
+msgstr ""
+
+#: pyhwp/hwp5/proc/records.py:135
+msgid "Print record headers as is"
+msgstr ""
+
+#: pyhwp/hwp5/proc/records.py:142
+msgid "Print record payloads as is"
+msgstr ""
+
+#: pyhwp/hwp5/proc/records.py:150
+msgid ""
+"Specifies the range of the records.\n"
+"N-M means \"from the record N to M-1 (excluding M)\"\n"
+"N means just the record N\n"
+msgstr ""
+
+#: pyhwp/hwp5/proc/summaryinfo.py:51
+msgid "Print summary informations of .hwp files."
+msgstr ""
+
+#: pyhwp/hwp5/proc/summaryinfo.py:54
+msgid "Print the summary information of <hwp5file>."
+msgstr ""
+
+#: pyhwp/hwp5/proc/unpack.py:43
+msgid "Extract out internal streams of .hwp files into a directory."
+msgstr ""
+
+#: pyhwp/hwp5/proc/unpack.py:46
+msgid "Extract out streams in the specified <hwp5file> to a directory."
+msgstr ""
+
+#: pyhwp/hwp5/proc/unpack.py:60
+msgid "Output directory"
+msgstr ""
+
+#: pyhwp/hwp5/proc/version.py:35
+msgid "Print the file format version of .hwp files."
+msgstr ""
+
+#: pyhwp/hwp5/proc/version.py:38
+msgid "Print the file format version of <hwp5file>."
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:81
+msgid "Transform .hwp files into an XML."
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:84
+msgid "Transform <hwp5file> into an XML."
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:96
+msgid "Embed BinData/* streams in the output XML."
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:101
+msgid "Do not output <?xml ... ?> XML declaration."
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:106
+msgid "Output filename."
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:111
+msgid "\"flat\", \"nested\" (default: \"nested\")"
+msgstr ""
+
+#: pyhwp/hwp5/proc/xml.py:116
+msgid "Do not validate well-formedness of output."
 msgstr ""
 

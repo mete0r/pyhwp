@@ -16,20 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Print HWP file header.
-
-Usage::
-
-    hwp5proc header [options] <hwp5file>
-    hwp5proc header -h
-
-Options::
-
-    -h --help              Show this screen
-       --loglevel=<level>  Set log level.
-       --logfile=<file>    Set log file.
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -47,9 +33,24 @@ def main(args):
         output_fp = sys.stdout.buffer
 
     from hwp5.filestructure import Hwp5File
-    hwp5file = Hwp5File(args['<hwp5file>'])
+    hwp5file = Hwp5File(args.hwp5file)
     f = hwp5file.header.open_text()
     try:
         shutil.copyfileobj(f, output_fp)
     finally:
         hwp5file.close()
+
+
+def header_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'header',
+        help=_('Print file headers of .hwp files.'),
+        description=_('Print the file header of <hwp5file>.'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    parser.set_defaults(func=main)
+    return parser

@@ -16,39 +16,20 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-'''HWPv5 to text converter
-
-Usage::
-
-    hwp5txt [options] <hwp5file>
-    hwp5txt -h | --help
-    hwp5txt --version
-
-Options::
-
-    -h --help           Show this screen
-    --version           Show version
-    --loglevel=<level>  Set log level.
-    --logfile=<file>    Set log file.
-
-    --output=<file>     Output file
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from argparse import ArgumentParser
 from contextlib import closing
 import gettext
 import logging
 import os.path
 import sys
 
-from docopt import docopt
-
 from . import __version__ as version
+from .cli import init_logger
 from .dataio import ParseError
 from .errors import InvalidHwp5FileError
-from .proc import init_logger
-from .proc import rest_to_docopt
 from .utils import make_open_dest_file
 from .utils import cached_property
 from .transforms import BaseTransform
@@ -86,16 +67,15 @@ class TextTransform(BaseTransform):
 
 
 def main():
-
-    doc = rest_to_docopt(__doc__)
-    args = docopt(doc, version=version)
+    argparser = main_argparser()
+    args = argparser.parse_args()
     init_logger(args)
 
-    hwp5path = args['<hwp5file>']
+    hwp5path = args.hwp5file
 
     text_transform = TextTransform()
 
-    open_dest = make_open_dest_file(args['--output'])
+    open_dest = make_open_dest_file(args.output)
     transform = text_transform.transform_hwp5_to_text
 
     try:
@@ -107,3 +87,33 @@ def main():
     except InvalidHwp5FileError as e:
         logger.error('%s', e)
         sys.exit(1)
+
+
+def main_argparser():
+    parser = ArgumentParser(
+        prog='hwp5txt',
+        description=_('HWPv5 to txt converter'),
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='%(prog)s {}'.format(version)
+    )
+    parser.add_argument(
+        '--loglevel',
+        help=_('Set log level.'),
+    )
+    parser.add_argument(
+        '--logfile',
+        help=_('Set log file.'),
+    )
+    parser.add_argument(
+        '--output',
+        help=_('Output file'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to convert'),
+    )
+    return parser

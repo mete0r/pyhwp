@@ -20,29 +20,4 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from ..filestructure import Hwp5File
-
-
-def main(args):
-    hwp5file = Hwp5File(args.hwp5file)
-    h = hwp5file.fileheader
-    print('%d.%d.%d.%d' % h.version)
-
-
-def version_argparser(subparsers, _):
-    parser = subparsers.add_parser(
-        'version',
-        help=_(
-            'Print the file format version of .hwp files.'
-        ),
-        description=_(
-            'Print the file format version of <hwp5file>.'
-        ),
-    )
-    parser.add_argument(
-        'hwp5file',
-        metavar='<hwp5file>',
-        help=_('.hwp file to analyze'),
-    )
-    parser.set_defaults(func=main)
-    return parser
+from .proc import main_argparser

@@ -34,6 +34,7 @@ Options::
 from __future__ import absolute_import
 from __future__ import unicode_literals
 from __future__ import print_function
+from argparse import ArgumentParser
 from contextlib import closing
 from contextlib import contextmanager
 from tempfile import mkdtemp
@@ -45,18 +46,15 @@ import shutil
 import sys
 import urllib
 
-from docopt import docopt
-
-from hwp5 import __version__ as version
-from hwp5.proc import rest_to_docopt
-from hwp5.proc import init_logger
-from hwp5.xmlmodel import Hwp5File
-from hwp5.hwp5html import HTMLTransform
+from . import __version__ as version
+from .cli import init_logger
+from .xmlmodel import Hwp5File
+from .hwp5html import HTMLTransform
 
 
 PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
-locale_dir = os.path.join(os.path.dirname(__file__), '..', 'locale')
+locale_dir = os.path.join(os.path.dirname(__file__), 'locale')
 locale_dir = os.path.abspath(locale_dir)
 t = gettext.translation('hwp5view', locale_dir, fallback=True)
 if PY3:
@@ -66,15 +64,43 @@ else:
 
 
 def main():
-    doc = rest_to_docopt(__doc__)
-    args = docopt(doc, version=version)
+    argparser = main_argparser()
+    args = argparser.parse_args()
     init_logger(args)
 
     runner = runner_factory()
 
     with make_temporary_directory() as out_dir:
-        with hwp5html(args['<hwp5file>'], out_dir) as index_path:
+        with hwp5html(args.hwp5file, out_dir) as index_path:
             runner(args, index_path, out_dir)
+
+
+def main_argparser():
+    parser = ArgumentParser(
+        prog='hwp5view',
+        description=_(
+            'HWPv5 viewer (Experimental, gtk only)'
+        )
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='%(prog)s {}'.format(version)
+    )
+    parser.add_argument(
+        '--loglevel',
+        help=_('Set log level.'),
+    )
+    parser.add_argument(
+        '--logfile',
+        help=_('Set log file.'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to view'),
+    )
+    return parser
 
 
 def runner_factory():

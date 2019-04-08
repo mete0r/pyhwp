@@ -1,24 +1,19 @@
-   $ hwp5txt
-   Usage:
-       hwp5txt [options] <hwp5file>
-       hwp5txt -h | --help
-       hwp5txt --version
-
    $ hwp5txt --help
-   HWPv5 to text converter
+   usage: hwp5txt [-h] [--version] [--loglevel LOGLEVEL] [--logfile LOGFILE]
+                  [--output OUTPUT]
+                  <hwp5file>
    
-   Usage:
-       hwp5txt [options] <hwp5file>
-       hwp5txt -h | --help
-       hwp5txt --version
+   HWPv5 to txt converter
    
-   Options:
-       -h --help           Show this screen
-       --version           Show version
-       --loglevel=<level>  Set log level.
-       --logfile=<file>    Set log file.
+   positional arguments:
+     <hwp5file>           .hwp file to convert
    
-       --output=<file>     Output file
+   optional arguments:
+     -h, --help           show this help message and exit
+     --version            show program's version number and exit
+     --loglevel LOGLEVEL  Set log level.
+     --logfile LOGFILE    Set log file.
+     --output OUTPUT      Output file
 
    $ hwp5txt samples/sample-5017.hwp
    한글 2005 예제 파일입니다.

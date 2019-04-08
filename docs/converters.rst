@@ -34,12 +34,24 @@ specifies the paths of the each programs. (If not set, ``xsltproc`` and/or
 
 ``hwp5odt``: ODT conversion
 ---------------------------
-.. automodule:: hwp5.hwp5odt
+
+.. argparse::
+   :module: hwp5.hwp5odt
+   :func: main_argparser
+   :prog: hwp5odt
 
 ``hwp5html``: HTML conversion
 -----------------------------
-.. automodule:: hwp5.hwp5html
+
+.. argparse::
+   :module: hwp5.hwp5html
+   :func: main_argparser
+   :prog: hwp5html
 
 ``hwp5txt``: text conversion
 ----------------------------
-.. automodule:: hwp5.hwp5txt
+
+.. argparse::
+   :module: hwp5.hwp5txt
+   :func: main_argparser
+   :prog: hwp5txt

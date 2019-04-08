@@ -25,7 +25,6 @@ configparser==3.5.0       # via entrypoints, flake8
 coverage==4.5.3
 cryptography==2.6.1 ; platform_python_implementation != "Jython"
 decorator==4.1.2          # via ipython, traitlets
-docopt==0.6.2
 docutils==0.14            # via pyroma, readme-renderer, restview, sphinx
 entrypoints==0.2.3        # via nbconvert
 enum34==1.1.6             # via cryptography, flake8, traitlets

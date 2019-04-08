@@ -101,10 +101,67 @@ def main(args):
             e.print_to_logger(logger)
 
 
+def find_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'find',
+        help=_(
+            'Find record models with specified predicates.'
+        ),
+        description=_(
+            'Find record models with specified predicates.'
+        ),
+    )
+    parser.add_argument(
+        'hwp5files',
+        nargs='*',
+        metavar='<hwp5files>',
+        help=_('.hwp files to analyze'),
+    )
+    parser.add_argument(
+        '--from-stdin',
+        action='store_true',
+        help=_('get filenames from stdin'),
+    )
+    filter_group = parser.add_mutually_exclusive_group()
+    filter_group.add_argument(
+        '--model',
+        metavar='<model-name>',
+        help=_(
+            'filter with record model name'
+        ),
+    )
+    filter_group.add_argument(
+        '--tag',
+        metavar='<hwptag>',
+        help=_(
+            'filter with record HWPTAG'
+        ),
+    )
+    parser.add_argument(
+        '--incomplete',
+        action='store_true',
+        help=_('filter with incompletely parsed content'),
+    )
+    parser.add_argument(
+        '--format',
+        metavar='<format>',
+        help=_(
+            'record output format'
+        ),
+    )
+    parser.add_argument(
+        '--dump',
+        action='store_true',
+        help=_('dump record'),
+    )
+    parser.set_defaults(func=main)
+    return parser
+
+
 def filenames_from_args(args):
-    if args['--from-stdin']:
+    if args.from_stdin:
         return filenames_from_stdin(args)
-    return args['<hwp5files>']
+    return args.hwp5files
 
 
 def filenames_from_stdin(args):
@@ -113,13 +170,13 @@ def filenames_from_stdin(args):
 
 def conditions_from_args(args):
 
-    if args['--model']:
+    if args.model:
         def with_model_name(model):
-            return args['--model'] == model['type'].__name__
+            return args.model == model['type'].__name__
         yield with_model_name
 
-    if args['--tag']:
-        tag = args['--tag']
+    if args.tag:
+        tag = args.tag
         try:
             tag = int(tag)
         except ValueError:
@@ -131,7 +188,7 @@ def conditions_from_args(args):
             return model['tagname'] == tag
         yield with_tag
 
-    if args['--incomplete']:
+    if args.incomplete:
         def with_incomplete(model):
             return 'unparsed' in model
         yield with_incomplete
@@ -157,12 +214,12 @@ def flat_models(hwp5file, **kwargs):
 
 def printer_from_args(args):
 
-    if args['--format']:
-        fmt = args['--format']
+    if args.format:
+        fmt = args.format
     else:
         fmt = '%(filename)s %(stream)s %(seqno)s %(tagname)s %(type)s'
 
-    dump = args['--dump']
+    dump = args.dump
 
     def print_model(model):
         printable_model = dict(model, type=model['type'].__name__)

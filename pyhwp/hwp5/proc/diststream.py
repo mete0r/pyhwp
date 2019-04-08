@@ -69,19 +69,49 @@ def main(args):
         input_fp = sys.stdin.buffer
         output_fp = sys.stdout.buffer
 
-    if args['sha1']:
+    if args.sha1:
         head = read_record(input_fp, 0)
         sha1ucs16le = decode_head_to_sha1(head['payload'])
         sha1 = a2b_hex(sha1ucs16le.decode('utf-16le'))
-        if not args['--raw']:
+        if not args.raw:
             sha1 = b2a_hex(sha1)
         output_fp.write(sha1)
-    elif args['key']:
+    elif args.key:
         head = read_record(input_fp, 0)
         key = decode_head_to_key(head['payload'])
-        if not args['--raw']:
+        if not args.raw:
             key = b2a_hex(key)
         output_fp.write(key)
     else:
         result = decode(input_fp)
         shutil.copyfileobj(result, output_fp)
+
+
+def diststream_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'diststream',
+        help=_(
+            'Decode a distribute document stream.'
+        ),
+        description=_(
+            'Decode a distribute document stream.'
+        ),
+    )
+    op_group = parser.add_mutually_exclusive_group()
+    op_group.add_argument(
+        '--sha1',
+        action='store_true',
+        help=_('Print SHA-1 value for decryption.'),
+    )
+    op_group.add_argument(
+        '--key',
+        action='store_true',
+        help=_('Print decrypted key.'),
+    )
+    parser.add_argument(
+        '--raw',
+        action='store_true',
+        help=_('Print raw binary objects as is.'),
+    )
+    parser.set_defaults(func=main)
+    return parser

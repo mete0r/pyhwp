@@ -1,34 +1,25 @@
-   $ hwp5odt
-   Usage:
-       hwp5odt [options] [--embed-image] <hwp5file>
-       hwp5odt [options] --styles <hwp5file>
-       hwp5odt [options] --content [--embed-image] <hwp5file>
-       hwp5odt [options] --document [--no-embed-image] <hwp5file>
-       hwp5odt -h | --help
-       hwp5odt --version
-
    $ hwp5odt --help
-   HWPv5 to ODT converter
+   usage: hwp5odt [-h] [--version] [--loglevel LOGLEVEL] [--logfile LOGFILE]
+                  [--output OUTPUT] [--styles | --content | --document]
+                  [--embed-image | --no-embed-image]
+                  <hwp5file>
    
-   Usage:
-       hwp5odt [options] [--embed-image] <hwp5file>
-       hwp5odt [options] --styles <hwp5file>
-       hwp5odt [options] --content [--embed-image] <hwp5file>
-       hwp5odt [options] --document [--no-embed-image] <hwp5file>
-       hwp5odt -h | --help
-       hwp5odt --version
+   HWPv5 to odt converter
    
-   Options:
-       -h --help           Show this screen
-       --version           Show version
-       --loglevel=<level>  Set log level.
-       --logfile=<file>    Set log file.
+   positional arguments:
+     <hwp5file>           .hwp file to convert
    
-       --document          Produce single OpenDocument XML file (.fodt)
-       --styles            Produce *.styles.xml
-       --content           Produce *.content.xml
-   
-       --output=<file>     Output file.
+   optional arguments:
+     -h, --help           show this help message and exit
+     --version            show program's version number and exit
+     --loglevel LOGLEVEL  Set log level.
+     --logfile LOGFILE    Set log file.
+     --output OUTPUT      Output file
+     --styles             Generate styles.xml
+     --content            Generate content.xml
+     --document           Generate .fodt
+     --embed-image        Embed images in output xml.
+     --no-embed-image     Do not embed images in output xml.
 
    $ rm -rf sample-5017
    $ hwp5odt samples/sample-5017.hwp >/dev/null 2>/dev/null
