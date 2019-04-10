@@ -16,51 +16,6 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Transform an HWPv5 file into an XML.
-
-.. note::
-
-   This command is experimental. Its output format is subject to change at any
-   time.
-
-Usage::
-
-    hwp5proc xml [--embedbin]
-                 [--no-xml-decl]
-                 [--output=<file>]
-                 [--format=<format>]
-                 [--no-validate-wellformed]
-                 [--loglevel=<loglevel>] [--logfile=<logfile>]
-                 <hwp5file>
-    hwp5proc xml --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-
-       --embedbin           Embed BinData/* streams in the output XML.
-       --no-xml-decl        Don't output <?xml ... ?> XML declaration.
-       --output=<file>      Output filename.
-
-    <hwp5file>              HWPv5 files (*.hwp)
-    <format>                "flat", "nested" (default: "nested")
-
-Example::
-
-    $ hwp5proc xml samples/sample-5017.hwp > sample-5017.xml
-    $ xmllint --format sample-5017.xml
-
-With ``--embedbin`` option, you can embed base64-encoded ``BinData/*`` files in
-the output XML.
-
-Example::
-
-    $ hwp5proc xml --embedbin samples/sample-5017.hwp > sample-5017.xml
-    $ xmllint --format sample-5017.xml
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -90,31 +45,75 @@ def main(args):
     ''' Transform <hwp5file> into an XML.
     '''
 
-    fmt = args['--format'] or 'nested'
+    fmt = args.format or 'nested'
     if fmt == 'flat':
         xmldump = partial(
             xmldump_flat,
-            xml_declaration=not args['--no-xml-decl']
+            xml_declaration=not args.no_xml_decl
         )
     elif fmt == 'nested':
         xmldump = partial(
             xmldump_nested,
-            xml_declaration=not args['--no-xml-decl'],
-            embedbin=args['--embedbin'],
+            xml_declaration=not args.no_xml_decl,
+            embedbin=args.embedbin,
         )
 
-    open_dest = make_open_dest_file(args['--output'])
+    open_dest = make_open_dest_file(args.output)
     open_dest = wrap_open_dest_for_tty(open_dest, [
         pager(),
         syntaxhighlight('application/xml'),
     ] + ([
         xmllint(format=True),
-    ] if not args['--no-validate-wellformed'] else []))
+    ] if not args.no_validate_wellformed else []))
     open_dest = wrap_open_dest(open_dest, [
         xmllint(encode='utf-8'),
         xmllint(c14n=True),
-    ] if not args['--no-validate-wellformed'] else [])
+    ] if not args.no_validate_wellformed else [])
 
-    hwp5file = Hwp5File(args['<hwp5file>'])
+    hwp5file = Hwp5File(args.hwp5file)
     with open_dest() as output:
         xmldump(hwp5file, output)
+
+
+def xml_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'xml',
+        help=_(
+           'Transform .hwp files into an XML.'
+        ),
+        description=_(
+           'Transform <hwp5file> into an XML.'
+        ),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    parser.add_argument(
+        '--embedbin',
+        action='store_true',
+        help=_('Embed BinData/* streams in the output XML.'),
+    )
+    parser.add_argument(
+        '--no-xml-decl',
+        action='store_true',
+        help=_('Do not output <?xml ... ?> XML declaration.'),
+    )
+    parser.add_argument(
+       '--output',
+       metavar='<file>',
+       help=_('Output filename.'),
+    )
+    parser.add_argument(
+       '--format',
+       metavar='<format>',
+       help=_('"flat", "nested" (default: "nested")'),
+    )
+    parser.add_argument(
+       '--no-validate-wellformed',
+       action='store_true',
+       help=_('Do not validate well-formedness of output.'),
+    )
+    parser.set_defaults(func=main)
+    return parser

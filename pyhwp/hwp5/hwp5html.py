@@ -16,28 +16,10 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-'''HWPv5 to HTML converter
-
-Usage::
-
-    hwp5html [options] <hwp5file>
-    hwp5html [options] <hwp5file> --html
-    hwp5html [options] <hwp5file> --css
-    hwp5html -h | --help
-    hwp5html --version
-
-Options::
-
-    -h --help           Show this screen
-    --version           Show version
-    --loglevel=<level>  Set log level.
-    --logfile=<file>    Set log file.
-
-    --output=<output>   Output file / directory
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from argparse import ArgumentParser
 from contextlib import contextmanager
 from contextlib import closing
 from functools import partial
@@ -48,6 +30,8 @@ import os.path
 import shutil
 import sys
 
+from . import __version__ as version
+from .cli import init_logger
 from .transforms import BaseTransform
 from .utils import cached_property
 
@@ -135,34 +119,29 @@ class HTMLTransform(BaseTransform):
 
 
 def main():
-    from docopt import docopt
-
-    from . import __version__ as version
     from .dataio import ParseError
     from .errors import InvalidHwp5FileError
-    from .proc import rest_to_docopt
-    from .proc import init_logger
     from .utils import make_open_dest_file
     from .xmlmodel import Hwp5File
 
-    doc = rest_to_docopt(__doc__)
-    args = docopt(doc, version=version)
+    argparser = main_argparser()
+    args = argparser.parse_args()
     init_logger(args)
 
-    hwp5path = args['<hwp5file>']
+    hwp5path = args.hwp5file
 
     html_transform = HTMLTransform()
 
-    open_dest = make_open_dest_file(args['--output'])
-    if args['--css']:
+    open_dest = make_open_dest_file(args.output)
+    if args.css:
         transform = html_transform.transform_hwp5_to_css
         open_dest = wrap_for_css(open_dest)
-    elif args['--html']:
+    elif args.html:
         transform = html_transform.transform_hwp5_to_xhtml
         open_dest = wrap_for_xml(open_dest)
     else:
         transform = html_transform.transform_hwp5_to_dir
-        dest_path = args['--output']
+        dest_path = args.output
         if not dest_path:
             dest_path = os.path.splitext(os.path.basename(hwp5path))[0]
         open_dest = partial(open_dir, dest_path)
@@ -176,6 +155,47 @@ def main():
     except InvalidHwp5FileError as e:
         logger.error('%s', e)
         sys.exit(1)
+
+
+def main_argparser():
+    parser = ArgumentParser(
+        prog='hwp5html',
+        description=_('HWPv5 to HTML converter'),
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='%(prog)s {}'.format(version)
+    )
+    parser.add_argument(
+        '--loglevel',
+        help=_('Set log level.'),
+    )
+    parser.add_argument(
+        '--logfile',
+        help=_('Set log file.'),
+    )
+    parser.add_argument(
+        '--output',
+        help=_('Output file'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to convert'),
+    )
+    generator_group = parser.add_mutually_exclusive_group()
+    generator_group.add_argument(
+        '--css',
+        action='store_true',
+        help=_('Generate CSS'),
+    )
+    generator_group.add_argument(
+        '--html',
+        action='store_true',
+        help=_('Generate HTML'),
+    )
+    return parser
 
 
 @contextmanager

@@ -32,22 +32,18 @@ Usage::
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from argparse import ArgumentParser
 import gettext
 import logging
 import os
 import sys
-
-from docopt import docopt
 
 from .. import __version__
 from ..dataio import ParseError
 from ..errors import InvalidHwp5FileError
 from ..plat import xsltproc
 from ..plat import xmllint
-from ..storage import ExtraItemStorage
 from ..storage import open_storage_item
-from ..storage.ole import OleStorage
-from ..xmlmodel import Hwp5File
 
 
 PY3 = sys.version_info.major == 3
@@ -62,12 +58,6 @@ else:
     _ = t.ugettext
 
 
-def rest_to_docopt(doc):
-    ''' ReST to docopt conversion
-    '''
-    return doc.replace('::\n\n', ':\n').replace('``', '')
-
-
 def init_with_environ():
     if 'PYHWP_XSLTPROC' in os.environ:
         xsltproc.executable = os.environ['PYHWP_XSLTPROC']
@@ -76,66 +66,6 @@ def init_with_environ():
     if 'PYHWP_XMLLINT' in os.environ:
         xmllint.executable = os.environ['PYHWP_XMLLINT']
         xmllint.enable()
-
-
-def init_logger(args):
-    logger = logging.getLogger('hwp5')
-    try:
-        from colorlog import ColoredFormatter
-    except ImportError:
-        formatter = None
-    else:
-        formatter = ColoredFormatter(
-            '%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s',
-            datefmt=None, reset=True,
-            log_colors={
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'red'
-            }
-        )
-
-    loglevel = args.get('--loglevel', None)
-    if not loglevel:
-        loglevel = os.environ.get('PYHWP_LOGLEVEL')
-    if loglevel:
-        levels = dict(debug=logging.DEBUG,
-                      info=logging.INFO,
-                      warning=logging.WARNING,
-                      error=logging.ERROR,
-                      critical=logging.CRITICAL)
-        loglevel = loglevel.lower()
-        loglevel = levels.get(loglevel, logging.WARNING)
-        logger.setLevel(loglevel)
-
-    logfile = args.get('--logfile', None)
-    if not logfile:
-        logfile = os.environ.get('PYHWP_LOGFILE')
-    if logfile:
-        handler = logging.FileHandler(logfile)
-    else:
-        handler = logging.StreamHandler()
-    if formatter:
-        handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-
-subcommands = [
-    'version',
-    'header',
-    'summaryinfo',
-    'ls',
-    'cat',
-    'unpack',
-    'records',
-    'models',
-    'find',
-    'xml',
-    'rawunz',
-    'diststream',
-]
 
 
 program = 'hwp5proc (pyhwp) {version}'.format(version=__version__)
@@ -162,49 +92,15 @@ version = '''{program}
 )
 
 
-def print_subcommands():
-    print(_('Available <command> values:'))
-    print('')
-    for subcommand in subcommands:
-        print('    {}'.format(subcommand))
-    print('')
-    print(_('See \'hwp5proc <command> --help\' '
-            'for more information on a specific command.'))
-
-
 def main():
-    doc = __doc__
-    doc = rest_to_docopt(doc)
+    from ..cli import init_logger
 
-    args = docopt(doc, version=version, help=False, options_first=True)
-
-    if args['--help-commands']:
-        print(doc)
-        print_subcommands()
-        return 0
-
-    command = args['<command>']
-    if command is None:
-        print(doc.strip())
-        return 1
-
-    if command not in subcommands:
-        message = _('Unknown command: {}')
-        message = message.format(command)
-        message = '\n{}\n\n'.format(message)
-        sys.stderr.write(message)
-        print_subcommands()
-        return 1
-
-    argv = [command] + args['<args>']
-    mod = __import__('hwp5.proc.' + command, fromlist=['main'])
-    main = mod.main
-    doc = rest_to_docopt(mod.__doc__)
-    args = docopt(doc, version=__version__, argv=argv)
+    argparser = main_argparser()
+    args = argparser.parse_args()
     init_logger(args)
 
     try:
-        return main(args)
+        return args.func(args)
     except InvalidHwp5FileError as e:
         logger.error('%s', e)
         raise SystemExit(1)
@@ -213,15 +109,48 @@ def main():
         raise SystemExit(1)
 
 
-def open_hwpfile(args):
-    filename = args['<hwp5file>']
-    if args['--ole']:
-        hwpfile = OleStorage(filename)
-    else:
-        hwpfile = Hwp5File(filename)
-        if args['--vstreams']:
-            hwpfile = ExtraItemStorage(hwpfile)
-    return hwpfile
+def main_argparser():
+    from .version import version_argparser
+    from .header import header_argparser
+    from .summaryinfo import summaryinfo_argparser
+    from .ls import ls_argparser
+    from .cat import cat_argparser
+    from .unpack import unpack_argparser
+    from .records import records_argparser
+    from .models import models_argparser
+    from .find import find_argparser
+    from .xml import xml_argparser
+    from .rawunz import rawunz_argparser
+    from .diststream import diststream_argparser
+    parser = ArgumentParser(
+        prog='hwp5proc',
+        description=_('Do various operations on HWPv5 files.'),
+    )
+    parser.add_argument(
+        '--loglevel',
+        help=_('Set log level.'),
+    )
+    parser.add_argument(
+        '--logfile',
+        help=_('Set log file.'),
+    )
+    subcommands = parser.add_subparsers(
+        title=_('subcommands'),
+        description=_('valid subcommands'),
+    )
+    version_argparser(subcommands, _)
+    header_argparser(subcommands, _)
+    summaryinfo_argparser(subcommands, _)
+    ls_argparser(subcommands, _)
+    cat_argparser(subcommands, _)
+    unpack_argparser(subcommands, _)
+    records_argparser(subcommands, _)
+    models_argparser(subcommands, _)
+    find_argparser(subcommands, _)
+    xml_argparser(subcommands, _)
+    rawunz_argparser(subcommands, _)
+    diststream_argparser(subcommands, _)
+    return parser
 
 
 def parse_recordstream_name(hwpfile, streamname):

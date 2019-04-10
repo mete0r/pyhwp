@@ -16,61 +16,12 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Extract out the specified stream in the <hwp5file> to the standard output.
-
-Usage::
-
-    hwp5proc cat [--loglevel=<loglevel>] [--logfile=<logfile>]
-                 [--vstreams | --ole]
-                 <hwp5file> <stream>
-    hwp5proc cat --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-
-       --vstreams           Process with virtual streams (i.e. parsed/converted
-                            form of real streams)
-       --ole                Treat <hwpfile> as an OLE Compound File. As a
-                            result, some streams will be presented as-is. (i.e.
-                            not decompressed)
-
-Example::
-
-    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg | file -
-
-    $ hwp5proc cat samples/sample-5017.hwp BinData/BIN0002.jpg > BIN0002.jpg
-
-    $ hwp5proc cat samples/sample-5017.hwp PrvText | iconv -f utf-16le -t utf-8
-
-    $ hwp5proc cat --vstreams samples/sample-5017.hwp PrvText.utf8
-
-    $ hwp5proc cat --vstreams samples/sample-5017.hwp FileHeader.txt
-
-    ccl: 0
-    cert_drm: 0
-    cert_encrypted: 0
-    cert_signature_extra: 0
-    cert_signed: 0
-    compressed: 1
-    distributable: 0
-    drm: 0
-    history: 0
-    password: 0
-    script: 0
-    signature: HWP Document File
-    version: 5.0.1.7
-    xmltemplate_storage: 0
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
-from . import open_hwpfile
+from ..cli import open_hwpfile
 from ..storage import open_storage_item
 
 
@@ -84,7 +35,7 @@ def main(args):
         output_fp = sys.stdout.buffer
 
     hwp5file = open_hwpfile(args)
-    stream = open_storage_item(hwp5file, args['<stream>'])
+    stream = open_storage_item(hwp5file, args.stream)
     f = stream.open()
     try:
         while True:
@@ -96,3 +47,45 @@ def main(args):
     finally:
         if hasattr(f, 'close'):
             f.close()
+
+
+def cat_argparser(subparsers, _):
+    parser = subparsers.add_parser(
+        'cat',
+        help=_(
+            'Extract out internal streams of .hwp files'
+        ),
+        description=_(
+            'Extract out the specified stream in the <hwp5file> '
+            'to the standard output.'
+        )
+    )
+    parser.add_argument(
+        'hwp5file',
+        metavar='<hwp5file>',
+        help=_('.hwp file to analyze'),
+    )
+    parser.add_argument(
+        'stream',
+        metavar='<stream>',
+        help=_('Internal path of a stream to extract'),
+    )
+    mutex_group = parser.add_mutually_exclusive_group()
+    mutex_group.add_argument(
+        '--vstreams',
+        action='store_true',
+        help=_(
+            'Process with virtual streams (i.e. parsed/converted form of '
+            'real streams)'
+        )
+    )
+    mutex_group.add_argument(
+        '--ole',
+        action='store_true',
+        help=_(
+            'Treat <hwp5file> as an OLE Compound File. As a result, '
+            'some streams will be presented as-is. (i.e. not decompressed)'
+        )
+    )
+    parser.set_defaults(func=main)
+    return parser

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1b9.dev0\n"
 "Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
-"POT-Creation-Date: 2017-10-09 00:54+0900\n"
+"POT-Creation-Date: 2019-04-10 22:55+0900\n"
 "PO-Revision-Date: 2017-10-09 00:41+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.0\n"
 
-#: pyhwp/hwp5/proc/__init__.py:126
+#: pyhwp/hwp5/proc/__init__.py:75
 msgid ""
 "License AGPLv3+: GNU Affero GPL version 3 or any later\n"
 "<http://gnu.org/licenses/agpl.txt>.\n"
@@ -33,7 +33,7 @@ msgstr ""
 "또한 이 프로그램은 아무런 보증 없이 제공됩니다. 이 프로그램을 사용하여\n"
 "발생한 결과에 대해 저자는 법률이 정한 바 외에는 아무런 책임을 지지 않습니다."
 
-#: pyhwp/hwp5/proc/__init__.py:131
+#: pyhwp/hwp5/proc/__init__.py:80
 msgid ""
 "Disclosure: This program has been developed in accordance with a public\n"
 "document named \"HWP Binary Specification 1.1\" published by Hancom Inc.\n"
@@ -43,17 +43,258 @@ msgstr ""
 "참고하여 개발하였습니다.\n"
 "<http://www.hancom.co.kr>."
 
-#: pyhwp/hwp5/proc/__init__.py:147
-msgid "Available <command> values:"
-msgstr "사용가능한 <command> 값:"
+#: pyhwp/hwp5/proc/__init__.py:127
+msgid "Do various operations on HWPv5 files."
+msgstr "HWPv5 파일로 작업 수행"
 
-#: pyhwp/hwp5/proc/__init__.py:152
+#: pyhwp/hwp5/proc/__init__.py:131
+msgid "Set log level."
+msgstr "로그 수준 지정"
+
+#: pyhwp/hwp5/proc/__init__.py:135
+msgid "Set log file."
+msgstr "로그 파일 지정"
+
+#: pyhwp/hwp5/proc/__init__.py:138
+msgid "subcommands"
+msgstr "하위 명령"
+
+#: pyhwp/hwp5/proc/__init__.py:139
+msgid "valid subcommands"
+msgstr "유효한 하위 명령"
+
+#: pyhwp/hwp5/proc/cat.py:55
+msgid "Extract out internal streams of .hwp files"
+msgstr ".hwp 파일의 내부 스트림을 출력합니다."
+
+#: pyhwp/hwp5/proc/cat.py:58
+msgid "Extract out the specified stream in the <hwp5file> to the standard output."
+msgstr "<hwp5file>의 지정된 스트림을 표준 출력으로 추출합니다."
+
+#: pyhwp/hwp5/proc/cat.py:66 pyhwp/hwp5/proc/header.py:53
+#: pyhwp/hwp5/proc/ls.py:107 pyhwp/hwp5/proc/models.py:91
+#: pyhwp/hwp5/proc/records.py:99 pyhwp/hwp5/proc/summaryinfo.py:61
+#: pyhwp/hwp5/proc/unpack.py:54 pyhwp/hwp5/proc/version.py:45
+#: pyhwp/hwp5/proc/xml.py:91
+msgid ".hwp file to analyze"
+msgstr "분석할 .hwp 파일"
+
+#: pyhwp/hwp5/proc/cat.py:71
+msgid "Internal path of a stream to extract"
+msgstr "추출할 스트림 내부 경로"
+
+#: pyhwp/hwp5/proc/cat.py:77 pyhwp/hwp5/proc/ls.py:113
+#: pyhwp/hwp5/proc/unpack.py:66
+msgid "Process with virtual streams (i.e. parsed/converted form of real streams)"
+msgstr "가상 스트림 처리 (실제 스트림의 파싱/변환 형)"
+
+#: pyhwp/hwp5/proc/cat.py:85 pyhwp/hwp5/proc/ls.py:121
+#: pyhwp/hwp5/proc/unpack.py:74
 msgid ""
-"See 'hwp5proc <command> --help' for more information on a specific "
-"command."
-msgstr "각 명령의 상세 사용법을 보려면: hwp5proc <command> --help"
+"Treat <hwp5file> as an OLE Compound File. As a result, some streams will "
+"be presented as-is. (i.e. not decompressed)"
+msgstr ""
+"<hwp5file>을 OLE Compound File로 취급합니다. 결과적으로 몇몇 스트림은 있는 그대로 나타납니다. 가령 압축해제"
+" 되지 않습니다."
 
-#: pyhwp/hwp5/proc/__init__.py:173
-msgid "Unknown command: {}"
-msgstr "잘못된 명령: {}"
+#: pyhwp/hwp5/proc/diststream.py:93 pyhwp/hwp5/proc/diststream.py:96
+msgid "Decode a distribute document stream."
+msgstr "배포 문서 스트림을 디코드합니다."
+
+#: pyhwp/hwp5/proc/diststream.py:104
+msgid "Print SHA-1 value for decryption."
+msgstr "복호화를 위한 SHA-1 값을 출력합니다."
+
+#: pyhwp/hwp5/proc/diststream.py:109
+msgid "Print decrypted key."
+msgstr "복호화된 키를 출력합니다."
+
+#: pyhwp/hwp5/proc/diststream.py:114
+msgid "Print raw binary objects as is."
+msgstr "바이너리 객체를 있는 그대로 출력합니다."
+
+#: pyhwp/hwp5/proc/find.py:107 pyhwp/hwp5/proc/find.py:110
+msgid "Find record models with specified predicates."
+msgstr "지정한 조건으로 레코드 모형을 검색합니다."
+
+#: pyhwp/hwp5/proc/find.py:118
+msgid ".hwp files to analyze"
+msgstr "분석할 .hwp 파일"
+
+#: pyhwp/hwp5/proc/find.py:123
+msgid "get filenames from stdin"
+msgstr "표준 출력에서 파일 이름을 얻습니다."
+
+#: pyhwp/hwp5/proc/find.py:129
+msgid "filter with record model name"
+msgstr "레코드 모형 이름으로 찾습니다."
+
+#: pyhwp/hwp5/proc/find.py:136
+msgid "filter with record HWPTAG"
+msgstr "레코드 HWPTAG 값으로 찾습니다."
+
+#: pyhwp/hwp5/proc/find.py:143
+msgid "filter with incompletely parsed content"
+msgstr "내용이 완전히 다 파싱되지 않은 레코드를 찾습니다."
+
+#: pyhwp/hwp5/proc/find.py:148
+msgid "record output format"
+msgstr "레코드 출력 형식 지정"
+
+#: pyhwp/hwp5/proc/find.py:155
+msgid "dump record"
+msgstr "레코드 덤프"
+
+#: pyhwp/hwp5/proc/header.py:47
+msgid "Print file headers of .hwp files."
+msgstr ".hwp 파일의 헤더를 출력합니다."
+
+#: pyhwp/hwp5/proc/header.py:48
+msgid "Print the file header of <hwp5file>."
+msgstr "<hwp5file>의 파일 헤더를 출력합니다."
+
+#: pyhwp/hwp5/proc/ls.py:101
+msgid "List streams in .hwp files."
+msgstr ".hwp 파일의 내부 스트림 목록을 출력합니다."
+
+#: pyhwp/hwp5/proc/ls.py:102
+msgid "List streams in the <hwp5file>."
+msgstr "<hwp5file>의 스트림 목록을 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:80
+msgid "Print parsed binary models of .hwp file record streams."
+msgstr "지정한 .hwp 파일 레코드 스트림을 파싱한 레코드 모형을 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:83
+msgid "Print parsed binary models in the specified <record-stream>."
+msgstr "지정한 <record-stream>을 파싱한 레코드 모형을 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:97 pyhwp/hwp5/proc/records.py:105
+msgid ""
+"Record-structured internal streams.\n"
+"(e.g. DocInfo, BodyText/*)\n"
+msgstr ""
+"레코드 구조를 갖는 내부 스트림.\n"
+"(예: DocInfo, BodyText/*)\n"
+
+#: pyhwp/hwp5/proc/models.py:106
+msgid "Specifies HWPv5 file format version of the standard input stream"
+msgstr "표준 입력의 HWPv5 파일 포맷 버젼을 지정합니다."
+
+#: pyhwp/hwp5/proc/models.py:114 pyhwp/hwp5/proc/records.py:114
+msgid "Print records as simple tree"
+msgstr "레코드열을 단순한 수형도樹形圖로 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:121 pyhwp/hwp5/proc/records.py:121
+msgid "Print records as json"
+msgstr "레코드를 JSON 형식으로 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:128
+msgid "Print records formatted"
+msgstr "레코드를 포맷팅하여 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:135
+msgid "Print records as events"
+msgstr "레코드를 이벤트로 출력합니다."
+
+#: pyhwp/hwp5/proc/models.py:143 pyhwp/hwp5/proc/records.py:159
+msgid "Specifies the N-th subtree of the record structure."
+msgstr "레코드 구조의 N번째 하위 트리를 지정합니다."
+
+#: pyhwp/hwp5/proc/models.py:150
+msgid "Print a model of <seqno>-th record"
+msgstr "<seqno>번째 레코드의 모형을 출력합니다."
+
+#: pyhwp/hwp5/proc/rawunz.py:46 pyhwp/hwp5/proc/rawunz.py:49
+msgid "Deflate an headerless zlib-compressed stream"
+msgstr "헤더 없는 zlib 압축 스트림을 복원합니다."
+
+#: pyhwp/hwp5/proc/records.py:88
+msgid "Print the record structure of .hwp file record streams."
+msgstr ".hwp 파일 레코드 스트림의 레코드 구조를 출력합니다."
+
+#: pyhwp/hwp5/proc/records.py:91
+msgid "Print the record structure of the specified stream."
+msgstr "지정한 스트림의 레코드 구조를 출력합니다."
+
+#: pyhwp/hwp5/proc/records.py:128
+msgid "Print records as is"
+msgstr "레코드를 있는 그대로 출력합니다."
+
+#: pyhwp/hwp5/proc/records.py:135
+msgid "Print record headers as is"
+msgstr "레코드 헤더를 있는 그대로 출력합니다."
+
+#: pyhwp/hwp5/proc/records.py:142
+msgid "Print record payloads as is"
+msgstr "레코드 페이로드를 있는 그대로 출력합니다."
+
+#: pyhwp/hwp5/proc/records.py:150
+msgid ""
+"Specifies the range of the records.\n"
+"N-M means \"from the record N to M-1 (excluding M)\"\n"
+"N means just the record N\n"
+msgstr ""
+"레코드의 범위를 지정합니다.\n"
+"N-M은 \"N번째 레코드로부터 M-1번째 레코드까지를 뜻합니다(M번째 레코드 제외)\"\n"
+"N은 N번째 레코드를 뜻합니다.\n"
+
+#: pyhwp/hwp5/proc/summaryinfo.py:51
+msgid "Print summary informations of .hwp files."
+msgstr ".hwp 파일의 요약 정보를 출력합니다."
+
+#: pyhwp/hwp5/proc/summaryinfo.py:54
+msgid "Print the summary information of <hwp5file>."
+msgstr "<hwp5file>의 요약 정보를 출력합니다."
+
+#: pyhwp/hwp5/proc/unpack.py:43
+msgid "Extract out internal streams of .hwp files into a directory."
+msgstr ".hwp 파일의 내부 스트림들을 디렉토리에 추출합니다."
+
+#: pyhwp/hwp5/proc/unpack.py:46
+msgid "Extract out streams in the specified <hwp5file> to a directory."
+msgstr "지정한 <hwp5file>의 내부 스트림들을 디렉토리에 추출합니다."
+
+#: pyhwp/hwp5/proc/unpack.py:60
+msgid "Output directory"
+msgstr "출력 디렉토리"
+
+#: pyhwp/hwp5/proc/version.py:35
+msgid "Print the file format version of .hwp files."
+msgstr ".hwp 파일의 형식 판본을 출력합니다."
+
+#: pyhwp/hwp5/proc/version.py:38
+msgid "Print the file format version of <hwp5file>."
+msgstr "<hwp5file>의 파일 형식 판본을 출력합니다."
+
+#: pyhwp/hwp5/proc/xml.py:81
+msgid "Transform .hwp files into an XML."
+msgstr ".hwp 파일을 XML로 변환합니다."
+
+#: pyhwp/hwp5/proc/xml.py:84
+msgid "Transform <hwp5file> into an XML."
+msgstr "<hwp5file>을 XML로 변환합니다."
+
+#: pyhwp/hwp5/proc/xml.py:96
+msgid "Embed BinData/* streams in the output XML."
+msgstr "BinData/* 스트림을 출력 XML에 내장합니다."
+
+#: pyhwp/hwp5/proc/xml.py:101
+msgid "Do not output <?xml ... ?> XML declaration."
+msgstr "<?xml ... ?> XML 선언을 출력하지 않습니다."
+
+#: pyhwp/hwp5/proc/xml.py:106
+msgid "Output filename."
+msgstr "출력 파일이름"
+
+#: pyhwp/hwp5/proc/xml.py:111
+msgid "\"flat\", \"nested\" (default: \"nested\")"
+msgstr "\"flat\", \"nested\" (기본값: \"nested\")"
+
+#: pyhwp/hwp5/proc/xml.py:116
+msgid "Do not validate well-formedness of output."
+msgstr "출력의 well-formed 여부를 검증하지 않습니다."
+
+#~ msgid "Print HWP file header."
+#~ msgstr "HWP 파일 헤더를 출력합니다."
 
