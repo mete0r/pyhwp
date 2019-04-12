@@ -156,7 +156,7 @@ setup_info = {
     ],
     # do not use '.'; just omit to specify setup.py directory
     'package_dir': {
-        '': 'pyhwp',
+        '': 'src',
     },
 
     'package_data': {

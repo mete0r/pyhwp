@@ -10,12 +10,12 @@ include buildout.cfg
 include classifiers.txt
 include ez_setup.py
 exclude notebooks
-include pyhwp/README.rst
-include pyhwp/hwp5/COPYING
-include pyhwp/hwp5/README
-include pyhwp/hwp5/VERSION.txt
-include pyhwp/hwp5/xsl/*.xsl
-include pyhwp/hwp5/xsl/odt/*
+include src/README.rst
+include src/hwp5/COPYING
+include src/hwp5/README
+include src/hwp5/VERSION.txt
+include src/hwp5/xsl/*.xsl
+include src/hwp5/xsl/odt/*
 include requirements.in
 include requirements.txt
 include requirements/dev.in
@@ -30,17 +30,17 @@ exclude samples
 include stdeb.cfg
 include tox.ini
 include tox.ini.in
-recursive-include pyhwp/hwp5/locale *.po
-recursive-include pyhwp/hwp5/locale *.pot
+recursive-include src/hwp5/locale *.po
+recursive-include src/hwp5/locale *.pot
 prune buildouts
 prune docs
 prune etc
 prune misc
 prune oxt
-prune pyhwp-tests
 prune release-hooks
+prune tests
 prune tools
 prune unokit
-prune pyhwp/hwp5/odf-relaxng
-include pyhwp/hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
+prune src/hwp5/odf-relaxng
+include src/hwp5/odf-relaxng/OpenDocument-v1.2-os-*.rng
 prune pyhwp_uno
