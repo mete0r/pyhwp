@@ -141,8 +141,7 @@ version specified by -V option.
 
 Example::
 
-    $ hwp5proc records --raw samples/sample-5017.hwp DocInfo --range=0-2 \
-> tmp.rec
+    $ hwp5proc records --raw samples/sample-5017.hwp DocInfo --range=0-2 > tmp.rec
     $ hwp5proc records < tmp.rec
 
 models
