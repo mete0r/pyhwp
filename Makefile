@@ -133,7 +133,7 @@ test-report:
 
 .PHONY: clitest
 clitest:
-	$(VENV) env LANG=C clitest -1 --prefix 3 pyhwp-tests/cli_tests/hwp5proc.txt pyhwp-tests/cli_tests/hwp5odt.txt pyhwp-tests/cli_tests/hwp5html.txt pyhwp-tests/cli_tests/hwp5txt.txt
+	$(VENV) env LANG=C clitest -1 --prefix 3 tests/cli_tests/hwp5proc.txt tests/cli_tests/hwp5odt.txt tests/cli_tests/hwp5html.txt tests/cli_tests/hwp5txt.txt
 
 
 .PHONY: install-jython
