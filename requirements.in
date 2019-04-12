@@ -1,3 +1,4 @@
 cryptography ; platform_python_implementation != "Jython"
 lxml ; platform_python_implementation != "Jython"
 olefile >= 0.43 ; platform_python_implementation != "Jython"
+zope.interface
