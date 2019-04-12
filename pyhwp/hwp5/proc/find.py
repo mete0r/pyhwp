@@ -60,6 +60,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from functools import partial
+import logging
 import itertools
 import sys
 
@@ -68,7 +69,6 @@ from ..binmodel import model_to_json
 from ..bintype import log_events
 from ..dataio import ParseError
 from ..tagids import tagnames
-from . import logger
 
 
 PY2 = sys.version_info.major == 2
@@ -78,6 +78,9 @@ if PY2:
 else:
     ifilter = filter
     imap = map
+
+
+logger = logging.getLogger(__name__)
 
 
 def main(args):

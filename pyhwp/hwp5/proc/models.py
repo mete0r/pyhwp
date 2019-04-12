@@ -26,12 +26,12 @@ from ..binmodel import Hwp5File
 from ..binmodel import ModelStream
 from ..binmodel import RecordModel
 from ..binmodel import model_to_json
+from ..cli import parse_recordstream_name
 from ..dataio import hexdump
 from ..storage import Open2Stream
 from ..treeop import ENDEVENT
 from ..utils import generate_json_array
 from ..utils import unicode_unescape
-from . import parse_recordstream_name
 
 
 PY2 = sys.version_info.major == 2

@@ -32,6 +32,7 @@ import sys
 
 from . import __version__ as version
 from .cli import init_logger
+from .cli import init_with_environ
 from .errors import ImplementationNotAvailable
 from .utils import mkstemp_open
 from .utils import hwp5_resources_path
@@ -325,7 +326,6 @@ def manifest_rdf(f):
 def main():
     from .dataio import ParseError
     from .errors import InvalidHwp5FileError
-    from .proc import init_with_environ
     from .utils import make_open_dest_file
     from .xmlmodel import Hwp5File
 

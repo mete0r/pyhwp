@@ -21,12 +21,12 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
+from ..cli import parse_recordstream_name
 from ..recordstream import Hwp5File
 from ..recordstream import RecordStream
 from ..recordstream import encode_record_header
 from ..recordstream import dump_record
 from ..storage import Open2Stream
-from . import parse_recordstream_name
 
 
 PY2 = sys.version_info.major == 2

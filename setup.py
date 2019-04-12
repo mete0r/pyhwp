@@ -180,7 +180,7 @@ setup_info = {
     'entry_points': {
         'console_scripts': [
             'hwp5spec=hwp5.binspec:main',
-            'hwp5proc=hwp5.proc:main',
+            'hwp5proc=hwp5.hwp5proc:main',
             'hwp5odt=hwp5.hwp5odt:main',
             'hwp5txt=hwp5.hwp5txt:main',
             'hwp5html=hwp5.hwp5html:main',

@@ -22,7 +22,10 @@ from __future__ import unicode_literals
 import logging
 import os
 
+from .plat import xsltproc
+from .plat import xmllint
 from .storage import ExtraItemStorage
+from .storage import open_storage_item
 from .storage.ole import OleStorage
 from .xmlmodel import Hwp5File
 
@@ -71,6 +74,16 @@ def init_logger(args):
     logger.addHandler(handler)
 
 
+def init_with_environ():
+    if 'PYHWP_XSLTPROC' in os.environ:
+        xsltproc.executable = os.environ['PYHWP_XSLTPROC']
+        xsltproc.enable()
+
+    if 'PYHWP_XMLLINT' in os.environ:
+        xmllint.executable = os.environ['PYHWP_XMLLINT']
+        xmllint.enable()
+
+
 def open_hwpfile(args):
     filename = args.hwp5file
     if args.ole:
@@ -80,3 +93,17 @@ def open_hwpfile(args):
         if args.vstreams:
             hwpfile = ExtraItemStorage(hwpfile)
     return hwpfile
+
+
+def parse_recordstream_name(hwpfile, streamname):
+    if streamname == 'docinfo':
+        return hwpfile.docinfo
+    segments = streamname.split('/')
+    if len(segments) == 2:
+        if segments[0] == 'bodytext':
+            try:
+                idx = int(segments[1])
+                return hwpfile.bodytext.section(idx)
+            except ValueError:
+                pass
+    return open_storage_item(hwpfile, streamname)
