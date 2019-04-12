@@ -100,7 +100,13 @@ def main():
     init_logger(args)
 
     try:
-        return args.func(args)
+        subcommand_fn = args.func
+    except AttributeError:
+        argparser.print_help()
+        raise SystemExit(1)
+
+    try:
+        return subcommand_fn(args)
     except InvalidHwp5FileError as e:
         logger.error('%s', e)
         raise SystemExit(1)
