@@ -24,7 +24,11 @@ import logging
 import os.path
 import sys
 
+from zope.interface import implementer
+
 from ...errors import InvalidOleStorageError
+from ...interfaces import IXSLT
+from ...interfaces import IXSLTFactory
 
 
 PY3 = sys.version_info.major == 3
@@ -100,75 +104,87 @@ class OneshotEvent(object):
         self.pout.close()
 
 
+@implementer(IXSLTFactory)
+class XSLTFactory:
+
+    def xslt_from_file(self, xsl_path, **params):
+        return XSLT(xsl_path, **params)
+
+
+@implementer(IXSLT)
 class XSLT(object):
 
-    def __init__(self, context):
+    def __init__(self, context, xsl_path):
         self.context = context
+        self.xsl_path = xsl_path
 
-    def __call__(self, xsl_path, inp_path, out_path):
+    def transform(self, inp_path, out_path):
+        out_path = os.path.abspath(out_path)
+        with io.open(out_path, 'wb') as out_file:
+            self.transform_into_stream(inp_path, out_file)
+
+    def transform_into_stream(self, inp_path, out_file):
         import uno
         import unohelper
         from hwp5.plat._uno import ucb
         from hwp5.plat._uno.adapters import OutputStreamToFileLike
-        xsl_path = os.path.abspath(xsl_path)
+        xsl_path = os.path.abspath(self.xsl_path)
         xsl_url = uno.systemPathToFileUrl(xsl_path)
 
         inp_path = os.path.abspath(inp_path)
         inp_url = uno.systemPathToFileUrl(inp_path)
         inp_stream = ucb.open_url(self.context, inp_url)
 
-        out_path = os.path.abspath(out_path)
-        with io.open(out_path, 'wb') as out_file:
-            out_stream = OutputStreamToFileLike(out_file, dontclose=True)
+        out_stream = OutputStreamToFileLike(out_file, dontclose=True)
 
-            from com.sun.star.io import XStreamListener
+        from com.sun.star.io import XStreamListener
 
-            class XSLTListener(unohelper.Base, XStreamListener):
-                def __init__(self):
-                    self.event = OneshotEvent()
+        class XSLTListener(unohelper.Base, XStreamListener):
+            def __init__(self):
+                self.event = OneshotEvent()
 
-                def started(self):
-                    logger.info('XSLT started')
+            def started(self):
+                logger.info('XSLT started')
 
-                def closed(self):
-                    logger.info('XSLT closed')
-                    self.event.signal()
+            def closed(self):
+                logger.info('XSLT closed')
+                self.event.signal()
 
-                def terminated(self):
-                    logger.info('XSLT terminated')
-                    self.event.signal()
+            def terminated(self):
+                logger.info('XSLT terminated')
+                self.event.signal()
 
-                def error(self, exception):
-                    logger.error('XSLT error: %s', exception)
-                    self.event.signal()
+            def error(self, exception):
+                logger.error('XSLT error: %s', exception)
+                self.event.signal()
 
-                def disposing(self, source):
-                    logger.info('XSLT disposing: %s', source)
-                    self.event.signal()
+            def disposing(self, source):
+                logger.info('XSLT disposing: %s', source)
+                self.event.signal()
 
-            listener = XSLTListener()
-            transformer = XSLTTransformer(self.context, xsl_url, '', '')
-            transformer.InputStream = inp_stream
-            transformer.OutputStream = out_stream
-            transformer.addListener(listener)
+        listener = XSLTListener()
+        transformer = XSLTTransformer(self.context, xsl_url, '', '')
+        transformer.InputStream = inp_stream
+        transformer.OutputStream = out_stream
+        transformer.addListener(listener)
 
-            transformer.start()
-            xsl_name = os.path.basename(xsl_path)
-            logger.info('xslt.soffice(%s) start', xsl_name)
-            try:
-                listener.event.wait()
-            finally:
-                logger.info('xslt.soffice(%s) end', xsl_name)
+        transformer.start()
+        xsl_name = os.path.basename(xsl_path)
+        logger.info('xslt.soffice(%s) start', xsl_name)
+        try:
+            listener.event.wait()
+        finally:
+            logger.info('xslt.soffice(%s) end', xsl_name)
 
-            transformer.removeListener(listener)
-            return dict()
+        transformer.removeListener(listener)
+        return dict()
 
 
 def xslt(xsl_path, inp_path, out_path):
     import uno
     context = uno.getComponentContext()
-    xslt = XSLT(context)
-    return xslt(xsl_path, inp_path, out_path)
+    xslt = XSLT(context, xsl_path)
+    return xslt.transform(inp_path, out_path)
 
 
 def oless_from_filename(filename):

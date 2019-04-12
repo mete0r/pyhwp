@@ -27,7 +27,11 @@ import shutil
 import sys
 import tempfile
 
+from zope.interface import implementer
+
 from ..errors import ValidationFailed
+from ..interfaces import IXSLT
+from ..interfaces import IXSLTFactory
 
 
 PY3 = sys.version_info.major == 3
@@ -62,6 +66,14 @@ def xslt_compile(xsl_path, **params):
     return xslt.transform_into_stream
 
 
+@implementer(IXSLTFactory)
+class XSLTFactory:
+
+    def xslt_from_file(self, xsl_path, **params):
+        return XSLT(xsl_path, **params)
+
+
+@implementer(IXSLT)
 class XSLT:
 
     def __init__(self, xsl_path, **params):

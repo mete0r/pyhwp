@@ -24,6 +24,11 @@ from subprocess import Popen
 import logging
 import subprocess
 
+from zope.interface import implementer
+
+from ..interfaces import IXSLT
+from ..interfaces import IXSLTFactory
+
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +73,14 @@ def xslt(xsl_path, inp_path, out_path):
     return xslt.transform(inp_path, out_path)
 
 
+@implementer(IXSLTFactory)
+class XSLTFactory:
+
+    def xslt_from_file(self, xsl_path, **params):
+        return XSLT(xsl_path, **params)
+
+
+@implementer(IXSLT)
 class XSLT:
 
     def __init__(self, xsl_path, **params):
