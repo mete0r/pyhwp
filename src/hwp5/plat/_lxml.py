@@ -30,6 +30,8 @@ import tempfile
 from zope.interface import implementer
 
 from ..errors import ValidationFailed
+from ..interfaces import IRelaxNG
+from ..interfaces import IRelaxNGFactory
 from ..interfaces import IXSLT
 from ..interfaces import IXSLTFactory
 
@@ -136,6 +138,14 @@ def relaxng_compile(rng_path):
     return RelaxNG(rng_path)
 
 
+@implementer(IRelaxNGFactory)
+class RelaxNGFactory:
+
+    def relaxng_validator_from_file(self, rng_path):
+        return RelaxNG(rng_path)
+
+
+@implementer(IRelaxNG)
 class RelaxNG:
 
     def __init__(self, rng_path):

@@ -24,6 +24,12 @@ from subprocess import CalledProcessError
 import logging
 import subprocess
 
+from zope.interface import implementer
+
+from ..errors import ValidationFailed
+from ..interfaces import IRelaxNG
+from ..interfaces import IRelaxNGFactory
+
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +81,14 @@ def relaxng_compile(rng_path):
     return RelaxNG(rng_path)
 
 
+@implementer(IRelaxNGFactory)
+class RelaxNGFactory:
+
+    def relaxng_validator_from_file(self, rng_path):
+        return RelaxNG(rng_path)
+
+
+@implementer(IRelaxNG)
 class RelaxNG:
 
     def __init__(self, rng_path):
@@ -94,4 +108,15 @@ class RelaxNG:
             p.stdin.close()
             p.wait()
             if p.returncode != 0:
-                raise Exception('RelaxNG validation failed')
+                raise ValidationFailed('RelaxNG')
+
+    def validate(self, input_path):
+        args = [
+            self.executable,
+            '--relaxng', self.rng_path,
+            '--noout',
+            input_path
+        ]
+        p = subprocess.Popen(args)
+        p.wait()
+        return p.returncode == 0

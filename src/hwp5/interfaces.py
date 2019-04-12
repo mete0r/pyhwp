@@ -23,6 +23,51 @@ from __future__ import unicode_literals
 from zope.interface import Interface
 
 
+class IRelaxNG(Interface):
+
+    def validating_output(output_stream):
+        '''
+        Return validating output stream on the given output stream.
+
+        :param output_stream:
+            output stream
+        :type output_stream:
+            byte-oriented file-like object.
+
+        >>> with R.validating_output(sys.stdout.buffer) as fp:
+                doc.dump(fp)
+        '''
+
+    def validate(input_path):
+        '''
+        Validate input file.
+
+        :param str input_path:
+            input file to validate.
+        :return bool:
+            True if validation succeeds.
+
+        >>> success = V.validate('input.xml')
+        '''
+
+
+class IRelaxNGFactory(Interface):
+
+    def relaxng_validator_from_file(rng_path):
+        '''
+        Create a RelaxNG validator from a file.
+
+        :param str rng_path:
+            RelaxNG file path.
+        :returns:
+            RelaxNG validator
+        :rtype:
+            IRelaxNG
+
+        >>> V = F.relaxng_validator_from_file('validator.rng')
+        '''
+
+
 class IXSLT(Interface):
 
     def transform(input, output):
