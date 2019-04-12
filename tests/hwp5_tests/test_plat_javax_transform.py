@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import unittest
 import sys
 
+from hwp5.errors import ImplementationNotAvailable
 from hwp5.plat import javax_transform
 
 from .mixin_xslt import XsltTestMixin
@@ -20,9 +21,10 @@ class TestPlatJavaxTransform(unittest.TestCase, XsltTestMixin):
             self.assertFalse(javax_transform.is_enabled())
 
     def setUp(self):
-        if javax_transform.is_enabled():
-            self.xslt = javax_transform.xslt
-            self.xslt_compile = javax_transform.xslt_compile
+        from hwp5.plat.javax_transform import createXSLTFactory
+        try:
+            factory = createXSLTFactory(None)
+        except ImplementationNotAvailable:
+            self.xslt_factory = None
         else:
-            self.xslt = None
-            self.xslt_compile = None
+            self.xslt_factory = factory

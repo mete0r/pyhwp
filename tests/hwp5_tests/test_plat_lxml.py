@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import unittest
 
+from hwp5.errors import ImplementationNotAvailable
 from hwp5.plat import _lxml
 
 from .mixin_xslt import XsltTestMixin
@@ -23,13 +24,18 @@ class TestPlatLxml(unittest.TestCase, XsltTestMixin, RelaxNGTestMixin):
             self.assertTrue(_lxml.is_enabled())
 
     def setUp(self):
-        if _lxml.is_enabled():
-            self.xslt = _lxml.xslt
-            self.xslt_compile = _lxml.xslt_compile
-            self.relaxng = _lxml.relaxng
-            self.relaxng_compile = _lxml.relaxng_compile
+        from hwp5.plat._lxml import createXSLTFactory
+        from hwp5.plat._lxml import createRelaxNGFactory
+        try:
+            factory = createXSLTFactory(None)
+        except ImplementationNotAvailable:
+            self.xslt_factory = None
         else:
-            self.xslt = None
-            self.xslt_compile = None
-            self.relaxng = None
-            self.relaxng_compile = None
+            self.xslt_factory = factory
+
+        try:
+            factory = createRelaxNGFactory(None)
+        except ImplementationNotAvailable:
+            self.relaxng_factory = None
+        else:
+            self.relaxng_factory = factory

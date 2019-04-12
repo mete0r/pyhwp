@@ -20,7 +20,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from binascii import b2a_hex
-from functools import partial
 from subprocess import CalledProcessError
 from subprocess import Popen
 import logging
@@ -28,69 +27,13 @@ import os
 import subprocess
 import tempfile
 
-from . import _lxml
 from . import _uno
 from . import gir_gsf
-from . import javax_transform
 from . import jython_poifs
 from . import olefileio
-from . import xmllint
-from . import xsltproc
 
 
 logger = logging.getLogger(__name__)
-
-
-def get_xslt():
-    if javax_transform.is_enabled():
-        return javax_transform.xslt
-    if _lxml.is_enabled():
-        return _lxml.xslt
-    if xsltproc.is_enabled():
-        return xsltproc.xslt
-    if _uno.is_enabled():
-        return _uno.xslt
-
-
-def get_xslt_compile():
-    modules = [
-        javax_transform,
-        _lxml,
-        xsltproc,
-        _uno
-    ]
-    for module in modules:
-        if module.is_enabled():
-            xslt_compile = getattr(module, 'xslt_compile', None)
-            if xslt_compile:
-                return xslt_compile
-            xslt = getattr(module, 'xslt', None)
-            if xslt:
-                def xslt_compile(xsl_path):
-                    return partial(xslt, xsl_path)
-
-
-def get_relaxng():
-    if _lxml.is_enabled():
-        return _lxml.relaxng
-    if xmllint.is_enabled():
-        return xmllint.relaxng
-
-
-def get_relaxng_compile():
-    modules = [
-        _lxml,
-        xmllint,
-    ]
-    for module in modules:
-        if module.is_enabled():
-            relaxng_compile = getattr(module, 'relaxng_compile', None)
-            if relaxng_compile:
-                return relaxng_compile
-            relaxng = getattr(module, 'relaxng', None)
-            if relaxng:
-                def relaxng_compile(rng_path):
-                    return partial(relaxng, rng_path)
 
 
 def get_olestorage_class():

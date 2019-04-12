@@ -30,8 +30,13 @@ import os.path
 import shutil
 import sys
 
+from zope.interface.registry import Components
+
 from . import __version__ as version
 from .cli import init_logger
+from .cli import init_xslt
+from .cli import update_settings_from_environ
+from .interfaces import IXSLTFactory
 from .transforms import BaseTransform
 from .utils import cached_property
 
@@ -128,9 +133,15 @@ def main():
     args = argparser.parse_args()
     init_logger(args)
 
+    settings = {}
+    registry = Components()
+    update_settings_from_environ(settings)
+    init_xslt(registry, **settings)
+
     hwp5path = args.hwp5file
 
-    html_transform = HTMLTransform()
+    xsltfactory = registry.getUtility(IXSLTFactory)
+    html_transform = HTMLTransform(xsltfactory)
 
     open_dest = make_open_dest_file(args.output)
     if args.css:

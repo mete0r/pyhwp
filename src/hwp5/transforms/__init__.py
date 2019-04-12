@@ -22,8 +22,6 @@ from __future__ import unicode_literals
 from contextlib import contextmanager
 import logging
 
-from ..errors import ImplementationNotAvailable
-from ..plat import get_xslt_compile
 from ..utils import hwp5_resources_path
 from ..utils import mkstemp_open
 
@@ -33,16 +31,9 @@ logger = logging.getLogger(__name__)
 
 class BaseTransform:
 
-    def __init__(self, xslt_compile=None, embedbin=False):
-        self.xslt_compile = xslt_compile or self.get_default_xslt_compile()
+    def __init__(self, xsltfactory, embedbin=False):
+        self.xsltfactory = xsltfactory
         self.embedbin = embedbin
-
-    @classmethod
-    def get_default_xslt_compile(cls):
-        xslt_compile = get_xslt_compile()
-        if not xslt_compile:
-            raise ImplementationNotAvailable('xslt')
-        return xslt_compile
 
     def make_transform_hwp5(self, transform_xhwp5):
         def transform_hwp5(hwp5file, output):
@@ -52,7 +43,8 @@ class BaseTransform:
 
     def make_xsl_transform(self, resource_path, **params):
         with hwp5_resources_path(resource_path) as xsl_path:
-            return self.xslt_compile(xsl_path, **params)
+            xslt = self.xsltfactory.xslt_from_file(xsl_path, **params)
+            return xslt.transform_into_stream
 
     @contextmanager
     def transformed_xhwp5_at_temp(self, hwp5file):

@@ -30,14 +30,19 @@ import logging
 import os.path
 import sys
 
+from zope.interface.registry import Components
+
 from . import __version__ as version
 from .cli import init_logger
 from .cli import init_with_environ
-from .errors import ImplementationNotAvailable
+from .cli import init_relaxng
+from .cli import init_xslt
+from .cli import update_settings_from_environ
+from .interfaces import IRelaxNGFactory
+from .interfaces import IXSLTFactory
 from .utils import mkstemp_open
 from .utils import hwp5_resources_path
 from .transforms import BaseTransform
-from .plat import get_relaxng_compile
 from .utils import cached_property
 
 
@@ -63,23 +68,11 @@ RESOURCE_PATH_XSL_CONTENT = 'xsl/odt/content.xsl'
 
 class ODFValidate:
 
-    def __init__(self, relaxng_compile=None):
+    def __init__(self, relaxng_factory=None):
         '''
-        >>> V = ODFValidate()
+        >>> V = ODFValidate(relaxng_factory)
         '''
-        if relaxng_compile is None:
-            try:
-                relaxng_compile = self.get_default_relaxng_compile()
-            except ImplementationNotAvailable:
-                relaxng_compile = None
-        self.relaxng_compile = relaxng_compile
-
-    @classmethod
-    def get_default_relaxng_compile(cls):
-        relaxng_compile = get_relaxng_compile()
-        if not relaxng_compile:
-            raise ImplementationNotAvailable('relaxng')
-        return relaxng_compile
+        self.relaxng_factory = relaxng_factory
 
     @cached_property
     def odf_validator(self):
@@ -90,22 +83,23 @@ class ODFValidate:
         return self.make_odf_validator()
 
     def make_odf_validator(self):
-        if self.relaxng_compile:
+        if self.relaxng_factory:
             with hwp5_resources_path(RESOURCE_PATH_RNG) as rng_path:
-                return self.relaxng_compile(rng_path)
+                return self.relaxng_factory.relaxng_validator_from_file(
+                    rng_path
+                )
 
 
 class ODTTransform(BaseTransform, ODFValidate):
 
-    def __init__(self, xslt_compile=None, relaxng_compile=None,
+    def __init__(self, xsltfactory, relaxng_factory,
                  embedbin=False):
         '''
         >>> from hwp5.hwp5odt import ODTTransform
-        >>> T = ODTTransform()
+        >>> T = ODTTransform(xsltfactory, relaxng_factory)
         '''
-        BaseTransform.__init__(self, xslt_compile=xslt_compile,
-                               embedbin=embedbin)
-        ODFValidate.__init__(self, relaxng_compile)
+        BaseTransform.__init__(self, xsltfactory, embedbin=embedbin)
+        ODFValidate.__init__(self, relaxng_factory)
 
     @property
     def transform_hwp5_to_styles(self):
@@ -335,9 +329,17 @@ def main():
 
     init_with_environ()
 
+    settings = {}
+    registry = Components()
+    update_settings_from_environ(settings)
+    init_xslt(registry, **settings)
+    init_relaxng(registry, **settings)
+
     hwp5path = args.hwp5file
 
-    odt_transform = ODTTransform()
+    xsltfactory = registry.getUtility(IXSLTFactory)
+    relaxng_factory = registry.getUtility(IRelaxNGFactory)
+    odt_transform = ODTTransform(xsltfactory, relaxng_factory)
 
     open_dest = make_open_dest_file(args.output)
     if args.document:

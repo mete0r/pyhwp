@@ -26,6 +26,7 @@ import subprocess
 
 from zope.interface import implementer
 
+from ..errors import ImplementationNotAvailable
 from ..interfaces import IXSLT
 from ..interfaces import IXSLTFactory
 
@@ -37,6 +38,21 @@ enabled = None
 
 
 def xslt_reachable():
+    args = [executable, '--version']
+    try:
+        subprocess.check_output(args)
+    except OSError:
+        return False
+    except CalledProcessError:
+        return False
+    except Exception as e:
+        logger.exception(e)
+        return False
+    else:
+        return True
+
+
+def xsltproc_is_reachable(executable):
     args = [executable, '--version']
     try:
         subprocess.check_output(args)
@@ -68,22 +84,30 @@ def disable():
     enabled = False
 
 
-def xslt(xsl_path, inp_path, out_path):
-    xslt = XSLT(xsl_path)
-    return xslt.transform(inp_path, out_path)
+def createXSLTFactory(registry, **settings):
+    executable = settings.get('xsltproc.path', 'xsltproc')
+    if not xsltproc_is_reachable(executable):
+        raise ImplementationNotAvailable(
+            'xslt/xsltproc: xsltproc not found', executable
+        )
+    return XSLTFactory(executable)
 
 
 @implementer(IXSLTFactory)
 class XSLTFactory:
 
+    def __init__(self, executable):
+        self.executable = executable
+
     def xslt_from_file(self, xsl_path, **params):
-        return XSLT(xsl_path, **params)
+        return XSLT(executable, xsl_path, **params)
 
 
 @implementer(IXSLT)
 class XSLT:
 
-    def __init__(self, xsl_path, **params):
+    def __init__(self, executable, xsl_path, **params):
+        self.executable = executable
         self.xsl_path = xsl_path
         self.cmd = [executable]
         for name, value in params.items():
@@ -114,8 +138,3 @@ class XSLT:
             return dict()
         else:
             return dict(errors=[])
-
-
-def xslt_compile(xsl_path, **params):
-    xslt = XSLT(xsl_path, **params)
-    return xslt.transform_into_stream

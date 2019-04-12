@@ -26,10 +26,15 @@ import logging
 import os.path
 import sys
 
+from zope.interface.registry import Components
+
 from . import __version__ as version
 from .cli import init_logger
+from .cli import init_xslt
+from .cli import update_settings_from_environ
 from .dataio import ParseError
 from .errors import InvalidHwp5FileError
+from .interfaces import IXSLTFactory
 from .utils import make_open_dest_file
 from .utils import cached_property
 from .transforms import BaseTransform
@@ -71,9 +76,15 @@ def main():
     args = argparser.parse_args()
     init_logger(args)
 
+    settings = {}
+    registry = Components()
+    update_settings_from_environ(settings)
+    init_xslt(registry, **settings)
+
     hwp5path = args.hwp5file
 
-    text_transform = TextTransform()
+    xsltfactory = registry.getUtility(IXSLTFactory)
+    text_transform = TextTransform(xsltfactory)
 
     open_dest = make_open_dest_file(args.output)
     transform = text_transform.transform_hwp5_to_text

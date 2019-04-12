@@ -29,6 +29,7 @@ import tempfile
 
 from zope.interface import implementer
 
+from ..errors import ImplementationNotAvailable
 from ..errors import ValidationFailed
 from ..interfaces import IRelaxNG
 from ..interfaces import IRelaxNGFactory
@@ -42,6 +43,15 @@ PY3 = sys.version_info.major == 3
 logger = logging.getLogger(__name__)
 
 
+def is_available():
+    try:
+        from lxml import etree  # noqa
+    except ImportError:
+        return False
+    else:
+        return True
+
+
 def is_enabled():
     try:
         from lxml import etree  # noqa
@@ -51,21 +61,12 @@ def is_enabled():
         return True
 
 
-def xslt(xsl_path, inp_path, out_path):
-    ''' Transform XML with XSL
-
-    :param xsl_path: stylesheet path
-    :param inp_path: input path
-    :param out_path: output path
-    '''
-    transform = xslt_compile(xsl_path)
-    with io.open(out_path, 'wb') as f:
-        return transform(inp_path, f)
-
-
-def xslt_compile(xsl_path, **params):
-    xslt = XSLT(xsl_path, **params)
-    return xslt.transform_into_stream
+def createXSLTFactory(registry, **settings):
+    try:
+        import lxml  # noqa
+    except ImportError:
+        raise ImplementationNotAvailable('xslt/lxml')
+    return XSLTFactory()
 
 
 @implementer(IXSLTFactory)
@@ -124,18 +125,12 @@ class XSLT:
         return dict()
 
 
-def relaxng(rng_path, inp_path):
-    relaxng = RelaxNG(rng_path)
-    return relaxng.validate(inp_path)
-
-
-def relaxng_compile(rng_path):
-    ''' Compile RelaxNG file
-
-    :param rng_path: RelaxNG path
-    :returns: a validation function
-    '''
-    return RelaxNG(rng_path)
+def createRelaxNGFactory(registry, **settings):
+    try:
+        import lxml  # noqa
+    except ImportError:
+        raise ImplementationNotAvailable('relaxng/lxml')
+    return RelaxNGFactory()
 
 
 @implementer(IRelaxNGFactory)

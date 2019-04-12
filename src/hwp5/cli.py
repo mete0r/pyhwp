@@ -22,12 +22,20 @@ from __future__ import unicode_literals
 import logging
 import os
 
+from .interfaces import IRelaxNGFactory
+from .interfaces import IXSLTFactory
+from .plat import _lxml
+from .plat import javax_transform
+from .plat import _uno
 from .plat import xsltproc
 from .plat import xmllint
 from .storage import ExtraItemStorage
 from .storage import open_storage_item
 from .storage.ole import OleStorage
 from .xmlmodel import Hwp5File
+
+
+logger = logging.getLogger(__name__)
 
 
 def init_logger(args):
@@ -82,6 +90,83 @@ def init_with_environ():
     if 'PYHWP_XMLLINT' in os.environ:
         xmllint.executable = os.environ['PYHWP_XMLLINT']
         xmllint.enable()
+
+
+def update_settings_from_environ(settings):
+    if 'PYHWP_XSLTPROC' in os.environ:
+        settings['xsltproc.path'] = os.environ['PYHWP_XSLTPROC']
+    if 'PYHWP_XMLLINT' in os.environ:
+        settings['xmllint.path'] = os.environ['PYHWP_XMLLINT']
+
+
+def init_xslt(registry, **settings):
+    factory = create_xslt_factory(registry, **settings)
+    if factory is None:
+        logger.warning('XSLT: No implementation is available.')
+        return
+    registry.registerUtility(factory, IXSLTFactory)
+
+
+def create_xslt_factory(registry, **settings):
+    try:
+        factory = _lxml.createXSLTFactory(registry, **settings)
+    except Exception:
+        logger.debug('XSLT: lxml is not available.')
+    else:
+        logger.info('XSLT: lxml')
+        return factory
+
+    try:
+        factory = javax_transform.createXSLTFactory(registry, **settings)
+    except Exception:
+        logger.debug('XSLT: javax.xml.transform is not available.')
+    else:
+        logger.info('XSLT: javax.xml.transform')
+        return factory
+
+    try:
+        factory = _uno.createXSLTFactory(registry, **settings)
+    except Exception:
+        logger.debug('XSLT: uno is not available.')
+    else:
+        logger.info('XSLT: uno')
+        return factory
+
+    try:
+        factory = xsltproc.createXSLTFactory(registry, **settings)
+    except Exception:
+        logger.debug('XSLT: xsltproc is not available.')
+    else:
+        logger.info('XSLT: xsltproc')
+        return factory
+
+
+def init_relaxng(registry, **settings):
+    relaxng_factory = create_relaxng_factory(registry, **settings)
+    if relaxng_factory is None:
+        logger.warning('RelaxNG: No implementation is available.')
+        return
+    registry.registerUtility(relaxng_factory, IRelaxNGFactory)
+
+
+def create_relaxng_factory(registry, **settings):
+    try:
+        factory = _lxml.createRelaxNGFactory(registry, **settings)
+    except Exception as e:
+        logger.debug('RelaxNG: lxml is not available.')
+        logger.debug('RelaxNG: (%s)', e)
+    else:
+        logger.info('RelaxNG: lxml')
+        return factory
+
+    try:
+        factory = xmllint.createRelaxNGFactory(registry, **settings)
+    except Exception as e:
+        logger.debug('RelaxNG: xmllint is not available.')
+        logger.debug('RelaxNG: (%s)', e)
+    else:
+        logger.info('RelaxNG: xmllint')
+        return factory
 
 
 def open_hwpfile(args):

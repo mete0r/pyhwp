@@ -20,13 +20,13 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from contextlib import closing
-import io
 import logging
 import os.path
 import sys
 
 from zope.interface import implementer
 
+from ..errors import ImplementationNotAvailable
 from ..interfaces import IXSLT
 from ..interfaces import IXSLTFactory
 
@@ -49,10 +49,13 @@ def is_enabled():
         return True
 
 
-def xslt(xsl_path, inp_path, out_path):
-    transform = xslt_compile(xsl_path)
-    with io.open(out_path, 'wb') as f:
-        return transform(inp_path, f)
+def createXSLTFactory(registry, **settings):
+    try:
+        from javax.xml.transform import TransformerFactory
+    except ImportError:
+        raise ImplementationNotAvailable('xslt/javax.xml.transform')
+    TransformerFactory.newInstance()
+    return XSLTFactory()
 
 
 @implementer(IXSLTFactory)
@@ -127,11 +130,6 @@ class XSLT:
         out_result = StreamResult(output)
         self.transformer.transform(inp_source, out_result)
         return dict()
-
-
-def xslt_compile(xsl_path, **params):
-    xslt = XSLT(xsl_path, **params)
-    return xslt.transform_into_stream
 
 
 def wrap_filelike_inputstream(f):

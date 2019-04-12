@@ -26,6 +26,7 @@ import sys
 
 from zope.interface import implementer
 
+from ...errors import ImplementationNotAvailable
 from ...errors import InvalidOleStorageError
 from ...interfaces import IXSLT
 from ...interfaces import IXSLTFactory
@@ -104,6 +105,14 @@ class OneshotEvent(object):
         self.pout.close()
 
 
+def createXSLTFactory(registry, **settings):
+    try:
+        import uno  # noqa
+    except ImportError:
+        raise ImplementationNotAvailable('xslt/uno')
+    return XSLTFactory()
+
+
 @implementer(IXSLTFactory)
 class XSLTFactory:
 
@@ -178,13 +187,6 @@ class XSLT(object):
 
         transformer.removeListener(listener)
         return dict()
-
-
-def xslt(xsl_path, inp_path, out_path):
-    import uno
-    context = uno.getComponentContext()
-    xslt = XSLT(context, xsl_path)
-    return xslt.transform(inp_path, out_path)
 
 
 def oless_from_filename(filename):

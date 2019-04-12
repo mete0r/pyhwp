@@ -23,7 +23,7 @@ class XsltTestMixin(object):
 </xsl:stylesheet>'''
 
     def test_xslt_compile(self):
-        if self.xslt_compile is None:
+        if self.xslt_factory is None:
             logger.warning('%s: skipped', self.id())
             return
 
@@ -39,17 +39,16 @@ class XsltTestMixin(object):
 
         out_path = self.id() + '.out'
 
-        transform = self.xslt_compile(xsl_path)
-        self.assertTrue(callable(transform))
+        transform = self.xslt_factory.xslt_from_file(xsl_path)
         with io.open(out_path, 'wb') as f:
-            transform(inp_path, f)
+            transform.transform_into_stream(inp_path, f)
 
         with io.open(out_path, 'rb') as f:
             out_doc = etree.parse(f)
         self.assertEqual('out', out_doc.getroot().tag)
 
     def test_xslt(self):
-        if self.xslt is None:
+        if self.xslt_factory is None:
             logger.warning('%s: skipped', self.id())
             return
 
@@ -65,7 +64,8 @@ class XsltTestMixin(object):
 
         out_path = self.id() + '.out'
 
-        result = self.xslt(xsl_path, inp_path, out_path)
+        transform = self.xslt_factory.xslt_from_file(xsl_path)
+        result = transform.transform(inp_path, out_path)
         self.assertTrue('errors' not in result)
 
         with io.open(out_path, 'rb') as f:

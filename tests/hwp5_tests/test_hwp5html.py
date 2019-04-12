@@ -7,8 +7,8 @@ import io
 import os.path
 import shutil
 
+from hwp5.cli import create_xslt_factory
 from hwp5.hwp5html import HTMLTransform
-from hwp5.plat import get_xslt
 from hwp5.storage.fs import FileSystemStorage
 
 from . import test_xmlmodel
@@ -27,16 +27,13 @@ class TestBase(test_xmlmodel.TestBase):
 class HtmlConvTest(TestBase):
 
     @property
-    def xslt(self):
-        return get_xslt()
-
-    @property
     def xhwp5_path(self):
         return self.id() + '.xhwp5'
 
     @property
     def transform(self):
-        return HTMLTransform()
+        xslt_factory = create_xslt_factory(None)
+        return HTMLTransform(xslt_factory)
 
     def create_xhwp5(self):
         xhwp5_path = self.xhwp5_path
@@ -71,7 +68,7 @@ class HtmlConvTest(TestBase):
         bindata_stg = hwp5file['BinData']
 
         self.assertEqual(set(bindata_stg),
-                          set(FileSystemStorage(bindata_dir)))
+                         set(FileSystemStorage(bindata_dir)))
 
     def test_extract_bindata_dir_without_bindata(self):
         self.hwp5file_name = 'charshape.hwp'

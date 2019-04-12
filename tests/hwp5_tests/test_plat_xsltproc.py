@@ -4,16 +4,17 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import unittest
 
-from hwp5.plat import xsltproc
-
+from hwp5.errors import ImplementationNotAvailable
 from .mixin_xslt import XsltTestMixin
 
 
 class TestPlatXsltProc(unittest.TestCase, XsltTestMixin):
 
-    xslt = None
-    xslt_compile = None
-
     def setUp(self):
-        if xsltproc.is_enabled():
-            self.xslt = xsltproc.xslt
+        from hwp5.plat.xsltproc import createXSLTFactory
+        try:
+            factory = createXSLTFactory(None)
+        except ImplementationNotAvailable:
+            self.xslt_factory = None
+        else:
+            self.xslt_factory = factory

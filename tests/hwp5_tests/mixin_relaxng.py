@@ -36,8 +36,8 @@ class RelaxNGTestMixin(object):
 </grammar>
 '''
 
-    def test_relaxng_compile(self):
-        if self.relaxng_compile is None:
+    def test_validating_output(self):
+        if self.relaxng_factory is None:
             logger.warning('%s: skipped', self.id())
             return
 
@@ -56,7 +56,7 @@ class RelaxNGTestMixin(object):
         with io.open(bad_path, 'w', encoding='utf-8') as f:
             f.write(bad)
 
-        relaxng = self.relaxng_compile(rng_path)
+        relaxng = self.relaxng_factory.relaxng_validator_from_file(rng_path)
         self.assertTrue(relaxng.validate(inp_path))
         self.assertFalse(relaxng.validate(bad_path))
 
@@ -75,8 +75,8 @@ class RelaxNGTestMixin(object):
                 else:
                     assert False, 'ValidationError expected'
 
-    def test_relaxng(self):
-        if self.relaxng is None:
+    def test_validate(self):
+        if self.relaxng_factory is None:
             logger.warning('%s: skipped', self.id())
             return
 
@@ -95,5 +95,6 @@ class RelaxNGTestMixin(object):
         with io.open(bad_path, 'w', encoding='utf-8') as f:
             f.write(bad)
 
-        self.assertTrue(self.relaxng(rng_path, inp_path))
-        self.assertFalse(self.relaxng(rng_path, bad_path))
+        relaxng = self.relaxng_factory.relaxng_validator_from_file(rng_path)
+        self.assertTrue(relaxng.validate(inp_path))
+        self.assertFalse(relaxng.validate(bad_path))

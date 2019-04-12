@@ -26,6 +26,7 @@ import subprocess
 
 from zope.interface import implementer
 
+from ..errors import ImplementationNotAvailable
 from ..errors import ValidationFailed
 from ..interfaces import IRelaxNG
 from ..interfaces import IRelaxNGFactory
@@ -38,6 +39,21 @@ enabled = None
 
 
 def xmllint_reachable():
+    args = [executable, '--version']
+    try:
+        subprocess.check_output(args)
+    except OSError:
+        return False
+    except CalledProcessError:
+        return False
+    except Exception as e:
+        logger.exception(e)
+        return False
+    else:
+        return True
+
+
+def xmllint_is_reachable(executable):
     args = [executable, '--version']
     try:
         subprocess.check_output(args)
@@ -69,34 +85,35 @@ def disable():
     enabled = False
 
 
-def relaxng(rng_path, inp_path):
-    from subprocess import Popen
-    args = [executable, '--noout', '--relaxng', rng_path, inp_path]
-    p = Popen(args)
-    p.wait()
-    return p.returncode == 0
-
-
-def relaxng_compile(rng_path):
-    return RelaxNG(rng_path)
+def createRelaxNGFactory(registry, **settings):
+    xmllint = settings.get('xmllint.path', 'xmllint')
+    if not xmllint_is_reachable(xmllint):
+        raise ImplementationNotAvailable(
+            'relaxng/xmllint: xmllint is not found', xmllint
+        )
+    return RelaxNGFactory(xmllint)
 
 
 @implementer(IRelaxNGFactory)
 class RelaxNGFactory:
 
+    def __init__(self, executable):
+        self.executable = executable
+
     def relaxng_validator_from_file(self, rng_path):
-        return RelaxNG(rng_path)
+        return RelaxNG(executable, rng_path)
 
 
 @implementer(IRelaxNG)
 class RelaxNG:
 
-    def __init__(self, rng_path):
+    def __init__(self, executable, rng_path):
+        self.executable = executable
         self.rng_path = rng_path
 
     @contextmanager
     def validating_output(self, output):
-        args = [executable, '--relaxng', self.rng_path, '-']
+        args = [self.executable, '--relaxng', self.rng_path, '-']
         p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=output)
         try:
             yield p.stdin
