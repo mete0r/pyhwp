@@ -39,6 +39,23 @@ class ITemporaryStreamFactory(Interface):
         '''
 
 
+class IAES128ECB(Interface):
+
+    def decrypt(key, ciphertext):
+        '''
+        Decrypt AES-128-ECB data
+
+        :param bytes key:
+            AES 128 key
+        :param bytes ciphertext:
+            data to decrypt
+        :returns:
+            data decrypted
+        :rtype:
+            bytes
+        '''
+
+
 class IRelaxNG(Interface):
 
     def validating_output(output_stream):

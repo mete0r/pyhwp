@@ -19,14 +19,9 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
-from binascii import b2a_hex
-from subprocess import CalledProcessError
-from subprocess import Popen
 import logging
-import os
-import subprocess
-import tempfile
 
+from ..errors import ImplementationNotAvailable
 from . import _uno
 from . import gir_gsf
 from . import jython_poifs
@@ -48,99 +43,37 @@ def get_olestorage_class():
 
 
 def get_aes128ecb_decrypt():
+    aes128ecb = create_aes128ecb()
+    if aes128ecb is None:
+        raise ImplementationNotAvailable('aes128ecb')
+    return aes128ecb.decrypt
+
+
+def create_aes128ecb():
+    from hwp5.plat import _cryptography
+    from hwp5.plat import javax_crypto
+    from hwp5.plat import openssl
+
     try:
-        return get_aes128ecb_decrypt_cryptography()
-    except Exception:
+        aes128ecb = _cryptography.createAES128ECB(None)
+    except ImplementationNotAvailable:
         pass
-
-    try:
-        return get_aes128ecb_decrypt_javax()
-    except Exception:
-        pass
-
-    try:
-        return get_aes128ecb_decrypt_openssl()
-    except Exception:
-        pass
-
-    raise NotImplementedError('aes128ecb_decrypt')
-
-
-def get_aes128ecb_decrypt_cryptography():
-    from cryptography.hazmat.primitives.ciphers import Cipher
-    from cryptography.hazmat.primitives.ciphers import algorithms
-    from cryptography.hazmat.primitives.ciphers import modes
-    from cryptography.hazmat.backends import default_backend
-
-    def decrypt(key, ciphertext):
-        backend = default_backend()
-        cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
-        decryptor = cipher.decryptor()
-        return decryptor.update(ciphertext) + decryptor.finalize()
-
-    return decrypt
-
-
-def get_aes128ecb_decrypt_javax():
-    from javax.crypto import Cipher
-    from javax.crypto.spec import SecretKeySpec
-
-    def decrypt(key, ciphertext):
-        secretkey = SecretKeySpec(key, 'AES')
-        cipher = Cipher.getInstance('AES/ECB/NoPadding')
-        cipher.init(Cipher.DECRYPT_MODE, secretkey)
-        decrypted = cipher.doFinal(ciphertext)
-        return decrypted.tostring()
-
-    return decrypt
-
-
-def get_aes128ecb_decrypt_openssl():
-    if not openssl_reachable():
-        raise NotImplementedError()
-
-    def decrypt(key, ciphertext):
-        fd, name = tempfile.mkstemp()
-        fp = os.fdopen(fd, 'wb')
-        try:
-            fp.write(ciphertext)
-        finally:
-            fp.close()
-
-        args = [
-            'openssl',
-            'enc',
-            '-d',
-            '-in',
-            name,
-            '-aes-128-ecb',
-            '-K',
-            b2a_hex(key),
-            '-nopad',
-        ]
-        try:
-            p = Popen(args, stdout=subprocess.PIPE)
-            try:
-                return p.stdout.read()
-            finally:
-                p.wait()
-                p.stdout.close()
-        finally:
-            os.unlink(name)
-
-    return decrypt
-
-
-def openssl_reachable():
-    args = ['openssl', 'version']
-    try:
-        subprocess.check_output(args)
-    except OSError:
-        return False
-    except CalledProcessError:
-        return False
-    except Exception as e:
-        logger.exception(e)
-        return False
     else:
-        return True
+        logger.info('AES128ECB: cryptography')
+        return aes128ecb
+
+    try:
+        aes128ecb = javax_crypto.createAES128ECB(None)
+    except ImplementationNotAvailable:
+        pass
+    else:
+        logger.info('AES128ECB: javax.crypto')
+        return aes128ecb
+
+    try:
+        aes128ecb = openssl.createAES128ECB(None)
+    except ImplementationNotAvailable:
+        pass
+    else:
+        logger.info('AES128ECB: openssl')
+        return aes128ecb
