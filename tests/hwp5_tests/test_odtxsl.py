@@ -6,11 +6,14 @@ from unittest import TestCase
 from contextlib import closing
 from zipfile import ZipFile
 
+from zope.interface.registry import Components
+
 from hwp5.hwp5odt import ODTTransform
 from hwp5.hwp5odt import open_odtpkg
 from hwp5.xmlmodel import Hwp5File
 from hwp5.cli import create_xslt_factory
 from hwp5.cli import create_relaxng_factory
+from hwp5.cli import init_temp_stream_factory
 
 from .fixtures import get_fixture_path
 
@@ -38,8 +41,10 @@ class TestODTTransform(TestCase):
 
     @property
     def transform(self):
-        xslt_factory = create_xslt_factory(None)
-        relaxng_factory = create_relaxng_factory(None)
+        registry = Components()
+        init_temp_stream_factory(registry)
+        xslt_factory = create_xslt_factory(registry)
+        relaxng_factory = create_relaxng_factory(registry)
         return ODTTransform(xslt_factory, relaxng_factory)
 
     def test_convert_bindata(self):

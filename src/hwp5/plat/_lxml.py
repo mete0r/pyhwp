@@ -25,12 +25,12 @@ import logging
 import os.path
 import shutil
 import sys
-import tempfile
 
 from zope.interface import implementer
 
 from ..errors import ImplementationNotAvailable
 from ..errors import ValidationFailed
+from ..interfaces import ITemporaryStreamFactory
 from ..interfaces import IRelaxNG
 from ..interfaces import IRelaxNGFactory
 from ..interfaces import IXSLT
@@ -130,21 +130,27 @@ def createRelaxNGFactory(registry, **settings):
         import lxml  # noqa
     except ImportError:
         raise ImplementationNotAvailable('relaxng/lxml')
-    return RelaxNGFactory()
+    temp_stream_factory = registry.getUtility(ITemporaryStreamFactory)
+    return RelaxNGFactory(temp_stream_factory)
 
 
 @implementer(IRelaxNGFactory)
 class RelaxNGFactory:
 
+    def __init__(self, temp_stream_factory):
+        self.temp_stream_factory = temp_stream_factory
+
     def relaxng_validator_from_file(self, rng_path):
-        return RelaxNG(rng_path)
+        return RelaxNG(self.temp_stream_factory, rng_path)
 
 
 @implementer(IRelaxNG)
 class RelaxNG:
 
-    def __init__(self, rng_path):
+    def __init__(self, temp_stream_factory, rng_path):
         from lxml import etree
+
+        self.temp_stream_factory = temp_stream_factory
 
         with io.open(rng_path, 'rb') as rng_file:
             rng = etree.parse(rng_file)
@@ -154,20 +160,13 @@ class RelaxNG:
 
     @contextmanager
     def validating_output(self, output):
-        fd, name = tempfile.mkstemp()
-        try:
-            with os.fdopen(fd, 'wb+') as f:
-                yield f
-                f.seek(0)
-                if not self.validate_stream(f):
-                    raise ValidationFailed('RelaxNG')
-                f.seek(0)
-                shutil.copyfileobj(f, output)
-        finally:
-            try:
-                os.unlink(name)
-            except Exception as e:
-                logger.warning('%s: can\'t unlink %s', e, name)
+        with self.temp_stream_factory.temporary_stream() as fp:
+            yield fp
+            fp.seek(0)
+            if not self.validate_stream(fp):
+                raise ValidationFailed('RelaxNG')
+            fp.seek(0)
+            shutil.copyfileobj(fp, output)
 
     def validate(self, input):
         from lxml import etree

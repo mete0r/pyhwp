@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 import logging
 import os
 
+from .interfaces import ITemporaryStreamFactory
 from .interfaces import IRelaxNGFactory
 from .interfaces import IXSLTFactory
 from .plat import _lxml
@@ -32,6 +33,7 @@ from .plat import xmllint
 from .storage import ExtraItemStorage
 from .storage import open_storage_item
 from .storage.ole import OleStorage
+from .utilities import TemporaryStreamFactory
 from .xmlmodel import Hwp5File
 
 
@@ -97,6 +99,11 @@ def update_settings_from_environ(settings):
         settings['xsltproc.path'] = os.environ['PYHWP_XSLTPROC']
     if 'PYHWP_XMLLINT' in os.environ:
         settings['xmllint.path'] = os.environ['PYHWP_XMLLINT']
+
+
+def init_temp_stream_factory(registry, **settings):
+    factory = TemporaryStreamFactory()
+    registry.registerUtility(factory, ITemporaryStreamFactory)
 
 
 def init_xslt(registry, **settings):

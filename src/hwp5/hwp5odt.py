@@ -35,6 +35,7 @@ from zope.interface.registry import Components
 from . import __version__ as version
 from .cli import init_logger
 from .cli import init_with_environ
+from .cli import init_temp_stream_factory
 from .cli import init_relaxng
 from .cli import init_xslt
 from .cli import update_settings_from_environ
@@ -332,6 +333,7 @@ def main():
     settings = {}
     registry = Components()
     update_settings_from_environ(settings)
+    init_temp_stream_factory(registry, **settings)
     init_xslt(registry, **settings)
     init_relaxng(registry, **settings)
 

@@ -4,7 +4,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import unittest
 
+from zope.interface.registry import Components
+
 from hwp5.errors import ImplementationNotAvailable
+from hwp5.cli import init_temp_stream_factory
 from hwp5.plat import _lxml
 
 from .mixin_xslt import XsltTestMixin
@@ -26,15 +29,19 @@ class TestPlatLxml(unittest.TestCase, XsltTestMixin, RelaxNGTestMixin):
     def setUp(self):
         from hwp5.plat._lxml import createXSLTFactory
         from hwp5.plat._lxml import createRelaxNGFactory
+
+        registry = Components()
+        init_temp_stream_factory(registry)
+
         try:
-            factory = createXSLTFactory(None)
+            factory = createXSLTFactory(registry)
         except ImplementationNotAvailable:
             self.xslt_factory = None
         else:
             self.xslt_factory = factory
 
         try:
-            factory = createRelaxNGFactory(None)
+            factory = createRelaxNGFactory(registry)
         except ImplementationNotAvailable:
             self.relaxng_factory = None
         else:
