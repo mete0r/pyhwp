@@ -23,6 +23,22 @@ from __future__ import unicode_literals
 from zope.interface import Interface
 
 
+class ITemporaryStreamFactory(Interface):
+
+    def temporary_stream():
+        '''
+        Return temporary byte-oriented stream.
+
+        :returns:
+            a temporary byte-oriented stream.
+        :rtype:
+            a byte-oriented file-like object.
+
+        >>> with F.temporary_stream() as fp:
+                fp.write(b'foo')
+        '''
+
+
 class IRelaxNG(Interface):
 
     def validating_output(output_stream):
