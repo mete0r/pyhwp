@@ -30,6 +30,103 @@ class ILocation(Interface):
     __name__ = Attribute('')
 
 
+class IStorageOpener(Interface):
+
+    def is_storage(path):
+        '''
+        Detect if the given path is a openable storage.
+
+        :param str path:
+            path to a storage
+        :returns:
+            True if it's a storage or False
+        :rtype:
+            bool
+        '''
+
+    def open_storage(path):
+        '''
+        Open a storage.
+
+        :param str path:
+            path to a storage
+        :returns:
+            a storage
+        :rtype:
+            IStorage
+        '''
+
+
+class IStorageNode(ILocation):
+    '''
+    '''
+
+
+class IStorageStreamNode(IStorageNode):
+    '''
+    '''
+
+
+class IStorageDirectoryNode(IStorageNode):
+
+    def __iter__():
+        '''
+        Return an iterator of item names.
+
+        :return:
+            an iterator of item names.
+        '''
+
+    def __getitem__(name):
+        '''
+        Return the item node.
+
+        :return:
+            an item node
+        :rtype:
+            IStorageDirectoryNode or IStorageStreamNode
+        '''
+
+
+class IStorage(IStorageDirectoryNode):
+
+    def close():
+        '''
+        Close this storage.
+        '''
+
+
+class IStorageTreeEventGenerator(Interface):
+
+    def generate(storage_node):
+        '''
+        Generate storage events.
+
+        For example::
+            (STARTEVENT, name, directorynode1)
+            (None, name, streamnode1)
+            (None, name, streamnode2)
+            (STARTEVENT, name, directorynode2)
+            (None, name, streamnode3)
+            (ENDEVENT, name, directorynode2)
+            (None, name, streamnode4)
+            (ENDEVENT, name, directorynode1)
+
+        :param storage_node:
+            storage node to generate events based on
+        :type storage_node:
+            IStorageNode
+        :return:
+            iterator of (event type, node name, node)
+        '''
+
+
+class IStorageTreeEventUnpacker(Interface):
+
+    def unpack_from_tree_events(tree_events, out_directory):
+        pass
+
+
 class ITemporaryStreamFactory(Interface):
 
     def temporary_stream():

@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from unittest import TestCase
 
-from hwp5.storage.ole import OleStorage
+from hwp5.plat import createOleStorageOpener
 
 from .fixtures import get_fixture_path
 from .fixtures import open_fixture
@@ -26,11 +26,15 @@ class TestBase(TestCase):
         return self.get_fixture_file(self.hwp5file_name)
 
     @property
+    def olestorage_opener(self):
+        return createOleStorageOpener(None)
+
+    @property
     def olestg(self):
-        return OleStorage(self.hwp5file_path)
+        return self.olestorage_opener.open_storage(self.hwp5file_path)
 
 
 class TestOleStorage(TestCase, OleStorageTestMixin):
 
     def setUp(self):
-        self.OleStorage = OleStorage
+        self.olestorage_opener = createOleStorageOpener(None)

@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from unittest import TestCase
 
+from hwp5.errors import ImplementationNotAvailable
 from hwp5.plat import jython_poifs
 
 from .mixin_olestg import OleStorageTestMixin
@@ -12,5 +13,7 @@ from .mixin_olestg import OleStorageTestMixin
 class TestOleStorageJythonPoiFS(TestCase, OleStorageTestMixin):
 
     def setUp(self):
-        if jython_poifs.is_enabled():
-            self.OleStorage = jython_poifs.OleStorage
+        try:
+            self.olestorage_opener = jython_poifs.createStorageOpener(None)
+        except ImplementationNotAvailable:
+            self.olestorage_opener = None

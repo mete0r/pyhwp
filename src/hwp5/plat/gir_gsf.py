@@ -21,7 +21,14 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import logging
 
+from zope.interface import implementer
+
+from ..errors import ImplementationNotAvailable
 from ..errors import InvalidOleStorageError
+from ..interfaces import IStorage
+from ..interfaces import IStorageOpener
+from ..interfaces import IStorageStreamNode
+from ..interfaces import IStorageDirectoryNode
 
 
 try:
@@ -56,42 +63,83 @@ def listdir(gsfole):
         yield gsfole.name_by_index(i)
 
 
-class OleStorage:
+def createStorageOpener(registry, **settings):
+    try:
+        from gi.repository.Gsf import InputGio
+        from gi.repository.Gsf import InfileMSOle
+        from gi.repository.GLib import Error as GLibError
+    except ImportError:
+        raise ImplementationNotAvailable('storage/gir_gsf')
+
+    return OleStorageOpener(InputGio, InfileMSOle, GLibError)
+
+
+@implementer(IStorageOpener)
+class OleStorageOpener:
+
+    def __init__(self, InputGio, InfileMSOle, GLibError):
+        self.InputGio = InputGio
+        self.InfileMSOle = InfileMSOle
+        self.GLibError = GLibError
+
+    def is_storage(self, path):
+        try:
+            self.open_storage(path)
+        except Exception:
+            return False
+        else:
+            return True
+
+    def open_storage(self, path):
+        inp = self.InputGio.new_for_path(path)
+        try:
+            return self.InfileMSOle.new(inp)
+        except self.GLibError as e:
+            if e.message == 'No OLE2 signature':
+                raise InvalidOleStorageError()
+            raise
+
+
+@implementer(IStorageDirectoryNode)
+class OleStorageDirectory:
 
     def __init__(self, gsfole):
-        from gi.repository.Gsf import Input
-        from gi.repository.Gsf import InfileMSOle
-
-        if isinstance(gsfole, InfileMSOle):
-            self.gsfole = gsfole
-        elif isinstance(gsfole, Input):
-            try:
-                self.gsfole = InfileMSOle.new(gsfole)
-            except Exception:
-                raise InvalidOleStorageError()
-        else:
-            try:
-                self.gsfole = open(gsfole)
-            except Exception:
-                raise InvalidOleStorageError()
+        self.gsfole = gsfole
 
     def __iter__(self):
         return listdir(self.gsfole)
 
     def __getitem__(self, name):
         child = self.gsfole.child_by_name(name)
-        if child:
+        if child is not None:
             if child.num_children() == -1:
-                return OleStreamItem(self.gsfole, name)
+                node = OleStreamItem(self.gsfole, name)
             else:
-                return OleStorage(child)
+                node = OleStorageDirectory(child)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
         else:
             raise KeyError(name)
+
+
+@implementer(IStorage)
+class OleStorage(OleStorageDirectory):
+
+    __parent__ = None
+    __name__ = ''
+
+    def __init__(self, gsfole):
+        from gi.repository.Gsf import InfileMSOle
+
+        if not isinstance(gsfole, InfileMSOle):
+            raise TypeError()
 
     def close(self):
         del self.gsfole
 
 
+@implementer(IStorageStreamNode)
 class OleStreamItem:
 
     def __init__(self, parent, name):

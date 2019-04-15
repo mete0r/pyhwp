@@ -22,7 +22,7 @@ class TestPlatUNO(unittest.TestCase, XsltTestMixin, OleStorageTestMixin):
         else:
             self.xslt_factory = factory
 
-        if _uno.is_enabled():
-            self.OleStorage = _uno.OleStorage
-        else:
-            self.OleStorage = None
+        try:
+            self.olestorage_opener = _uno.createStorageOpener(None)
+        except ImplementationNotAvailable:
+            self.olestorage_opener = None

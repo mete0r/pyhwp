@@ -22,7 +22,14 @@ from __future__ import unicode_literals
 import os.path
 import sys
 
+from zope.interface import implementer
+
+from ..errors import ImplementationNotAvailable
 from ..errors import InvalidOleStorageError
+from ..interfaces import IStorage
+from ..interfaces import IStorageOpener
+from ..interfaces import IStorageStreamNode
+from ..interfaces import IStorageDirectoryNode
 
 
 PY3 = sys.version_info.major == 3
@@ -39,32 +46,50 @@ def is_enabled():
         return False
 
 
-class OleStorage(object):
-    ''' Create an OleStorage instance.
-
-    :param olefile: an OLE2 Compound Binary File.
-    :raises: `InvalidOleStorageError` when `olefile` is not valid OLE2 format.
-    '''
-
-    def __init__(self, olefile):
+def createStorageOpener(registry, **settings):
+    try:
         from java.io import FileInputStream
         from java.io import IOException
         from org.apache.poi.poifs.filesystem import POIFSFileSystem
+    except ImportError:
+        raise ImplementationNotAvailable('storage/jython_poifs')
+    return OleStorageOpener(
+        FileInputStream,
+        IOException,
+        POIFSFileSystem,
+    )
+
+
+@implementer(IStorageOpener)
+class OleStorageOpener:
+
+    def __init__(self, FileInputStream, IOException, POIFSFileSystem):
+        self.FileInputStream = FileInputStream
+        self.IOException = IOException
+        self.POIFSFileSystem = POIFSFileSystem
+
+    def is_storage(self, path):
+        pass
+
+    def open_storage(self, path):
+        path = os.path.abspath(path)
+        fis = self.FileInputStream(path)
+        try:
+            fs = self.POIFSFileSystem(fis)
+        except self.IOException as e:
+            raise InvalidOleStorageError(e.getMessage())
+        entry = fs.getRoot()
+        return OleStorage(entry)
+
+
+@implementer(IStorageDirectoryNode)
+class OleStorageDirectory:
+
+    def __init__(self, entry):
         from org.apache.poi.poifs.filesystem import DirectoryEntry
 
-        if isinstance(olefile, basestring):
-            path = os.path.abspath(olefile)
-            fis = FileInputStream(path)
-            try:
-                fs = POIFSFileSystem(fis)
-            except IOException as e:
-                raise InvalidOleStorageError(e.getMessage())
-            entry = fs.getRoot()
-        elif isinstance(olefile, DirectoryEntry):
-            entry = olefile
-        else:
-            raise ValueError('invalid olefile')
-
+        if isinstance(entry, DirectoryEntry):
+            raise TypeError()
         self.entry = entry
 
     def __iter__(self):
@@ -78,16 +103,35 @@ class OleStorage(object):
             raise KeyError('%s not found' % name)
 
         if entry.directoryEntry:
-            return OleStorage(entry)
+            child = OleStorageDirectory(entry)
+            child.__name__ = name
+            child.__parent__ = self
+            return child
         elif entry.documentEntry:
-            return OleStream(entry)
+            child = OleStream(entry)
+            child.__name__ = name
+            child.__parent__ = self
+            return child
         else:
             raise KeyError('%s is invalid' % name)
+
+
+@implementer(IStorage)
+class OleStorage(OleStorageDirectory):
+    ''' Create an OleStorage instance.
+
+    :param olefile: an OLE2 Compound Binary File.
+    :raises: `InvalidOleStorageError` when `olefile` is not valid OLE2 format.
+    '''
+
+    __parent__ = None
+    __name__ = ''
 
     def close(self):
         return
 
 
+@implementer(IStorageStreamNode)
 class OleStream(object):
 
     def __init__(self, entry):

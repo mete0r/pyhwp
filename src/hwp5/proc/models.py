@@ -19,15 +19,22 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
+from contextlib import contextmanager
 from itertools import islice
 import sys
+
+from zope.interface.registry import Components
 
 from ..binmodel import Hwp5File
 from ..binmodel import ModelStream
 from ..binmodel import RecordModel
 from ..binmodel import model_to_json
+from ..cli import init_olestorage_opener
 from ..cli import parse_recordstream_name
 from ..dataio import hexdump
+from ..filestructure import Hwp5FileOpener
+from ..interfaces import IStorageOpener
 from ..storage import Open2Stream
 from ..treeop import ENDEVENT
 from ..utils import generate_json_array
@@ -38,40 +45,46 @@ PY2 = sys.version_info.major == 2
 
 
 def main(args):
-    stream = stream_from_args(args)
-    if args.events:
-        for event, item in stream.parse_model_events():
-            type = item['type'].__name__
-            if event is not None:
-                if item['type'] is RecordModel:
-                    record = item['record']
-                    fmt = '     %s Record %s level=%s %s'
-                    print(fmt % (event.__name__,
-                                 record['seqno'],
-                                 record['level'],
-                                 record['tagname']))
-                    if event is ENDEVENT:
-                        leftover = item['leftover']
-                        print('%04x' % leftover['offset'])
-                        if len(leftover['bytes']):
-                            print('')
-                            print('leftover:')
-                            print(hexdump(leftover['bytes']))
-                        print('-' * 20)
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    with stream_from_args(registry, args) as stream:
+        if args.events:
+            for event, item in stream.parse_model_events():
+                type = item['type'].__name__
+                if event is not None:
+                    if item['type'] is RecordModel:
+                        record = item['record']
+                        fmt = '     %s Record %s level=%s %s'
+                        print(fmt % (event.__name__,
+                                     record['seqno'],
+                                     record['level'],
+                                     record['tagname']))
+                        if event is ENDEVENT:
+                            leftover = item['leftover']
+                            print('%04x' % leftover['offset'])
+                            if len(leftover['bytes']):
+                                print('')
+                                print('leftover:')
+                                print(hexdump(leftover['bytes']))
+                            print('-' * 20)
+                    else:
+                        print(
+                            '    ', event.__name__, type, item.get('name', '')
+                        )
                 else:
-                    print('    ', event.__name__, type, item.get('name', ''))
-            else:
-                offset = item['bin_offset']
-                name = item.get('name', '-')
-                value = item.get('value', '-')
-                print('%04x' % offset, type, name, repr(value))
-        return
+                    offset = item['bin_offset']
+                    name = item.get('name', '-')
+                    value = item.get('value', '-')
+                    print('%04x' % offset, type, name, repr(value))
+            return
 
-    models_from_stream = models_from_args(args)
-    models = models_from_stream(stream)
+        models_from_stream = models_from_args(args)
+        models = models_from_stream(stream)
 
-    print_models = print_models_from_args(args)
-    print_models(models)
+        print_models = print_models_from_args(args)
+        print_models(models)
 
 
 def models_argparser(subparsers, _):
@@ -155,13 +168,16 @@ def models_argparser(subparsers, _):
     return parser
 
 
-def stream_from_args(args):
+@contextmanager
+def stream_from_args(registry, args):
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
     filename = args.hwp5file
     if filename:
         # TODO: args.record_stream is None
         streamname = args.record_stream
-        hwpfile = Hwp5File(filename)
-        return parse_recordstream_name(hwpfile, streamname)
+        with closing(hwp5file_opener.open_hwp5file(filename)) as hwp5file:
+            yield parse_recordstream_name(hwp5file, streamname)
     else:
         version = args.file_format_version or '5.0.0.0'
         version = version.split('.')
@@ -172,7 +188,7 @@ def stream_from_args(args):
         else:
             stdin_binary = sys.stdin.buffer
 
-        return ModelStream(Open2Stream(lambda: stdin_binary), version)
+        yield ModelStream(Open2Stream(lambda: stdin_binary), version)
 
 
 def models_from_args(args):

@@ -21,6 +21,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 
+from zope.interface.registry import Components
+
+from ..cli import init_olestorage_opener
 from ..cli import open_hwpfile
 from ..storage import open_storage_item
 
@@ -29,12 +32,16 @@ PY2 = sys.version_info.major == 2
 
 
 def main(args):
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
     if PY2:
         output_fp = sys.stdout
     else:
         output_fp = sys.stdout.buffer
 
-    hwp5file = open_hwpfile(args)
+    hwp5file = open_hwpfile(registry, args)
     stream = open_storage_item(hwp5file, args.stream)
     f = stream.open()
     try:

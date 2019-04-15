@@ -19,9 +19,15 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
 import sys
 
+from zope.interface.registry import Components
+
 from ..filestructure import Hwp5File
+from ..filestructure import Hwp5FileOpener
+from ..cli import init_olestorage_opener
+from ..interfaces import IStorageOpener
 from ..summaryinfo import HwpSummaryInfoTextFormatter
 
 
@@ -29,20 +35,24 @@ PY2 = sys.version_info.major == 2
 
 
 def main(args):
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
+
     if PY2:
         output_fp = sys.stdout
     else:
         output_fp = sys.stdout.buffer
 
     formatter = HwpSummaryInfoTextFormatter()
-    hwpfile = Hwp5File(args.hwp5file)
-    try:
+    with closing(hwp5file_opener.open_hwp5file(args.hwp5file)) as hwpfile:
         for textline in formatter.formatTextLines(hwpfile.summaryinfo):
             line = textline.encode('utf-8')
             output_fp.write(line)
             output_fp.write(b'\n')
-    finally:
-        hwpfile.close()
 
 
 def summaryinfo_argparser(subparsers, _):

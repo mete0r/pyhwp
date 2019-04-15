@@ -14,6 +14,7 @@ from hwp5.xmlmodel import Hwp5File
 from hwp5.cli import create_xslt_factory
 from hwp5.cli import create_relaxng_factory
 from hwp5.cli import init_temp_stream_factory
+from hwp5.plat import createOleStorageOpener
 
 from .fixtures import get_fixture_path
 
@@ -24,7 +25,9 @@ def example_path(filename):
 
 def open_example(filename):
     path = example_path(filename)
-    return closing(Hwp5File(path))
+    olestorage_opener = createOleStorageOpener(None)
+    olestorage = olestorage_opener.open_storage(path)
+    return closing(Hwp5File(olestorage))
 
 
 class TestPrecondition(TestCase):

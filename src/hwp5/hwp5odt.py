@@ -35,10 +35,13 @@ from zope.interface.registry import Components
 from . import __version__ as version
 from .cli import init_logger
 from .cli import init_with_environ
+from .cli import init_olestorage_opener
 from .cli import init_temp_stream_factory
 from .cli import init_relaxng
 from .cli import init_xslt
 from .cli import update_settings_from_environ
+from .filestructure import Hwp5FileOpener
+from .interfaces import IStorageOpener
 from .interfaces import IRelaxNGFactory
 from .interfaces import IXSLTFactory
 from .utils import mkstemp_open
@@ -333,9 +336,13 @@ def main():
     settings = {}
     registry = Components()
     update_settings_from_environ(settings)
+    init_olestorage_opener(registry, **settings)
     init_temp_stream_factory(registry, **settings)
     init_xslt(registry, **settings)
     init_relaxng(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
 
     hwp5path = args.hwp5file
 
@@ -364,7 +371,7 @@ def main():
         open_dest = partial(open_odtpkg, dest_path)
 
     try:
-        with closing(Hwp5File(hwp5path)) as hwp5file:
+        with closing(hwp5file_opener.open_hwp5file(hwp5path)) as hwp5file:
             with open_dest() as dest:
                 transform(hwp5file, dest)
     except ParseError as e:

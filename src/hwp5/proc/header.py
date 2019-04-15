@@ -19,26 +19,37 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
 import shutil
 import sys
+
+from zope.interface.registry import Components
+
+from ..cli import init_olestorage_opener
+from ..filestructure import Hwp5File
+from ..filestructure import Hwp5FileOpener
+from ..interfaces import IStorageOpener
 
 
 PY2 = sys.version_info.major == 2
 
 
 def main(args):
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
+
     if PY2:
         output_fp = sys.stdout
     else:
         output_fp = sys.stdout.buffer
 
-    from hwp5.filestructure import Hwp5File
-    hwp5file = Hwp5File(args.hwp5file)
-    f = hwp5file.header.open_text()
-    try:
+    with closing(hwp5file_opener.open_hwp5file(args.hwp5file)) as hwp5file:
+        f = hwp5file.header.open_text()
         shutil.copyfileobj(f, output_fp)
-    finally:
-        hwp5file.close()
 
 
 def header_argparser(subparsers, _):

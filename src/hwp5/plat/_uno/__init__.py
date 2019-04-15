@@ -28,6 +28,10 @@ from zope.interface import implementer
 
 from ...errors import ImplementationNotAvailable
 from ...errors import InvalidOleStorageError
+from ...interfaces import IStorage
+from ...interfaces import IStorageOpener
+from ...interfaces import IStorageStreamNode
+from ...interfaces import IStorageDirectoryNode
 from ...interfaces import IXSLT
 from ...interfaces import IXSLTFactory
 
@@ -209,23 +213,41 @@ def oless_from_inputstream(inputstream):
     return sm.createInstanceWithArgumentsAndContext(name, args, context)
 
 
-class OleStorage(object):
+def createStorageOpener(registry, **settings):
+    try:
+        import uno  # noqa
+    except ImportError:
+        raise ImplementationNotAvailable('storage/uno')
 
-    def __init__(self, stg):
-        ''' an OLESimpleStorage to hwp5 storage adapter.
+    return OleStorageOpener()
 
-        :param stg: a filename or an instance of OLESimpleStorage
-        '''
-        if isinstance(stg, basestring):
-            self.oless = oless_from_filename(stg)
-            try:
-                self.oless.getElementNames()
-            except:
-                errormsg = 'Not a valid OLE2 Compound Binary File.'
-                raise InvalidOleStorageError(errormsg)
+
+@implementer(IStorageOpener)
+class OleStorageOpener:
+
+    def is_storage(self, path):
+        try:
+            self.open_storage(path)
+        except Exception:
+            return False
         else:
-            # TODO assert stg is an instance of OLESimpleStorage
-            self.oless = stg
+            return True
+
+    def open_storage(self, path):
+        oless = oless_from_filename(path)
+        try:
+            oless.getElementNames()
+        except Exception as e:
+            logger.exception(e)
+            errormsg = 'Not a valid OLE2 Compound Binary File.'
+            raise InvalidOleStorageError(errormsg)
+        return OleStorage(oless)
+
+
+@implementer(IStorageDirectoryNode)
+class OleStorageDirectory:
+    def __init__(self, oless):
+        self.oless = oless
 
     def __iter__(self):
         return iter(self.oless.getElementNames())
@@ -238,21 +260,38 @@ class OleStorage(object):
             raise KeyError(name)
         services = elem.SupportedServiceNames
         if 'com.sun.star.embed.OLESimpleStorage' in services:
-            return OleStorage(elem)
+            node = OleStorage(elem)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
         else:
             elem.closeInput()
-            return OleStorageStream(self.oless, name)
+            node = OleStorageStream(self.oless, name)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
+
+
+@implementer(IStorage)
+class OleStorage(OleStorageDirectory):
+
+    __parent__ = None
+    __name__ = ''
+
+    def __init__(self, oless):
+        ''' an OLESimpleStorage to hwp5 storage adapter.
+
+        :param stg: a filename or an instance of OLESimpleStorage
+        '''
+        # TODO: check type of oless
+        self.oless = oless
 
     def close(self):
-        return
         # TODO
-        # if this is root, close underlying olefile
-        if self.path == '':
-            # old version of OleFileIO has no close()
-            if hasattr(self.olefile, 'close'):
-                self.olefile.close()
+        return
 
 
+@implementer(IStorageStreamNode)
 class OleStorageStream(object):
 
     def __init__(self, oless, name):

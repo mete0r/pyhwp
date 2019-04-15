@@ -18,6 +18,7 @@ from hwp5.binmodel import ParaCharShape
 from hwp5.binmodel import ParaLineSeg
 from hwp5.binmodel import ParaText
 from hwp5.binmodel import SectionDef
+from hwp5.plat import createOleStorageOpener
 from hwp5.tagids import HWPTAG_PARA_LINE_SEG
 from hwp5.treeop import STARTEVENT, ENDEVENT
 from hwp5.utils import cached_property
@@ -293,7 +294,9 @@ class TestMatchFieldStartEnd(TestCase):
 
         name = 'issue144-fields-crossing-lineseg-boundary.hwp'
         path = get_fixture_path(name)
-        hwp5file = xmlmodel.Hwp5File(path)
+        olestorage_opener = createOleStorageOpener(None)
+        olestorage = olestorage_opener.open_storage(path)
+        hwp5file = xmlmodel.Hwp5File(olestorage)
         xmlevents = hwp5file.bodytext.xmlevents()
         # pprint(list(enumerate(xmlevents)))
 

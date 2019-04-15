@@ -20,8 +20,14 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 from functools import partial
+from contextlib import closing
 import logging
 
+from zope.interface.registry import Components
+
+from ..cli import init_olestorage_opener
+from ..filestructure import Hwp5FileOpener
+from ..interfaces import IStorageOpener
 from ..utils import make_open_dest_file
 from ..utils import wrap_open_dest_for_tty
 from ..utils import wrap_open_dest
@@ -44,6 +50,12 @@ def xmldump_nested(hwp5file, output, embedbin=False, xml_declaration=True):
 def main(args):
     ''' Transform <hwp5file> into an XML.
     '''
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
 
     fmt = args.format or 'nested'
     if fmt == 'flat':
@@ -70,9 +82,9 @@ def main(args):
         xmllint(c14n=True),
     ] if not args.no_validate_wellformed else [])
 
-    hwp5file = Hwp5File(args.hwp5file)
-    with open_dest() as output:
-        xmldump(hwp5file, output)
+    with closing(hwp5file_opener.open_hwp5file(args.hwp5file)) as hwp5file:
+        with open_dest() as output:
+            xmldump(hwp5file, output)
 
 
 def xml_argparser(subparsers, _):

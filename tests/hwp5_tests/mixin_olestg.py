@@ -8,8 +8,8 @@ import shutil
 
 from hwp5.errors import InvalidOleStorageError
 from hwp5.storage import is_storage
+from hwp5.storage import is_directory
 from hwp5.storage import is_stream
-from hwp5.storage import iter_storage_leafs
 from hwp5.storage import unpack
 
 from .fixtures import get_fixture_path
@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 class OleStorageTestMixin(object):
 
     hwp5file_name = 'sample-5017.hwp'
-    OleStorage = None
 
     def get_fixture_file(self, filename):
         return get_fixture_path(filename)
@@ -32,23 +31,25 @@ class OleStorageTestMixin(object):
 
     @property
     def olestg(self):
-        return self.OleStorage(self.hwp5file_path)
+        return self.olestorage_opener.open_storage(self.hwp5file_path)
 
-    def test_OleStorage(self):
-        if self.OleStorage is None:
+    def test_open_storage(self):
+        if self.olestorage_opener is None:
             logger.warning('%s: skipped', self.id())
             return
-        OleStorage = self.OleStorage
-
-        olestg = OleStorage(self.hwp5file_path)
-        self.assertTrue(is_storage(olestg))
-        self.assertTrue(isinstance(olestg, OleStorage))
 
         nonolefile = self.get_fixture_file('nonole.txt')
-        self.assertRaises(InvalidOleStorageError, OleStorage, nonolefile)
+        self.assertRaises(
+            InvalidOleStorageError,
+            self.olestorage_opener.open_storage,
+            nonolefile
+        )
+
+        olestg = self.olestorage_opener.open_storage(self.hwp5file_path)
+        self.assertTrue(is_storage(olestg))
 
     def test_getitem0(self):
-        if self.OleStorage is None:
+        if self.olestorage_opener is None:
             logger.warning('%s: skipped', self.id())
             return
         olestg = self.olestg
@@ -60,7 +61,7 @@ class OleStorageTestMixin(object):
         # self.assertEqual('DocInfo', docinfo.path)
 
         bodytext = olestg['BodyText']
-        self.assertTrue(is_storage(bodytext))
+        self.assertTrue(is_directory(bodytext))
         # self.assertEqual('BodyText', bodytext.path)
 
         section = bodytext['Section0']
@@ -80,17 +81,8 @@ class OleStorageTestMixin(object):
         except KeyError:
             pass
 
-    def test_init_should_receive_string_olefile(self):
-        if self.OleStorage is None:
-            logger.warning('%s: skipped', self.id())
-            return
-        OleStorage = self.OleStorage
-        path = self.get_fixture_file(self.hwp5file_name)
-        olestg = OleStorage(path)
-        self.assertTrue(olestg['FileHeader'] is not None)
-
     def test_iter(self):
-        if self.OleStorage is None:
+        if self.olestorage_opener is None:
             logger.warning('%s: skipped', self.id())
             return
         olestg = self.olestg
@@ -103,7 +95,7 @@ class OleStorageTestMixin(object):
         self.assertEqual(sorted(expected), sorted(gen))
 
     def test_getitem(self):
-        if self.OleStorage is None:
+        if self.olestorage_opener is None:
             logger.warning('%s: skipped', self.id())
             return
 
@@ -119,18 +111,18 @@ class OleStorageTestMixin(object):
         self.assertTrue(hasattr(fileheader, 'open'))
 
         bindata = olestg['BinData']
-        self.assertTrue(is_storage(bindata))
+        self.assertTrue(is_directory(bindata))
         # self.assertEqual('BinData', bindata.path)
 
         self.assertEqual(sorted(['BIN0002.jpg', 'BIN0002.png',
-                                  'BIN0003.png']),
-                          sorted(iter(bindata)))
+                                 'BIN0003.png']),
+                         sorted(iter(bindata)))
 
         bin0002 = bindata['BIN0002.jpg']
         self.assertTrue(hasattr(bin0002, 'open'))
 
     def test_stream_open(self):
-        if self.OleStorage is None:
+        if self.olestorage_opener is None:
             logger.warning('%s: skipped', self.id())
             return
         olestg = self.olestg
@@ -150,20 +142,8 @@ class OleStorageTestMixin(object):
         stream1.seek(0)
         self.assertEqual(0, stream1.tell())
 
-    def test_iter_storage_leafs(self):
-        if self.OleStorage is None:
-            logger.warning('%s: skipped', self.id())
-            return
-        result = iter_storage_leafs(self.olestg)
-        expected = ['\x05HwpSummaryInformation', 'BinData/BIN0002.jpg',
-                    'BinData/BIN0002.png', 'BinData/BIN0003.png',
-                    'BodyText/Section0', 'DocInfo', 'DocOptions/_LinkDoc',
-                    'FileHeader', 'PrvImage', 'PrvText',
-                    'Scripts/DefaultJScript', 'Scripts/JScriptVersion']
-        self.assertEqual(sorted(expected), sorted(result))
-
     def test_unpack(self):
-        if self.OleStorage is None:
+        if self.olestorage_opener is None:
             logger.warning('%s: skipped', self.id())
             return
 

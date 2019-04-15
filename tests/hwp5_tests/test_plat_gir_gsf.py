@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from unittest import TestCase
 
+from hwp5.errors import ImplementationNotAvailable
 from hwp5.plat import gir_gsf
 
 from .fixtures import get_fixture_path
@@ -34,14 +35,16 @@ class TestGirGsf(TestCase):
 
         children = list(gir_gsf.listdir(gsfole))
         self.assertEqual(set(['BinData', 'DocInfo', 'PrvText',
-                               'Scripts', 'BodyText', 'PrvImage',
-                               'DocOptions', 'FileHeader',
-                               '\x05HwpSummaryInformation']),
-                          set(children))
+                              'Scripts', 'BodyText', 'PrvImage',
+                              'DocOptions', 'FileHeader',
+                              '\x05HwpSummaryInformation']),
+                         set(children))
 
 
 class TestOleStorageGirGsf(TestCase, OleStorageTestMixin):
 
     def setUp(self):
-        if gir_gsf.is_enabled():
-            self.OleStorage = gir_gsf.OleStorage
+        try:
+            self.olestorage_opener = gir_gsf.createStorageOpener(None)
+        except ImplementationNotAvailable:
+            self.olestorage_opener = None

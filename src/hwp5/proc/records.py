@@ -19,9 +19,16 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
+from contextlib import contextmanager
 import sys
 
+from zope.interface.registry import Components
+
+from ..cli import init_olestorage_opener
 from ..cli import parse_recordstream_name
+from ..filestructure import Hwp5FileOpener
+from ..interfaces import IStorageOpener
 from ..recordstream import Hwp5File
 from ..recordstream import RecordStream
 from ..recordstream import encode_record_header
@@ -33,6 +40,13 @@ PY2 = sys.version_info.major == 2
 
 
 def main(args):
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
+
     if PY2:
         stdout_text = sys.stdout
         stdout_binary = sys.stdout
@@ -41,45 +55,49 @@ def main(args):
         stdout_binary = sys.stdout.buffer
 
     filename = args.hwp5file
+    # TODO: args.record_stream is None
+    streamname = args.record_stream
+    with open_stream(hwp5file_opener, filename, streamname) as stream:
+        opts = dict()
+        rng = args.range
+        if rng:
+            rng = rng.split('-', 1)
+            rng = tuple(int(x) for x in rng)
+            if len(rng) == 1:
+                rng = (rng[0], rng[0] + 1)
+            opts['range'] = rng
+        treegroup = args.treegroup
+        if treegroup is not None:
+            opts['treegroup'] = int(treegroup)
+
+        if args.simple:
+            for record in stream.records(**opts):
+                stdout_text.write('{:04d} {} {}\n'.format(
+                    record['seqno'],
+                    '  ' * record['level'],
+                    record['tagname'],
+                ))
+        elif args.raw:
+            for record in stream.records(**opts):
+                dump_record(stdout_binary, record)
+        elif args.raw_header:
+            for record in stream.records(**opts):
+                hdr = encode_record_header(record)
+                stdout_binary.write(hdr)
+        elif args.raw_payload:
+            for record in stream.records(**opts):
+                stdout_binary.write(record['payload'])
+        else:
+            stream.records_json(**opts).dump(stdout_text)
+
+
+@contextmanager
+def open_stream(hwp5file_opener, filename, streamname):
     if filename:
-        hwpfile = Hwp5File(filename)
-        # TODO: args.record_stream is None
-        streamname = args.record_stream
-        stream = parse_recordstream_name(hwpfile, streamname)
+        with closing(hwp5file_opener.open_hwp5file(filename)) as hwp5file:
+            yield parse_recordstream_name(hwp5file, streamname)
     else:
-        stream = RecordStream(Open2Stream(lambda: sys.stdin), None)
-
-    opts = dict()
-    rng = args.range
-    if rng:
-        rng = rng.split('-', 1)
-        rng = tuple(int(x) for x in rng)
-        if len(rng) == 1:
-            rng = (rng[0], rng[0] + 1)
-        opts['range'] = rng
-    treegroup = args.treegroup
-    if treegroup is not None:
-        opts['treegroup'] = int(treegroup)
-
-    if args.simple:
-        for record in stream.records(**opts):
-            stdout_text.write('{:04d} {} {}\n'.format(
-                record['seqno'],
-                '  ' * record['level'],
-                record['tagname'],
-            ))
-    elif args.raw:
-        for record in stream.records(**opts):
-            dump_record(stdout_binary, record)
-    elif args.raw_header:
-        for record in stream.records(**opts):
-            hdr = encode_record_header(record)
-            stdout_binary.write(hdr)
-    elif args.raw_payload:
-        for record in stream.records(**opts):
-            stdout_binary.write(record['payload'])
-    else:
-        stream.records_json(**opts).dump(stdout_text)
+        yield RecordStream(Open2Stream(lambda: sys.stdin), None)
 
 
 def records_argparser(subparsers, _):

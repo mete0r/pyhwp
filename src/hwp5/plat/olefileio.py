@@ -20,7 +20,15 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from zope.interface import implementer
+
+from ..errors import ImplementationNotAvailable
 from ..errors import InvalidOleStorageError
+from ..interfaces import IStorage
+from ..interfaces import IStorageNode
+from ..interfaces import IStorageOpener
+from ..interfaces import IStorageStreamNode
+from ..interfaces import IStorageDirectoryNode
 from ..utils import cached_property
 
 
@@ -74,9 +82,13 @@ def import_OleFileIO():
         return OleFileIO
 
 
+@implementer(IStorageNode)
 class OleStorageItem(object):
 
     def __init__(self, olefile, path, parent=None):
+        OleFileIO = import_OleFileIO()
+        if not isinstance(olefile, OleFileIO):
+            raise TypeError()
         self.olefile = olefile
         self.path = path  # path DOES NOT end with '/'
 
@@ -89,31 +101,43 @@ class OleStorageItem(object):
     name = cached_property(get_name)
 
 
+def createStorageOpener(registry, **settings):
+    isOleFile = import_isOleFile()
+    if isOleFile is None:
+        raise ImplementationNotAvailable('storage/olefileio')
+    OleFileIO = import_OleFileIO()
+    if OleFileIO is None:
+        raise ImplementationNotAvailable('storage/olefileio')
+    return OleStorageOpener(isOleFile, OleFileIO)
+
+
+@implementer(IStorageOpener)
+class OleStorageOpener:
+
+    def __init__(self, isOleFile, OleFileIO):
+        self.isOleFile = isOleFile
+        self.OleFileIO = OleFileIO
+
+    def is_storage(self, path):
+        return self.isOleFile(path)
+
+    def open_storage(self, path):
+        if not self.isOleFile(path):
+            errormsg = 'Not an OLE2 Compound Binary File.'
+            raise InvalidOleStorageError(errormsg)
+        olefile = self.OleFileIO(path)
+        return OleStorage(olefile)
+
+
+@implementer(IStorageStreamNode)
 class OleStream(OleStorageItem):
 
     def open(self):
         return self.olefile.openstream(self.path)
 
 
-class OleStorage(OleStorageItem):
-    ''' Create an OleStorage instance.
-
-    :param olefile: an OLE2 Compound Binary File.
-    :type olefile: an OleFileIO instance or an argument to OleFileIO()
-    :param path: internal path in the olefile. Should not end with '/'.
-    :raises: `InvalidOleStorageError` when `olefile` is not valid OLE2 format.
-    '''
-
-    def __init__(self, olefile, path='', parent=None):
-        if not hasattr(olefile, 'openstream'):
-            isOleFile = import_isOleFile()
-            OleFileIO = import_OleFileIO()
-
-            if not isOleFile(olefile):
-                errormsg = 'Not an OLE2 Compound Binary File.'
-                raise InvalidOleStorageError(errormsg)
-            olefile = OleFileIO(olefile)
-        OleStorageItem.__init__(self, olefile, path, parent)
+@implementer(IStorageDirectoryNode)
+class OleStorageDirectory(OleStorageItem):
 
     def __iter__(self):
         return olefile_listdir(self.olefile, self.path)
@@ -127,18 +151,37 @@ class OleStorage(OleStorageItem):
             raise KeyError('%s not found' % path)
         t = self.olefile.get_type(path)
         if t == 1:  # Storage
-            return OleStorage(self.olefile, path, self)
+            child = OleStorageDirectory(self.olefile, path, self)
+            child.__name__ = name
+            child.__parent__ = self
+            return child
         elif t == 2:  # Stream
-            return OleStream(self.olefile, path, self)
+            child = OleStream(self.olefile, path, self)
+            child.__name__ = name
+            child.__parent__ = self
+            return child
         else:
             raise KeyError('%s is invalid' % path)
 
+
+@implementer(IStorage)
+class OleStorage(OleStorageDirectory):
+    ''' Create an OleStorage instance.
+
+    :param olefile: an OLE2 Compound Binary File.
+    :type olefile: an OleFileIO instance or an argument to OleFileIO()
+    :param path: internal path in the olefile. Should not end with '/'.
+    :raises: `InvalidOleStorageError` when `olefile` is not valid OLE2 format.
+    '''
+
+    __parent__ = None
+    __name__ = ''
+
+    def __init__(self, olefile, path='', parent=None):
+        OleStorageItem.__init__(self, olefile, path, parent)
+
     def close(self):
-        # if this is root, close underlying olefile
-        if self.path == '':
-            # old version of OleFileIO has no close()
-            if hasattr(self.olefile, 'close'):
-                self.olefile.close()
+        self.olefile.close()
 
 
 def olefile_listdir(olefile, path):

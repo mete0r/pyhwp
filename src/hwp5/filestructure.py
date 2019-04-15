@@ -23,14 +23,18 @@ from io import BytesIO
 import logging
 import sys
 
+from zope.interface import implementer
+
 from .bintype import read_type
 from .compressed import decompress
 from .dataio import UINT32, Flags, Struct
 from .errors import InvalidOleStorageError
 from .errors import InvalidHwp5FileError
+from .interfaces import IStorageStreamNode
 from .storage import ItemWrapper
 from .storage import StorageWrapper
 from .storage import ItemConversionStorage
+from .storage import is_storage
 from .storage import is_stream
 from .storage.ole import OleStorage
 from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
@@ -90,6 +94,20 @@ class FileHeader(Struct):
         yield cls.Flags, 'flags'
         yield BYTES(216), 'reserved'
     attributes = classmethod(attributes)
+
+
+class Hwp5FileOpener:
+
+    def __init__(self, olestorage_opener, hwp5file_class):
+        self.olestorage_opener = olestorage_opener
+        self.hwp5file_class = hwp5file_class
+
+    def open_hwp5file(self, path):
+        try:
+            olestorage = self.olestorage_opener.open_storage(path)
+        except InvalidOleStorageError:
+            raise InvalidHwp5FileError('Not an OLE2 Compound Binary File.')
+        return self.hwp5file_class(olestorage)
 
 
 def is_hwp5file(filename):
@@ -183,12 +201,8 @@ class Hwp5FileBase(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        if isinstance(stg, basestring):
-            try:
-                stg = OleStorage(stg)
-            except InvalidOleStorageError:
-                raise InvalidHwp5FileError('Not an OLE2 Compound Binary File.')
-
+        if not is_storage(stg):
+            raise TypeError('IStorage is required')
         if not storage_is_hwp5file(stg):
             errormsg = 'Not an HWP Document format v5 storage.'
             raise InvalidHwp5FileError(errormsg)
@@ -286,6 +300,7 @@ class Hwp5Compression(ItemConversionStorage):
             return CompressedStorage
 
 
+@implementer(IStorageStreamNode)
 class PreviewText(object):
 
     def __init__(self, item):
@@ -366,6 +381,7 @@ class Sections(ItemConversionStorage):
                     for idx in self.section_indexes())
 
 
+@implementer(IStorageStreamNode)
 class HwpFileHeader(object):
 
     def __init__(self, item):

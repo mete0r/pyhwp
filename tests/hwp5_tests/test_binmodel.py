@@ -41,6 +41,7 @@ from hwp5.dataio import Enum
 from hwp5.dataio import Flags
 from hwp5.dataio import UINT32
 from hwp5.dataio import WORD
+from hwp5.filestructure import Hwp5FileOpener
 from hwp5.recordstream import Record
 from hwp5.recordstream import read_records
 from hwp5.tagids import HWPTAG_BEGIN
@@ -902,7 +903,8 @@ class TestFootnoteShape(TestBase):
 
     def test_footnote_shape(self):
         path = get_fixture_path('footnote-endnote.hwp')
-        hwp5file = Hwp5File(path)
+        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5File)
+        hwp5file = hwp5file_opener.open_hwp5file(path)
 
         models = hwp5file.bodytext.section(0).models()
         models = list(models)

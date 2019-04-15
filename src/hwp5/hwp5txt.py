@@ -30,10 +30,13 @@ from zope.interface.registry import Components
 
 from . import __version__ as version
 from .cli import init_logger
+from .cli import init_olestorage_opener
 from .cli import init_xslt
 from .cli import update_settings_from_environ
 from .dataio import ParseError
 from .errors import InvalidHwp5FileError
+from .filestructure import Hwp5FileOpener
+from .interfaces import IStorageOpener
 from .interfaces import IXSLTFactory
 from .utils import make_open_dest_file
 from .utils import cached_property
@@ -79,7 +82,11 @@ def main():
     settings = {}
     registry = Components()
     update_settings_from_environ(settings)
+    init_olestorage_opener(registry, **settings)
     init_xslt(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
 
     hwp5path = args.hwp5file
 
@@ -90,7 +97,7 @@ def main():
     transform = text_transform.transform_hwp5_to_text
 
     try:
-        with closing(Hwp5File(hwp5path)) as hwp5file:
+        with closing(hwp5file_opener.open_hwp5file(hwp5path)) as hwp5file:
             with open_dest() as dest:
                 transform(hwp5file, dest)
     except ParseError as e:

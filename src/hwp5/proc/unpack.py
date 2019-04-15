@@ -21,20 +21,35 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import os.path
 
-from .. import storage
+from zope.interface.registry import Components
+
+from ..cli import init_olestorage_opener
 from ..cli import open_hwpfile
+from ..storage import StorageTreeEventGenerator
+from ..storage import StorageTreeEventUnpacker
+from ..storage import rename_safe
 
 
 def main(args):
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
     filename = args.hwp5file
-    hwp5file = open_hwpfile(args)
+    hwp5file = open_hwpfile(registry, args)
 
     outdir = args.out_directory
     if outdir is None:
         outdir, ext = os.path.splitext(os.path.basename(filename))
     if not os.path.exists(outdir):
         os.mkdir(outdir)
-    storage.unpack(hwp5file, outdir)
+
+    storage_event_generator = StorageTreeEventGenerator()
+    storage_event_unpacker = StorageTreeEventUnpacker(rename_safe)
+    tree_events = storage_event_generator.generate(hwp5file)
+    storage_event_unpacker.unpack_from_tree_events(
+        tree_events, outdir,
+    )
 
 
 def unpack_argparser(subparsers, _):

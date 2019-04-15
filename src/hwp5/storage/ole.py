@@ -21,24 +21,15 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import logging
 
-from ..plat import get_olestorage_class
+from ..errors import ImplementationNotAvailable
+from ..plat import createOleStorageOpener
 
 
 logger = logging.getLogger(__name__)
 
 
-class OleStorage(object):
-
-    def __init__(self, *args, **kwargs):
-        impl_class = get_olestorage_class()
-        assert impl_class is not None, 'no OleStorage implementation available'
-        self.impl = impl_class(*args, **kwargs)
-
-    def __iter__(self):
-        return self.impl.__iter__()
-
-    def __getitem__(self, name):
-        return self.impl.__getitem__(name)
-
-    def __getattr__(self, name):
-        return getattr(self.impl, name)
+def OleStorage(path):
+    opener = createOleStorageOpener(None)
+    if opener is None:
+        raise ImplementationNotAvailable('olestorage')
+    return opener.open_storage(path)

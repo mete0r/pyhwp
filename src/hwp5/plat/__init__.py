@@ -42,6 +42,40 @@ def get_olestorage_class():
         return gir_gsf.OleStorage
 
 
+def createOleStorageOpener(registry, **settings):
+    try:
+        opener = olefileio.createStorageOpener(registry, **settings)
+    except Exception:
+        logger.debug('olestorage: olefileio is not available.')
+    else:
+        logger.info('olestorage: olefileio')
+        return opener
+
+    try:
+        opener = gir_gsf.createStorageOpener(registry, **settings)
+    except Exception:
+        logger.debug('olestorage: gir.repository.Gsf is not available.')
+    else:
+        logger.info('olestorage: gir.repository.Gsf')
+        return opener
+
+    try:
+        opener = jython_poifs.createStorageOpener(registry, **settings)
+    except Exception:
+        logger.debug('olestorage: jython_poifs is not available.')
+    else:
+        logger.info('olestorage: jython_poifs')
+        return opener
+
+    try:
+        opener = _uno.createStorageOpener(registry, **settings)
+    except Exception:
+        logger.debug('olestorage: uno is not available.')
+    else:
+        logger.info('olestorage: uno')
+        return opener
+
+
 def get_aes128ecb_decrypt():
     aes128ecb = create_aes128ecb()
     if aes128ecb is None:

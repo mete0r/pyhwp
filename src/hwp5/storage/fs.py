@@ -22,9 +22,32 @@ from __future__ import unicode_literals
 import io
 import os.path
 
+from zope.interface import implementer
 
-class FileSystemStorage(object):
-    ''' Directory-based stroage. '''
+from ..interfaces import IStorage
+from ..interfaces import IStorageOpener
+from ..interfaces import IStorageStreamNode
+from ..interfaces import IStorageDirectoryNode
+
+
+def createStorageOpener(registry, **settings):
+    return FileSystemStorageOpener()
+
+
+@implementer(IStorageOpener)
+class FileSystemStorageOpener:
+
+    def is_storage(self, path):
+        return os.path.isdir(path)
+
+    def open_storage(self, path):
+        if not self.is_storage(path):
+            raise Exception('Not a directory', path)
+        return FileSystemStorage(path)
+
+
+@implementer(IStorageDirectoryNode)
+class FileSystemDirectory(object):
 
     def __init__(self, path):
         self.path = path
@@ -35,13 +58,31 @@ class FileSystemStorage(object):
     def __getitem__(self, name):
         path = os.path.join(self.path, name)
         if os.path.isdir(path):
-            return FileSystemStorage(path)
+            node = FileSystemDirectory(path)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
         elif os.path.exists(path):
-            return FileSystemStream(path)
+            node = FileSystemStream(path)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
         else:
             raise KeyError(name)
 
 
+@implementer(IStorage)
+class FileSystemStorage(FileSystemDirectory):
+    ''' Directory-based stroage. '''
+
+    __parent__ = None
+    __name__ = ''
+
+    def close(self):
+        pass
+
+
+@implementer(IStorageStreamNode)
 class FileSystemStream(object):
     ''' File-based stream. '''
 

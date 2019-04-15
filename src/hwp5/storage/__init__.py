@@ -19,9 +19,21 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
 import io
 import os.path
+import shutil
 import sys
+
+from zope.interface import implementer
+
+from ..interfaces import IStorage
+from ..interfaces import IStorageDirectoryNode
+from ..interfaces import IStorageStreamNode
+from ..interfaces import IStorageTreeEventGenerator
+from ..interfaces import IStorageTreeEventUnpacker
+from ..treeop import STARTEVENT
+from ..treeop import ENDEVENT
 
 
 PY3 = sys.version_info.major == 3
@@ -30,11 +42,15 @@ if PY3:
 
 
 def is_storage(item):
-    return hasattr(item, '__iter__') and hasattr(item, '__getitem__')
+    return IStorage.providedBy(item)
+
+
+def is_directory(item):
+    return IStorageDirectoryNode.providedBy(item)
 
 
 def is_stream(item):
-    return hasattr(item, 'open') and callable(item.open)
+    return IStorageStreamNode.providedBy(item)
 
 
 class ItemWrapper(object):
@@ -50,7 +66,10 @@ class StorageWrapper(ItemWrapper):
         return iter(self.wrapped)
 
     def __getitem__(self, name):
-        return self.wrapped[name]
+        node = self.wrapped[name]
+        node.__name__ = name
+        node.__parent__ = self
+        return node
 
 
 class ItemConversionStorage(StorageWrapper):
@@ -60,7 +79,12 @@ class ItemConversionStorage(StorageWrapper):
         # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
         conversion = self.resolve_conversion_for(name)
         if conversion:
-            return conversion(item)
+            node = conversion(item)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
+        item.__name__ = name
+        item.__parent__ = self
         return item
 
     def resolve_conversion_for(self, name):
@@ -68,6 +92,7 @@ class ItemConversionStorage(StorageWrapper):
         pass
 
 
+@implementer(IStorageDirectoryNode)
 class ExtraItemStorage(StorageWrapper):
 
     def __iter__(self):
@@ -84,8 +109,10 @@ class ExtraItemStorage(StorageWrapper):
     def __getitem__(self, name):
         try:
             item = self.wrapped[name]
-            if is_storage(item):
+            if is_directory(item):
                 item = ExtraItemStorage(item)
+            item.__name__ = name
+            item.__parent__ = self
             return item
         except KeyError:
             # 기반 스토리지에는 없으므로, other_formats() 중에서 찾아본다.
@@ -96,52 +123,71 @@ class ExtraItemStorage(StorageWrapper):
                     if other_formats:
                         for ext, func in other_formats.items():
                             if root + ext == name:
-                                return Open2Stream(func)
+                                node = Open2Stream(func)
+                                node.__name__ = name
+                                node.__parent__ = self
+                                return node
             raise
 
 
+@implementer(IStorageStreamNode)
 class Open2Stream(object):
 
     def __init__(self, open):
         self.open = open
 
 
-def iter_storage_leafs(stg, basepath=''):
-    ''' iterate every leaf nodes in the storage
+@implementer(IStorageTreeEventGenerator)
+class StorageTreeEventGenerator:
 
-        stg: an instance of Storage
-    '''
-    for name in stg:
-        path = basepath + name
-        item = stg[name]
-        if is_storage(item):
-            for x in iter_storage_leafs(item, path + '/'):
-                yield x
+    def generate(self, node, name=''):
+        if is_directory(node):
+            yield STARTEVENT, name, node
+            for child_name in iter(node):
+                child_node = node[child_name]
+                for x in self.generate(child_node, child_name):
+                    yield x
+            yield ENDEVENT, name, node
         else:
-            yield path
+            yield None, name, node
+
+
+@implementer(IStorageTreeEventUnpacker)
+class StorageTreeEventUnpacker:
+
+    def __init__(self, rename):
+        self.rename = rename
+
+    def unpack_from_tree_events(self, tree_events, out_directory):
+        path_segments = []
+        for ev, name, node in tree_events:
+            if ev is STARTEVENT:
+                path_segments.append(name)
+                path = os.path.join(*([out_directory] + path_segments[1:]))
+                if not os.path.exists(path):
+                    os.makedirs(path)
+            elif ev is ENDEVENT:
+                path_segments = path_segments[:-1]
+            else:
+                modified_name = self.rename(name)
+                path = os.path.join(*([out_directory] + path_segments[1:] +
+                                      [modified_name]))
+                with closing(node.open()) as input_fp:
+                    with io.open(path, 'wb') as output_fp:
+                        shutil.copyfileobj(input_fp, output_fp)
+
+
+def rename_safe(name):
+    return name.replace('\x05', '_05')
 
 
 def unpack(stg, outbase):
-    ''' unpack a storage into outbase directory
-
-        stg: an instance of Storage
-        outbase: path to a directory in filesystem (should not end with '/')
-    '''
-    for name in stg:
-        outpath = os.path.join(outbase, name)
-        item = stg[name]
-        if is_storage(item):
-            if not os.path.exists(outpath):
-                os.mkdir(outpath)
-            unpack(item, outpath)
-        else:
-            f = item.open()
-            try:
-                outpath = outpath.replace('\x05', '_05')
-                with io.open(outpath, 'wb') as outfile:
-                    outfile.write(f.read())
-            finally:
-                f.close()
+    storage_event_generator = StorageTreeEventGenerator()
+    storage_event_unpacker = StorageTreeEventUnpacker(rename_safe)
+    tree_events = storage_event_generator.generate(stg)
+    storage_event_unpacker.unpack_from_tree_events(
+        tree_events, outbase,
+    )
 
 
 def open_storage_item(stg, path):
@@ -162,7 +208,7 @@ def printstorage(stg, basepath=''):
     for name in names:
         path = basepath + name
         item = stg[name]
-        if is_storage(item):
+        if is_directory(item):
             printstorage(item, path + '/')
         elif is_stream(item):
             print(path.encode('unicode_escape').decode('utf-8'))

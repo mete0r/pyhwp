@@ -86,12 +86,18 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from zope.interface.registry import Components
+
 from ..storage import printstorage
+from ..cli import init_olestorage_opener
 from ..cli import open_hwpfile
 
 
 def main(args):
-    hwpfile = open_hwpfile(args)
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+    hwpfile = open_hwpfile(registry, args)
     printstorage(hwpfile)
 
 

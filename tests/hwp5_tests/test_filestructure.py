@@ -15,12 +15,13 @@ from hwp5.filestructure import Hwp5DistDocStream
 from hwp5.filestructure import Hwp5DistDocStorage
 from hwp5.filestructure import Hwp5File
 from hwp5.filestructure import Hwp5FileBase
+from hwp5.filestructure import Hwp5FileOpener
 from hwp5.filestructure import HwpFileHeader
 from hwp5.filestructure import PreviewText
 from hwp5.filestructure import Sections
 from hwp5.recordstream import read_record
 from hwp5.storage import ExtraItemStorage
-from hwp5.storage import is_storage
+from hwp5.storage import is_directory
 from hwp5.storage import is_stream
 from hwp5.storage import unpack
 from hwp5.storage.fs import FileSystemStorage
@@ -65,19 +66,28 @@ class TestModuleFunctions(TestBase):
         assert not FS.is_hwp5file(nonole_filename)
 
 
+class TestHwp5FileOpener(TestBase):
+
+    def test_open(self):
+        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5FileBase)
+        hwp5file = hwp5file_opener.open_hwp5file(self.hwp5file_path)
+        self.assertTrue('FileHeader' in hwp5file)
+
+    def test_open_with_nonole(self):
+        nonole = self.get_fixture_file('nonole.txt')
+        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5FileBase)
+        self.assertRaises(
+            InvalidHwp5FileError,
+            hwp5file_opener.open_hwp5file,
+            nonole,
+        )
+
+
 class TestHwp5FileBase(TestBase):
 
     @cached_property
     def hwp5file_base(self):
         return Hwp5FileBase(self.olestg)
-
-    def test_create_with_filename(self):
-        hwp5file = Hwp5FileBase(self.hwp5file_path)
-        self.assertTrue('FileHeader' in hwp5file)
-
-    def test_create_with_nonole(self):
-        nonole = self.get_fixture_file('nonole.txt')
-        self.assertRaises(InvalidHwp5FileError, Hwp5FileBase, nonole)
 
     def test_create_with_nonhwp5_storage(self):
         stg = FileSystemStorage(self.get_fixture_file('nonhwp5stg'))
@@ -167,7 +177,7 @@ class TestHwp5DistDoc(TestBase):
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
         stg = FS.CompressedStorage(self.olestg['BinData'])
-        self.assertTrue(is_storage(stg))
+        self.assertTrue(is_directory(stg))
 
         item = stg['BIN0002.jpg']
         self.assertTrue(is_stream(item))
@@ -218,7 +228,8 @@ class TestHwp5Compression(TestBase):
 class TestHwp5File(TestBase):
 
     def test_init_should_accept_string_path(self):
-        hwp5file = Hwp5File(self.hwp5file_path)
+        olestorage = self.olestorage_opener.open_storage(self.hwp5file_path)
+        hwp5file = Hwp5File(olestorage)
         self.assertTrue(hwp5file['FileHeader'] is not None)
 
     def test_init_should_accept_olestorage(self):

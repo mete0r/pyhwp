@@ -16,58 +16,24 @@
 #   You should have received a copy of the GNU Affero General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-''' Find record models with specified predicates.
-
-Usage::
-
-    hwp5proc find [--model=<model-name> | --tag=<hwptag>]
-                  [--incomplete] [--dump] [--format=<format>]
-                  [--loglevel=<loglevel>] [--logfile=<logfile>]
-                  (--from-stdin | <hwp5files>...)
-    hwp5proc find --help
-
-Options::
-
-    -h --help               Show this screen
-       --loglevel=<level>   Set log level.
-       --logfile=<file>     Set log file.
-
-       --from-stdin         get filenames fro stdin
-
-       --model=<model-name> filter with record model name
-       --tag=<hwptag>       filter with record HWPTAG
-       --incomplete         filter with incompletely parsed content
-
-       --format=<format>    record output format
-                            %(filename)s %(stream)s %(seqno)s %(type)s
-       --dump               dump record
-
-    <hwp5files>...          HWPv5 files (*.hwp)
-
-Example: Find paragraphs::
-
-    $ hwp5proc find --model=Paragraph samples/*.hwp
-    $ hwp5proc find --tag=HWPTAG_PARA_TEXT samples/*.hwp
-    $ hwp5proc find --tag=66 samples/*.hwp
-
-Example: Find and dump records of ``HWPTAG_LIST_HEADER`` which is parsed
-incompletely::
-
-    $ hwp5proc find --tag=HWPTAG_LIST_HEADER --incomplete --dump samples/*.hwp
-
-'''
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
 from functools import partial
 import logging
 import itertools
 import sys
 
+from zope.interface.registry import Components
+
 from ..binmodel import Hwp5File
 from ..binmodel import model_to_json
 from ..bintype import log_events
+from ..cli import init_olestorage_opener
 from ..dataio import ParseError
+from ..filestructure import Hwp5FileOpener
+from ..interfaces import IStorageOpener
 from ..tagids import tagnames
 
 
@@ -84,6 +50,13 @@ logger = logging.getLogger(__name__)
 
 
 def main(args):
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
+
     filenames = filenames_from_args(args)
 
     conditions = list(conditions_from_args(args))
@@ -95,10 +68,11 @@ def main(args):
 
     for filename in filenames:
         try:
-            models = hwp5file_models(filename)
-            models = filter_conditions(models)
-            for model in models:
-                print_model(model)
+            with closing(hwp5file_opener.open_hwp5file(filename)) as hwp5file:
+                models = hwp5file_models(hwp5file, filename)
+                models = filter_conditions(models)
+                for model in models:
+                    print_model(model)
         except ParseError as e:
             logger.error('---- On processing %s:', filename)
             e.print_to_logger(logger)
@@ -197,8 +171,7 @@ def conditions_from_args(args):
         yield with_incomplete
 
 
-def hwp5file_models(filename):
-    hwp5file = Hwp5File(filename)
+def hwp5file_models(hwp5file, filename):
     for model in flat_models(hwp5file):
         model['filename'] = filename
         yield model

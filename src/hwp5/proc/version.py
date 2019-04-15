@@ -19,14 +19,27 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from contextlib import closing
 
+from zope.interface.registry import Components
+
+from ..cli import init_olestorage_opener
 from ..filestructure import Hwp5File
+from ..filestructure import Hwp5FileOpener
+from ..interfaces import IStorageOpener
 
 
 def main(args):
-    hwp5file = Hwp5File(args.hwp5file)
-    h = hwp5file.fileheader
-    print('%d.%d.%d.%d' % h.version)
+    registry = Components()
+    settings = {}
+    init_olestorage_opener(registry, **settings)
+
+    olestorage_opener = registry.getUtility(IStorageOpener)
+
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
+    with closing(hwp5file_opener.open_hwp5file(args.hwp5file)) as hwp5file:
+        h = hwp5file.fileheader
+        print('%d.%d.%d.%d' % h.version)
 
 
 def version_argparser(subparsers, _):

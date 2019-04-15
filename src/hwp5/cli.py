@@ -22,9 +22,11 @@ from __future__ import unicode_literals
 import logging
 import os
 
+from .interfaces import IStorageOpener
 from .interfaces import ITemporaryStreamFactory
 from .interfaces import IRelaxNGFactory
 from .interfaces import IXSLTFactory
+from .plat import createOleStorageOpener
 from .plat import _lxml
 from .plat import javax_transform
 from .plat import _uno
@@ -32,7 +34,6 @@ from .plat import xsltproc
 from .plat import xmllint
 from .storage import ExtraItemStorage
 from .storage import open_storage_item
-from .storage.ole import OleStorage
 from .utilities import TemporaryStreamFactory
 from .xmlmodel import Hwp5File
 
@@ -106,6 +107,18 @@ def init_temp_stream_factory(registry, **settings):
     registry.registerUtility(factory, ITemporaryStreamFactory)
 
 
+def init_olestorage_opener(registry, **settings):
+    opener = create_olestorage_opener(registry, **settings)
+    if opener is None:
+        logger.warning('olestorage: No implementation is available.')
+        return
+    registry.registerUtility(opener, IStorageOpener)
+
+
+def create_olestorage_opener(registry, **settings):
+    return createOleStorageOpener(registry, **settings)
+
+
 def init_xslt(registry, **settings):
     factory = create_xslt_factory(registry, **settings)
     if factory is None:
@@ -176,14 +189,17 @@ def create_relaxng_factory(registry, **settings):
         return factory
 
 
-def open_hwpfile(args):
+def open_hwpfile(registry, args):
     filename = args.hwp5file
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    olestorage = olestorage_opener.open_storage(filename)
+
     if args.ole:
-        hwpfile = OleStorage(filename)
-    else:
-        hwpfile = Hwp5File(filename)
-        if args.vstreams:
-            hwpfile = ExtraItemStorage(hwpfile)
+        return olestorage
+
+    hwpfile = Hwp5File(olestorage)
+    if args.vstreams:
+        hwpfile = ExtraItemStorage(hwpfile)
     return hwpfile
 
 
