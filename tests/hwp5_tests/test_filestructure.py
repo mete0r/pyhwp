@@ -10,11 +10,10 @@ import zlib
 
 from hwp5 import filestructure as FS
 from hwp5.errors import InvalidHwp5FileError
-from hwp5.filestructure import Hwp5DistDoc
+from hwp5.filestructure import CompressedStorage
 from hwp5.filestructure import Hwp5DistDocStream
 from hwp5.filestructure import Hwp5DistDocStorage
 from hwp5.filestructure import Hwp5File
-from hwp5.filestructure import Hwp5FileBase
 from hwp5.filestructure import Hwp5FileOpener
 from hwp5.filestructure import HwpFileHeader
 from hwp5.filestructure import PreviewText
@@ -34,10 +33,6 @@ from . import test_ole
 
 
 class TestBase(test_ole.TestBase):
-
-    @cached_property
-    def hwp5file_base(self):
-        return FS.Hwp5FileBase(self.olestg)
 
     @cached_property
     def hwp5file_fs(self):
@@ -69,13 +64,13 @@ class TestModuleFunctions(TestBase):
 class TestHwp5FileOpener(TestBase):
 
     def test_open(self):
-        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5FileBase)
+        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5File)
         hwp5file = hwp5file_opener.open_hwp5file(self.hwp5file_path)
         self.assertTrue('FileHeader' in hwp5file)
 
     def test_open_with_nonole(self):
         nonole = self.get_fixture_file('nonole.txt')
-        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5FileBase)
+        hwp5file_opener = Hwp5FileOpener(self.olestorage_opener, Hwp5File)
         self.assertRaises(
             InvalidHwp5FileError,
             hwp5file_opener.open_hwp5file,
@@ -85,20 +80,16 @@ class TestHwp5FileOpener(TestBase):
 
 class TestHwp5FileBase(TestBase):
 
-    @cached_property
-    def hwp5file_base(self):
-        return Hwp5FileBase(self.olestg)
-
     def test_create_with_nonhwp5_storage(self):
         stg = FileSystemStorage(self.get_fixture_file('nonhwp5stg'))
-        self.assertRaises(InvalidHwp5FileError, Hwp5FileBase, stg)
+        self.assertRaises(InvalidHwp5FileError, Hwp5File, stg)
 
     def test_item_is_hwpfileheader(self):
-        fileheader = self.hwp5file_base['FileHeader']
+        fileheader = self.hwp5file['FileHeader']
         self.assertTrue(isinstance(fileheader, HwpFileHeader))
 
     def test_header(self):
-        header = self.hwp5file_base.header
+        header = self.hwp5file.header
         self.assertTrue(isinstance(header, HwpFileHeader))
 
 
@@ -109,8 +100,8 @@ class TestHwp5DistDocStream(TestBase):
     @cached_property
     def jscriptversion(self):
         return Hwp5DistDocStream(
-            self.hwp5file_base['Scripts']['JScriptVersion'],
-            self.hwp5file_base.header.version
+            self.olestg['Scripts']['JScriptVersion'],
+            self.hwp5file.header.version
         )
 
     def test_head_record(self):
@@ -159,19 +150,45 @@ class TestHwp5DistDoc(TestBase):
 
     hwp5file_name = 'viewtext.hwp'
 
-    @cached_property
-    def hwp5distdoc(self):
-        return Hwp5DistDoc(self.olestg)
-
     def test_conversion_for(self):
-        conversion = self.hwp5distdoc.resolve_conversion_for('Scripts')
-        self.assertTrue(conversion is Hwp5DistDocStorage)
+        conversion = self.hwp5file.resolve_conversion_for('Scripts')
+        scripts = self.olestg['Scripts']
+        scripts = conversion(scripts)
+        self.assertTrue(
+            isinstance(scripts.wrapped, Hwp5DistDocStorage)
+        )
 
     def test_getitem(self):
-        self.assertTrue(isinstance(self.hwp5distdoc['Scripts'],
-                                   Hwp5DistDocStorage))
-        self.assertTrue(isinstance(self.hwp5distdoc['ViewText'],
-                                   Hwp5DistDocStorage))
+        self.assertTrue(
+            isinstance(
+                self.hwp5file['Scripts'],
+                CompressedStorage,
+            )
+        )
+        self.assertTrue(
+            isinstance(
+                self.hwp5file['Scripts'].wrapped,
+                Hwp5DistDocStorage
+            )
+        )
+        self.assertTrue(
+            isinstance(
+                self.hwp5file['ViewText'],
+                Sections,
+            )
+        )
+        self.assertTrue(
+            isinstance(
+                self.hwp5file['ViewText'].wrapped,
+                CompressedStorage,
+            )
+        )
+        self.assertTrue(
+            isinstance(
+                self.hwp5file['ViewText'].wrapped.wrapped,
+                Hwp5DistDocStorage
+            )
+        )
 
 
 class TestCompressedStorage(TestBase):
@@ -194,20 +211,16 @@ class TestCompressedStorage(TestBase):
 class TestHwp5Compression(TestBase):
 
     @cached_property
-    def hwp5file_compressed(self):
-        return FS.Hwp5Compression(self.hwp5file_base)
-
-    @cached_property
     def docinfo(self):
-        return self.hwp5file_compressed['DocInfo'].open()
+        return self.hwp5file['DocInfo'].open()
 
     @cached_property
     def bodytext(self):
-        return self.hwp5file_compressed['BodyText']
+        return self.hwp5file['BodyText']
 
     @cached_property
     def scripts(self):
-        return self.hwp5file_compressed['Scripts']
+        return self.hwp5file['Scripts']
 
     def test_docinfo_decompressed(self):
         record = read_record(self.docinfo, 0)
@@ -218,7 +231,7 @@ class TestHwp5Compression(TestBase):
         self.assertEqual(HWPTAG_PARA_HEADER, record['tagid'])
 
     def test_scripts_version(self):
-        hwp5file = self.hwp5file_compressed
+        hwp5file = self.hwp5file
         self.assertFalse(hwp5file.header.flags.distributable)
 
         JScriptVersion = self.scripts['JScriptVersion'].open().read()

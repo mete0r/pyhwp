@@ -53,15 +53,11 @@ def is_stream(item):
     return IStorageStreamNode.providedBy(item)
 
 
-class ItemWrapper(object):
+class StorageWrapper(object):
+
     def __init__(self, wrapped):
         self.wrapped = wrapped
 
-    def __getattr__(self, name):
-        return getattr(self.wrapped, name)
-
-
-class StorageWrapper(ItemWrapper):
     def __iter__(self):
         return iter(self.wrapped)
 
@@ -70,26 +66,6 @@ class StorageWrapper(ItemWrapper):
         node.__name__ = name
         node.__parent__ = self
         return node
-
-
-class ItemConversionStorage(StorageWrapper):
-
-    def __getitem__(self, name):
-        item = self.wrapped[name]
-        # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
-        conversion = self.resolve_conversion_for(name)
-        if conversion:
-            node = conversion(item)
-            node.__name__ = name
-            node.__parent__ = self
-            return node
-        item.__name__ = name
-        item.__parent__ = self
-        return item
-
-    def resolve_conversion_for(self, name):
-        ''' return a conversion function for the specified storage item '''
-        pass
 
 
 @implementer(IStorageDirectoryNode)

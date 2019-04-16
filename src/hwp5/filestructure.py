@@ -30,10 +30,10 @@ from .compressed import decompress
 from .dataio import UINT32, Flags, Struct
 from .errors import InvalidOleStorageError
 from .errors import InvalidHwp5FileError
+from .interfaces import IHwp5File
+from .interfaces import IStorageDirectoryNode
 from .interfaces import IStorageStreamNode
-from .storage import ItemWrapper
 from .storage import StorageWrapper
-from .storage import ItemConversionStorage
 from .storage import is_storage
 from .storage import is_stream
 from .storage.ole import OleStorage
@@ -133,14 +133,47 @@ def storage_is_hwp5file(stg):
         return False
 
 
-class CompressedStream(ItemWrapper):
+class ItemConversionStorage(StorageWrapper):
+
+    def __getitem__(self, name):
+        item = self.wrapped[name]
+        # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
+        conversion = self.resolve_conversion_for(name)
+        if conversion:
+            node = conversion(item)
+            node.__name__ = name
+            node.__parent__ = self
+            return node
+        item.__name__ = name
+        item.__parent__ = self
+        return item
+
+    def resolve_conversion_for(self, name):
+        ''' return a conversion function for the specified storage item '''
+        pass
+
+
+@implementer(IStorageStreamNode)
+class CompressedStream(object):
+
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
 
     def open(self):
         return decompress(self.wrapped.open())
 
+    def other_formats(self):
+        try:
+            other_formats = self.wrapped.other_formats
+        except AttributeError:
+            return {}
+        return other_formats()
 
+
+@implementer(IStorageDirectoryNode)
 class CompressedStorage(StorageWrapper):
     ''' decompress streams in the underlying storage '''
+
     def __getitem__(self, name):
         item = self.wrapped[name]
         if is_stream(item):
@@ -148,8 +181,19 @@ class CompressedStorage(StorageWrapper):
         else:
             return item
 
+    def other_formats(self):
+        try:
+            other_formats = self.wrapped.other_formats
+        except AttributeError:
+            return {}
+        return other_formats()
 
-class PasswordProtectedStream(ItemWrapper):
+
+@implementer(IStorageStreamNode)
+class PasswordProtectedStream(object):
+
+    def __init__(self, wrapped):
+        self.wrapped = wrapped
 
     def open(self):
         # TODO: 현재로선 암호화된 내용을 그냥 반환
@@ -157,8 +201,19 @@ class PasswordProtectedStream(ItemWrapper):
                        'not supported')
         return self.wrapped.open()
 
+    def other_formats(self):
+        try:
+            other_formats = self.wrapped.other_formats
+        except AttributeError:
+            return {}
+        return other_formats()
+
 
 class PasswordProtectedStorage(StorageWrapper):
+
+    def close(self):
+        self.wrapped.close()
+
     def __getitem__(self, name):
         item = self.wrapped[name]
         if is_stream(item):
@@ -166,20 +221,19 @@ class PasswordProtectedStorage(StorageWrapper):
         else:
             return item
 
-
-class Hwp5PasswordProtectedDoc(ItemConversionStorage):
-
-    def resolve_conversion_for(self, name):
-        if name in ('BinData', 'BodyText', 'Scripts', 'ViewText'):
-            return PasswordProtectedStorage
-        elif name in ('DocInfo', ):
-            return PasswordProtectedStream
+    def other_formats(self):
+        try:
+            other_formats = self.wrapped.other_formats
+        except AttributeError:
+            return {}
+        return other_formats()
 
 
-class VersionSensitiveItem(ItemWrapper):
+@implementer(IStorageStreamNode)
+class VersionSensitiveItem(object):
 
     def __init__(self, item, version):
-        ItemWrapper.__init__(self, item)
+        self.wrapped = item
         self.version = version
 
     def open(self):
@@ -189,38 +243,7 @@ class VersionSensitiveItem(ItemWrapper):
         return dict()
 
 
-class Hwp5FileBase(ItemConversionStorage):
-    ''' Base of an Hwp5File.
-
-    Hwp5FileBase checks basic validity of an HWP format v5 and provides
-    `fileheader` property.
-
-    :param stg: an OLE2 structured storage.
-    :type stg: an instance of storage, OleFileIO or filename
-    :raises InvalidHwp5FileError: `stg` is not a valid HWP format v5 document.
-    '''
-
-    def __init__(self, stg):
-        if not is_storage(stg):
-            raise TypeError('IStorage is required')
-        if not storage_is_hwp5file(stg):
-            errormsg = 'Not an HWP Document format v5 storage.'
-            raise InvalidHwp5FileError(errormsg)
-
-        ItemConversionStorage.__init__(self, stg)
-
-    def resolve_conversion_for(self, name):
-        if name == 'FileHeader':
-            return HwpFileHeader
-
-    def get_fileheader(self):
-        return self['FileHeader']
-
-    fileheader = cached_property(get_fileheader)
-
-    header = fileheader
-
-
+@implementer(IStorageStreamNode)
 class Hwp5DistDocStream(VersionSensitiveItem):
 
     def open(self):
@@ -272,7 +295,15 @@ class Hwp5DistDocStream(VersionSensitiveItem):
     def tail_stream(self):
         return BytesIO(self.tail())
 
+    def other_formats(self):
+        try:
+            other_formats = self.wrapped.other_formats
+        except AttributeError:
+            return {}
+        return other_formats()
 
+
+@implementer(IStorageDirectoryNode)
 class Hwp5DistDocStorage(ItemConversionStorage):
 
     def resolve_conversion_for(self, name):
@@ -280,24 +311,12 @@ class Hwp5DistDocStorage(ItemConversionStorage):
             return Hwp5DistDocStream(self.wrapped[name], None)  # TODO: version
         return conversion
 
-
-class Hwp5DistDoc(ItemConversionStorage):
-
-    def resolve_conversion_for(self, name):
-        if name in ('Scripts', 'ViewText'):
-            return Hwp5DistDocStorage
-
-
-class Hwp5Compression(ItemConversionStorage):
-    ''' handle compressed streams in HWPv5 files '''
-
-    def resolve_conversion_for(self, name):
-        if name in ('BinData', 'BodyText', 'ViewText'):
-            return CompressedStorage
-        elif name == 'DocInfo':
-            return CompressedStream
-        elif name == 'Scripts':
-            return CompressedStorage
+    def other_formats(self):
+        try:
+            other_formats = self.wrapped.other_formats
+        except AttributeError:
+            return {}
+        return other_formats()
 
 
 @implementer(IStorageStreamNode)
@@ -341,6 +360,7 @@ class PreviewText(object):
         return self.text
 
 
+@implementer(IStorageDirectoryNode)
 class Sections(ItemConversionStorage):
 
     section_class = VersionSensitiveItem
@@ -541,6 +561,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
         return out
 
 
+@implementer(IHwp5File)
 class Hwp5File(ItemConversionStorage):
     ''' represents HWPv5 File
 
@@ -550,41 +571,65 @@ class Hwp5File(ItemConversionStorage):
     '''
 
     def __init__(self, stg):
-        stg = Hwp5FileBase(stg)
-
-        if stg.header.flags.password:
-            stg = Hwp5PasswordProtectedDoc(stg)
-
-            # TODO: 현재로선 decryption이 구현되지 않았으므로,
-            # 레코드 파싱은 불가능하다. 적어도 encrypted stream에
-            # 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
-            ItemConversionStorage.__init__(self, stg)
-            return
-
-        if stg.header.flags.distributable:
-            stg = Hwp5DistDoc(stg)
-
-        if stg.header.flags.compressed:
-            stg = Hwp5Compression(stg)
+        if not is_storage(stg):
+            raise TypeError('IStorage is required')
+        if not storage_is_hwp5file(stg):
+            errormsg = 'Not an HWP Document format v5 storage.'
+            raise InvalidHwp5FileError(errormsg)
 
         ItemConversionStorage.__init__(self, stg)
 
+    def close(self):
+        self.wrapped.close()
+
+    @property
+    def header(self):
+        return self['FileHeader']
+
+    fileheader = header
+
     def resolve_conversion_for(self, name):
+        fn = None
+
+        if name == 'FileHeader':
+            return HwpFileHeader
+
+        if self.header.flags.password:
+            # TODO: 현재로선 decryption이 구현되지 않았으므로,
+            # 레코드 파싱은 불가능하다. 적어도 encrypted stream에
+            # 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
+            if name in ('BinData', 'BodyText', 'Scripts', 'ViewText'):
+                return compose(PasswordProtectedStorage, fn)
+            elif name in ('DocInfo', ):
+                return compose(PasswordProtectedStream, fn)
+
+        if self.header.flags.distributable:
+            if name in ('Scripts', 'ViewText'):
+                fn = compose(Hwp5DistDocStorage, fn)
+
+        if self.header.flags.compressed:
+            if name in ('BinData', 'BodyText', 'ViewText'):
+                fn = compose(CompressedStorage, fn)
+            elif name == 'DocInfo':
+                fn = compose(CompressedStream, fn)
+            elif name == 'Scripts':
+                fn = compose(CompressedStorage, fn)
+
         if name == 'DocInfo':
-            return self.with_version(self.docinfo_class)
+            fn = compose(self.with_version(self.docinfo_class), fn)
         if name == 'BodyText':
-            return self.with_version(self.bodytext_class)
+            fn = compose(self.with_version(self.bodytext_class), fn)
         if name == 'ViewText':
-            return self.with_version(self.bodytext_class)
+            fn = compose(self.with_version(self.bodytext_class), fn)
         if name == 'PrvText':
-            return PreviewText
+            return compose(PreviewText, fn)
         if name == '\005HwpSummaryInformation':
-            return self.with_version(self.summaryinfo_class)
+            return compose(self.with_version(self.summaryinfo_class), fn)
+
+        return fn
 
     def with_version(self, f):
-        def wrapped(item):
-            return f(item, self.header.version)
-        return wrapped
+        return with_version(f, self.header.version)
 
     summaryinfo_class = HwpSummaryInfo
     docinfo_class = VersionSensitiveItem
@@ -616,3 +661,58 @@ class Hwp5File(ItemConversionStorage):
             return self.viewtext
         else:
             return self.bodytext
+
+
+class with_version(object):
+
+    def __init__(self, fn, version):
+        self.fn = fn
+        self.version = version
+
+    def __call__(self, item):
+        return self.fn(item, self.version)
+
+    def __repr__(self):
+        return '{}{}'.format(
+            self.fn.__name__,
+            self.version,
+        )
+
+    @property
+    def __name__(self):
+        return self.__repr__()
+
+
+class compose(object):
+
+    def __init__(self, outerfn, innerfn):
+        self.outerfn = outerfn
+        self.innerfn = innerfn
+
+    def __call__(self, x):
+        outerfn = self.outerfn
+        innerfn = self.innerfn
+        return outerfn(innerfn(x))
+
+    def __repr__(self):
+        return 'compose({}, {})'.format(
+            self.outerfn.__name__,
+            self.innerfn.__name__,
+        )
+
+    @property
+    def __name__(self):
+        return self.__repr__()
+
+
+_compose = compose
+
+
+def compose(outerfn, innerfn):
+    if outerfn is None and innerfn is None:
+        raise ValueError()
+    if outerfn is None:
+        return innerfn
+    if innerfn is None:
+        return outerfn
+    return _compose(outerfn, innerfn)

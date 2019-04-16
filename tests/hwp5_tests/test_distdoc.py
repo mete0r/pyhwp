@@ -6,11 +6,11 @@ from hashlib import sha1
 from io import BytesIO
 import zlib
 
-from hwp5.filestructure import Hwp5DistDoc
 from hwp5.distdoc import decode_head_to_sha1
 from hwp5.distdoc import decode_head_to_key
 from hwp5.distdoc import decrypt_tail
 from hwp5.recordstream import read_record
+from hwp5.filestructure import Hwp5DistDocStream
 from hwp5.tagids import HWPTAG_PARA_HEADER
 import hwp5.distdoc
 import hwp5.compressed
@@ -24,12 +24,10 @@ class TestHwp5DistDocFunctions(TestBase):
     password_sha1 = sha1(b'12345').hexdigest()
 
     @property
-    def hwp5distdoc(self):
-        return Hwp5DistDoc(self.olestg)
-
-    @property
     def section(self):
-        return self.hwp5distdoc['ViewText']['Section0']
+        section = self.olestg['ViewText']['Section0']
+        section = Hwp5DistDocStream(section, self.hwp5file.header.version)
+        return section
 
     def test_distdoc_decode_head_to_sha1(self):
         password_sha1 = self.password_sha1

@@ -127,6 +127,18 @@ class IStorageTreeEventUnpacker(Interface):
         pass
 
 
+class IHwp5File(IStorage):
+
+    header = Attribute('')
+    fileheader = Attribute('')
+    summaryinfo = Attribute('')
+    docinfo = Attribute('')
+    preview_text = Attribute('')
+    bodytext = Attribute('')
+    viewtext = Attribute('')
+    text = Attribute('')
+
+
 class ITemporaryStreamFactory(Interface):
 
     def temporary_stream():
