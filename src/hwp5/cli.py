@@ -19,9 +19,15 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from argparse import ArgumentParser
+import code
 import logging
 import os
+import textwrap
 
+from zope.interface.registry import Components
+
+from .filestructure import Hwp5FileOpener
 from .interfaces import IStorageOpener
 from .interfaces import ITemporaryStreamFactory
 from .interfaces import IRelaxNGFactory
@@ -215,3 +221,73 @@ def parse_recordstream_name(hwpfile, streamname):
             except ValueError:
                 pass
     return open_storage_item(hwpfile, streamname)
+
+
+def hwp5shell():
+    argparser = hwp5shell_argparser()
+    args = argparser.parse_args()
+    init_logger(args)
+
+    registry = Components()
+    init_olestorage_opener(registry)
+    olestorage_opener = registry.getUtility(IStorageOpener)
+    hwp5file_opener = Hwp5FileOpener(olestorage_opener, Hwp5File)
+    namespace = {
+        'registry': registry,
+        'open_ole': olestorage_opener.open_storage,
+        'open_hwp': hwp5file_opener.open_hwp5file,
+        'Hwp5File': Hwp5File,
+        'Hwp5FileOpener': Hwp5FileOpener,
+    }
+    if args.hwp5file is not None:
+        hwp5file = hwp5file_opener.open_hwp5file(args.hwp5file)
+        namespace['hwp5file'] = hwp5file
+
+    banner = textwrap.dedent(
+        '''
+        --------------------------------
+        hwp5shell
+        --------------------------------
+        registry:
+            the component registry.
+
+        open_ole(filename) -> IStorage:
+            open an OLE Compound File.
+
+        open_hwp(filename) -> IHwp5File:
+            open a .hwp(v5) file.
+        '''
+    ).strip()
+    code.interact(banner=banner, local=namespace)
+
+
+def hwp5shell_argparser():
+    from . import __version__ as version
+
+    def _(s):
+        return s
+
+    parser = ArgumentParser(
+        prog='hwp5txt',
+        description=_('HWPv5 to txt converter'),
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='%(prog)s {}'.format(version)
+    )
+    parser.add_argument(
+        '--loglevel',
+        help=_('Set log level.'),
+    )
+    parser.add_argument(
+        '--logfile',
+        help=_('Set log file.'),
+    )
+    parser.add_argument(
+        'hwp5file',
+        nargs='?',
+        metavar='<hwp5file>',
+        help=_('.hwp file to convert'),
+    )
+    return parser
