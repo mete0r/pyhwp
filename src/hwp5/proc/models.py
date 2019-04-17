@@ -24,6 +24,7 @@ from contextlib import contextmanager
 from itertools import islice
 import sys
 
+from zope.interface import implementer
 from zope.interface.registry import Components
 
 from ..binmodel import Hwp5File
@@ -34,6 +35,7 @@ from ..cli import init_olestorage_opener
 from ..cli import parse_recordstream_name
 from ..dataio import hexdump
 from ..filestructure import Hwp5FileOpener
+from ..interfaces import IHwp5File
 from ..interfaces import IStorageOpener
 from ..storage import Open2Stream
 from ..treeop import ENDEVENT
@@ -188,7 +190,22 @@ def stream_from_args(registry, args):
         else:
             stdin_binary = sys.stdin.buffer
 
-        yield ModelStream(Open2Stream(lambda: stdin_binary), version)
+        class DummyHwp5FileHeader:
+            def __init__(self, version):
+                self.version = version
+
+        @implementer(IHwp5File)
+        class DummyHwp5File:
+
+            header = fileheader = DummyHwp5FileHeader(version)
+
+        stream = Open2Stream(lambda: stdin_binary)
+        stream.__name__ = '<stdin>'
+        yield ModelStream(
+            DummyHwp5File(),
+            None,
+            stream,
+        )
 
 
 def models_from_args(args):

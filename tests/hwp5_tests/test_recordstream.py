@@ -50,8 +50,11 @@ class TestRecordStream(TestBase):
 
     @cached_property
     def docinfo(self):
-        return RecordStream(self.hwp5file_fs['DocInfo'],
-                            self.hwp5file_fs.header.version)
+        return RecordStream(
+            self.hwp5file_fs,
+            self.hwp5file_fs,
+            self.hwp5file_fs['DocInfo'],
+        )
 
     def test_records(self):
         self.assertEqual(67, len(list(self.docinfo.records())))

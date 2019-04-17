@@ -24,6 +24,7 @@ import logging
 import sys
 
 from zope.interface import implementer
+from zope.interface.registry import Components
 
 from .bintype import read_type
 from .compressed import decompress
@@ -31,11 +32,10 @@ from .dataio import UINT32, Flags, Struct
 from .errors import InvalidOleStorageError
 from .errors import InvalidHwp5FileError
 from .interfaces import IHwp5File
+from .interfaces import IStorageNode
 from .interfaces import IStorageDirectoryNode
 from .interfaces import IStorageStreamNode
-from .storage import StorageWrapper
 from .storage import is_storage
-from .storage import is_stream
 from .storage.ole import OleStorage
 from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
 from .utils import GeneratorTextReader
@@ -48,6 +48,7 @@ if PY3:
 
 
 logger = logging.getLogger(__name__)
+nodeAdapterRegistry = Components()
 
 
 HWP5_SIGNATURE = b'HWP Document File' + (b'\x00' * 15)
@@ -125,7 +126,7 @@ def storage_is_hwp5file(stg):
     except KeyError:
         logger.info('stg has no FileHeader')
         return False
-    fileheader = HwpFileHeader(fileheader)
+    fileheader = HwpFileHeader(None, None, fileheader)
     if fileheader.signature == HWP5_SIGNATURE:
         return True
     else:
@@ -133,31 +134,46 @@ def storage_is_hwp5file(stg):
         return False
 
 
-class ItemConversionStorage(StorageWrapper):
+@implementer(IStorageNode)
+class Hwp5FileNode(object):
 
-    def __getitem__(self, name):
-        item = self.wrapped[name]
-        # 기반 스토리지에서 찾은 아이템에 대해, conversion()한다.
-        conversion = self.resolve_conversion_for(name)
-        if conversion:
-            node = conversion(item)
-            node.__name__ = name
-            node.__parent__ = self
-            return node
-        item.__name__ = name
-        item.__parent__ = self
-        return item
-
-    def resolve_conversion_for(self, name):
-        ''' return a conversion function for the specified storage item '''
-        pass
+    def __init__(self, hwp5file, parent, node):
+        self.hwp5file = hwp5file
+        self.__parent__ = parent
+        self.__name__ = node.__name__
+        self.wrapped = node
 
 
 @implementer(IStorageStreamNode)
-class CompressedStream(object):
+class Hwp5FileStreamNode(Hwp5FileNode):
 
-    def __init__(self, wrapped):
-        self.wrapped = wrapped
+    def open(self):
+        return self.wrapped.open()
+
+
+@implementer(IStorageDirectoryNode)
+class Hwp5FileDirectoryNode(Hwp5FileNode):
+
+    def __iter__(self):
+        return iter(self.wrapped)
+
+    def __getitem__(self, name):
+        child = self.wrapped[name]
+        adapter = nodeAdapterRegistry.queryMultiAdapter(
+            [self.hwp5file, self, child],
+            IStorageNode,
+            name,
+        )
+        if adapter is not None:
+            return adapter
+        return nodeAdapterRegistry.getMultiAdapter(
+            [self.hwp5file, self, child],
+            IStorageNode,
+        )
+
+
+@implementer(IStorageStreamNode)
+class CompressedStream(Hwp5FileStreamNode):
 
     def open(self):
         return decompress(self.wrapped.open())
@@ -171,15 +187,8 @@ class CompressedStream(object):
 
 
 @implementer(IStorageDirectoryNode)
-class CompressedStorage(StorageWrapper):
+class CompressedStorage(Hwp5FileDirectoryNode):
     ''' decompress streams in the underlying storage '''
-
-    def __getitem__(self, name):
-        item = self.wrapped[name]
-        if is_stream(item):
-            return CompressedStream(item)
-        else:
-            return item
 
     def other_formats(self):
         try:
@@ -190,10 +199,7 @@ class CompressedStorage(StorageWrapper):
 
 
 @implementer(IStorageStreamNode)
-class PasswordProtectedStream(object):
-
-    def __init__(self, wrapped):
-        self.wrapped = wrapped
+class PasswordProtectedStream(Hwp5FileStreamNode):
 
     def open(self):
         # TODO: 현재로선 암호화된 내용을 그냥 반환
@@ -209,17 +215,7 @@ class PasswordProtectedStream(object):
         return other_formats()
 
 
-class PasswordProtectedStorage(StorageWrapper):
-
-    def close(self):
-        self.wrapped.close()
-
-    def __getitem__(self, name):
-        item = self.wrapped[name]
-        if is_stream(item):
-            return PasswordProtectedStream(item)
-        else:
-            return item
+class PasswordProtectedStorage(Hwp5FileDirectoryNode):
 
     def other_formats(self):
         try:
@@ -230,11 +226,11 @@ class PasswordProtectedStorage(StorageWrapper):
 
 
 @implementer(IStorageStreamNode)
-class VersionSensitiveItem(object):
+class VersionSensitiveItem(Hwp5FileStreamNode):
 
-    def __init__(self, item, version):
-        self.wrapped = item
-        self.version = version
+    @property
+    def version(self):
+        return self.hwp5file.header.version
 
     def open(self):
         return self.wrapped.open()
@@ -244,7 +240,7 @@ class VersionSensitiveItem(object):
 
 
 @implementer(IStorageStreamNode)
-class Hwp5DistDocStream(VersionSensitiveItem):
+class Hwp5DistDocStream(Hwp5FileStreamNode):
 
     def open(self):
         from hwp5.distdoc import decode
@@ -304,12 +300,7 @@ class Hwp5DistDocStream(VersionSensitiveItem):
 
 
 @implementer(IStorageDirectoryNode)
-class Hwp5DistDocStorage(ItemConversionStorage):
-
-    def resolve_conversion_for(self, name):
-        def conversion(item):
-            return Hwp5DistDocStream(self.wrapped[name], None)  # TODO: version
-        return conversion
+class Hwp5DistDocStorage(Hwp5FileDirectoryNode):
 
     def other_formats(self):
         try:
@@ -322,7 +313,10 @@ class Hwp5DistDocStorage(ItemConversionStorage):
 @implementer(IStorageStreamNode)
 class PreviewText(object):
 
-    def __init__(self, item):
+    def __init__(self, hwp5file, parent, item):
+        self.hwp5file = hwp5file
+        self.__parent__ = parent
+        self.__name__ = item.__name__
         self.open = item.open
 
     def other_formats(self):
@@ -361,18 +355,9 @@ class PreviewText(object):
 
 
 @implementer(IStorageDirectoryNode)
-class Sections(ItemConversionStorage):
+class Sections(Hwp5FileDirectoryNode):
 
     section_class = VersionSensitiveItem
-
-    def __init__(self, stg, version):
-        ItemConversionStorage.__init__(self, stg)
-        self.version = version
-
-    def resolve_conversion_for(self, name):
-        def conversion(item):
-            return self.section_class(self.wrapped[name], self.version)
-        return conversion
 
     def other_formats(self):
         return dict()
@@ -404,7 +389,10 @@ class Sections(ItemConversionStorage):
 @implementer(IStorageStreamNode)
 class HwpFileHeader(object):
 
-    def __init__(self, item):
+    def __init__(self, hwp5file, parent, item):
+        self.hwp5file = hwp5file
+        self.__parent__ = parent
+        self.__name__ = item.__name__
         self.open = item.open
 
     def to_dict(self):
@@ -449,7 +437,7 @@ class HwpFileHeader(object):
         return {'.txt': self.open_text}
 
 
-class HwpSummaryInfo(VersionSensitiveItem):
+class HwpSummaryInfo(Hwp5FileStreamNode):
 
     def other_formats(self):
         return {'.txt': self.open_text}
@@ -562,7 +550,7 @@ class HwpSummaryInfo(VersionSensitiveItem):
 
 
 @implementer(IHwp5File)
-class Hwp5File(ItemConversionStorage):
+class Hwp5File(Hwp5FileDirectoryNode):
     ''' represents HWPv5 File
 
         Hwp5File(stg)
@@ -577,7 +565,13 @@ class Hwp5File(ItemConversionStorage):
             errormsg = 'Not an HWP Document format v5 storage.'
             raise InvalidHwp5FileError(errormsg)
 
-        ItemConversionStorage.__init__(self, stg)
+        self.__parent__ = None
+        self.__name__ = ''
+        self.wrapped = stg
+
+    @property
+    def hwp5file(self):
+        return self
 
     def close(self):
         self.wrapped.close()
@@ -587,49 +581,6 @@ class Hwp5File(ItemConversionStorage):
         return self['FileHeader']
 
     fileheader = header
-
-    def resolve_conversion_for(self, name):
-        fn = None
-
-        if name == 'FileHeader':
-            return HwpFileHeader
-
-        if self.header.flags.password:
-            # TODO: 현재로선 decryption이 구현되지 않았으므로,
-            # 레코드 파싱은 불가능하다. 적어도 encrypted stream에
-            # 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
-            if name in ('BinData', 'BodyText', 'Scripts', 'ViewText'):
-                return compose(PasswordProtectedStorage, fn)
-            elif name in ('DocInfo', ):
-                return compose(PasswordProtectedStream, fn)
-
-        if self.header.flags.distributable:
-            if name in ('Scripts', 'ViewText'):
-                fn = compose(Hwp5DistDocStorage, fn)
-
-        if self.header.flags.compressed:
-            if name in ('BinData', 'BodyText', 'ViewText'):
-                fn = compose(CompressedStorage, fn)
-            elif name == 'DocInfo':
-                fn = compose(CompressedStream, fn)
-            elif name == 'Scripts':
-                fn = compose(CompressedStorage, fn)
-
-        if name == 'DocInfo':
-            fn = compose(self.with_version(self.docinfo_class), fn)
-        if name == 'BodyText':
-            fn = compose(self.with_version(self.bodytext_class), fn)
-        if name == 'ViewText':
-            fn = compose(self.with_version(self.bodytext_class), fn)
-        if name == 'PrvText':
-            return compose(PreviewText, fn)
-        if name == '\005HwpSummaryInformation':
-            return compose(self.with_version(self.summaryinfo_class), fn)
-
-        return fn
-
-    def with_version(self, f):
-        return with_version(f, self.header.version)
 
     summaryinfo_class = HwpSummaryInfo
     docinfo_class = VersionSensitiveItem
@@ -663,36 +614,16 @@ class Hwp5File(ItemConversionStorage):
             return self.bodytext
 
 
-class with_version(object):
-
-    def __init__(self, fn, version):
-        self.fn = fn
-        self.version = version
-
-    def __call__(self, item):
-        return self.fn(item, self.version)
-
-    def __repr__(self):
-        return '{}{}'.format(
-            self.fn.__name__,
-            self.version,
-        )
-
-    @property
-    def __name__(self):
-        return self.__repr__()
-
-
 class compose(object):
 
     def __init__(self, outerfn, innerfn):
         self.outerfn = outerfn
         self.innerfn = innerfn
 
-    def __call__(self, x):
+    def __call__(self, hwp5file, parent, x):
         outerfn = self.outerfn
         innerfn = self.innerfn
-        return outerfn(innerfn(x))
+        return outerfn(hwp5file, parent, innerfn(hwp5file, parent, x))
 
     def __repr__(self):
         return 'compose({}, {})'.format(
@@ -705,14 +636,218 @@ class compose(object):
         return self.__repr__()
 
 
-_compose = compose
+#
+# Generic
+#
+
+nodeAdapterRegistry.registerAdapter(
+    Hwp5FileNode,
+    [Hwp5File, Hwp5FileDirectoryNode, IStorageNode],
+    IStorageNode,
+)
+
+nodeAdapterRegistry.registerAdapter(
+    Hwp5FileStreamNode,
+    [Hwp5File, Hwp5FileDirectoryNode, IStorageStreamNode],
+    IStorageNode,
+)
+
+nodeAdapterRegistry.registerAdapter(
+    Hwp5FileDirectoryNode,
+    [Hwp5File, Hwp5FileDirectoryNode, IStorageDirectoryNode],
+    IStorageNode,
+)
+
+#
+# Specializations: Compressed, DistDoc, Password
+#
+
+nodeAdapterRegistry.registerAdapter(
+    CompressedStream,
+    [Hwp5File, CompressedStorage, IStorageStreamNode],
+    IStorageNode,
+)
+
+nodeAdapterRegistry.registerAdapter(
+    Hwp5DistDocStream,
+    [Hwp5File, Hwp5DistDocStorage, IStorageStreamNode],
+    IStorageNode,
+)
+
+nodeAdapterRegistry.registerAdapter(
+    PasswordProtectedStream,
+    [Hwp5File, PasswordProtectedStorage, IStorageStreamNode],
+    IStorageNode,
+)
+
+#
+# Specialization: Text Sections
+#
 
 
-def compose(outerfn, innerfn):
-    if outerfn is None and innerfn is None:
-        raise ValueError()
-    if outerfn is None:
-        return innerfn
-    if innerfn is None:
-        return outerfn
-    return _compose(outerfn, innerfn)
+def adapt_text_section(hwp5file, parent, node):
+    return parent.section_class(hwp5file, parent, node)
+
+
+nodeAdapterRegistry.registerAdapter(
+    adapt_text_section,
+    [Hwp5File, Sections, IStorageStreamNode],
+    IStorageNode,
+)
+
+#
+# Specializations: Hwp5File
+#
+
+nodeAdapterRegistry.registerAdapter(
+    HwpFileHeader,
+    [Hwp5File, Hwp5File, IStorageStreamNode],
+    IStorageNode,
+    'FileHeader',
+)
+
+
+class if_password_protected(object):
+
+    def __init__(self, adapter, elseAdapter):
+        self.adapter = adapter
+        self.elseAdapter = elseAdapter
+
+    def __repr__(self):
+        return 'if_password_protected({}, {})'.format(
+            self.adapter.__name__,
+            self.elseAdapter.__name__,
+        )
+
+    @property
+    def __name__(self):
+        return self.__repr__()
+
+    def __call__(self, hwp5file, parent, node):
+        if hwp5file.header.flags.password:
+            return self.adapter(hwp5file, parent, node)
+        else:
+            return self.elseAdapter(hwp5file, parent, node)
+
+
+class if_(object):
+
+    def __init__(self, adapter):
+        self.adapter = adapter
+
+    def __repr__(self):
+        return '{}({})'.format(
+            type(self).__name__,
+            self.adapter.__name__,
+        )
+
+    @property
+    def __name__(self):
+        return self.__repr__()
+
+
+class if_distdoc(if_):
+
+    def __call__(self, hwp5file, parent, node):
+        if hwp5file.header.flags.distributable:
+            return self.adapter(hwp5file, parent, node)
+        else:
+            return node
+
+
+class if_compressed(if_):
+
+    def __call__(self, hwp5file, parent, node):
+        if hwp5file.header.flags.compressed:
+            return self.adapter(hwp5file, parent, node)
+        else:
+            return node
+
+
+def adapt_docinfo(hwp5file, parent, node):
+    return hwp5file.docinfo_class(hwp5file, parent, node)
+
+
+def adapt_bodytext(hwp5file, parent, node):
+    return hwp5file.bodytext_class(hwp5file, parent, node)
+
+
+def adapt_summaryinfo(hwp5file, parent, node):
+    return hwp5file.summaryinfo_class(hwp5file, parent, node)
+
+
+nodeAdapterRegistry.registerAdapter(
+    if_password_protected(PasswordProtectedStorage, compose(
+        if_compressed(CompressedStorage),
+        if_distdoc(Hwp5DistDocStorage),
+    )),
+    [Hwp5File, Hwp5File, IStorageDirectoryNode],
+    IStorageNode,
+    'Scripts',
+)
+
+
+# TODO: 현재로선 password decryption이 구현되지 않았으므로,
+# 레코드 파싱은 불가능하다. 적어도 encrypted stream에
+# 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
+
+nodeAdapterRegistry.registerAdapter(
+    if_password_protected(
+        PasswordProtectedStorage, compose(adapt_bodytext, compose(
+            if_compressed(CompressedStorage),
+            if_distdoc(Hwp5DistDocStorage),
+        ))
+    ),
+    [Hwp5File, Hwp5File, IStorageDirectoryNode],
+    IStorageNode,
+    'ViewText',
+)
+
+
+nodeAdapterRegistry.registerAdapter(
+    if_password_protected(
+        PasswordProtectedStorage,
+        if_compressed(CompressedStorage),
+    ),
+    [Hwp5File, Hwp5File, IStorageDirectoryNode],
+    IStorageNode,
+    'BinData',
+)
+
+
+nodeAdapterRegistry.registerAdapter(
+    if_password_protected(
+        PasswordProtectedStorage,
+        compose(adapt_bodytext, if_compressed(CompressedStorage)),
+    ),
+    [Hwp5File, Hwp5File, IStorageDirectoryNode],
+    IStorageNode,
+    'BodyText',
+)
+
+
+nodeAdapterRegistry.registerAdapter(
+    if_password_protected(
+        PasswordProtectedStream,
+        compose(adapt_docinfo, if_compressed(CompressedStream)),
+    ),
+    [Hwp5File, Hwp5File, IStorageStreamNode],
+    IStorageNode,
+    'DocInfo',
+)
+
+
+nodeAdapterRegistry.registerAdapter(
+    PreviewText,
+    [Hwp5File, Hwp5File, IStorageStreamNode],
+    IStorageNode,
+    'PrvText',
+)
+
+
+nodeAdapterRegistry.registerAdapter(
+    adapt_summaryinfo,
+    [Hwp5File, Hwp5File, IStorageStreamNode],
+    IStorageNode,
+    '\x05HwpSummaryInformation',
+)

@@ -78,8 +78,11 @@ class TestModelEventStream(TestBase):
 
     @cached_property
     def docinfo(self):
-        return ModelEventStream(self.hwp5file_bin['DocInfo'],
-                                self.hwp5file_bin.header.version)
+        return ModelEventStream(
+            self.hwp5file_bin,
+            self.hwp5file_bin,
+            self.hwp5file_bin['DocInfo'],
+        )
 
     def test_modelevents(self):
         self.assertEqual(len(list(self.docinfo.models())) * 2,
@@ -91,8 +94,11 @@ class TestDocInfo(TestBase):
 
     @cached_property
     def docinfo(self):
-        return DocInfo(self.hwp5file_bin['DocInfo'],
-                       self.hwp5file_bin.header.version)
+        return DocInfo(
+            self.hwp5file_bin,
+            self.hwp5file_bin,
+            self.hwp5file_bin['DocInfo'],
+        )
 
     def test_events(self):
         events = list(self.docinfo.events())
@@ -114,8 +120,11 @@ class TestDocInfo(TestBase):
 class TestSection(TestBase):
 
     def test_events(self):
-        section = Section(self.hwp5file_bin['BodyText']['Section0'],
-                          self.hwp5file_bin.fileheader.version)
+        section = Section(
+            self.hwp5file_bin,
+            self.hwp5file_bin['BodyText'],
+            self.hwp5file_bin['BodyText']['Section0'],
+        )
         events = list(section.events())
         ev, (tag, attrs, ctx) = events[0]
         self.assertEqual((STARTEVENT, SectionDef), (ev, tag))

@@ -11,10 +11,13 @@ import zlib
 from hwp5 import filestructure as FS
 from hwp5.errors import InvalidHwp5FileError
 from hwp5.filestructure import CompressedStorage
+from hwp5.filestructure import CompressedStream
 from hwp5.filestructure import Hwp5DistDocStream
 from hwp5.filestructure import Hwp5DistDocStorage
 from hwp5.filestructure import Hwp5File
 from hwp5.filestructure import Hwp5FileOpener
+from hwp5.filestructure import Hwp5FileStreamNode
+from hwp5.filestructure import Hwp5FileDirectoryNode
 from hwp5.filestructure import HwpFileHeader
 from hwp5.filestructure import PreviewText
 from hwp5.filestructure import Sections
@@ -99,9 +102,11 @@ class TestHwp5DistDocStream(TestBase):
 
     @cached_property
     def jscriptversion(self):
+        hwp5file = self.hwp5file
         return Hwp5DistDocStream(
+            hwp5file,
+            hwp5file['Scripts'],
             self.olestg['Scripts']['JScriptVersion'],
-            self.hwp5file.header.version
         )
 
     def test_head_record(self):
@@ -139,7 +144,12 @@ class TestHwp5DistDicStorage(TestBase):
 
     @cached_property
     def scripts(self):
-        return Hwp5DistDocStorage(self.olestg['Scripts'])
+        hwp5file = self.hwp5file
+        return Hwp5DistDocStorage(
+            hwp5file,
+            hwp5file,
+            self.olestg['Scripts']
+        )
 
     def test_scripts_other_formats(self):
         jscriptversion = self.scripts['JScriptVersion']
@@ -151,9 +161,7 @@ class TestHwp5DistDoc(TestBase):
     hwp5file_name = 'viewtext.hwp'
 
     def test_conversion_for(self):
-        conversion = self.hwp5file.resolve_conversion_for('Scripts')
-        scripts = self.olestg['Scripts']
-        scripts = conversion(scripts)
+        scripts = self.hwp5file['Scripts']
         self.assertTrue(
             isinstance(scripts.wrapped, Hwp5DistDocStorage)
         )
@@ -193,7 +201,8 @@ class TestHwp5DistDoc(TestBase):
 
 class TestCompressedStorage(TestBase):
     def test_getitem(self):
-        stg = FS.CompressedStorage(self.olestg['BinData'])
+        hwp5file = self.hwp5file
+        stg = CompressedStorage(hwp5file, hwp5file, self.olestg['BinData'])
         self.assertTrue(is_directory(stg))
 
         item = stg['BIN0002.jpg']
@@ -268,9 +277,12 @@ class TestHwp5File(TestBase):
 
     def test_getitem_storage_classes(self):
         hwp5file = self.hwp5file
-        self.assertTrue(isinstance(hwp5file['BinData'], FS.StorageWrapper))
-        self.assertTrue(isinstance(hwp5file['BodyText'], FS.Sections))
-        self.assertTrue(isinstance(hwp5file['Scripts'], FS.StorageWrapper))
+        self.assertTrue(isinstance(hwp5file['FileHeader'], HwpFileHeader))
+        self.assertTrue(isinstance(hwp5file['BinData'], Hwp5FileDirectoryNode))
+        self.assertTrue(isinstance(hwp5file['BodyText'], Sections))
+        self.assertTrue(isinstance(hwp5file['Scripts'], Hwp5FileDirectoryNode))
+        self.assertTrue(isinstance(hwp5file['PrvText'], PreviewText))
+        self.assertTrue(isinstance(hwp5file['PrvImage'], Hwp5FileStreamNode))
 
     def test_prv_text(self):
         prvtext = self.hwp5file['PrvText']
@@ -308,9 +320,6 @@ class TestHwp5File(TestBase):
         stg = ExtraItemStorage(self.hwp5file)
         self.assertTrue('PrvText.utf8' in list(stg))
 
-    def test_resolve_conversion_for_bodytext(self):
-        self.assertTrue(self.hwp5file.resolve_conversion_for('BodyText'))
-
     def test_docinfo(self):
         hwp5file = self.hwp5file
         self.assertTrue(isinstance(hwp5file.docinfo, FS.VersionSensitiveItem))
@@ -325,18 +334,12 @@ class TestHwp5File(TestBase):
 
     def test_bodytext(self):
         bodytext = self.hwp5file.bodytext
-        self.assertTrue(isinstance(bodytext, FS.Sections))
+        self.assertTrue(isinstance(bodytext, Sections))
+        self.assertTrue(isinstance(bodytext.wrapped, CompressedStorage))
         self.assertEqual(['Section0'], list(bodytext))
-
-
-class TestSections(TestBase):
-
-    @property
-    def sections(self):
-        return Sections(
-            self.hwp5file.stg['BodyText'],
-            self.hwp5file.header.version,
-        )
+        section0 = bodytext['Section0']
+        self.assertTrue(isinstance(section0, Hwp5FileStreamNode))
+        self.assertTrue(isinstance(section0.wrapped, CompressedStream))
 
 
 class TestGeneratorReader(TestCase):

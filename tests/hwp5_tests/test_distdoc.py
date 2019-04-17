@@ -26,7 +26,7 @@ class TestHwp5DistDocFunctions(TestBase):
     @property
     def section(self):
         section = self.olestg['ViewText']['Section0']
-        section = Hwp5DistDocStream(section, self.hwp5file.header.version)
+        section = Hwp5DistDocStream(None, None, section)
         return section
 
     def test_distdoc_decode_head_to_sha1(self):

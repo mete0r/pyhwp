@@ -973,8 +973,11 @@ class TestModelJson(TestBase):
 class TestModelStream(TestBase):
     @cached_property
     def docinfo(self):
-        return ModelStream(self.hwp5file_rec['DocInfo'],
-                           self.hwp5file_rec.header.version)
+        return ModelStream(
+            self.hwp5file_rec,
+            self.hwp5file_rec,
+            self.hwp5file_rec['DocInfo'],
+        )
 
     def test_models(self):
         self.assertEqual(67, len(list(self.docinfo.models())))
