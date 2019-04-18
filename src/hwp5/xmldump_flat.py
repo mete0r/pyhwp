@@ -19,6 +19,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+from binascii import b2a_hex
+import sys
 
 from .binmodel import ControlChar
 from .binmodel import ParaTextChunks
@@ -31,17 +33,22 @@ from .dataio import FlagsType
 from .dataio import SelectiveType
 from .dataio import StructType
 from .dataio import X_ARRAY
+from .filestructure import BYTES
 from .filestructure import FileHeader
 from .treeop import ENDEVENT
 from .treeop import STARTEVENT
 from .xmlformat import xmlevents_to_bytechunks
 
 
+if sys.version_info.major > 2:
+    unicode = str
+
+
 def xmldump_flat(hwp5file, output, xml_declaration=True):
     xmlevents = xmlevents_from_hwp5file(hwp5file)
     bytechunks = xmlevents_to_bytechunks(xmlevents)
     if xml_declaration:
-        output.write('<?xml version="1.0" encoding="utf-8"?>')
+        output.write(b'<?xml version="1.0" encoding="utf-8"?>')
     for x in bytechunks:
         output.write(x)
 
@@ -154,7 +161,6 @@ def xmlevents_from_modelevents(model_events):  # noqa
             elif ev is None:
                 atrs = {
                     'type': typename,
-                    'value': unicode(data['value'])
                 }
                 if 'name' in data:
                     atrs['name'] = data['name']
@@ -164,6 +170,21 @@ def xmlevents_from_modelevents(model_events):  # noqa
                     atrs['bin_value'] = unicode(data['bin_value'])
                 if 'bin_type' in data:
                     atrs['type'] = data['bin_type'].__name__
+                if datatype is ControlChar:
+                    atrs['value'] = unicode(data['value']['code'])
+                    if 'chid' in data['value']:
+                        atrs['value-chid'] = data['value']['chid']
+                    if 'param' in data['value']:
+                        atrs['value-param'] = b2a_hex(
+                            data['value']['param']
+                        ).decode('ascii')
+                elif isinstance(datatype, BYTES):
+                    atrs['value'] = b2a_hex(data['value']).decode('ascii')
+                elif issubclass(datatype, float):
+                    atrs['value'] = repr(data['value'])
+                else:
+                    atrs['value'] = unicode(data['value'])
+
                 yield STARTEVENT, ('item', atrs)
 
                 if isinstance(datatype, FlagsType):
@@ -171,7 +192,7 @@ def xmlevents_from_modelevents(model_events):  # noqa
                     b = bin(data['value'])[2:]
                     if len(b) < fixed_size * 8:
                         b = '0' * (fixed_size * 8 - len(b)) + b
-                    h = hex(data['value'])[2:]
+                    h = '{:08x}'.format(data['value'])
                     if len(h) < fixed_size * 2:
                         h = '0' * (fixed_size * 2 - len(h)) + h
                     if h.endswith('L'):
@@ -182,7 +203,11 @@ def xmlevents_from_modelevents(model_events):  # noqa
                     }
                     yield STARTEVENT, ('bitflags', atrs)
 
-                    for bitfield_name in datatype.bitfields:
+                    bitfields = sorted(
+                        datatype.bitfields.items(),
+                        key=lambda item: item[1].lsb,
+                    )
+                    for bitfield_name, desc in bitfields:
                         desc = datatype.bitfields[bitfield_name]
                         bitfield_type = desc.valuetype
                         value = desc.__get__(data['value'], None)

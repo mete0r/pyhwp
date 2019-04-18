@@ -472,7 +472,7 @@ class ModelStream(recordstream.RecordStream):
         return d
 
     def parse_model_events(self):
-        context = dict(version=self.version)
+        context = dict(version=self.hwp5file.header.version)
 
         def resolve_values_from_record(record):
             stream = BytesIO(record['payload'])
