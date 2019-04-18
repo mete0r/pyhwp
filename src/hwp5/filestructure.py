@@ -226,20 +226,6 @@ class PasswordProtectedStorage(Hwp5FileDirectoryNode):
 
 
 @implementer(IStorageStreamNode)
-class VersionSensitiveItem(Hwp5FileStreamNode):
-
-    @property
-    def version(self):
-        return self.hwp5file.header.version
-
-    def open(self):
-        return self.wrapped.open()
-
-    def other_formats(self):
-        return dict()
-
-
-@implementer(IStorageStreamNode)
 class Hwp5DistDocStream(Hwp5FileStreamNode):
 
     def open(self):
@@ -357,7 +343,7 @@ class PreviewText(object):
 @implementer(IStorageDirectoryNode)
 class Sections(Hwp5FileDirectoryNode):
 
-    section_class = VersionSensitiveItem
+    section_class = Hwp5FileStreamNode
 
     def other_formats(self):
         return dict()
@@ -583,7 +569,7 @@ class Hwp5File(Hwp5FileDirectoryNode):
     fileheader = header
 
     summaryinfo_class = HwpSummaryInfo
-    docinfo_class = VersionSensitiveItem
+    docinfo_class = Hwp5FileStreamNode
     bodytext_class = Sections
 
     @cached_property

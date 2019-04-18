@@ -628,7 +628,8 @@ class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
         models = self.models(**kwargs)
 
         # prepare modelevents context
-        kwargs.setdefault('version', self.version)
+        version = self.hwp5file.header.version
+        kwargs.setdefault('version', version)
         return prefix_binmodels_with_event(kwargs, models)
 
     def other_formats(self):

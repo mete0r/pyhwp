@@ -435,7 +435,8 @@ class ModelStream(recordstream.RecordStream):
 
     def models(self, **kwargs):
         # prepare binmodel parsing context
-        kwargs.setdefault('version', self.version)
+        version = self.hwp5file.header.version
+        kwargs.setdefault('version', version)
         try:
             kwargs.setdefault('path', self.path)
         except AttributeError:
@@ -452,7 +453,8 @@ class ModelStream(recordstream.RecordStream):
     def models_treegrouped(self, **kwargs):
         ''' iterable of iterable of the models, grouped by the top-level tree
         '''
-        kwargs.setdefault('version', self.version)
+        version = self.hwp5file.header.version
+        kwargs.setdefault('version', version)
         for group_idx, records in enumerate(self.records_treegrouped()):
             kwargs['treegroup'] = group_idx
             yield parse_models(kwargs, records)

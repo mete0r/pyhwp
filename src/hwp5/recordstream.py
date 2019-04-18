@@ -151,7 +151,7 @@ def group_records_by_toplevel(records, group_as_list=True):
         yield group
 
 
-class RecordStream(filestructure.VersionSensitiveItem):
+class RecordStream(filestructure.Hwp5FileStreamNode):
 
     def records(self, **kwargs):
         records = read_records(self.open())
