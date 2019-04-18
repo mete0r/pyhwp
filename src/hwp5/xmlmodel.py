@@ -27,6 +27,8 @@ import base64
 import logging
 import sys
 
+from zope.interface import implementer
+
 from . import binmodel
 from . import filestructure
 from .binmodel.controls import SectionDef
@@ -49,7 +51,10 @@ from .binmodel import ControlChar
 from .binmodel import Control
 from .charsets import tokenize_unicode_by_lang
 from .dataio import Struct
+from .filestructure import nodeAdapterRegistry
 from .filestructure import VERSION
+from .interfaces import INodeEventGenerator
+from .interfaces import IXmlEventGenerator
 from .treeop import STARTEVENT, ENDEVENT
 from .treeop import prefix_event
 from .treeop import build_subtree
@@ -579,11 +584,11 @@ def modelevents_to_xmlevents(modelevents):
 
 class XmlEvents(object):
 
-    def __init__(self, events):
-        self.events = events
+    def __init__(self, node_events):
+        self.node_events = node_events
 
     def __iter__(self):
-        return modelevents_to_xmlevents(self.events)
+        return modelevents_to_xmlevents(self.node_events)
 
     def bytechunks(self, xml_declaration=True, **kwargs):
         encoding = kwargs.get('xml_encoding', 'utf-8')
@@ -616,31 +621,10 @@ class XmlEvents(object):
         return tmpfile
 
 
-class XmlEventsMixin(object):
+@implementer(INodeEventGenerator)
+class HwpSummaryInfo(filestructure.HwpSummaryInfo):
 
-    def xmlevents(self, **kwargs):
-        return XmlEvents(self.events(**kwargs))
-
-
-class ModelEventStream(binmodel.ModelStream, XmlEventsMixin):
-
-    def modelevents(self, **kwargs):
-        models = self.models(**kwargs)
-
-        # prepare modelevents context
-        version = self.hwp5file.header.version
-        kwargs.setdefault('version', version)
-        return prefix_binmodels_with_event(kwargs, models)
-
-    def other_formats(self):
-        d = super(ModelEventStream, self).other_formats()
-        d['.xml'] = self.xmlevents().open
-        return d
-
-
-class HwpSummaryInfo(filestructure.HwpSummaryInfo, XmlEventsMixin):
-
-    def events(self, **context):
+    def node_events(self, **context):
         generator = PropertySetStreamModelEventsGenerator(context)
         events = generator.generateModelEvents(self.propertySetStream)
         element = HwpSummaryInfo, {}, context
@@ -729,21 +713,60 @@ class PropertySetStreamModelEventsGenerator(object):
         return wrap_modelevents(element, ())
 
 
-class DocInfo(ModelEventStream):
+def generate_modelstream_events(modelstream, **kwargs):
+    models = modelstream.models(**kwargs)
+    version = modelstream.hwp5file.header.version
+    kwargs.setdefault('version', version)
+    return prefix_binmodels_with_event(kwargs, models)
 
-    def events(self, **kwargs):
+
+@implementer(INodeEventGenerator)
+class DocInfo(binmodel.ModelStream):
+
+    def node_events(self, **kwargs):
+        return DocInfoEventGenerator(self).node_events(**kwargs)
+
+    def other_formats(self):
+        d = super(DocInfo, self).other_formats()
+        d['.xml'] = XmlEventGenerator(self).xmlevents().open
+        return d
+
+
+@implementer(INodeEventGenerator)
+class DocInfoEventGenerator(object):
+
+    def __init__(self, modelstream):
+        self.modelstream = modelstream
+
+    def node_events(self, **kwargs):
         docinfo = DocInfo, dict(), dict()
-        events = self.modelevents(**kwargs)
+        events = generate_modelstream_events(self.modelstream, **kwargs)
         if 'embedbin' in kwargs:
             events = embed_bindata(events, kwargs['embedbin'])
         events = wrap_modelevents(docinfo, events)
         return events
 
 
-class Section(ModelEventStream):
+@implementer(INodeEventGenerator)
+class Section(binmodel.ModelStream):
 
-    def events(self, **kwargs):
-        events = self.modelevents(**kwargs)
+    def node_events(self, **kwargs):
+        return SectionEventGenerator(self).node_events(**kwargs)
+
+    def other_formats(self):
+        d = super(Section, self).other_formats()
+        d['.xml'] = XmlEventGenerator(self).xmlevents().open
+        return d
+
+
+@implementer(INodeEventGenerator)
+class SectionEventGenerator(object):
+
+    def __init__(self, modelstream):
+        self.modelstream = modelstream
+
+    def node_events(self, **kwargs):
+        events = generate_modelstream_events(self.modelstream, **kwargs)
 
         events = make_texts_linesegmented_and_charshaped(events)
         events = make_extended_controls_inline(events)
@@ -761,16 +784,17 @@ class Section(ModelEventStream):
         return events
 
 
-class Sections(binmodel.Sections, XmlEventsMixin):
+@implementer(INodeEventGenerator)
+class Sections(binmodel.Sections):
 
     section_class = Section
 
-    def events(self, **kwargs):
+    def node_events(self, **kwargs):
         bodytext_events = []
         for idx in self.section_indexes():
             kwargs['section_idx'] = idx
             section = self.section(idx)
-            events = section.events(**kwargs)
+            events = section.node_events(**kwargs)
             bodytext_events.append(events)
 
         class BodyText(object):
@@ -781,7 +805,7 @@ class Sections(binmodel.Sections, XmlEventsMixin):
 
     def other_formats(self):
         d = super(Sections, self).other_formats()
-        d['.xml'] = self.xmlevents().open
+        d['.xml'] = XmlEventGenerator(self).xmlevents().open
         return d
 
 
@@ -792,21 +816,22 @@ class HwpDoc(Struct):
     attributes = staticmethod(attributes)
 
 
-class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
+@implementer(INodeEventGenerator)
+class Hwp5File(binmodel.Hwp5File):
 
     summaryinfo_class = HwpSummaryInfo
     docinfo_class = DocInfo
     bodytext_class = Sections
 
-    def events(self, **kwargs):
+    def node_events(self, **kwargs):
         if 'embedbin' in kwargs and kwargs['embedbin'] and 'BinData' in self:
             kwargs['embedbin'] = self['BinData']
         else:
             kwargs.pop('embedbin', None)
 
-        events = chain(self.summaryinfo.events(**kwargs),
-                       self.docinfo.events(**kwargs),
-                       self.text.events(**kwargs))
+        events = chain(self.summaryinfo.node_events(**kwargs),
+                       self.docinfo.node_events(**kwargs),
+                       self.text.node_events(**kwargs))
 
         hwpdoc = HwpDoc, dict(version=self.header.version), dict()
         events = wrap_modelevents(hwpdoc, events)
@@ -815,3 +840,21 @@ class Hwp5File(binmodel.Hwp5File, XmlEventsMixin):
         events = give_elements_unique_id(events)
 
         return events
+
+
+@implementer(IXmlEventGenerator)
+class XmlEventGenerator(object):
+
+    def __init__(self, nodeEventGenerator):
+        self.nodeEventGenerator = nodeEventGenerator
+
+    def xmlevents(self, **kwargs):
+        nodeEvents = self.nodeEventGenerator.node_events(**kwargs)
+        return XmlEvents(nodeEvents)
+
+
+nodeAdapterRegistry.registerAdapter(
+    XmlEventGenerator,
+    [INodeEventGenerator],
+    IXmlEventGenerator,
+)

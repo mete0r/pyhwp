@@ -172,6 +172,20 @@ class IAES128ECB(Interface):
         '''
 
 
+class INodeEventGenerator(Interface):
+
+    def node_events(**kwargs):
+        '''
+        '''
+
+
+class IXmlEventGenerator(Interface):
+
+    def xmlevents(**kwargs):
+        '''
+        '''
+
+
 class IRelaxNG(Interface):
 
     def validating_output(output_stream):

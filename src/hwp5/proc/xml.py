@@ -36,13 +36,14 @@ from ..utils import syntaxhighlight
 from ..utils import xmllint
 from ..xmldump_flat import xmldump_flat
 from ..xmlmodel import Hwp5File
+from ..xmlmodel import XmlEventGenerator
 
 
 logger = logging.getLogger(__name__)
 
 
 def xmldump_nested(hwp5file, output, embedbin=False, xml_declaration=True):
-    dump = hwp5file.xmlevents(embedbin=embedbin).dump
+    dump = XmlEventGenerator(hwp5file).xmlevents(embedbin=embedbin).dump
     dump = partial(dump, xml_declaration=xml_declaration)
     dump(output)
 

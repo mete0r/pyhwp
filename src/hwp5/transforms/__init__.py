@@ -24,6 +24,7 @@ import logging
 
 from ..utils import hwp5_resources_path
 from ..utils import mkstemp_open
+from ..xmlmodel import XmlEventGenerator
 
 
 logger = logging.getLogger(__name__)
@@ -49,5 +50,6 @@ class BaseTransform:
     @contextmanager
     def transformed_xhwp5_at_temp(self, hwp5file):
         with mkstemp_open() as (tmp_path, f):
-            hwp5file.xmlevents(embedbin=self.embedbin).dump(f)
+            xmlevent_gen = XmlEventGenerator(hwp5file)
+            xmlevent_gen.xmlevents(embedbin=self.embedbin).dump(f)
             yield tmp_path

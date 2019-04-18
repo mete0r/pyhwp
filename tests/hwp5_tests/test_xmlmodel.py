@@ -24,9 +24,9 @@ from hwp5.treeop import STARTEVENT, ENDEVENT
 from hwp5.utils import cached_property
 from hwp5.xmlmodel import DocInfo
 from hwp5.xmlmodel import Hwp5File
-from hwp5.xmlmodel import ModelEventStream
 from hwp5.xmlmodel import Section
 from hwp5.xmlmodel import XmlEvents
+from hwp5.xmlmodel import XmlEventGenerator
 from hwp5.xmlmodel import embed_bindata
 from hwp5.xmlmodel import line_segmented
 from hwp5.xmlmodel import make_ranged_shapes
@@ -74,22 +74,6 @@ class TestXmlEvents(TestBase):
         self.assertTrue(b'&#13;' in xml)
 
 
-class TestModelEventStream(TestBase):
-
-    @cached_property
-    def docinfo(self):
-        return ModelEventStream(
-            self.hwp5file_bin,
-            self.hwp5file_bin,
-            self.hwp5file_bin['DocInfo'],
-        )
-
-    def test_modelevents(self):
-        self.assertEqual(len(list(self.docinfo.models())) * 2,
-                         len(list(self.docinfo.modelevents())))
-        # print len(list(self.docinfo.modelevents()))
-
-
 class TestDocInfo(TestBase):
 
     @cached_property
@@ -100,17 +84,17 @@ class TestDocInfo(TestBase):
             self.hwp5file_bin['DocInfo'],
         )
 
-    def test_events(self):
-        events = list(self.docinfo.events())
+    def test_node_events(self):
+        events = list(self.docinfo.node_events())
         self.assertEqual(136, len(events))
         # print len(events)
 
         # without embedbin, no <text> is embedded
         self.assertTrue('<text>' not in events[4][1][1]['bindata'])
 
-    def test_events_with_embedbin(self):
+    def test_node_events_with_embedbin(self):
         bindata = self.hwp5file_bin['BinData']
-        events = list(self.docinfo.events(embedbin=bindata))
+        events = list(self.docinfo.node_events(embedbin=bindata))
         self.assertTrue('<text>' in events[4][1][1]['bindata'])
         self.assertEqual(bindata['BIN0002.jpg'].open().read(),
                          base64.b64decode(events[4][1][1]
@@ -119,13 +103,13 @@ class TestDocInfo(TestBase):
 
 class TestSection(TestBase):
 
-    def test_events(self):
+    def test_node_events(self):
         section = Section(
             self.hwp5file_bin,
             self.hwp5file_bin['BodyText'],
             self.hwp5file_bin['BodyText']['Section0'],
         )
-        events = list(section.events())
+        events = list(section.node_events())
         ev, (tag, attrs, ctx) = events[0]
         self.assertEqual((STARTEVENT, SectionDef), (ev, tag))
         self.assertFalse('section-id' in attrs)
@@ -146,17 +130,17 @@ class TestHwp5File(TestBase):
         self.assertTrue(isinstance(self.hwp5file.docinfo, DocInfo))
 
     def test_events(self):
-        list(self.hwp5file.events())
+        list(self.hwp5file.node_events())
 
     def test_events_embedbin_without_bindata(self):
         # see issue 76: https://github.com/mete0r/pyhwp/issues/76
         self.hwp5file_name = 'parashape.hwp'  # an hwp5file without BinData
         hwp5file = self.hwp5file
         self.assertTrue('BinData' not in hwp5file)
-        list(hwp5file.events(embedbin=True))
+        list(hwp5file.node_events(embedbin=True))
 
     def test_xmlevents(self):
-        events = iter(self.hwp5file.xmlevents())
+        events = iter(XmlEventGenerator(self.hwp5file).xmlevents())
         ev = next(events)
         self.assertEqual((STARTEVENT,
                           ('HwpDoc', dict(version='5.0.1.7'))), ev)
@@ -164,7 +148,7 @@ class TestHwp5File(TestBase):
 
     def test_xmlevents_dump(self):
         with io.open(self.id() + '.xml', 'wb+') as outfile:
-            self.hwp5file.xmlevents().dump(outfile)
+            XmlEventGenerator(self.hwp5file).xmlevents().dump(outfile)
 
             outfile.seek(0)
             doc = ElementTree.parse(outfile)
@@ -306,7 +290,8 @@ class TestMatchFieldStartEnd(TestCase):
         olestorage_opener = createOleStorageOpener(None)
         olestorage = olestorage_opener.open_storage(path)
         hwp5file = xmlmodel.Hwp5File(olestorage)
-        xmlevents = hwp5file.bodytext.xmlevents()
+        xmlevent_gen = XmlEventGenerator(hwp5file.bodytext)
+        xmlevents = xmlevent_gen.xmlevents()
         # pprint(list(enumerate(xmlevents)))
 
         stack_fields = []
