@@ -26,6 +26,5 @@ sphinx-argparse==0.2.5
 sphinx-intl==0.9.11
 sphinx==1.8.5
 sphinxcontrib-websupport==1.1.0  # via sphinx
-typing==3.6.6             # via sphinx
-urllib3==1.24.1           # via requests
+urllib3==1.24.2           # via requests
 zope.interface==4.6.0     # via repoze.sphinx.autointerface
