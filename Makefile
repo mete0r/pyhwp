@@ -122,7 +122,7 @@ notebook:
 
 .PHONY: test
 test:
-	$(VENV) tox --parallel 8 -e py27,py34,py35,py36,py37,pypy,pypy3
+	$(VENV) tox --parallel 2 -e py27,py38
 
 .PHONY: test-report
 test-report:
