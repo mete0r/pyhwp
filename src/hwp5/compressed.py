@@ -68,4 +68,10 @@ def decompress(stream):
         stream: a file-like readable
         returns a file-like readable
     '''
-    return BytesIO(zlib.decompress(stream.read(), -15))  # without gzip header
+    data=stream.read()
+    try:
+        res=BytesIO(zlib.decompress(data, -15))  # without gzip header
+    except zlib.error:
+        res=BytesIO(data)
+
+    return res
