@@ -192,7 +192,7 @@ def xmlevents_from_modelevents(model_events):  # noqa
                             'name': bitfield_name,
                             'msb': unicode(desc.msb),
                             'lsb': unicode(desc.lsb),
-                            'value': unicode(value)
+                            'value': unicode(int(value))
                         }
                         yield STARTEVENT, ('bits', atrs)
 
