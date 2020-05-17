@@ -67,7 +67,7 @@ def get_version():
 
 
 def get_long_description():
-    long_description = readfile('README')
+    long_description = readfile('README') + '\n' + readfile('CHANGES')
     return long_description
 
 
