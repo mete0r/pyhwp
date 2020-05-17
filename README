@@ -25,7 +25,9 @@ Requirements
 ------------
 
 - Python 2.7, 3.5, 3.6, 3.7 or 3.8
-- `lxml <https://pypi.org/project/lxml>`_ (optional)
+- `cryptography <https://pypi.org/project/cryptography>`_
+- `lxml <https://pypi.org/project/lxml>`_
+- `olefile <https://pypi.org/project/olefile>`_
 
 Documentation & Development
 ---------------------------
