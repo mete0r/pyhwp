@@ -5,6 +5,7 @@ CHANGES
 -------------------
 
 - Replace docopt with argparse.
+- Workaround for BinData decompression (#175, #176)
 
 
 0.1b12 (2019-04-08)
