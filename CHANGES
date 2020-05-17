@@ -4,7 +4,7 @@ CHANGES
 0.1b14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix xmldump_flat for Python 3.8
 
 
 0.1b13 (2020-05-17)
