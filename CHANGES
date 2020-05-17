@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-0.1b13 (unreleased)
+0.1b13 (2020-05-17)
 -------------------
 
 - Replace docopt with argparse.
