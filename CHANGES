@@ -4,7 +4,8 @@ CHANGES
 0.1b15 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Unknown Numbering.Kind value of 6, which is not described in the official
+  specification docs, has been added. See #177.
 
 
 0.1b14 (2020-05-17)
