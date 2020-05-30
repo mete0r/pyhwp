@@ -30,7 +30,10 @@ from hwp5.binmodel.controls._shared import Control
 
 
 class NumberingControl(Control):
-    Kind = Enum(PAGE=0, FOOTNOTE=1, ENDNOTE=2, PICTURE=3, TABLE=4, EQUATION=5)
+    Kind = Enum(
+            PAGE=0, FOOTNOTE=1, ENDNOTE=2, PICTURE=3, TABLE=4, EQUATION=5,
+            UNKNOWN6=6,
+    )
     Flags = Flags(UINT32,
                   0, 3, Kind, 'kind',
                   4, 11, 'footnoteshape',
