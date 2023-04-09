@@ -12,7 +12,7 @@ babel==2.12.1
     # via
     #   sphinx
     #   sphinx-intl
-certifi==2020.4.5.1
+certifi==2022.12.7
     # via requests
 chardet==3.0.4
     # via requests
