@@ -1,5 +1,5 @@
 argcomplete
-babel
+babel >= 2.12.1
 colorlog
 jip
 jupyter

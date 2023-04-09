@@ -18,7 +18,7 @@ attrs==19.3.0
     # via
     #   jsonschema
     #   pytest
-babel==2.8.0
+babel==2.12.1
     # via
     #   -r requirements/dev.in
     #   sphinx
@@ -233,8 +233,6 @@ pytest==4.6.9
     # via -r requirements/test.in
 python-dateutil==2.8.1
     # via jupyter-client
-pytz==2020.1
-    # via babel
 pyzmq==19.0.0
     # via
     #   jupyter-client
