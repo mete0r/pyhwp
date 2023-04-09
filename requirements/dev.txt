@@ -19,6 +19,8 @@ argon2-cffi==21.3.0
     #   notebook
 argon2-cffi-bindings==21.2.0
     # via argon2-cffi
+asttokens==2.2.1
+    # via stack-data
 attrs==19.3.0
     # via jsonschema
 babel==2.12.1
@@ -80,6 +82,8 @@ docutils==0.16
     #   sphinx
 entrypoints==0.3
     # via flake8
+executing==1.2.0
+    # via stack-data
 fastjsonschema==2.16.3
     # via nbformat
 filelock==3.11.0
@@ -106,7 +110,7 @@ ipykernel==5.2.1
     #   nbclassic
     #   notebook
     #   qtconsole
-ipython==7.14.0
+ipython==8.12.0
     # via
     #   ipykernel
     #   ipywidgets
@@ -181,6 +185,8 @@ markupsafe==2.1.2
     # via
     #   jinja2
     #   nbconvert
+matplotlib-inline==0.1.6
+    # via ipython
 mccabe==0.6.1
     # via flake8
 mistune==2.0.5
@@ -250,7 +256,7 @@ prometheus-client==0.7.1
     #   jupyter-server
     #   nbclassic
     #   notebook
-prompt-toolkit==3.0.5
+prompt-toolkit==3.0.38
     # via
     #   ipython
     #   jupyter-console
@@ -258,6 +264,8 @@ ptyprocess==0.6.0
     # via
     #   pexpect
     #   terminado
+pure-eval==0.2.2
+    # via stack-data
 pycodestyle==2.5.0
     # via flake8
 pycparser==2.20
@@ -364,6 +372,8 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.4
     # via sphinx
+stack-data==0.6.2
+    # via ipython
 terminado==0.8.3
     # via
     #   jupyter-server
@@ -403,6 +413,7 @@ traitlets==5.9.0
     #   jupyter-core
     #   jupyter-events
     #   jupyter-server
+    #   matplotlib-inline
     #   nbclassic
     #   nbclient
     #   nbconvert
@@ -411,6 +422,8 @@ traitlets==5.9.0
     #   qtconsole
 twine==3.1.1
     # via zest-releaser
+typing-extensions==4.5.0
+    # via ipython
 urllib3==1.26.15
     # via
     #   -r requirements/dev.in
