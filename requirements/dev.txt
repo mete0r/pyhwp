@@ -109,7 +109,7 @@ jinja2==3.1.2
     #   nbconvert
     #   notebook
     #   sphinx
-jip==0.9.13
+jip==0.9.16
     # via -r requirements/dev.in
 jsonschema==3.2.0
     # via nbformat

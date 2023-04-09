@@ -1,7 +1,7 @@
 argcomplete
 babel >= 2.12.1
 colorlog
-jip
+jip >= 0.9.16
 jupyter
 lxml
 notebook >= 5.7.8
