@@ -830,7 +830,7 @@ find 명령
    usage: hwp5proc find [-h] [--from-stdin]
                         [--model <model-name> | --tag <hwptag>] [--incomplete]
                         [--format <format>] [--dump]
-                        [<hwp5files> [<hwp5files> ...]]
+                        [<hwp5files> ...]
    
    Find record models with specified predicates.
    
@@ -2797,7 +2797,7 @@ xml 명령
      </BodyText>
    </HwpDoc>
 
-   $ hwp5proc xml samples/sample-5017.hwp | xmllint --xpath '//PictureInfo' - | sed -e 's/>/>\n/g'
+   $ hwp5proc xml samples/sample-5017.hwp | xmllint --xpath '//PictureInfo' -
    <PictureInfo attribute-name="picture" bindata-id="1" brightness="0" contrast="0" effect="0"/>
    <PictureInfo attribute-name="picture" bindata-id="2" brightness="0" contrast="0" effect="0"/>
 
