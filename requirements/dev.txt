@@ -12,12 +12,8 @@ appdirs==1.4.3
     # via virtualenv
 argcomplete==1.11.1
     # via -r requirements/dev.in
-atomicwrites==1.4.0
-    # via pytest
 attrs==19.3.0
-    # via
-    #   jsonschema
-    #   pytest
+    # via jsonschema
 babel==2.12.1
     # via
     #   -r requirements/dev.in
@@ -146,10 +142,6 @@ mccabe==0.6.1
     # via flake8
 mistune==0.8.4
     # via nbconvert
-more-itertools==5.0.0
-    # via
-    #   -r requirements/test.in
-    #   pytest
 nbconvert==5.6.1
     # via
     #   jupyter
@@ -170,7 +162,6 @@ packaging==20.3
     # via
     #   bleach
     #   build
-    #   pytest
     #   sphinx
     #   tox
 pandocfilters==1.4.2
@@ -188,9 +179,7 @@ pip-tools==6.13.0
 pkginfo==1.5.0.1
     # via twine
 pluggy==0.13.1
-    # via
-    #   pytest
-    #   tox
+    # via tox
 prometheus-client==0.7.1
     # via notebook
 prompt-toolkit==3.0.5
@@ -202,9 +191,7 @@ ptyprocess==0.6.0
     #   pexpect
     #   terminado
 py==1.8.1
-    # via
-    #   pytest
-    #   tox
+    # via tox
 pycodestyle==2.5.0
     # via flake8
 pycparser==2.20
@@ -229,8 +216,6 @@ pyroma==2.6
     # via -r requirements/lint.in
 pyrsistent==0.16.0
     # via jsonschema
-pytest==4.6.9
-    # via -r requirements/test.in
 python-dateutil==2.8.1
     # via jupyter-client
 pyzmq==19.0.0
@@ -268,10 +253,8 @@ six==1.14.0
     # via
     #   bleach
     #   jsonschema
-    #   more-itertools
     #   packaging
     #   pyrsistent
-    #   pytest
     #   python-dateutil
     #   readme-renderer
     #   tox
@@ -345,9 +328,7 @@ urllib3==1.25.9
 virtualenv==20.0.20
     # via tox
 wcwidth==0.1.9
-    # via
-    #   prompt-toolkit
-    #   pytest
+    # via prompt-toolkit
 webencodings==0.5.1
     # via bleach
 wheel==0.34.2

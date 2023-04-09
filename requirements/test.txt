@@ -4,10 +4,6 @@
 #
 #    pip-compile --output-file=requirements/test.txt requirements.in requirements/test.in
 #
-atomicwrites==1.4.0
-    # via pytest
-attrs==19.3.0
-    # via pytest
 cffi==1.14.0
     # via cryptography
 coverage==5.1
@@ -16,28 +12,7 @@ cryptography==40.0.1 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 lxml==4.9.2 ; platform_python_implementation != "Jython"
     # via -r requirements.in
-more-itertools==5.0.0
-    # via
-    #   -r requirements/test.in
-    #   pytest
 olefile==0.46 ; platform_python_implementation != "Jython"
     # via -r requirements.in
-packaging==20.3
-    # via pytest
-pluggy==0.13.1
-    # via pytest
-py==1.8.1
-    # via pytest
 pycparser==2.20
     # via cffi
-pyparsing==2.4.7
-    # via packaging
-pytest==4.6.9
-    # via -r requirements/test.in
-six==1.14.0
-    # via
-    #   more-itertools
-    #   packaging
-    #   pytest
-wcwidth==0.1.9
-    # via pytest
