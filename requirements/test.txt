@@ -6,7 +6,7 @@
 #
 cffi==1.14.0
     # via cryptography
-coverage==5.1
+coverage==7.2.3
     # via -r requirements/test.in
 cryptography==40.0.1 ; platform_python_implementation != "Jython"
     # via -r requirements.in

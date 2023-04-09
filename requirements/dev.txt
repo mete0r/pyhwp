@@ -43,7 +43,7 @@ colorama==0.4.3
     # via zest-releaser
 colorlog==4.1.0
     # via -r requirements/dev.in
-coverage==5.1
+coverage==7.2.3
     # via -r requirements/test.in
 cryptography==40.0.1 ; platform_python_implementation != "Jython"
     # via
