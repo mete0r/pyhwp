@@ -4,7 +4,8 @@ CHANGES
 0.1b16 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- [CVE-2023-0286] Depends on cryptography >= 40.0.1
+- [CVE-2022-2309] Depends on lxml >= 4.9,2
 
 
 0.1b15 (2020-05-30)
