@@ -354,9 +354,10 @@ wheel==0.34.2
     # via
     #   -r requirements/dev.in
     #   pip-tools
+    #   zc-buildout
 widgetsnbextension==3.5.1
     # via ipywidgets
-zc-buildout==2.13.3
+zc-buildout==3.0.1
     # via -r requirements/dev.in
 zest-releaser==6.20.1
     # via -r requirements/dev.in
