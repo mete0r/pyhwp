@@ -5,7 +5,7 @@ jip
 jupyter
 lxml
 notebook >= 5.7.8
-pip-tools >= 2.0.2
+pip-tools >= 6.13.0
 requests >= 2.20.0
 restview
 tox >= 3.7.0
