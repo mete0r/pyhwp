@@ -12,6 +12,7 @@
 /.jip
 /.jip_index
 /.tox
+/.venv
 /bin
 /build
 /develop-eggs

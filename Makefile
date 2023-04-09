@@ -50,7 +50,7 @@ PIP_NO_INDEX:=--no-index
 endif
 
 FIND_LINKS?=
-VENV	:= . bin/activate &&
+VENV	:= . .venv/bin/activate &&
 
 
 .PHONY: all
