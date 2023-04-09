@@ -412,7 +412,7 @@ traitlets==5.9.0
     #   qtconsole
 twine==3.1.1
     # via zest-releaser
-urllib3==1.25.9
+urllib3==1.26.15
     # via
     #   -r requirements/dev.in
     #   requests
