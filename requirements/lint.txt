@@ -20,7 +20,7 @@ pycodestyle==2.5.0
     # via flake8
 pyflakes==2.1.1
     # via flake8
-pygments==2.6.1
+pygments==2.14.0
     # via pyroma
 pyroma==2.6
     # via -r requirements/lint.in
