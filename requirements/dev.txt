@@ -49,7 +49,7 @@ colorlog==4.1.0
     # via -r requirements/dev.in
 coverage==5.1
     # via -r requirements/test.in
-cryptography==2.9.2 ; platform_python_implementation != "Jython"
+cryptography==40.0.1 ; platform_python_implementation != "Jython"
     # via
     #   -r requirements.in
     #   secretstorage
@@ -269,7 +269,6 @@ send2trash==1.5.0
 six==1.14.0
     # via
     #   bleach
-    #   cryptography
     #   jsonschema
     #   more-itertools
     #   packaging

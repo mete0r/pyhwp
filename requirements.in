@@ -1,3 +1,3 @@
-cryptography ; platform_python_implementation != "Jython"
+cryptography >= 40.0.1 ; platform_python_implementation != "Jython"
 lxml >= 4.9.2 ; platform_python_implementation != "Jython"
 olefile >= 0.43 ; platform_python_implementation != "Jython"
