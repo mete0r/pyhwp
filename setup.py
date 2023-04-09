@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 #   pyhwp : hwp file format parser in python
-#   Copyright (C) 2010-2018 mete0r <mete0r@sarangbang.or.kr>
+#   Copyright (C) 2010-2023 mete0r <https://github.com/mete0r>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Affero General Public License as published by
@@ -128,7 +128,7 @@ setup_info = {
     # authorative
 
     'author': 'mete0r',
-    'author_email': 'mete0r@sarangbang.or.kr',
+    'author_email': '137794+mete0r@users.noreply.github.com',
     'license': 'GNU Affero General Public License v3 or later (AGPLv3+)',
     'url': 'https://github.com/mete0r/pyhwp',
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #   pyhwp.zestreleaser.cmds: A zest.releaser plugin to provide command hooks
-#   Copyright (C) 2013  mete0r@sarangbang.or.kr
+#   Copyright (C) 2013  https://github.com/mete0r
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by

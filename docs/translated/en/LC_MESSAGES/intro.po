@@ -138,7 +138,7 @@ msgstr ""
 
 # d64dabb371984d2ba250f37e220aa39a
 #: ../../intro.rst:48
-msgid "Copyright (C) 2010-2015 mete0r <mete0r@sarangbang.or.kr>"
+msgid "Copyright (C) 2010-2023 mete0r <https://github.com/mete0r>"
 msgstr ""
 
 # 32ed7d69ae9f4bf5bff4e8d68c113f4c

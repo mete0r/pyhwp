@@ -1,5 +1,5 @@
 # Translations template for pyhwp.
-# Copyright (C) 2019 mete0r@sarangbang.or.kr
+# Copyright (C) 2019 https://github.com/mete0r
 # This file is distributed under the same license as the pyhwp project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pyhwp 0.1b13.dev0\n"
-"Report-Msgid-Bugs-To: mete0r@sarangbang.or.kr\n"
+"Report-Msgid-Bugs-To: https://github.com/mete0r\n"
 "POT-Creation-Date: 2019-04-10 22:55+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
