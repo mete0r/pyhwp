@@ -4,364 +4,420 @@
 #
 #    pip-compile --output-file=requirements/dev.txt requirements.in requirements/dev.in requirements/docs.in requirements/lint.in requirements/test.in
 #
-alabaster==0.7.12
-    # via
-    #   -r requirements/docs.in
-    #   sphinx
-appdirs==1.4.3
-    # via virtualenv
-argcomplete==1.11.1
+anyio==3.6.2
+    # via jupyter-server
+argcomplete==3.0.5
     # via -r requirements/dev.in
-atomicwrites==1.4.0
-    # via pytest
+argon2-cffi==21.3.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+argon2-cffi-bindings==21.2.0
+    # via argon2-cffi
+arrow==1.2.3
+    # via isoduration
+asttokens==2.2.1
+    # via stack-data
 attrs==19.3.0
-    # via
-    #   jsonschema
-    #   pytest
+    # via jsonschema
 babel==2.12.1
-    # via
-    #   -r requirements/dev.in
-    #   sphinx
-    #   sphinx-intl
-backcall==0.1.0
+    # via -r requirements/dev.in
+backcall==0.2.0
     # via ipython
-bleach==3.1.5
+beautifulsoup4==4.12.2
+    # via nbconvert
+bleach==6.0.0
     # via
     #   nbconvert
     #   readme-renderer
 build==0.10.0
     # via pip-tools
+cachetools==5.3.0
+    # via tox
 certifi==2022.12.7
     # via requests
-cffi==1.14.0
-    # via cryptography
-chardet==3.0.4
+cffi==1.15.1
+    # via
+    #   argon2-cffi-bindings
+    #   cryptography
+chardet==5.1.0
+    # via tox
+charset-normalizer==3.1.0
     # via requests
-check-manifest==0.42
-    # via -r requirements/lint.in
 click==8.1.3
+    # via pip-tools
+colorama==0.4.6
     # via
-    #   pip-tools
-    #   sphinx-intl
-colorama==0.4.3
-    # via zest-releaser
-colorlog==4.1.0
+    #   tox
+    #   zest-releaser
+colorlog==6.7.0
     # via -r requirements/dev.in
-coverage==5.1
-    # via -r requirements/test.in
-cryptography==40.0.1 ; platform_python_implementation != "Jython"
-    # via
-    #   -r requirements.in
-    #   secretstorage
-decorator==4.4.2
-    # via
-    #   ipython
-    #   traitlets
-defusedxml==0.6.0
+comm==0.1.3
+    # via ipykernel
+cryptography==40.0.1
+    # via secretstorage
+debugpy==1.6.7
+    # via ipykernel
+decorator==5.1.1
+    # via ipython
+defusedxml==0.7.1
     # via nbconvert
-distlib==0.3.0
+distlib==0.3.6
     # via virtualenv
-docutils==0.16
+docutils==0.19
     # via
-    #   pyroma
     #   readme-renderer
     #   restview
-    #   sphinx
-entrypoints==0.3
-    # via
-    #   flake8
-    #   nbconvert
-filelock==3.0.12
+executing==1.2.0
+    # via stack-data
+fastjsonschema==2.16.3
+    # via nbformat
+filelock==3.11.0
     # via
     #   tox
     #   virtualenv
-flake8==3.7.9
-    # via -r requirements/lint.in
-idna==2.9
-    # via requests
-imagesize==1.2.0
-    # via sphinx
-ipykernel==5.2.1
+fqdn==1.5.1
+    # via jsonschema
+idna==3.4
+    # via
+    #   anyio
+    #   jsonschema
+    #   requests
+importlib-metadata==6.2.0
+    # via
+    #   keyring
+    #   twine
+ipykernel==6.22.0
     # via
     #   ipywidgets
     #   jupyter
     #   jupyter-console
+    #   nbclassic
     #   notebook
     #   qtconsole
-ipython==7.14.0
+ipython==8.12.0
     # via
     #   ipykernel
     #   ipywidgets
     #   jupyter-console
 ipython-genutils==0.2.0
     # via
-    #   nbformat
+    #   nbclassic
     #   notebook
     #   qtconsole
-    #   traitlets
-ipywidgets==7.5.1
+ipywidgets==8.0.6
     # via jupyter
-jedi==0.17.0
+isoduration==20.11.0
+    # via jsonschema
+jaraco-classes==3.2.3
+    # via keyring
+jedi==0.18.2
     # via ipython
-jeepney==0.4.3
+jeepney==0.8.0
     # via
     #   keyring
     #   secretstorage
-jinja2==2.11.2
+jinja2==3.1.2
     # via
-    #   -r requirements/docs.in
+    #   jupyter-server
+    #   nbclassic
     #   nbconvert
     #   notebook
-    #   sphinx
-jip==0.9.13
+jip==0.9.16
     # via -r requirements/dev.in
-jsonschema==3.2.0
-    # via nbformat
+jsonpointer==2.3
+    # via jsonschema
+jsonschema[format-nongpl]==4.17.3
+    # via
+    #   jupyter-events
+    #   nbformat
 jupyter==1.0.0
     # via -r requirements/dev.in
-jupyter-client==6.1.3
+jupyter-client==8.1.0
     # via
     #   ipykernel
     #   jupyter-console
+    #   jupyter-server
+    #   nbclassic
+    #   nbclient
     #   notebook
     #   qtconsole
-jupyter-console==6.1.0
+jupyter-console==6.6.3
     # via jupyter
-jupyter-core==4.6.3
+jupyter-core==5.3.0
     # via
+    #   ipykernel
     #   jupyter-client
+    #   jupyter-console
+    #   jupyter-server
+    #   nbclassic
+    #   nbclient
     #   nbconvert
     #   nbformat
     #   notebook
     #   qtconsole
-keyring==21.2.1
-    # via twine
-lxml==4.9.2 ; platform_python_implementation != "Jython"
+jupyter-events==0.6.3
+    # via jupyter-server
+jupyter-server==2.5.0
     # via
-    #   -r requirements.in
-    #   -r requirements/dev.in
-markupsafe==1.1.1
-    # via jinja2
-mccabe==0.6.1
-    # via flake8
-mistune==0.8.4
+    #   nbclassic
+    #   notebook-shim
+jupyter-server-terminals==0.4.4
+    # via jupyter-server
+jupyterlab-pygments==0.2.2
+    # via nbconvert
+jupyterlab-widgets==3.0.7
+    # via ipywidgets
+keyring==23.13.1
+    # via twine
+lxml==4.9.2
+    # via -r requirements/dev.in
+markdown-it-py==2.2.0
+    # via rich
+markupsafe==2.1.2
+    # via
+    #   jinja2
+    #   nbconvert
+matplotlib-inline==0.1.6
+    # via
+    #   ipykernel
+    #   ipython
+mdurl==0.1.2
+    # via markdown-it-py
+mistune==2.0.5
     # via nbconvert
 more-itertools==5.0.0
-    # via
-    #   -r requirements/test.in
-    #   pytest
-nbconvert==5.6.1
+    # via jaraco-classes
+nbclassic==0.5.5
+    # via notebook
+nbclient==0.7.3
+    # via nbconvert
+nbconvert==7.3.0
     # via
     #   jupyter
+    #   jupyter-server
+    #   nbclassic
     #   notebook
-nbformat==5.0.6
+nbformat==5.8.0
     # via
-    #   ipywidgets
+    #   jupyter-server
+    #   nbclassic
+    #   nbclient
     #   nbconvert
     #   notebook
-notebook==6.0.3
+nest-asyncio==1.5.6
+    # via
+    #   ipykernel
+    #   nbclassic
+    #   notebook
+notebook==6.5.4
     # via
     #   -r requirements/dev.in
     #   jupyter
-    #   widgetsnbextension
-olefile==0.46 ; platform_python_implementation != "Jython"
-    # via -r requirements.in
-packaging==20.3
+notebook-shim==0.2.2
+    # via nbclassic
+packaging==23.0
     # via
-    #   bleach
     #   build
-    #   pytest
-    #   sphinx
+    #   ipykernel
+    #   jupyter-server
+    #   nbconvert
+    #   pyproject-api
+    #   qtconsole
+    #   qtpy
     #   tox
-pandocfilters==1.4.2
+pandocfilters==1.5.0
     # via nbconvert
-parso==0.7.0
+parso==0.8.3
     # via jedi
-pep517==0.8.2
-    # via check-manifest
 pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
 pip-tools==6.13.0
     # via -r requirements/dev.in
-pkginfo==1.5.0.1
+pkginfo==1.9.6
     # via twine
-pluggy==0.13.1
+platformdirs==3.2.0
     # via
-    #   pytest
+    #   jupyter-core
     #   tox
-prometheus-client==0.7.1
-    # via notebook
-prompt-toolkit==3.0.5
+    #   virtualenv
+pluggy==1.0.0
+    # via tox
+prometheus-client==0.16.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+prompt-toolkit==3.0.38
     # via
     #   ipython
     #   jupyter-console
-ptyprocess==0.6.0
+psutil==5.9.4
+    # via ipykernel
+ptyprocess==0.7.0
     # via
     #   pexpect
     #   terminado
-py==1.8.1
-    # via
-    #   pytest
-    #   tox
-pycodestyle==2.5.0
-    # via flake8
-pycparser==2.20
+pure-eval==0.2.2
+    # via stack-data
+pycparser==2.21
     # via cffi
-pyflakes==2.1.1
-    # via flake8
 pygments==2.14.0
     # via
     #   ipython
     #   jupyter-console
     #   nbconvert
-    #   pyroma
     #   qtconsole
     #   readme-renderer
     #   restview
-    #   sphinx
-pyparsing==2.4.7
-    # via packaging
+    #   rich
+pyproject-api==1.5.1
+    # via tox
 pyproject-hooks==1.0.0
     # via build
-pyroma==2.6
-    # via -r requirements/lint.in
-pyrsistent==0.16.0
+pyrsistent==0.19.3
     # via jsonschema
-pytest==4.6.9
-    # via -r requirements/test.in
-python-dateutil==2.8.1
-    # via jupyter-client
-pyzmq==19.0.0
+python-dateutil==2.8.2
     # via
+    #   arrow
     #   jupyter-client
+python-json-logger==2.0.7
+    # via jupyter-events
+pyyaml==6.0
+    # via jupyter-events
+pyzmq==25.0.2
+    # via
+    #   ipykernel
+    #   jupyter-client
+    #   jupyter-console
+    #   jupyter-server
+    #   nbclassic
     #   notebook
     #   qtconsole
-qtconsole==4.7.3
+qtconsole==5.4.2
     # via jupyter
-qtpy==1.9.0
+qtpy==2.3.1
     # via qtconsole
-readme-renderer==26.0
+readme-renderer==36.0
     # via
     #   restview
     #   twine
-repoze-sphinx-autointerface==0.8
-    # via -r requirements/docs.in
-requests==2.23.0
+requests==2.28.2
     # via
     #   -r requirements/dev.in
     #   jip
     #   requests-toolbelt
-    #   sphinx
     #   twine
     #   zest-releaser
-requests-toolbelt==0.9.1
+requests-toolbelt==0.10.1
     # via twine
-restview==2.9.2
+restview==3.0.1
     # via -r requirements/dev.in
-secretstorage==3.1.2
+rfc3339-validator==0.1.4
+    # via
+    #   jsonschema
+    #   jupyter-events
+rfc3986==2.0.0
+    # via twine
+rfc3986-validator==0.1.1
+    # via
+    #   jsonschema
+    #   jupyter-events
+rich==13.3.3
+    # via twine
+secretstorage==3.3.3
     # via keyring
-send2trash==1.5.0
-    # via notebook
+send2trash==1.8.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
 six==1.14.0
     # via
+    #   asttokens
     #   bleach
-    #   jsonschema
     #   more-itertools
-    #   packaging
-    #   pyrsistent
-    #   pytest
     #   python-dateutil
-    #   readme-renderer
-    #   tox
-    #   traitlets
-    #   virtualenv
-    #   zest-releaser
-snowballstemmer==2.0.0
-    # via sphinx
-sphinx==3.0.3
+    #   rfc3339-validator
+sniffio==1.3.0
+    # via anyio
+soupsieve==2.4
+    # via beautifulsoup4
+stack-data==0.6.2
+    # via ipython
+terminado==0.17.1
     # via
-    #   -r requirements/docs.in
-    #   repoze-sphinx-autointerface
-    #   sphinx-argparse
-    #   sphinx-intl
-sphinx-argparse==0.2.5
-    # via -r requirements/docs.in
-sphinx-intl==2.0.1
-    # via -r requirements/docs.in
-sphinxcontrib-applehelp==1.0.2
-    # via sphinx
-sphinxcontrib-devhelp==1.0.2
-    # via sphinx
-sphinxcontrib-htmlhelp==1.0.3
-    # via sphinx
-sphinxcontrib-jsmath==1.0.1
-    # via sphinx
-sphinxcontrib-qthelp==1.0.3
-    # via sphinx
-sphinxcontrib-serializinghtml==1.1.4
-    # via sphinx
-terminado==0.8.3
-    # via notebook
-testpath==0.4.4
+    #   jupyter-server
+    #   jupyter-server-terminals
+    #   nbclassic
+    #   notebook
+tinycss2==1.2.1
     # via nbconvert
-toml==0.10.0
-    # via
-    #   check-manifest
-    #   pep517
-    #   tox
-tomli==2.0.1
-    # via
-    #   build
-    #   pyproject-hooks
-tornado==6.0.4
+tornado==6.2
     # via
     #   ipykernel
     #   jupyter-client
+    #   jupyter-server
+    #   nbclassic
     #   notebook
     #   terminado
-tox==3.15.0
+tox==4.4.11
     # via -r requirements/dev.in
-tqdm==4.46.0
-    # via twine
-traitlets==4.3.3
+traitlets==5.9.0
     # via
+    #   comm
     #   ipykernel
     #   ipython
     #   ipywidgets
     #   jupyter-client
+    #   jupyter-console
     #   jupyter-core
+    #   jupyter-events
+    #   jupyter-server
+    #   matplotlib-inline
+    #   nbclassic
+    #   nbclient
     #   nbconvert
     #   nbformat
     #   notebook
     #   qtconsole
-twine==3.1.1
+twine==4.0.2
     # via zest-releaser
-urllib3==1.25.9
+uri-template==1.2.0
+    # via jsonschema
+urllib3==1.26.15
     # via
     #   -r requirements/dev.in
     #   requests
-virtualenv==20.0.20
+    #   twine
+virtualenv==20.21.0
     # via tox
 wcwidth==0.1.9
-    # via
-    #   prompt-toolkit
-    #   pytest
+    # via prompt-toolkit
+webcolors==1.13
+    # via jsonschema
 webencodings==0.5.1
-    # via bleach
-wheel==0.34.2
+    # via
+    #   bleach
+    #   tinycss2
+websocket-client==1.5.1
+    # via jupyter-server
+wheel==0.40.0
     # via
     #   -r requirements/dev.in
     #   pip-tools
-widgetsnbextension==3.5.1
+    #   zc-buildout
+widgetsnbextension==4.0.7
     # via ipywidgets
-zc-buildout==2.13.3
+zc-buildout==3.0.1
     # via -r requirements/dev.in
-zest-releaser==6.20.1
+zest-releaser==7.3.0
     # via -r requirements/dev.in
-zope-interface==5.1.0
-    # via repoze-sphinx-autointerface
+zipp==3.15.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
