@@ -14,7 +14,7 @@ coverage==5.1
     # via -r requirements/test.in
 cryptography==2.9.2 ; platform_python_implementation != "Jython"
     # via -r requirements.in
-lxml==4.5.0 ; platform_python_implementation != "Jython"
+lxml==4.9.2 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 more-itertools==5.0.0
     # via

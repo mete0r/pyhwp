@@ -136,7 +136,7 @@ jupyter-core==4.6.3
     #   qtconsole
 keyring==21.2.1
     # via twine
-lxml==4.5.0 ; platform_python_implementation != "Jython"
+lxml==4.9.2 ; platform_python_implementation != "Jython"
     # via
     #   -r requirements.in
     #   -r requirements/dev.in

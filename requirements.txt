@@ -10,7 +10,7 @@ cffi==1.12.2
     # via cryptography
 cryptography==2.6.1 ; platform_python_implementation != "Jython"
     # via -r requirements.in
-lxml==4.2.4 ; platform_python_implementation != "Jython"
+lxml==4.9.2 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 olefile==0.44 ; platform_python_implementation != "Jython"
     # via -r requirements.in
