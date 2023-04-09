@@ -30,7 +30,7 @@ backcall==0.1.0
     # via ipython
 beautifulsoup4==4.12.2
     # via nbconvert
-bleach==3.1.5
+bleach==6.0.0
     # via
     #   nbconvert
     #   readme-renderer
@@ -218,7 +218,6 @@ olefile==0.46 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 packaging==23.0
     # via
-    #   bleach
     #   build
     #   jupyter-server
     #   nbconvert
