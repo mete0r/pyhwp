@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
     # via
-    #   -r requirements/docs.in
+    #   -r docs.in
     #   sphinx
 babel==2.12.1
     # via
@@ -26,18 +26,18 @@ imagesize==1.2.0
     # via sphinx
 jinja2==3.1.2
     # via
-    #   -r requirements/docs.in
+    #   -r docs.in
     #   sphinx
 markupsafe==2.1.2
     # via jinja2
 packaging==20.3
     # via sphinx
-pygments==2.6.1
+pygments==2.7.4
     # via sphinx
 pyparsing==2.4.7
     # via packaging
 repoze-sphinx-autointerface==0.8
-    # via -r requirements/docs.in
+    # via -r docs.in
 requests==2.23.0
     # via sphinx
 six==1.14.0
@@ -46,14 +46,14 @@ snowballstemmer==2.0.0
     # via sphinx
 sphinx==3.0.3
     # via
-    #   -r requirements/docs.in
+    #   -r docs.in
     #   repoze-sphinx-autointerface
     #   sphinx-argparse
     #   sphinx-intl
 sphinx-argparse==0.4.0
-    # via -r requirements/docs.in
+    # via -r docs.in
 sphinx-intl==2.0.1
-    # via -r requirements/docs.in
+    # via -r docs.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
