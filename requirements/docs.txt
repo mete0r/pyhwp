@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via
     #   -r requirements/docs.in
     #   sphinx
-babel==2.8.0
+babel==2.12.1
     # via
     #   sphinx
     #   sphinx-intl
@@ -36,8 +36,6 @@ pygments==2.6.1
     # via sphinx
 pyparsing==2.4.7
     # via packaging
-pytz==2020.1
-    # via babel
 repoze-sphinx-autointerface==0.8
     # via -r requirements/docs.in
 requests==2.23.0
