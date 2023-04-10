@@ -8,17 +8,15 @@ check-manifest==0.42
     # via -r requirements/lint.in
 docutils==0.16
     # via pyroma
-entrypoints==0.3
-    # via flake8
-flake8==3.7.9
+flake8==6.0.0
     # via -r requirements/lint.in
-mccabe==0.6.1
+mccabe==0.7.0
     # via flake8
 pep517==0.8.2
     # via check-manifest
-pycodestyle==2.5.0
+pycodestyle==2.10.0
     # via flake8
-pyflakes==2.1.1
+pyflakes==3.0.1
     # via flake8
 pygments==2.14.0
     # via pyroma
