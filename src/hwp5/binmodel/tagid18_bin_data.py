@@ -64,7 +64,7 @@ class BinData(RecordModel):
     Flags = Flags(UINT16,
                   0, 3, StorageType, 'storage',
                   4, 5, CompressionType, 'compression',
-                  16, 17, AccessState, 'access')
+                  8, 9, AccessState, 'access')
 
     def attributes(cls):
         ''' 표 12 바이너리 데이터 '''
