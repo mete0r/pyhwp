@@ -1,6 +1,6 @@
 alabaster >= 0.7.10
 jinja2 >= 3.1.2
-repoze.sphinx.autointerface
-sphinx >= 1.5
+repoze.sphinx.autointerface >= 1.0.0
+sphinx >= 7.0.1
 sphinx-argparse >= 0.4.0
 sphinx-intl

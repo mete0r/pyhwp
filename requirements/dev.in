@@ -1,6 +1,6 @@
-argcomplete
+argcomplete >= 3.0.8
 babel >= 2.12.1
-colorlog
+colorlog >= 6.7.0
 jip >= 0.9.16
 jupyter
 lxml

@@ -68,19 +68,19 @@ update-requirements: $(REQUIREMENTS_FILES)
 	$(VENV) pip-sync $(FIND_LINKS) $(PIP_NO_INDEX) requirements/dev.txt
 
 requirements.txt: $(REQUIREMENTS_IN)
-	$(VENV)	pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
+	$(VENV)	pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) --resolver=backtracking $(pip-compile-options) -o $@ $^
 
 requirements/test.txt: $(REQUIREMENTS_IN_TEST)
-	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
+	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) --resolver=backtracking $(pip-compile-options) -o $@ $^
 
 requirements/lint.txt: $(REQUIREMENTS_IN_LINT)
-	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
+	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) --resolver=backtracking $(pip-compile-options) -o $@ $^
 
 requirements/docs.txt: $(REQUIREMENTS_IN_DOCS)
-	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
+	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) --resolver=backtracking $(pip-compile-options) -o $@ $^
 
 requirements/dev.txt: $(REQUIREMENTS_IN_DEV)
-	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) $(pip-compile-options) -o $@ $^
+	$(VENV) pip-compile $(FIND_LINKS) $(PIP_NO_INDEX) --resolver=backtracking $(pip-compile-options) -o $@ $^
 
 
 .PHONY: extract-messages
