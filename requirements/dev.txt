@@ -312,7 +312,7 @@ readme-renderer==26.0
     #   twine
 repoze-sphinx-autointerface==1.0.0
     # via -r requirements/docs.in
-requests==2.28.2
+requests==2.31.0
     # via
     #   -r requirements/dev.in
     #   jip

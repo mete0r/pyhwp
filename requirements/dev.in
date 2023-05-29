@@ -6,7 +6,7 @@ jupyter
 lxml
 notebook >= 6.5.4
 pip-tools >= 6.13.0
-requests >= 2.28.2
+requests >= 2.31.0
 restview
 tox >= 4.5.2
 urllib3 >= 1.26.15
