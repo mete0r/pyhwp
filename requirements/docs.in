@@ -3,4 +3,4 @@ jinja2 >= 3.1.2
 repoze.sphinx.autointerface >= 1.0.0
 sphinx >= 7.0.1
 sphinx-argparse >= 0.4.0
-sphinx-intl
+sphinx-intl >= 2.1.0
