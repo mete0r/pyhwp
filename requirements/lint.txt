@@ -4,14 +4,26 @@
 #
 #    pip-compile --output-file=requirements/lint.txt --resolver=backtracking requirements/lint.in
 #
+build==0.10.0
+    # via pyroma
+certifi==2023.5.7
+    # via requests
+charset-normalizer==3.1.0
+    # via requests
 check-manifest==0.42
     # via -r requirements/lint.in
 docutils==0.16
     # via pyroma
 flake8==6.0.0
     # via -r requirements/lint.in
+idna==3.4
+    # via requests
 mccabe==0.7.0
     # via flake8
+packaging==23.1
+    # via
+    #   build
+    #   pyroma
 pep517==0.8.2
     # via check-manifest
 pycodestyle==2.10.0
@@ -20,12 +32,20 @@ pyflakes==3.0.1
     # via flake8
 pygments==2.14.0
     # via pyroma
-pyroma==2.6
+pyproject-hooks==1.0.0
+    # via build
+pyroma==4.2
     # via -r requirements/lint.in
+requests==2.31.0
+    # via pyroma
 toml==0.10.0
     # via
     #   check-manifest
     #   pep517
+trove-classifiers==2023.5.24
+    # via pyroma
+urllib3==2.0.2
+    # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
