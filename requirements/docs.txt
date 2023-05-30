@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements/docs.txt --resolver=backtracking requirements/docs.in
 #
-alabaster==0.7.12
+alabaster==0.7.13
     # via
     #   -r requirements/docs.in
     #   sphinx
@@ -23,8 +23,6 @@ docutils==0.20.1
 idna==2.9
     # via requests
 imagesize==1.4.1
-    # via sphinx
-importlib-metadata==6.6.0
     # via sphinx
 jinja2==3.1.2
     # via
@@ -66,8 +64,6 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 urllib3==1.26.15
     # via requests
-zipp==3.15.0
-    # via importlib-metadata
 zope-interface==5.1.0
     # via repoze-sphinx-autointerface
 
