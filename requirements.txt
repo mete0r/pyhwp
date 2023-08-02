@@ -6,7 +6,7 @@
 #
 cffi==1.12.2
     # via cryptography
-cryptography==40.0.1 ; platform_python_implementation != "Jython"
+cryptography==41.0.3 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 lxml==4.9.2 ; platform_python_implementation != "Jython"
     # via -r requirements.in
