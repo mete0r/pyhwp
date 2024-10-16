@@ -113,6 +113,10 @@ def main_argparser():
         '--logfile',
         help=_('Set log file.'),
     )
+    parser.add_argument(
+        '--password',
+        help=_('Set password for encrypted files.'),
+    )
     subcommands = parser.add_subparsers(
         title=_('subcommands'),
         description=_('valid subcommands'),
