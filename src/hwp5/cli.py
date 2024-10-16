@@ -86,10 +86,13 @@ def init_with_environ():
 
 def open_hwpfile(args):
     filename = args.hwp5file
+    password = ""
+    if args.password:
+        password = args.password
     if args.ole:
         hwpfile = OleStorage(filename)
     else:
-        hwpfile = Hwp5File(filename)
+        hwpfile = Hwp5File(filename, password)
         if args.vstreams:
             hwpfile = ExtraItemStorage(hwpfile)
     return hwpfile

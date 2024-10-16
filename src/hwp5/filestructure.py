@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 from io import BytesIO
 import logging
 import sys
+import zlib
 
 from .bintype import read_type
 from .compressed import decompress
@@ -37,7 +38,11 @@ from .summaryinfo import CLSID_HWP_SUMMARY_INFORMATION
 from .utils import GeneratorTextReader
 from .utils import cached_property
 from .utils import transcoder
+from .utils import pad
+from .utils import decrypt_data
+from .utils import genkey
 
+PASSWORD = ""
 PY3 = sys.version_info.major == 3
 if PY3:
     basestring = str
@@ -134,13 +139,19 @@ class CompressedStorage(StorageWrapper):
 class PasswordProtectedStream(ItemWrapper):
 
     def open(self):
-        # TODO: 현재로선 암호화된 내용을 그냥 반환
-        logger.warning('Password-encrypted stream: currently decryption is '
-                       'not supported')
-        return self.wrapped.open()
+        pwd = genkey(PASSWORD.encode())
+        data = self.wrapped.open().read()
+        decrypted_stream = decrypt_data(pwd, pad(data))
+        try:
+            stream = zlib.decompress(decrypted_stream, -15)
+        except Exception as e:
+            logger.warning("Couldn't decrypt stream - probably bad password")
+            return self.wrapped.open()
+        return BytesIO(stream)
 
 
 class PasswordProtectedStorage(StorageWrapper):
+
     def __getitem__(self, name):
         item = self.wrapped[name]
         if is_stream(item):
@@ -533,15 +544,13 @@ class Hwp5File(ItemConversionStorage):
         stg: an instance of Storage
     '''
 
-    def __init__(self, stg):
+    def __init__(self, stg, password: str = ""):
         stg = Hwp5FileBase(stg)
 
         if stg.header.flags.password:
+            global PASSWORD
+            PASSWORD = password
             stg = Hwp5PasswordProtectedDoc(stg)
-
-            # TODO: 현재로선 decryption이 구현되지 않았으므로,
-            # 레코드 파싱은 불가능하다. 적어도 encrypted stream에
-            # 직접 접근은 가능하도록, 다음 레이어들은 bypass한다.
             ItemConversionStorage.__init__(self, stg)
             return
 
