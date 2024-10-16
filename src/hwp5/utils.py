@@ -29,6 +29,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from Crypto.Cipher import AES
+import hashlib
 
 from .importhelper import pkg_resources_filename
 
@@ -419,3 +421,96 @@ def unlink_or_warning(path):
     except Exception as e:
         logger.exception(e)
         logger.warning('%s cannot be deleted', path)
+
+
+# NOTE - credit to junorouse -- their hwp-password-recover project contained the following functions
+# https://github.com/junorouse/hwp-password-recover
+
+
+def pad(s: bytes):
+    block_size = 16
+    size_of_last_block = len(s) % block_size
+    padding_amount = block_size - size_of_last_block
+    pad_bytes = bytes([padding_amount] * padding_amount)
+    return s + pad_bytes
+
+
+class AESCipher:
+    def __init__(self, key):
+        self.key = key
+
+    def encrypt(self, raw):
+        cipher = AES.new(self.key, AES.MODE_ECB)
+        return cipher.encrypt(raw)
+
+    def decrypt(self, enc):
+        cipher = AES.new(self.key, AES.MODE_ECB)
+        return cipher.decrypt(enc)
+
+
+def decrypt_data(pwd: bytes, data: bytearray):
+    TMP_IN = bytearray(16)
+    final_data = bytearray()
+
+    for kkk in range(0, len(data), 16):
+
+        REAL_INPUT = bytearray(data[kkk:kkk+16])
+
+        for i in range(128):
+
+            AAA = AESCipher(pwd).encrypt(TMP_IN)
+            OUT = AAA[0]
+
+            ff = i & 7
+
+            tmp = 1
+            for j in range(3):
+                v14 = TMP_IN[tmp]
+
+                TMP_IN[tmp-1] = ((2 * TMP_IN[tmp-1]) & 0xff) | (TMP_IN[tmp] >> 7)
+                v15 = TMP_IN[tmp+1]
+                v16 = ((2 * v14) & 0xff) | (TMP_IN[tmp+1] >> 7)
+
+                v17 = TMP_IN[tmp+2]
+                TMP_IN[tmp] = v16
+                v18 = ((2 * v15) & 0xff) | (v17 >> 7)
+
+                v19 = TMP_IN[tmp+3]
+                TMP_IN[tmp+1] = v18
+                v20 = ((2 * v17) & 0xff) | (v19 >> 7)
+
+                v21 = ((2 * v19) & 0xff) | (TMP_IN[tmp+4] >> 7)
+
+                TMP_IN[tmp+2] = v20
+                TMP_IN[tmp+3] = v21
+
+                tmp += 5
+
+            TMP_IN[15] = ((2 * TMP_IN[15]) & 0xff) | (REAL_INPUT[i >> 3] >> (7 - ff)) & 1
+
+            REAL_INPUT[i >> 3] ^= (OUT & 0x80) >> (i & 7)
+
+        final_data.extend(REAL_INPUT)
+
+    return final_data
+
+
+def genkey(pwd: bytes) -> bytes:
+    buf = bytearray(160)
+    password = bytearray(pwd)
+
+    for i in range(0, len(password)):
+        if i:
+            v6 = password[i-1]
+        else:
+            v6 = 0xec
+
+        v7 = (2 * v6 | (v6 >> 7)) & 0xff
+
+        buf[i*2] = v7
+        buf[i*2+1] = password[i]
+
+    sha1 = hashlib.sha1()
+    sha1.update(buf[0:len(password)*2])
+    h = sha1.digest()
+    return h[0:16]
