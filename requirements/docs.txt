@@ -19,7 +19,9 @@ charset-normalizer==3.1.0
 click==7.1.2
     # via sphinx-intl
 docutils==0.20.1
-    # via sphinx
+    # via
+    #   sphinx
+    #   sphinx-argparse
 idna==2.9
     # via requests
 imagesize==1.4.1
@@ -48,7 +50,7 @@ sphinx==7.0.1
     #   repoze-sphinx-autointerface
     #   sphinx-argparse
     #   sphinx-intl
-sphinx-argparse==0.4.0
+sphinx-argparse==0.5.2
     # via -r requirements/docs.in
 sphinx-intl==2.1.0
     # via -r requirements/docs.in
