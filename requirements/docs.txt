@@ -38,7 +38,7 @@ pygments==2.19.2
     #   sphinx
 repoze-sphinx-autointerface==1.0.0
     # via -r requirements/docs.in
-requests==2.28.2
+requests==2.32.5
     # via sphinx
 snowballstemmer==2.0.0
     # via sphinx
