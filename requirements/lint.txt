@@ -46,7 +46,7 @@ toml==0.10.0
     #   pep517
 trove-classifiers==2026.1.14.14
     # via pyroma
-urllib3==2.6.3
+urllib3==1.26.20
     # via requests
 
 # The following packages are considered to be unsafe in a requirements file:

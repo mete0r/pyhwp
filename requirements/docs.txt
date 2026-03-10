@@ -64,7 +64,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-urllib3==1.26.15
+urllib3==1.26.20
     # via requests
 zope-interface==5.1.0
     # via repoze-sphinx-autointerface
