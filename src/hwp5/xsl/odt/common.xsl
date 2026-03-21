@@ -714,7 +714,7 @@
 
   <xsl:template mode="style-style-for-paragraph-and-text" match="Paragraph">
     <xsl:variable name="style-id" select="@style-id + 1" />
-    <xsl:variable name="style" select="//Style[$style-id]"/>
+    <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
 
     <xsl:apply-templates mode="style:style" select="." />
 
@@ -750,7 +750,7 @@
         <xsl:attribute name="style:name">
           <xsl:value-of select="$style-name" />
         </xsl:attribute>
-        <xsl:apply-templates select="//CharShape[$charshape-id]" mode="style:text-properties" />
+        <xsl:apply-templates select="/HwpDoc/DocInfo/IdMappings/CharShape[$charshape-id]" mode="style:text-properties" />
       </xsl:element>
     </xsl:if>
   </xsl:template>
@@ -758,10 +758,10 @@
   <xsl:template mode="style:style" match="Paragraph">
     <xsl:variable name="paragraph-id" select="@paragraph-id + 1"/>
     <xsl:variable name="style-id" select="@style-id + 1" />
-    <xsl:variable name="style" select="//Style[$style-id]"/>
+    <xsl:variable name="style" select="/HwpDoc/DocInfo/IdMappings/Style[$style-id]"/>
     <xsl:variable name="style-parashape-id" select="$style/@parashape-id + 1"/>
     <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
-    <xsl:variable name="parashape" select="//ParaShape[$parashape-id]"/>
+    <xsl:variable name="parashape" select="/HwpDoc/DocInfo/IdMappings/ParaShape[$parashape-id]"/>
     <xsl:if test="$style-parashape-id != $parashape-id or @new-page = '1'">
       <xsl:element name="style:style">
         <xsl:attribute name="style:family">paragraph</xsl:attribute>
@@ -844,7 +844,7 @@
       <style:tab-stops> 17.7
     -->
     <xsl:variable name="parashape-id" select="@parashape-id + 1"/>
-    <xsl:variable name="parashape" select="//ParaShape[$parashape-id]"/>
+    <xsl:variable name="parashape" select="/HwpDoc/DocInfo/IdMappings/ParaShape[$parashape-id]"/>
     <xsl:element name="style:paragraph-properties">
       <xsl:apply-templates mode="style-paragraph-properties-common" select="$parashape" />
       <xsl:if test="@new-page = '1'">
