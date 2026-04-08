@@ -4,9 +4,9 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
-cffi==1.12.2
+cffi==2.0.0
     # via cryptography
-cryptography==40.0.1 ; platform_python_implementation != "Jython"
+cryptography==46.0.6 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 lxml==4.9.2 ; platform_python_implementation != "Jython"
     # via -r requirements.in
@@ -14,3 +14,5 @@ olefile==0.44 ; platform_python_implementation != "Jython"
     # via -r requirements.in
 pycparser==2.19
     # via cffi
+typing-extensions==4.15.0
+    # via cryptography
