@@ -201,7 +201,16 @@ def main_argparser():
 @contextmanager
 def open_dir(path):
     if os.path.exists(path):
-        shutil.rmtree(path)
+        if os.path.isdir(path):
+            if os.listdir(path):
+                raise ValueError(
+                    'Output directory already exists and is not empty: {}'.format(path)
+                )
+            os.rmdir(path)
+        else:
+            raise ValueError(
+                'Output path exists and is not a directory: {}'.format(path)
+            )
     os.mkdir(path)
     yield path
 
