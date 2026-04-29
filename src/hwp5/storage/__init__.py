@@ -37,6 +37,19 @@ def is_stream(item):
     return hasattr(item, 'open') and callable(item.open)
 
 
+def _sanitize_name(name):
+    if not isinstance(name, str):
+        name = name.decode('utf-8') if isinstance(name, bytes) else str(name)
+    name = name.replace('\x00', '')
+    name = name.replace('..', '_')
+    name = name.replace('/', '_')
+    name = name.replace('\\', '_')
+    name = name.strip(' .')
+    if not name:
+        name = '_'
+    return name
+
+
 class ItemWrapper(object):
     def __init__(self, wrapped):
         self.wrapped = wrapped
@@ -128,8 +141,9 @@ def unpack(stg, outbase):
         outbase: path to a directory in filesystem (should not end with '/')
     '''
     for name in stg:
-        outpath = os.path.join(outbase, name)
         item = stg[name]
+        name = _sanitize_name(name)
+        outpath = os.path.join(outbase, name)
         if is_storage(item):
             if not os.path.exists(outpath):
                 os.mkdir(outpath)
